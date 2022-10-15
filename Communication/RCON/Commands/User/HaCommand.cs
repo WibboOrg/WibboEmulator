@@ -29,7 +29,7 @@ internal class HaCommand : IRCONCommand
 
         var message = parameters[2];
 
-        ModerationManager.LogStaffEntry(client.GetUser().Id, client.GetUser().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", message));
+        ModerationManager.LogStaffEntry(client.User.Id, client.User.Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", message));
         if (client.Antipub(message, "<alert>"))
         {
             return false;
@@ -38,7 +38,7 @@ internal class HaCommand : IRCONCommand
         WibboEnvironment
             .GetGame()
             .GetGameClientManager()
-            .SendMessage(new BroadcastMessageAlertComposer(WibboEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", client.Langue) + "\r\n" + message + "\r\n- " + client.GetUser().Username));
+            .SendMessage(new BroadcastMessageAlertComposer(WibboEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", client.Langue) + "\r\n" + message + "\r\n- " + client.User.Username));
         return true;
     }
 }

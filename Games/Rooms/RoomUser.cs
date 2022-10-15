@@ -132,7 +132,7 @@ public class RoomUser : IEquatable<RoomUser>
 
     public bool IsDancing => this.DanceId >= 1;
 
-    public bool NeedsAutokick => !this.IsBot && (this.Client == null || this.Client.GetUser() == null || (this.Client.GetUser().Rank < 2 && this.IdleTime >= 1200));
+    public bool NeedsAutokick => !this.IsBot && (this.Client == null || this.Client.User == null || (this.Client.User.Rank < 2 && this.IdleTime >= 1200));
 
     public bool IsTrading => !this.IsBot && this.ContainStatus("trd");
 
@@ -204,9 +204,9 @@ public class RoomUser : IEquatable<RoomUser>
         {
             return this.PetData.Name;
         }
-        else if (this.Client != null && this.Client.GetUser() != null)
+        else if (this.Client != null && this.Client.User != null)
         {
-            return this.Client.GetUser().Username;
+            return this.Client.User.Username;
         }
         else
         {

@@ -9,7 +9,7 @@ internal class UserSettingsSoundEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
@@ -19,19 +19,20 @@ internal class UserSettingsSoundEvent : IPacketEvent
         var volume3 = packet.PopInt();
 
 
-        if (session.GetUser().ClientVolume[0] == volume1 && session.GetUser().ClientVolume[1] == volume2 && session.GetUser().ClientVolume[2] == volume3)
+        if (session.User.ClientVolume[0] == volume1 && session.User.ClientVolume[1] == volume2 && session.User.ClientVolume[2] == volume3)
         {
             return;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserDao.UpdateVolume(dbClient, session.GetUser().Id, volume1, +volume2, +volume3);
+            UserDao.UpdateVolume(dbClient, session.User.Id, volume1, +volume2, +volume3);
         }
 
-        session.GetUser().ClientVolume.Clear();
-        session.GetUser().ClientVolume.Add(volume1);
-        session.GetUser().ClientVolume.Add(volume2);
-        session.GetUser().ClientVolume.Add(volume3);
+        session.
+        User.ClientVolume.Clear();
+        session.User.ClientVolume.Add(volume1);
+        session.User.ClientVolume.Add(volume2);
+        session.User.ClientVolume.Add(volume3);
     }
 }

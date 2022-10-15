@@ -10,12 +10,12 @@ internal class RemoveAllRightsEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }

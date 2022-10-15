@@ -17,12 +17,12 @@ internal class SuperPull : IChatCommand
             return;
         }
 
-        if (targetUser.Client.GetUser().Id == session.GetUser().Id)
+        if (targetUser.Client.User.Id == session.User.Id)
         {
             return;
         }
 
-        if (targetUser.Client.GetUser().PremiumProtect && !session.GetUser().HasPermission("perm_mod"))
+        if (targetUser.Client.User.PremiumProtect && !session.User.HasPermission("perm_mod"))
         {
             userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
             return;

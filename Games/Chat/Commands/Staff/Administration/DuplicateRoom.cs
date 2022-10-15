@@ -21,13 +21,13 @@ internal class DuplicateRoom : IChatCommand
         {
             room.RoomItemHandling.SaveFurniture();
 
-            roomId = RoomDao.InsertDuplicate(dbClient, oldRoomId, session.GetUser().Username);
+            roomId = RoomDao.InsertDuplicate(dbClient, oldRoomId, session.User.Username);
 
             RoomModelCustomDao.InsertDuplicate(dbClient, roomId, oldRoomId);
 
             var furniIdAllow = new List<int>();
 
-            var catalogItemTable = CatalogItemDao.GetItemIdByRank(dbClient, session.GetUser().Rank);
+            var catalogItemTable = CatalogItemDao.GetItemIdByRank(dbClient, session.User.Rank);
             foreach (DataRow dataRow in catalogItemTable.Rows)
             {
                 _ = int.TryParse(dataRow["item_id"].ToString(), out var itemId);
@@ -58,7 +58,7 @@ internal class DuplicateRoom : IChatCommand
                     continue;
                 }
 
-                var itemId = ItemDao.InsertDuplicate(dbClient, session.GetUser().Id, roomId, oldItemId);
+                var itemId = ItemDao.InsertDuplicate(dbClient, session.User.Id, roomId, oldItemId);
 
                 newItemsId.Add(oldItemId, itemId);
 
@@ -166,14 +166,14 @@ internal class DuplicateRoom : IChatCommand
                 ItemWiredDao.UpdateTriggerItem(dbClient, triggerItems, id);
             }
 
-            BotUserDao.DupliqueAllBotInRoomId(dbClient, session.GetUser().Id, roomId, oldRoomId);
+            BotUserDao.DupliqueAllBotInRoomId(dbClient, session.User.Id, roomId, oldRoomId);
 
-            BotPetDao.InsertDuplicate(dbClient, session.GetUser().Id, roomId, oldRoomId);
+            BotPetDao.InsertDuplicate(dbClient, session.User.Id, roomId, oldRoomId);
         }
 
-        if (!session.GetUser().UsersRooms.Contains(roomId))
+        if (!session.User.UsersRooms.Contains(roomId))
         {
-            session.GetUser().UsersRooms.Add(roomId);
+            session.User.UsersRooms.Add(roomId);
         }
 
         session.SendNotification("Copie de l'appartement " + oldRoomId + " en cours de chargement...");

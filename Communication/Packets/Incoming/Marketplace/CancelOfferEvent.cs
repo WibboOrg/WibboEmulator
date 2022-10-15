@@ -12,7 +12,7 @@ internal class CancelOfferEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.GetUser() == null)
+        if (session == null || session.User == null)
         {
             return;
         }
@@ -37,7 +37,7 @@ internal class CancelOfferEvent : IPacketEvent
             return;
         }
 
-        if (Convert.ToInt32(row["user_id"]) != session.GetUser().Id)
+        if (Convert.ToInt32(row["user_id"]) != session.User.Id)
         {
             session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
             return;
@@ -51,14 +51,14 @@ internal class CancelOfferEvent : IPacketEvent
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            CatalogMarketplaceOfferDao.DeleteUserOffer(dbClient, offerId, session.GetUser().Id);
+            CatalogMarketplaceOfferDao.DeleteUserOffer(dbClient, offerId, session.User.Id);
         }
 
-        var giveItem = ItemFactory.CreateSingleItem(item, session.GetUser(), Convert.ToString(row["extra_data"]), Convert.ToInt32(row["furni_id"]), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"]));
+        var giveItem = ItemFactory.CreateSingleItem(item, session.User, Convert.ToString(row["extra_data"]), Convert.ToInt32(row["furni_id"]), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"]));
 
         if (giveItem != null)
         {
-            _ = session.GetUser().InventoryComponent.TryAddItem(giveItem);
+            _ = session.User.InventoryComponent.TryAddItem(giveItem);
             session.SendPacket(new FurniListNotificationComposer(giveItem.Id, 1));
         }
 

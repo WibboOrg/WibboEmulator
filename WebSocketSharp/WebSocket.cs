@@ -823,7 +823,7 @@ public class WebSocket : IDisposable
         var fmt = "A handshake request from {0}:\n{1}";
         var msg = string.Format(fmt, this._context.UserEndPoint, this._context);
 
-        //this._logger.Debug(msg);
+        this._logger.Trace(msg);
 
         if (!this.CheckHandshakeRequest(this._context, out msg))
         {
@@ -1277,7 +1277,7 @@ public class WebSocket : IDisposable
                     received
                   );
 
-        //this._logger.Debug(msg);
+        this._logger.Trace(msg);
 
         return ret;
     }
@@ -1727,7 +1727,10 @@ public class WebSocket : IDisposable
             e = this._messageEventQueue.Dequeue();
         }
 
-        _ = this._message.BeginInvoke(e, ar => this._message.EndInvoke(ar), null);
+        if (this._message != null)
+        {
+            _ = this._message.BeginInvoke(e, ar => this._message.EndInvoke(ar), null);
+        }
     }
 
     private bool Ping(byte[] data)
@@ -2394,13 +2397,13 @@ public class WebSocket : IDisposable
     {
         var msg = "An HTTP request to the server:\n" + request.ToString();
 
-        //this._logger.Debug(msg);
+        this._logger.Trace(msg);
 
         var res = request.GetResponse(this._stream, millisecondsTimeout);
 
         msg = "An HTTP response from the server:\n" + res.ToString();
 
-        //this._logger.Debug(msg);
+        this._logger.Trace(msg);
 
         return res;
     }
@@ -2411,7 +2414,7 @@ public class WebSocket : IDisposable
         var fmt = "An HTTP response to {0}:\n{1}";
         var msg = string.Format(fmt, this._context.UserEndPoint, response);
 
-        //this._logger.Debug(msg);
+        this._logger.Trace(msg);
 
         var bytes = response.ToByteArray();
 
@@ -2548,8 +2551,12 @@ public class WebSocket : IDisposable
         this._pongReceived = new ManualResetEvent(false);
         this._receivingExited = new ManualResetEvent(false);
 
-        void receive() =>
-            WebSocketFrame.ReadFrameAsync(
+        if (this._stream == null)
+        {
+            return;
+        }
+
+        void receive() => WebSocketFrame.ReadFrameAsync(
               this._stream,
               false,
               frame =>

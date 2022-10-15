@@ -10,16 +10,17 @@ internal class UserSettingsCameraFollowEvent : IPacketEvent
     {
         var flag = packet.PopBoolean();
 
-        if (session == null || session.GetUser() == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserDao.UpdateCameraFollowDisabled(dbClient, session.GetUser().Id, flag);
+            UserDao.UpdateCameraFollowDisabled(dbClient, session.User.Id, flag);
         }
 
-        session.GetUser().CameraFollowDisabled = flag;
+        session.
+        User.CameraFollowDisabled = flag;
     }
 }

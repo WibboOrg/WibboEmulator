@@ -121,9 +121,9 @@ public class InteractorGenericSwitch : FurniInteractor
             newState = state < this._modes ? state + 1 : 0;
         }
 
-        if (session != null && session.GetUser() != null && session.GetUser().ForceUse > -1)
+        if (session != null && session.User != null && session.User.ForceUse > -1)
         {
-            newState = (session.GetUser().ForceUse <= this._modes) ? session.GetUser().ForceUse : 0;
+            newState = (session.User.ForceUse <= this._modes) ? session.User.ForceUse : 0;
         }
 
         if (item.GetBaseItem().InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
@@ -144,12 +144,12 @@ public class InteractorGenericSwitch : FurniInteractor
                 return;
             }
 
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
             {
                 return;
             }
 
-            var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+            var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
             if (roomUserByUserId != null)
             {
                 item.GetRoom().RoomUserManager.UpdateUserStatus(roomUserByUserId, false);

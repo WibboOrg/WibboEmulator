@@ -11,7 +11,7 @@ internal class GetGroupMembersEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.GetUser() == null)
+        if (session == null || session.User == null)
         {
             return;
         }
@@ -112,7 +112,7 @@ internal class GetGroupMembersEvent : IPacketEvent
                 break;
         }
 
-        session.SendPacket(new GroupMembersComposer(group, members.ToList(), memberCount, page, group.CreatorId == session.GetUser().Id || group.IsAdmin(session.GetUser().Id), requestType, searchVal));
+        session.SendPacket(new GroupMembersComposer(group, members.ToList(), memberCount, page, group.CreatorId == session.User.Id || group.IsAdmin(session.User.Id), requestType, searchVal));
     }
 
     private static List<int> GetSearchRequests(int groupeId, string searchVal)

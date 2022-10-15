@@ -20,18 +20,18 @@ internal class MoveAvatarKeyboardEvent : IPacketEvent
             targetY = 0;
         }
 
-        if (session == null || session.GetUser() == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
-        var currentRoom = session.GetUser().CurrentRoom;
+        var currentRoom = session.User.CurrentRoom;
         if (currentRoom == null)
         {
             return;
         }
 
-        var user = currentRoom.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var user = currentRoom.RoomUserManager.GetRoomUserByUserId(session.User.Id);
 
         if (user == null || (!user.CanWalk && !user.TeleportEnabled))
         {

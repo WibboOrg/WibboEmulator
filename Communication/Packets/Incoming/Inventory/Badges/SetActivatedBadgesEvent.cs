@@ -15,22 +15,23 @@ internal class SetActivatedBadgesEvent : IPacketEvent
             return;
         }
 
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
 
-        if (session.GetUser().BadgeComponent == null)
+        if (session.User.BadgeComponent == null)
         {
             return;
         }
 
-        session.GetUser().
+        session.
+        User.
         BadgeComponent.ResetSlots();
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserBadgeDao.UpdateResetSlot(dbClient, session.GetUser().Id);
+            UserBadgeDao.UpdateResetSlot(dbClient, session.User.Id);
         }
 
         for (var i = 0; i < 5; i++)
@@ -43,29 +44,30 @@ internal class SetActivatedBadgesEvent : IPacketEvent
                 continue;
             }
 
-            if (!session.GetUser().BadgeComponent.HasBadge(badge) || slot < 1 || slot > 5)
+            if (!session.User.BadgeComponent.HasBadge(badge) || slot < 1 || slot > 5)
             {
                 continue;
             }
 
-            session.GetUser().
+            session.
+            User.
             BadgeComponent.GetBadge(badge).Slot = slot;
 
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            UserBadgeDao.UpdateSlot(dbClient, session.GetUser().Id, slot, badge);
+            UserBadgeDao.UpdateSlot(dbClient, session.User.Id, slot, badge);
         }
 
         WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ProfileBadge, 0);
 
-        if (!session.GetUser().InRoom)
+        if (!session.User.InRoom)
         {
-            session.SendPacket(new UserBadgesComposer(session.GetUser()));
+            session.SendPacket(new UserBadgesComposer(session.User));
         }
         else
         {
-            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
             {
-                room.SendPacket(new UserBadgesComposer(session.GetUser()));
+                room.SendPacket(new UserBadgesComposer(session.User));
             }
         }
     }

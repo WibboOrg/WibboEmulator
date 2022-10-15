@@ -17,7 +17,7 @@ internal class Poke : IChatCommand
             return;
         }
 
-        if (session.GetUser().SpectatorMode)
+        if (session.User.SpectatorMode)
         {
             return;
         }
@@ -36,18 +36,18 @@ internal class Poke : IChatCommand
             return;
         }
 
-        if (wpCount > session.GetUser().WibboPoints)
+        if (wpCount > session.User.WibboPoints)
         {
             return;
         }
 
         var targetUser = room.RoomUserManager.GetRoomUserByName(username);
-        if (targetUser == null || targetUser.Client == null || targetUser.Client.GetUser() == null)
+        if (targetUser == null || targetUser.Client == null || targetUser.Client.User == null)
         {
             return;
         }
 
-        if (wpCount > targetUser.Client.GetUser().WibboPoints)
+        if (wpCount > targetUser.Client.User.WibboPoints)
         {
             return;
         }

@@ -11,7 +11,7 @@ internal class MaxFloor : IChatCommand
     {
         var map = "";
         var maxSize = 50;
-        if (session.GetUser().Rank > 1)
+        if (session.User.Rank > 1)
         {
             maxSize = 75;
         }

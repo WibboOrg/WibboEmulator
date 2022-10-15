@@ -8,25 +8,25 @@ internal class UnIgnoreUserEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
 
-        if (session.GetUser().CurrentRoom == null)
+        if (session.User.CurrentRoom == null)
         {
             return;
         }
 
         var str = packet.PopString();
 
-        var user = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(str).GetUser();
-        if (user == null || !session.GetUser().MutedUsers.Contains(user.Id))
+        var user = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(str).User;
+        if (user == null || !session.User.MutedUsers.Contains(user.Id))
         {
             return;
         }
 
-        _ = session.GetUser().MutedUsers.Remove(user.Id);
+        _ = session.User.MutedUsers.Remove(user.Id);
 
         session.SendPacket(new IgnoreStatusComposer(3, str));
     }

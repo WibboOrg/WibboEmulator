@@ -8,20 +8,20 @@ internal class GetPetTrainingPanelEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.GetUser() == null || !session.GetUser().InRoom)
+        if (session == null || session.User == null || !session.User.InRoom)
         {
             return;
         }
 
         var petId = packet.PopInt();
 
-        if (!session.GetUser().CurrentRoom.RoomUserManager.TryGetPet(petId, out var pet))
+        if (!session.User.CurrentRoom.RoomUserManager.TryGetPet(petId, out var pet))
         {
             return;
         }
 
         //Continue as a regular pet..
-        if (pet.RoomId != session.GetUser().CurrentRoomId || pet.PetData == null)
+        if (pet.RoomId != session.User.CurrentRoomId || pet.PetData == null)
         {
             return;
         }

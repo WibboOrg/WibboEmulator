@@ -30,11 +30,12 @@ internal class UpdateCreditsCommand : IRCONCommand
         int credits;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            credits = UserDao.GetCredits(dbClient, client.GetUser().Id);
+            credits = UserDao.GetCredits(dbClient, client.User.Id);
         }
 
-        client.GetUser().Credits = credits;
-        client.SendPacket(new CreditBalanceComposer(client.GetUser().Credits));
+        client.
+        User.Credits = credits;
+        client.SendPacket(new CreditBalanceComposer(client.User.Credits));
 
         return true;
     }

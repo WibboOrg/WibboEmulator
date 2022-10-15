@@ -11,12 +11,12 @@ internal class EditTvYoutubeEvent : IPacketEvent
         var itemId = packet.PopInt();
         var url = packet.PopString();
 
-        if (session == null || session.GetUser() == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
-        var room = session.GetUser().CurrentRoom;
+        var room = session.User.CurrentRoom;
         if (room == null || !room.CheckRights(session))
         {
             return;

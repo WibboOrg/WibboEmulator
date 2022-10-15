@@ -27,11 +27,11 @@ internal class ShowGuide : IChatCommand
 
                 if (entry.Value)
                 {
-                    _ = stringBuilder.Append("- " + guide.GetUser().Username + " (En service)\r");
+                    _ = stringBuilder.Append("- " + guide.User.Username + " (En service)\r");
                 }
                 else
                 {
-                    _ = stringBuilder.Append("- " + guide.GetUser().Username + " (Disponible)\r");
+                    _ = stringBuilder.Append("- " + guide.User.Username + " (Disponible)\r");
                 }
             }
 

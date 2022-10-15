@@ -64,7 +64,7 @@ public class RoomItemHandling
             roomItem.Interactor.OnRemove(session, roomItem);
 
             roomItem.Destroy();
-            listMessage.Add(new ObjectRemoveComposer(roomItem.Id, session.GetUser().Id));
+            listMessage.Add(new ObjectRemoveComposer(roomItem.Id, session.User.Id));
             items.Add(roomItem);
         }
 
@@ -540,9 +540,9 @@ public class RoomItemHandling
             pileMagic = true;
         }
 
-        if (session != null && session.GetUser() != null && session.GetUser().CurrentRoom != null)
+        if (session != null && session.User != null && session.User.CurrentRoom != null)
         {
-            var roomUser = session.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+            var roomUser = session.User.CurrentRoom.RoomUserManager.GetRoomUserByUserId(session.User.Id);
             if (roomUser != null)
             {
                 construitMode = roomUser.ConstruitEnable;

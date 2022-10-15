@@ -14,12 +14,12 @@ internal class RemoveSaddleFromHorseEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.GetUser().InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
@@ -29,7 +29,7 @@ internal class RemoveSaddleFromHorseEvent : IPacketEvent
             return;
         }
 
-        if (petUser.PetData == null || petUser.PetData.OwnerId != session.GetUser().Id || petUser.PetData.Type != 13)
+        if (petUser.PetData == null || petUser.PetData.OwnerId != session.User.Id || petUser.PetData.Type != 13)
         {
             return;
         }
@@ -48,10 +48,10 @@ internal class RemoveSaddleFromHorseEvent : IPacketEvent
             return;
         }
 
-        var item = ItemFactory.CreateSingleItemNullable(itemData, session.GetUser(), "");
+        var item = ItemFactory.CreateSingleItemNullable(itemData, session.User, "");
         if (item != null)
         {
-            _ = session.GetUser().InventoryComponent.TryAddItem(item);
+            _ = session.User.InventoryComponent.TryAddItem(item);
             session.SendPacket(new FurniListNotificationComposer(item.Id, 1));
             session.SendPacket(new PurchaseOKComposer());
         }

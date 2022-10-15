@@ -17,12 +17,12 @@ internal class RenderRoomThumbnailEvent : IPacketEvent
 
         var photoBinary = packet.ReadBytes(photoLength);
 
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
 
-        var room = session.GetUser().CurrentRoom;
+        var room = session.User.CurrentRoom;
         if (room == null)
         {
             return;

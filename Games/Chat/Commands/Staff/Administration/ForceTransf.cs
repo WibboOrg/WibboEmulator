@@ -26,7 +26,7 @@ internal class ForceTransf : IChatCommand
             return;
         }
 
-        if (clientByUsername.GetUser().SpectatorMode)
+        if (clientByUsername.User.SpectatorMode)
         {
             return;
         }

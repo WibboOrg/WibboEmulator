@@ -21,9 +21,9 @@ internal class MassBadge : IChatCommand
 
         foreach (var client in WibboEnvironment.GetGame().GetGameClientManager().GetClients.ToList())
         {
-            if (client.GetUser() != null)
+            if (client.User != null)
             {
-                client.GetUser().BadgeComponent.GiveBadge(badge, true);
+                client.User.BadgeComponent.GiveBadge(badge, true);
                 client.SendPacket(new ReceiveBadgeComposer(badge));
                 client.SendNotification("Vous venez de recevoir le badge : " + badge + " !");
             }

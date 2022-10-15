@@ -17,7 +17,7 @@ internal class RockPaperScissors : IChatCommand
             return;
         }
 
-        if (session.GetUser().SpectatorMode)
+        if (session.User.SpectatorMode)
         {
             return;
         }

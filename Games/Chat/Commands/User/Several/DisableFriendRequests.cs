@@ -6,14 +6,14 @@ internal class DisableFriendRequests : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (session.GetUser().HasFriendRequestsDisabled)
+        if (session.User.HasFriendRequestsDisabled)
         {
-            session.GetUser().HasFriendRequestsDisabled = false;
+            session.User.HasFriendRequestsDisabled = false;
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.textamigo.true", session.Langue));
         }
         else
         {
-            session.GetUser().HasFriendRequestsDisabled = true;
+            session.User.HasFriendRequestsDisabled = true;
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.textamigo.false", session.Langue));
         }
     }

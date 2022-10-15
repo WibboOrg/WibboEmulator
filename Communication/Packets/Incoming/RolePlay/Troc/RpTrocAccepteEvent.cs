@@ -7,18 +7,18 @@ internal class RpTrocAccepteEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.GetUser() == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
-        var room = session.GetUser().CurrentRoom;
+        var room = session.User.CurrentRoom;
         if (room == null || !room.IsRoleplay)
         {
             return;
         }
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (user == null)
         {
             return;

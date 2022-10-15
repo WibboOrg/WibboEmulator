@@ -10,12 +10,12 @@ internal class SaveBotActionEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.GetUser().InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        var room = session.GetUser().CurrentRoom;
+        var room = session.User.CurrentRoom;
         if (room == null || !room.CheckRights(session, true))
         {
             return;
@@ -58,13 +58,13 @@ internal class SaveBotActionEvent : IPacketEvent
             case 1:
             {
                 //Change the defaults
-                bot.BotData.Look = session.GetUser().Look;
-                bot.BotData.Gender = session.GetUser().Gender;
+                bot.BotData.Look = session.User.Look;
+                bot.BotData.Gender = session.User.Gender;
 
                 room.SendPacket(new UserChangeComposer(bot));
 
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                BotUserDao.UpdateLookGender(dbClient, bot.BotData.Id, session.GetUser().Gender, session.GetUser().Look);
+                BotUserDao.UpdateLookGender(dbClient, bot.BotData.Id, session.User.Gender, session.User.Look);
                 break;
             }
 

@@ -13,7 +13,7 @@ public class InteractorChangeBackgrounds : FurniInteractor
 
     public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (session == null || session.GetUser() == null || item == null || !userHasRights || request != 0)
+        if (session == null || session.User == null || item == null || !userHasRights || request != 0)
         {
             return;
         }

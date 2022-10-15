@@ -7,7 +7,7 @@ internal class ReleaseTicketEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.GetUser().HasPermission("perm_mod"))
+        if (!session.User.HasPermission("perm_mod"))
         {
             return;
         }

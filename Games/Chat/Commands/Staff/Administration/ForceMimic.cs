@@ -28,20 +28,21 @@ internal class ForceMimic : IChatCommand
             return;
         }
 
-        clientByUsername.GetUser().Gender = session.GetUser().Gender;
-        clientByUsername.GetUser().Look = session.GetUser().Look;
+        clientByUsername.
+        User.Gender = session.User.Gender;
+        clientByUsername.User.Look = session.User.Look;
 
         if (roomUserByUserId.IsTransf || roomUserByUserId.IsSpectator)
         {
             return;
         }
 
-        if (!clientByUsername.GetUser().InRoom)
+        if (!clientByUsername.User.InRoom)
         {
             return;
         }
 
-        clientByUsername.SendPacket(new FigureUpdateComposer(clientByUsername.GetUser().Look, clientByUsername.GetUser().Gender));
+        clientByUsername.SendPacket(new FigureUpdateComposer(clientByUsername.User.Look, clientByUsername.User.Gender));
         clientByUsername.SendPacket(new UserChangeComposer(roomUserByUserId, true));
         currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
     }

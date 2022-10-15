@@ -8,11 +8,11 @@ internal class GetBotInventoryEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
 
-        session.SendPacket(new BotInventoryComposer(session.GetUser().InventoryComponent.GetBots()));
+        session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.GetBots()));
     }
 }

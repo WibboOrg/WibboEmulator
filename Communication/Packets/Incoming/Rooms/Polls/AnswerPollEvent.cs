@@ -8,12 +8,12 @@ internal class AnswerPollEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (user == null)
         {
             return;
@@ -42,7 +42,7 @@ internal class AnswerPollEvent : IPacketEvent
             room.VotedYesCount++;
         }
 
-        room.SendPacket(new QuestionAnsweredComposer(session.GetUser().Id, value, room.VotedNoCount, room.VotedYesCount));
+        room.SendPacket(new QuestionAnsweredComposer(session.User.Id, value, room.VotedNoCount, room.VotedYesCount));
 
         var wiredCode = value == "0" ? "QUESTION_NO" : "QUESTION_YES";
         if (room.AllowsShous(user, wiredCode))

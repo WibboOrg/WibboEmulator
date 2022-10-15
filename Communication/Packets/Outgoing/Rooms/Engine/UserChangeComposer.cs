@@ -8,10 +8,10 @@ internal class UserChangeComposer : ServerPacket
         : base(ServerPacketHeader.UNIT_INFO)
     {
         this.WriteInteger(self ? -1 : user.VirtualId);
-        this.WriteString(user.Client.GetUser().Look);
-        this.WriteString(user.Client.GetUser().Gender);
-        this.WriteString(user.Client.GetUser().Motto);
-        this.WriteInteger(user.Client.GetUser().AchievementPoints);
+        this.WriteString(user.Client.User.Look);
+        this.WriteString(user.Client.User.Gender);
+        this.WriteString(user.Client.User.Motto);
+        this.WriteInteger(user.Client.User.AchievementPoints);
     }
 
     public UserChangeComposer(RoomUser user) //Bot
@@ -28,9 +28,9 @@ internal class UserChangeComposer : ServerPacket
         : base(ServerPacketHeader.UNIT_INFO)
     {
         this.WriteInteger(-1);
-        this.WriteString(client.GetUser().Look);
-        this.WriteString(client.GetUser().Gender);
-        this.WriteString(client.GetUser().Motto);
-        this.WriteInteger(client.GetUser().AchievementPoints);
+        this.WriteString(client.User.Look);
+        this.WriteString(client.User.Gender);
+        this.WriteString(client.User.Motto);
+        this.WriteInteger(client.User.AchievementPoints);
     }
 }

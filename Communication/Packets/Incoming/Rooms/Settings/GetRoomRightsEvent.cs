@@ -8,12 +8,12 @@ internal class GetRoomRightsEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.GetUser().InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        var rooom = session.GetUser().CurrentRoom;
+        var rooom = session.User.CurrentRoom;
         if (rooom == null)
         {
             return;

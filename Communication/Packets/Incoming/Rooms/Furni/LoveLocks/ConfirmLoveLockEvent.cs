@@ -13,7 +13,7 @@ internal class ConfirmLoveLockEvent : IPacketEvent
         var id = packet.PopInt();
         var isConfirmed = packet.PopBoolean();
 
-        var room = session.GetUser().CurrentRoom;
+        var room = session.User.CurrentRoom;
         if (room == null || !room.CheckRights(session))
         {
             return;
@@ -85,12 +85,12 @@ internal class ConfirmLoveLockEvent : IPacketEvent
         }
         else
         {
-            if (userOneId == session.GetUser().Id)
+            if (userOneId == session.User.Id)
             {
                 session.SendPacket(new LoveLockDialogueSetLockedComposer(id));
                 userOne.LLPartner = userTwoId;
             }
-            else if (userTwoId == session.GetUser().Id)
+            else if (userTwoId == session.User.Id)
             {
                 session.SendPacket(new LoveLockDialogueSetLockedComposer(id));
                 userTwo.LLPartner = userOneId;
@@ -102,7 +102,7 @@ internal class ConfirmLoveLockEvent : IPacketEvent
             }
             else
             {
-                item.ExtraData = "1" + (char)5 + userOne.GetUsername() + (char)5 + userTwo.GetUsername() + (char)5 + userOne.Client.GetUser().Look + (char)5 + userTwo.Client.GetUser().Look + (char)5 + DateTime.Now.ToString("dd/MM/yyyy");
+                item.ExtraData = "1" + (char)5 + userOne.GetUsername() + (char)5 + userTwo.GetUsername() + (char)5 + userOne.Client.User.Look + (char)5 + userTwo.Client.User.Look + (char)5 + DateTime.Now.ToString("dd/MM/yyyy");
 
                 item.InteractingUser = 0;
                 item.InteractingUser2 = 0;

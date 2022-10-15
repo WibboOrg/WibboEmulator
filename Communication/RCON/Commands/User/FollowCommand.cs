@@ -43,12 +43,12 @@ internal class FollowCommand : IRCONCommand
             return false;
         }
 
-        if (clientTwo.GetUser() == null || clientTwo.GetUser().CurrentRoom == null)
+        if (clientTwo.User == null || clientTwo.User.CurrentRoom == null)
         {
             return false;
         }
 
-        var room = clientTwo.GetUser().CurrentRoom;
+        var room = clientTwo.User.CurrentRoom;
         if (room == null)
         {
             return false;

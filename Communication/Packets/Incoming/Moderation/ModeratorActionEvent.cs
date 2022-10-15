@@ -9,7 +9,7 @@ internal class ModeratorActionEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.GetUser().HasPermission("perm_alert"))
+        if (!session.User.HasPermission("perm_alert"))
         {
             return;
         }
@@ -24,8 +24,9 @@ internal class ModeratorActionEvent : IPacketEvent
             return;
         }
 
-        ModerationManager.LogStaffEntry(session.GetUser().Id, session.GetUser().Username, 0, string.Empty, alertMessage.Split(' ')[0].Replace(":", ""), string.Format("Modtool Roomalert: {0}", alertMessage));
+        ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, alertMessage.Split(' ')[0].Replace(":", ""), string.Format("Modtool Roomalert: {0}", alertMessage));
 
-        session.GetUser().CurrentRoom.SendPacket(new BroadcastMessageAlertComposer(alertMessage));
+        session.
+        User.CurrentRoom.SendPacket(new BroadcastMessageAlertComposer(alertMessage));
     }
 }

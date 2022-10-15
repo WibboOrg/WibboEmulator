@@ -8,7 +8,7 @@ internal class ModerationMsgEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.GetUser().HasPermission("perm_alert"))
+        if (!session.User.HasPermission("perm_alert"))
         {
             return;
         }
@@ -22,12 +22,12 @@ internal class ModerationMsgEvent : IPacketEvent
             return;
         }
 
-        if (clientTarget.GetUser().Id == session.GetUser().Id)
+        if (clientTarget.User.Id == session.User.Id)
         {
             return;
         }
 
-        if (clientTarget.GetUser().Rank >= session.GetUser().Rank)
+        if (clientTarget.User.Rank >= session.User.Rank)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("moderation.caution.missingrank", session.Langue));
         }
@@ -37,7 +37,7 @@ internal class ModerationMsgEvent : IPacketEvent
             return;
         }
 
-        ModerationManager.LogStaffEntry(session.GetUser().Id, session.GetUser().Username, 0, string.Empty, "ModTool", string.Format("Modtool alert ( {1} ): {0}", message, clientTarget.GetUser().Username));
+        ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "ModTool", string.Format("Modtool alert ( {1} ): {0}", message, clientTarget.User.Username));
 
         clientTarget.SendNotification(message);
     }

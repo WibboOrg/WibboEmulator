@@ -22,10 +22,10 @@ internal class ExtraBox : IChatCommand
             return;
         }
 
-        var items = ItemFactory.CreateMultipleItems(itemData, session.GetUser(), "", nbLot);
+        var items = ItemFactory.CreateMultipleItems(itemData, session.User, "", nbLot);
         foreach (var purchasedItem in items)
         {
-            if (session.GetUser().InventoryComponent.TryAddItem(purchasedItem))
+            if (session.User.InventoryComponent.TryAddItem(purchasedItem))
             {
                 session.SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
             }

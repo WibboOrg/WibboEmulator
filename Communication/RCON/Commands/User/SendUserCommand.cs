@@ -21,7 +21,7 @@ internal class SendUserCommand : IRCONCommand
         }
 
         var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (client == null || client.GetUser() == null)
+        if (client == null || client.User == null)
         {
             return false;
         }

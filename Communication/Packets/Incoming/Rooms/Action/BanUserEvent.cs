@@ -7,12 +7,12 @@ internal class BanUserEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
@@ -46,7 +46,7 @@ internal class BanUserEvent : IPacketEvent
 
             time = 429496729;
         }
-        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.GetUser().HasPermission("perm_kick"))
+        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.User.HasPermission("perm_kick"))
         {
             return;
         }

@@ -27,7 +27,7 @@ internal class RedeemVoucherEvent : IPacketEvent
         var haveVoucher = false;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            haveVoucher = UserVoucherDao.HaveVoucher(dbClient, session.GetUser().Id, voucherCode);
+            haveVoucher = UserVoucherDao.HaveVoucher(dbClient, session.User.Id, voucherCode);
         }
 
         if (!haveVoucher)
@@ -37,20 +37,20 @@ internal class RedeemVoucherEvent : IPacketEvent
         else
         {
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            UserVoucherDao.Insert(dbClient, session.GetUser().Id, voucherCode);
+            UserVoucherDao.Insert(dbClient, session.User.Id, voucherCode);
         }
 
         voucher.UpdateUses();
 
         if (voucher.Type == VoucherType.Credit)
         {
-            session.GetUser().Credits += voucher.Value;
-            session.SendPacket(new CreditBalanceComposer(session.GetUser().Credits));
+            session.User.Credits += voucher.Value;
+            session.SendPacket(new CreditBalanceComposer(session.User.Credits));
         }
         else if (voucher.Type == VoucherType.Ducket)
         {
-            session.GetUser().Duckets += voucher.Value;
-            session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().Duckets, voucher.Value));
+            session.User.Duckets += voucher.Value;
+            session.SendPacket(new ActivityPointNotificationComposer(session.User.Duckets, voucher.Value));
         }
 
         //session.SendPacket(new VoucherRedeemOkComposer());

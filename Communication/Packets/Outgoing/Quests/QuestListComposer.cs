@@ -31,7 +31,7 @@ internal class QuestListComposer : ServerPacket
     {
         var questsInCategory = WibboEnvironment.GetGame().GetQuestManager().GetAmountOfQuestsInCategory(category);
         var i = quest == null ? questsInCategory : quest.Number - 1;
-        var num = quest == null ? 0 : session.GetUser().GetQuestProgress(quest.Id);
+        var num = quest == null ? 0 : session.User.GetQuestProgress(quest.Id);
         if (quest != null && quest.IsCompleted(num))
         {
             i++;
@@ -42,7 +42,7 @@ internal class QuestListComposer : ServerPacket
         this.WriteInteger(questsInCategory);
         this.WriteInteger(0);
         this.WriteInteger(quest == null ? 0 : quest.Id);
-        this.WriteBoolean(quest != null && session.GetUser().CurrentQuestId == quest.Id);
+        this.WriteBoolean(quest != null && session.User.CurrentQuestId == quest.Id);
         this.WriteString(quest == null ? string.Empty : quest.ActionName);
         this.WriteString(quest == null ? string.Empty : quest.DataBit);
         this.WriteInteger(quest == null ? 0 : quest.Reward);

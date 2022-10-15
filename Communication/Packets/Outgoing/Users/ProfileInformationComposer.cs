@@ -17,8 +17,8 @@ internal class ProfileInformationComposer : ServerPacket
         this.WriteString(origin.ToString("dd/MM/yyyy"));
         this.WriteInteger(habbo.AchievementPoints);
         this.WriteInteger(friendCount); // Friend Count
-        this.WriteBoolean(habbo.Id != session.GetUser().Id && session.GetUser().Messenger.FriendshipExists(habbo.Id)); //  Is friend
-        this.WriteBoolean(habbo.Id != session.GetUser().Id && !session.GetUser().Messenger.FriendshipExists(habbo.Id) && session.GetUser().Messenger.RequestExists(habbo.Id)); // Sent friend request
+        this.WriteBoolean(habbo.Id != session.User.Id && session.User.Messenger.FriendshipExists(habbo.Id)); //  Is friend
+        this.WriteBoolean(habbo.Id != session.User.Id && !session.User.Messenger.FriendshipExists(habbo.Id) && session.User.Messenger.RequestExists(habbo.Id)); // Sent friend request
         this.WriteBoolean(WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(habbo.Id) != null);
 
         this.WriteInteger(groups.Count);

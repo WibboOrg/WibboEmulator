@@ -16,7 +16,7 @@ internal class DeclineGroupMembershipEvent : IPacketEvent
             return;
         }
 
-        if (session.GetUser().Id != group.CreatorId && !group.IsAdmin(session.GetUser().Id))
+        if (session.User.Id != group.CreatorId && !group.IsAdmin(session.User.Id))
         {
             return;
         }

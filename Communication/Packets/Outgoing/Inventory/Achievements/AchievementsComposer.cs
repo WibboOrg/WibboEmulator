@@ -10,7 +10,7 @@ internal class AchievementsComposer : ServerPacket
         this.WriteInteger(achievements.Count);
         foreach (var achievement in achievements)
         {
-            var achievementData = session.GetUser().AchievementComponent.GetAchievementData(achievement.GroupName);
+            var achievementData = session.User.AchievementComponent.GetAchievementData(achievement.GroupName);
             var targetLevel = achievementData != null ? achievementData.Level + 1 : 1;
             var count = achievement.Levels.Count;
             if (targetLevel > count)

@@ -9,21 +9,22 @@ internal class RemoveGroupFavouriteEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        session.GetUser().FavouriteGroupId = 0;
+        session.User.FavouriteGroupId = 0;
 
-        if (session.GetUser().InRoom)
+        if (session.User.InRoom)
         {
-            var userRoom = session.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+            var userRoom = session.User.CurrentRoom.RoomUserManager.GetRoomUserByUserId(session.User.Id);
             if (userRoom != null)
             {
-                session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(null, userRoom.VirtualId));
+                session.User.CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(null, userRoom.VirtualId));
             }
 
-            session.GetUser().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.GetUser().Id));
+            session.
+            User.CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
         }
         else
         {
-            session.SendPacket(new RefreshFavouriteGroupComposer(session.GetUser().Id));
+            session.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
         }
     }
 }

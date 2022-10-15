@@ -18,19 +18,19 @@ internal class RenderRoomEvent : IPacketEvent
 
         var photoBinary = packet.ReadBytes(photoLength);
 
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
 
-        var room = session.GetUser().CurrentRoom;
+        var room = session.User.CurrentRoom;
         if (room == null)
         {
             return;
         }
 
         var time = WibboEnvironment.GetUnixTimestamp();
-        var pictureName = $"{session.GetUser().Id}_{room.Id}_{time}";
+        var pictureName = $"{session.User.Id}_{room.Id}_{time}";
 
         var content = new MultipartFormDataContent("Upload")
         {
@@ -55,14 +55,15 @@ internal class RenderRoomEvent : IPacketEvent
 
         session.SendPacket(new CameraURLComposer(photoId + ".png"));
 
-        if (session.GetUser().LastPhotoId == photoId)
+        if (session.User.LastPhotoId == photoId)
         {
             return;
         }
 
-        session.GetUser().LastPhotoId = photoId;
+        session.
+        User.LastPhotoId = photoId;
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        UserPhotoDao.Insert(dbClient, session.GetUser().Id, photoId, time);
+        UserPhotoDao.Insert(dbClient, session.User.Id, photoId, time);
     }
 }

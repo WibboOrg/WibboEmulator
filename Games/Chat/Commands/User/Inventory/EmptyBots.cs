@@ -7,8 +7,8 @@ internal class EmptyBots : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        session.GetUser().InventoryComponent.ClearBots();
-        session.SendPacket(new BotInventoryComposer(session.GetUser().InventoryComponent.GetBots()));
+        session.User.InventoryComponent.ClearBots();
+        session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.GetBots()));
         session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("empty.cleared", session.Langue));
     }
 }

@@ -255,7 +255,7 @@ public class Room
     {
         foreach (var roomUser in this.RoomUserManager.GetUserList().ToList())
         {
-            if (!roomUser.IsBot && !roomUser.Client.GetUser().HasPermission("perm_no_kick"))
+            if (!roomUser.IsBot && !roomUser.Client.User.HasPermission("perm_no_kick"))
             {
                 this.RoomUserManager.RemoveUserFromRoom(roomUser.Client, true, true);
             }
@@ -299,19 +299,19 @@ public class Room
 
     public bool CheckRights(GameClient session, bool requireOwnership = false)
     {
-        if (session == null || session.GetUser() == null)
+        if (session == null || session.User == null)
         {
             return false;
         }
 
-        if (session.GetUser().Username == this.RoomData.OwnerName || session.GetUser().HasPermission("perm_owner_all_rooms"))
+        if (session.User.Username == this.RoomData.OwnerName || session.User.HasPermission("perm_owner_all_rooms"))
         {
             return true;
         }
 
         if (!requireOwnership)
         {
-            if (session.GetUser().HasPermission("perm_room_rights") || this.UsersWithRights.Contains(session.GetUser().Id))
+            if (session.User.HasPermission("perm_room_rights") || this.UsersWithRights.Contains(session.User.Id))
             {
                 return true;
             }
@@ -326,14 +326,14 @@ public class Room
                 return false;
             }
 
-            if (this.RoomData.Group.IsAdmin(session.GetUser().Id))
+            if (this.RoomData.Group.IsAdmin(session.User.Id))
             {
                 return true;
             }
 
             if (this.RoomData.Group.AdminOnlyDeco == 0)
             {
-                if (this.RoomData.Group.IsMember(session.GetUser().Id))
+                if (this.RoomData.Group.IsMember(session.User.Id))
                 {
                     return true;
                 }
@@ -363,7 +363,7 @@ public class Room
                 continue;
             }
 
-            if (!roomUser.IsBot && roomUser.Client != null && roomUser.Client.GetUser() == null)
+            if (!roomUser.IsBot && roomUser.Client != null && roomUser.Client.User == null)
             {
                 continue;
             }
@@ -490,17 +490,17 @@ public class Room
                 continue;
             }
 
-            if (user.Client == null || user.Client.GetConnection() == null || user.Client.GetUser() == null)
+            if (user.Client == null || user.Client.Connection == null || user.Client.User == null)
             {
                 continue;
             }
 
-            if (userMutedOnly && thisUser != null && user.Client.GetUser().MutedUsers.Contains(thisUser.UserId))
+            if (userMutedOnly && thisUser != null && user.Client.User.MutedUsers.Contains(thisUser.UserId))
             {
                 continue;
             }
 
-            if (thisUser != null && thisUser.Client != null && thisUser.Client.GetUser() != null && thisUser.Client.GetUser().IgnoreAll && thisUser != user)
+            if (thisUser != null && thisUser.Client != null && thisUser.Client.User != null && thisUser.Client.User.IgnoreAll && thisUser != user)
             {
                 continue;
             }
@@ -544,7 +544,7 @@ public class Room
                 continue;
             }
 
-            if (user.Client == null || user.Client.GetConnection() == null)
+            if (user.Client == null || user.Client.Connection == null)
             {
                 continue;
             }
@@ -577,12 +577,13 @@ public class Room
                 continue;
             }
 
-            if (user.Client == null || user.Client.GetConnection() == null)
+            if (user.Client == null || user.Client.Connection == null)
             {
                 continue;
             }
 
-            user.Client.GetConnection().SendData(packet);
+            user.Client.
+            Connection.SendData(packet);
         }
     }
 
@@ -671,7 +672,7 @@ public class Room
         }
         else
         {
-            return this.HasActiveTrade(user.Client.GetUser().Id);
+            return this.HasActiveTrade(user.Client.User.Id);
         }
     }
 
@@ -711,7 +712,7 @@ public class Room
             return;
         }
 
-        this.ActiveTrades.Add(new Trade(userOne.Client.GetUser().Id, userTwo.Client.GetUser().Id, this.Id));
+        this.ActiveTrades.Add(new Trade(userOne.Client.User.Id, userTwo.Client.User.Id, this.Id));
     }
 
     public void TryStopTrade(int userId)

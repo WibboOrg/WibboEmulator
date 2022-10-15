@@ -10,12 +10,12 @@ internal class SendHotelAlertEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.GetUser() == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
-        if (!session.GetUser().HasPermission("perm_wibbotool"))
+        if (!session.User.HasPermission("perm_wibbotool"))
         {
             return;
         }
@@ -38,7 +38,7 @@ internal class SendHotelAlertEvent : IPacketEvent
 
         if (!string.IsNullOrWhiteSpace(url))
         {
-            ModerationManager.LogStaffEntry(session.GetUser().Id, session.GetUser().Username, 0, string.Empty, "hal", string.Format("WibbbTool HaL: {0} : {1}", url, message));
+            ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "hal", string.Format("WibbbTool HaL: {0} : {1}", url, message));
 
             if (!url.StartsWith("https://wibbo.org") && !url.StartsWith("https://www.facebook.com/WibboHotelFR") && !url.StartsWith("https://twitter.com/WibboOrg") && !url.StartsWith("https://instagram.com/wibboorg"))
             {
@@ -51,12 +51,12 @@ internal class SendHotelAlertEvent : IPacketEvent
 
         if (eventAlert)
         {
-            if (session.GetUser().CurrentRoom == null)
+            if (session.User.CurrentRoom == null)
             {
                 return;
             }
 
-            ModerationManager.LogStaffEntry(session.GetUser().Id, session.GetUser().Username, session.GetUser().CurrentRoom.Id, string.Empty, "eventha", string.Format("WibbobTool EventHa: {0}", message));
+            ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, session.User.CurrentRoom.Id, string.Empty, "eventha", string.Format("WibbobTool EventHa: {0}", message));
             if (session.Antipub(message, "<eventalert>"))
             {
                 return;
@@ -68,13 +68,14 @@ internal class SendHotelAlertEvent : IPacketEvent
                 return;
             }
 
-            WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer("game_promo_small", "Message d'animation", message, "Je veux y jouer !", session.GetUser().CurrentRoom.Id, ""));
+            WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer("game_promo_small", "Message d'animation", message, "Je veux y jouer !", session.User.CurrentRoom.Id, ""));
 
-            session.GetUser().CurrentRoom.CloseFullRoom = true;
+            session.
+            User.CurrentRoom.CloseFullRoom = true;
         }
         else
         {
-            ModerationManager.LogStaffEntry(session.GetUser().Id, session.GetUser().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", message));
+            ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", message));
             if (session.Antipub(message, "<alert>"))
             {
                 return;

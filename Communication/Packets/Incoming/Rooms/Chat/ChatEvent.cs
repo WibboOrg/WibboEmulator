@@ -11,18 +11,18 @@ internal class ChatEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.GetUser() == null || !session.GetUser().InRoom)
+        if (session == null || session.User == null || !session.User.InRoom)
         {
             return;
         }
 
-        var room = session.GetUser().CurrentRoom;
+        var room = session.User.CurrentRoom;
         if (room == null)
         {
             return;
         }
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (user == null)
         {
             return;
@@ -46,7 +46,7 @@ internal class ChatEvent : IPacketEvent
 
         var color = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(color, out var style) || (style.RequiredRight.Length > 0 && !session.GetUser().HasPermission(style.RequiredRight)))
+        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(color, out var style) || (style.RequiredRight.Length > 0 && !session.User.HasPermission(style.RequiredRight)))
         {
             color = 0;
         }
@@ -58,7 +58,7 @@ internal class ChatEvent : IPacketEvent
 
         user.Unidle();
 
-        if (!session.GetUser().HasPermission("perm_mod") && !user.IsOwner() && !session.GetUser().CurrentRoom.CheckRights(session) && room.RoomMuted)
+        if (!session.User.HasPermission("perm_mod") && !user.IsOwner() && !session.User.CurrentRoom.CheckRights(session) && room.RoomMuted)
         {
             user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("room.muted", session.Langue));
             return;
@@ -74,42 +74,42 @@ internal class ChatEvent : IPacketEvent
             return;
         }
 
-        if (!session.GetUser().HasPermission("perm_mod") && !user.IsOwner() && !session.GetUser().CurrentRoom.CheckRights(session) && room.UserIsMuted(session.GetUser().Id))
+        if (!session.User.HasPermission("perm_mod") && !user.IsOwner() && !session.User.CurrentRoom.CheckRights(session) && room.UserIsMuted(session.User.Id))
         {
-            if (!room.HasMuteExpired(session.GetUser().Id))
+            if (!room.HasMuteExpired(session.User.Id))
             {
                 user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("user.muted", session.Langue));
                 return;
             }
             else
             {
-                room.RemoveMute(session.GetUser().Id);
+                room.RemoveMute(session.User.Id);
             }
         }
 
-        var timeSpan = DateTime.Now - session.GetUser().SpamFloodTime;
-        if (timeSpan.TotalSeconds > session.GetUser().SpamProtectionTime && session.GetUser().SpamEnable)
+        var timeSpan = DateTime.Now - session.User.SpamFloodTime;
+        if (timeSpan.TotalSeconds > session.User.SpamProtectionTime && session.User.SpamEnable)
         {
-            session.GetUser().FloodCount = 0;
-            session.GetUser().SpamEnable = false;
+            session.User.FloodCount = 0;
+            session.User.SpamEnable = false;
         }
         else if (timeSpan.TotalSeconds > 4.0)
         {
-            session.GetUser().FloodCount = 0;
+            session.User.FloodCount = 0;
         }
 
-        if (timeSpan.TotalSeconds < session.GetUser().SpamProtectionTime && session.GetUser().SpamEnable)
+        if (timeSpan.TotalSeconds < session.User.SpamProtectionTime && session.User.SpamEnable)
         {
-            var i = session.GetUser().SpamProtectionTime - timeSpan.Seconds;
+            var i = session.User.SpamProtectionTime - timeSpan.Seconds;
             user.Client.SendPacket(new FloodControlComposer(i));
             return;
         }
-        else if (timeSpan.TotalSeconds < 4.0 && session.GetUser().FloodCount > 5 && !session.GetUser().HasPermission("perm_mod"))
+        else if (timeSpan.TotalSeconds < 4.0 && session.User.FloodCount > 5 && !session.User.HasPermission("perm_mod"))
         {
-            session.GetUser().SpamProtectionTime = room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium") ? 5 : 15;
-            session.GetUser().SpamEnable = true;
+            session.User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("perm_flood_premium") ? 5 : 15;
+            session.User.SpamEnable = true;
 
-            user.Client.SendPacket(new FloodControlComposer(session.GetUser().SpamProtectionTime - timeSpan.Seconds));
+            user.Client.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
 
             return;
         }
@@ -118,9 +118,10 @@ internal class ChatEvent : IPacketEvent
             user.LastMessageCount = 0;
             user.LastMessage = "";
 
-            session.GetUser().SpamProtectionTime = room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium") ? 5 : 15;
-            session.GetUser().SpamEnable = true;
-            user.Client.SendPacket(new FloodControlComposer(session.GetUser().SpamProtectionTime - timeSpan.Seconds));
+            session.
+            User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("perm_flood_premium") ? 5 : 15;
+            session.User.SpamEnable = true;
+            user.Client.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
             return;
         }
         else
@@ -132,8 +133,9 @@ internal class ChatEvent : IPacketEvent
 
             user.LastMessage = message;
 
-            session.GetUser().SpamFloodTime = DateTime.Now;
-            session.GetUser().FloodCount++;
+            session.
+            User.SpamFloodTime = DateTime.Now;
+            session.User.FloodCount++;
 
             if (message.StartsWith("@red@") || message.StartsWith("@rouge@"))
             {
@@ -162,7 +164,7 @@ internal class ChatEvent : IPacketEvent
 
             if (message.StartsWith(":", StringComparison.CurrentCulture) && WibboEnvironment.GetGame().GetChatManager().GetCommands().Parse(session, user, room, message))
             {
-                room.ChatlogManager.AddMessage(session.GetUser().Id, session.GetUser().Username, room.Id, string.Format("{0} a utilisé la commande {1}", session.GetUser().Username, message), UnixTimestamp.GetNow());
+                room.ChatlogManager.AddMessage(session.User.Id, session.User.Username, room.Id, string.Format("{0} a utilisé la commande {1}", session.User.Username, message), UnixTimestamp.GetNow());
                 return;
             }
 
@@ -172,8 +174,8 @@ internal class ChatEvent : IPacketEvent
             }
 
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialChat, 0);
-            session.GetUser().ChatMessageManager.AddMessage(session.GetUser().Id, session.GetUser().Username, room.Id, message, UnixTimestamp.GetNow());
-            room.ChatlogManager.AddMessage(session.GetUser().Id, session.GetUser().Username, room.Id, message, UnixTimestamp.GetNow());
+            session.User.ChatMessageManager.AddMessage(session.User.Id, session.User.Username, room.Id, message, UnixTimestamp.GetNow());
+            room.ChatlogManager.AddMessage(session.User.Id, session.User.Username, room.Id, message, UnixTimestamp.GetNow());
 
             if (user.TransfBot)
             {
@@ -181,7 +183,7 @@ internal class ChatEvent : IPacketEvent
             }
         }
 
-        if (!session.GetUser().HasPermission("perm_word_filter_override"))
+        if (!session.User.HasPermission("perm_word_filter_override"))
         {
             message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(message);
             message = new Regex(@"\[tag\](.*?)\[\/tag\]").Replace(message, "<tag>$1</tag>");
@@ -195,12 +197,12 @@ internal class ChatEvent : IPacketEvent
 
         room.OnUserSay(user, message, false);
 
-        if (user.IsSpectator && session.GetUser().Rank < 11)
+        if (user.IsSpectator && session.User.Rank < 11)
         {
             return;
         }
 
-        if (!session.GetUser().IgnoreAll)
+        if (!session.User.IgnoreAll)
         {
             message = WibboEnvironment.GetGame().GetChatManager().GetMention().Parse(session, message);
         }

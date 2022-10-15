@@ -9,13 +9,13 @@ internal class GetGroupCreationWindowEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.GetUser() == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
         var validRooms = new List<RoomData>();
-        foreach (var roomId in session.GetUser().UsersRooms)
+        foreach (var roomId in session.User.UsersRooms)
         {
             var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
             if (data == null)

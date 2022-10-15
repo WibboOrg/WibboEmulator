@@ -10,6 +10,6 @@ internal class GetUserFlatCatsEvent : IPacketEvent
     {
         var categories = WibboEnvironment.GetGame().GetNavigator().GetFlatCategories();
 
-        session.SendPacket(new UserFlatCatsComposer(categories, session.GetUser().Rank));
+        session.SendPacket(new UserFlatCatsComposer(categories, session.User.Rank));
     }
 }

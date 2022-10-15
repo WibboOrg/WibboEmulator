@@ -6,5 +6,5 @@ internal class GetBuddyRequestsEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet) => session.SendPacket(new BuddyRequestsComposer(session.GetUser().Messenger.Requests));
+    public void Parse(GameClient session, ClientPacket packet) => session.SendPacket(new BuddyRequestsComposer(session.User.Messenger.Requests));
 }

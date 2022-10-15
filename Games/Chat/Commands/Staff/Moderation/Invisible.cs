@@ -7,15 +7,15 @@ internal class Invisible : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (session.GetUser().SpectatorMode)
+        if (session.User.SpectatorMode)
         {
-            session.GetUser().SpectatorMode = false;
-            session.GetUser().HideInRoom = false;
+            session.User.SpectatorMode = false;
+            session.User.HideInRoom = false;
         }
         else
         {
-            session.GetUser().SpectatorMode = true;
-            session.GetUser().HideInRoom = true;
+            session.User.SpectatorMode = true;
+            session.User.HideInRoom = true;
         }
 
         session.SendPacket(new GetGuestRoomResultComposer(session, room.RoomData, false, true));

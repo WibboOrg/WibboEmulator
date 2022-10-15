@@ -30,7 +30,7 @@ internal class UpdateGroupColoursEvent : IPacketEvent
             return;
         }
 
-        if (group.CreatorId != session.GetUser().Id)
+        if (group.CreatorId != session.User.Id)
         {
             return;
         }
@@ -44,9 +44,9 @@ internal class UpdateGroupColoursEvent : IPacketEvent
         group.Colour2 = colour2;
 
         session.SendPacket(new GroupInfoComposer(group, session));
-        if (session.GetUser().CurrentRoom != null)
+        if (session.User.CurrentRoom != null)
         {
-            foreach (var item in session.GetUser().CurrentRoom.RoomItemHandling.GetFloor.ToList())
+            foreach (var item in session.User.CurrentRoom.RoomItemHandling.GetFloor.ToList())
             {
                 if (item == null || item.GetBaseItem() == null)
                 {
@@ -58,7 +58,8 @@ internal class UpdateGroupColoursEvent : IPacketEvent
                     continue;
                 }
 
-                session.GetUser().CurrentRoom.SendPacket(new ObjectUpdateComposer(item, session.GetUser().CurrentRoom.RoomData.OwnerId));
+                session.
+                User.CurrentRoom.SendPacket(new ObjectUpdateComposer(item, session.User.CurrentRoom.RoomData.OwnerId));
             }
         }
     }

@@ -9,12 +9,12 @@ internal class CreateFlatEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.GetUser() == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
-        if (session.GetUser().UsersRooms.Count >= 200)
+        if (session.User.UsersRooms.Count >= 200)
         {
             session.SendPacket(new CanCreateRoomComposer(true, 200));
             return;
@@ -60,9 +60,9 @@ internal class CreateFlatEvent : IPacketEvent
         var roomId = 0;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            roomId = RoomDao.Insert(dbClient, name, desc, session.GetUser().Username, model, category, maxVisitors, tradeSettings);
+            roomId = RoomDao.Insert(dbClient, name, desc, session.User.Username, model, category, maxVisitors, tradeSettings);
         }
-        session.GetUser().UsersRooms.Add(roomId);
+        session.User.UsersRooms.Add(roomId);
 
         var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
 

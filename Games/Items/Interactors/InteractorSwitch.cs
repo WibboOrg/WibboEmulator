@@ -50,7 +50,7 @@ public class InteractorSwitch : FurniInteractor
         RoomUser roomUser = null;
         if (session != null)
         {
-            roomUser = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+            roomUser = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.User.Id);
         }
 
         if (roomUser == null)

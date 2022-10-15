@@ -52,30 +52,31 @@ internal class BuyOfferEvent : IPacketEvent
         }
         else
         {
-            if (Convert.ToInt32(row["user_id"]) == session.GetUser().Id)
+            if (Convert.ToInt32(row["user_id"]) == session.User.Id)
             {
                 session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.4", session.Langue));
                 return;
             }
 
-            if (Convert.ToInt32(row["total_price"]) > session.GetUser().WibboPoints)
+            if (Convert.ToInt32(row["total_price"]) > session.User.WibboPoints)
             {
                 session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.5", session.Langue));
                 return;
             }
 
-            session.GetUser().WibboPoints -= Convert.ToInt32(row["total_price"]);
-            session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().WibboPoints, 0, 105));
+            session.
+            User.WibboPoints -= Convert.ToInt32(row["total_price"]);
+            session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
 
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserDao.UpdateRemovePoints(dbClient, session.GetUser().Id, Convert.ToInt32(row["total_price"]));
+                UserDao.UpdateRemovePoints(dbClient, session.User.Id, Convert.ToInt32(row["total_price"]));
             }
 
-            var giveItem = ItemFactory.CreateSingleItem(item, session.GetUser(), Convert.ToString(row["extra_data"]), Convert.ToInt32(row["furni_id"]), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"]));
+            var giveItem = ItemFactory.CreateSingleItem(item, session.User, Convert.ToString(row["extra_data"]), Convert.ToInt32(row["furni_id"]), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"]));
             if (giveItem != null)
             {
-                _ = session.GetUser().InventoryComponent.TryAddItem(giveItem);
+                _ = session.User.InventoryComponent.TryAddItem(giveItem);
                 session.SendPacket(new FurniListNotificationComposer(giveItem.Id, 1));
 
                 session.SendPacket(new PurchaseOKComposer());

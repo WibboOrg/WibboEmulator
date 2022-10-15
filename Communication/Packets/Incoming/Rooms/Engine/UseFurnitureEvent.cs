@@ -8,7 +8,7 @@ internal class UseFurnitureEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
@@ -83,6 +83,6 @@ internal class UseFurnitureEvent : IPacketEvent
         var request = packet.PopInt();
 
         roomItem.Interactor.OnTrigger(session, roomItem, request, userHasRights, false);
-        roomItem.OnTrigger(room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id));
+        roomItem.OnTrigger(room.RoomUserManager.GetRoomUserByUserId(session.User.Id));
     }
 }

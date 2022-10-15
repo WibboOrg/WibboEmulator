@@ -4,7 +4,6 @@ using System.Text;
 using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.WebSocket;
-using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.Users.Messenger;
@@ -38,7 +37,7 @@ public class GameClientManager
         foreach (var userId in this._userStaff)
         {
             var client = this.GetClientByUserID(userId);
-            if (client == null || client.GetUser() == null)
+            if (client == null || client.User == null)
             {
                 continue;
             }
@@ -107,7 +106,7 @@ public class GameClientManager
 
         if (clientByUserId != null)
         {
-            return clientByUserId.GetUser().Username;
+            return clientByUserId.User.Username;
         }
 
         var username = "";
@@ -139,7 +138,7 @@ public class GameClientManager
         foreach (var userId in this._userStaff)
         {
             var client = this.GetClientByUserID(userId);
-            if (client == null || client.GetUser() == null)
+            if (client == null || client.User == null)
             {
                 continue;
             }
@@ -152,7 +151,7 @@ public class GameClientManager
     {
         foreach (var client in this._clients.Values.ToList())
         {
-            if (client == null || client.GetUser() == null)
+            if (client == null || client.User == null)
             {
                 continue;
             }
@@ -250,15 +249,15 @@ public class GameClientManager
                 continue;
             }
 
-            if (client.GetUser() != null)
+            if (client.User != null)
             {
                 try
                 {
-                    var timeOnline = DateTime.Now - client.GetUser().OnlineTime;
+                    var timeOnline = DateTime.Now - client.User.OnlineTime;
                     var timeOnlineSec = (int)timeOnline.TotalSeconds;
 
-                    _ = stringBuilder.Append(UserDao.BuildUpdateQuery(client.GetUser().Id, client.GetUser().Duckets, client.GetUser().Credits));
-                    _ = stringBuilder.Append(UserStatsDao.BuildUpdateQuery(client.GetUser().Id, client.GetUser().FavouriteGroupId, timeOnlineSec, client.GetUser().CurrentQuestId, client.GetUser().Respect, client.GetUser().DailyRespectPoints, client.GetUser().DailyPetRespectPoints));
+                    _ = stringBuilder.Append(UserDao.BuildUpdateQuery(client.User.Id, client.User.Duckets, client.User.Credits));
+                    _ = stringBuilder.Append(UserStatsDao.BuildUpdateQuery(client.User.Id, client.User.FavouriteGroupId, timeOnlineSec, client.User.CurrentQuestId, client.User.Respect, client.User.DailyRespectPoints, client.User.DailyPetRespectPoints));
                 }
                 catch
                 {
@@ -278,14 +277,14 @@ public class GameClientManager
         foreach (var client in this.GetClients.ToList())
         {
 
-            if (client == null || client.GetConnection() == null)
+            if (client == null || client.Connection == null)
             {
                 continue;
             }
 
             try
             {
-                client.GetConnection().Disconnect();
+                client.Connection.Disconnect();
             }
             catch
             {
@@ -302,13 +301,13 @@ public class GameClientManager
             reason = "Non respect des règles de conditions générales d'utilisations ainsi que la Wibbo Attitude";
         }
 
-        var variable = client.GetUser().Username.ToLower();
+        var variable = client.User.Username.ToLower();
         var str = "user";
         var expire = WibboEnvironment.GetUnixTimestamp() + lengthSeconds;
         if (ipBan)
         {
             //Variable = Client.GetConnection().getIp();
-            variable = client.GetUser().IP;
+            variable = client.User.IP;
             str = "ip";
         }
 
@@ -327,7 +326,7 @@ public class GameClientManager
         {
             if (str == "user")
             {
-                UserDao.UpdateIsBanned(dbClient, client.GetUser().Id);
+                UserDao.UpdateIsBanned(dbClient, client.User.Id);
             }
 
             BanDao.InsertBan(dbClient, expire, str, variable, reason, moderator);

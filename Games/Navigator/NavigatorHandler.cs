@@ -193,7 +193,7 @@ internal static class NavigatorHandler
 
                 var myRooms = new List<RoomData>();
 
-                foreach (var roomId in session.GetUser().UsersRooms)
+                foreach (var roomId in session.User.UsersRooms)
                 {
                     var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
                     if (data == null)
@@ -216,7 +216,7 @@ internal static class NavigatorHandler
 
             case NavigatorCategoryType.MyFavorites:
                 var favourites = new List<RoomData>();
-                foreach (var roomId in session.GetUser().FavoriteRooms)
+                foreach (var roomId in session.User.FavoriteRooms)
                 {
                     var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
                     if (data == null)
@@ -242,7 +242,7 @@ internal static class NavigatorHandler
             case NavigatorCategoryType.MyGroups:
                 var myGroups = new List<RoomData>();
 
-                foreach (var groupId in session.GetUser().MyGroups.ToList())
+                foreach (var groupId in session.User.MyGroups.ToList())
                 {
                     if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
                     {
@@ -291,7 +291,7 @@ internal static class NavigatorHandler
             case NavigatorCategoryType.MyRights:
                 var myRights = new List<RoomData>();
 
-                foreach (var roomId in session.GetUser().RoomRightsList)
+                foreach (var roomId in session.User.RoomRightsList)
                 {
                     var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
                     if (data == null)

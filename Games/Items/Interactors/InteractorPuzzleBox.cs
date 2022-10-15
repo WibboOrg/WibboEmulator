@@ -20,7 +20,7 @@ public class InteractorPuzzleBox : FurniInteractor
             return;
         }
 
-        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.User.Id);
         var point1 = new Point(item.Coordinate.X + 1, item.Coordinate.Y);
         var point2 = new Point(item.Coordinate.X - 1, item.Coordinate.Y);
         var point3 = new Point(item.Coordinate.X, item.Coordinate.Y + 1);

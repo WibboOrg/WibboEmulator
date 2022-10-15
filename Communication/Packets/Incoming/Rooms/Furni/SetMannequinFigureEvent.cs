@@ -10,7 +10,7 @@ internal class SetMannequinFigureEvent : IPacketEvent
     {
         var itemId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
@@ -27,7 +27,7 @@ internal class SetMannequinFigureEvent : IPacketEvent
         }
 
         var look = "";
-        foreach (var part in session.GetUser().Look.Split('.'))
+        foreach (var part in session.User.Look.Split('.'))
         {
             if (part.StartsWith("ch") || part.StartsWith("lg") || part.StartsWith("cc") || part.StartsWith("ca") || part.StartsWith("sh") || part.StartsWith("wa"))
             {
@@ -49,7 +49,7 @@ internal class SetMannequinFigureEvent : IPacketEvent
             name = stuff[2];
         }
 
-        roomItem.ExtraData = session.GetUser().Gender.ToUpper() + ";" + look + ";" + name;
+        roomItem.ExtraData = session.User.Gender.ToUpper() + ";" + look + ";" + name;
         roomItem.UpdateState();
     }
 }

@@ -9,18 +9,18 @@ internal class RpBotChooseEvent : IPacketEvent
     {
         var message = packet.PopString();
 
-        if (session == null || session.GetUser() == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
-        var room = session.GetUser().CurrentRoom;
+        var room = session.User.CurrentRoom;
         if (room == null)
         {
             return;
         }
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (user == null)
         {
             return;

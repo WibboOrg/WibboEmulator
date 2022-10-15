@@ -18,9 +18,9 @@ internal class OnGuideEvent : IPacketEvent
             return;
         }
 
-        if (session.GetUser().OnDuty)
+        if (session.User.OnDuty)
         {
-            guideManager.RemoveGuide(session.GetUser().Id);
+            guideManager.RemoveGuide(session.User.Id);
         }
 
         var guideId = guideManager.GetRandomGuide();
@@ -35,7 +35,8 @@ internal class OnGuideEvent : IPacketEvent
         session.SendPacket(new OnGuideSessionAttachedComposer(false, userId, message, 30));
         guide.SendPacket(new OnGuideSessionAttachedComposer(true, userId, message, 15));
 
-        guide.GetUser().GuideOtherUserId = session.GetUser().Id;
-        session.GetUser().GuideOtherUserId = guide.GetUser().Id;
+        guide.
+        User.GuideOtherUserId = session.User.Id;
+        session.User.GuideOtherUserId = guide.User.Id;
     }
 }

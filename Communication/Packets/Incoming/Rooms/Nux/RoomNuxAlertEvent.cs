@@ -9,7 +9,7 @@ internal class RoomNuxAlertEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var user = session.GetUser();
+        var user = session.User;
 
         user.PassedNuxCount++;
 

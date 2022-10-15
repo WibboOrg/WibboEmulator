@@ -29,7 +29,7 @@ internal class Steal : IChatCommand
 
         var targetRoomUser = room.RoomUserManager.GetRoomUserByName(parameters[1].ToString());
 
-        if (targetRoomUser == null || targetRoomUser.Client == null || targetRoomUser.Client.GetUser() == null)
+        if (targetRoomUser == null || targetRoomUser.Client == null || targetRoomUser.Client.User == null)
         {
             return;
         }
@@ -40,7 +40,7 @@ internal class Steal : IChatCommand
             return;
         }
 
-        if (targetRoomUser.Client.GetUser().Id == session.GetUser().Id)
+        if (targetRoomUser.Client.User.Id == session.User.Id)
         {
             return;
         }

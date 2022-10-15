@@ -8,7 +8,7 @@ internal class ModerationMuteEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.GetUser().HasPermission("perm_no_kick"))
+        if (!session.User.HasPermission("perm_no_kick"))
         {
             return;
         }

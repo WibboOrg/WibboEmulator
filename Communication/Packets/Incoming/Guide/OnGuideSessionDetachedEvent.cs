@@ -10,7 +10,7 @@ internal class OnGuideSessionDetachedEvent : IPacketEvent
     {
         var state = packet.PopBoolean();
 
-        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.GetUser().GuideOtherUserId);
+        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.User.GuideOtherUserId);
 
         if (!state)
         {
@@ -30,7 +30,7 @@ internal class OnGuideSessionDetachedEvent : IPacketEvent
             return;
         }
 
-        requester.SendPacket(new OnGuideSessionStartedComposer(session.GetUser(), requester.GetUser()));
-        session.SendPacket(new OnGuideSessionStartedComposer(session.GetUser(), requester.GetUser()));
+        requester.SendPacket(new OnGuideSessionStartedComposer(session.User, requester.User));
+        session.SendPacket(new OnGuideSessionStartedComposer(session.User, requester.User));
     }
 }

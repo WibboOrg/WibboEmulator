@@ -8,7 +8,7 @@ internal class CheckValidNameEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null || session == null)
+        if (session.User == null || session == null)
         {
             return;
         }

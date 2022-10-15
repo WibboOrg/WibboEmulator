@@ -15,7 +15,7 @@ public class InteractorTvYoutube : FurniInteractor
 
     public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (session == null || session.GetUser() == null)
+        if (session == null || session.User == null)
         {
             return;
         }

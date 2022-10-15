@@ -15,28 +15,29 @@ internal class RoomBuy : IChatCommand
             return;
         }
 
-        if (session.GetUser().WibboPoints - room.RoomData.SellPrice <= 0)
+        if (session.User.WibboPoints - room.RoomData.SellPrice <= 0)
         {
             return;
         }
 
-        session.GetUser().WibboPoints -= room.RoomData.SellPrice;
-        session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().WibboPoints, 0, 105));
+        session.
+        User.WibboPoints -= room.RoomData.SellPrice;
+        session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
 
         var clientOwner = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(room.RoomData.OwnerId);
-        if (clientOwner != null && clientOwner.GetUser() != null)
+        if (clientOwner != null && clientOwner.User != null)
         {
-            clientOwner.GetUser().WibboPoints += room.RoomData.SellPrice;
-            clientOwner.SendPacket(new ActivityPointNotificationComposer(clientOwner.GetUser().WibboPoints, 0, 105));
+            clientOwner.User.WibboPoints += room.RoomData.SellPrice;
+            clientOwner.SendPacket(new ActivityPointNotificationComposer(clientOwner.User.WibboPoints, 0, 105));
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserDao.UpdateRemovePoints(dbClient, session.GetUser().Id, room.RoomData.SellPrice);
+            UserDao.UpdateRemovePoints(dbClient, session.User.Id, room.RoomData.SellPrice);
             UserDao.UpdateAddPoints(dbClient, room.RoomData.OwnerId, room.RoomData.SellPrice);
 
             RoomRightDao.Delete(dbClient, room.Id);
-            RoomDao.UpdateOwner(dbClient, room.Id, session.GetUser().Username);
+            RoomDao.UpdateOwner(dbClient, room.Id, session.User.Username);
             RoomDao.UpdatePrice(dbClient, room.Id, 0);
         }
 

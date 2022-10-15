@@ -78,10 +78,8 @@ public static class Ext
             return data;
         }
 
-        using (var input = new MemoryStream(data))
-        {
-            return input.CompressToArray();
-        }
+        using var input = new MemoryStream(data);
+        return input.CompressToArray();
     }
 
     private static MemoryStream Compress(this Stream stream)
@@ -97,26 +95,22 @@ public static class Ext
 
         var mode = CompressionMode.Compress;
 
-        using (var ds = new DeflateStream(ret, mode, true))
-        {
-            stream.CopyTo(ds, 1024);
-            ds.Close(); // BFINAL set to 1.
-            ret.Write(Last, 0, 1);
+        using var ds = new DeflateStream(ret, mode, true);
+        stream.CopyTo(ds, 1024);
+        ds.Close(); // BFINAL set to 1.
+        ret.Write(Last, 0, 1);
 
-            ret.Position = 0;
+        ret.Position = 0;
 
-            return ret;
-        }
+        return ret;
     }
 
     private static byte[] CompressToArray(this Stream stream)
     {
-        using (var output = stream.Compress())
-        {
-            output.Close();
+        using var output = stream.Compress();
+        output.Close();
 
-            return output.ToArray();
-        }
+        return output.ToArray();
     }
 
     private static byte[] Decompress(this byte[] data)
@@ -126,10 +120,8 @@ public static class Ext
             return data;
         }
 
-        using (var input = new MemoryStream(data))
-        {
-            return input.DecompressToArray();
-        }
+        using var input = new MemoryStream(data);
+        return input.DecompressToArray();
     }
 
     private static MemoryStream Decompress(this Stream stream)
@@ -145,24 +137,20 @@ public static class Ext
 
         var mode = CompressionMode.Decompress;
 
-        using (var ds = new DeflateStream(stream, mode, true))
-        {
-            ds.CopyTo(ret, 1024);
+        using var ds = new DeflateStream(stream, mode, true);
+        ds.CopyTo(ret, 1024);
 
-            ret.Position = 0;
+        ret.Position = 0;
 
-            return ret;
-        }
+        return ret;
     }
 
     private static byte[] DecompressToArray(this Stream stream)
     {
-        using (var output = stream.Decompress())
-        {
-            output.Close();
+        using var output = stream.Decompress();
+        output.Close();
 
-            return output.ToArray();
-        }
+        return output.ToArray();
     }
 
     private static bool IsPredefinedScheme(this string value)
@@ -699,43 +687,47 @@ public static class Ext
       this Stream stream, long length, int bufferLength
     )
     {
-        using (var dest = new MemoryStream())
+
+        if (stream == null)
         {
-            var buff = new byte[bufferLength];
-            var retry = 0;
+            return Array.Empty<byte>();
+        }
 
-            while (length > 0)
+        using var dest = new MemoryStream();
+        var buff = new byte[bufferLength];
+        var retry = 0;
+
+        while (length > 0)
+        {
+            if (length < bufferLength)
             {
-                if (length < bufferLength)
-                {
-                    bufferLength = (int)length;
-                }
-
-                var nread = stream.Read(buff, 0, bufferLength);
-
-                if (nread <= 0)
-                {
-                    if (retry < MaxRetry)
-                    {
-                        retry++;
-
-                        continue;
-                    }
-
-                    break;
-                }
-
-                retry = 0;
-
-                dest.Write(buff, 0, nread);
-
-                length -= nread;
+                bufferLength = (int)length;
             }
 
-            dest.Close();
+            var nread = stream.Read(buff, 0, bufferLength);
 
-            return dest.ToArray();
+            if (nread <= 0)
+            {
+                if (retry < MaxRetry)
+                {
+                    retry++;
+
+                    continue;
+                }
+
+                break;
+            }
+
+            retry = 0;
+
+            dest.Write(buff, 0, nread);
+
+            length -= nread;
         }
+
+        dest.Close();
+
+        return dest.ToArray();
     }
 
     internal static void ReadBytesAsync(
@@ -745,6 +737,11 @@ public static class Ext
       Action<Exception> error
     )
     {
+        if (stream == null)
+        {
+            return;
+        }
+
         var ret = new byte[length];
 
         var offset = 0;
@@ -754,6 +751,11 @@ public static class Ext
         {
             try
             {
+                if (stream == null)
+                {
+                    return;
+                }
+
                 var nread = stream.EndRead(ar);
 
                 if (nread <= 0)
@@ -984,13 +986,11 @@ public static class Ext
     {
         stream.Position = 0;
 
-        using (var buff = new MemoryStream())
-        {
-            stream.CopyTo(buff, 1024);
-            buff.Close();
+        using var buff = new MemoryStream();
+        stream.CopyTo(buff, 1024);
+        buff.Close();
 
-            return buff.ToArray();
-        }
+        return buff.ToArray();
     }
 
     internal static byte[] ToByteArray(this ushort value, ByteOrder order)
@@ -1317,10 +1317,8 @@ public static class Ext
       this Stream stream, byte[] bytes, int bufferLength
     )
     {
-        using (var src = new MemoryStream(bytes))
-        {
-            src.CopyTo(stream, bufferLength);
-        }
+        using var src = new MemoryStream(bytes);
+        src.CopyTo(stream, bufferLength);
     }
 
     internal static void WriteBytesAsync(

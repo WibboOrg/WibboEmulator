@@ -15,7 +15,7 @@ internal class GetRoomSettingsEvent : IPacketEvent
             return;
         }
 
-        if (!room.CheckRights(session, true) && !session.GetUser().HasPermission("perm_settings_room"))
+        if (!room.CheckRights(session, true) && !session.User.HasPermission("perm_settings_room"))
         {
             return;
         }

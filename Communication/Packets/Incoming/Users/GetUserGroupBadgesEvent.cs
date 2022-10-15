@@ -8,12 +8,12 @@ internal class GetUserGroupBadgesEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.GetUser() == null || session.GetUser().LoadingRoomId == 0)
+        if (session == null || session.User == null || session.User.LoadingRoomId == 0)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().LoadingRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.LoadingRoomId, out var room))
         {
             return;
         }
@@ -21,17 +21,17 @@ internal class GetUserGroupBadgesEvent : IPacketEvent
         var badges = new Dictionary<int, string>();
         foreach (var user in room.RoomUserManager.GetRoomUsers().ToList())
         {
-            if (user.IsBot || user.Client == null || user.Client.GetUser() == null)
+            if (user.IsBot || user.Client == null || user.Client.User == null)
             {
                 continue;
             }
 
-            if (user.Client.GetUser().FavouriteGroupId == 0 || badges.ContainsKey(user.Client.GetUser().FavouriteGroupId))
+            if (user.Client.User.FavouriteGroupId == 0 || badges.ContainsKey(user.Client.User.FavouriteGroupId))
             {
                 continue;
             }
 
-            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.Client.GetUser().FavouriteGroupId, out var group))
+            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.Client.User.FavouriteGroupId, out var group))
             {
                 continue;
             }
@@ -42,9 +42,9 @@ internal class GetUserGroupBadgesEvent : IPacketEvent
             }
         }
 
-        if (session.GetUser().FavouriteGroupId > 0)
+        if (session.User.FavouriteGroupId > 0)
         {
-            if (WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(session.GetUser().FavouriteGroupId, out var group))
+            if (WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(session.User.FavouriteGroupId, out var group))
             {
                 if (!badges.ContainsKey(group.Id))
                 {

@@ -20,13 +20,13 @@ internal class UserInfo : IChatCommand
             return;
         }
         var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
-        if (clientByUsername == null || clientByUsername.GetUser() == null)
+        if (clientByUsername == null || clientByUsername.User == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.useroffline", session.Langue));
             return;
         }
 
-        var user = clientByUsername.GetUser();
+        var user = clientByUsername.User;
         var stringBuilder = new StringBuilder();
 
         _ = stringBuilder.Append("- Information sur l'utilisateur [" + user.Username + "] -\r");
@@ -51,12 +51,12 @@ internal class UserInfo : IChatCommand
             _ = stringBuilder.Append("Utilisateurs: " + user.CurrentRoom.UserCount + "/" + user.CurrentRoom.RoomData.UsersMax + "\r");
         }
 
-        if (session.GetUser().HasPermission("perm_god"))
+        if (session.User.HasPermission("perm_god"))
         {
             _ = stringBuilder.Append("\r - Autre information - \r");
             _ = stringBuilder.Append("MachineId: " + clientByUsername.MachineId + "\r");
-            _ = stringBuilder.Append("IP Web: " + clientByUsername.GetUser().IP + "\r");
-            _ = stringBuilder.Append("IP Emu: " + clientByUsername.GetConnection().GetIp() + "\r");
+            _ = stringBuilder.Append("IP Web: " + clientByUsername.User.IP + "\r");
+            _ = stringBuilder.Append("IP Emu: " + clientByUsername.Connection.GetIp() + "\r");
             _ = stringBuilder.Append("Langue: " + clientByUsername.Langue.ToString() + "\r");
         }
 

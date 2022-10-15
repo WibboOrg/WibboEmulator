@@ -430,6 +430,11 @@ Extended Payload Length: {7}
       Stream stream, WebSocketFrame frame
     )
     {
+        if (stream == null)
+        {
+            return frame;
+        }
+
         var len = frame.ExtendedPayloadLengthWidth;
 
         if (len == 0)

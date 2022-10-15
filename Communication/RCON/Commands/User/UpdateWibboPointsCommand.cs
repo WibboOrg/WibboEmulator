@@ -36,8 +36,9 @@ internal class UpdateWibboPointsCommand : IRCONCommand
             return false;
         }
 
-        client.GetUser().WibboPoints += nbWb;
-        client.SendPacket(new ActivityPointNotificationComposer(client.GetUser().WibboPoints, 0, 105));
+        client.
+        User.WibboPoints += nbWb;
+        client.SendPacket(new ActivityPointNotificationComposer(client.User.WibboPoints, 0, 105));
 
         return true;
     }

@@ -511,8 +511,8 @@ public class RolePlayer
             else
             {
                 this.SendPrison = false;
-                user.Client.GetUser().IsTeleporting = true;
-                user.Client.GetUser().TeleportingRoomID = rpManager.PrisonId;
+                user.Client.User.IsTeleporting = true;
+                user.Client.User.TeleportingRoomID = rpManager.PrisonId;
                 user.Client.SendPacket(new RoomForwardComposer(rpManager.PrisonId));
             }
         }
@@ -526,8 +526,8 @@ public class RolePlayer
             else
             {
                 this.Dead = false;
-                user.Client.GetUser().IsTeleporting = true;
-                user.Client.GetUser().TeleportingRoomID = rpManager.HopitalId;
+                user.Client.User.IsTeleporting = true;
+                user.Client.User.TeleportingRoomID = rpManager.HopitalId;
                 user.Client.SendPacket(new RoomForwardComposer(rpManager.HopitalId));
             }
         }

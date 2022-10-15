@@ -8,24 +8,25 @@ internal class GuideEndSessionEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.GetUser().GuideOtherUserId);
+        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.User.GuideOtherUserId);
 
         session.SendPacket(new OnGuideSessionEndedComposer(1));
 
-        session.GetUser().GuideOtherUserId = 0;
-        if (session.GetUser().OnDuty)
+        session.
+        User.GuideOtherUserId = 0;
+        if (session.User.OnDuty)
         {
-            WibboEnvironment.GetGame().GetHelpManager().EndService(session.GetUser().Id);
+            WibboEnvironment.GetGame().GetHelpManager().EndService(session.User.Id);
         }
 
         if (requester != null)
         {
             requester.SendPacket(new OnGuideSessionEndedComposer(1));
-            requester.GetUser().GuideOtherUserId = 0;
+            requester.User.GuideOtherUserId = 0;
 
-            if (requester.GetUser().OnDuty)
+            if (requester.User.OnDuty)
             {
-                WibboEnvironment.GetGame().GetHelpManager().EndService(requester.GetUser().Id);
+                WibboEnvironment.GetGame().GetHelpManager().EndService(requester.User.Id);
             }
         }
     }

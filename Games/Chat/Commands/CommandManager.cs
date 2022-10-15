@@ -106,7 +106,7 @@ public class CommandManager
 
         if (cmdInfo.UserGotAuthorizationStaffLog())
         {
-            ModerationManager.LogStaffEntry(session.GetUser().Id, session.GetUser().Username, room.Id, string.Empty, split[0].ToLower(), string.Format("Tchat commande: {0}", string.Join(" ", split)));
+            ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, room.Id, string.Empty, split[0].ToLower(), string.Format("Tchat commande: {0}", string.Join(" ", split)));
         }
 
         cmd.Execute(session, room, user, split);
@@ -148,7 +148,7 @@ public class CommandManager
 
     public string GetCommandList(GameClient client, Room room)
     {
-        var rank = client.GetUser().Rank + client.GetUser().Langue.ToString();
+        var rank = client.User.Rank + client.User.Langue.ToString();
         if (this._listCommande.ContainsKey(rank))
         {
             return this._listCommande[rank];

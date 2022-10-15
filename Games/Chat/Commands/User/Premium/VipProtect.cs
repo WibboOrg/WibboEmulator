@@ -6,9 +6,9 @@ internal class VipProtect : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        session.GetUser().PremiumProtect = !session.GetUser().PremiumProtect;
+        session.User.PremiumProtect = !session.User.PremiumProtect;
 
-        if (session.GetUser().PremiumProtect)
+        if (session.User.PremiumProtect)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.premium.true", session.Langue));
         }

@@ -20,9 +20,9 @@ internal class RoomBadge : IChatCommand
             {
                 if (user.Client != null)
                 {
-                    if (user.Client.GetUser() != null)
+                    if (user.Client.User != null)
                     {
-                        user.Client.GetUser().BadgeComponent.GiveBadge(badgeId, true);
+                        user.Client.User.BadgeComponent.GiveBadge(badgeId, true);
                         user.Client.SendPacket(new ReceiveBadgeComposer(badgeId));
                     }
                 }

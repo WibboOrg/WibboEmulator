@@ -148,12 +148,12 @@ internal static class ItemLootBox
 
         var badgeCode = pageBadge.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, pageBadge.Items.Count - 1)).Value.Badge;
 
-        if (!string.IsNullOrEmpty(badgeCode) && !session.GetUser().BadgeComponent.HasBadge(badgeCode))
+        if (!string.IsNullOrEmpty(badgeCode) && !session.User.BadgeComponent.HasBadge(badgeCode))
         {
-            session.GetUser().BadgeComponent.GiveBadge(badgeCode, true);
+            session.User.BadgeComponent.GiveBadge(badgeCode, true);
             session.SendPacket(new ReceiveBadgeComposer(badgeCode));
 
-            var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+            var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
             if (roomUserByUserId != null)
             {
                 roomUserByUserId.SendWhisperChat("Tu as reçu le badge: " + badgeCode);
@@ -214,7 +214,7 @@ internal static class ItemLootBox
 
         foreach (var item in pageBadge.Items.OrderBy(a => Guid.NewGuid()).ToList())
         {
-            if (session.GetUser().BadgeComponent.HasBadge(item.Value.Badge))
+            if (session.User.BadgeComponent.HasBadge(item.Value.Badge))
             {
                 continue;
             }
@@ -224,20 +224,20 @@ internal static class ItemLootBox
         }
 
         var credits = WibboEnvironment.GetRandomNumber(100, 10000) * 1000;
-        session.GetUser().Credits += credits;
-        session.SendPacket(new CreditBalanceComposer(session.GetUser().Credits));
+        session.User.Credits += credits;
+        session.SendPacket(new CreditBalanceComposer(session.User.Credits));
 
         var winwin = WibboEnvironment.GetRandomNumber(100, 1000);
-        session.GetUser().AchievementPoints += winwin;
+        session.User.AchievementPoints += winwin;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserStatsDao.UpdateAchievementScore(dbClient, session.GetUser().Id, winwin);
+            UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, winwin);
         }
 
-        session.SendPacket(new AchievementScoreComposer(session.GetUser().AchievementPoints));
+        session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));
 
-        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (roomUserByUserId != null)
         {
             session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
@@ -248,7 +248,7 @@ internal static class ItemLootBox
 
         if (!string.IsNullOrEmpty(badgeCode))
         {
-            session.GetUser().BadgeComponent.GiveBadge(badgeCode, true);
+            session.User.BadgeComponent.GiveBadge(badgeCode, true);
             session.SendPacket(new ReceiveBadgeComposer(badgeCode));
         }
 
@@ -286,7 +286,7 @@ internal static class ItemLootBox
 
         if (lotData.IsRare)
         {
-            LogLootBoxDao.Insert(dbClient, present.Data.InteractionType.ToString(), session.GetUser().Id, present.Id, lotData.Id);
+            LogLootBoxDao.Insert(dbClient, present.Data.InteractionType.ToString(), session.User.Id, present.Id, lotData.Id);
         }
 
         if (lotData.Amount >= 0)
@@ -332,7 +332,7 @@ internal static class ItemLootBox
 
         if (!itemIsInRoom)
         {
-            _ = session.GetUser().InventoryComponent.TryAddItem(present);
+            _ = session.User.InventoryComponent.TryAddItem(present);
         }
     }
 }

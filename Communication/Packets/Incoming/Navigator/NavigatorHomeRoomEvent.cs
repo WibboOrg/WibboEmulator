@@ -12,15 +12,16 @@ internal class NavigatorHomeRoomEvent : IPacketEvent
         var roomId = packet.PopInt();
 
         var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
-        if (roomId != 0 && (roomData == null || roomData.OwnerName.ToLower() != session.GetUser().Username.ToLower()))
+        if (roomId != 0 && (roomData == null || roomData.OwnerName.ToLower() != session.User.Username.ToLower()))
         {
             return;
         }
 
-        session.GetUser().HomeRoom = roomId;
+        session.
+        User.HomeRoom = roomId;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserDao.UpdateHomeRoom(dbClient, session.GetUser().Id, roomId);
+            UserDao.UpdateHomeRoom(dbClient, session.User.Id, roomId);
         }
 
         session.SendPacket(new NavigatorHomeRoomComposer(roomId, 0));

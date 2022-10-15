@@ -45,7 +45,7 @@ internal class Prison : IChatCommand
             return;
         }
 
-        if (targetRoomUser.Client.GetUser().Id == session.GetUser().Id)
+        if (targetRoomUser.Client.User.Id == session.User.Id)
         {
             return;
         }

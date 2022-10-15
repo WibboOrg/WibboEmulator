@@ -12,7 +12,7 @@ internal class UpdateFigureDataEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
@@ -28,29 +28,30 @@ internal class UpdateFigureDataEvent : IPacketEvent
 
         WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ProfileChangeLook, 0);
 
-        session.GetUser().Look = look;
-        session.GetUser().Gender = gender.ToLower();
+        session.
+        User.Look = look;
+        session.User.Gender = gender.ToLower();
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserDao.UpdateLookAndGender(dbClient, session.GetUser().Id, look, gender);
+            UserDao.UpdateLookAndGender(dbClient, session.User.Id, look, gender);
         }
 
         _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_AvatarLooks", 1);
 
-        if (!session.GetUser().InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        var currentRoom = session.GetUser().CurrentRoom;
+        var currentRoom = session.User.CurrentRoom;
 
         if (currentRoom == null)
         {
             return;
         }
 
-        var roomUserByUserId = currentRoom.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserByUserId = currentRoom.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (roomUserByUserId == null)
         {
             return;
@@ -61,8 +62,8 @@ internal class UpdateFigureDataEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new FigureUpdateComposer(session.GetUser().Look, session.GetUser().Gender));
-        session.SendPacket(new UserObjectComposer(session.GetUser()));
+        session.SendPacket(new FigureUpdateComposer(session.User.Look, session.User.Gender));
+        session.SendPacket(new UserObjectComposer(session.User));
         session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
 
         currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));

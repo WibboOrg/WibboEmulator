@@ -13,12 +13,12 @@ internal class Kick : IChatCommand
 
         var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
 
-        if (targetUser == null || targetUser.GetUser() == null)
+        if (targetUser == null || targetUser.User == null)
         {
             return;
         }
 
-        if (session.GetUser().Rank <= targetUser.GetUser().Rank)
+        if (session.User.Rank <= targetUser.User.Rank)
         {
             return;
         }

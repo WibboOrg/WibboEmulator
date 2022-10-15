@@ -7,7 +7,7 @@ internal class AllEyesOnMe : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var thisUser = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var thisUser = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (thisUser == null)
         {
             return;
@@ -16,7 +16,7 @@ internal class AllEyesOnMe : IChatCommand
         var users = room.RoomUserManager.GetRoomUsers();
         foreach (var u in users.ToList())
         {
-            if (u == null || session.GetUser().Id == u.UserId)
+            if (u == null || session.User.Id == u.UserId)
             {
                 continue;
             }

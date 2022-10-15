@@ -12,7 +12,7 @@ internal class ChangeMottoEvent : IPacketEvent
     public void Parse(GameClient session, ClientPacket packet)
     {
         var newMotto = StringCharFilter.Escape(packet.PopString());
-        if (newMotto == session.GetUser().Motto)
+        if (newMotto == session.User.Motto)
         {
             return;
         }
@@ -27,34 +27,35 @@ internal class ChangeMottoEvent : IPacketEvent
             return;
         }
 
-        if (!session.GetUser().HasPermission("perm_word_filter_override"))
+        if (!session.User.HasPermission("perm_word_filter_override"))
         {
             newMotto = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(newMotto);
         }
 
-        if (session.GetUser().IgnoreAll)
+        if (session.User.IgnoreAll)
         {
             return;
         }
 
-        session.GetUser().Motto = newMotto;
+        session.
+        User.Motto = newMotto;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserDao.UpdateMotto(dbClient, session.GetUser().Id, newMotto);
+            UserDao.UpdateMotto(dbClient, session.User.Id, newMotto);
         }
 
         WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ProfileChangeMotto, 0);
 
-        if (session.GetUser().InRoom)
+        if (session.User.InRoom)
         {
-            var currentRoom = session.GetUser().CurrentRoom;
+            var currentRoom = session.User.CurrentRoom;
             if (currentRoom == null)
             {
                 return;
             }
 
-            var roomUserByUserId = currentRoom.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+            var roomUserByUserId = currentRoom.RoomUserManager.GetRoomUserByUserId(session.User.Id);
             if (roomUserByUserId == null)
             {
                 return;

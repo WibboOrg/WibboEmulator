@@ -13,24 +13,24 @@ internal class AllFriends : IChatCommand
                 continue;
             }
 
-            if (user.GetUser() == null)
+            if (user.User == null)
             {
                 continue;
             }
 
-            if (user.GetUser().Messenger == null)
+            if (user.User.Messenger == null)
             {
                 continue;
             }
 
-            if (!user.GetUser().Messenger.FriendshipExists(userRoom.UserId))
+            if (!user.User.Messenger.FriendshipExists(userRoom.UserId))
             {
-                user.GetUser().Messenger.OnNewFriendship(userRoom.UserId);
+                user.User.Messenger.OnNewFriendship(userRoom.UserId);
             }
 
-            if (!session.GetUser().Messenger.FriendshipExists(user.GetUser().Id))
+            if (!session.User.Messenger.FriendshipExists(user.User.Id))
             {
-                session.GetUser().Messenger.OnNewFriendship(user.GetUser().Id);
+                session.User.Messenger.OnNewFriendship(user.User.Id);
             }
         }
     }

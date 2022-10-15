@@ -14,9 +14,9 @@ internal class StaffsOnline : IChatCommand
         {
             foreach (var client in staffs)
             {
-                if (client != null && client.GetUser() != null)
+                if (client != null && client.User != null)
                 {
-                    output += $"{client.GetUser().Username} (Rank: {client.GetUser().Rank})\n";
+                    output += $"{client.User.Username} (Rank: {client.User.Rank})\n";
                 }
             }
         }

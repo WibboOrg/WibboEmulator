@@ -10,7 +10,7 @@ internal class GuideToolMessageNewEvent : IPacketEvent
     {
         var message = packet.PopString();
 
-        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.GetUser().GuideOtherUserId);
+        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.User.GuideOtherUserId);
         if (requester == null)
         {
             return;
@@ -21,7 +21,7 @@ internal class GuideToolMessageNewEvent : IPacketEvent
             return;
         }
 
-        requester.SendPacket(new OnGuideSessionMsgComposer(message, session.GetUser().Id));
-        session.SendPacket(new OnGuideSessionMsgComposer(message, session.GetUser().Id));
+        requester.SendPacket(new OnGuideSessionMsgComposer(message, session.User.Id));
+        session.SendPacket(new OnGuideSessionMsgComposer(message, session.User.Id));
     }
 }

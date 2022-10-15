@@ -13,12 +13,12 @@ public class InteractorFreezeTile : FurniInteractor
 
     public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (session == null || session.GetUser() == null || item.InteractingUser > 0)
+        if (session == null || session.User == null || item.InteractingUser > 0)
         {
             return;
         }
 
-        var pName = session.GetUser().Username;
+        var pName = session.User.Username;
         var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByName(pName);
         if (roomUserByUserId == null || roomUserByUserId.CountFreezeBall == 0 || roomUserByUserId.Freezed)
         {

@@ -8,12 +8,12 @@ internal class CancelTypingEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
 
-        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (roomUserByUserId == null)
         {
             return;

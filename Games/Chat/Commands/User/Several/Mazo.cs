@@ -7,7 +7,7 @@ internal class Mazo : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
@@ -18,7 +18,7 @@ internal class Mazo : IChatCommand
         }
 
         var numberRandom = WibboEnvironment.GetRandomNumber(1, 3);
-        var user = session.GetUser();
+        var user = session.User;
 
         if (numberRandom != 1)
         {

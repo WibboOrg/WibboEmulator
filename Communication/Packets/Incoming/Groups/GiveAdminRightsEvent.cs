@@ -17,7 +17,7 @@ internal class GiveAdminRightsEvent : IPacketEvent
             return;
         }
 
-        if (session.GetUser().Id != group.CreatorId || !group.IsMember(userId))
+        if (session.User.Id != group.CreatorId || !group.IsMember(userId))
         {
             return;
         }

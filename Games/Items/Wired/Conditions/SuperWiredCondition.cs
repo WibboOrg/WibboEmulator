@@ -378,7 +378,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             return false;
         }
 
-        if (user == null || user.Client == null || user.Client.GetUser() == null)
+        if (user == null || user.Client == null || user.Client.User == null)
         {
             return false;
         }
@@ -799,7 +799,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "missioncontais":
             case "notmissioncontais":
             {
-                if (!user.IsBot && user.Client.GetUser().Motto.Contains(value))
+                if (!user.IsBot && user.Client.User.Motto.Contains(value))
                 {
                     result = true;
                 }
@@ -809,7 +809,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "mission":
             case "notmission":
             {
-                if (!user.IsBot && user.Client.GetUser().Motto == value)
+                if (!user.IsBot && user.Client.User.Motto == value)
                 {
                     result = true;
                 }
@@ -821,7 +821,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 _ = int.TryParse(value, out var groupId);
 
-                if (!user.IsBot && user.Client.GetUser().FavouriteGroupId == groupId)
+                if (!user.IsBot && user.Client.User.FavouriteGroupId == groupId)
                 {
                     result = true;
                 }
@@ -831,7 +831,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "usergirl":
             case "notusergirl":
             {
-                if (!user.IsBot && user.Client.GetUser().Gender.ToUpper() == "F")
+                if (!user.IsBot && user.Client.User.Gender.ToUpper() == "F")
                 {
                     result = true;
                 }
@@ -841,7 +841,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "userboy":
             case "notuserboy":
             {
-                if (!user.IsBot && user.Client.GetUser().Gender.ToUpper() == "M")
+                if (!user.IsBot && user.Client.User.Gender.ToUpper() == "M")
                 {
                     result = true;
                 }
@@ -990,7 +990,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (user.IsBot || (user.Client != null && user.Client.GetUser() != null && user.Client.GetUser().MyGroups.Contains(groupId)))
+                if (user.IsBot || (user.Client != null && user.Client.User != null && user.Client.User.MyGroups.Contains(groupId)))
                 {
                     result = true;
                 }
@@ -1070,12 +1070,12 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "badge":
             case "notbadge":
             {
-                if (user.IsBot || user.Client == null || user.Client.GetUser() == null || user.Client.GetUser().BadgeComponent == null)
+                if (user.IsBot || user.Client == null || user.Client.User == null || user.Client.User.BadgeComponent == null)
                 {
                     break;
                 }
 
-                if (user.Client.GetUser().BadgeComponent.HasBadge(value))
+                if (user.Client.User.BadgeComponent.HasBadge(value))
                 {
                     result = true;
                 }
@@ -1099,7 +1099,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (user.Client.GetUser().Rank.ToString() == value)
+                if (user.Client.User.Rank.ToString() == value)
                 {
                     result = true;
                 }
@@ -1113,7 +1113,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (user.Client.GetUser().Rank > Convert.ToInt32(value))
+                if (user.Client.User.Rank > Convert.ToInt32(value))
                 {
                     result = true;
                 }
@@ -1127,7 +1127,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (user.Client.GetUser().Rank < Convert.ToInt32(value))
+                if (user.Client.User.Rank < Convert.ToInt32(value))
                 {
                     result = true;
                 }

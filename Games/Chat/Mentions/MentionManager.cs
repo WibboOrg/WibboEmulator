@@ -71,40 +71,41 @@ public class MentionManager
             return false;
         }
 
-        if (targetClient.GetUser() == null || targetClient.GetUser().Messenger == null)
+        if (targetClient.User == null || targetClient.User.Messenger == null)
         {
             return false;
         }
 
-        if (!targetClient.GetUser().Messenger.FriendshipExists(session.GetUser().Id) && !session.GetUser().HasPermission("perm_mention"))
+        if (!targetClient.User.Messenger.FriendshipExists(session.User.Id) && !session.User.HasPermission("perm_mention"))
         {
             session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Tu as besoin d'être ami avec {targetUsername} pour pouvoir le taguer"));
             return false;
         }
 
-        targetClient.SendPacket(new MentionComposer(session.GetUser().Id, session.GetUser().Username, session.GetUser().Look, message));
+        targetClient.SendPacket(new MentionComposer(session.User.Id, session.User.Username, session.User.Look, message));
 
         return true;
     }
 
     public static bool EveryoneFriend(GameClient session, string message)
     {
-        if (session.GetUser().Rank < 2)
+        if (session.User.Rank < 2)
         {
             session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous devez être Premium pour utiliser @everyone"));
             return false;
         }
 
-        var timeSpan = DateTime.Now - session.GetUser().EveryoneTimer;
+        var timeSpan = DateTime.Now - session.User.EveryoneTimer;
         if (timeSpan.TotalSeconds < 120)
         {
             session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Veuille attendre 2 minute avant de pouvoir réutiliser @everyone"));
             return false;
         }
 
-        session.GetUser().EveryoneTimer = DateTime.Now;
+        session.
+        User.EveryoneTimer = DateTime.Now;
 
-        var onlineUsers = WibboEnvironment.GetGame().GetGameClientManager().GetClientsById(session.GetUser().Messenger.Friends.Keys);
+        var onlineUsers = WibboEnvironment.GetGame().GetGameClientManager().GetClientsById(session.User.Messenger.Friends.Keys);
 
         if (onlineUsers == null)
         {
@@ -113,11 +114,11 @@ public class MentionManager
 
         foreach (var targetClient in onlineUsers)
         {
-            if (targetClient != null && targetClient.GetUser() != null && targetClient.GetUser().Messenger != null)
+            if (targetClient != null && targetClient.User != null && targetClient.User.Messenger != null)
             {
-                if (targetClient.GetUser().Messenger.FriendshipExists(session.GetUser().Id))
+                if (targetClient.User.Messenger.FriendshipExists(session.User.Id))
                 {
-                    targetClient.SendPacket(new MentionComposer(session.GetUser().Id, session.GetUser().Username, session.GetUser().Look, message));
+                    targetClient.SendPacket(new MentionComposer(session.User.Id, session.User.Username, session.User.Look, message));
                 }
             }
         }

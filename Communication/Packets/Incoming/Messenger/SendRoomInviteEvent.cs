@@ -10,19 +10,20 @@ internal class SendRoomInviteEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var timeSpan = DateTime.Now - session.GetUser().FloodTime;
+        var timeSpan = DateTime.Now - session.User.FloodTime;
         if (timeSpan.Seconds > 4)
         {
-            session.GetUser().FloodCount = 0;
+            session.User.FloodCount = 0;
         }
 
-        if (timeSpan.Seconds < 4 && session.GetUser().FloodCount > 5 && session.GetUser().Rank < 5)
+        if (timeSpan.Seconds < 4 && session.User.FloodCount > 5 && session.User.Rank < 5)
         {
             return;
         }
 
-        session.GetUser().FloodTime = DateTime.Now;
-        session.GetUser().FloodCount++;
+        session.
+        User.FloodTime = DateTime.Now;
+        session.User.FloodCount++;
 
         var inviteCount = packet.PopInt();
         if (inviteCount > 100)
@@ -51,25 +52,25 @@ internal class SendRoomInviteEvent : IPacketEvent
             return;
         }
 
-        if (session.GetUser().IgnoreAll)
+        if (session.User.IgnoreAll)
         {
             return;
         }
 
 
-        ServerPacket roomInvitePacket = new RoomInviteComposer(session.GetUser().Id, textMessage);
+        ServerPacket roomInvitePacket = new RoomInviteComposer(session.User.Id, textMessage);
 
         foreach (var userId in targets)
         {
-            if (session.GetUser().Messenger.FriendshipExists(userId))
+            if (session.User.Messenger.FriendshipExists(userId))
             {
                 var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-                if (clientByUserId == null || clientByUserId.GetUser().IgnoreRoomInvites)
+                if (clientByUserId == null || clientByUserId.User.IgnoreRoomInvites)
                 {
                     break;
                 }
 
-                if (clientByUserId.GetUser().Messenger.FriendshipExists(session.GetUser().Id))
+                if (clientByUserId.User.Messenger.FriendshipExists(session.User.Id))
                 {
                     clientByUserId.SendPacket(roomInvitePacket);
                 }

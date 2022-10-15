@@ -8,12 +8,12 @@ internal class IgnoreUserEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
 
-        if (session.GetUser().CurrentRoom == null)
+        if (session.User.CurrentRoom == null)
         {
             return;
         }
@@ -26,13 +26,14 @@ internal class IgnoreUserEvent : IPacketEvent
             return;
         }
 
-        var user = gameclient.GetUser();
-        if (user == null || session.GetUser().MutedUsers.Contains(user.Id))
+        var user = gameclient.User;
+        if (user == null || session.User.MutedUsers.Contains(user.Id))
         {
             return;
         }
 
-        session.GetUser().MutedUsers.Add(user.Id);
+        session.
+        User.MutedUsers.Add(user.Id);
 
         session.SendPacket(new IgnoreStatusComposer(1, userName));
     }

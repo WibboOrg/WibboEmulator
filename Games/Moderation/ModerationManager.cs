@@ -169,17 +169,17 @@ public class ModerationManager
 
     public void SendNewTicket(GameClient session, int category, int reportedUser, string message)
     {
-        var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(session.GetUser().CurrentRoomId);
+        var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(session.User.CurrentRoomId);
         var id = 0;
         var roomname = (roomData != null) ? roomData.Name : "Aucun appart";
         var roomId = (roomData != null) ? roomData.Id : 0;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            id = ModerationTicketDao.Insert(dbClient, message, roomname, category, session.GetUser().Id, reportedUser, roomId);
+            id = ModerationTicketDao.Insert(dbClient, message, roomname, category, session.User.Id, reportedUser, roomId);
         }
 
-        var ticket = new ModerationTicket(id, 1, category, session.GetUser().Id, reportedUser, message, roomId, roomname, WibboEnvironment.GetUnixTimestamp());
+        var ticket = new ModerationTicket(id, 1, category, session.User.Id, reportedUser, message, roomId, roomname, WibboEnvironment.GetUnixTimestamp());
         this._tickets.Add(ticket);
         SendTicketToModerators(ticket);
     }
@@ -197,12 +197,13 @@ public class ModerationManager
             return;
         }
 
-        session.GetUser().
+        session.
+        User.
         Messenger.DestroyFriendship(userReport.Id);
 
         session.SendPacket(new IgnoreStatusComposer(1, userReport.Username));
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
@@ -213,7 +214,7 @@ public class ModerationManager
         }
 
         var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(userReport.Id);
-        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.GetUser().HasPermission("perm_mod") || roomUserByUserId.Client.GetUser().HasPermission("perm_no_kick"))
+        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.User.HasPermission("perm_mod") || roomUserByUserId.Client.User.HasPermission("perm_no_kick"))
         {
             return;
         }
@@ -248,14 +249,14 @@ public class ModerationManager
             return;
         }
 
-        ticket.Pick(session.GetUser().Id, true);
+        ticket.Pick(session.User.Id, true);
         SendTicketToModerators(ticket);
     }
 
     public void ReleaseTicket(GameClient session, int ticketId)
     {
         var ticket = this.GetTicket(ticketId);
-        if (ticket == null || ticket.Status != TicketStatusType.Picked || ticket.ModeratorId != session.GetUser().Id)
+        if (ticket == null || ticket.Status != TicketStatusType.Picked || ticket.ModeratorId != session.User.Id)
         {
             return;
         }
@@ -267,7 +268,7 @@ public class ModerationManager
     public void CloseTicket(GameClient session, int ticketId, int result)
     {
         var ticket = this.GetTicket(ticketId);
-        if (ticket == null || ticket.Status != TicketStatusType.Picked || ticket.ModeratorId != session.GetUser().Id)
+        if (ticket == null || ticket.Status != TicketStatusType.Picked || ticket.ModeratorId != session.User.Id)
         {
             return;
         }
@@ -368,18 +369,18 @@ public class ModerationManager
     public static void KickUser(GameClient modSession, int userId, string message, bool soft)
     {
         var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (clientByUserId == null || clientByUserId.GetUser().CurrentRoomId < 1 || clientByUserId.GetUser().Id == modSession.GetUser().Id)
+        if (clientByUserId == null || clientByUserId.User.CurrentRoomId < 1 || clientByUserId.User.Id == modSession.User.Id)
         {
             return;
         }
 
-        if (clientByUserId.GetUser().Rank >= modSession.GetUser().Rank)
+        if (clientByUserId.User.Rank >= modSession.User.Rank)
         {
             modSession.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("moderation.kick.missingrank", modSession.Langue));
         }
         else
         {
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(clientByUserId.GetUser().CurrentRoomId, out var room))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(clientByUserId.User.CurrentRoomId, out var room))
             {
                 return;
             }
@@ -397,7 +398,7 @@ public class ModerationManager
                 return;
             }
 
-            LogStaffEntry(modSession.GetUser().Id, modSession.GetUser().Username, 0, string.Empty, "Modtool", string.Format("Modtool kickalert: {0}", message));
+            LogStaffEntry(modSession.User.Id, modSession.User.Username, 0, string.Empty, "Modtool", string.Format("Modtool kickalert: {0}", message));
 
             clientByUserId.SendNotification(message);
         }
@@ -406,19 +407,19 @@ public class ModerationManager
     public static void BanUser(GameClient modSession, int userId, int length, string message)
     {
         var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (clientByUserId == null || clientByUserId.GetUser().Id == modSession.GetUser().Id)
+        if (clientByUserId == null || clientByUserId.User.Id == modSession.User.Id)
         {
             return;
         }
 
-        if (clientByUserId.GetUser().Rank >= modSession.GetUser().Rank)
+        if (clientByUserId.User.Rank >= modSession.User.Rank)
         {
             modSession.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("moderation.ban.missingrank", modSession.Langue));
         }
         else
         {
             double lengthSeconds = length;
-            WibboEnvironment.GetGame().GetGameClientManager().BanUser(clientByUserId, modSession.GetUser().Username, lengthSeconds, message, false, false);
+            WibboEnvironment.GetGame().GetGameClientManager().BanUser(clientByUserId, modSession.User.Username, lengthSeconds, message, false, false);
         }
     }
 }

@@ -8,11 +8,11 @@ internal class GetBadgesEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.GetUser() == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
-        session.SendPacket(new BadgesComposer(session.GetUser().BadgeComponent.BadgeList));
+        session.SendPacket(new BadgesComposer(session.User.BadgeComponent.BadgeList));
     }
 }

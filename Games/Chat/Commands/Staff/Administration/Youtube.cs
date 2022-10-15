@@ -39,7 +39,7 @@ internal class Youtube : IChatCommand
         var videoId = split[..11];
 
         var roomUserByUserId = room.RoomUserManager.GetRoomUserByName(username);
-        if (roomUserByUserId == null || roomUserByUserId.Client == null || roomUserByUserId.Client.GetUser() == null)
+        if (roomUserByUserId == null || roomUserByUserId.Client == null || roomUserByUserId.Client.User == null)
         {
             return;
         }

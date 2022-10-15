@@ -18,7 +18,7 @@ internal class UpdateGroupSettingsEvent : IPacketEvent
             return;
         }
 
-        if (group.CreatorId != session.GetUser().Id)
+        if (group.CreatorId != session.User.Id)
         {
             return;
         }

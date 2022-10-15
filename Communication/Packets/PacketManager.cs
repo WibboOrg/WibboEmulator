@@ -133,7 +133,7 @@ public sealed class PacketManager
         var timeExecution = timeEnded - timeStarted;
         if (timeExecution > this._maximumRunTimeInSec)
         {
-            ExceptionLogger.LogPacketException(packet.ToString(), string.Format("High latency in {0}: {1}ms", session.GetUser()?.Username ?? session.GetConnection().GetIp(), timeExecution.TotalMilliseconds));
+            ExceptionLogger.LogPacketException(packet.ToString(), string.Format("High latency in {0}: {1}ms", session.User?.Username ?? session.Connection.GetIp(), timeExecution.TotalMilliseconds));
         }
 
         //await ExecutePacketAsync(session, packet, pak);

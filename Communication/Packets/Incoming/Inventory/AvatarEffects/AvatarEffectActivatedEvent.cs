@@ -15,18 +15,18 @@ internal class AvatarEffectActivatedEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(effectId, session.GetUser().HasPermission("perm_god")))
+        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(effectId, session.User.HasPermission("perm_god")))
         {
             return;
         }
 
-        var room = session.GetUser().CurrentRoom;
+        var room = session.User.CurrentRoom;
         if (room == null)
         {
             return;
         }
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (user == null)
         {
             return;

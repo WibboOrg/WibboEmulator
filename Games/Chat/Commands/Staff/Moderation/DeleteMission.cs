@@ -19,25 +19,25 @@ internal class DeleteMission : IChatCommand
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
         }
-        else if (session.GetUser().Rank <= targetUser.GetUser().Rank)
+        else if (session.User.Rank <= targetUser.User.Rank)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.notpermitted", session.Langue));
         }
         else
         {
-            targetUser.GetUser().Motto = WibboEnvironment.GetLanguageManager().TryGetValue("user.unacceptable_motto", targetUser.Langue);
+            targetUser.User.Motto = WibboEnvironment.GetLanguageManager().TryGetValue("user.unacceptable_motto", targetUser.Langue);
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserDao.UpdateMotto(dbClient, targetUser.GetUser().Id, targetUser.GetUser().Motto);
+                UserDao.UpdateMotto(dbClient, targetUser.User.Id, targetUser.User.Motto);
             }
 
-            var currentRoom2 = targetUser.GetUser().CurrentRoom;
+            var currentRoom2 = targetUser.User.CurrentRoom;
             if (currentRoom2 == null)
             {
                 return;
             }
 
-            var roomUserByUserId = currentRoom2.RoomUserManager.GetRoomUserByUserId(targetUser.GetUser().Id);
+            var roomUserByUserId = currentRoom2.RoomUserManager.GetRoomUserByUserId(targetUser.User.Id);
             if (roomUserByUserId == null)
             {
                 return;

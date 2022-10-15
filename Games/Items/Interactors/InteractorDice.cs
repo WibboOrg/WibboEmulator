@@ -19,7 +19,7 @@ public class InteractorDice : FurniInteractor
             return;
         }
 
-        var roomUser = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var roomUser = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.User.Id);
 
         if (roomUser == null)
         {

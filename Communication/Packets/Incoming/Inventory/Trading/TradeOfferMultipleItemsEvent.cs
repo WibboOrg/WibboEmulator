@@ -7,12 +7,12 @@ internal class TradeOfferMultipleItemsEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
 
-        var userTrade = room.GetUserTrade(session.GetUser().Id);
+        var userTrade = room.GetUserTrade(session.User.Id);
         if (userTrade == null)
         {
             return;
@@ -22,13 +22,13 @@ internal class TradeOfferMultipleItemsEvent : IPacketEvent
         for (var i = 0; i < itemCount; i++)
         {
             var itemId = packet.PopInt();
-            var userItem = session.GetUser().InventoryComponent.GetItem(itemId);
+            var userItem = session.User.InventoryComponent.GetItem(itemId);
             if (userItem == null)
             {
                 continue;
             }
 
-            userTrade.OfferItem(session.GetUser().Id, userItem, false);
+            userTrade.OfferItem(session.User.Id, userItem, false);
         }
 
         userTrade.UpdateTradeWindow();

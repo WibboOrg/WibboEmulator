@@ -16,7 +16,7 @@ public class InteractorManiqui : FurniInteractor
 
     public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (session == null || session.GetUser() == null || item == null)
+        if (session == null || session.User == null || item == null)
         {
             return;
         }
@@ -26,7 +26,7 @@ public class InteractorManiqui : FurniInteractor
             return;
         }
 
-        var lookSplit = session.GetUser().Look.Split(new char[1] { '.' });
+        var lookSplit = session.User.Look.Split(new char[1] { '.' });
         var lookCode = "";
         foreach (var part in lookSplit)
         {
@@ -37,20 +37,20 @@ public class InteractorManiqui : FurniInteractor
         }
 
         var look = lookCode + item.ExtraData.Split(new char[1] { ';' })[1];
-        session.GetUser().Look = look;
+        session.User.Look = look;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserDao.UpdateLook(dbClient, session.GetUser().Id, look);
+            UserDao.UpdateLook(dbClient, session.User.Id, look);
         }
 
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
 
-        var roomUser = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var roomUser = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (roomUser == null)
         {
             return;
@@ -61,12 +61,12 @@ public class InteractorManiqui : FurniInteractor
             return;
         }
 
-        if (!session.GetUser().InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        session.SendPacket(new FigureUpdateComposer(session.GetUser().Look, session.GetUser().Gender));
+        session.SendPacket(new FigureUpdateComposer(session.User.Look, session.User.Gender));
         room.SendPacket(new UserChangeComposer(roomUser, false));
     }
 

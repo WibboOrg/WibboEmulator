@@ -8,20 +8,20 @@ internal class RequestFurniInventoryEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
 
-        if (session.GetUser().InventoryComponent == null)
+        if (session.User.InventoryComponent == null)
         {
             return;
         }
 
-        session.GetUser().
-        InventoryComponent.LoadInventory();
+        session.
+        User.InventoryComponent.LoadInventory();
 
-        var items = session.GetUser().InventoryComponent.GetWallAndFloor;
+        var items = session.User.InventoryComponent.GetWallAndFloor;
         session.SendPacket(new FurniListComposer(items.ToList(), 1, 0));
     }
 }

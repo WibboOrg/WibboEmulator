@@ -9,7 +9,7 @@ internal class AddStickyNoteEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
@@ -22,7 +22,7 @@ internal class AddStickyNoteEvent : IPacketEvent
         var id = packet.PopInt();
         var str = packet.PopString();
 
-        var userItem = session.GetUser().InventoryComponent.GetItem(id);
+        var userItem = session.User.InventoryComponent.GetItem(id);
         if (userItem == null)
         {
             return;
@@ -45,7 +45,8 @@ internal class AddStickyNoteEvent : IPacketEvent
             ItemDao.UpdateRoomIdAndUserId(dbClient, id, room.Id, room.RoomData.OwnerId);
         }
 
-        session.GetUser().
+        session.
+        User.
         InventoryComponent.RemoveItem(id);
     }
 

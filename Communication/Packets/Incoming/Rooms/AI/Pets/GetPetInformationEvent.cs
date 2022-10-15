@@ -8,31 +8,31 @@ internal class GetPetInformationEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null || session.GetUser().CurrentRoom == null)
+        if (session.User == null || session.User.CurrentRoom == null)
         {
             return;
         }
 
         var petId = packet.PopInt();
 
-        if (!session.GetUser().CurrentRoom.RoomUserManager.TryGetPet(petId, out var pet))
+        if (!session.User.CurrentRoom.RoomUserManager.TryGetPet(petId, out var pet))
         {
-            var user = session.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByUserId(petId);
+            var user = session.User.CurrentRoom.RoomUserManager.GetRoomUserByUserId(petId);
             if (user == null)
             {
                 return;
             }
 
-            if (user.Client == null || user.Client.GetUser() == null)
+            if (user.Client == null || user.Client.User == null)
             {
                 return;
             }
 
-            session.SendPacket(new PetInformationComposer(user.Client.GetUser()));
+            session.SendPacket(new PetInformationComposer(user.Client.User));
             return;
         }
 
-        if (pet.RoomId != session.GetUser().CurrentRoomId || pet.PetData == null)
+        if (pet.RoomId != session.User.CurrentRoomId || pet.PetData == null)
         {
             return;
         }

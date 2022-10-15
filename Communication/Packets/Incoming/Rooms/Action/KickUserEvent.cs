@@ -7,17 +7,17 @@ internal class KickUserEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
 
-        if (room.RoomData.WhoCanKick != 2 && (room.RoomData.WhoCanKick != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true) && session.GetUser().Rank < 6)
+        if (room.RoomData.WhoCanKick != 2 && (room.RoomData.WhoCanKick != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true) && session.User.Rank < 6)
         {
             return;
         }
@@ -25,7 +25,7 @@ internal class KickUserEvent : IPacketEvent
         var pId = packet.PopInt();
 
         var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(pId);
-        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.GetUser().HasPermission("perm_mod") || roomUserByUserId.Client.GetUser().HasPermission("perm_no_kick"))
+        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.User.HasPermission("perm_mod") || roomUserByUserId.Client.User.HasPermission("perm_no_kick"))
         {
             return;
         }

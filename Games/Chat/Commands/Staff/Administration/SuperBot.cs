@@ -18,18 +18,18 @@ internal class SuperBot : IChatCommand
                 {
                     if (!room.IsRoleplay)
                     {
-                        var superBot = room.RoomUserManager.DeploySuperBot(new RoomBot(-i, session.GetUser().Id, room.Id, BotAIType.SuperBot, false, session.GetUser().Username, "SuperBot", session.GetUser().Gender, session.GetUser().Look, userRoom.X, userRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
+                        var superBot = room.RoomUserManager.DeploySuperBot(new RoomBot(-i, session.User.Id, room.Id, BotAIType.SuperBot, false, session.User.Username, "SuperBot", session.User.Gender, session.User.Look, userRoom.X, userRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
                         superBot.BotData.FollowUser = userRoom.VirtualId;
                     }
                     else
                     {
-                        _ = room.RoomUserManager.DeploySuperBot(new RoomBot(-i, session.GetUser().Id, room.Id, BotAIType.SuperBot, false, session.GetUser().Username, "SuperBot", session.GetUser().Gender, session.GetUser().Look, userRoom.X, userRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
+                        _ = room.RoomUserManager.DeploySuperBot(new RoomBot(-i, session.User.Id, room.Id, BotAIType.SuperBot, false, session.User.Username, "SuperBot", session.User.Gender, session.User.Look, userRoom.X, userRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
                     }
                 }
             }
             else if (parameters.Length > 2)
             {
-                var getUserRoom = session.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByName(parameters[1]);
+                var getUserRoom = session.User.CurrentRoom.RoomUserManager.GetRoomUserByName(parameters[1]);
                 if (getUserRoom == null)
                 {
                     return;
@@ -44,7 +44,7 @@ internal class SuperBot : IChatCommand
                 _ = int.TryParse(parameters[2], out count);
                 for (var i = 0; i < count; i++)
                 {
-                    var superBot = room.RoomUserManager.DeploySuperBot(new RoomBot(-i, getUserRoom.Client.GetUser().Id, room.Id, BotAIType.SuperBot, false, getUserRoom.Client.GetUser().Username, "SuperBot", getUserRoom.Client.GetUser().Gender, getUserRoom.Client.GetUser().Look, getUserRoom.X, getUserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
+                    var superBot = room.RoomUserManager.DeploySuperBot(new RoomBot(-i, getUserRoom.Client.User.Id, room.Id, BotAIType.SuperBot, false, getUserRoom.Client.User.Username, "SuperBot", getUserRoom.Client.User.Gender, getUserRoom.Client.User.Look, getUserRoom.X, getUserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
                     superBot.BotData.FollowUser = getUserRoom.VirtualId;
                 }
             }
@@ -60,14 +60,14 @@ internal class SuperBot : IChatCommand
 
             foreach (var user in users)
             {
-                if (user.GetUser() == null)
+                if (user.User == null)
                 {
                     continue;
                 }
 
                 var randomWalkableSquare = room.GameMap.GetRandomWalkableSquare(userRoom.X, userRoom.Y);
 
-                var superBot = room.RoomUserManager.DeploySuperBot(new RoomBot(0, session.GetUser().Id, room.Id, BotAIType.SuperBot, false, user.GetUser().Username, user.GetUser().Motto, user.GetUser().Gender, user.GetUser().Look, userRoom.X, userRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
+                var superBot = room.RoomUserManager.DeploySuperBot(new RoomBot(0, session.User.Id, room.Id, BotAIType.SuperBot, false, user.User.Username, user.User.Motto, user.User.Gender, user.User.Look, userRoom.X, userRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
                 superBot.MoveTo(randomWalkableSquare, true);
             }
         }

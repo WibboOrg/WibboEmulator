@@ -9,12 +9,12 @@ internal class LetUserInEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
@@ -28,17 +28,17 @@ internal class LetUserInEvent : IPacketEvent
         var allowUserToEnter = packet.PopBoolean();
 
         var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
-        if (clientByUsername == null || clientByUsername.GetUser() == null)
+        if (clientByUsername == null || clientByUsername.User == null)
         {
             return;
         }
 
-        if (clientByUsername.GetUser().LoadingRoomId != room.Id)
+        if (clientByUsername.User.LoadingRoomId != room.Id)
         {
             return;
         }
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(clientByUsername.GetUser().Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(clientByUsername.User.Id);
 
         if (user != null)
         {
@@ -49,9 +49,10 @@ internal class LetUserInEvent : IPacketEvent
         {
             clientByUsername.SendPacket(new FlatAccessibleComposer(""));
 
-            clientByUsername.GetUser().AllowDoorBell = true;
+            clientByUsername.
+            User.AllowDoorBell = true;
 
-            if (!clientByUsername.GetUser().EnterRoom(session.GetUser().CurrentRoom))
+            if (!clientByUsername.User.EnterRoom(session.User.CurrentRoom))
             {
                 clientByUsername.SendPacket(new CloseConnectionComposer());
             }

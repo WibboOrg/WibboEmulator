@@ -66,12 +66,12 @@ public class InteractorTeleport : FurniInteractor
 
     public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (item == null || item.GetRoom() == null || session == null || session.GetUser() == null)
+        if (item == null || item.GetRoom() == null || session == null || session.User == null)
         {
             return;
         }
 
-        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (roomUserByUserId == null)
         {
             return;
@@ -84,7 +84,7 @@ public class InteractorTeleport : FurniInteractor
                 return;
             }
 
-            item.InteractingUser = roomUserByUserId.Client.GetUser().Id;
+            item.InteractingUser = roomUserByUserId.Client.User.Id;
             item.ReqUpdate(2);
         }
         else
@@ -133,11 +133,11 @@ public class InteractorTeleport : FurniInteractor
                                 roomItem.ReqUpdate(2);
                             }
                         }
-                        else if (!roomUserTarget.IsBot && roomUserTarget != null && roomUserTarget.Client != null && roomUserTarget.Client.GetUser() != null)
+                        else if (!roomUserTarget.IsBot && roomUserTarget != null && roomUserTarget.Client != null && roomUserTarget.Client.User != null)
                         {
-                            roomUserTarget.Client.GetUser().IsTeleporting = true;
-                            roomUserTarget.Client.GetUser().TeleportingRoomID = teleRoomId;
-                            roomUserTarget.Client.GetUser().TeleporterId = linkedTele;
+                            roomUserTarget.Client.User.IsTeleporting = true;
+                            roomUserTarget.Client.User.TeleportingRoomID = teleRoomId;
+                            roomUserTarget.Client.User.TeleporterId = linkedTele;
                             roomUserTarget.Client.SendPacket(new RoomForwardComposer(teleRoomId));
                         }
                         item.InteractingUser = 0;

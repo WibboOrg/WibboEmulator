@@ -12,11 +12,11 @@ internal class Disconnect : IChatCommand
         }
 
         var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (targetUser == null || targetUser.GetUser() == null)
+        if (targetUser == null || targetUser.User == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
         }
-        else if (targetUser.GetUser().Rank >= session.GetUser().Rank)
+        else if (targetUser.User.Rank >= session.User.Rank)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
         }

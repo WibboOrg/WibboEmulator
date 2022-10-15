@@ -8,7 +8,7 @@ internal class InfoRetrieveEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        session.SendPacket(new UserObjectComposer(session.GetUser()));
-        session.SendPacket(new UserPerksComposer(session.GetUser()));
+        session.SendPacket(new UserObjectComposer(session.User));
+        session.SendPacket(new UserPerksComposer(session.User));
     }
 }

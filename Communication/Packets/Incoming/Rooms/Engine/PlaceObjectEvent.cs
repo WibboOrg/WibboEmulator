@@ -13,12 +13,12 @@ internal class PlaceObjectEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.GetUser() == null || !session.GetUser().InRoom)
+        if (session == null || session.User == null || !session.User.InRoom)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
@@ -48,7 +48,7 @@ internal class PlaceObjectEvent : IPacketEvent
             return;
         }
 
-        var userItem = session.GetUser().InventoryComponent.GetItem(itemId);
+        var userItem = session.User.InventoryComponent.GetItem(itemId);
         if (userItem == null)
         {
             return;
@@ -62,7 +62,7 @@ internal class PlaceObjectEvent : IPacketEvent
 
         if (userItem.GetBaseItem().InteractionType == InteractionType.BADGE_TROC)
         {
-            if (session.GetUser().BadgeComponent.HasBadge(userItem.ExtraData))
+            if (session.User.BadgeComponent.HasBadge(userItem.ExtraData))
             {
                 session.SendNotification("Vous posséder déjà ce badge !");
                 return;
@@ -73,10 +73,12 @@ internal class PlaceObjectEvent : IPacketEvent
                 ItemDao.Delete(dbClient, itemId);
             }
 
-            session.GetUser().
+            session.
+            User.
             InventoryComponent.RemoveItem(itemId);
 
-            session.GetUser().
+            session.
+            User.
             BadgeComponent.GiveBadge(userItem.ExtraData, true);
             session.SendPacket(new ReceiveBadgeComposer(userItem.ExtraData));
 
@@ -106,9 +108,9 @@ internal class PlaceObjectEvent : IPacketEvent
                 return;
             }
 
-            if (session.GetUser().ForceRot > -1)
+            if (session.User.ForceRot > -1)
             {
-                rotation = session.GetUser().ForceRot;
+                rotation = session.User.ForceRot;
             }
 
             var item = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, x, y, 0.0, rotation, "", room);
@@ -119,7 +121,8 @@ internal class PlaceObjectEvent : IPacketEvent
                     ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                 }
 
-                session.GetUser().
+                session.
+                User.
                 InventoryComponent.RemoveItem(itemId);
 
                 if (WiredUtillity.TypeIsWired(userItem.GetBaseItem().InteractionType))
@@ -127,12 +130,12 @@ internal class PlaceObjectEvent : IPacketEvent
                     WiredRegister.HandleRegister(room, item);
                 }
 
-                if (session.GetUser().ForceUse > -1)
+                if (session.User.ForceUse > -1)
                 {
                     item.Interactor.OnTrigger(session, item, 0, true, false);
                 }
 
-                if (session.GetUser().ForceOpenGift)
+                if (session.User.ForceOpenGift)
                 {
                     if (item.GetBaseItem().InteractionType == InteractionType.EXTRABOX)
                     {
@@ -185,7 +188,8 @@ internal class PlaceObjectEvent : IPacketEvent
                         ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                     }
 
-                    session.GetUser().
+                    session.
+                    User.
                     InventoryComponent.RemoveItem(itemId);
                 }
             }

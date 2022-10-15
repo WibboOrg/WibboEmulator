@@ -74,18 +74,18 @@ public class QuestManager
 
     public void ProgressUserQuest(GameClient session, QuestType questType, int eventData = 0)
     {
-        if (session == null || session.GetUser() == null || session.GetUser().CurrentQuestId <= 0)
+        if (session == null || session.User == null || session.User.CurrentQuestId <= 0)
         {
             return;
         }
 
-        var quest = this.GetQuest(session.GetUser().CurrentQuestId);
+        var quest = this.GetQuest(session.User.CurrentQuestId);
         if (quest == null || quest.GoalType != questType)
         {
             return;
         }
 
-        var questProgress = session.GetUser().GetQuestProgress(quest.Id);
+        var questProgress = session.User.GetQuestProgress(quest.Id);
         var flag = false;
         int progress;
         if (questType != QuestType.ExploreFindItem)
@@ -108,10 +108,11 @@ public class QuestManager
         }
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserQuestDao.Update(dbClient, session.GetUser().Id, quest.Id, progress);
+            UserQuestDao.Update(dbClient, session.User.Id, quest.Id, progress);
         }
 
-        session.GetUser().Quests[session.GetUser().CurrentQuestId] = progress;
+        session.
+        User.Quests[session.User.CurrentQuestId] = progress;
         session.SendPacket(new QuestStartedComposer(session, quest));
 
         if (!flag)
@@ -119,11 +120,12 @@ public class QuestManager
             return;
         }
 
-        session.GetUser().CurrentQuestId = 0;
-        session.GetUser().LastCompleted = quest.Id;
+        session.
+        User.CurrentQuestId = 0;
+        session.User.LastCompleted = quest.Id;
         session.SendPacket(new QuestCompletedComposer(session, quest));
-        session.GetUser().Duckets += quest.Reward;
-        session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().Duckets, 1));
+        session.User.Duckets += quest.Reward;
+        session.SendPacket(new ActivityPointNotificationComposer(session.User.Duckets, 1));
         this.SendQuestList(session);
     }
 
@@ -154,8 +156,8 @@ public class QuestManager
             }
             if (quest.Number >= dictionary1[quest.Category])
             {
-                var questProgress = session.GetUser().GetQuestProgress(quest.Id);
-                if (session.GetUser().CurrentQuestId != quest.Id && questProgress >= (long)quest.GoalData)
+                var questProgress = session.User.GetQuestProgress(quest.Id);
+                if (session.User.CurrentQuestId != quest.Id && questProgress >= (long)quest.GoalData)
                 {
                     dictionary1[quest.Category] = quest.Number + 1;
                 }
@@ -187,22 +189,23 @@ public class QuestManager
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserQuestDao.Replace(dbClient, session.GetUser().Id, quest.Id);
+            UserQuestDao.Replace(dbClient, session.User.Id, quest.Id);
         }
 
-        session.GetUser().CurrentQuestId = quest.Id;
+        session.
+        User.CurrentQuestId = quest.Id;
         this.SendQuestList(session);
         session.SendPacket(new QuestStartedComposer(session, quest));
     }
 
     public void GetCurrentQuest(GameClient session)
     {
-        if (!session.GetUser().InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        var quest = this.GetQuest(session.GetUser().LastCompleted);
+        var quest = this.GetQuest(session.User.LastCompleted);
         var nextQuestInSeries = this.GetNextQuestInSeries(quest.Category, quest.Number + 1);
         if (nextQuestInSeries == null)
         {
@@ -211,26 +214,28 @@ public class QuestManager
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserQuestDao.Replace(dbClient, session.GetUser().Id, nextQuestInSeries.Id);
+            UserQuestDao.Replace(dbClient, session.User.Id, nextQuestInSeries.Id);
         }
 
-        session.GetUser().CurrentQuestId = nextQuestInSeries.Id;
+        session.
+        User.CurrentQuestId = nextQuestInSeries.Id;
         this.SendQuestList(session);
         session.SendPacket(new QuestStartedComposer(session, nextQuestInSeries));
     }
 
     public void CancelQuest(GameClient session)
     {
-        var quest = this.GetQuest(session.GetUser().CurrentQuestId);
+        var quest = this.GetQuest(session.User.CurrentQuestId);
         if (quest == null)
         {
             return;
         }
 
-        session.GetUser().CurrentQuestId = 0;
+        session.
+        User.CurrentQuestId = 0;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserQuestDao.Delete(dbClient, session.GetUser().Id, quest.Id);
+            UserQuestDao.Delete(dbClient, session.User.Id, quest.Id);
         }
 
         session.SendPacket(new QuestAbortedComposer());

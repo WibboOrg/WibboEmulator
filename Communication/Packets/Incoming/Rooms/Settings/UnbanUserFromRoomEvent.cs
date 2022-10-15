@@ -8,12 +8,12 @@ internal class UnbanUserFromRoomEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.GetUser().InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        var instance = session.GetUser().CurrentRoom;
+        var instance = session.User.CurrentRoom;
         if (instance == null || !instance.CheckRights(session, true))
         {
             return;

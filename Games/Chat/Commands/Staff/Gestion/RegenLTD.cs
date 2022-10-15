@@ -36,14 +36,14 @@ internal class RegenLTD : IChatCommand
                     continue;
                 }
 
-                var newItem = ItemFactory.CreateSingleItemNullable(item.Data, session.GetUser(), "", limitedNumber, limitedStack);
+                var newItem = ItemFactory.CreateSingleItemNullable(item.Data, session.User, "", limitedNumber, limitedStack);
 
                 if (newItem == null)
                 {
                     continue;
                 }
 
-                if (session.GetUser().InventoryComponent.TryAddItem(newItem))
+                if (session.User.InventoryComponent.TryAddItem(newItem))
                 {
                     session.SendPacket(new FurniListNotificationComposer(newItem.Id, 1));
                 }

@@ -8,7 +8,7 @@ internal class GetModeratorUserRoomVisitsEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.GetUser().HasPermission("perm_mod"))
+        if (!session.User.HasPermission("perm_mod"))
         {
             return;
         }
@@ -22,6 +22,6 @@ internal class GetModeratorUserRoomVisitsEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new ModeratorUserRoomVisitsComposer(clientTarget.GetUser(), clientTarget.GetUser().Visits));
+        session.SendPacket(new ModeratorUserRoomVisitsComposer(clientTarget.User, clientTarget.User.Visits));
     }
 }

@@ -8,7 +8,7 @@ internal class OpenBotActionEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.GetUser().InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
@@ -21,7 +21,7 @@ internal class OpenBotActionEvent : IPacketEvent
             return;
         }
 
-        var room = session.GetUser().CurrentRoom;
+        var room = session.User.CurrentRoom;
         if (room == null || !room.CheckRights(session))
         {
             return;

@@ -20,7 +20,7 @@ public class InteractorFootball : FurniInteractor
             return;
         }
 
-        var user = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var user = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.User.Id);
 
         if (user == null)
         {

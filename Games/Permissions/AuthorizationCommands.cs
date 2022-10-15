@@ -30,7 +30,7 @@ public struct AuthorizationCommands
 
         if (this.MinRank > 0)
         {
-            if (this.MinRank <= (long)session.GetUser().Rank)
+            if (this.MinRank <= (long)session.User.Rank)
             {
                 return true;
             }
@@ -70,14 +70,14 @@ public struct AuthorizationCommands
             return 0;
         }
 
-        if (this.MinRank > 2 && session.GetUser().Rank < 13 && room.RoomData.Langue != session.Langue)
+        if (this.MinRank > 2 && session.User.Rank < 13 && room.RoomData.Langue != session.Langue)
         {
             return 5;
         }
 
         if (this.MinRank > 0)
         {
-            if (this.MinRank <= session.GetUser().Rank)
+            if (this.MinRank <= session.User.Rank)
             {
                 return 0;
             }

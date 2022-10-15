@@ -16,7 +16,7 @@ internal class MakeOfferEvent : IPacketEvent
         _ = packet.PopInt();
         var itemId = packet.PopInt();
 
-        var item = session.GetUser().InventoryComponent.GetItem(itemId);
+        var item = session.User.InventoryComponent.GetItem(itemId);
         if (item == null)
         {
             session.SendPacket(new MarketplaceMakeOfferResultComposer(0));
@@ -46,11 +46,12 @@ internal class MakeOfferEvent : IPacketEvent
         {
             ItemDao.Delete(dbClient, itemId);
 
-            CatalogMarketplaceOfferDao.Insert(dbClient, item.GetBaseItem().ItemName, item.ExtraData, itemId, item.BaseItem, session.GetUser().Id, sellingPrice, totalPrice, item.GetBaseItem().SpriteId, itemType, item.Limited, item.LimitedStack);
+            CatalogMarketplaceOfferDao.Insert(dbClient, item.GetBaseItem().ItemName, item.ExtraData, itemId, item.BaseItem, session.User.Id, sellingPrice, totalPrice, item.GetBaseItem().SpriteId, itemType, item.Limited, item.LimitedStack);
 
         }
 
-        session.GetUser().
+        session.
+        User.
         InventoryComponent.RemoveItem(itemId);
         session.SendPacket(new MarketplaceMakeOfferResultComposer(1));
     }

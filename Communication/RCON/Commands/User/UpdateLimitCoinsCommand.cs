@@ -36,8 +36,9 @@ internal class UpdateLimitCoinsCommand : IRCONCommand
             return false;
         }
 
-        client.GetUser().LimitCoins += amount;
-        client.SendPacket(new ActivityPointNotificationComposer(client.GetUser().LimitCoins, 0, 55));
+        client.
+        User.LimitCoins += amount;
+        client.SendPacket(new ActivityPointNotificationComposer(client.User.LimitCoins, 0, 55));
 
         return true;
     }

@@ -29,12 +29,12 @@ public class InteractorVendor : FurniInteractor
 
     public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (!(item.ExtraData != "1") || item.GetBaseItem().VendingIds.Count < 1 || item.InteractingUser != 0 || session == null || session.GetUser() == null)
+        if (!(item.ExtraData != "1") || item.GetBaseItem().VendingIds.Count < 1 || item.InteractingUser != 0 || session == null || session.User == null)
         {
             return;
         }
 
-        var roomUserTarget = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserTarget = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (roomUserTarget == null)
         {
             return;
@@ -46,7 +46,7 @@ public class InteractorVendor : FurniInteractor
         }
         else
         {
-            item.InteractingUser = session.GetUser().Id;
+            item.InteractingUser = session.User.Id;
             roomUserTarget.SetRot(Rotation.Calculate(roomUserTarget.X, roomUserTarget.Y, item.X, item.Y), false);
             item.ReqUpdate(2);
             item.ExtraData = "1";

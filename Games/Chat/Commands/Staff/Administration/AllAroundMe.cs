@@ -9,7 +9,7 @@ internal class AllAroundMe : IChatCommand
         var users = room.RoomUserManager.GetRoomUsers();
         foreach (var user in users.ToList())
         {
-            if (user == null || session.GetUser().Id == user.UserId)
+            if (user == null || session.User.Id == user.UserId)
             {
                 continue;
             }

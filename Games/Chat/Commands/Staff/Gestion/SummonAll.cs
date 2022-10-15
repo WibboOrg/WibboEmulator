@@ -9,16 +9,17 @@ internal class SummonAll : IChatCommand
     {
         foreach (var client in WibboEnvironment.GetGame().GetGameClientManager().GetClients.ToList())
         {
-            if (client.GetUser() != null)
+            if (client.User != null)
             {
-                if (client.GetUser().CurrentRoom != null && client.GetUser().CurrentRoom.Id == session.GetUser().CurrentRoom.Id)
+                if (client.User.CurrentRoom != null && client.User.CurrentRoom.Id == session.User.CurrentRoom.Id)
                 {
                     return;
                 }
 
-                client.GetUser().IsTeleporting = true;
-                client.GetUser().TeleportingRoomID = room.RoomData.Id;
-                client.GetUser().TeleporterId = 0;
+                client.
+                User.IsTeleporting = true;
+                client.User.TeleportingRoomID = room.RoomData.Id;
+                client.User.TeleporterId = 0;
 
                 client.SendPacket(new GetGuestRoomResultComposer(client, room.RoomData, false, true));
             }

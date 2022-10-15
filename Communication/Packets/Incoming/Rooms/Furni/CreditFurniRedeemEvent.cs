@@ -13,12 +13,12 @@ internal class CreditFurniRedeemEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.GetUser().InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
@@ -53,28 +53,29 @@ internal class CreditFurniRedeemEvent : IPacketEvent
         {
             if (exchange.GetBaseItem().ItemName.StartsWith("CF_") || exchange.GetBaseItem().ItemName.StartsWith("CFC_"))
             {
-                session.GetUser().Credits += value;
-                session.SendPacket(new CreditBalanceComposer(session.GetUser().Credits));
+                session.User.Credits += value;
+                session.SendPacket(new CreditBalanceComposer(session.User.Credits));
             }
             else if (exchange.GetBaseItem().ItemName.StartsWith("PntEx_"))
             {
-                session.GetUser().WibboPoints += value;
-                session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().WibboPoints, 0, 105));
+                session.User.WibboPoints += value;
+                session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
 
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                UserDao.UpdateAddPoints(dbClient, session.GetUser().Id, value);
+                UserDao.UpdateAddPoints(dbClient, session.User.Id, value);
             }
             else if (exchange.GetBaseItem().ItemName.StartsWith("WwnEx_"))
             {
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    UserStatsDao.UpdateAchievementScore(dbClient, session.GetUser().Id, value);
+                    UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, value);
                 }
 
-                session.GetUser().AchievementPoints += value;
-                session.SendPacket(new AchievementScoreComposer(session.GetUser().AchievementPoints));
+                session.
+                User.AchievementPoints += value;
+                session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));
 
-                var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+                var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
                 if (roomUserByUserId != null)
                 {
                     session.SendPacket(new UserChangeComposer(roomUserByUserId, true));

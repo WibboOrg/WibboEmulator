@@ -10,7 +10,7 @@ internal class RequestBuddyEvent : IPacketEvent
     {
         var userName = packet.PopString();
 
-        if (session.GetUser().Messenger == null || !session.GetUser().Messenger.RequestBuddy(userName))
+        if (session.User.Messenger == null || !session.User.Messenger.RequestBuddy(userName))
         {
             return;
         }

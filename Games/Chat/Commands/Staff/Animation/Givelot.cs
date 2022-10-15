@@ -21,15 +21,15 @@ internal class GiveLot : IChatCommand
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
             return;
         }
-        if (roomUserByUserId.GetUsername() == session.GetUser().Username || roomUserByUserId.Client.GetUser().IP == session.GetUser().IP)
+        if (roomUserByUserId.GetUsername() == session.User.Username || roomUserByUserId.Client.User.IP == session.User.IP)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.error", session.Langue));
-            ModerationManager.LogStaffEntry(session.GetUser().Id, session.GetUser().Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + roomUserByUserId.GetUsername());
+            ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + roomUserByUserId.GetUsername());
             return;
         }
 
         var lotCount = WibboEnvironment.GetRandomNumber(1, 2);
-        if (roomUserByUserId.Client.GetUser().Rank > 1)
+        if (roomUserByUserId.Client.User.Rank > 1)
         {
             lotCount = WibboEnvironment.GetRandomNumber(2, 3);
         }
@@ -41,11 +41,11 @@ internal class GiveLot : IChatCommand
             return;
         }
 
-        var items = ItemFactory.CreateMultipleItems(itemData, roomUserByUserId.Client.GetUser(), "", lotCount);
+        var items = ItemFactory.CreateMultipleItems(itemData, roomUserByUserId.Client.User, "", lotCount);
 
         foreach (var purchasedItem in items)
         {
-            if (roomUserByUserId.Client.GetUser().InventoryComponent.TryAddItem(purchasedItem))
+            if (roomUserByUserId.Client.User.InventoryComponent.TryAddItem(purchasedItem))
             {
                 roomUserByUserId.Client.SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
             }
@@ -56,7 +56,7 @@ internal class GiveLot : IChatCommand
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserDao.UpdateAddGamePoints(dbClient, roomUserByUserId.Client.GetUser().Id);
+            UserDao.UpdateAddGamePoints(dbClient, roomUserByUserId.Client.User.Id);
         }
 
         _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByUserId.Client, "ACH_Extrabox", 1);

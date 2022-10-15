@@ -25,7 +25,8 @@ internal class ForceControlUser : IChatCommand
             return;
         }
 
-        session.GetUser().ControlUserId = roomUserByUserId.Client.GetUser().Id;
+        session.
+        User.ControlUserId = roomUserByUserId.Client.User.Id;
 
     }
 }

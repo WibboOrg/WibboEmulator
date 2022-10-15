@@ -43,12 +43,12 @@ public class InteractorOneWayGate : FurniInteractor
 
     public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (session == null || session.GetUser() == null || item == null || item.GetRoom() == null)
+        if (session == null || session.User == null || item == null || item.GetRoom() == null)
         {
             return;
         }
 
-        var roomUser = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var roomUser = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (roomUser == null)
         {
             return;

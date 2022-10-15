@@ -30,7 +30,7 @@ public class InteractorLoveLock : FurniInteractor
 
         if (session != null)
         {
-            user = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+            user = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.User.Id);
         }
 
         if (user == null)
@@ -79,8 +79,8 @@ public class InteractorLoveLock : FurniInteractor
                 userOne.CanWalk = false;
                 userTwo.CanWalk = false;
 
-                item.InteractingUser = userOne.Client.GetUser().Id;
-                item.InteractingUser2 = userTwo.Client.GetUser().Id;
+                item.InteractingUser = userOne.Client.User.Id;
+                item.InteractingUser2 = userTwo.Client.User.Id;
 
                 userOne.Client.SendPacket(new LoveLockDialogueComposer(item.Id));
                 userTwo.Client.SendPacket(new LoveLockDialogueComposer(item.Id));

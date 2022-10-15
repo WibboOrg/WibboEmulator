@@ -6,14 +6,14 @@ internal class DisableFollow : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (session.GetUser().HideInRoom)
+        if (session.User.HideInRoom)
         {
-            session.GetUser().HideInRoom = false;
+            session.User.HideInRoom = false;
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.followme.true", session.Langue));
         }
         else
         {
-            session.GetUser().HideInRoom = true;
+            session.User.HideInRoom = true;
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.followme.false", session.Langue));
         }
     }

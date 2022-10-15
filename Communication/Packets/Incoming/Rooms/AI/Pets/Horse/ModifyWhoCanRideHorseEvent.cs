@@ -9,12 +9,12 @@ internal class ModifyWhoCanRideHorseEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.GetUser().InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
@@ -26,7 +26,7 @@ internal class ModifyWhoCanRideHorseEvent : IPacketEvent
             return;
         }
 
-        if (pet.PetData == null || pet.PetData.OwnerId != session.GetUser().Id || pet.PetData.Type != 13)
+        if (pet.PetData == null || pet.PetData.OwnerId != session.User.Id || pet.PetData.Type != 13)
         {
             return;
         }

@@ -17,16 +17,16 @@ internal class GroupInfoComposer : ServerPacket
         this.WriteString(group.Badge);
         this.WriteInteger(group.RoomId);
         this.WriteString((WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(group.RoomId) == null) ? "No room found.." : WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(group.RoomId).Name);    // room name
-        this.WriteInteger(group.CreatorId == session.GetUser().Id ? 3 : group.HasRequest(session.GetUser().Id) ? 2 : group.IsMember(session.GetUser().Id) ? 1 : 0);
+        this.WriteInteger(group.CreatorId == session.User.Id ? 3 : group.HasRequest(session.User.Id) ? 2 : group.IsMember(session.User.Id) ? 1 : 0);
         this.WriteInteger(group.MemberCount); // Members
         this.WriteBoolean(false);//?? CHANGED
         this.WriteString(origin.Day + "-" + origin.Month + "-" + origin.Year);
-        this.WriteBoolean(group.CreatorId == session.GetUser().Id);
-        this.WriteBoolean(group.IsAdmin(session.GetUser().Id)); // admin
+        this.WriteBoolean(group.CreatorId == session.User.Id);
+        this.WriteBoolean(group.IsAdmin(session.User.Id)); // admin
         this.WriteString(WibboEnvironment.GetUsernameById(group.CreatorId));
         this.WriteBoolean(newWindow); // Show group info
         this.WriteBoolean(group.AdminOnlyDeco == 0); // Any user can place furni in home room
-        this.WriteInteger(group.CreatorId == session.GetUser().Id ? group.RequestCount : group.IsAdmin(session.GetUser().Id) ? group.RequestCount : group.IsMember(session.GetUser().Id) ? 0 : 0); // Pending users
+        this.WriteInteger(group.CreatorId == session.User.Id ? group.RequestCount : group.IsAdmin(session.User.Id) ? group.RequestCount : group.IsMember(session.User.Id) ? 0 : 0); // Pending users
         //base.WriteInteger(0);//what the fuck
         this.WriteBoolean(group == null || group.ForumEnabled);
     }

@@ -8,19 +8,20 @@ internal class GetPetInventoryEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
 
-        if (session.GetUser().InventoryComponent == null)
+        if (session.User.InventoryComponent == null)
         {
             return;
         }
 
-        session.GetUser().
+        session.
+        User.
         InventoryComponent.LoadInventory();
 
-        session.SendPacket(new PetInventoryComposer(session.GetUser().InventoryComponent.GetPets()));
+        session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.GetPets()));
     }
 }

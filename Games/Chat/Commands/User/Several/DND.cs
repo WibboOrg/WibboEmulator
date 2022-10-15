@@ -6,7 +6,7 @@ internal class DND : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        session.GetUser().IgnoreRoomInvites = !session.GetUser().IgnoreRoomInvites;
-        session.SendWhisper("Tu " + (session.GetUser().IgnoreRoomInvites ? "acceptes" : "refuses") + " les messages dans ta console d'amis");
+        session.User.IgnoreRoomInvites = !session.User.IgnoreRoomInvites;
+        session.SendWhisper("Tu " + (session.User.IgnoreRoomInvites ? "acceptes" : "refuses") + " les messages dans ta console d'amis");
     }
 }

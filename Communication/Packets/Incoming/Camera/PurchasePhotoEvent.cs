@@ -13,7 +13,7 @@ internal class PurchasePhotoEvent : IPacketEvent
 
         if (string.IsNullOrEmpty(photoId))
         {
-            photoId = session.GetUser().LastPhotoId;
+            photoId = session.User.LastPhotoId;
         }
         else if (!WibboEnvironment.IsValidAlphaNumeric(photoId) || photoId.Length != 32)
         {
@@ -40,13 +40,13 @@ internal class PurchasePhotoEvent : IPacketEvent
         }
 
         var time = WibboEnvironment.GetUnixTimestamp();
-        var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + session.GetUser().Username + "\", \"s\":\"" + session.GetUser().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
+        var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + session.User.Username + "\", \"s\":\"" + session.User.Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
 
-        var itemSmall = ItemFactory.CreateSingleItemNullable(itemDataSmall, session.GetUser(), extraData);
-        _ = session.GetUser().InventoryComponent.TryAddItem(itemSmall);
+        var itemSmall = ItemFactory.CreateSingleItemNullable(itemDataSmall, session.User, extraData);
+        _ = session.User.InventoryComponent.TryAddItem(itemSmall);
 
-        var item = ItemFactory.CreateSingleItemNullable(itemData, session.GetUser(), extraData);
-        _ = session.GetUser().InventoryComponent.TryAddItem(item);
+        var item = ItemFactory.CreateSingleItemNullable(itemData, session.User, extraData);
+        _ = session.User.InventoryComponent.TryAddItem(item);
 
         session.SendPacket(new CameraPurchaseSuccesfullComposer());
     }

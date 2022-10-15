@@ -19,7 +19,7 @@ internal class SaveFloorPlanModelEvent : IPacketEvent
         var floorThick = packet.PopInt();
         var wallHeight = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }

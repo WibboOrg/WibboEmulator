@@ -6,14 +6,14 @@ internal class DisableExchange : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (session.GetUser().AcceptTrading)
+        if (session.User.AcceptTrading)
         {
-            session.GetUser().AcceptTrading = false;
+            session.User.AcceptTrading = false;
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.troc.true", session.Langue));
         }
         else
         {
-            session.GetUser().AcceptTrading = true;
+            session.User.AcceptTrading = true;
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.troc.false", session.Langue));
         }
     }

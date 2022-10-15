@@ -12,13 +12,13 @@ internal class BanIP : IChatCommand
         }
 
         var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (targetUser == null || targetUser.GetUser() == null)
+        if (targetUser == null || targetUser.User == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
             return;
         }
 
-        if (targetUser.GetUser().Rank >= session.GetUser().Rank)
+        if (targetUser.User.Rank >= session.User.Rank)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
             return;
@@ -30,11 +30,11 @@ internal class BanIP : IChatCommand
             reason = CommandManager.MergeParams(parameters, 2);
         }
 
-        var securityBan = targetUser.GetUser().Rank > 5 && session.GetUser().Rank < 12;
+        var securityBan = targetUser.User.Rank > 5 && session.User.Rank < 12;
 
-        session.SendWhisper("Tu as banIP " + targetUser.GetUser().Username + " pour " + reason + "!");
+        session.SendWhisper("Tu as banIP " + targetUser.User.Username + " pour " + reason + "!");
 
-        WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.GetUser().Username, 788922000, reason, true, false);
+        WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.User.Username, 788922000, reason, true, false);
         _ = session.Antipub(reason, "<CMD>");
 
         if (securityBan)

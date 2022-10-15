@@ -9,7 +9,7 @@ internal class SetRelationshipEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null || session.GetUser().Messenger == null)
+        if (session.User == null || session.User.Messenger == null)
         {
             return;
         }
@@ -22,37 +22,38 @@ internal class SetRelationshipEvent : IPacketEvent
             return;
         }
 
-        if (!session.GetUser().Messenger.FriendshipExists(user))
+        if (!session.User.Messenger.FriendshipExists(user))
         {
             return;
         }
 
         if (type == 0)
         {
-            if (session.GetUser().Messenger.Relation.ContainsKey(user))
+            if (session.User.Messenger.Relation.ContainsKey(user))
             {
-                _ = session.GetUser().Messenger.Relation.Remove(user);
+                _ = session.User.Messenger.Relation.Remove(user);
             }
         }
         else
         {
-            if (session.GetUser().Messenger.Relation.ContainsKey(user))
+            if (session.User.Messenger.Relation.ContainsKey(user))
             {
-                session.GetUser().Messenger.Relation[user].Type = type;
+                session.User.Messenger.Relation[user].Type = type;
             }
             else
             {
-                session.GetUser().Messenger.Relation.Add(user, new Relationship(user, type));
+                session.User.Messenger.Relation.Add(user, new Relationship(user, type));
             }
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            MessengerFriendshipDao.UpdateRelation(dbClient, type, session.GetUser().Id, user);
+            MessengerFriendshipDao.UpdateRelation(dbClient, type, session.User.Id, user);
         }
 
-        session.GetUser().
+        session.
+        User.
         Messenger.RelationChanged(user, type);
-        session.GetUser().Messenger.UpdateFriend(user, true);
+        session.User.Messenger.UpdateFriend(user, true);
     }
 }

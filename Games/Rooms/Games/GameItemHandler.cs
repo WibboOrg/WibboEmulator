@@ -225,22 +225,22 @@ public class GameItemHandler
             return false;
         }
 
-        if (user.Client.GetUser() == null)
+        if (user.Client.User == null)
         {
             return false;
         }
 
-        if (user.Client.GetUser().Rank > 5)
+        if (user.Client.User.Rank > 5)
         {
             return false;
         }
 
-        if (user.Client.GetUser().MyGroups == null)
+        if (user.Client.User.MyGroups == null)
         {
             return true;
         }
 
-        if (user.Client.GetUser().MyGroups.Contains(group.Id))
+        if (user.Client.User.MyGroups.Contains(group.Id))
         {
             return false;
         }

@@ -7,17 +7,17 @@ internal class TradingConfirmEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
 
-        var userTrade = room.GetUserTrade(session.GetUser().Id);
+        var userTrade = room.GetUserTrade(session.User.Id);
         if (userTrade == null)
         {
             return;
         }
 
-        userTrade.CompleteTrade(session.GetUser().Id);
+        userTrade.CompleteTrade(session.User.Id);
     }
 }

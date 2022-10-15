@@ -13,12 +13,12 @@ internal class Trigger : IChatCommand
 
         var targetRoomUser = room.RoomUserManager.GetRoomUserByName(Convert.ToString(parameters[1]));
 
-        if (targetRoomUser == null || targetRoomUser.Client == null || targetRoomUser.Client.GetUser() == null)
+        if (targetRoomUser == null || targetRoomUser.Client == null || targetRoomUser.Client.User == null)
         {
             return;
         }
 
-        if (targetRoomUser.Client.GetUser().Id == session.GetUser().Id)
+        if (targetRoomUser.Client.User.Id == session.User.Id)
         {
             return;
         }

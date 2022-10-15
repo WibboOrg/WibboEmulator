@@ -278,24 +278,24 @@ public class User : IDisposable
 
     public void PrepareRoom(int id, string password = "", bool overrideDoorbell = false)
     {
-        if (this.Client == null || this.Client.GetUser() == null)
+        if (this.Client == null || this.Client.User == null)
         {
             return;
         }
 
-        if (this.Client.GetUser().InRoom)
+        if (this.Client.User.InRoom)
         {
-            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.Client.GetUser().CurrentRoomId, out var oldRoom))
+            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.Client.User.CurrentRoomId, out var oldRoom))
             {
                 oldRoom.RoomUserManager.RemoveUserFromRoom(this.Client, false, false);
             }
         }
 
-        if (this.Client.GetUser().IsTeleporting && this.Client.GetUser().TeleportingRoomID != id)
+        if (this.Client.User.IsTeleporting && this.Client.User.TeleportingRoomID != id)
         {
-            this.Client.GetUser().TeleportingRoomID = 0;
-            this.Client.GetUser().IsTeleporting = false;
-            this.Client.GetUser().TeleporterId = 0;
+            this.Client.User.TeleportingRoomID = 0;
+            this.Client.User.IsTeleporting = false;
+            this.Client.User.TeleporterId = 0;
             this.Client.SendPacket(new CloseConnectionComposer());
 
             return;
@@ -317,11 +317,11 @@ public class User : IDisposable
             return;
         }
 
-        if (!this.Client.GetUser().HasPermission("perm_mod") && room.UserIsBanned(this.Client.GetUser().Id))
+        if (!this.Client.User.HasPermission("perm_mod") && room.UserIsBanned(this.Client.User.Id))
         {
-            if (room.HasBanExpired(this.Client.GetUser().Id))
+            if (room.HasBanExpired(this.Client.User.Id))
             {
-                room.RemoveBan(this.Client.GetUser().Id);
+                room.RemoveBan(this.Client.User.Id);
             }
             else
             {
@@ -333,7 +333,7 @@ public class User : IDisposable
             }
         }
 
-        if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !this.Client.GetUser().HasPermission("perm_enter_full_rooms") && !this.Client.GetUser().HasPermission("perm_enter_full_rooms"))
+        if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !this.Client.User.HasPermission("perm_enter_full_rooms") && !this.Client.User.HasPermission("perm_enter_full_rooms"))
         {
             if (room.CloseFullRoom)
             {
@@ -341,7 +341,7 @@ public class User : IDisposable
                 room.CloseFullRoom = false;
             }
 
-            if (this.Client.GetUser().Id != room.RoomData.OwnerId)
+            if (this.Client.User.Id != room.RoomData.OwnerId)
             {
                 this.Client.SendPacket(new CantConnectComposer(1));
 
@@ -353,9 +353,9 @@ public class User : IDisposable
 
         var ownerEnterNotAllowed = WibboEnvironment.GetSettings().GetData<string>("room.owner.enter.not.allowed").Split(',');
 
-        if (!this.Client.GetUser().HasPermission("perm_access_apartments_all"))
+        if (!this.Client.User.HasPermission("perm_access_apartments_all"))
         {
-            if (!(this.Client.GetUser().HasPermission("perm_access_apartments") && !ownerEnterNotAllowed.Contains(room.RoomData.OwnerName)) && !room.CheckRights(this.Client, true) && !(this.Client.GetUser().IsTeleporting && this.Client.GetUser().TeleportingRoomID == room.Id))
+            if (!(this.Client.User.HasPermission("perm_access_apartments") && !ownerEnterNotAllowed.Contains(room.RoomData.OwnerName)) && !room.CheckRights(this.Client, true) && !(this.Client.User.IsTeleporting && this.Client.User.TeleportingRoomID == room.Id))
             {
                 if (room.RoomData.Access == RoomAccess.Doorbell && !overrideDoorbell && !room.CheckRights(this.Client))
                 {
@@ -366,9 +366,9 @@ public class User : IDisposable
                     else
                     {
                         this.Client.SendPacket(new DoorbellComposer(""));
-                        room.SendPacket(new DoorbellComposer(this.Client.GetUser().Username), true);
-                        this.Client.GetUser().LoadingRoomId = id;
-                        this.Client.GetUser().AllowDoorBell = false;
+                        room.SendPacket(new DoorbellComposer(this.Client.User.Username), true);
+                        this.Client.User.LoadingRoomId = id;
+                        this.Client.User.AllowDoorBell = false;
                     }
                     return;
                 }
@@ -396,8 +396,8 @@ public class User : IDisposable
         }
         else
         {
-            this.Client.GetUser().LoadingRoomId = id;
-            this.Client.GetUser().AllowDoorBell = true;
+            this.Client.User.LoadingRoomId = id;
+            this.Client.User.AllowDoorBell = true;
         }
     }
 
@@ -427,7 +427,7 @@ public class User : IDisposable
         }
 
         session.SendPacket(new RoomPropertyComposer("landscape", room.RoomData.Landscape));
-        session.SendPacket(new RoomRatingComposer(room.RoomData.Score, !(session.GetUser().RatedRooms.Contains(room.Id) || room.RoomData.OwnerId == session.GetUser().Id)));
+        session.SendPacket(new RoomRatingComposer(room.RoomData.Score, !(session.User.RatedRooms.Contains(room.Id) || room.RoomData.OwnerId == session.User.Id)));
 
         session.SendPacket(room.GameMap.Model.SerializeRelativeHeightmap());
         session.SendPacket(room.GameMap.Model.GetHeightmap());
@@ -509,7 +509,8 @@ public class User : IDisposable
             {
                 requester.SendPacket(new OnGuideSessionEndedComposer(1));
 
-                requester.GetUser().GuideOtherUserId = 0;
+                requester.
+                User.GuideOtherUserId = 0;
             }
         }
         if (this.OnDuty)

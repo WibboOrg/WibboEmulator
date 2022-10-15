@@ -634,8 +634,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     var roomDataTarget = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
                     if (roomDataTarget != null && roomDataTarget.OwnerId == this.RoomInstance.RoomData.OwnerId)
                     {
-                        user.Client.GetUser().IsTeleporting = true;
-                        user.Client.GetUser().TeleportingRoomID = roomId;
+                        user.Client.User.IsTeleporting = true;
+                        user.Client.User.TeleportingRoomID = roomId;
                         user.Client.SendPacket(new RoomForwardComposer(roomId));
                     }
                 }
@@ -1093,7 +1093,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 foreach (var rUser in this.RoomInstance.RoomUserManager.GetUserList().ToList())
                 {
-                    if (rUser != null && !rUser.IsBot && !rUser.Client.GetUser().HasPermission("perm_no_kick") && this.RoomInstance.RoomData.OwnerId != rUser.UserId)
+                    if (rUser != null && !rUser.IsBot && !rUser.Client.User.HasPermission("perm_no_kick") && this.RoomInstance.RoomData.OwnerId != rUser.UserId)
                     {
                         this.RoomInstance.RoomUserManager.RemoveUserFromRoom(rUser.Client, true, false);
                     }
@@ -2078,14 +2078,14 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "badge":
             {
-                user.Client.GetUser().BadgeComponent.GiveBadge(value, true);
+                user.Client.User.BadgeComponent.GiveBadge(value, true);
                 user.Client.SendPacket(new ReceiveBadgeComposer(value));
                 break;
             }
             case "removebadge":
             {
-                user.Client.GetUser().BadgeComponent.RemoveBadge(value);
-                user.Client.SendPacket(new BadgesComposer(user.Client.GetUser().BadgeComponent.BadgeList));
+                user.Client.User.BadgeComponent.RemoveBadge(value);
+                user.Client.SendPacket(new BadgesComposer(user.Client.User.BadgeComponent.BadgeList));
                 break;
             }
 
@@ -2093,8 +2093,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 if (int.TryParse(value, out var roomId))
                 {
-                    user.Client.GetUser().IsTeleporting = true;
-                    user.Client.GetUser().TeleportingRoomID = roomId;
+                    user.Client.User.IsTeleporting = true;
+                    user.Client.User.TeleportingRoomID = roomId;
                     user.Client.SendPacket(new RoomForwardComposer(roomId));
                 }
                 break;
@@ -2111,7 +2111,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "winmovierun":
             {
-                if (user.IsBot || user.Client == null || user.Client.GetUser() == null || user.Client.GetUser().Rank > 4)
+                if (user.IsBot || user.Client == null || user.Client.User == null || user.Client.User.Rank > 4)
                 {
                     break;
                 }
@@ -2123,13 +2123,13 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 }
 
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                UserDao.UpdateAddRunPoints(dbClient, user.Client.GetUser().Id);
+                UserDao.UpdateAddRunPoints(dbClient, user.Client.User.Id);
 
                 break;
             }
             case "givelot":
             {
-                if (user.IsBot || user.Client == null || user.Client.GetUser() == null || user.Client.GetUser().Rank > 4)
+                if (user.IsBot || user.Client == null || user.Client.User == null || user.Client.User.Rank > 4)
                 {
                     break;
                 }
@@ -2162,16 +2162,16 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 var nbLot = WibboEnvironment.GetRandomNumber(1, 2);
 
-                if (user.Client.GetUser().Rank > 1)
+                if (user.Client.User.Rank > 1)
                 {
                     nbLot = WibboEnvironment.GetRandomNumber(2, 3);
                 }
 
-                var items = ItemFactory.CreateMultipleItems(itemData, user.Client.GetUser(), "", nbLot);
+                var items = ItemFactory.CreateMultipleItems(itemData, user.Client.User, "", nbLot);
 
                 foreach (var purchasedItem in items)
                 {
-                    if (user.Client.GetUser().InventoryComponent.TryAddItem(purchasedItem))
+                    if (user.Client.User.InventoryComponent.TryAddItem(purchasedItem))
                     {
                         user.Client.SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
                     }
@@ -2181,7 +2181,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    UserDao.UpdateAddGamePoints(dbClient, user.Client.GetUser().Id);
+                    UserDao.UpdateAddGamePoints(dbClient, user.Client.User.Id);
                 }
 
                 _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.Client, "ACH_Extrabox", 1);

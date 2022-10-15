@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Rooms.AI.Types;
-using WibboEmulator.Core;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Rooms.Map;
@@ -51,7 +50,7 @@ public class PetBot : BotAI
         var roomUser = this.GetRoomUser();
         roomUser.PetData.DBState = DatabaseUpdateState.NeedsUpdate;
 
-        if (roomUser.PetData.OwnerId != user.Client.GetUser().Id)
+        if (roomUser.PetData.OwnerId != user.Client.User.Id)
         {
             return;
         }

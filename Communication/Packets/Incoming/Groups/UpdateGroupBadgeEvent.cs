@@ -17,7 +17,7 @@ internal class UpdateGroupBadgeEvent : IPacketEvent
             return;
         }
 
-        if (group.CreatorId != session.GetUser().Id)
+        if (group.CreatorId != session.User.Id)
         {
             return;
         }

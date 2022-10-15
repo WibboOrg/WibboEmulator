@@ -13,20 +13,20 @@ internal class Summon : IChatCommand
         }
 
         var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (targetUser == null || targetUser.GetUser() == null)
+        if (targetUser == null || targetUser.User == null)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.useroffline", session.Langue));
             return;
         }
-        else if (targetUser.GetUser().CurrentRoom != null && targetUser.GetUser().CurrentRoom.Id == session.GetUser().CurrentRoom.Id)
+        else if (targetUser.User.CurrentRoom != null && targetUser.User.CurrentRoom.Id == session.User.CurrentRoom.Id)
         {
             return;
         }
 
-        var currentRoom = session.GetUser().CurrentRoom;
-        targetUser.GetUser().IsTeleporting = true;
-        targetUser.GetUser().TeleportingRoomID = currentRoom.RoomData.Id;
-        targetUser.GetUser().TeleporterId = 0;
+        var currentRoom = session.User.CurrentRoom;
+        targetUser.User.IsTeleporting = true;
+        targetUser.User.TeleportingRoomID = currentRoom.RoomData.Id;
+        targetUser.User.TeleporterId = 0;
 
         targetUser.SendPacket(new GetGuestRoomResultComposer(targetUser, currentRoom.RoomData, false, true));
     }

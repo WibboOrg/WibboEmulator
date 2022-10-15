@@ -9,12 +9,12 @@ internal class UpdateMagicTileEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session != null && session.GetUser() != null)
+        if (session != null && session.User != null)
         {
             var itemId = packet.PopInt();
             var heightToSet = packet.PopInt();
 
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
             {
                 return;
             }

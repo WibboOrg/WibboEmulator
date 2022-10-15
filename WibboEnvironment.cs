@@ -259,9 +259,9 @@ public static class WibboEnvironment
     public static string GetUsernameById(int userId)
     {
         var client = GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (client != null && client.GetUser() != null)
+        if (client != null && client.User != null)
         {
-            return client.GetUser().Username;
+            return client.User.Username;
         }
 
         if (UsersCached.ContainsKey(userId))
@@ -299,7 +299,7 @@ public static class WibboEnvironment
             var client = GetGame().GetGameClientManager().GetClientByUserID(userId);
             if (client != null)
             {
-                var user = client.GetUser();
+                var user = client.User;
                 if (user != null && user.Id > 0)
                 {
                     if (UsersCached.ContainsKey(userId))

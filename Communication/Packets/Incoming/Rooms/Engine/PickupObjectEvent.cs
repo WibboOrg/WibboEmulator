@@ -11,7 +11,7 @@ internal class PickupObjectEvent : IPacketEvent
         _ = packet.PopInt();
         var itemId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
@@ -35,7 +35,7 @@ internal class PickupObjectEvent : IPacketEvent
 
         room.
         RoomItemHandling.RemoveFurniture(session, item.Id);
-        session.GetUser().InventoryComponent.AddItem(item);
+        session.User.InventoryComponent.AddItem(item);
         WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FurniPick, 0);
     }
 }

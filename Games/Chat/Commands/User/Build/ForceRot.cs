@@ -14,11 +14,11 @@ internal class ForceRot : IChatCommand
         _ = int.TryParse(parameters[1], out var result);
         if (result is <= (-1) or >= 7)
         {
-            session.GetUser().ForceRot = 0;
+            session.User.ForceRot = 0;
         }
         else
         {
-            session.GetUser().ForceRot = result;
+            session.User.ForceRot = result;
         }
 
         session.SendWhisper("Rot: " + result);

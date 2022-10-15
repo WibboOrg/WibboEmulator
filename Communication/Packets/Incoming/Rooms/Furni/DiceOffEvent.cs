@@ -7,7 +7,7 @@ internal class DiceOffEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
@@ -25,6 +25,6 @@ internal class DiceOffEvent : IPacketEvent
         }
 
         roomItem.Interactor.OnTrigger(session, roomItem, -1, userHasRights, false);
-        roomItem.OnTrigger(room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id));
+        roomItem.OnTrigger(room.RoomUserManager.GetRoomUserByUserId(session.User.Id));
     }
 }

@@ -34,7 +34,7 @@ public class InteractorVendorEnable : FurniInteractor
             return;
         }
 
-        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (roomUserByUserId == null)
         {
             return;
@@ -46,7 +46,7 @@ public class InteractorVendorEnable : FurniInteractor
         }
         else
         {
-            item.InteractingUser = session.GetUser().Id;
+            item.InteractingUser = session.User.Id;
             roomUserByUserId.SetRot(Rotation.Calculate(roomUserByUserId.X, roomUserByUserId.Y, item.X, item.Y), false);
             item.ReqUpdate(2);
             item.ExtraData = "1";

@@ -7,7 +7,7 @@ internal class AcceptBuddyEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser().Messenger == null)
+        if (session.User.Messenger == null)
         {
             return;
         }
@@ -16,20 +16,21 @@ internal class AcceptBuddyEvent : IPacketEvent
         for (var index = 0; index < count; ++index)
         {
             var num2 = packet.PopInt();
-            var request = session.GetUser().Messenger.GetRequest(num2);
+            var request = session.User.Messenger.GetRequest(num2);
             if (request != null)
             {
-                if (request.To != session.GetUser().Id)
+                if (request.To != session.User.Id)
                 {
                     break;
                 }
 
-                if (!session.GetUser().Messenger.FriendshipExists(request.To))
+                if (!session.User.Messenger.FriendshipExists(request.To))
                 {
-                    session.GetUser().Messenger.CreateFriendship(request.From);
+                    session.User.Messenger.CreateFriendship(request.From);
                 }
 
-                session.GetUser().
+                session.
+                User.
                 Messenger.HandleRequest(num2);
             }
         }

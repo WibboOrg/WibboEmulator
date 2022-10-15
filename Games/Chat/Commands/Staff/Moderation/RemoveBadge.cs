@@ -8,10 +8,10 @@ internal class RemoveBadge : IChatCommand
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (targetUser != null && targetUser.GetUser() != null)
+        if (targetUser != null && targetUser.User != null)
         {
-            targetUser.GetUser().BadgeComponent.RemoveBadge(parameters[2]);
-            targetUser.SendPacket(new BadgesComposer(targetUser.GetUser().BadgeComponent.BadgeList));
+            targetUser.User.BadgeComponent.RemoveBadge(parameters[2]);
+            targetUser.SendPacket(new BadgesComposer(targetUser.User.BadgeComponent.BadgeList));
         }
         else
         {

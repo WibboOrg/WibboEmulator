@@ -14,7 +14,7 @@ internal class ApplyDecorationEvent : IPacketEvent
     {
         var itemId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
@@ -24,7 +24,7 @@ internal class ApplyDecorationEvent : IPacketEvent
             return;
         }
 
-        var userItem = session.GetUser().InventoryComponent.GetItem(itemId);
+        var userItem = session.User.InventoryComponent.GetItem(itemId);
         if (userItem == null)
         {
             return;
@@ -71,7 +71,8 @@ internal class ApplyDecorationEvent : IPacketEvent
             ItemDao.Delete(dbClient, userItem.Id);
         }
 
-        session.GetUser().
+        session.
+        User.
         InventoryComponent.RemoveItem(userItem.Id);
         room.SendPacket(new RoomPropertyComposer(decorationKey, userItem.ExtraData));
     }

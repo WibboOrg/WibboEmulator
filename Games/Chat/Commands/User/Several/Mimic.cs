@@ -21,7 +21,7 @@ internal class Mimic : IChatCommand
         var username = parameters[1];
 
         var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
-        if (targetUser == null || targetUser.GetUser() == null)
+        if (targetUser == null || targetUser.User == null)
         {
             var bot = room.RoomUserManager.GetBotByName(username);
             if (bot == null || bot.BotData == null)
@@ -29,20 +29,22 @@ internal class Mimic : IChatCommand
                 return;
             }
 
-            session.GetUser().Gender = bot.BotData.Gender;
-            session.GetUser().Look = bot.BotData.Look;
+            session.
+            User.Gender = bot.BotData.Gender;
+            session.User.Look = bot.BotData.Look;
         }
         else
         {
 
-            if (targetUser.GetUser().PremiumProtect && !session.GetUser().HasPermission("perm_mod"))
+            if (targetUser.User.PremiumProtect && !session.User.HasPermission("perm_mod"))
             {
                 session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
                 return;
             }
 
-            session.GetUser().Gender = targetUser.GetUser().Gender;
-            session.GetUser().Look = targetUser.GetUser().Look;
+            session.
+            User.Gender = targetUser.User.Gender;
+            session.User.Look = targetUser.User.Look;
         }
 
         if (userRoom.IsTransf || userRoom.IsSpectator)
@@ -50,7 +52,7 @@ internal class Mimic : IChatCommand
             return;
         }
 
-        session.SendPacket(new FigureUpdateComposer(session.GetUser().Look, session.GetUser().Gender));
+        session.SendPacket(new FigureUpdateComposer(session.User.Look, session.User.Gender));
         session.SendPacket(new UserChangeComposer(userRoom, true));
         room.SendPacket(new UserChangeComposer(userRoom, false));
     }

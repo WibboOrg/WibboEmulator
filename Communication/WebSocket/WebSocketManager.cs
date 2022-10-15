@@ -47,7 +47,7 @@ public class WebSocketManager
         this._webSocketServer.Log.File = WibboEnvironment.PatchDir + "/logs/websocketSharp.txt";
         if (Debugger.IsAttached)
         {
-            this._webSocketServer.Log.Level = LogLevel.Trace;
+            this._webSocketServer.Log.Level = LogLevel.Debug;
         }
         else
         {

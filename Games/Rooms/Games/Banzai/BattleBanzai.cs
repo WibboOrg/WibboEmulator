@@ -214,7 +214,7 @@ public class BattleBanzai
                 GameMap.TeleportToItem(roomUser, this._roomInstance.GameItemHandler.GetExitTeleport());
             }
 
-            var managerForBanzai = roomUser.Client.GetUser().CurrentRoom.TeamManager;
+            var managerForBanzai = roomUser.Client.User.CurrentRoom.TeamManager;
             managerForBanzai.OnUserLeave(roomUser);
             this._roomInstance.GameManager.UpdateGatesTeamCounts();
             roomUser.ApplyEffect(0);
@@ -246,7 +246,7 @@ public class BattleBanzai
             return;
         }
 
-        this.HandleBanzaiTiles(new Point(newX, newY), team, this._roomInstance.RoomUserManager.GetRoomUserByUserId(mover.GetUser().Id));
+        this.HandleBanzaiTiles(new Point(newX, newY), team, this._roomInstance.RoomUserManager.GetRoomUserByUserId(mover.User.Id));
     }
 
     private void SetTile(Item item, TeamType team, RoomUser user)

@@ -7,21 +7,21 @@ internal class InitTradeEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
 
         var virtualId = packet.PopInt();
 
-        var roomUser = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var roomUser = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         var roomUserTarget = room.RoomUserManager.GetRoomUserByVirtualId(virtualId);
-        if (roomUser == null || roomUser.Client == null || roomUser.Client.GetUser() == null)
+        if (roomUser == null || roomUser.Client == null || roomUser.Client.User == null)
         {
             return;
         }
 
-        if (roomUserTarget == null || roomUserTarget.Client == null || roomUserTarget.Client.GetUser() == null)
+        if (roomUserTarget == null || roomUserTarget.Client == null || roomUserTarget.Client.User == null)
         {
             return;
         }
@@ -57,7 +57,7 @@ internal class InitTradeEvent : IPacketEvent
             return;
         }
 
-        if (!roomUserTarget.Client.GetUser().AcceptTrading && session.GetUser().Rank < 3)
+        if (!roomUserTarget.Client.User.AcceptTrading && session.User.Rank < 3)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.tradedisabled", session.Langue));
         }

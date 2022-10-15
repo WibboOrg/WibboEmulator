@@ -7,14 +7,14 @@ internal class SendMsgEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.GetUser() == null || session.GetUser().Messenger == null)
+        if (session == null || session.User == null || session.User.Messenger == null)
         {
             return;
         }
 
         var userId = packet.PopInt();
 
-        if (userId == session.GetUser().Id)
+        if (userId == session.User.Id)
         {
             return;
         }
@@ -25,31 +25,33 @@ internal class SendMsgEvent : IPacketEvent
             return;
         }
 
-        var timeSpan = DateTime.Now - session.GetUser().FloodTime;
+        var timeSpan = DateTime.Now - session.User.FloodTime;
         if (timeSpan.Seconds > 4)
         {
-            session.GetUser().FloodCount = 0;
+            session.User.FloodCount = 0;
         }
 
-        if (timeSpan.Seconds < 4 && session.GetUser().FloodCount > 5 && session.GetUser().Rank < 5)
+        if (timeSpan.Seconds < 4 && session.User.FloodCount > 5 && session.User.Rank < 5)
         {
             return;
         }
 
-        session.GetUser().FloodTime = DateTime.Now;
-        session.GetUser().FloodCount++;
+        session.
+        User.FloodTime = DateTime.Now;
+        session.User.FloodCount++;
 
         if (session.Antipub("<" + userId + "> " + message, "<MP>"))
         {
             return;
         }
 
-        if (session.GetUser().IgnoreAll)
+        if (session.User.IgnoreAll)
         {
             return;
         }
 
-        session.GetUser().
+        session.
+        User.
         Messenger.SendInstantMessage(userId, message);
     }
 }

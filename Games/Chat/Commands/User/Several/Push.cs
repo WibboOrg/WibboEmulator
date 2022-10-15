@@ -30,12 +30,12 @@ internal class Push : IChatCommand
             return;
         }
 
-        if (targetRoomUser.Client.GetUser().Id == session.GetUser().Id)
+        if (targetRoomUser.Client.User.Id == session.User.Id)
         {
             return;
         }
 
-        if (targetRoomUser.Client.GetUser().PremiumProtect && !session.GetUser().HasPermission("perm_mod"))
+        if (targetRoomUser.Client.User.PremiumProtect && !session.User.HasPermission("perm_mod"))
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
             return;

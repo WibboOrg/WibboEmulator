@@ -8,12 +8,12 @@ internal class GoToFlatEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.GetUser().InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        if (!session.GetUser().EnterRoom(session.GetUser().CurrentRoom))
+        if (!session.User.EnterRoom(session.User.CurrentRoom))
         {
             session.SendPacket(new CloseConnectionComposer());
         }

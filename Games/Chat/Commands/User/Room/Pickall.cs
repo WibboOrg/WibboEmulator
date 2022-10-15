@@ -13,7 +13,8 @@ internal class Pickall : IChatCommand
             return;
         }
 
-        session.GetUser().
+        session.
+        User.
         InventoryComponent.AddItemArray(room.RoomItemHandling.RemoveAllFurniture(session));
         session.SendPacket(new FurniListUpdateComposer());
     }

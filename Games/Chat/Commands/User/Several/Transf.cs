@@ -13,7 +13,7 @@ internal class Transf : IChatCommand
             return;
         }
 
-        if (session.GetUser().SpectatorMode || userRoom.InGame)
+        if (session.User.SpectatorMode || userRoom.InGame)
         {
             return;
         }

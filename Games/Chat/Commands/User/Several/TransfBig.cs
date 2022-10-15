@@ -18,7 +18,7 @@ internal class TransfBig : IChatCommand
             return;
         }
 
-        if (session.GetUser().SpectatorMode)
+        if (session.User.SpectatorMode)
         {
             return;
         }

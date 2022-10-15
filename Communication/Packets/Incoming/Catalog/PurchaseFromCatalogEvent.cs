@@ -6,7 +6,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
-using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
@@ -31,7 +30,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
             return;
         }
 
-        if (!page.Enabled || page.MinimumRank > session.GetUser().Rank)
+        if (!page.Enabled || page.MinimumRank > session.User.Rank)
         {
             return;
         }
@@ -64,10 +63,10 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
         var totalDiamondCost = amount > 1 ? (item.CostWibboPoints * amount) - ((int)Math.Floor((double)amount / 6) * item.CostWibboPoints) : item.CostWibboPoints;
         var totalLimitCoinCost = amount > 1 ? (item.CostLimitCoins * amount) - ((int)Math.Floor((double)amount / 6) * item.CostLimitCoins) : item.CostLimitCoins;
 
-        if (session.GetUser().Credits < totalCreditsCost ||
-            session.GetUser().Duckets < totalPixelCost ||
-            session.GetUser().WibboPoints < totalDiamondCost ||
-            session.GetUser().LimitCoins < totalLimitCoinCost)
+        if (session.User.Credits < totalCreditsCost ||
+            session.User.Duckets < totalPixelCost ||
+            session.User.WibboPoints < totalDiamondCost ||
+            session.User.LimitCoins < totalLimitCoinCost)
         {
             return;
         }
@@ -159,7 +158,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
                 break;
 
             case InteractionType.TROPHY:
-                extraData = session.GetUser().Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + Convert.ToChar(9) + extraData;
+                extraData = session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + Convert.ToChar(9) + extraData;
                 break;
 
             case InteractionType.MANNEQUIN:
@@ -177,28 +176,28 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
 
                 if (!extraData.StartsWith("perso_"))
                 {
-                    session.GetUser().BadgeComponent.RemoveBadge(extraData);
+                    session.User.BadgeComponent.RemoveBadge(extraData);
                 }
 
-                session.SendPacket(new BadgesComposer(session.GetUser().BadgeComponent.BadgeList));
+                session.SendPacket(new BadgesComposer(session.User.BadgeComponent.BadgeList));
 
                 break;
             }
 
             case InteractionType.BADGE_DISPLAY:
-                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(extraData) || !session.GetUser().BadgeComponent.HasBadge(extraData))
+                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(extraData) || !session.User.BadgeComponent.HasBadge(extraData))
                 {
                     session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", session.Langue));
                     session.SendPacket(new PurchaseOKComposer());
                     return;
                 }
 
-                extraData = extraData + Convert.ToChar(9) + session.GetUser().Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
+                extraData = extraData + Convert.ToChar(9) + session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
                 break;
 
             case InteractionType.BADGE:
             {
-                if (session.GetUser().BadgeComponent.HasBadge(item.Badge))
+                if (session.User.BadgeComponent.HasBadge(item.Badge))
                 {
                     session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadge.error", session.Langue));
                     session.SendPacket(new PurchaseOKComposer());
@@ -233,30 +232,30 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
 
         if (item.CostCredits > 0)
         {
-            session.GetUser().Credits -= totalCreditsCost;
-            session.SendPacket(new CreditBalanceComposer(session.GetUser().Credits));
+            session.User.Credits -= totalCreditsCost;
+            session.SendPacket(new CreditBalanceComposer(session.User.Credits));
         }
 
         if (item.CostDuckets > 0)
         {
-            session.GetUser().Duckets -= totalPixelCost;
-            session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().Duckets, session.GetUser().Duckets));
+            session.User.Duckets -= totalPixelCost;
+            session.SendPacket(new ActivityPointNotificationComposer(session.User.Duckets, session.User.Duckets));
         }
 
         if (item.CostWibboPoints > 0)
         {
-            session.GetUser().WibboPoints -= totalDiamondCost;
-            session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().WibboPoints, 0, 105));
+            session.User.WibboPoints -= totalDiamondCost;
+            session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
 
-            UserDao.UpdateRemovePoints(dbClient, session.GetUser().Id, totalDiamondCost);
+            UserDao.UpdateRemovePoints(dbClient, session.User.Id, totalDiamondCost);
         }
 
         if (item.CostLimitCoins > 0)
         {
-            session.GetUser().LimitCoins -= totalLimitCoinCost;
-            session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().LimitCoins, 0, 55));
+            session.User.LimitCoins -= totalLimitCoinCost;
+            session.SendPacket(new ActivityPointNotificationComposer(session.User.LimitCoins, 0, 55));
 
-            UserDao.UpdateRemoveLimitCoins(dbClient, session.GetUser().Id, totalLimitCoinCost);
+            UserDao.UpdateRemoveLimitCoins(dbClient, session.User.Id, totalLimitCoinCost);
         }
 
         switch (item.Data.Type.ToString().ToLower())
@@ -271,7 +270,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
                     default:
                         if (amountPurchase > 1)
                         {
-                            var items = ItemFactory.CreateMultipleItems(item.Data, session.GetUser(), extraData, amountPurchase);
+                            var items = ItemFactory.CreateMultipleItems(item.Data, session.User, extraData, amountPurchase);
 
                             if (items != null)
                             {
@@ -280,7 +279,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
                         }
                         else
                         {
-                            newItem = ItemFactory.CreateSingleItemNullable(item.Data, session.GetUser(), extraData, limitedEditionSells, limitedEditionStack);
+                            newItem = ItemFactory.CreateSingleItemNullable(item.Data, session.User, extraData, limitedEditionSells, limitedEditionStack);
 
                             if (newItem != null)
                             {
@@ -293,7 +292,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
                     case InteractionType.ARROW:
                         for (var i = 0; i < amountPurchase; i++)
                         {
-                            var teleItems = ItemFactory.CreateTeleporterItems(item.Data, session.GetUser());
+                            var teleItems = ItemFactory.CreateTeleporterItems(item.Data, session.User);
 
                             if (teleItems != null)
                             {
@@ -306,7 +305,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
                     {
                         if (amountPurchase > 1)
                         {
-                            var items = ItemFactory.CreateMultipleItems(item.Data, session.GetUser(), extraData, amountPurchase);
+                            var items = ItemFactory.CreateMultipleItems(item.Data, session.User, extraData, amountPurchase);
 
                             if (items != null)
                             {
@@ -319,7 +318,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
                         }
                         else
                         {
-                            newItem = ItemFactory.CreateSingleItemNullable(item.Data, session.GetUser(), extraData);
+                            newItem = ItemFactory.CreateSingleItemNullable(item.Data, session.User, extraData);
 
                             if (newItem != null)
                             {
@@ -333,7 +332,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
 
                 foreach (var purchasedItem in generatedGenericItems)
                 {
-                    if (session.GetUser().InventoryComponent.TryAddItem(purchasedItem))
+                    if (session.User.InventoryComponent.TryAddItem(purchasedItem))
                     {
                         session.SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
                     }
@@ -347,15 +346,15 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
                 break;
 
             case "r":
-                var bot = BotUtility.CreateBot(item.Data, session.GetUser().Id);
+                var bot = BotUtility.CreateBot(item.Data, session.User.Id);
                 if (bot != null)
                 {
-                    if (!session.GetUser().InventoryComponent.TryAddBot(bot))
+                    if (!session.User.InventoryComponent.TryAddBot(bot))
                     {
                         break;
                     }
 
-                    session.SendPacket(new BotInventoryComposer(session.GetUser().InventoryComponent.GetBots()));
+                    session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.GetBots()));
                     session.SendPacket(new FurniListNotificationComposer(bot.Id, 5));
                 }
                 break;
@@ -364,16 +363,16 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
             {
                 var petData = extraData.Split('\n');
 
-                var generatedPet = PetUtility.CreatePet(session.GetUser().Id, petData[0], item.Data.SpriteId, petData[1], petData[2]);
+                var generatedPet = PetUtility.CreatePet(session.User.Id, petData[0], item.Data.SpriteId, petData[1], petData[2]);
                 if (generatedPet != null)
                 {
-                    if (!session.GetUser().InventoryComponent.TryAddPet(generatedPet))
+                    if (!session.User.InventoryComponent.TryAddPet(generatedPet))
                     {
                         break;
                     }
 
                     session.SendPacket(new FurniListNotificationComposer(generatedPet.PetId, 3));
-                    session.SendPacket(new PetInventoryComposer(session.GetUser().InventoryComponent.GetPets()));
+                    session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.GetPets()));
                 }
                 break;
             }
@@ -384,9 +383,9 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
             }
         }
 
-        if (!string.IsNullOrEmpty(item.Badge) && !session.GetUser().BadgeComponent.HasBadge(item.Badge))
+        if (!string.IsNullOrEmpty(item.Badge) && !session.User.BadgeComponent.HasBadge(item.Badge))
         {
-            session.GetUser().BadgeComponent.GiveBadge(item.Badge, true);
+            session.User.BadgeComponent.GiveBadge(item.Badge, true);
             session.SendPacket(new ReceiveBadgeComposer(item.Badge));
 
             session.SendPacket(new FurniListNotificationComposer(0, 4));

@@ -9,7 +9,7 @@ internal class GetModeratorUserChatlogEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.GetUser().HasPermission("perm_chatlog"))
+        if (!session.User.HasPermission("perm_chatlog"))
         {
             return;
         }
@@ -17,16 +17,16 @@ internal class GetModeratorUserChatlogEvent : IPacketEvent
         var userId = packet.PopInt();
 
         var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (clientByUserId == null || clientByUserId.GetUser() == null)
+        if (clientByUserId == null || clientByUserId.User == null)
         {
             var sortedMessages = new List<ChatlogEntry>();
-            session.SendPacket(new ModeratorUserChatlogComposer(userId, "User not online", session.GetUser().CurrentRoomId, sortedMessages));
+            session.SendPacket(new ModeratorUserChatlogComposer(userId, "User not online", session.User.CurrentRoomId, sortedMessages));
         }
         else
         {
-            var sortedMessages = clientByUserId.GetUser().ChatMessageManager.GetSortedMessages(0);
+            var sortedMessages = clientByUserId.User.ChatMessageManager.GetSortedMessages(0);
 
-            session.SendPacket(new ModeratorUserChatlogComposer(userId, clientByUserId.GetUser().Username, session.GetUser().CurrentRoomId, sortedMessages));
+            session.SendPacket(new ModeratorUserChatlogComposer(userId, clientByUserId.User.Username, session.User.CurrentRoomId, sortedMessages));
         }
     }
 }

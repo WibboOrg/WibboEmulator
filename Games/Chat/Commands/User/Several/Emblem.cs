@@ -7,39 +7,39 @@ internal class Emblem : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (session.GetUser().BadgeComponent.HasBadgeSlot("ADM"))
+        if (session.User.BadgeComponent.HasBadgeSlot("ADM"))
         {
             userRoom.CurrentEffect = 540;
         }
-        else if (session.GetUser().BadgeComponent.HasBadgeSlot("PRWRD1"))
+        else if (session.User.BadgeComponent.HasBadgeSlot("PRWRD1"))
         {
             userRoom.CurrentEffect = 580;
         }
-        else if (session.GetUser().BadgeComponent.HasBadgeSlot("GPHWIB"))
+        else if (session.User.BadgeComponent.HasBadgeSlot("GPHWIB"))
         {
             userRoom.CurrentEffect = 557;
         }
-        else if (session.GetUser().BadgeComponent.HasBadgeSlot("wibbo.helpeur"))
+        else if (session.User.BadgeComponent.HasBadgeSlot("wibbo.helpeur"))
         {
             userRoom.CurrentEffect = 544;
         }
-        else if (session.GetUser().BadgeComponent.HasBadgeSlot("WIBARC"))
+        else if (session.User.BadgeComponent.HasBadgeSlot("WIBARC"))
         {
             userRoom.CurrentEffect = 546;
         }
-        else if (session.GetUser().BadgeComponent.HasBadgeSlot("CRPOFFI"))
+        else if (session.User.BadgeComponent.HasBadgeSlot("CRPOFFI"))
         {
             userRoom.CurrentEffect = 570;
         }
-        else if (session.GetUser().BadgeComponent.HasBadgeSlot("ZEERSWS"))
+        else if (session.User.BadgeComponent.HasBadgeSlot("ZEERSWS"))
         {
             userRoom.CurrentEffect = 552;
         }
-        else if (session.GetUser().BadgeComponent.HasBadgeSlot("WBASSO"))
+        else if (session.User.BadgeComponent.HasBadgeSlot("WBASSO"))
         {
             userRoom.CurrentEffect = 576;
         }
-        else if (session.GetUser().BadgeComponent.HasBadgeSlot("WIBBOCOM"))
+        else if (session.User.BadgeComponent.HasBadgeSlot("WIBBOCOM"))
         {
             userRoom.CurrentEffect = 581;
         }

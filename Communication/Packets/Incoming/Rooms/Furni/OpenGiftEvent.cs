@@ -13,12 +13,12 @@ internal class OpenGiftEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.GetUser() == null || !session.GetUser().InRoom)
+        if (session == null || session.User == null || !session.User.InRoom)
         {
             return;
         }
 
-        var room = session.GetUser().CurrentRoom;
+        var room = session.User.CurrentRoom;
         if (room == null)
         {
             return;
@@ -54,7 +54,8 @@ internal class OpenGiftEvent : IPacketEvent
                     UserPresentDao.Delete(dbClient, present.Id);
                 }
 
-                session.GetUser().
+                session.
+                User.
                 InventoryComponent.RemoveItem(present.Id);
                 return;
             }
@@ -69,7 +70,8 @@ internal class OpenGiftEvent : IPacketEvent
                     UserPresentDao.Delete(dbClient, present.Id);
                 }
 
-                session.GetUser().
+                session.
+                User.
                 InventoryComponent.RemoveItem(present.Id);
                 return;
             }
@@ -124,7 +126,7 @@ internal class OpenGiftEvent : IPacketEvent
                     ItemDao.UpdateResetRoomId(dbClient, present.Id);
                 }
 
-                _ = session.GetUser().InventoryComponent.TryAddItem(present);
+                _ = session.User.InventoryComponent.TryAddItem(present);
 
                 itemIsInRoom = false;
             }
@@ -136,7 +138,7 @@ internal class OpenGiftEvent : IPacketEvent
                 ItemDao.UpdateResetRoomId(dbClient, present.Id);
             }
 
-            _ = session.GetUser().InventoryComponent.TryAddItem(present);
+            _ = session.User.InventoryComponent.TryAddItem(present);
 
             itemIsInRoom = false;
         }

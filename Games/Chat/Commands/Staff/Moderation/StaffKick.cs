@@ -12,15 +12,15 @@ internal class StaffKick : IChatCommand
         }
 
         var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (targetUser == null || targetUser.GetUser() == null)
+        if (targetUser == null || targetUser.User == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
         }
-        else if (session.GetUser().Rank <= targetUser.GetUser().Rank)
+        else if (session.User.Rank <= targetUser.User.Rank)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
         }
-        else if (targetUser.GetUser().CurrentRoomId < 1U)
+        else if (targetUser.User.CurrentRoomId < 1U)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("kick.error", session.Langue));
         }

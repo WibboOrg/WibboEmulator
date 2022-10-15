@@ -14,17 +14,17 @@ internal class Follow : IChatCommand
 
         var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
 
-        if (targetUser == null || targetUser.GetUser() == null)
+        if (targetUser == null || targetUser.User == null)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.useroffline", session.Langue));
         }
-        else if (targetUser.GetUser().HideInRoom && !session.GetUser().HasPermission("perm_mod"))
+        else if (targetUser.User.HideInRoom && !session.User.HasPermission("perm_mod"))
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.follow.notallowed", session.Langue));
         }
         else
         {
-            var currentRoom = targetUser.GetUser().CurrentRoom;
+            var currentRoom = targetUser.User.CurrentRoom;
             if (currentRoom != null)
             {
                 session.SendPacket(new GetGuestRoomResultComposer(session, currentRoom.RoomData, false, true));

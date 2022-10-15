@@ -6,9 +6,9 @@ internal class ForceOpenGift : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        session.GetUser().ForceOpenGift = !session.GetUser().ForceOpenGift;
+        session.User.ForceOpenGift = !session.User.ForceOpenGift;
 
-        if (session.GetUser().ForceOpenGift)
+        if (session.User.ForceOpenGift)
         {
             session.SendWhisper("ForceOpenGift activé");
         }

@@ -6,7 +6,7 @@ internal class DisableWhispers : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (session.GetUser().ViewMurmur)
+        if (session.User.ViewMurmur)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.murmur.true", session.Langue));
         }
@@ -15,6 +15,7 @@ internal class DisableWhispers : IChatCommand
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.murmur.false", session.Langue));
         }
 
-        session.GetUser().ViewMurmur = !session.GetUser().ViewMurmur;
+        session.
+        User.ViewMurmur = !session.User.ViewMurmur;
     }
 }

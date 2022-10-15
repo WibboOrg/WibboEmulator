@@ -26,29 +26,30 @@ internal class SetGroupFavouriteEvent : IPacketEvent
             return;
         }
 
-        session.GetUser().FavouriteGroupId = group.Id;
+        session.
+        User.FavouriteGroupId = group.Id;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserStatsDao.UpdateGroupId(dbClient, session.GetUser().FavouriteGroupId, session.GetUser().Id);
+            UserStatsDao.UpdateGroupId(dbClient, session.User.FavouriteGroupId, session.User.Id);
         }
 
-        if (session.GetUser().InRoom && session.GetUser().CurrentRoom != null)
+        if (session.User.InRoom && session.User.CurrentRoom != null)
         {
-            session.GetUser().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.GetUser().Id));
+            session.User.CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
             if (group != null)
             {
-                session.GetUser().CurrentRoom.SendPacket(new UserGroupBadgesComposer(group));
+                session.User.CurrentRoom.SendPacket(new UserGroupBadgesComposer(group));
 
-                var user = session.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+                var user = session.User.CurrentRoom.RoomUserManager.GetRoomUserByUserId(session.User.Id);
                 if (user != null)
                 {
-                    session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(group, user.VirtualId));
+                    session.User.CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(group, user.VirtualId));
                 }
             }
         }
         else
         {
-            session.SendPacket(new RefreshFavouriteGroupComposer(session.GetUser().Id));
+            session.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
         }
     }
 }

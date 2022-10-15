@@ -7,7 +7,7 @@ internal class OpenFlatConnectionEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.GetUser() == null)
+        if (session == null || session.User == null)
         {
             return;
         }
@@ -15,6 +15,7 @@ internal class OpenFlatConnectionEvent : IPacketEvent
         var roomId = packet.PopInt();
         var password = packet.PopString();
 
-        session.GetUser().PrepareRoom(roomId, password);
+        session.
+        User.PrepareRoom(roomId, password);
     }
 }

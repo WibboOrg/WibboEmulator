@@ -75,7 +75,7 @@ internal class Cac : IChatCommand
                 return;
             }
 
-            if (targetRoomUser.Client.GetUser().Id == session.GetUser().Id)
+            if (targetRoomUser.Client.User.Id == session.User.Id)
             {
                 return;
             }

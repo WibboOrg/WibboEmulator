@@ -10,12 +10,12 @@ internal class FollowFriendEvent : IPacketEvent
     {
         var userId = packet.PopInt();
         var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (clientByUserId == null || clientByUserId.GetUser() == null || !clientByUserId.GetUser().InRoom || (clientByUserId.GetUser().HideInRoom && !session.GetUser().HasPermission("perm_mod")))
+        if (clientByUserId == null || clientByUserId.User == null || !clientByUserId.User.InRoom || (clientByUserId.User.HideInRoom && !session.User.HasPermission("perm_mod")))
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(clientByUserId.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(clientByUserId.User.CurrentRoomId, out var room))
         {
             return;
         }

@@ -9,7 +9,7 @@ internal class AddFavouriteRoomEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
@@ -17,7 +17,7 @@ internal class AddFavouriteRoomEvent : IPacketEvent
         var roomId = packet.PopInt();
 
         var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
-        if (roomData == null || session.GetUser().FavoriteRooms.Count >= 30 || session.GetUser().FavoriteRooms.Contains(roomId))
+        if (roomData == null || session.User.FavoriteRooms.Count >= 30 || session.User.FavoriteRooms.Contains(roomId))
         {
             return;
         }
@@ -25,10 +25,11 @@ internal class AddFavouriteRoomEvent : IPacketEvent
         {
             session.SendPacket(new UpdateFavouriteRoomComposer(roomId, true));
 
-            session.GetUser().FavoriteRooms.Add(roomId);
+            session.
+            User.FavoriteRooms.Add(roomId);
 
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            UserFavoriteDao.Insert(dbClient, session.GetUser().Id, roomId);
+            UserFavoriteDao.Insert(dbClient, session.User.Id, roomId);
         }
     }
 }

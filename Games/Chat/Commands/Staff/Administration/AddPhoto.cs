@@ -21,14 +21,14 @@ internal class AddPhoto : IChatCommand
         }
 
         var time = WibboEnvironment.GetUnixTimestamp();
-        var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + session.GetUser().Username + "\", \"s\":\"" + session.GetUser().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
+        var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + session.User.Username + "\", \"s\":\"" + session.User.Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
 
-        var item = ItemFactory.CreateSingleItemNullable(itemData, session.GetUser(), extraData);
-        _ = session.GetUser().InventoryComponent.TryAddItem(item);
+        var item = ItemFactory.CreateSingleItemNullable(itemData, session.User, extraData);
+        _ = session.User.InventoryComponent.TryAddItem(item);
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserPhotoDao.Insert(dbClient, session.GetUser().Id, photoId, time);
+            UserPhotoDao.Insert(dbClient, session.User.Id, photoId, time);
         }
 
         session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.valide", session.Langue));

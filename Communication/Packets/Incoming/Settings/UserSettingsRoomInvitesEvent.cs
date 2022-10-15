@@ -10,16 +10,17 @@ internal class UserSettingsRoomInvitesEvent : IPacketEvent
     {
         var flag = packet.PopBoolean();
 
-        if (session == null || session.GetUser() == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserDao.UpdateIgnoreRoomInvites(dbClient, session.GetUser().Id, flag);
+            UserDao.UpdateIgnoreRoomInvites(dbClient, session.User.Id, flag);
         }
 
-        session.GetUser().IgnoreRoomInvites = flag;
+        session.
+        User.IgnoreRoomInvites = flag;
     }
 }

@@ -13,7 +13,7 @@ internal class ForceEnableUser : IChatCommand
 
         var username = parameters[1];
 
-        var roomUserByUserId = session.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByName(username);
+        var roomUserByUserId = session.User.CurrentRoom.RoomUserManager.GetRoomUserByName(username);
         if (roomUserByUserId == null || roomUserByUserId.Client == null)
         {
             return;
@@ -30,7 +30,7 @@ internal class ForceEnableUser : IChatCommand
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(effectId, session.GetUser().HasPermission("perm_god")))
+        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(effectId, session.User.HasPermission("perm_god")))
         {
             return;
         }

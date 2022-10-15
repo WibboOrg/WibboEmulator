@@ -12,7 +12,7 @@ internal class FaceLess : IChatCommand
             return;
         }
 
-        var look = session.GetUser().Look;
+        var look = session.User.Look;
 
         if (look.Contains("hd-"))
         {
@@ -28,7 +28,8 @@ internal class FaceLess : IChatCommand
 
             look = look.Replace(hdcode, hdcodenoface);
 
-            session.GetUser().Look = look;
+            session.
+            User.Look = look;
 
             room.SendPacket(new UserChangeComposer(userRoom, false));
         }

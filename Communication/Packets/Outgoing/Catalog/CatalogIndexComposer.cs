@@ -12,7 +12,7 @@ internal class CatalogIndexComposer : ServerPacket
 
         foreach (var parent in pages)
         {
-            if (parent.ParentId != -1 || parent.MinimumRank > session.GetUser().Rank)
+            if (parent.ParentId != -1 || parent.MinimumRank > session.User.Rank)
             {
                 continue;
             }
@@ -21,7 +21,7 @@ internal class CatalogIndexComposer : ServerPacket
 
             foreach (var child in pages)
             {
-                if (child.ParentId != parent.Id || child.MinimumRank > session.GetUser().Rank)
+                if (child.ParentId != parent.Id || child.MinimumRank > session.User.Rank)
                 {
                     continue;
                 }
@@ -37,7 +37,7 @@ internal class CatalogIndexComposer : ServerPacket
 
                 foreach (var subChild in pages)
                 {
-                    if (subChild.ParentId != child.Id || subChild.MinimumRank > session.GetUser().Rank)
+                    if (subChild.ParentId != child.Id || subChild.MinimumRank > session.User.Rank)
                     {
                         continue;
                     }
@@ -53,7 +53,7 @@ internal class CatalogIndexComposer : ServerPacket
 
                     foreach (var subSubChild in pages)
                     {
-                        if (subSubChild.ParentId != subChild.Id || subSubChild.MinimumRank > session.GetUser().Rank)
+                        if (subSubChild.ParentId != subChild.Id || subSubChild.MinimumRank > session.User.Rank)
                         {
                             continue;
                         }
@@ -120,7 +120,7 @@ internal class CatalogIndexComposer : ServerPacket
         var i = 0;
         foreach (var page in pages)
         {
-            if (page.MinimumRank > session.GetUser().Rank || page.ParentId != parentId)
+            if (page.MinimumRank > session.User.Rank || page.ParentId != parentId)
             {
                 continue;
             }

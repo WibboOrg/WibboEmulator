@@ -9,7 +9,7 @@ internal class QuestCompletedComposer : ServerPacket
     {
         var questsInCategory = WibboEnvironment.GetGame().GetQuestManager().GetAmountOfQuestsInCategory(quest.Category);
         var i = quest.Number - 1;
-        var num = session.GetUser().GetQuestProgress(quest.Id);
+        var num = session.User.GetQuestProgress(quest.Id);
         if (quest.IsCompleted(num))
         {
             i++;
@@ -20,7 +20,7 @@ internal class QuestCompletedComposer : ServerPacket
         this.WriteInteger(questsInCategory);
         this.WriteInteger(0);
         this.WriteInteger(quest.Id);
-        this.WriteBoolean(session.GetUser().CurrentQuestId == quest.Id);
+        this.WriteBoolean(session.User.CurrentQuestId == quest.Id);
         this.WriteString(quest.ActionName);
         this.WriteString(quest.DataBit);
         this.WriteInteger(quest.Reward);

@@ -13,12 +13,12 @@ internal class AllIgnore : IChatCommand
         }
 
         var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (targetUser == null || targetUser.GetUser() == null)
+        if (targetUser == null || targetUser.User == null)
         {
             return;
         }
 
-        if (targetUser.GetUser().Rank >= session.GetUser().Rank)
+        if (targetUser.User.Rank >= session.User.Rank)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
             return;
@@ -40,14 +40,15 @@ internal class AllIgnore : IChatCommand
         var reason = CommandManager.MergeParams(parameters, 3);
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        var isIgnoreall = BanDao.GetOneIgnoreAll(dbClient, targetUser.GetUser().Username);
+        var isIgnoreall = BanDao.GetOneIgnoreAll(dbClient, targetUser.User.Username);
         if (isIgnoreall == 0)
         {
-            BanDao.InsertBan(dbClient, expireTime, "ignoreall", targetUser.GetUser().Username, reason, session.GetUser().Username);
+            BanDao.InsertBan(dbClient, expireTime, "ignoreall", targetUser.User.Username, reason, session.User.Username);
         }
 
-        targetUser.GetUser().IgnoreAllExpireTime = expireTime;
+        targetUser.
+        User.IgnoreAllExpireTime = expireTime;
 
-        session.SendWhisper("Tu as ignoreall " + targetUser.GetUser().Username + " pour " + reason + "!");
+        session.SendWhisper("Tu as ignoreall " + targetUser.User.Username + " pour " + reason + "!");
     }
 }

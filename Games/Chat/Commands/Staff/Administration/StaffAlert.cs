@@ -26,22 +26,22 @@ internal class StaffAlert : IChatCommand
                 continue;
             }
 
-            if (staff.GetUser() == null)
+            if (staff.User == null)
             {
                 continue;
             }
 
-            if (staff.GetUser().CurrentRoom == null)
+            if (staff.User.CurrentRoom == null)
             {
                 continue;
             }
 
-            if (staff.GetUser().Rank < 3)
+            if (staff.User.Rank < 3)
             {
                 continue;
             }
 
-            var user = staff.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByUserId(staff.GetUser().Id);
+            var user = staff.User.CurrentRoom.RoomUserManager.GetRoomUserByUserId(staff.User.Id);
 
             user.Client.SendPacket(new WhisperComposer(user.VirtualId, "[STAFF ALERT] " + messageTxt + " - " + roomUser.GetUsername(), 23));
         }

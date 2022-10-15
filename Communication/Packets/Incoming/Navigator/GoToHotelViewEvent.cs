@@ -9,14 +9,14 @@ internal class GoToHotelViewEvent : IPacketEvent
     public void Parse(GameClient session, ClientPacket packet)
     {
         session.SendPacket(new CloseConnectionComposer());
-        session.GetUser().LoadingRoomId = 0;
+        session.User.LoadingRoomId = 0;
 
-        if (session.GetUser() == null || !session.GetUser().InRoom)
+        if (session.User == null || !session.User.InRoom)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }

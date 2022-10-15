@@ -36,8 +36,9 @@ internal class AddWinwinCommand : IRCONCommand
             return false;
         }
 
-        client.GetUser().AchievementPoints = client.GetUser().AchievementPoints + winwin;
-        client.SendPacket(new AchievementScoreComposer(client.GetUser().AchievementPoints));
+        client.
+        User.AchievementPoints = client.User.AchievementPoints + winwin;
+        client.SendPacket(new AchievementScoreComposer(client.User.AchievementPoints));
 
         return true;
     }

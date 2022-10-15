@@ -12,7 +12,7 @@ internal class EventAlert : IChatCommand
         }
 
         var str = CommandManager.MergeParams(parameters, 1);
-        str = "<b>[ANIMATION]</b>\r\n" + str + "\r\n- " + session.GetUser().Username;
+        str = "<b>[ANIMATION]</b>\r\n" + str + "\r\n- " + session.User.Username;
         WibboEnvironment.GetGame().GetGameClientManager().SendSuperNotif("Animation des Staffs", str, "game_promo_small", "event:navigator/goto/" + userRoom.RoomId, "Rejoindre!");
     }
 }

@@ -10,7 +10,7 @@ internal class SubmitNewTicketEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (WibboEnvironment.GetGame().GetModerationManager().UsersHasPendingTicket(session.GetUser().Id))
+        if (WibboEnvironment.GetGame().GetModerationManager().UsersHasPendingTicket(session.User.Id))
         {
             return;
         }

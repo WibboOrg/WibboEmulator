@@ -7,12 +7,12 @@ internal class SitEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var room = session.GetUser().CurrentRoom;        if (room == null)
+        var room = session.User.CurrentRoom;        if (room == null)
         {
             return;
         }
 
-        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);        if (roomUserByUserId == null)
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);        if (roomUserByUserId == null)
         {
             return;
         }

@@ -9,17 +9,17 @@ internal class RemoveMyRightsEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
 
-        if (!session.GetUser().InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
@@ -29,9 +29,9 @@ internal class RemoveMyRightsEvent : IPacketEvent
             return;
         }
 
-        if (room.UsersWithRights.Contains(session.GetUser().Id))
+        if (room.UsersWithRights.Contains(session.User.Id))
         {
-            var user = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+            var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
             if (user != null && !user.IsBot)
             {
                 user.RemoveStatus("flatctrl");
@@ -42,12 +42,12 @@ internal class RemoveMyRightsEvent : IPacketEvent
 
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                RoomRightDao.Delete(dbClient, room.Id, session.GetUser().Id);
+                RoomRightDao.Delete(dbClient, room.Id, session.User.Id);
             }
 
-            if (room.UsersWithRights.Contains(session.GetUser().Id))
+            if (room.UsersWithRights.Contains(session.User.Id))
             {
-                _ = room.UsersWithRights.Remove(session.GetUser().Id);
+                _ = room.UsersWithRights.Remove(session.User.Id);
             }
         }
     }

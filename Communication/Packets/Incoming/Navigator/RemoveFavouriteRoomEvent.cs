@@ -9,7 +9,7 @@ internal class RemoveFavouriteRoomEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
@@ -22,11 +22,11 @@ internal class RemoveFavouriteRoomEvent : IPacketEvent
             return;
         }
 
-        _ = session.GetUser().FavoriteRooms.Remove(roomId);
+        _ = session.User.FavoriteRooms.Remove(roomId);
 
         session.SendPacket(new UpdateFavouriteRoomComposer(roomId, false));
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        UserFavoriteDao.Delete(dbClient, session.GetUser().Id, roomId);
+        UserFavoriteDao.Delete(dbClient, session.User.Id, roomId);
     }
 }

@@ -20,14 +20,14 @@ internal class RemoveGroupMemberEvent : IPacketEvent
             return;
         }
 
-        if (userId == session.GetUser().Id)
+        if (userId == session.User.Id)
         {
             if (group.IsMember(userId))
             {
                 group.DeleteMember(userId);
             }
 
-            _ = session.GetUser().MyGroups.Remove(group.Id);
+            _ = session.User.MyGroups.Remove(group.Id);
 
             if (group.IsAdmin(userId))
             {
@@ -41,7 +41,7 @@ internal class RemoveGroupMemberEvent : IPacketEvent
                     return;
                 }
 
-                var userRom = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+                var userRom = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
                 if (userRom != null)
                 {
                     userRom.RemoveStatus("flatctrl");
@@ -60,9 +60,9 @@ internal class RemoveGroupMemberEvent : IPacketEvent
             }
 
             session.SendPacket(new GroupInfoComposer(group, session));
-            if (session.GetUser().FavouriteGroupId == groupId)
+            if (session.User.FavouriteGroupId == groupId)
             {
-                session.GetUser().FavouriteGroupId = 0;
+                session.User.FavouriteGroupId = 0;
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserStatsDao.UpdateRemoveGroupId(dbClient, userId);
@@ -75,7 +75,7 @@ internal class RemoveGroupMemberEvent : IPacketEvent
                         return;
                     }
 
-                    var userRoom = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+                    var userRoom = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
                     if (userRoom != null)
                     {
                         userRoom.RemoveStatus("flatctrl");
@@ -88,33 +88,34 @@ internal class RemoveGroupMemberEvent : IPacketEvent
                     }
                 }
 
-                if (session.GetUser().InRoom && session.GetUser().CurrentRoom != null)
+                if (session.User.InRoom && session.User.CurrentRoom != null)
                 {
-                    var userRoom = session.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+                    var userRoom = session.User.CurrentRoom.RoomUserManager.GetRoomUserByUserId(session.User.Id);
                     if (userRoom != null)
                     {
-                        session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(group, userRoom.VirtualId));
+                        session.User.CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(group, userRoom.VirtualId));
                     }
 
-                    session.GetUser().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.GetUser().Id));
+                    session.
+                    User.CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
                 }
                 else
                 {
-                    session.SendPacket(new RefreshFavouriteGroupComposer(session.GetUser().Id));
+                    session.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
                 }
             }
             return;
         }
         else
         {
-            if (group.CreatorId == session.GetUser().Id || group.IsAdmin(session.GetUser().Id))
+            if (group.CreatorId == session.User.Id || group.IsAdmin(session.User.Id))
             {
                 if (!group.IsMember(userId))
                 {
                     return;
                 }
 
-                if (group.IsAdmin(userId) && group.CreatorId != session.GetUser().Id)
+                if (group.IsAdmin(userId) && group.CreatorId != session.User.Id)
                 {
                     session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupremoveuser.error", session.Langue));
                     return;
@@ -157,7 +158,7 @@ internal class RemoveGroupMemberEvent : IPacketEvent
                 var finishIndex = 14 < members.Count ? 14 : members.Count;
                 var membersCount = group.GetMembers.Count;
 
-                session.SendPacket(new GroupMembersComposer(group, members.Take(finishIndex).ToList(), membersCount, 1, group.CreatorId == session.GetUser().Id || group.IsAdmin(session.GetUser().Id), 0, ""));
+                session.SendPacket(new GroupMembersComposer(group, members.Take(finishIndex).ToList(), membersCount, 1, group.CreatorId == session.User.Id || group.IsAdmin(session.User.Id), 0, ""));
             }
         }
     }

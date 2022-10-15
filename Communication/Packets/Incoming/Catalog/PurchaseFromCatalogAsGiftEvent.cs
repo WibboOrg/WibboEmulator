@@ -33,7 +33,7 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             return;
         }
 
-        if (!page.Enabled || page.MinimumRank > session.GetUser().Rank)
+        if (!page.Enabled || page.MinimumRank > session.User.Rank)
         {
             return;
         }
@@ -58,10 +58,10 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
         var totalDiamondCost = item.CostWibboPoints;
         var totalLimitCoinCost = item.CostLimitCoins;
 
-        if (session.GetUser().Credits < totalCreditsCost ||
-            session.GetUser().Duckets < totalPixelCost ||
-            session.GetUser().WibboPoints < totalDiamondCost ||
-            session.GetUser().LimitCoins < totalLimitCoinCost)
+        if (session.User.Credits < totalCreditsCost ||
+            session.User.Duckets < totalPixelCost ||
+            session.User.WibboPoints < totalDiamondCost ||
+            session.User.LimitCoins < totalLimitCoinCost)
         {
             return;
         }
@@ -73,25 +73,26 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             return;
         }
 
-        if ((DateTime.Now - session.GetUser().LastGiftPurchaseTime).TotalSeconds <= 15.0)
+        if ((DateTime.Now - session.User.LastGiftPurchaseTime).TotalSeconds <= 15.0)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buygift.flood", session.Langue));
 
-            session.GetUser().GiftPurchasingWarnings += 1;
-            if (session.GetUser().GiftPurchasingWarnings >= 25)
+            session.
+            User.GiftPurchasingWarnings += 1;
+            if (session.User.GiftPurchasingWarnings >= 25)
             {
-                session.GetUser().SessionGiftBlocked = true;
+                session.User.SessionGiftBlocked = true;
             }
 
             return;
         }
 
-        if (session.GetUser().SessionGiftBlocked)
+        if (session.User.SessionGiftBlocked)
         {
             return;
         }
 
-        var ed = session.GetUser().Id + ";" + giftMessage + Convert.ToChar(5) + ribbon + Convert.ToChar(5) + colour;
+        var ed = session.User.Id + ";" + giftMessage + Convert.ToChar(5) + ribbon + Convert.ToChar(5) + colour;
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
         var newItemId = ItemDao.Insert(dbClient, presentData.Id, user.Id, ed);
@@ -187,7 +188,7 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
                 break;
 
             case InteractionType.TROPHY:
-                itemExtraData = session.GetUser().Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + Convert.ToChar(9) + data;
+                itemExtraData = session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + Convert.ToChar(9) + data;
                 break;
 
             case InteractionType.MANNEQUIN:
@@ -204,24 +205,24 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 
                 if (!data.StartsWith("perso_"))
                 {
-                    session.GetUser().BadgeComponent.RemoveBadge(data);
+                    session.User.BadgeComponent.RemoveBadge(data);
                 }
 
-                session.SendPacket(new BadgesComposer(session.GetUser().BadgeComponent.BadgeList));
+                session.SendPacket(new BadgesComposer(session.User.BadgeComponent.BadgeList));
 
                 itemExtraData = data;
                 break;
             }
 
             case InteractionType.BADGE_DISPLAY:
-                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(data) || !session.GetUser().BadgeComponent.HasBadge(data))
+                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(data) || !session.User.BadgeComponent.HasBadge(data))
                 {
                     session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", session.Langue));
                     session.SendPacket(new PurchaseOKComposer());
                     return;
                 }
 
-                itemExtraData = data + Convert.ToChar(9) + session.GetUser().Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
+                itemExtraData = data + Convert.ToChar(9) + session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
                 break;
 
             default:
@@ -239,13 +240,13 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             var receiver = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(user.Id);
             if (receiver != null)
             {
-                _ = receiver.GetUser().InventoryComponent.TryAddItem(giveItem);
+                _ = receiver.User.InventoryComponent.TryAddItem(giveItem);
                 receiver.SendPacket(new FurniListNotificationComposer(giveItem.Id, 1));
                 receiver.SendPacket(new PurchaseOKComposer());
                 //Receiver.SendPacket(new FurniListUpdateComposer());
             }
 
-            if (user.Id != session.GetUser().Id && !string.IsNullOrWhiteSpace(giftMessage))
+            if (user.Id != session.User.Id && !string.IsNullOrWhiteSpace(giftMessage))
             {
                 _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_GiftGiver", 1);
                 if (receiver != null)
@@ -259,32 +260,33 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 
         if (item.CostCredits > 0)
         {
-            session.GetUser().Credits -= totalCreditsCost;
-            session.SendPacket(new CreditBalanceComposer(session.GetUser().Credits));
+            session.User.Credits -= totalCreditsCost;
+            session.SendPacket(new CreditBalanceComposer(session.User.Credits));
         }
 
         if (item.CostDuckets > 0)
         {
-            session.GetUser().Duckets -= totalPixelCost;
-            session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().Duckets, session.GetUser().Duckets));
+            session.User.Duckets -= totalPixelCost;
+            session.SendPacket(new ActivityPointNotificationComposer(session.User.Duckets, session.User.Duckets));
         }
 
         if (item.CostWibboPoints > 0)
         {
-            session.GetUser().WibboPoints -= totalDiamondCost;
-            session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().WibboPoints, 0, 105));
+            session.User.WibboPoints -= totalDiamondCost;
+            session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
 
-            UserDao.UpdateRemovePoints(dbClient, session.GetUser().Id, totalDiamondCost);
+            UserDao.UpdateRemovePoints(dbClient, session.User.Id, totalDiamondCost);
         }
 
         if (item.CostLimitCoins > 0)
         {
-            session.GetUser().LimitCoins -= totalLimitCoinCost;
-            session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().LimitCoins, 0, 55));
+            session.User.LimitCoins -= totalLimitCoinCost;
+            session.SendPacket(new ActivityPointNotificationComposer(session.User.LimitCoins, 0, 55));
 
-            UserDao.UpdateRemoveLimitCoins(dbClient, session.GetUser().Id, totalLimitCoinCost);
+            UserDao.UpdateRemoveLimitCoins(dbClient, session.User.Id, totalLimitCoinCost);
         }
 
-        session.GetUser().LastGiftPurchaseTime = DateTime.Now;
+        session.
+        User.LastGiftPurchaseTime = DateTime.Now;
     }
 }

@@ -13,7 +13,7 @@ public class HasUserInGroup : WiredConditionBase, IWiredCondition, IWired
 
     public bool AllowsExecution(RoomUser user, Item item)
     {
-        if (user == null || user.IsBot || user.Client == null || user.Client.GetUser() == null)
+        if (user == null || user.IsBot || user.Client == null || user.Client.User == null)
         {
             return false;
         }
@@ -23,7 +23,7 @@ public class HasUserInGroup : WiredConditionBase, IWiredCondition, IWired
             return false;
         }
 
-        if (!user.Client.GetUser().MyGroups.Contains(this.RoomInstance.RoomData.Group.Id))
+        if (!user.Client.User.MyGroups.Contains(this.RoomInstance.RoomData.Group.Id))
         {
             return false;
         }

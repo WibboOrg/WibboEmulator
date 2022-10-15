@@ -15,7 +15,7 @@ internal class RandomLook : IChatCommand
             return;
         }
 
-        if (session.GetUser() == null)
+        if (session.User == null)
         {
             return;
         }
@@ -27,10 +27,10 @@ internal class RandomLook : IChatCommand
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            session.GetUser().Look = UserWardrobeDao.GetOneRandomLook(dbClient);
+            session.User.Look = UserWardrobeDao.GetOneRandomLook(dbClient);
         }
 
-        session.SendPacket(new FigureUpdateComposer(session.GetUser().Look, session.GetUser().Gender));
+        session.SendPacket(new FigureUpdateComposer(session.User.Look, session.User.Gender));
         session.SendPacket(new UserChangeComposer(userRoom, true));
         room.SendPacket(new UserChangeComposer(userRoom, false));
     }

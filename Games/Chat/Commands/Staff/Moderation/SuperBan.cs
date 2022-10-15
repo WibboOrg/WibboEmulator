@@ -12,13 +12,13 @@ internal class SuperBan : IChatCommand
         }
 
         var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (targetUser == null || targetUser.GetUser() == null)
+        if (targetUser == null || targetUser.User == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
             return;
         }
 
-        if (targetUser.GetUser().Rank >= session.GetUser().Rank)
+        if (targetUser.User.Rank >= session.User.Rank)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
             WibboEnvironment.GetGame().GetGameClientManager().BanUser(session, "Robot", 788922000, "Votre compte a été banni par sécurité !", false, false);
@@ -38,9 +38,9 @@ internal class SuperBan : IChatCommand
             else
             {
                 var raison = CommandManager.MergeParams(parameters, 3);
-                session.SendWhisper("Tu as SuperBan " + targetUser.GetUser().Username + " pour" + raison + "!");
+                session.SendWhisper("Tu as SuperBan " + targetUser.User.Username + " pour" + raison + "!");
 
-                WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.GetUser().Username, num, raison, false, false);
+                WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.User.Username, num, raison, false, false);
                 _ = session.Antipub(raison, "<CMD>");
             }
         }

@@ -8,7 +8,7 @@ internal class GetPromoArticlesEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var currentView = WibboEnvironment.GetGame().GetHotelView();        if (session == null || session.GetUser() == null)
+        var currentView = WibboEnvironment.GetGame().GetHotelView();        if (session == null || session.User == null)
         {
             return;
         }

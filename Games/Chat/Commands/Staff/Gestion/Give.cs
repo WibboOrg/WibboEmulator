@@ -15,7 +15,7 @@ internal class Give : IChatCommand
             case "coins":
             case "credits":
             {
-                if (!session.GetUser().HasPermission("perm_give_credits"))
+                if (!session.User.HasPermission("perm_give_credits"))
                 {
                     session.SendWhisper("Désolé, vous n'avez pas la permission...");
                     break;
@@ -24,15 +24,15 @@ internal class Give : IChatCommand
                 {
                     if (int.TryParse(parameters[3], out var amount))
                     {
-                        targetUser.GetUser().Credits += amount;
-                        targetUser.SendPacket(new CreditBalanceComposer(targetUser.GetUser().Credits));
+                        targetUser.User.Credits += amount;
+                        targetUser.SendPacket(new CreditBalanceComposer(targetUser.User.Credits));
 
-                        if (targetUser.GetUser().Id != session.GetUser().Id)
+                        if (targetUser.User.Id != session.User.Id)
                         {
-                            targetUser.SendNotification(session.GetUser().Username + " t'a donné  " + amount.ToString() + " crédit(s)!");
+                            targetUser.SendNotification(session.User.Username + " t'a donné  " + amount.ToString() + " crédit(s)!");
                         }
 
-                        session.SendWhisper("Tu as donné " + amount + " crédit(s) à " + targetUser.GetUser().Username + "!");
+                        session.SendWhisper("Tu as donné " + amount + " crédit(s) à " + targetUser.User.Username + "!");
                         break;
                     }
                     else
@@ -46,7 +46,7 @@ internal class Give : IChatCommand
             case "wbpts":
             case "wp":
             {
-                if (!session.GetUser().HasPermission("perm_give_wibbopoints"))
+                if (!session.User.HasPermission("perm_give_wibbopoints"))
                 {
                     session.SendWhisper("Désolé, vous n'avez pas la permission...");
                     break;
@@ -55,15 +55,15 @@ internal class Give : IChatCommand
                 {
                     if (int.TryParse(parameters[3], out var amount))
                     {
-                        targetUser.GetUser().WibboPoints += amount;
-                        targetUser.SendPacket(new ActivityPointNotificationComposer(targetUser.GetUser().WibboPoints, 0, 105));
+                        targetUser.User.WibboPoints += amount;
+                        targetUser.SendPacket(new ActivityPointNotificationComposer(targetUser.User.WibboPoints, 0, 105));
 
-                        if (targetUser.GetUser().Id != session.GetUser().Id)
+                        if (targetUser.User.Id != session.User.Id)
                         {
-                            targetUser.SendNotification(session.GetUser().Username + " t'a donné " + amount.ToString() + " WibboPoint(s)!");
+                            targetUser.SendNotification(session.User.Username + " t'a donné " + amount.ToString() + " WibboPoint(s)!");
                         }
 
-                        session.SendWhisper("Tu as donné " + amount + " WibboPoint(s) à " + targetUser.GetUser().Username + "!");
+                        session.SendWhisper("Tu as donné " + amount + " WibboPoint(s) à " + targetUser.User.Username + "!");
                         break;
                     }
                     else
@@ -77,7 +77,7 @@ internal class Give : IChatCommand
             case "limitcoins":
             case "ltc":
             {
-                if (!session.GetUser().HasPermission("perm_give_limitcoins"))
+                if (!session.User.HasPermission("perm_give_limitcoins"))
                 {
                     session.SendWhisper("Désolé, vous n'avez pas la permission...");
                     break;
@@ -86,15 +86,15 @@ internal class Give : IChatCommand
                 {
                     if (int.TryParse(parameters[3], out var amount))
                     {
-                        targetUser.GetUser().LimitCoins += amount;
-                        targetUser.SendPacket(new ActivityPointNotificationComposer(targetUser.GetUser().LimitCoins, 0, 55));
+                        targetUser.User.LimitCoins += amount;
+                        targetUser.SendPacket(new ActivityPointNotificationComposer(targetUser.User.LimitCoins, 0, 55));
 
-                        if (targetUser.GetUser().Id != session.GetUser().Id)
+                        if (targetUser.User.Id != session.User.Id)
                         {
-                            targetUser.SendNotification(session.GetUser().Username + " t'a donné " + amount.ToString() + " Limit'Coin(s)!");
+                            targetUser.SendNotification(session.User.Username + " t'a donné " + amount.ToString() + " Limit'Coin(s)!");
                         }
 
-                        session.SendWhisper("Tu as donné " + amount + " Limit'Coin(s) à " + targetUser.GetUser().Username + "!");
+                        session.SendWhisper("Tu as donné " + amount + " Limit'Coin(s) à " + targetUser.User.Username + "!");
                         break;
                     }
                     else

@@ -10,7 +10,7 @@ internal class PlacePetEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
             return;
         }
@@ -27,7 +27,7 @@ internal class PlacePetEvent : IPacketEvent
             return;
         }
 
-        if (!session.GetUser().InventoryComponent.TryGetPet(packet.PopInt(), out var pet))
+        if (!session.User.InventoryComponent.TryGetPet(packet.PopInt(), out var pet))
         {
             return;
         }
@@ -70,11 +70,11 @@ internal class PlacePetEvent : IPacketEvent
             BotPetDao.UpdateRoomId(dbClient, pet.PetId, pet.RoomId);
         }
 
-        if (!session.GetUser().InventoryComponent.TryRemovePet(pet.PetId, out var toRemove))
+        if (!session.User.InventoryComponent.TryRemovePet(pet.PetId, out var toRemove))
         {
             return;
         }
 
-        session.SendPacket(new PetInventoryComposer(session.GetUser().InventoryComponent.GetPets()));
+        session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.GetPets()));
     }
 }

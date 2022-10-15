@@ -8,13 +8,13 @@ internal class GuideInviteToRoomEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.GetUser().GuideOtherUserId);
+        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.User.GuideOtherUserId);
         if (requester == null)
         {
             return;
         }
 
-        var room = session.GetUser().CurrentRoom;
+        var room = session.User.CurrentRoom;
 
         if (room == null)
         {

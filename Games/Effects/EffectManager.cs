@@ -5,20 +5,19 @@ using WibboEmulator.Database.Interfaces;
 
 public class EffectManager
 {
-    private readonly List<int> _effects;
     private readonly List<int> _effectsStaff;
 
-    public List<int> GetEffects() => this._effects;
+    public List<int> Effects { get; }
 
     public EffectManager()
     {
-        this._effects = new List<int>();
+        this.Effects = new List<int>();
         this._effectsStaff = new List<int>();
     }
 
     public void Init(IQueryAdapter dbClient)
     {
-        this._effects.Clear();
+        this.Effects.Clear();
         this._effectsStaff.Clear();
 
         var table = EmulatorEffectDao.GetAll(dbClient);
@@ -40,9 +39,9 @@ public class EffectManager
             }
             else
             {
-                if (!this._effects.Contains(effectId))
+                if (!this.Effects.Contains(effectId))
                 {
-                    this._effects.Add(effectId);
+                    this.Effects.Add(effectId);
                 }
             }
         }
@@ -50,7 +49,7 @@ public class EffectManager
 
     public bool HaveEffect(int effectId, bool isStaff = false)
     {
-        if (this._effects.Contains(effectId))
+        if (this.Effects.Contains(effectId))
         {
             return true;
         }

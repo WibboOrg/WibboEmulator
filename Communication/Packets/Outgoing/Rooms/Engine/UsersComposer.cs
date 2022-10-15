@@ -73,7 +73,7 @@ internal class UsersComposer : ServerPacket
         }
         else
         {
-            if (roomUser.Client == null || roomUser.Client.GetUser() == null)
+            if (roomUser.Client == null || roomUser.Client.User == null)
             {
                 this.WriteInteger(0);
                 this.WriteString("");
@@ -96,7 +96,7 @@ internal class UsersComposer : ServerPacket
             }
             else
             {
-                var user = roomUser.Client.GetUser();
+                var user = roomUser.Client.User;
 
                 Group group = null;
                 if (user.FavouriteGroupId > 0)

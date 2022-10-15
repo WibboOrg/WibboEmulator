@@ -23,17 +23,17 @@ internal class Pull : IChatCommand
         }
 
         var targetUser = room.RoomUserManager.GetRoomUserByName(Convert.ToString(parameters[1]));
-        if (targetUser == null || targetUser.Client == null || targetUser.Client.GetUser() == null)
+        if (targetUser == null || targetUser.Client == null || targetUser.Client.User == null)
         {
             return;
         }
 
-        if (targetUser.Client.GetUser().Id == session.GetUser().Id)
+        if (targetUser.Client.User.Id == session.User.Id)
         {
             return;
         }
 
-        if (targetUser.Client.GetUser().PremiumProtect && !session.GetUser().HasPermission("perm_mod"))
+        if (targetUser.Client.User.PremiumProtect && !session.User.HasPermission("perm_mod"))
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
             return;

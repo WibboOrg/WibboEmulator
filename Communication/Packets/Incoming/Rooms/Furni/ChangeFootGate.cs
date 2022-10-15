@@ -12,7 +12,7 @@ internal class ChangeFootGate : IPacketEvent
         var gender = packet.PopString();
         var look = packet.PopString();
 
-        var room = session.GetUser().CurrentRoom;
+        var room = session.User.CurrentRoom;
         if (room == null || !room.CheckRights(session, true))
         {
             return;

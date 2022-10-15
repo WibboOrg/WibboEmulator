@@ -9,7 +9,7 @@ internal class RoomAlert : IChatCommand
         var message = CommandManager.MergeParams(parameters, 1);
         foreach (var roomUser in room.RoomUserManager.GetRoomUsers())
         {
-            if (roomUser == null || roomUser.Client == null || session.GetUser().Id == roomUser.UserId)
+            if (roomUser == null || roomUser.Client == null || session.User.Id == roomUser.UserId)
             {
                 continue;
             }

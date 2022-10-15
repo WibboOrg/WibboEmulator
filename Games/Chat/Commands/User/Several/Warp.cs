@@ -17,7 +17,7 @@ internal class Warp : IChatCommand
             return;
         }
 
-        var roomUserByUserIdTarget = room.RoomUserManager.GetRoomUserByUserId(targetUser.GetUser().Id);
+        var roomUserByUserIdTarget = room.RoomUserManager.GetRoomUserByUserId(targetUser.User.Id);
         if (roomUserByUserIdTarget == null)
         {
             return;
