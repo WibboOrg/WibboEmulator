@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.WebSocket;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
@@ -26,10 +27,7 @@ public class WebSocketManager
         this._bannedIp = new List<string>();
         this._webSocketOrigins = webSocketOrigins;
 
-        this._webSocketServer = new WebSocketServer(IPAddress.Any, port, isSecure)
-        {
-            WaitTime = TimeSpan.FromSeconds(5)
-        };
+        this._webSocketServer = new WebSocketServer(IPAddress.Any, port, isSecure);
         if (isSecure)
         {
             var pemFile = WibboEnvironment.GetSettings().GetData<string>("game.ssl.pem.file.path");
@@ -46,9 +44,14 @@ public class WebSocketManager
         this._webSocketServer.AddWebSocketService<GameWebSocket>("/", (initializer) => _ = new GameWebSocket() { IgnoreExtensions = true });
         this._webSocketServer.Start();
 
+        this._webSocketServer.Log.File = WibboEnvironment.PatchDir + "/logs/websocketSharp.txt";
         if (Debugger.IsAttached)
         {
             this._webSocketServer.Log.Level = LogLevel.Trace;
+        }
+        else
+        {
+            this._webSocketServer.Log.Level = LogLevel.Debug;
         }
     }
 
@@ -138,7 +141,12 @@ public class WebSocketManager
         }
     }
 
-    public void ResetBan() => this._bannedIp.Clear();
+    public void ResetBan()
+    {
+        this._bannedIp.Clear();
+        this._lastTimeConnection.Clear();
+        this._ipConnectionsCount.Clear();
+    }
 
     public void Destroy()
     {

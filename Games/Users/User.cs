@@ -5,7 +5,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Core;
 using WibboEmulator.Core.Language;
@@ -21,6 +20,7 @@ using WibboEmulator.Games.Users.Inventory;
 using WibboEmulator.Games.Users.Messenger;
 using WibboEmulator.Games.Users.Permissions;
 using WibboEmulator.Games.Users.Wardrobes;
+using WibboEmulator.Utilities;
 
 public class User : IDisposable
 {
@@ -83,9 +83,7 @@ public class User : IDisposable
     public DateTime SpamFloodTime { get; set; }
     public DateTime EveryoneTimer { get; set; }
     public DateTime LastGiftPurchaseTime { get; set; }
-    public bool LoadRoomBlocked { get; set; }
-    public int LoadRoomCount { get; set; }
-    public DateTime LastLoadedRoomTime { get; set; }
+    public SpamDetect LastLoadedRoomTime { get; } = new(TimeSpan.FromSeconds(2), TimeSpan.FromMinutes(1), 5);
     public int CurrentQuestId { get; set; }
     public int LastCompleted { get; set; }
     public int LastQuestId { get; set; }
@@ -305,29 +303,11 @@ public class User : IDisposable
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(id, out _))
         {
-            var timeSpan = DateTime.Now - this.LastLoadedRoomTime;
-            if (timeSpan.TotalSeconds < 2)
+            if (this.LastLoadedRoomTime.CheckIsBlocked())
             {
-                this.LoadRoomCount++;
-            }
-
-            if (timeSpan.TotalSeconds > 60)
-            {
-                this.LoadRoomCount = 0;
-                this.LoadRoomBlocked = false;
-            }
-            else if (this.LoadRoomCount > 5)
-            {
-                if (!this.LoadRoomBlocked)
-                {
-                    WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(RoomNotificationComposer.SendBubble("mention", $"Attention {this.Username} charge trop vite les apparts!"));
-                    this.LoadRoomBlocked = true;
-                }
                 this.Client.SendPacket(new CloseConnectionComposer());
                 return;
             }
-
-            this.LastLoadedRoomTime = DateTime.Now;
         }
 
         var room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(id);
@@ -419,7 +399,6 @@ public class User : IDisposable
             this.Client.GetUser().LoadingRoomId = id;
             this.Client.GetUser().AllowDoorBell = true;
         }
-
     }
 
     public bool EnterRoom(Room room)

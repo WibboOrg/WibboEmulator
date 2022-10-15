@@ -21,7 +21,6 @@ public class ConsoleCommands
                 {
                     ExceptionLogger.LogMessage("Server exiting at " + DateTime.Now);
                     ExceptionLogger.DisablePrimaryWriting(true);
-                    Console.WriteLine("The server is saving users furniture, rooms, etc. WAIT FOR THE SERVER TO CLOSE, DO NOT EXIT THE PROCESS IN TASK MANAGER!!");
                     WibboEnvironment.PreformShutDown();
                     break;
                 }

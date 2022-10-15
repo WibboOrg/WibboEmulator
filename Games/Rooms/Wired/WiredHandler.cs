@@ -16,7 +16,7 @@ public class WiredHandler
     private readonly List<Point> _specialRandom;
     private readonly Dictionary<Point, int> _specialUnseen;
 
-    private ConcurrentQueue<WiredCycle> _requestingUpdates;
+    private readonly ConcurrentQueue<WiredCycle> _requestingUpdates;
 
     private bool _doCleanup;
 
@@ -30,7 +30,6 @@ public class WiredHandler
         this._conditionStacks = new ConcurrentDictionary<Point, List<Item>>();
         this._requestingUpdates = new ConcurrentQueue<WiredCycle>();
         this._wiredUsed = new ConcurrentDictionary<Point, List<RoomUser>>();
-
 
         this._specialRandom = new List<Point>();
         this._specialUnseen = new Dictionary<Point, int>();
@@ -302,7 +301,7 @@ public class WiredHandler
 
         if (this._requestingUpdates != null)
         {
-            this._requestingUpdates = null;
+            this._requestingUpdates.Clear();
         }
 
         this.TrgCollision = null;

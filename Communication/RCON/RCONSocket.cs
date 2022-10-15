@@ -2,6 +2,7 @@ namespace WibboEmulator.Communication.RCON;
 using System.Net;
 using System.Net.Sockets;
 using WibboEmulator.Communication.RCON.Commands;
+using WibboEmulator.Core;
 
 public class RCONSocket : IDisposable
 {
@@ -53,7 +54,7 @@ public class RCONSocket : IDisposable
             }
             else
             {
-                Console.WriteLine("MusSocket Ip non autorisé: " + str);
+                ExceptionLogger.LogDenial("MusSocket Ip non autorisé: " + str);
                 socket.Close();
             }
         }

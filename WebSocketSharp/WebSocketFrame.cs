@@ -497,10 +497,8 @@ Extended Payload Length: {7}
         return ProcessHeader(bytes);
     }
 
-    private static void ReadHeaderAsync(
-      Stream stream, Action<WebSocketFrame> completed, Action<Exception> error
-    ) => stream.ReadBytesAsync(
-          2,
+    private static void ReadHeaderAsync(Stream stream, Action<WebSocketFrame> completed, Action<Exception> error) =>
+        stream.ReadBytesAsync(2,
           bytes =>
           {
               var frame = ProcessHeader(bytes);
@@ -556,7 +554,7 @@ Extended Payload Length: {7}
 
         stream.ReadBytesAsync(
           len,
-                    bytes =>
+          bytes =>
           {
               if (bytes.Length != len)
               {
@@ -679,23 +677,15 @@ Extended Payload Length: {7}
 
     internal static WebSocketFrame CreateCloseFrame(
       PayloadData payloadData, bool mask
-    ) => new(
-                 Fin.Final, Opcode.Close, payloadData, false, mask
-               );
+    ) => new(Fin.Final, Opcode.Close, payloadData, false, mask);
 
-    internal static WebSocketFrame CreatePingFrame(bool mask) => new(
-                 Fin.Final, Opcode.Ping, PayloadData.Empty, false, mask
-               );
+    internal static WebSocketFrame CreatePingFrame(bool mask) => new(Fin.Final, Opcode.Ping, PayloadData.Empty, false, mask);
 
-    internal static WebSocketFrame CreatePingFrame(byte[] data, bool mask) => new(
-                 Fin.Final, Opcode.Ping, new PayloadData(data), false, mask
-               );
+    internal static WebSocketFrame CreatePingFrame(byte[] data, bool mask) => new(Fin.Final, Opcode.Ping, new PayloadData(data), false, mask);
 
     internal static WebSocketFrame CreatePongFrame(
       PayloadData payloadData, bool mask
-    ) => new(
-                 Fin.Final, Opcode.Pong, payloadData, false, mask
-               );
+    ) => new(Fin.Final, Opcode.Pong, payloadData, false, mask);
 
     internal static WebSocketFrame ReadFrame(Stream stream, bool unmask)
     {

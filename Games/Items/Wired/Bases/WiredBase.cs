@@ -6,7 +6,6 @@ public class WiredBase
 {
     internal bool StuffTypeSelectionEnabled { get; set; }
     internal int FurniLimit { get; set; }
-
     internal List<int> StuffIds { get; set; }
     internal int StuffTypeId { get; set; }
     internal int Id { get; set; }

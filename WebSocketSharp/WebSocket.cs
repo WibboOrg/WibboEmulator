@@ -823,7 +823,7 @@ public class WebSocket : IDisposable
         var fmt = "A handshake request from {0}:\n{1}";
         var msg = string.Format(fmt, this._context.UserEndPoint, this._context);
 
-        this._logger.Debug(msg);
+        //this._logger.Debug(msg);
 
         if (!this.CheckHandshakeRequest(this._context, out msg))
         {
@@ -1277,7 +1277,7 @@ public class WebSocket : IDisposable
                     received
                   );
 
-        this._logger.Debug(msg);
+        //this._logger.Debug(msg);
 
         return ret;
     }
@@ -2394,13 +2394,13 @@ public class WebSocket : IDisposable
     {
         var msg = "An HTTP request to the server:\n" + request.ToString();
 
-        this._logger.Debug(msg);
+        //this._logger.Debug(msg);
 
         var res = request.GetResponse(this._stream, millisecondsTimeout);
 
         msg = "An HTTP response from the server:\n" + res.ToString();
 
-        this._logger.Debug(msg);
+        //this._logger.Debug(msg);
 
         return res;
     }
@@ -2411,7 +2411,7 @@ public class WebSocket : IDisposable
         var fmt = "An HTTP response to {0}:\n{1}";
         var msg = string.Format(fmt, this._context.UserEndPoint, response);
 
-        this._logger.Debug(msg);
+        //this._logger.Debug(msg);
 
         var bytes = response.ToByteArray();
 
@@ -2747,7 +2747,7 @@ public class WebSocket : IDisposable
                     received
                   );
 
-        this._logger.Debug(msg);
+        //this._logger.Debug(msg);
 
         this.ReleaseServerResources();
         this.ReleaseCommonResources();

@@ -708,8 +708,7 @@ public class WebSocketServer
             return false;
         }
 
-        var chal = new AuthenticationChallenge(this._authSchemes, this._realmInUse)
-                   .ToString();
+        var chal = new AuthenticationChallenge(this._authSchemes, this._realmInUse).ToString();
 
         var retry = -1;
         bool auth()

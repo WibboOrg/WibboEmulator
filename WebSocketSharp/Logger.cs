@@ -200,7 +200,7 @@ public class Logger
     {
         var val = data.ToString();
 
-        Console.WriteLine(val);
+        //Console.WriteLine(val);
 
         if (path != null && path.Length > 0)
         {
@@ -225,9 +225,7 @@ public class Logger
             }
             catch (Exception ex)
             {
-                var data = new LogData(
-                             LogLevel.Fatal, new StackFrame(0, true), ex.Message
-                           );
+                var data = new LogData(LogLevel.Fatal, new StackFrame(0, true), ex.Message);
 
                 Console.WriteLine(data.ToString());
             }

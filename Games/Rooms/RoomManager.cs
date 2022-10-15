@@ -337,27 +337,27 @@ public class RoomManager
             this._roomCycleStopwatch.Restart();
 
             var emptyRoomsCount = 0;
-            foreach (var room in this._rooms.Values.ToList())
+            foreach (var room in this._rooms.ToList())
             {
-                if (room.UserCount == 0)
+                if (room.Value.UserCount == 0)
                 {
                     emptyRoomsCount++;
                 }
 
-                if (room.ProcessTask == null || room.ProcessTask.IsCompleted)
+                if (room.Value.ProcessTask == null || room.Value.ProcessTask.IsCompleted)
                 {
-                    room.ProcessTask = room.RunTask(() => room.ProcessRoom());
+                    room.Value.ProcessTask = room.Value.RunTask(() => room.Value.ProcessRoom());
 
-                    room.IsLagging = 0;
+                    room.Value.IsLagging = 0;
                 }
                 else
                 {
-                    room.IsLagging++;
-                    if (room.IsLagging > 20)
+                    room.Value.IsLagging++;
+                    if (room.Value.IsLagging > 20)
                     {
-                        ExceptionLogger.LogThreadException("Room lagging", "Room cycle task for room " + room.Id);
+                        ExceptionLogger.LogThreadException("Room lagging", "Room cycle task for room " + room.Value.Id);
 
-                        this.UnloadRoom(room);
+                        this.UnloadRoom(room.Value);
                     }
                 }
             }

@@ -11,6 +11,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Settings;
 using WibboEmulator.Communication.Packets.Outgoing.WibboTool;
 using WibboEmulator.Communication.WebSocket;
@@ -273,9 +274,9 @@ public class GameClient
                 continue;
             }
 
+            client.SendPacket(RoomNotificationComposer.SendBubble("mention", "Detection d'un message suspect sur le compte " + this.GetUser().Username));
             client.SendPacket(new AddChatlogsComposer(this._user.Id, this._user.Username, type + message));
         }
-
         return true;
     }
     public void SendWhisper(string message, bool info = true)

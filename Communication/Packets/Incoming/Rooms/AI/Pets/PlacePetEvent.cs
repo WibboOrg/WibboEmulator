@@ -72,7 +72,6 @@ internal class PlacePetEvent : IPacketEvent
 
         if (!session.GetUser().InventoryComponent.TryRemovePet(pet.PetId, out var toRemove))
         {
-            Console.WriteLine("Error whilst removing pet: " + toRemove.PetId);
             return;
         }
 

@@ -30,13 +30,16 @@ internal class BanIP : IChatCommand
             reason = CommandManager.MergeParams(parameters, 2);
         }
 
+        var securityBan = targetUser.GetUser().Rank > 5 && session.GetUser().Rank < 12;
+
         session.SendWhisper("Tu as banIP " + targetUser.GetUser().Username + " pour " + reason + "!");
 
-        if (targetUser.GetUser().Rank > 5 && session.GetUser().Rank < 12)
+        WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.GetUser().Username, 788922000, reason, true, false);
+        _ = session.Antipub(reason, "<CMD>");
+
+        if (securityBan)
         {
             WibboEnvironment.GetGame().GetGameClientManager().BanUser(session, "Robot", 788922000, "Votre compte à été banni par sécurité", false, false);
         }
-        WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.GetUser().Username, 788922000, reason, true, false);
-        _ = session.Antipub(reason, "<CMD>");
     }
 }
