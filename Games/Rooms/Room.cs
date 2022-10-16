@@ -251,17 +251,6 @@ public class Room
         }
     }
 
-    public void OnRoomKick()
-    {
-        foreach (var roomUser in this.RoomUserManager.GetUserList().ToList())
-        {
-            if (!roomUser.IsBot && !roomUser.Client.User.HasPermission("perm_no_kick"))
-            {
-                this.RoomUserManager.RemoveUserFromRoom(roomUser.Client, true, true);
-            }
-        }
-    }
-
     public void OnUserSay(RoomUser user, string message, bool shout)
     {
         foreach (var roomUser in this.RoomUserManager.GetPets().ToList())

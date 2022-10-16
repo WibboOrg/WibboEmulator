@@ -197,9 +197,7 @@ public class ModerationManager
             return;
         }
 
-        session.
-        User.
-        Messenger.DestroyFriendship(userReport.Id);
+        session.User.Messenger.DestroyFriendship(userReport.Id);
 
         session.SendPacket(new IgnoreStatusComposer(1, userReport.Username));
 
@@ -360,7 +358,13 @@ public class ModerationManager
 
         if (kickUsers)
         {
-            room.OnRoomKick();
+            foreach (var roomUser in room.RoomUserManager.GetUserList().ToList())
+            {
+                if (!roomUser.IsBot && !roomUser.Client.User.HasPermission("perm_no_kick"))
+                {
+                    room.RoomUserManager.RemoveUserFromRoom(roomUser.Client, true, true);
+                }
+            }
         }
 
         room.SendPacket(new GetGuestRoomResultComposer(modSession, room.RoomData, false, false));

@@ -10,7 +10,7 @@ internal class SaveBotActionEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.User.InRoom)
+        if (session.User == null || !session.User.InRoom)
         {
             return;
         }
@@ -70,8 +70,12 @@ internal class SaveBotActionEvent : IPacketEvent
 
             case 2:
             {
-
                 var configData = dataString.Split(";#;", StringSplitOptions.None);
+
+                if (configData.Length != 4)
+                {
+                    return;
+                }
 
                 var speechData = configData[0].Split(new char[]
                 {
@@ -153,7 +157,7 @@ internal class SaveBotActionEvent : IPacketEvent
                     return;
                 }
 
-                if (dataString.Contains("<img src") || dataString.Contains("<font ") || dataString.Contains("</font>") || dataString.Contains("</a>") || dataString.Contains("<i>"))
+                if (dataString.Contains("<img ") || dataString.Contains("<font ") || dataString.Contains("</font>") || dataString.Contains("</a>") || dataString.Contains("<i>"))
                 {
                     return;
                 }

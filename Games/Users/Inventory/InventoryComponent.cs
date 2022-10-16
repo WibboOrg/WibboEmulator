@@ -12,9 +12,11 @@ using WibboEmulator.Games.Users.Inventory.Bots;
 public class InventoryComponent : IDisposable
 {
     private readonly ConcurrentDictionary<int, Item> _userItems;
-    private readonly ConcurrentDictionary<int, Pet> _petsItems;
+    private readonly ConcurrentDictionary<int, Pet> _petItems;
     private readonly ConcurrentDictionary<int, Bot> _botItems;
-
+    private readonly int _furniLimit;
+    private readonly int _petLimit;
+    private readonly int _botLimit;
     private readonly User _userInstance;
     private bool _inventoryDefined;
 
@@ -23,8 +25,12 @@ public class InventoryComponent : IDisposable
         this._userInstance = user;
 
         this._userItems = new ConcurrentDictionary<int, Item>();
-        this._petsItems = new ConcurrentDictionary<int, Pet>();
+        this._petItems = new ConcurrentDictionary<int, Pet>();
         this._botItems = new ConcurrentDictionary<int, Bot>();
+
+        this._furniLimit = WibboEnvironment.GetSettings().GetData<int>("inventory.furni.limit");
+        this._petLimit = WibboEnvironment.GetSettings().GetData<int>("inventory.pet.limit");
+        this._botLimit = WibboEnvironment.GetSettings().GetData<int>("inventory.bot.limit");
     }
 
     public void ClearItems(bool all = false)
@@ -68,7 +74,7 @@ public class InventoryComponent : IDisposable
 
             this._userItems.Clear();
 
-            var table = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id);
+            var table = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id, this._furniLimit);
 
             foreach (DataRow dataRow in table.Rows)
             {
@@ -93,7 +99,7 @@ public class InventoryComponent : IDisposable
             BotPetDao.Delete(dbClient, this._userInstance.Id);
         }
 
-        this._petsItems.Clear();
+        this._petItems.Clear();
     }
 
     public void ClearBots()
@@ -109,27 +115,27 @@ public class InventoryComponent : IDisposable
     public void Dispose()
     {
         this._userItems.Clear();
-        this._petsItems.Clear();
+        this._petItems.Clear();
         this._botItems.Clear();
 
         GC.SuppressFinalize(this);
     }
 
-    public ICollection<Pet> GetPets() => this._petsItems.Values;
+    public ICollection<Pet> GetPets() => this._petItems.Values;
 
     public bool TryAddPet(Pet pet)
     {
         pet.RoomId = 0;
         pet.PlacedInRoom = false;
 
-        return this._petsItems.TryAdd(pet.PetId, pet);
+        return this._petItems.TryAdd(pet.PetId, pet);
     }
 
     public bool TryRemovePet(int petId, out Pet petItem)
     {
-        if (this._petsItems.ContainsKey(petId))
+        if (this._petItems.ContainsKey(petId))
         {
-            return this._petsItems.TryRemove(petId, out petItem);
+            return this._petItems.TryRemove(petId, out petItem);
         }
         else
         {
@@ -140,9 +146,9 @@ public class InventoryComponent : IDisposable
 
     public bool TryGetPet(int petId, out Pet pet)
     {
-        if (this._petsItems.ContainsKey(petId))
+        if (this._petItems.ContainsKey(petId))
         {
-            return this._petsItems.TryGetValue(petId, out pet);
+            return this._petItems.TryGetValue(petId, out pet);
         }
         else
         {
@@ -199,10 +205,10 @@ public class InventoryComponent : IDisposable
 
         this._userItems.Clear();
         this._botItems.Clear();
-        this._petsItems.Clear();
+        this._petItems.Clear();
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        var dItems = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id);
+        var dItems = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id, this._furniLimit);
 
         foreach (DataRow dataRow in dItems.Rows)
         {
@@ -216,17 +222,27 @@ public class InventoryComponent : IDisposable
             _ = this._userItems.TryAdd(id, userItem);
         }
 
-        var dPets = BotPetDao.GetAllByUserId(dbClient, this._userInstance.Id);
+        if (this._userItems.Count >= this._furniLimit)
+        {
+            this._userInstance.Client.SendHugeNotif($"Attention votre inventaire n'a pas été charger complètement car il contient plus de {this._furniLimit} mobiliers");
+        }
+
+        var dPets = BotPetDao.GetAllByUserId(dbClient, this._userInstance.Id, this._petLimit);
         if (dPets != null)
         {
             foreach (DataRow row in dPets.Rows)
             {
                 var pet = new Pet(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), Convert.ToInt32(row["room_id"]), (string)row["name"], Convert.ToInt32(row["type"]), (string)row["race"], (string)row["color"], Convert.ToInt32(row["experience"]), Convert.ToInt32(row["energy"]), Convert.ToInt32(row["nutrition"]), Convert.ToInt32(row["respect"]), (double)row["createstamp"], Convert.ToInt32(row["x"]), Convert.ToInt32(row["y"]), (double)row["z"], Convert.ToInt32(row["have_saddle"]), Convert.ToInt32(row["hairdye"]), Convert.ToInt32(row["pethair"]), (string)row["anyone_ride"] == "1");
-                _ = this._petsItems.TryAdd(pet.PetId, pet);
+                _ = this._petItems.TryAdd(pet.PetId, pet);
             }
         }
 
-        var dBots = BotUserDao.GetAllByUserId(dbClient, this._userInstance.Id);
+        if (this._petItems.Count >= this._petLimit)
+        {
+            this._userInstance.Client.SendHugeNotif($"Attention votre inventaire d'animaux n'a pas été charger complètement car il contient plus de {this._petLimit} mobiliers");
+        }
+
+        var dBots = BotUserDao.GetAllByUserId(dbClient, this._userInstance.Id, this._botLimit);
         if (dBots != null)
         {
             foreach (DataRow row in dBots.Rows)
@@ -234,6 +250,11 @@ public class InventoryComponent : IDisposable
                 var bot = new Bot(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), (string)row["name"], (string)row["motto"], (string)row["look"], (string)row["gender"], (string)row["walk_enabled"] == "1", (string)row["chat_enabled"] == "1", (string)row["chat_text"], Convert.ToInt32(row["chat_seconds"]), (string)row["is_dancing"] == "1", Convert.ToInt32(row["enable"]), Convert.ToInt32(row["handitem"]), Convert.ToInt32((string)row["status"]));
                 _ = this._botItems.TryAdd(Convert.ToInt32(row["id"]), bot);
             }
+        }
+
+        if (this._botItems.Count >= this._botLimit)
+        {
+            this._userInstance.Client.SendHugeNotif($"Attention votre inventaire de bot n'a pas été charger complètement car il contient plus de {this._botLimit} mobiliers");
         }
     }
 
@@ -264,8 +285,7 @@ public class InventoryComponent : IDisposable
 
         _ = this._userItems.TryAdd(userItem.Id, userItem);
 
-        this._userInstance.
-        Client.SendPacket(new FurniListAddComposer(userItem));
+        this._userInstance.Client.SendPacket(new FurniListAddComposer(userItem));
 
         return userItem;
     }
@@ -311,5 +331,23 @@ public class InventoryComponent : IDisposable
 
         this._userInstance.
         Client.SendPacket(new FurniListAddComposer(userItem));
+    }
+
+    public bool CheckLimit(int amountPurchase, string type)
+    {
+        if (type is "s" or "i")
+        {
+            return this._userItems.Count + amountPurchase >= this._furniLimit;
+        }
+        else if(type is "r")
+        {
+            return this._botItems.Count + amountPurchase >= this._botLimit;
+        }
+        else if (type is "p")
+        {
+            return this._petItems.Count + amountPurchase >= this._petLimit;
+        }
+
+        return false;
     }
 }

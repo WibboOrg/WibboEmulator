@@ -107,9 +107,9 @@ internal class BotUserDao
 
     internal static void Delete(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("DELETE FROM `bot_user` WHERE room_id = '0' AND user_id = '" + userId + "'");
 
-    internal static DataTable GetAllByUserId(IQueryAdapter dbClient, int userId)
+    internal static DataTable GetAllByUserId(IQueryAdapter dbClient, int userId, int limit)
     {
-        dbClient.SetQuery("SELECT `id`, `user_id`, `name`, `motto`, `gender`, `look`, `room_id`, `walk_enabled`, `x`, `y`, `z`, `rotation`, `chat_enabled`, `chat_text`, `chat_seconds`, `is_dancing`, `is_mixchat`, `status`, `enable`, `handitem` FROM `bot_user` WHERE user_id = '" + userId + "' AND room_id = '0'");
+        dbClient.SetQuery("SELECT `id`, `user_id`, `name`, `motto`, `gender`, `look`, `room_id`, `walk_enabled`, `x`, `y`, `z`, `rotation`, `chat_enabled`, `chat_text`, `chat_seconds`, `is_dancing`, `is_mixchat`, `status`, `enable`, `handitem` FROM `bot_user` WHERE user_id = '" + userId + "' AND room_id = '0' LIMIT " + limit);
 
         return dbClient.GetTable();
     }

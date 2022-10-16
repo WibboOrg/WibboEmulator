@@ -71,9 +71,9 @@ internal class BotPetDao
 
     internal static void Delete(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("DELETE FROM `bot_pet` WHERE room_id = '0' AND user_id = '" + userId + "'");
 
-    internal static DataTable GetAllByUserId(IQueryAdapter dbClient, int userId)
+    internal static DataTable GetAllByUserId(IQueryAdapter dbClient, int userId, int limit)
     {
-        dbClient.SetQuery("SELECT id, user_id, room_id, name, type, race, color, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM `bot_pet` WHERE user_id = '" + userId + "' AND room_id = 0");
+        dbClient.SetQuery("SELECT id, user_id, room_id, name, type, race, color, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM `bot_pet` WHERE user_id = '" + userId + "' AND room_id = 0 LIMIT " + limit);
         return dbClient.GetTable();
     }
 

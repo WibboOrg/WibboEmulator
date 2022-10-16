@@ -86,11 +86,9 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             case "inventoryadd":
             case "inventoryremove":
             case "droprpitem":
-
             case "sendroomid":
             case "botchoose":
             case "botchoosenav":
-
             case "playsounduser":
             case "playsoundroom":
             case "playmusicroom":
@@ -196,10 +194,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        var value = "";
-
-
         string command;
+        string value;
         if (this.StringParam.Contains(':'))
         {
             command = this.StringParam.Split(':')[0].ToLower();
@@ -208,12 +204,13 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
         else
         {
             command = this.StringParam;
+            value = string.Empty;
         }
 
         this.RpCommand(command, value, user);
         this.RoomCommand(command, value, user, item);
-        UserCommand(command, value, user);
-        BotCommand(command, value, user);
+        this.UserCommand(command, value, user);
+        this.BotCommand(command, value, user);
 
         return false;
     }
@@ -949,7 +946,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
         }
     }
 
-    private static void BotCommand(string command, string value, RoomUser user)
+    private void BotCommand(string command, string value, RoomUser user)
     {
         if (user == null || !user.IsBot)
         {
@@ -973,7 +970,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
 
                     user.DanceId = danceId;
-                    user.Room.SendPacket(new DanceComposer(user.VirtualId, danceId));
+                    this.RoomInstance.SendPacket(new DanceComposer(user.VirtualId, danceId));
                 }
 
                 break;
@@ -1567,7 +1564,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
         }
     }
 
-    private static void UserCommand(string cmd, string value, RoomUser user)
+    private void UserCommand(string cmd, string value, RoomUser user)
     {
         if (user == null || user.IsBot || user.Client == null)
         {
@@ -1580,11 +1577,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 if (value == "true")
                 {
-                    user.Room.AddMute(user.UserId, 24 * 60 * 60);
+                    this.RoomInstance.AddMute(user.UserId, 24 * 60 * 60);
                 }
                 else
                 {
-                    user.Room.RemoveMute(user.UserId);
+                    this.RoomInstance.RemoveMute(user.UserId);
                 }
 
                 break;
@@ -1644,7 +1641,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         var list = pChoose.Split(';').ToList();
                         if (list.Count == 3)
                         {
-                            var botOrPet = user.Room.RoomUserManager.GetBotByName(list[0]);
+                            var botOrPet = this.RoomInstance.RoomUserManager.GetBotByName(list[0]);
                             if (botOrPet != null && botOrPet.BotData != null)
                             {
                                 list.Add(botOrPet.BotData.Look);
@@ -1663,7 +1660,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     var list = value.Split(';').ToList();
                     if (list.Count == 3)
                     {
-                        var botOrPet = user.Room.RoomUserManager.GetBotByName(list[0]);
+                        var botOrPet = this.RoomInstance.RoomUserManager.GetBotByName(list[0]);
                         if (botOrPet != null && botOrPet.BotData != null)
                         {
                             list.Add(botOrPet.BotData.Look);
@@ -1805,12 +1802,12 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 _ = int.TryParse(value, out var count);
 
-                if (user.Room == null)
+                if (this.RoomInstance == null)
                 {
                     break;
                 }
 
-                user.Room.
+                this.RoomInstance.
                 GameManager.AddPointToTeam(user.Team, count, user);
                 break;
             }
@@ -1973,7 +1970,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "dance":
             {
-                if (user.Room == null)
+                if (this.RoomInstance == null)
                 {
                     break;
                 }
@@ -1992,7 +1989,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                     user.DanceId = danceId;
 
-                    user.Room.SendPacket(new DanceComposer(user.VirtualId, danceId));
+                    this.RoomInstance.SendPacket(new DanceComposer(user.VirtualId, danceId));
                 }
                 break;
             }
@@ -2063,8 +2060,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 {
                     user.IsTransf = true;
 
-                    user.Room.SendPacket(new UserRemoveComposer(user.VirtualId));
-                    user.Room.SendPacket(new UsersComposer(user));
+                    this.RoomInstance.SendPacket(new UserRemoveComposer(user.VirtualId));
+                    this.RoomInstance.SendPacket(new UsersComposer(user));
                 }
                 break;
             }
@@ -2072,8 +2069,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 user.IsTransf = false;
 
-                user.Room.SendPacket(new UserRemoveComposer(user.VirtualId));
-                user.Room.SendPacket(new UsersComposer(user));
+                this.RoomInstance.SendPacket(new UserRemoveComposer(user.VirtualId));
+                this.RoomInstance.SendPacket(new UsersComposer(user));
                 break;
             }
             case "badge":
@@ -2117,7 +2114,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 }
 
 
-                if (user.GetUsername() == user.Room.RoomData.OwnerName)
+                if (user.GetUsername() == this.RoomInstance.RoomData.OwnerName)
                 {
                     break;
                 }
@@ -2134,14 +2131,14 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                if (user.GetUsername() == user.Room.RoomData.OwnerName)
+                if (user.GetUsername() == this.RoomInstance.RoomData.OwnerName)
                 {
                     break;
                 }
 
                 var allowedOwner = WibboEnvironment.GetSettings().GetData<string>("givelot.allowed.owner").Split(',');
 
-                if (!allowedOwner.Contains(user.Room.RoomData.OwnerName))
+                if (!allowedOwner.Contains(this.RoomInstance.RoomData.OwnerName))
                 {
                     break;
                 }
@@ -2185,7 +2182,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 }
 
                 _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.Client, "ACH_Extrabox", 1);
-                ModerationManager.LogStaffEntry(1953042, user.Room.RoomData.OwnerName, user.RoomId, string.Empty, "givelot", "SuperWired givelot: " + user.GetUsername());
+                ModerationManager.LogStaffEntry(1953042, this.RoomInstance.RoomData.OwnerName, user.RoomId, string.Empty, "givelot", "SuperWired givelot: " + user.GetUsername());
 
                 break;
             }

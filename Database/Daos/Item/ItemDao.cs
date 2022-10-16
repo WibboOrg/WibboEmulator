@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Database.Daos.Item;
+namespace WibboEmulator.Database.Daos.Item;
 using System.Collections.Concurrent;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
@@ -132,9 +132,9 @@ internal class ItemDao
         return dbClient.GetRow();
     }
 
-    internal static DataTable GetAllByUserId(IQueryAdapter dbClient, int userId)
+    internal static DataTable GetAllByUserId(IQueryAdapter dbClient, int userId, int limit)
     {
-        dbClient.SetQuery("SELECT `item`.id, `item`.base_item, `item`.extra_data, `item_limited`.limited_number, `item_limited`.limited_stack FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) WHERE `item`.user_id = @userid AND `item`.room_id = '0'");
+        dbClient.SetQuery("SELECT `item`.id, `item`.base_item, `item`.extra_data, `item_limited`.limited_number, `item_limited`.limited_stack FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) WHERE `item`.user_id = @userid AND `item`.room_id = '0' LIMIT " + limit);
         dbClient.AddParameter("userid", userId);
         return dbClient.GetTable();
     }

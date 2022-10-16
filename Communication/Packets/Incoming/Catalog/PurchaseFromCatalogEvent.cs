@@ -211,6 +211,13 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
         }
 
 
+        if (session.User.InventoryComponent.CheckLimit(amountPurchase, item.Data.Type.ToString().ToLower()))
+        {
+            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("catalog.purchase.limit", session.Langue));
+            session.SendPacket(new PurchaseOKComposer());
+            return;
+        }
+
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
         if (item.IsLimited)
@@ -262,7 +269,6 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
         {
             default:
                 var generatedGenericItems = new List<Item>();
-
 
                 Item newItem;
                 switch (item.Data.InteractionType)
