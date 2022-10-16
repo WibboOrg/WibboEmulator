@@ -18,9 +18,7 @@ internal class GetPetInventoryEvent : IPacketEvent
             return;
         }
 
-        session.
-        User.
-        InventoryComponent.LoadInventory();
+        session.User.InventoryComponent.LoadInventory();
 
         session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.GetPets()));
     }

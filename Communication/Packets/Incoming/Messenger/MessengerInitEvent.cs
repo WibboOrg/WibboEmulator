@@ -13,9 +13,7 @@ internal class MessengerInitEvent : IPacketEvent
             return;
         }
 
-        session.
-        User.
-        Messenger.OnStatusChanged();
+        session.User.Messenger.OnStatusChanged();
 
         session.SendPacket(new MessengerInitComposer());
         session.SendPacket(new BuddyListComposer(session.User.Messenger.Friends));

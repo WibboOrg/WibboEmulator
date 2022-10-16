@@ -73,13 +73,9 @@ internal class PlaceObjectEvent : IPacketEvent
                 ItemDao.Delete(dbClient, itemId);
             }
 
-            session.
-            User.
-            InventoryComponent.RemoveItem(itemId);
+            session.User.InventoryComponent.RemoveItem(itemId);
 
-            session.
-            User.
-            BadgeComponent.GiveBadge(userItem.ExtraData, true);
+            session.User.BadgeComponent.GiveBadge(userItem.ExtraData, true);
             session.SendPacket(new ReceiveBadgeComposer(userItem.ExtraData));
 
             session.SendNotification("Vous avez reçu le badge: " + userItem.ExtraData + " !");
@@ -121,9 +117,7 @@ internal class PlaceObjectEvent : IPacketEvent
                     ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                 }
 
-                session.
-                User.
-                InventoryComponent.RemoveItem(itemId);
+                session.User.InventoryComponent.RemoveItem(itemId);
 
                 if (WiredUtillity.TypeIsWired(userItem.GetBaseItem().InteractionType))
                 {
@@ -188,9 +182,7 @@ internal class PlaceObjectEvent : IPacketEvent
                         ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                     }
 
-                    session.
-                    User.
-                    InventoryComponent.RemoveItem(itemId);
+                    session.User.InventoryComponent.RemoveItem(itemId);
                 }
             }
             else

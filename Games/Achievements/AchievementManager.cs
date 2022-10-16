@@ -98,9 +98,7 @@ public class AchievementManager
             _ = newProgress - targetLevelData.Requirement;
             newProgress = 0;
 
-            session.
-            User.
-            BadgeComponent.GiveBadge(achievementGroup + targetLevel, true);
+            session.User.BadgeComponent.GiveBadge(achievementGroup + targetLevel, true);
             session.SendPacket(new ReceiveBadgeComposer(achievementGroup + targetLevel));
 
             if (newTarget > totalLevels)
@@ -108,8 +106,7 @@ public class AchievementManager
                 newTarget = totalLevels;
             }
 
-            session.
-            User.Duckets += targetLevelData.RewardPixels;
+            session.User.Duckets += targetLevelData.RewardPixels;
             session.SendPacket(new ActivityPointNotificationComposer(session.User.Duckets, 1));
 
             session.SendPacket(new AchievementUnlockedComposer(achievementData, targetLevel, targetLevelData.RewardPoints, targetLevelData.RewardPixels));
@@ -126,8 +123,7 @@ public class AchievementManager
                 userData.Progress = newProgress;
             }
 
-            session.
-            User.AchievementPoints += targetLevelData.RewardPoints;
+            session.User.AchievementPoints += targetLevelData.RewardPoints;
             session.User.Duckets += targetLevelData.RewardPixels;
             session.SendPacket(new ActivityPointNotificationComposer(session.User.Duckets, 1));
             session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));

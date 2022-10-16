@@ -8,9 +8,7 @@ internal class EmptyItems : IChatCommand
     {
         var emptyAll = parameters.Length > 1 && parameters[1] == "all";
 
-        session.
-        User.
-        InventoryComponent.ClearItems(emptyAll);
+        session.User.InventoryComponent.ClearItems(emptyAll);
         session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("empty.cleared", session.Langue));
     }
 }

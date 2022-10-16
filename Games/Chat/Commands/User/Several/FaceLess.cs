@@ -28,8 +28,7 @@ internal class FaceLess : IChatCommand
 
             look = look.Replace(hdcode, hdcodenoface);
 
-            session.
-            User.Look = look;
+            session.User.Look = look;
 
             room.SendPacket(new UserChangeComposer(userRoom, false));
         }

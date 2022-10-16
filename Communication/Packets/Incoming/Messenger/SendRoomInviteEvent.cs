@@ -21,8 +21,7 @@ internal class SendRoomInviteEvent : IPacketEvent
             return;
         }
 
-        session.
-        User.FloodTime = DateTime.Now;
+        session.User.FloodTime = DateTime.Now;
         session.User.FloodCount++;
 
         var inviteCount = packet.PopInt();

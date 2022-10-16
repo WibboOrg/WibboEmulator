@@ -20,7 +20,6 @@ internal class UserSettingsRoomInvitesEvent : IPacketEvent
             UserDao.UpdateIgnoreRoomInvites(dbClient, session.User.Id, flag);
         }
 
-        session.
-        User.IgnoreRoomInvites = flag;
+        session.User.IgnoreRoomInvites = flag;
     }
 }

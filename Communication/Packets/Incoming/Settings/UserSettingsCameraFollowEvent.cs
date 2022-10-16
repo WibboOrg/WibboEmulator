@@ -20,7 +20,6 @@ internal class UserSettingsCameraFollowEvent : IPacketEvent
             UserDao.UpdateCameraFollowDisabled(dbClient, session.User.Id, flag);
         }
 
-        session.
-        User.CameraFollowDisabled = flag;
+        session.User.CameraFollowDisabled = flag;
     }
 }

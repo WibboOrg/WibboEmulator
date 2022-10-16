@@ -195,9 +195,7 @@ public class MessengerComponent : IDisposable
             return;
         }
 
-        clientByUserId.
-        User.
-        Messenger.OnNewFriendship(this._userInstance.Id);
+        clientByUserId.User.Messenger.OnNewFriendship(this._userInstance.Id);
     }
 
     public void DestroyFriendship(int friendID)
@@ -219,9 +217,7 @@ public class MessengerComponent : IDisposable
             return;
         }
 
-        clientByUserId.
-        User.
-        Messenger.OnDestroyFriendship(this._userInstance.Id);
+        clientByUserId.User.Messenger.OnDestroyFriendship(this._userInstance.Id);
     }
 
     public void OnNewFriendship(int friendID)

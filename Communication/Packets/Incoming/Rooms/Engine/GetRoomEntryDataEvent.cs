@@ -67,8 +67,7 @@ internal class GetRoomEntryDataEvent : IPacketEvent
         {
             session.SendPacket(new NuxAlertComposer(2));
 
-            session.
-            User.PassedNuxCount++;
+            session.User.PassedNuxCount++;
             session.SendPacket(new InClientLinkComposer("nux/lobbyoffer/hide"));
             session.SendPacket(new InClientLinkComposer("helpBubble/add/BOTTOM_BAR_NAVIGATOR/nux.bot.info.navigator.1"));
         }

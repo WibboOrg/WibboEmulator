@@ -52,8 +52,7 @@ internal class RespectPetEvent : IPacketEvent
             _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(targetUser.Client, "ACH_RespectEarned", 1);
 
             //Take away from pet respect points, just in-case users abuse this..
-            session.
-            //Take away from pet respect points, just in-case users abuse this..
+            session.            //Take away from pet respect points, just in-case users abuse this..
             User.DailyPetRespectPoints -= 1;
             targetUser.Client.User.Respect += 1;
 
@@ -72,8 +71,7 @@ internal class RespectPetEvent : IPacketEvent
             return;
         }
 
-        session.
-        User.DailyPetRespectPoints -= 1;
+        session.User.DailyPetRespectPoints -= 1;
         _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_PetRespectGiver", 1);
 
         thisUser.CarryItemID = 999999999;

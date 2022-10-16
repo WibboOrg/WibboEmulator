@@ -203,8 +203,7 @@ public class WebSocketSessionManager : IDisposable
     ///   </para>
     ///   <para>
     ///   The session instance provides the function to access the information
-    ///   in the session.
-    ///   </para>
+    ///   in the session.    ///   </para>
     /// </value>
     /// <param name="id">
     /// A <see cref="string"/> that specifies the ID of the session to find.
@@ -1118,15 +1117,13 @@ public class WebSocketSessionManager : IDisposable
     }
 
     /// <summary>
-    /// Sends a ping to the client using the specified session.
-    /// </summary>
+    /// Sends a ping to the client using the specified session.    /// </summary>
     /// <returns>
     /// <c>true</c> if the send has done with no error and a pong has been
     /// received from the client within a time; otherwise, <c>false</c>.
     /// </returns>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the session.
-    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <exception cref="ArgumentNullException">
     /// <paramref name="id"/> is <see langword="null"/>.
     /// </exception>
@@ -1151,8 +1148,7 @@ public class WebSocketSessionManager : IDisposable
 
     /// <summary>
     /// Sends a ping with the specified message to the client using
-    /// the specified session.
-    /// </summary>
+    /// the specified session.    /// </summary>
     /// <returns>
     /// <c>true</c> if the send has done with no error and a pong has been
     /// received from the client within a time; otherwise, <c>false</c>.
@@ -1166,8 +1162,7 @@ public class WebSocketSessionManager : IDisposable
     ///   </para>
     /// </param>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the session.
-    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <exception cref="ArgumentNullException">
     /// <paramref name="id"/> is <see langword="null"/>.
     /// </exception>
@@ -1202,14 +1197,12 @@ public class WebSocketSessionManager : IDisposable
     }
 
     /// <summary>
-    /// Sends the specified data to the client using the specified session.
-    /// </summary>
+    /// Sends the specified data to the client using the specified session.    /// </summary>
     /// <param name="data">
     /// An array of <see cref="byte"/> that specifies the binary data to send.
     /// </param>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the session.
-    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <exception cref="ArgumentNullException">
     ///   <para>
     ///   <paramref name="id"/> is <see langword="null"/>.
@@ -1249,14 +1242,12 @@ public class WebSocketSessionManager : IDisposable
     }
 
     /// <summary>
-    /// Sends the specified data to the client using the specified session.
-    /// </summary>
+    /// Sends the specified data to the client using the specified session.    /// </summary>
     /// <param name="data">
     /// A <see cref="string"/> that specifies the text data to send.
     /// </param>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the session.
-    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <exception cref="ArgumentNullException">
     ///   <para>
     ///   <paramref name="id"/> is <see langword="null"/>.
@@ -1305,8 +1296,7 @@ public class WebSocketSessionManager : IDisposable
 
     /// <summary>
     /// Sends the data from the specified stream instance to the client using
-    /// the specified session.
-    /// </summary>
+    /// the specified session.    /// </summary>
     /// <param name="stream">
     ///   <para>
     ///   A <see cref="Stream"/> instance from which to read the data to send.
@@ -1319,8 +1309,7 @@ public class WebSocketSessionManager : IDisposable
     /// An <see cref="int"/> that specifies the number of bytes to send.
     /// </param>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the session.
-    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <exception cref="ArgumentNullException">
     ///   <para>
     ///   <paramref name="id"/> is <see langword="null"/>.
@@ -1381,8 +1370,7 @@ public class WebSocketSessionManager : IDisposable
 
     /// <summary>
     /// Sends the specified data asynchronously to the client using
-    /// the specified session.
-    /// </summary>
+    /// the specified session.    /// </summary>
     /// <remarks>
     /// This method does not wait for the send to be complete.
     /// </remarks>
@@ -1390,8 +1378,7 @@ public class WebSocketSessionManager : IDisposable
     /// An array of <see cref="byte"/> that specifies the binary data to send.
     /// </param>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the session.
-    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <param name="completed">
     ///   <para>
     ///   An <c>Action&lt;bool&gt;</c> delegate or <see langword="null"/>
@@ -1445,8 +1432,7 @@ public class WebSocketSessionManager : IDisposable
 
     /// <summary>
     /// Sends the specified data asynchronously to the client using
-    /// the specified session.
-    /// </summary>
+    /// the specified session.    /// </summary>
     /// <remarks>
     /// This method does not wait for the send to be complete.
     /// </remarks>
@@ -1454,8 +1440,7 @@ public class WebSocketSessionManager : IDisposable
     /// A <see cref="string"/> that specifies the text data to send.
     /// </param>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the session.
-    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <param name="completed">
     ///   <para>
     ///   An <c>Action&lt;bool&gt;</c> delegate or <see langword="null"/>
@@ -1517,8 +1502,7 @@ public class WebSocketSessionManager : IDisposable
 
     /// <summary>
     /// Sends the data from the specified stream instance asynchronously to
-    /// the client using the specified session.
-    /// </summary>
+    /// the client using the specified session.    /// </summary>
     /// <remarks>
     /// This method does not wait for the send to be complete.
     /// </remarks>
@@ -1534,8 +1518,7 @@ public class WebSocketSessionManager : IDisposable
     /// An <see cref="int"/> that specifies the number of bytes to send.
     /// </param>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the session.
-    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <param name="completed">
     ///   <para>
     ///   An <c>Action&lt;bool&gt;</c> delegate or <see langword="null"/>

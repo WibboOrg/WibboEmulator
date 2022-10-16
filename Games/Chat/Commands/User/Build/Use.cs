@@ -22,8 +22,7 @@ internal class Use : IChatCommand
             return;
         }
 
-        session.
-        User.ForceUse = useCount;
+        session.User.ForceUse = useCount;
 
         session.SendWhisper("Use: " + useCount);
     }

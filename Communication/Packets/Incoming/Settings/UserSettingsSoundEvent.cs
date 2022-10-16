@@ -29,8 +29,7 @@ internal class UserSettingsSoundEvent : IPacketEvent
             UserDao.UpdateVolume(dbClient, session.User.Id, volume1, +volume2, +volume3);
         }
 
-        session.
-        User.ClientVolume.Clear();
+        session.User.ClientVolume.Clear();
         session.User.ClientVolume.Add(volume1);
         session.User.ClientVolume.Add(volume2);
         session.User.ClientVolume.Add(volume3);

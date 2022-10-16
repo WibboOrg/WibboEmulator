@@ -25,9 +25,7 @@ internal class SetActivatedBadgesEvent : IPacketEvent
             return;
         }
 
-        session.
-        User.
-        BadgeComponent.ResetSlots();
+        session.User.BadgeComponent.ResetSlots();
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
@@ -49,9 +47,7 @@ internal class SetActivatedBadgesEvent : IPacketEvent
                 continue;
             }
 
-            session.
-            User.
-            BadgeComponent.GetBadge(badge).Slot = slot;
+            session.User.BadgeComponent.GetBadge(badge).Slot = slot;
 
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             UserBadgeDao.UpdateSlot(dbClient, session.User.Id, slot, badge);

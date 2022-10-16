@@ -58,8 +58,7 @@ internal class UpdateGroupColoursEvent : IPacketEvent
                     continue;
                 }
 
-                session.
-                User.CurrentRoom.SendPacket(new ObjectUpdateComposer(item, session.User.CurrentRoom.RoomData.OwnerId));
+                session.User.CurrentRoom.SendPacket(new ObjectUpdateComposer(item, session.User.CurrentRoom.RoomData.OwnerId));
             }
         }
     }

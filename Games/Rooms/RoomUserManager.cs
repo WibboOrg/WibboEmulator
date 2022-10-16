@@ -25,7 +25,7 @@ using WibboEmulator.Utilities;
 public class RoomUserManager
 {
     private readonly Room _room;
-    private readonly ConcurrentDictionary<string, RoomUser> _usersByUsername;
+    public readonly ConcurrentDictionary<string, RoomUser> _usersByUsername;
     private readonly ConcurrentDictionary<int, RoomUser> _usersByUserID;
 
     private readonly ConcurrentDictionary<int, RoomUser> _users;
@@ -401,8 +401,7 @@ public class RoomUserManager
             this._usersRank.Add(user.UserId);
         }
 
-        session.
-        User.CurrentRoomId = this._room.Id;
+        session.User.CurrentRoomId = this._room.Id;
         session.User.LoadingRoomId = 0;
 
         var username = session.User.Username;
@@ -549,7 +548,7 @@ public class RoomUserManager
             bot.BotAI.OnUserEnterRoom(user);
         }
 
-        if (!user.IsBot && user.Client != null && this._room.RoomData.OwnerName != user.Client.User.Username)
+        if (!user.IsBot && user.Client != null && user.Client.User != null && this._room.RoomData.OwnerName != user.Client.User.Username)
         {
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.Client, QuestType.SocialVisit, 0);
         }
@@ -582,8 +581,7 @@ public class RoomUserManager
                     }
                 }
 
-                session.
-                User.RolePlayId = this._room.RoomData.OwnerId;
+                session.User.RolePlayId = this._room.RoomData.OwnerId;
             }
         }
 
@@ -677,12 +675,10 @@ public class RoomUserManager
             }
         }
 
-        session.
-        User.CurrentRoomId = 0;
+        session.User.CurrentRoomId = 0;
         session.User.LoadingRoomId = 0;
 
-        session.
-        User.ForceUse = -1;
+        session.User.ForceUse = -1;
 
         this.RemoveRoomUser(user);
 

@@ -54,9 +54,7 @@ internal class OpenGiftEvent : IPacketEvent
                     UserPresentDao.Delete(dbClient, present.Id);
                 }
 
-                session.
-                User.
-                InventoryComponent.RemoveItem(present.Id);
+                session.User.InventoryComponent.RemoveItem(present.Id);
                 return;
             }
 
@@ -70,9 +68,7 @@ internal class OpenGiftEvent : IPacketEvent
                     UserPresentDao.Delete(dbClient, present.Id);
                 }
 
-                session.
-                User.
-                InventoryComponent.RemoveItem(present.Id);
+                session.User.InventoryComponent.RemoveItem(present.Id);
                 return;
             }
 

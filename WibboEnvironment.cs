@@ -1,4 +1,4 @@
-namespace WibboEmulator;
+﻿namespace WibboEmulator;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reflection;
@@ -304,7 +304,7 @@ public static class WibboEnvironment
                 {
                     if (UsersCached.ContainsKey(userId))
                     {
-                        _ = UsersCached.TryRemove(userId, out user);
+                        _ = UsersCached.TryRemove(userId, out _);
                     }
 
                     return user;

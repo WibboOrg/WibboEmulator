@@ -49,10 +49,9 @@ internal class LetUserInEvent : IPacketEvent
         {
             clientByUsername.SendPacket(new FlatAccessibleComposer(""));
 
-            clientByUsername.
-            User.AllowDoorBell = true;
+            clientByUsername.User.AllowDoorBell = true;
 
-            if (!clientByUsername.User.EnterRoom(session.User.CurrentRoom))
+            if (!clientByUsername.User.EnterRoom(room))
             {
                 clientByUsername.SendPacket(new CloseConnectionComposer());
             }

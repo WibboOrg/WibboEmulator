@@ -44,8 +44,7 @@ internal class GiveRoomScoreEvent : IPacketEvent
             RoomDao.UpdateScore(dbClient, room.Id, room.RoomData.Score);
         }
 
-        session.
-        User.RatedRooms.Add(room.Id);
+        session.User.RatedRooms.Add(room.Id);
         session.SendPacket(new RoomRatingComposer(room.RoomData.Score, !(session.User.RatedRooms.Contains(room.Id) || room.RoomData.OwnerId == session.User.Id)));
     }
 }

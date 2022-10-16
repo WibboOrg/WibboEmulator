@@ -32,8 +32,7 @@ internal class IgnoreUserEvent : IPacketEvent
             return;
         }
 
-        session.
-        User.MutedUsers.Add(user.Id);
+        session.User.MutedUsers.Add(user.Id);
 
         session.SendPacket(new IgnoreStatusComposer(1, userName));
     }

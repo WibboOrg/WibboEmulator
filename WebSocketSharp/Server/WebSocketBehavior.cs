@@ -112,8 +112,7 @@ public abstract class WebSocketBehavior : IWebSocketSession
     #region Public Properties
 
     /// <summary>
-    /// Gets the current state of the WebSocket connection for a session.
-    /// </summary>
+    /// Gets the current state of the WebSocket connection for a session.    /// </summary>
     /// <value>
     ///   <para>
     ///   One of the <see cref="WebSocketState"/> enum values.
@@ -205,12 +204,10 @@ public abstract class WebSocketBehavior : IWebSocketSession
     }
 
     /// <summary>
-    /// Gets the unique ID of a session.
-    /// </summary>
+    /// Gets the unique ID of a session.    /// </summary>
     /// <value>
     ///   <para>
-    ///   A <see cref="string"/> that represents the unique ID of the session.
-    ///   </para>
+    ///   A <see cref="string"/> that represents the unique ID of the session.    ///   </para>
     ///   <para>
     ///   <see langword="null"/> if the session has not started yet.
     ///   </para>
@@ -426,8 +423,7 @@ public abstract class WebSocketBehavior : IWebSocketSession
     #region Protected Methods
 
     /// <summary>
-    /// Closes the WebSocket connection for a session.
-    /// </summary>
+    /// Closes the WebSocket connection for a session.    /// </summary>
     /// <remarks>
     /// This method does nothing if the current state of the connection is
     /// Closing or Closed.

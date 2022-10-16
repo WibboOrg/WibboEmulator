@@ -71,9 +71,7 @@ internal class ApplyDecorationEvent : IPacketEvent
             ItemDao.Delete(dbClient, userItem.Id);
         }
 
-        session.
-        User.
-        InventoryComponent.RemoveItem(userItem.Id);
+        session.User.InventoryComponent.RemoveItem(userItem.Id);
         room.SendPacket(new RoomPropertyComposer(decorationKey, userItem.ExtraData));
     }
 }

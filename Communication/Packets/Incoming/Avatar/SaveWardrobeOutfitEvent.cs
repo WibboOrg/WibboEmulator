@@ -11,8 +11,6 @@ internal class SaveWardrobeOutfitEvent : IPacketEvent
         var look = packet.PopString();
         var gender = packet.PopString();
 
-        session.
-        User.
-        WardrobeComponent.AddWardrobe(look, gender, slotId);
+        session.User.WardrobeComponent.AddWardrobe(look, gender, slotId);
     }
 }

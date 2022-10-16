@@ -327,8 +327,7 @@ public class User : IDisposable
             {
                 this.Client.SendPacket(new CantConnectComposer(1));
 
-                this.
-                Client.SendPacket(new CloseConnectionComposer());
+                this.Client.SendPacket(new CloseConnectionComposer());
                 return;
             }
         }
@@ -345,8 +344,7 @@ public class User : IDisposable
             {
                 this.Client.SendPacket(new CantConnectComposer(1));
 
-                this.
-                Client.SendPacket(new CloseConnectionComposer());
+                this.Client.SendPacket(new CloseConnectionComposer());
                 return;
             }
         }
@@ -403,34 +401,23 @@ public class User : IDisposable
 
     public bool EnterRoom(Room room)
     {
-        var session = this.Client;
-        if (session == null)
-        {
-            return false;
-        }
-
-        if (room == null)
-        {
-            return false;
-        }
-
-        session.SendPacket(new RoomReadyComposer(room.Id, room.RoomData.ModelName));
+        this.Client.SendPacket(new RoomReadyComposer(room.Id, room.RoomData.ModelName));
 
         if (room.RoomData.Wallpaper != "0.0")
         {
-            session.SendPacket(new RoomPropertyComposer("wallpaper", room.RoomData.Wallpaper));
+            this.Client.SendPacket(new RoomPropertyComposer("wallpaper", room.RoomData.Wallpaper));
         }
 
         if (room.RoomData.Floor != "0.0")
         {
-            session.SendPacket(new RoomPropertyComposer("floor", room.RoomData.Floor));
+            this.Client.SendPacket(new RoomPropertyComposer("floor", room.RoomData.Floor));
         }
 
-        session.SendPacket(new RoomPropertyComposer("landscape", room.RoomData.Landscape));
-        session.SendPacket(new RoomRatingComposer(room.RoomData.Score, !(session.User.RatedRooms.Contains(room.Id) || room.RoomData.OwnerId == session.User.Id)));
+        this.Client.SendPacket(new RoomPropertyComposer("landscape", room.RoomData.Landscape));
+        this.Client.SendPacket(new RoomRatingComposer(room.RoomData.Score, !(this.Client.User.RatedRooms.Contains(room.Id) || room.RoomData.OwnerId == this.Client.User.Id)));
 
-        session.SendPacket(room.GameMap.Model.SerializeRelativeHeightmap());
-        session.SendPacket(room.GameMap.Model.GetHeightmap());
+        this.Client.SendPacket(room.GameMap.Model.SerializeRelativeHeightmap());
+        this.Client.SendPacket(room.GameMap.Model.GetHeightmap());
 
         return true;
     }

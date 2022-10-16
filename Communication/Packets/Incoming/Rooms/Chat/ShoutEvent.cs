@@ -110,8 +110,7 @@ internal class ShoutEvent : IPacketEvent
             user.LastMessageCount = 0;
             user.LastMessage = "";
 
-            session.
-            User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("perm_flood_premium") ? 5 : 15;
+            session.User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("perm_flood_premium") ? 5 : 15;
             session.User.SpamEnable = true;
             user.Client.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
             return;
@@ -125,8 +124,7 @@ internal class ShoutEvent : IPacketEvent
 
             user.LastMessage = message;
 
-            session.
-            User.SpamFloodTime = DateTime.Now;
+            session.User.SpamFloodTime = DateTime.Now;
             session.User.FloodCount++;
 
             if (message.StartsWith("@red@"))

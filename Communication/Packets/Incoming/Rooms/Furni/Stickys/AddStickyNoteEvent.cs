@@ -45,9 +45,7 @@ internal class AddStickyNoteEvent : IPacketEvent
             ItemDao.UpdateRoomIdAndUserId(dbClient, id, room.Id, room.RoomData.OwnerId);
         }
 
-        session.
-        User.
-        InventoryComponent.RemoveItem(id);
+        session.User.InventoryComponent.RemoveItem(id);
     }
 
     private static string WallPositionCheck(string wallPosition)

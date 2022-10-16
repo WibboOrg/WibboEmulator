@@ -36,8 +36,7 @@ internal class SendMsgEvent : IPacketEvent
             return;
         }
 
-        session.
-        User.FloodTime = DateTime.Now;
+        session.User.FloodTime = DateTime.Now;
         session.User.FloodCount++;
 
         if (session.Antipub("<" + userId + "> " + message, "<MP>"))
@@ -50,8 +49,6 @@ internal class SendMsgEvent : IPacketEvent
             return;
         }
 
-        session.
-        User.
-        Messenger.SendInstantMessage(userId, message);
+        session.User.Messenger.SendInstantMessage(userId, message);
     }
 }

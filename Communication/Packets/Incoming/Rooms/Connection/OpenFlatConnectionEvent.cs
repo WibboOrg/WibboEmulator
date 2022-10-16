@@ -15,7 +15,6 @@ internal class OpenFlatConnectionEvent : IPacketEvent
         var roomId = packet.PopInt();
         var password = packet.PopString();
 
-        session.
-        User.PrepareRoom(roomId, password);
+        session.User.PrepareRoom(roomId, password);
     }
 }

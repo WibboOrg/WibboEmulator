@@ -329,17 +329,16 @@ public class InventoryComponent : IDisposable
 
         _ = this._userItems.TryAdd(userItem.Id, userItem);
 
-        this._userInstance.
-        Client.SendPacket(new FurniListAddComposer(userItem));
+        this._userInstance.Client.SendPacket(new FurniListAddComposer(userItem));
     }
 
-    public bool CheckLimit(int amountPurchase, string type)
+    public bool IsOverlowLimit(int amountPurchase, string type)
     {
         if (type is "s" or "i")
         {
             return this._userItems.Count + amountPurchase >= this._furniLimit;
         }
-        else if(type is "r")
+        else if (type is "r")
         {
             return this._botItems.Count + amountPurchase >= this._botLimit;
         }

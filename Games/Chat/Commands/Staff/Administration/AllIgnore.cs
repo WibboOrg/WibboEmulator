@@ -46,8 +46,7 @@ internal class AllIgnore : IChatCommand
             BanDao.InsertBan(dbClient, expireTime, "ignoreall", targetUser.User.Username, reason, session.User.Username);
         }
 
-        targetUser.
-        User.IgnoreAllExpireTime = expireTime;
+        targetUser.User.IgnoreAllExpireTime = expireTime;
 
         session.SendWhisper("Tu as ignoreall " + targetUser.User.Username + " pour " + reason + "!");
     }

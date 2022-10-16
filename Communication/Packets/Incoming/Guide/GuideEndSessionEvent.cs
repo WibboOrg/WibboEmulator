@@ -12,8 +12,7 @@ internal class GuideEndSessionEvent : IPacketEvent
 
         session.SendPacket(new OnGuideSessionEndedComposer(1));
 
-        session.
-        User.GuideOtherUserId = 0;
+        session.User.GuideOtherUserId = 0;
         if (session.User.OnDuty)
         {
             WibboEnvironment.GetGame().GetHelpManager().EndService(session.User.Id);

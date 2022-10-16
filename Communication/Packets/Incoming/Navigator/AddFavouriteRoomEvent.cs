@@ -25,8 +25,7 @@ internal class AddFavouriteRoomEvent : IPacketEvent
         {
             session.SendPacket(new UpdateFavouriteRoomComposer(roomId, true));
 
-            session.
-            User.FavoriteRooms.Add(roomId);
+            session.User.FavoriteRooms.Add(roomId);
 
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             UserFavoriteDao.Insert(dbClient, session.User.Id, roomId);

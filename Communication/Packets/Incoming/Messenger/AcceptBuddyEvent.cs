@@ -29,9 +29,7 @@ internal class AcceptBuddyEvent : IPacketEvent
                     session.User.Messenger.CreateFriendship(request.From);
                 }
 
-                session.
-                User.
-                Messenger.HandleRequest(num2);
+                session.User.Messenger.HandleRequest(num2);
             }
         }
     }

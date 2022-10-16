@@ -64,8 +64,7 @@ internal class BuyOfferEvent : IPacketEvent
                 return;
             }
 
-            session.
-            User.WibboPoints -= Convert.ToInt32(row["total_price"]);
+            session.User.WibboPoints -= Convert.ToInt32(row["total_price"]);
             session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
 
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())

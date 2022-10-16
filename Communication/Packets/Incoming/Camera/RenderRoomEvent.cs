@@ -60,8 +60,7 @@ internal class RenderRoomEvent : IPacketEvent
             return;
         }
 
-        session.
-        User.LastPhotoId = photoId;
+        session.User.LastPhotoId = photoId;
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         UserPhotoDao.Insert(dbClient, session.User.Id, photoId, time);

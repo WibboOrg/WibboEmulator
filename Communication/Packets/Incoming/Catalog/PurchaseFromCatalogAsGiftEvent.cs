@@ -77,8 +77,7 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buygift.flood", session.Langue));
 
-            session.
-            User.GiftPurchasingWarnings += 1;
+            session.User.GiftPurchasingWarnings += 1;
             if (session.User.GiftPurchasingWarnings >= 25)
             {
                 session.User.SessionGiftBlocked = true;
@@ -286,7 +285,6 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             UserDao.UpdateRemoveLimitCoins(dbClient, session.User.Id, totalLimitCoinCost);
         }
 
-        session.
-        User.LastGiftPurchaseTime = DateTime.Now;
+        session.User.LastGiftPurchaseTime = DateTime.Now;
     }
 }

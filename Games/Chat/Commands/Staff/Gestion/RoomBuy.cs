@@ -20,8 +20,7 @@ internal class RoomBuy : IChatCommand
             return;
         }
 
-        session.
-        User.WibboPoints -= room.RoomData.SellPrice;
+        session.User.WibboPoints -= room.RoomData.SellPrice;
         session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
 
         var clientOwner = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(room.RoomData.OwnerId);

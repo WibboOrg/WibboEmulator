@@ -51,9 +51,7 @@ internal class SetRelationshipEvent : IPacketEvent
             MessengerFriendshipDao.UpdateRelation(dbClient, type, session.User.Id, user);
         }
 
-        session.
-        User.
-        Messenger.RelationChanged(user, type);
+        session.User.Messenger.RelationChanged(user, type);
         session.User.Messenger.UpdateFriend(user, true);
     }
 }

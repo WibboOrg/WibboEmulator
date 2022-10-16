@@ -29,8 +29,7 @@ internal class Mimic : IChatCommand
                 return;
             }
 
-            session.
-            User.Gender = bot.BotData.Gender;
+            session.User.Gender = bot.BotData.Gender;
             session.User.Look = bot.BotData.Look;
         }
         else
@@ -42,8 +41,7 @@ internal class Mimic : IChatCommand
                 return;
             }
 
-            session.
-            User.Gender = targetUser.User.Gender;
+            session.User.Gender = targetUser.User.Gender;
             session.User.Look = targetUser.User.Look;
         }
 

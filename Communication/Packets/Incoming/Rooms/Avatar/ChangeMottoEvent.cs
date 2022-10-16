@@ -37,8 +37,7 @@ internal class ChangeMottoEvent : IPacketEvent
             return;
         }
 
-        session.
-        User.Motto = newMotto;
+        session.User.Motto = newMotto;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {

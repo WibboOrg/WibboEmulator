@@ -184,8 +184,7 @@ public abstract class WebSocketServiceHost
     /// </summary>
     /// <returns>
     /// A <see cref="WebSocketBehavior"/> instance that represents
-    /// the new session.
-    /// </returns>
+    /// the new session.    /// </returns>
     protected abstract WebSocketBehavior CreateSession();
 
     #endregion

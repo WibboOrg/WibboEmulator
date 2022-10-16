@@ -106,8 +106,7 @@ internal class WhisperEvent : IPacketEvent
             user.LastMessageCount = 0;
             user.LastMessage = "";
 
-            session.
-            User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("perm_flood_premium") ? 5 : 15;
+            session.User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("perm_flood_premium") ? 5 : 15;
             session.User.SpamEnable = true;
             user.Client.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
             return;
@@ -121,8 +120,7 @@ internal class WhisperEvent : IPacketEvent
 
             user.LastMessage = message;
 
-            session.
-            User.SpamFloodTime = DateTime.Now;
+            session.User.SpamFloodTime = DateTime.Now;
             session.User.FloodCount++;
 
             if (message.StartsWith("@red@"))
@@ -254,9 +252,7 @@ internal class WhisperEvent : IPacketEvent
                 }
             }
 
-            session.
-            User.
-            ChatMessageManager.AddMessage(user.UserId, user.GetUsername(), user.RoomId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", session.Langue) + toUser + ": " + message, UnixTimestamp.GetNow());
+            session.User.ChatMessageManager.AddMessage(user.UserId, user.GetUsername(), user.RoomId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", session.Langue) + toUser + ": " + message, UnixTimestamp.GetNow());
             room.ChatlogManager.AddMessage(user.UserId, user.GetUsername(), user.RoomId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", session.Langue) + toUser + ": " + message, UnixTimestamp.GetNow());
         }
     }

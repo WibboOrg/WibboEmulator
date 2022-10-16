@@ -211,7 +211,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
         }
 
 
-        if (session.User.InventoryComponent.CheckLimit(amountPurchase, item.Data.Type.ToString().ToLower()))
+        if (session.User.InventoryComponent.IsOverlowLimit(amountPurchase, item.Data.Type.ToString().ToLower()))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("catalog.purchase.limit", session.Langue));
             session.SendPacket(new PurchaseOKComposer());

@@ -70,8 +70,7 @@ internal class SendHotelAlertEvent : IPacketEvent
 
             WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer("game_promo_small", "Message d'animation", message, "Je veux y jouer !", session.User.CurrentRoom.Id, ""));
 
-            session.
-            User.CurrentRoom.CloseFullRoom = true;
+            session.User.CurrentRoom.CloseFullRoom = true;
         }
         else
         {

@@ -69,8 +69,7 @@ internal class PurchaseGroupEvent : IPacketEvent
             return;
         }
 
-        session.
-        User.Credits -= groupCost;
+        session.User.Credits -= groupCost;
         session.SendPacket(new CreditBalanceComposer(session.User.Credits));
 
         if (session.User.CurrentRoomId != room.Id)

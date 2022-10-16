@@ -71,8 +71,7 @@ internal class CreditFurniRedeemEvent : IPacketEvent
                     UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, value);
                 }
 
-                session.
-                User.AchievementPoints += value;
+                session.User.AchievementPoints += value;
                 session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));
 
                 var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);

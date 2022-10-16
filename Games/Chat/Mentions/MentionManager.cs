@@ -102,8 +102,7 @@ public class MentionManager
             return false;
         }
 
-        session.
-        User.EveryoneTimer = DateTime.Now;
+        session.User.EveryoneTimer = DateTime.Now;
 
         var onlineUsers = WibboEnvironment.GetGame().GetGameClientManager().GetClientsById(session.User.Messenger.Friends.Keys);
 

@@ -19,8 +19,7 @@ internal class RemoveGroupFavouriteEvent : IPacketEvent
                 session.User.CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(null, userRoom.VirtualId));
             }
 
-            session.
-            User.CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
+            session.User.CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
         }
         else
         {

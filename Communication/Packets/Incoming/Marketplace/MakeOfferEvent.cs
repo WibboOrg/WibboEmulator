@@ -50,9 +50,7 @@ internal class MakeOfferEvent : IPacketEvent
 
         }
 
-        session.
-        User.
-        InventoryComponent.RemoveItem(itemId);
+        session.User.InventoryComponent.RemoveItem(itemId);
         session.SendPacket(new MarketplaceMakeOfferResultComposer(1));
     }
 }
