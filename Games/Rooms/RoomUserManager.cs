@@ -25,7 +25,7 @@ using WibboEmulator.Utilities;
 public class RoomUserManager
 {
     private readonly Room _room;
-    public readonly ConcurrentDictionary<string, RoomUser> _usersByUsername;
+    private readonly ConcurrentDictionary<string, RoomUser> _usersByUsername;
     private readonly ConcurrentDictionary<int, RoomUser> _usersByUserID;
 
     private readonly ConcurrentDictionary<int, RoomUser> _users;

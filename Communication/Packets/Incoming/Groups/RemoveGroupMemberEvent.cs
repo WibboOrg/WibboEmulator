@@ -55,7 +55,7 @@ internal class RemoveGroupMemberEvent : IPacketEvent
             }
 
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            
+
             GuildMembershipDao.Delete(dbClient, groupId, userId);
 
             session.SendPacket(new GroupInfoComposer(group, session));

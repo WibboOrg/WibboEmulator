@@ -17,7 +17,7 @@ internal class GetOffersEvent : IPacketEvent
         var filterMode = packet.PopInt();
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        
+
         var table = CatalogMarketplaceOfferDao.GetAll(dbClient, searchQuery, minCost, maxCost, filterMode);
 
         WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Clear();

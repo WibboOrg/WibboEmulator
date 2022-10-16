@@ -138,7 +138,7 @@ internal class GetGroupMembersEvent : IPacketEvent
         var membersId = new List<int>();
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        
+
         var membresTable = GuildMembershipDao.GetAllUserIdBySearchAndStaff(dbClient, groupeId, searchVal);
 
         foreach (DataRow row in membresTable.Rows)
@@ -157,7 +157,7 @@ internal class GetGroupMembersEvent : IPacketEvent
         var membersId = new List<int>();
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        
+
         var membresTable = GuildMembershipDao.GetAllUserIdBySearch(dbClient, groupeId, searchVal);
 
         foreach (DataRow row in membresTable.Rows)

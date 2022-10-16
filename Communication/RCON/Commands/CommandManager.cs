@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.RCON.Commands;
+namespace WibboEmulator.Communication.RCON.Commands;
 using WibboEmulator.Communication.RCON.Commands.Hotel;
 using WibboEmulator.Communication.RCON.Commands.User;
 
@@ -25,7 +25,7 @@ public class CommandManager
 
         if (this._commands.TryGetValue(cmd.ToLower(), out var command))
         {
-            string[] parameters = data.Split(Convert.ToChar(1));
+            var parameters = data.Split(Convert.ToChar(1));
 
             return command.TryExecute(parameters);
         }

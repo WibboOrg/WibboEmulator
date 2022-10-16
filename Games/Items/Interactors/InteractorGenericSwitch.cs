@@ -139,7 +139,7 @@ public class InteractorGenericSwitch : FurniInteractor
 
         if (item.GetBaseItem().AdjustableHeights.Count > 1)
         {
-            if (session == null)
+            if (session == null || session.User == null)
             {
                 return;
             }

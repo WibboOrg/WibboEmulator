@@ -13,7 +13,7 @@ using WibboEmulator.Utilities;
 
 public class GameClient
 {
-    private Dictionary<int, double> _packetTimeout;
+    private readonly Dictionary<int, double> _packetTimeout;
     private int _packetCount;
     private double _packetLastTimestamp;
 
@@ -53,7 +53,7 @@ public class GameClient
         }
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        
+
         LogChatDao.Insert(dbClient, this.User.Id, roomId, message, type, this.User.Username);
 
         if (!WibboEnvironment.GetGame().GetChatManager().GetFilter().Ispub(message))

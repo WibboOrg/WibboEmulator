@@ -13,7 +13,7 @@ using WibboEmulator.Utilities;
 
 public class WebSocketManager
 {
-    private WebSocketServer _webSocketServer;
+    private readonly WebSocketServer _webSocketServer;
 
     private readonly ConcurrentDictionary<string, int> _ipConnectionsCount;
     private readonly ConcurrentDictionary<string, int> _lastTimeConnection;
@@ -148,10 +148,7 @@ public class WebSocketManager
         this._ipConnectionsCount.Clear();
     }
 
-    public void Destroy()
-    {
-        this._webSocketServer.Stop();
-    }
+    public void Destroy() => this._webSocketServer.Stop();
 }
 
 public class GameWebSocket : WebSocketBehavior

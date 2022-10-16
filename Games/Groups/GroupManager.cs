@@ -150,7 +150,7 @@ public class GroupManager
 
     public void DeleteGroup(int id)
     {
-        if(this._groups.TryGetValue(id, out var group))
+        if (this._groups.TryGetValue(id, out var group))
         {
             group.Dispose();
             _ = this._groups.TryRemove(id, out _);

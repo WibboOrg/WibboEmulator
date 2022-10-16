@@ -3,27 +3,23 @@ using System.Text;
 
 public class ClientPacket
 {
-    private byte[] _body;
+    private readonly byte[] _body;
     private int _pointer;
     private readonly Encoding _encoding = Encoding.UTF8;
 
-    public ClientPacket(int messageID, byte[] body) => this.Init(messageID, body);
+    public ClientPacket(int messageID, byte[] body)
+    {
+        this.Id = messageID;
+        this._body = body;
+
+        this._pointer = 0;
+    }
 
     public int Id { get; private set; }
 
     public int RemainingLength => this._body.Length - this._pointer;
 
     public int Header => this.Id;
-
-    public void Init(int messageID, byte[] body)
-    {
-        body ??= Array.Empty<byte>();
-
-        this.Id = messageID;
-        this._body = body;
-
-        this._pointer = 0;
-    }
 
     public byte[] ReadBytes(int bytes)
     {

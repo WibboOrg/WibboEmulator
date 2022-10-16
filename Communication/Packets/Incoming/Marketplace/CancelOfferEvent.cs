@@ -1,5 +1,4 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
-using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos.Catalog;
