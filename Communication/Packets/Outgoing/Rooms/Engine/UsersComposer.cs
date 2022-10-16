@@ -101,10 +101,7 @@ internal class UsersComposer : ServerPacket
                 Group group = null;
                 if (user.FavouriteGroupId > 0)
                 {
-                    if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.FavouriteGroupId, out group))
-                    {
-                        group = null;
-                    }
+                    _ = WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.FavouriteGroupId, out group);
                 }
 
                 if (roomUser.TransfBot)

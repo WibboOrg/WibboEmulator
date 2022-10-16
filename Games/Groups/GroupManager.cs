@@ -70,8 +70,6 @@ public class GroupManager
 
     public bool TryGetGroup(int id, out Group group)
     {
-        group = null;
-
         if (this._groups.ContainsKey(id))
         {
             return this._groups.TryGetValue(id, out group);
@@ -85,6 +83,7 @@ public class GroupManager
 
                 if (row == null)
                 {
+                    group = null;
                     return false;
                 }
 
@@ -151,16 +150,12 @@ public class GroupManager
 
     public void DeleteGroup(int id)
     {
-        Group group = null;
-        if (this._groups.ContainsKey(id))
+        if(this._groups.TryGetValue(id, out var group))
         {
+            group.Dispose();
             _ = this._groups.TryRemove(id, out _);
         }
 
-        if (group != null)
-        {
-            group.Dispose();
-        }
     }
 
     public List<Group> GetGroupsForUser(List<int> groupIds)

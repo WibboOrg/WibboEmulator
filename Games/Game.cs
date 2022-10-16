@@ -238,7 +238,6 @@ public class Game : IDisposable
     public void Dispose()
     {
         this._gameLoop.Dispose();
-        this._gameLoop = null;
 
         GC.SuppressFinalize(this);
     }

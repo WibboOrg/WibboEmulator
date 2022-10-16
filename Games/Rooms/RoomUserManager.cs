@@ -1036,8 +1036,7 @@ public class RoomUserManager
                             user.Team = roomItem.Team;
                             managerForBanzai.AddUser(user);
 
-                            this._room.
-                            GameManager.UpdateGatesTeamCounts();
+                            this._room.GameManager.UpdateGatesTeamCounts();
                             if (user.CurrentEffect != effectId)
                             {
                                 user.ApplyEffect(effectId);

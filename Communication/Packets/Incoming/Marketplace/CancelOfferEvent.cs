@@ -17,13 +17,11 @@ internal class CancelOfferEvent : IPacketEvent
             return;
         }
 
-        DataRow row = null;
         var offerId = packet.PopInt();
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            row = CatalogMarketplaceOfferDao.GetByOfferId(dbClient, offerId);
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+        var row = CatalogMarketplaceOfferDao.GetByOfferId(dbClient, offerId);
 
         if (row == null)
         {
@@ -49,10 +47,7 @@ internal class CancelOfferEvent : IPacketEvent
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            CatalogMarketplaceOfferDao.DeleteUserOffer(dbClient, offerId, session.User.Id);
-        }
+        CatalogMarketplaceOfferDao.DeleteUserOffer(dbClient, offerId, session.User.Id);
 
         var giveItem = ItemFactory.CreateSingleItem(item, session.User, Convert.ToString(row["extra_data"]), Convert.ToInt32(row["furni_id"]), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"]));
 

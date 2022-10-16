@@ -25,11 +25,7 @@ public class CommandManager
 
         if (this._commands.TryGetValue(cmd.ToLower(), out var command))
         {
-            string[] parameters = null;
-            if (data.Split(Convert.ToChar(1))[1] != null)
-            {
-                parameters = data.Split(Convert.ToChar(1));
-            }
+            string[] parameters = data.Split(Convert.ToChar(1));
 
             return command.TryExecute(parameters);
         }

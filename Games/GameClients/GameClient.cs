@@ -52,19 +52,15 @@ public class GameClient
             return false;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            LogChatDao.Insert(dbClient, this.User.Id, roomId, message, type, this.User.Username);
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        
+        LogChatDao.Insert(dbClient, this.User.Id, roomId, message, type, this.User.Username);
 
         if (!WibboEnvironment.GetGame().GetChatManager().GetFilter().Ispub(message))
         {
             if (WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessageWord(message))
             {
-                using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    LogChatPubDao.Insert(dbClient, this.User.Id, "A vérifié: " + type + message, this.User.Username);
-                }
+                LogChatPubDao.Insert(dbClient, this.User.Id, "A vérifié: " + type + message, this.User.Username);
 
                 foreach (var client in WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers())
                 {
@@ -89,10 +85,7 @@ public class GameClient
             pubCount = 4;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            LogChatPubDao.Insert(dbClient, this.User.Id, "Pub numero " + pubCount + ": " + type + message, this.User.Username);
-        }
+        LogChatPubDao.Insert(dbClient, this.User.Id, "Pub numero " + pubCount + ": " + type + message, this.User.Username);
 
         if (pubCount is < 3 and > 0)
         {
@@ -201,10 +194,6 @@ public class GameClient
         {
             this._packetTimeout.Clear();
         }
-
-        this._packetTimeout = null;
-        this.User = null;
-        this.Connection = null;
     }
 
     public void Disconnect()

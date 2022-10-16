@@ -151,7 +151,6 @@ public class WebSocketManager
     public void Destroy()
     {
         this._webSocketServer.Stop();
-        this._webSocketServer = null;
     }
 }
 

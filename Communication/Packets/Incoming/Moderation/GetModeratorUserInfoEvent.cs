@@ -19,20 +19,16 @@ internal class GetModeratorUserInfoEvent : IPacketEvent
         if (WibboEnvironment.GetGame().GetGameClientManager().GetNameById(userId) != "")
         {
             _ = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-            DataRow user = null;
-            DataRow info = null;
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                user = UserDao.GetOneInfo(dbClient, userId);
-            }
+            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            var user = UserDao.GetOneInfo(dbClient, userId);
 
             if (user == null)
             {
                 return;
             }
 
-            session.SendPacket(new ModeratorUserInfoComposer(user, info));
+            session.SendPacket(new ModeratorUserInfoComposer(user));
         }
         else
         {

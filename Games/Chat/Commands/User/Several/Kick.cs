@@ -23,7 +23,6 @@ internal class Kick : IChatCommand
             return;
         }
 
-        room.
-        RoomUserManager.RemoveUserFromRoom(targetUser, true, true);
+        room.RoomUserManager.RemoveUserFromRoom(targetUser, true, true);
     }
 }

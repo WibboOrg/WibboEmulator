@@ -18,11 +18,9 @@ internal class BuyOfferEvent : IPacketEvent
     {
         var offerId = packet.PopInt();
 
-        DataRow row = null;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            row = CatalogMarketplaceOfferDao.GetOneByOfferId(dbClient, offerId);
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+        var row = CatalogMarketplaceOfferDao.GetOneByOfferId(dbClient, offerId);
 
         if (row == null)
         {
@@ -67,10 +65,7 @@ internal class BuyOfferEvent : IPacketEvent
             session.User.WibboPoints -= Convert.ToInt32(row["total_price"]);
             session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                UserDao.UpdateRemovePoints(dbClient, session.User.Id, Convert.ToInt32(row["total_price"]));
-            }
+            UserDao.UpdateRemovePoints(dbClient, session.User.Id, Convert.ToInt32(row["total_price"]));
 
             var giveItem = ItemFactory.CreateSingleItem(item, session.User, Convert.ToString(row["extra_data"]), Convert.ToInt32(row["furni_id"]), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"]));
             if (giveItem != null)
@@ -81,9 +76,6 @@ internal class BuyOfferEvent : IPacketEvent
                 session.SendPacket(new PurchaseOKComposer());
             }
 
-
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
                 CatalogMarketplaceOfferDao.UpdateState(dbClient, offerId);
 
                 CatalogMarketplaceDataDao.Replace(dbClient, item.SpriteId, Convert.ToInt32(row["total_price"]));
@@ -110,7 +102,6 @@ internal class BuyOfferEvent : IPacketEvent
                         WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.Add(item.SpriteId, 1);
                     }
                 }
-            }
         }
 
         ReloadOffers(session);
@@ -123,12 +114,9 @@ internal class BuyOfferEvent : IPacketEvent
         var searchQuery = "";
         var filterMode = 1;
 
-        DataTable table = null;
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            table = CatalogMarketplaceOfferDao.GetAll(dbClient, searchQuery, minCost, maxCost, filterMode);
-        }
+        var table = CatalogMarketplaceOfferDao.GetAll(dbClient, searchQuery, minCost, maxCost, filterMode);
 
         WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Clear();
         WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Clear();

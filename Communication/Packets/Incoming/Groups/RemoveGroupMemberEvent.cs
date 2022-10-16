@@ -54,19 +54,15 @@ internal class RemoveGroupMemberEvent : IPacketEvent
                 }
             }
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                GuildMembershipDao.Delete(dbClient, groupId, userId);
-            }
+            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            
+            GuildMembershipDao.Delete(dbClient, groupId, userId);
 
             session.SendPacket(new GroupInfoComposer(group, session));
             if (session.User.FavouriteGroupId == groupId)
             {
                 session.User.FavouriteGroupId = 0;
-                using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    UserStatsDao.UpdateRemoveGroupId(dbClient, userId);
-                }
+                UserStatsDao.UpdateRemoveGroupId(dbClient, userId);
 
                 if (group.AdminOnlyDeco == 0)
                 {

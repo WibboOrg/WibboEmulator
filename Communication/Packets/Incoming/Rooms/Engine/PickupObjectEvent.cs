@@ -33,8 +33,7 @@ internal class PickupObjectEvent : IPacketEvent
             return;
         }
 
-        room.
-        RoomItemHandling.RemoveFurniture(session, item.Id);
+        room.RoomItemHandling.RemoveFurniture(session, item.Id);
         session.User.InventoryComponent.AddItem(item);
         WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FurniPick, 0);
     }

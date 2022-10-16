@@ -39,13 +39,10 @@ internal class CreditFurniRedeemEvent : IPacketEvent
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            ItemDao.Delete(dbClient, exchange.Id);
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        ItemDao.Delete(dbClient, exchange.Id);
 
-        room.
-        RoomItemHandling.RemoveFurniture(null, exchange.Id);
+        room.RoomItemHandling.RemoveFurniture(null, exchange.Id);
 
         var value = int.Parse(exchange.GetBaseItem().ItemName.Split(new char[1] { '_' })[1]);
 
@@ -61,15 +58,11 @@ internal class CreditFurniRedeemEvent : IPacketEvent
                 session.User.WibboPoints += value;
                 session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
                 UserDao.UpdateAddPoints(dbClient, session.User.Id, value);
             }
             else if (exchange.GetBaseItem().ItemName.StartsWith("WwnEx_"))
             {
-                using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, value);
-                }
+                UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, value);
 
                 session.User.AchievementPoints += value;
                 session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));

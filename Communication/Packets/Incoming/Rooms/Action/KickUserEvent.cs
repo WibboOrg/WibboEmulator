@@ -30,7 +30,6 @@ internal class KickUserEvent : IPacketEvent
             return;
         }
 
-        room.
-        RoomUserManager.RemoveUserFromRoom(roomUserByUserId.Client, true, true);
+        room.RoomUserManager.RemoveUserFromRoom(roomUserByUserId.Client, true, true);
     }
 }

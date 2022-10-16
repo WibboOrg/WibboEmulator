@@ -41,8 +41,7 @@ internal class RoomKick : IChatCommand
                     user.Client.SendNotification(messageAlert);
                 }
 
-                room.
-                RoomUserManager.RemoveUserFromRoom(user.Client, true, false);
+                room.RoomUserManager.RemoveUserFromRoom(user.Client, true, false);
             }
         });
     }

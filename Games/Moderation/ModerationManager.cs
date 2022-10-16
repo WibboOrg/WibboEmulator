@@ -389,8 +389,7 @@ public class ModerationManager
                 return;
             }
 
-            room.
-            RoomUserManager.RemoveUserFromRoom(clientByUserId, true, false);
+            room.RoomUserManager.RemoveUserFromRoom(clientByUserId, true, false);
 
             if (soft)
             {

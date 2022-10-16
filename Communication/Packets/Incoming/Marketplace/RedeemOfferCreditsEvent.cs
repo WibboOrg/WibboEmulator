@@ -13,11 +13,9 @@ internal class RedeemOfferCreditsEvent : IPacketEvent
     {
         var creditsOwed = 0;
 
-        DataTable table = null;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            table = CatalogMarketplaceOfferDao.GetPriceByUserId(dbClient, session.User.Id);
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+        var table = CatalogMarketplaceOfferDao.GetPriceByUserId(dbClient, session.User.Id);
 
         if (table != null)
         {
@@ -31,7 +29,6 @@ internal class RedeemOfferCreditsEvent : IPacketEvent
                 session.User.WibboPoints += creditsOwed;
                 session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
                 CatalogMarketplaceOfferDao.Delete(dbClient, session.User.Id);
                 UserDao.UpdateAddPoints(dbClient, session.User.Id, creditsOwed);
             }

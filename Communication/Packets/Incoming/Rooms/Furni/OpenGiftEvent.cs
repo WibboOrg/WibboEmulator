@@ -3,6 +3,7 @@ using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
@@ -38,21 +39,16 @@ internal class OpenGiftEvent : IPacketEvent
 
         if (present.GetBaseItem().InteractionType == InteractionType.GIFT)
         {
-            DataRow data = null;
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                data = UserPresentDao.GetOne(dbClient, present.Id);
-            }
+            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+            var data = UserPresentDao.GetOne(dbClient, present.Id);
 
             if (data == null)
             {
                 room.RoomItemHandling.RemoveFurniture(null, present.Id);
 
-                using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    ItemDao.Delete(dbClient, present.Id);
-                    UserPresentDao.Delete(dbClient, present.Id);
-                }
+                ItemDao.Delete(dbClient, present.Id);
+                UserPresentDao.Delete(dbClient, present.Id);
 
                 session.User.InventoryComponent.RemoveItem(present.Id);
                 return;
@@ -62,17 +58,14 @@ internal class OpenGiftEvent : IPacketEvent
             {
                 room.RoomItemHandling.RemoveFurniture(null, present.Id);
 
-                using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    ItemDao.Delete(dbClient, present.Id);
-                    UserPresentDao.Delete(dbClient, present.Id);
-                }
+                ItemDao.Delete(dbClient, present.Id);
+                UserPresentDao.Delete(dbClient, present.Id);
 
                 session.User.InventoryComponent.RemoveItem(present.Id);
                 return;
             }
 
-            FinishOpenGift(session, present, room, data);
+            FinishOpenGift(dbClient, session, present, room, data);
         }
         else if (present.GetBaseItem().InteractionType == InteractionType.EXTRABOX)
         {
@@ -96,18 +89,15 @@ internal class OpenGiftEvent : IPacketEvent
         }
     }
 
-    private static void FinishOpenGift(GameClient session, Item present, Room room, DataRow row)
+    private static void FinishOpenGift(IQueryAdapter dbClient, GameClient session, Item present, Room room, DataRow row)
     {
         var itemIsInRoom = true;
 
         room.RoomItemHandling.RemoveFurniture(session, present.Id);
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            ItemDao.UpdateBaseItemAndExtraData(dbClient, present.Id, Convert.ToInt32(row["base_id"]), row["extra_data"].ToString());
+        ItemDao.UpdateBaseItemAndExtraData(dbClient, present.Id, Convert.ToInt32(row["base_id"]), row["extra_data"].ToString());
 
-            UserPresentDao.Delete(dbClient, present.Id);
-        }
+        UserPresentDao.Delete(dbClient, present.Id);
 
         present.BaseItem = Convert.ToInt32(row["base_id"]);
         present.ResetBaseItem();
@@ -117,10 +107,7 @@ internal class OpenGiftEvent : IPacketEvent
         {
             if (!room.RoomItemHandling.SetFloorItem(session, present, present.X, present.Y, present.Rotation, true, false, true))
             {
-                using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    ItemDao.UpdateResetRoomId(dbClient, present.Id);
-                }
+                ItemDao.UpdateResetRoomId(dbClient, present.Id);
 
                 _ = session.User.InventoryComponent.TryAddItem(present);
 
@@ -129,10 +116,7 @@ internal class OpenGiftEvent : IPacketEvent
         }
         else
         {
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                ItemDao.UpdateResetRoomId(dbClient, present.Id);
-            }
+            ItemDao.UpdateResetRoomId(dbClient, present.Id);
 
             _ = session.User.InventoryComponent.TryAddItem(present);
 
