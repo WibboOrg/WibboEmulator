@@ -1090,7 +1090,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 foreach (var rUser in this.RoomInstance.RoomUserManager.GetUserList().ToList())
                 {
-                    if (rUser != null && !rUser.IsBot && !rUser.Client.User.HasPermission("perm_no_kick") && this.RoomInstance.RoomData.OwnerId != rUser.UserId)
+                    if (rUser != null && rUser.Client != null && !rUser.Client.User.HasPermission("perm_no_kick") && this.RoomInstance.RoomData.OwnerId != rUser.UserId)
                     {
                         this.RoomInstance.RoomUserManager.RemoveUserFromRoom(rUser.Client, true, false);
                     }
@@ -1108,7 +1108,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 {
                     if (rUser != null && !rUser.IsBot)
                     {
-                        rUser.Client.SendNotification(value);
+                        rUser.Client?.SendNotification(value);
                     }
                 }
                 break;
@@ -1306,15 +1306,13 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
             case "jackanddaisy":
             {
-                RoomUser bot;
+                var botName = "Daisy";
                 if (WibboEnvironment.GetRandomNumber(0, 1) == 1)
                 {
-                    bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName("Jack");
+                    botName = "Jack";
                 }
-                else
-                {
-                    bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName("Daisy");
-                }
+
+                var bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName(botName);
 
                 if (bot == null)
                 {

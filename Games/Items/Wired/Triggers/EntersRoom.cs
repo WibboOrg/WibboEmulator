@@ -32,8 +32,7 @@ public class EntersRoom : WiredTriggerBase, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.
-        RoomUserManager.OnUserEnter -= this.OnUserEnter;
+        this.RoomInstance.RoomUserManager.OnUserEnter -= this.OnUserEnter;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null);

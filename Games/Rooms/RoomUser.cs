@@ -12,7 +12,7 @@ using WibboEmulator.Games.Rooms.Utils;
 
 public class RoomUser : IEquatable<RoomUser>
 {
-    public GameClient Client { get; private set; }
+    public GameClient? Client { get; private set; }
     public int UserId { get; set; }
     public int VirtualId { get; set; }
     public int RoomId { get; set; }
@@ -257,17 +257,17 @@ public class RoomUser : IEquatable<RoomUser>
         this.Client = null;
     }
 
-    public void SendWhisperChat(string message, bool info = true) => this.Client.SendPacket(new WhisperComposer(this.VirtualId, message, info ? 34 : 0));
+    public void SendWhisperChat(string message, bool info = true) => this.Client?.SendPacket(new WhisperComposer(this.VirtualId, message, info ? 34 : 0));
 
     public void OnChatMe(string messageText, int color = 0, bool shout = false)
     {
         if (shout)
         {
-            this.Client.SendPacket(new ShoutComposer(this.VirtualId, messageText, color));
+            this.Client?.SendPacket(new ShoutComposer(this.VirtualId, messageText, color));
         }
         else
         {
-            this.Client.SendPacket(new ChatComposer(this.VirtualId, messageText, color));
+            this.Client?.SendPacket(new ChatComposer(this.VirtualId, messageText, color));
         }
     }
 

@@ -677,8 +677,7 @@ public class RoomItemHandling
                 continue;
             }
 
-            this._roomInstance.
-            RoomUserManager.UpdateUserStatus(user, false);
+            this._roomInstance.RoomUserManager.UpdateUserStatus(user, false);
         }
 
         return true;

@@ -97,6 +97,8 @@ public sealed class PacketManager
 
     public void TryExecutePacket(GameClient session, ClientPacket packet)
     {
+        var timeStarted = DateTime.Now;
+
         if (!this._incomingPackets.TryGetValue(packet.Id, out var pak))
         {
             if (Debugger.IsAttached)
@@ -123,44 +125,19 @@ public sealed class PacketManager
                 Console.WriteLine("[" + packet.Id + "] Spam detected");
                 Console.ResetColor();
             }
+
+            ExceptionLogger.LogPacketException(packet.ToString(), string.Format("Span detected in {0}: {1}ms", session.User?.Username ?? session.Connection.GetIp(), pak.Delay));
             return;
         }
 
-        var timeStarted = DateTime.Now;
         pak.Parse(session, packet);
-        var timeEnded = DateTime.Now;
 
-        var timeExecution = timeEnded - timeStarted;
+        var timeExecution = DateTime.Now - timeStarted;
         if (timeExecution > this._maximumRunTimeInSec)
         {
             ExceptionLogger.LogPacketException(packet.ToString(), string.Format("High latency in {0}: {1}ms", session.User?.Username ?? session.Connection.GetIp(), timeExecution.TotalMilliseconds));
         }
-
-        //await ExecutePacketAsync(session, packet, pak);
     }
-
-    /*private async Task ExecutePacketAsync(GameClient session, ClientPacket packet, IPacketEvent pak)
-    {
-        if (this._cancellationTokenSource.IsCancellationRequested)
-        {
-            return;
-        }
-
-        var task = new Task(() => pak.Parse(session, packet));
-        task.Start();
-
-        await task.WaitAsync(this._maximumRunTimeInSec, this._cancellationTokenSource.Token).ContinueWith(t =>
-        {
-            if (t.IsFaulted && t.Exception != null)
-            {
-                foreach (var e in t.Exception.Flatten().InnerExceptions)
-                {
-                    var messageError = string.Format("Error handling packet {0} for session {1} @ User Name {2}: {3}", packet.Id, session.ConnectionID, session.GetUser()?.Username ?? string.Empty, e.Message);
-                    ExceptionLogger.LogPacketException(packet.Id.ToString(), messageError);
-                }
-            }
-        });
-    }*/
 
     public void UnregisterAll() => this._incomingPackets.Clear();
 

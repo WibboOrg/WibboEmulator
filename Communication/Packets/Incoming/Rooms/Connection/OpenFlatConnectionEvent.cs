@@ -3,7 +3,7 @@ using WibboEmulator.Games.GameClients;
 
 internal class OpenFlatConnectionEvent : IPacketEvent
 {
-    public double Delay => 0;
+    public double Delay => 250;
 
     public void Parse(GameClient session, ClientPacket packet)
     {

@@ -58,7 +58,7 @@ internal class WhisperEvent : IPacketEvent
             return;
         }
 
-        if (!session.User.HasPermission("perm_mod") && !user.IsOwner() && !session.User.CurrentRoom.CheckRights(session) && room.UserIsMuted(session.User.Id))
+        if (!session.User.HasPermission("perm_mod") && !user.IsOwner() && !room.CheckRights(session) && room.UserIsMuted(session.User.Id))
         {
             if (!room.HasMuteExpired(session.User.Id))
             {
@@ -97,7 +97,7 @@ internal class WhisperEvent : IPacketEvent
             session.User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("perm_flood_premium") ? 5 : 15;
             session.User.SpamEnable = true;
 
-            user.Client.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
+            user.Client?.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
 
             return;
         }
@@ -108,7 +108,7 @@ internal class WhisperEvent : IPacketEvent
 
             session.User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("perm_flood_premium") ? 5 : 15;
             session.User.SpamEnable = true;
-            user.Client.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
+            user.Client?.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
             return;
         }
         else
@@ -171,7 +171,7 @@ internal class WhisperEvent : IPacketEvent
 
                 message = "(" + groupUsername + ") " + message;
 
-                user.Client.SendPacket(new WhisperComposer(user.VirtualId, message, color));
+                user.Client?.SendPacket(new WhisperComposer(user.VirtualId, message, color));
 
                 if (session.User.IgnoreAll)
                 {
@@ -215,7 +215,7 @@ internal class WhisperEvent : IPacketEvent
             }
             else
             {
-                user.Client.SendPacket(new WhisperComposer(user.VirtualId, message, color));
+                user.Client?.SendPacket(new WhisperComposer(user.VirtualId, message, color));
 
                 if (session.User.IgnoreAll)
                 {

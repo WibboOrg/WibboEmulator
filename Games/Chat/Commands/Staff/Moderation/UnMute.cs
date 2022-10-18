@@ -6,7 +6,19 @@ internal class UnMute : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        if (parameters.Length != 2)
+        {
+            return;
+        }
+
+        var username = parameters[1];
+
+        if (string.IsNullOrEmpty(username))
+        {
+            return;
+        }
+
+        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
         if (targetUser == null || targetUser.User == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));

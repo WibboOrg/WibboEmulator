@@ -655,7 +655,7 @@ public class Room
 
     public bool HasActiveTrade(RoomUser user)
     {
-        if (user.IsBot)
+        if (user.Client == null)
         {
             return false;
         }
@@ -696,7 +696,7 @@ public class Room
             return;
         }
 
-        if (userOne.IsBot || userTwo.IsBot || userOne.IsTrading || userTwo.IsTrading || this.HasActiveTrade(userOne) || this.HasActiveTrade(userTwo))
+        if (userOne.Client == null || userTwo.Client == null || userOne.IsTrading || userTwo.IsTrading || this.HasActiveTrade(userOne) || this.HasActiveTrade(userTwo))
         {
             return;
         }

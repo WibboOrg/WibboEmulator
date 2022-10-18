@@ -43,7 +43,7 @@ internal class FollowCommand : IRCONCommand
             return false;
         }
 
-        if (clientTwo.User == null || clientTwo.User.CurrentRoom == null)
+        if (clientTwo.User == null)
         {
             return false;
         }

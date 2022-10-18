@@ -58,7 +58,7 @@ internal class ChatEvent : IPacketEvent
 
         user.Unidle();
 
-        if (!session.User.HasPermission("perm_mod") && !user.IsOwner() && !session.User.CurrentRoom.CheckRights(session) && room.RoomMuted)
+        if (!session.User.HasPermission("perm_mod") && !user.IsOwner() && !room.CheckRights(session) && room.RoomMuted)
         {
             user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("room.muted", session.Langue));
             return;
@@ -74,7 +74,7 @@ internal class ChatEvent : IPacketEvent
             return;
         }
 
-        if (!session.User.HasPermission("perm_mod") && !user.IsOwner() && !session.User.CurrentRoom.CheckRights(session) && room.UserIsMuted(session.User.Id))
+        if (!session.User.HasPermission("perm_mod") && !user.IsOwner() && !room.CheckRights(session) && room.UserIsMuted(session.User.Id))
         {
             if (!room.HasMuteExpired(session.User.Id))
             {
@@ -101,7 +101,7 @@ internal class ChatEvent : IPacketEvent
         if (timeSpan.TotalSeconds < session.User.SpamProtectionTime && session.User.SpamEnable)
         {
             var i = session.User.SpamProtectionTime - timeSpan.Seconds;
-            user.Client.SendPacket(new FloodControlComposer(i));
+            user.Client?.SendPacket(new FloodControlComposer(i));
             return;
         }
         else if (timeSpan.TotalSeconds < 4.0 && session.User.FloodCount > 5 && !session.User.HasPermission("perm_mod"))
@@ -109,7 +109,7 @@ internal class ChatEvent : IPacketEvent
             session.User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("perm_flood_premium") ? 5 : 15;
             session.User.SpamEnable = true;
 
-            user.Client.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
+            user.Client?.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
 
             return;
         }
@@ -120,7 +120,7 @@ internal class ChatEvent : IPacketEvent
 
             session.User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("perm_flood_premium") ? 5 : 15;
             session.User.SpamEnable = true;
-            user.Client.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
+            user.Client?.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
             return;
         }
         else

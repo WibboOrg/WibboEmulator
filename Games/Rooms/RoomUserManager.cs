@@ -429,20 +429,20 @@ public class RoomUserManager
         user.SetPos(roomModel.DoorX, roomModel.DoorY, roomModel.DoorZ);
         user.SetRot(roomModel.DoorOrientation, false);
 
-        if (session.User.IsTeleporting)
-        {
-            var roomItem = this._room.RoomItemHandling.GetItem(user.Client.User.TeleporterId);
-            if (roomItem != null)
-            {
-                GameMap.TeleportToItem(user, roomItem);
-
-                roomItem.InteractingUser2 = session.User.Id;
-                roomItem.ReqUpdate(1);
-            }
-        }
-
         if (user.Client != null && user.Client.User != null)
         {
+            if (session.User.IsTeleporting)
+            {
+                var roomItem = this._room.RoomItemHandling.GetItem(user.Client.User.TeleporterId);
+                if (roomItem != null)
+                {
+                    GameMap.TeleportToItem(user, roomItem);
+
+                    roomItem.InteractingUser2 = session.User.Id;
+                    roomItem.ReqUpdate(1);
+                }
+            }
+
             user.Client.User.IsTeleporting = false;
             user.Client.User.TeleporterId = 0;
             user.Client.User.TeleportingRoomID = 0;
@@ -686,8 +686,8 @@ public class RoomUserManager
         user.FreezeEndCounter = 0;
         user.Dispose();
 
-        _ = this._usersByUserID.TryRemove(user.UserId, out user);
-        _ = this._usersByUsername.TryRemove(session.User.Username.ToLower(), out user);
+        _ = this._usersByUserID.TryRemove(user.UserId, out _);
+        _ = this._usersByUsername.TryRemove(session.User.Username.ToLower(), out _);
     }
 
     private void RemoveRoomUser(RoomUser user)

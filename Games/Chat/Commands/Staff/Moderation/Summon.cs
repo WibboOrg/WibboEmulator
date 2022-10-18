@@ -23,11 +23,10 @@ internal class Summon : IChatCommand
             return;
         }
 
-        var currentRoom = session.User.CurrentRoom;
         targetUser.User.IsTeleporting = true;
-        targetUser.User.TeleportingRoomID = currentRoom.RoomData.Id;
+        targetUser.User.TeleportingRoomID = room.RoomData.Id;
         targetUser.User.TeleporterId = 0;
 
-        targetUser.SendPacket(new GetGuestRoomResultComposer(targetUser, currentRoom.RoomData, false, true));
+        targetUser.SendPacket(new GetGuestRoomResultComposer(targetUser, room.RoomData, false, true));
     }
 }

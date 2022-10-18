@@ -401,6 +401,11 @@ public class User : IDisposable
 
     public bool EnterRoom(Room room)
     {
+        if (this.Client == null)
+        {
+            return false;
+        }
+
         this.Client.SendPacket(new RoomReadyComposer(room.Id, room.RoomData.ModelName));
 
         if (room.RoomData.Wallpaper != "0.0")

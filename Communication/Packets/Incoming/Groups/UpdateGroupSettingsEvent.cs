@@ -69,14 +69,14 @@ internal class UpdateGroupSettingsEvent : IPacketEvent
                 user.RemoveStatus("flatctrl");
                 user.UpdateNeeded = true;
 
-                user.Client.SendPacket(new YouAreControllerComposer(0));
+                user.Client?.SendPacket(new YouAreControllerComposer(0));
             }
             else if (furniOptions == 0 && !user.ContainStatus("flatctrl"))
             {
                 user.SetStatus("flatctrl", "1");
                 user.UpdateNeeded = true;
 
-                user.Client.SendPacket(new YouAreControllerComposer(1));
+                user.Client?.SendPacket(new YouAreControllerComposer(1));
             }
         }
 
