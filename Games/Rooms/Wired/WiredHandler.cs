@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Rooms.Wired;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Drawing;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
@@ -11,7 +12,7 @@ public class WiredHandler
     private readonly ConcurrentDictionary<Point, List<Item>> _actionStacks;
     private readonly ConcurrentDictionary<Point, List<Item>> _conditionStacks;
 
-    private readonly ConcurrentDictionary<Point, List<RoomUser>> _wiredUsed;
+    private readonly ConcurrentDictionary<Point, List<int>> _wiredUsed;
 
     private readonly List<Point> _specialRandom;
     private readonly Dictionary<Point, int> _specialUnseen;
@@ -29,7 +30,7 @@ public class WiredHandler
         this._actionStacks = new ConcurrentDictionary<Point, List<Item>>();
         this._conditionStacks = new ConcurrentDictionary<Point, List<Item>>();
         this._requestingUpdates = new ConcurrentQueue<WiredCycle>();
-        this._wiredUsed = new ConcurrentDictionary<Point, List<RoomUser>>();
+        this._wiredUsed = new ConcurrentDictionary<Point, List<int>>();
 
         this._specialRandom = new List<Point>();
         this._specialUnseen = new Dictionary<Point, int>();
@@ -212,18 +213,18 @@ public class WiredHandler
 
         if (this._wiredUsed.ContainsKey(coordinate))
         {
-            if (this._wiredUsed[coordinate].Contains(user))
+            if (this._wiredUsed[coordinate].Contains(user?.VirtualId ?? 0))
             {
                 return;
             }
             else
             {
-                this._wiredUsed[coordinate].Add(user);
+                this._wiredUsed[coordinate].Add(user?.VirtualId ?? 0);
             }
         }
         else
         {
-            _ = this._wiredUsed.TryAdd(coordinate, new List<RoomUser>() { user });
+            _ = this._wiredUsed.TryAdd(coordinate, new() { user?.VirtualId ?? 0 });
         }
 
         if (this._conditionStacks.ContainsKey(coordinate))
