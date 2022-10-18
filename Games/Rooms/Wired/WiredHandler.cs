@@ -210,23 +210,20 @@ public class WiredHandler
             return;
         }
 
-        if (user != null)
+        if (this._wiredUsed.ContainsKey(coordinate))
         {
-            if (this._wiredUsed.ContainsKey(coordinate))
+            if (this._wiredUsed[coordinate].Contains(user))
             {
-                if (this._wiredUsed[coordinate].Contains(user))
-                {
-                    return;
-                }
-                else
-                {
-                    this._wiredUsed[coordinate].Add(user);
-                }
+                return;
             }
             else
             {
-                _ = this._wiredUsed.TryAdd(coordinate, new List<RoomUser>() { user });
+                this._wiredUsed[coordinate].Add(user);
             }
+        }
+        else
+        {
+            _ = this._wiredUsed.TryAdd(coordinate, new List<RoomUser>() { user });
         }
 
         if (this._conditionStacks.ContainsKey(coordinate))

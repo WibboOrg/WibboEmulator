@@ -73,10 +73,10 @@ public class InteractorTimer : FurniInteractor
         }
         else if ((request == 0 || request == 1) && time != 0 && !this._chronoStarter)
         {
-            item.ReqUpdate(1);
-            item.GetRoom().GameManager.StartGame();
             this._chronoStarter = true;
             this._pendingReset = true;
+            item.ReqUpdate(1);
+            item.GetRoom().GameManager.StartGame();
         }
 
         item.ExtraData = time.ToString();
