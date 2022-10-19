@@ -57,6 +57,6 @@ internal class PlaceBotEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.GetBots()));
+        session.SendPacket(new BotRemovedFromInventoryComposer(botId));
     }
 }

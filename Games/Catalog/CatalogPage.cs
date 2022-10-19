@@ -6,6 +6,7 @@ public class CatalogPage
     public int Id { get; set; }
     public int ParentId { get; set; }
     public bool Enabled { get; set; }
+    public bool IsPremium { get; set; }
     public string Caption { get; set; }
     public string CaptionEn { get; set; }
     public string CaptionBr { get; set; }
@@ -23,11 +24,12 @@ public class CatalogPage
 
     public CatalogPage(int id, int parentId, string enabled, string caption, string pageLink, int icon, int minRank,
         string template, string pageStrings1, string pageStrings2, string captionEn, string captionBr, string pageStrings2En,
-        string pageStrings2Br, Dictionary<int, CatalogItem> items)
+        string pageStrings2Br, string isPremium, Dictionary<int, CatalogItem> items)
     {
         this.Id = id;
         this.ParentId = parentId;
         this.Enabled = enabled.ToLower() == "1";
+        this.IsPremium = isPremium.ToLower() == "1";
 
         this.Caption = caption;
         this.CaptionEn = captionEn;

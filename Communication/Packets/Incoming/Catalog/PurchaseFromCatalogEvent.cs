@@ -51,6 +51,12 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
             }
         }
 
+        if (page.IsPremium && session.User.Rank < 2)
+        {
+            session.SendPacket(new PurchaseErrorComposer());
+            return;
+        }
+
         if (amount < 1 || amount > 100 || !ItemUtility.CanSelectAmount(item))
         {
             amount = 1;
@@ -68,6 +74,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
             session.User.WibboPoints < totalDiamondCost ||
             session.User.LimitCoins < totalLimitCoinCost)
         {
+            session.SendPacket(new PurchaseErrorComposer());
             return;
         }
 
@@ -85,17 +92,14 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
                 int groupId;
                 if (!int.TryParse(extraData, out groupId))
                 {
-                    return;
-                }
-
-                if (groupId == 0)
-                {
+                    session.SendPacket(new PurchaseErrorComposer());
                     return;
                 }
 
                 Group group;
                 if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out group))
                 {
+                    session.SendPacket(new PurchaseErrorComposer());
                     return;
                 }
 
@@ -108,23 +112,9 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
                 var race = bits[1];
                 var color = bits[2];
 
-                if (!int.TryParse(race, out _))
+                if (!int.TryParse(race, out _) || color.Length != 6 || race.Length > 2 || !PetUtility.CheckPetName(petName))
                 {
-                    return;
-                }
-
-                if (!PetUtility.CheckPetName(petName))
-                {
-                    return;
-                }
-
-                if (race.Length > 2)
-                {
-                    return;
-                }
-
-                if (color.Length != 6)
-                {
+                    session.SendPacket(new PurchaseErrorComposer());
                     return;
                 }
 
@@ -170,7 +160,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
                 if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(extraData) || !WibboEnvironment.GetGame().GetCatalog().HasBadge(extraData))
                 {
                     session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", session.Langue));
-                    session.SendPacket(new PurchaseOKComposer());
+                    session.SendPacket(new PurchaseErrorComposer());
                     return;
                 }
 
@@ -188,7 +178,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
                 if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(extraData) || !session.User.BadgeComponent.HasBadge(extraData))
                 {
                     session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", session.Langue));
-                    session.SendPacket(new PurchaseOKComposer());
+                    session.SendPacket(new PurchaseErrorComposer());
                     return;
                 }
 
@@ -200,7 +190,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
                 if (session.User.BadgeComponent.HasBadge(item.Badge))
                 {
                     session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadge.error", session.Langue));
-                    session.SendPacket(new PurchaseOKComposer());
+                    session.SendPacket(new PurchaseErrorComposer());
                     return;
                 }
                 break;
@@ -214,7 +204,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
         if (session.User.InventoryComponent.IsOverlowLimit(amountPurchase, item.Data.Type.ToString().ToLower()))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("catalog.purchase.limit", session.Langue));
-            session.SendPacket(new PurchaseOKComposer());
+            session.SendPacket(new PurchaseErrorComposer());
             return;
         }
 
@@ -225,7 +215,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
             if (item.LimitedEditionStack <= item.LimitedEditionSells)
             {
                 session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyltd.error", session.Langue));
-                session.SendPacket(new PurchaseOKComposer());
+                session.SendPacket(new PurchaseErrorComposer());
                 return;
             }
 

@@ -53,6 +53,12 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             return;
         }
 
+        if (page.IsPremium && session.User.Rank < 2)
+        {
+            session.SendPacket(new PurchaseErrorComposer());
+            return;
+        }
+
         var totalCreditsCost = item.CostCredits;
         var totalPixelCost = item.CostDuckets;
         var totalDiamondCost = item.CostWibboPoints;
@@ -69,7 +75,7 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
         var user = WibboEnvironment.GetUserByUsername(giftUser);
         if (user == null)
         {
-            //session.SendPacket(new GiftWrappingErrorComposer());
+            session.SendPacket(new GiftReceiverNotFoundComposer());
             return;
         }
 
@@ -96,64 +102,41 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 
         var newItemId = ItemDao.Insert(dbClient, presentData.Id, user.Id, ed);
 
-        var itemExtraData = "";
+        var extraData = "";
         switch (item.Data.InteractionType)
         {
             case InteractionType.NONE:
-                itemExtraData = "";
+                extraData = "";
                 break;
 
             case InteractionType.GUILD_ITEM:
             case InteractionType.GUILD_GATE:
-                var groupId = 0;
-                if (!int.TryParse(data, out groupId))
+                int groupId;
+                if (!int.TryParse(extraData, out groupId))
                 {
+                    session.SendPacket(new PurchaseErrorComposer());
                     return;
                 }
 
-                if (groupId == 0)
+                Group group;
+                if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out group))
                 {
+                    session.SendPacket(new PurchaseErrorComposer());
                     return;
                 }
 
-                Group groupItem;
-                if (WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out groupItem))
-                {
-                    itemExtraData = "0;" + groupItem.Id;
-                }
-
+                extraData = "0;" + group.Id;
                 break;
 
             case InteractionType.PET:
-
-                var bits = data.Split('\n');
-
-                if (bits.Length != 3)
-                {
-                    return;
-                }
-
+                var bits = extraData.Split('\n');
                 var petName = bits[0];
                 var race = bits[1];
                 var color = bits[2];
 
-                if (!int.TryParse(race, out _))
+                if (!int.TryParse(race, out _) || color.Length != 6 || race.Length > 2 || !PetUtility.CheckPetName(petName))
                 {
-                    return;
-                }
-
-                if (PetUtility.CheckPetName(petName))
-                {
-                    return;
-                }
-
-                if (race.Length > 2)
-                {
-                    return;
-                }
-
-                if (color.Length != 6)
-                {
+                    session.SendPacket(new PurchaseErrorComposer());
                     return;
                 }
 
@@ -166,70 +149,80 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             case InteractionType.LANDSCAPE:
 
                 double number;
-                if (string.IsNullOrEmpty(data))
+                if (string.IsNullOrEmpty(extraData))
                 {
                     number = 0;
                 }
                 else
                 {
-                    _ = double.TryParse(data, out number);
+                    _ = double.TryParse(extraData, out number);
                 }
 
-                itemExtraData = number.ToString().Replace(',', '.');
+                extraData = number.ToString().Replace(',', '.');
                 break; // maintain extra data // todo: validate
 
             case InteractionType.POSTIT:
-                itemExtraData = "FFFF33";
+                extraData = "FFFF33";
                 break;
 
             case InteractionType.MOODLIGHT:
-                itemExtraData = "1,1,1,#000000,255";
+                extraData = "1,1,1,#000000,255";
                 break;
 
             case InteractionType.TROPHY:
-                itemExtraData = session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + Convert.ToChar(9) + data;
+                extraData = session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + Convert.ToChar(9) + extraData;
                 break;
 
             case InteractionType.MANNEQUIN:
-                itemExtraData = "m;ch-210-1321.lg-285-92;Mannequin";
+                extraData = "m;ch-210-1321.lg-285-92;Mannequin";
                 break;
 
             case InteractionType.BADGE_TROC:
             {
-                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(data) || !WibboEnvironment.GetGame().GetCatalog().HasBadge(data))
+                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(extraData) || !WibboEnvironment.GetGame().GetCatalog().HasBadge(extraData))
                 {
                     session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", session.Langue));
+                    session.SendPacket(new PurchaseErrorComposer());
                     return;
                 }
 
-                if (!data.StartsWith("perso_"))
+                if (!extraData.StartsWith("perso_"))
                 {
-                    session.User.BadgeComponent.RemoveBadge(data);
+                    session.User.BadgeComponent.RemoveBadge(extraData);
                 }
 
                 session.SendPacket(new BadgesComposer(session.User.BadgeComponent.BadgeList));
 
-                itemExtraData = data;
                 break;
             }
 
             case InteractionType.BADGE_DISPLAY:
-                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(data) || !session.User.BadgeComponent.HasBadge(data))
+                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(extraData) || !session.User.BadgeComponent.HasBadge(extraData))
                 {
                     session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", session.Langue));
-                    session.SendPacket(new PurchaseOKComposer());
+                    session.SendPacket(new PurchaseErrorComposer());
                     return;
                 }
 
-                itemExtraData = data + Convert.ToChar(9) + session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
+                extraData = extraData + Convert.ToChar(9) + session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
                 break;
 
+            case InteractionType.BADGE:
+            {
+                if (session.User.BadgeComponent.HasBadge(item.Badge))
+                {
+                    session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadge.error", session.Langue));
+                    session.SendPacket(new PurchaseErrorComposer());
+                    return;
+                }
+                break;
+            }
             default:
-                itemExtraData = data;
+                extraData = "";
                 break;
         }
 
-        UserPresentDao.Insert(dbClient, newItemId, item.Data.Id, itemExtraData);
+        UserPresentDao.Insert(dbClient, newItemId, item.Data.Id, extraData);
 
         ItemDao.Delete(dbClient, newItemId);
 
@@ -242,7 +235,6 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
                 _ = receiver.User.InventoryComponent.TryAddItem(giveItem);
                 receiver.SendPacket(new FurniListNotificationComposer(giveItem.Id, 1));
                 receiver.SendPacket(new PurchaseOKComposer());
-                //Receiver.SendPacket(new FurniListUpdateComposer());
             }
 
             if (user.Id != session.User.Id && !string.IsNullOrWhiteSpace(giftMessage))

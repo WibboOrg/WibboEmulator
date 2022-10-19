@@ -119,7 +119,7 @@ public class CatalogManager
                     this._pages.Add(Convert.ToInt32(row["id"]), new CatalogPage(Convert.ToInt32(row["id"]), Convert.ToInt32(row["parent_id"]), row["enabled"].ToString(), Convert.ToString(row["caption"]),
                         Convert.ToString(row["page_link"]), Convert.ToInt32(row["icon_image"]), Convert.ToInt32(row["min_rank"]), Convert.ToString(row["page_layout"]),
                         Convert.ToString(row["page_strings_1"]), Convert.ToString(row["page_strings_2"]), Convert.ToString(row["caption_en"]),
-                        Convert.ToString(row["caption_br"]), Convert.ToString(row["page_strings_2_en"]), Convert.ToString(row["page_strings_2_br"]),
+                        Convert.ToString(row["caption_br"]), Convert.ToString(row["page_strings_2_en"]), Convert.ToString(row["page_strings_2_br"]), row["is_premium"].ToString(),
                         this._items.ContainsKey(Convert.ToInt32(row["id"])) ? this._items[Convert.ToInt32(row["id"])] : new Dictionary<int, CatalogItem>()));
                 }
             }
