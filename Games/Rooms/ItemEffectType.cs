@@ -4,10 +4,10 @@ public enum ItemEffectType
 {
     None,
     Swim,
+    NormalSkates,
+    IceSkates,
     SwimLow,
     SwimHalloween,
-    IceSkates,
-    NormalSkates,
     PublicPool,
     Trampoline,
     Treadmill,

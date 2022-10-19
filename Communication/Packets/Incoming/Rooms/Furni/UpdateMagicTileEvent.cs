@@ -5,7 +5,7 @@ using WibboEmulator.Games.Items;
 
 internal class UpdateMagicTileEvent : IPacketEvent
 {
-    public double Delay => 250;
+    public double Delay => 0;
 
     public void Parse(GameClient session, ClientPacket packet)
     {

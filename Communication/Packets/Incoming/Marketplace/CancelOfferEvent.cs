@@ -7,7 +7,7 @@ using WibboEmulator.Games.Items;
 
 internal class CancelOfferEvent : IPacketEvent
 {
-    public double Delay => 1000;
+    public double Delay => 250;
 
     public void Parse(GameClient session, ClientPacket packet)
     {
