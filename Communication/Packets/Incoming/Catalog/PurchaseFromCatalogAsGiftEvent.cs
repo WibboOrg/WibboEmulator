@@ -197,7 +197,7 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             }
 
             case InteractionType.BADGE_DISPLAY:
-                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(extraData) || !session.User.BadgeComponent.HasBadge(extraData))
+                if (!session.User.BadgeComponent.HasBadge(extraData))
                 {
                     session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", session.Langue));
                     session.SendPacket(new PurchaseErrorComposer());
