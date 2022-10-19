@@ -6,7 +6,7 @@ using WibboEmulator.Utilities;
 
 internal class UserSearchEvent : IPacketEvent
 {
-    public double Delay => 1000;
+    public double Delay => 500;
 
     public void Parse(GameClient session, ClientPacket packet)
     {

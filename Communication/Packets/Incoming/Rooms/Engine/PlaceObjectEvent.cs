@@ -9,7 +9,7 @@ using WibboEmulator.Games.Quests;
 
 internal class PlaceObjectEvent : IPacketEvent
 {
-    public double Delay => 200;
+    public double Delay => 100;
 
     public void Parse(GameClient session, ClientPacket packet)
     {

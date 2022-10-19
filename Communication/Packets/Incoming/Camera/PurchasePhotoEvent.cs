@@ -5,7 +5,7 @@ using WibboEmulator.Games.Items;
 
 internal class PurchasePhotoEvent : IPacketEvent
 {
-    public double Delay => 200;
+    public double Delay => 100;
 
     public void Parse(GameClient session, ClientPacket packet)
     {

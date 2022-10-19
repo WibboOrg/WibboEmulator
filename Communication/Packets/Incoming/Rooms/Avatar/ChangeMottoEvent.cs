@@ -7,7 +7,7 @@ using WibboEmulator.Utilities;
 
 internal class ChangeMottoEvent : IPacketEvent
 {
-    public double Delay => 500;
+    public double Delay => 250;
 
     public void Parse(GameClient session, ClientPacket packet)
     {

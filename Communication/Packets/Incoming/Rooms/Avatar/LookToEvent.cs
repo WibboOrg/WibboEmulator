@@ -4,7 +4,7 @@ using WibboEmulator.Games.Rooms.PathFinding;
 
 internal class LookToEvent : IPacketEvent
 {
-    public double Delay => 100;
+    public double Delay => 50;
 
     public void Parse(GameClient session, ClientPacket packet)
     {

@@ -3,7 +3,7 @@ using WibboEmulator.Games.GameClients;
 
 internal class InitTradeEvent : IPacketEvent
 {
-    public double Delay => 5000;
+    public double Delay => 100;
 
     public void Parse(GameClient session, ClientPacket packet)
     {

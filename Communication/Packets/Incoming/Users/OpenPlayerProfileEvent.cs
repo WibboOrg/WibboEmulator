@@ -5,7 +5,7 @@ using WibboEmulator.Games.GameClients;
 
 internal class OpenPlayerProfileEvent : IPacketEvent
 {
-    public double Delay => 500;
+    public double Delay => 250;
 
     public void Parse(GameClient session, ClientPacket packet)
     {

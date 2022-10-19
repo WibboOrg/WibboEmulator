@@ -16,7 +16,7 @@ using WibboEmulator.Games.Items;
 
 internal class PurchaseFromCatalogEvent : IPacketEvent
 {
-    public double Delay => 1000;
+    public double Delay => 500;
 
     public void Parse(GameClient session, ClientPacket packet)
     {

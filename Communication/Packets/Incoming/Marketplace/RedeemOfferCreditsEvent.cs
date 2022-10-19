@@ -7,7 +7,7 @@ using WibboEmulator.Games.GameClients;
 
 internal class RedeemOfferCreditsEvent : IPacketEvent
 {
-    public double Delay => 1000;
+    public double Delay => 500;
 
     public void Parse(GameClient session, ClientPacket packet)
     {

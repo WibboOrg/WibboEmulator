@@ -4,7 +4,7 @@ using WibboEmulator.Games.Quests;
 
 internal class UseFurnitureEvent : IPacketEvent
 {
-    public double Delay => 250;
+    public double Delay => 100;
 
     public void Parse(GameClient session, ClientPacket packet)
     {

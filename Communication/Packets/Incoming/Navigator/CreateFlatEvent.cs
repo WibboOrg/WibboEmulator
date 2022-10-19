@@ -5,7 +5,7 @@ using WibboEmulator.Games.GameClients;
 
 internal class CreateFlatEvent : IPacketEvent
 {
-    public double Delay => 5000;
+    public double Delay => 1000;
 
     public void Parse(GameClient session, ClientPacket packet)
     {

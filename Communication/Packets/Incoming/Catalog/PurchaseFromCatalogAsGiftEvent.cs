@@ -13,7 +13,7 @@ using WibboEmulator.Utilities;
 
 internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 {
-    public double Delay => 1000;
+    public double Delay => 500;
 
     public void Parse(GameClient session, ClientPacket packet)
     {
@@ -78,7 +78,7 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buygift.flood", session.Langue));
 
             session.User.GiftPurchasingWarnings += 1;
-            if (session.User.GiftPurchasingWarnings >= 25)
+            if (session.User.GiftPurchasingWarnings >= 3)
             {
                 session.User.SessionGiftBlocked = true;
             }

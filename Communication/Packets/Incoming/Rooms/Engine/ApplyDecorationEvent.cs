@@ -8,7 +8,7 @@ using WibboEmulator.Games.Quests;
 
 internal class ApplyDecorationEvent : IPacketEvent
 {
-    public double Delay => 500;
+    public double Delay => 100;
 
     public void Parse(GameClient session, ClientPacket packet)
     {
@@ -67,7 +67,6 @@ internal class ApplyDecorationEvent : IPacketEvent
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
             RoomDao.UpdateDecoration(dbClient, room.Id, decorationKey, userItem.ExtraData);
-
             ItemDao.Delete(dbClient, userItem.Id);
         }
 
