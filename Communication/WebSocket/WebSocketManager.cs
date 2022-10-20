@@ -155,7 +155,7 @@ public class GameWebSocket : WebSocketBehavior
 {
     private string _ip;
 
-    //protected override void OnError(ErrorEventArgs e) => ExceptionLogger.LogException(e.Message);
+    protected override void OnError(WebSocketSharp.ErrorEventArgs e) => ExceptionLogger.LogException(e.Message);
 
     protected override void OnClose(CloseEventArgs e) => WibboEnvironment.GetWebSocketManager().DisposeClient(this);
 

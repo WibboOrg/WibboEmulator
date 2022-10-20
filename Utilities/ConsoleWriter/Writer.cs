@@ -121,17 +121,17 @@ public class Writer
     {
         try
         {
-            var fullPath = Path.GetDirectoryName(WibboEnvironment.PatchDir + path);
+            var fullPath = WibboEnvironment.PatchDir + path;
+            var fullPathDir = Path.GetDirectoryName(fullPath);
 
-            if (!string.IsNullOrEmpty(fullPath))
+            if (!string.IsNullOrEmpty(fullPathDir))
             {
-                _ = Directory.CreateDirectory(fullPath);
+                _ = Directory.CreateDirectory(fullPathDir);
             }
 
-            var fileStream = new FileStream(WibboEnvironment.PatchDir + path, FileMode.Append, FileAccess.Write);
-            var bytes = Encoding.ASCII.GetBytes(Environment.NewLine + content);
-            fileStream.Write(bytes, 0, bytes.Length);
-            fileStream.Dispose();
+            using var writer = new StreamWriter(fullPath, true);
+            using var syncWriter = TextWriter.Synchronized(writer);
+            syncWriter.WriteLine(content);
         }
         catch (Exception ex)
         {

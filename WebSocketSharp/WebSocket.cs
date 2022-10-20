@@ -1911,7 +1911,6 @@ public class WebSocket : IDisposable
 
     private bool ProcessReceivedFrame(WebSocketFrame frame)
     {
-
         if (!this.CheckReceivedFrame(frame, out var msg))
         {
             throw new WebSocketException(CloseStatusCode.ProtocolError, msg);
@@ -2245,41 +2244,28 @@ public class WebSocket : IDisposable
 
     private void SendAsync(
       Opcode opcode, Stream stream, Action<bool> completed
-    )
-    {
-        Func<Opcode, Stream, bool> sender = this.Send;
-
-        _ = sender.BeginInvoke(
-          opcode,
-          stream,
-          ar =>
-          {
-              try
+    ) => _ = Task.Run(() =>
               {
-                  var sent = sender.EndInvoke(ar);
+                  try
+                  {
+                      var sent = this.Send(opcode, stream);
 
-                  completed?.Invoke(sent);
-              }
-              catch (Exception ex)
-              {
-                  this._logger.Error(ex.Message);
-                  this._logger.Debug(ex.ToString());
+                      completed?.Invoke(sent);
+                  }
+                  catch (Exception ex)
+                  {
+                      this._logger.Error(ex.Message);
+                      this._logger.Debug(ex.ToString());
 
-                  this.Error(
-              "An exception has occurred during the callback for an async send.",
-              ex
-            );
-              }
-          },
-          null
-        );
-    }
+                      this.Error("An exception has occurred during the callback for an async send.", ex);
+                  }
+              });
 
     private bool SendBytes(byte[] bytes)
     {
         try
         {
-            this._stream.Write(bytes, 0, bytes.Length);
+            _ = this._stream.WriteAsync(bytes, 0, bytes.Length);
         }
         catch (Exception ex)
         {

@@ -24,7 +24,8 @@ public sealed class DatabaseManager
             Port = databaseConfiguration.Port,
             Server = databaseConfiguration.Hostname,
             UserID = databaseConfiguration.Username,
-            AllowZeroDateTime = true
+            AllowZeroDateTime = true,
+            CharacterSet = "utf8mb4"
         };
 
         this._connectionStr = connectionString.ToString();
