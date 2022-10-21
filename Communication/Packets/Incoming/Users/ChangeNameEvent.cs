@@ -69,12 +69,10 @@ internal class ChangeNameEvent : IPacketEvent
 
         foreach (var roomId in session.User.UsersRooms)
         {
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out var roomOwner))
+            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out var roomOwner))
             {
-                continue;
+                roomOwner.RoomData.OwnerName = newUsername;
             }
-
-            roomOwner.RoomData.OwnerName = newUsername;
 
             WibboEnvironment.GetGame().GetRoomManager().RoomDataRemove(roomId);
         }

@@ -2265,7 +2265,7 @@ public class WebSocket : IDisposable
     {
         try
         {
-            _ = this._stream.WriteAsync(bytes, 0, bytes.Length);
+            this._stream.Write(bytes, 0, bytes.Length);
         }
         catch (Exception ex)
         {

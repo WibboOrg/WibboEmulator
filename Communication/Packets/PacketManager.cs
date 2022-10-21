@@ -139,6 +139,29 @@ public sealed class PacketManager
         }
     }
 
+    /*private async Task ExecutePacketAsync(GameClient session, ClientPacket packet, IPacketEvent pak)
+    {
+        if (this._cancellationTokenSource.IsCancellationRequested)
+        {
+            return;
+        }
+
+        var task = new Task(() => pak.Parse(session, packet));
+        task.Start();
+
+        await task.WaitAsync(this._maximumRunTimeInSec, this._cancellationTokenSource.Token).ContinueWith(t =>
+        {
+            if (t.IsFaulted && t.Exception != null)
+            {
+                foreach (var e in t.Exception.Flatten().InnerExceptions)
+                {
+                    var messageError = string.Format("Error handling packet {0} for session {1} @ User Name {2}: {3}", packet.Id, session.ConnectionID, session.GetUser()?.Username ?? string.Empty, e.Message);
+                    ExceptionLogger.LogPacketException(packet.Id.ToString(), messageError);
+                }
+            }
+        });
+    }*/
+
     public void UnregisterAll() => this._incomingPackets.Clear();
 
     private void RegisterCustom()

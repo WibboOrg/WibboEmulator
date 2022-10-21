@@ -233,7 +233,7 @@ public class GameWebSocket : WebSocketBehavior
             return;
         }
 
-        this.Send(bytes);
+        this.SendAsync(bytes, null);
     }
 
     public void Disconnect() => this.Close();
