@@ -79,7 +79,7 @@ internal class SSOTicketEvent : IPacketEvent
 
                 var packetList = new ServerPacketList();
                 packetList.Add(new NavigatorHomeRoomComposer(session.User.HomeRoom, session.User.HomeRoom));
-                packetList.Add(new FavouritesComposer(session.User.FavoriteRooms));
+                //packetList.Add(new FavouritesComposer(session.User.FavoriteRooms));
                 packetList.Add(new FigureSetIdsComposer());
                 packetList.Add(new UserRightsComposer(session.User.Rank < 2 ? 2 : session.User.Rank));
                 packetList.Add(new AvailabilityStatusComposer());
@@ -87,7 +87,7 @@ internal class SSOTicketEvent : IPacketEvent
                 packetList.Add(new BuildersClubMembershipComposer());
                 packetList.Add(new CfhTopicsInitComposer(WibboEnvironment.GetGame().GetModerationManager().UserActionPresets));
                 packetList.Add(new UserSettingsComposer(session.User.ClientVolume, session.User.OldChat, session.User.IgnoreRoomInvites, session.User.CameraFollowDisabled, 1, 0));
-                packetList.Add(new AvatarEffectsComposer(WibboEnvironment.GetGame().GetEffectManager().Effects));
+                //packetList.Add(new AvatarEffectsComposer(WibboEnvironment.GetGame().GetEffectManager().Effects));
 
                 packetList.Add(new ActivityPointNotificationComposer(session.User.Duckets, 1));
                 packetList.Add(new CreditBalanceComposer(session.User.Credits));

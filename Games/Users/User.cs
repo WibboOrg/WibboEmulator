@@ -260,12 +260,12 @@ public class User : IDisposable
             this.Quests.Add(questId, progress);
         }
 
-        var dFavorites = UserFavoriteDao.GetAll(dbClient, this.Id);
+        /*var dFavorites = UserFavoriteDao.GetAll(dbClient, this.Id);
         foreach (DataRow dataRow in dFavorites.Rows)
         {
             var roomId = Convert.ToInt32(dataRow["room_id"]);
             this.FavoriteRooms.Add(roomId);
-        }
+        }*/
 
         var dRoomRights = RoomRightDao.GetAllByUserId(dbClient, this.Id);
         foreach (DataRow dataRow in dRoomRights.Rows)

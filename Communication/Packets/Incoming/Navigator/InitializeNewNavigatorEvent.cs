@@ -16,7 +16,6 @@ internal class InitializeNewNavigatorEvent : IPacketEvent
         packetList.Add(new NavigatorMetaDataParserComposer(topLevelItems));
         packetList.Add(new NavigatorLiftedRoomsComposer());
         packetList.Add(new NavigatorCollapsedCategoriesComposer());
-        packetList.Add(new NavigatorPreferencesComposer());
 
         session.SendPacket(packetList);
     }

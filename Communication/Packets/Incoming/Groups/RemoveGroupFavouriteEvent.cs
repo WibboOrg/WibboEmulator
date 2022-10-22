@@ -11,15 +11,16 @@ internal class RemoveGroupFavouriteEvent : IPacketEvent
     {
         session.User.FavouriteGroupId = 0;
 
-        if (session.User.InRoom)
+        var room = session.User.CurrentRoom;
+        if (room != null)
         {
-            var userRoom = session.User.CurrentRoom.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+            var userRoom = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
             if (userRoom != null)
             {
-                session.User.CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(null, userRoom.VirtualId));
+                room.SendPacket(new UpdateFavouriteGroupComposer(null, userRoom.VirtualId));
             }
 
-            session.User.CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
+            room.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
         }
         else
         {
