@@ -104,6 +104,9 @@ internal class TcpListenerWebSocketContext : WebSocketContext, IDisposable
             this.Stream = netStream;
         }
 
+        this.Stream.ReadTimeout = 5 * 1000;
+        this.Stream.WriteTimeout = 5 * 1000;
+
         var sock = tcpClient.Client;
         this._serverEndPoint = sock.LocalEndPoint;
         this._userEndPoint = sock.RemoteEndPoint;

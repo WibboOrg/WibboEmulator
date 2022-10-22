@@ -571,8 +571,7 @@ public class Room
                 continue;
             }
 
-            user.Client.
-            Connection.SendData(packet);
+            user.Client.Connection.SendData(packet);
         }
     }
 
