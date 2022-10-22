@@ -1581,7 +1581,6 @@ public class WebSocketSessionManager : IDisposable
       Stream stream, int length, string id, Action<bool> completed
     )
     {
-
         if (!this.TryGetSession(id, out var session))
         {
             var msg = "The session could not be found.";

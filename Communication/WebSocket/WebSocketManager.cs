@@ -27,7 +27,11 @@ public class WebSocketManager
         this._bannedIp = new List<string>();
         this._webSocketOrigins = webSocketOrigins;
 
-        this._webSocketServer = new WebSocketServer(IPAddress.Any, port, isSecure);
+        this._webSocketServer = new WebSocketServer(IPAddress.Any, port, isSecure)
+        {
+            AllowForwardedRequest = true
+        };
+
         if (isSecure)
         {
             var pemFile = WibboEnvironment.GetSettings().GetData<string>("game.ssl.pem.file.path");
@@ -47,7 +51,7 @@ public class WebSocketManager
         this._webSocketServer.Log.File = WibboEnvironment.PatchDir + "/logs/websocketSharp.txt";
         if (Debugger.IsAttached)
         {
-            this._webSocketServer.Log.Level = LogLevel.Debug;
+            this._webSocketServer.Log.Level = LogLevel.Trace;
         }
         else
         {

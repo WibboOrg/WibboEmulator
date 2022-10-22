@@ -1011,7 +1011,7 @@ public abstract class WebSocketBehavior : IWebSocketSession
     /// <exception cref="ArgumentNullException">
     /// <paramref name="data"/> is <see langword="null"/>.
     /// </exception>
-    protected void SendAsync(byte[] data, Action<bool> completed)
+    protected void SendAsync(byte[] data, Action<bool> completed = null)
     {
         if (this._websocket == null)
         {
