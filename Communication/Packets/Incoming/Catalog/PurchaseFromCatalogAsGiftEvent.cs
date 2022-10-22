@@ -19,7 +19,8 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
     {
         var pageId = packet.PopInt();
         var itemId = packet.PopInt();
-        var data = packet.PopString();
+
+        _ = packet.PopString();
         var giftUser = StringCharFilter.Escape(packet.PopString());
         var giftMessage = StringCharFilter.Escape(packet.PopString().Replace(Convert.ToChar(5), ' '));
         var spriteId = packet.PopInt();

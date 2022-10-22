@@ -1,7 +1,6 @@
 namespace WibboEmulator.Games.Users;
 using System.Data;
 using System.Globalization;
-using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;

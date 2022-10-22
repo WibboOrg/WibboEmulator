@@ -70,7 +70,7 @@ internal class PlacePetEvent : IPacketEvent
             BotPetDao.UpdateRoomId(dbClient, pet.PetId, pet.RoomId);
         }
 
-        if (!session.User.InventoryComponent.TryRemovePet(pet.PetId, out var toRemove))
+        if (!session.User.InventoryComponent.TryRemovePet(pet.PetId, out _))
         {
             return;
         }
