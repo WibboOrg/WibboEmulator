@@ -20,7 +20,7 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
         var pageId = packet.PopInt();
         var itemId = packet.PopInt();
 
-        _ = packet.PopString();
+        var extraData = packet.PopString();
         var giftUser = StringCharFilter.Escape(packet.PopString());
         var giftMessage = StringCharFilter.Escape(packet.PopString().Replace(Convert.ToChar(5), ' '));
         var spriteId = packet.PopInt();
@@ -103,7 +103,6 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 
         var newItemId = ItemDao.Insert(dbClient, presentData.Id, user.Id, ed);
 
-        var extraData = "";
         switch (item.Data.InteractionType)
         {
             case InteractionType.NONE:
