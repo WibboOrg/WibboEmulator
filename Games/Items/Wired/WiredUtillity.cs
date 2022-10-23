@@ -72,7 +72,6 @@ public class WiredUtillity
 public class ItemsPosReset
 {
     public int Id { get; set; }
-
     public int X { get; set; }
     public int Y { get; set; }
     public double Z { get; set; }
@@ -86,7 +85,6 @@ public class ItemsPosReset
         this.Y = y;
         this.Z = z;
         this.Rot = rot;
-
 
         if (int.TryParse(extraData, out _) || (!extraData.Contains(';') && !extraData.Contains(':')))
         {

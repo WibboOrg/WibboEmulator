@@ -832,6 +832,11 @@ public static class Ext
             {
                 try
                 {
+                    if (stream == null)
+                    {
+                        return;
+                    }
+
                     var nread = stream.EndRead(ar);
 
                     if (nread <= 0)

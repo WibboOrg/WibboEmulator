@@ -43,9 +43,10 @@ internal class JoinGroupEvent : IPacketEvent
             session.SendPacket(new GroupFurniConfigComposer(WibboEnvironment.GetGame().GetGroupManager().GetGroupsForUser(session.User.MyGroups)));
             session.SendPacket(new GroupInfoComposer(group, session));
 
-            if (session.User.CurrentRoom != null)
+            var room = session.User.CurrentRoom;
+            if (room != null)
             {
-                session.User.CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
+                room.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
             }
             else
             {

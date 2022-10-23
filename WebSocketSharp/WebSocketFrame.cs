@@ -656,12 +656,12 @@ Extended Payload Length: {7}
 
         if (frame.PayloadLength < 127)
         {
-            stream.ReadBytesAsync((int)exactLen, comp, error);
+            stream?.ReadBytesAsync((int)exactLen, comp, error);
 
             return;
         }
 
-        stream.ReadBytesAsync(len, 1024, comp, error);
+        stream?.ReadBytesAsync(len, 1024, comp, error);
     }
 
     private static string Utf8Decode(byte[] bytes)

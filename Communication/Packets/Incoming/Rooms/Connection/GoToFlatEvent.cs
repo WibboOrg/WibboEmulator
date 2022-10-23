@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Connection;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Connection;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Games.GameClients;
 
@@ -13,7 +13,14 @@ internal class GoToFlatEvent : IPacketEvent
             return;
         }
 
-        if (!session.User.EnterRoom(session.User.CurrentRoom))
+        var room = session.User.CurrentRoom;
+
+        if (room == null)
+        {
+            return;
+        }
+
+        if (!session.User.EnterRoom(room))
         {
             session.SendPacket(new CloseConnectionComposer());
         }

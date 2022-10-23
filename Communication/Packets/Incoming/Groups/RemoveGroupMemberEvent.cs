@@ -36,12 +36,12 @@ internal class RemoveGroupMemberEvent : IPacketEvent
                     group.TakeAdmin(userId);
                 }
 
-                if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var room))
+                if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var roomGroup))
                 {
                     return;
                 }
 
-                var userRom = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+                var userRom = roomGroup.RoomUserManager.GetRoomUserByUserId(session.User.Id);
                 if (userRom != null)
                 {
                     userRom.RemoveStatus("flatctrl");
@@ -66,12 +66,12 @@ internal class RemoveGroupMemberEvent : IPacketEvent
 
                 if (group.AdminOnlyDeco == 0)
                 {
-                    if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var room))
+                    if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var roomGroup))
                     {
                         return;
                     }
 
-                    var userRoom = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+                    var userRoom = roomGroup.RoomUserManager.GetRoomUserByUserId(session.User.Id);
                     if (userRoom != null)
                     {
                         userRoom.RemoveStatus("flatctrl");
@@ -84,15 +84,16 @@ internal class RemoveGroupMemberEvent : IPacketEvent
                     }
                 }
 
-                if (session.User.InRoom && session.User.CurrentRoom != null)
+                var room = session.User.CurrentRoom;
+                if (room != null)
                 {
-                    var userRoom = session.User.CurrentRoom.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+                    var userRoom = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
                     if (userRoom != null)
                     {
-                        session.User.CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(group, userRoom.VirtualId));
+                        room.SendPacket(new UpdateFavouriteGroupComposer(group, userRoom.VirtualId));
                     }
 
-                    session.User.CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
+                    room.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
                 }
                 else
                 {

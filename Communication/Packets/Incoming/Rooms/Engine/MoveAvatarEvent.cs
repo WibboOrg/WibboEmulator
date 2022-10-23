@@ -7,13 +7,13 @@ internal class MoveAvatarEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var currentRoom = session.User.CurrentRoom;
-        if (currentRoom == null)
+        var room = session.User.CurrentRoom;
+        if (room == null)
         {
             return;
         }
 
-        var user = currentRoom.RoomUserManager.GetRoomUserByUserId(session.User.ControlUserId == 0 ? session.User.Id : session.User.ControlUserId);
+        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.ControlUserId == 0 ? session.User.Id : session.User.ControlUserId);
         if (user == null || (!user.CanWalk && !user.TeleportEnabled))
         {
             return;

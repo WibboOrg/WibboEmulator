@@ -45,7 +45,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
@@ -70,7 +69,6 @@ public class WebSocket : IDisposable
 {
     #region Private Fields
 
-    private AuthenticationChallenge _authChallenge;
     private string _base64Key;
     private readonly bool _client;
     private Action _closeContext;
@@ -78,7 +76,6 @@ public class WebSocket : IDisposable
     private WebSocketContext _context;
     private bool _enableRedirection;
     private string _extensions;
-    private bool _extensionsRequested;
     private object _forMessageEventQueue;
     private object _forPing;
     private object _forSend;
@@ -90,25 +87,15 @@ public class WebSocket : IDisposable
     private bool _inContinuation;
     private volatile bool _inMessage;
     private volatile Logger _logger;
-    private static readonly int MaxRetryCountForConnect;
     private readonly Action<MessageEventArgs> _message;
     private Queue<MessageEventArgs> _messageEventQueue;
-    private uint _nonceCount;
     private string _origin;
     private ManualResetEvent _pongReceived;
-    private bool _preAuth;
     private string _protocol;
-    private readonly string[] _protocols;
-    private bool _protocolsRequested;
-    private NetworkCredential _proxyCredentials;
-    private Uri _proxyUri;
     private volatile WebSocketState _readyState;
     private ManualResetEvent _receivingExited;
-    private int _retryCountForConnect;
-    private ClientSslConfiguration _sslConfig;
     private Stream _stream;
     private TcpClient _tcpClient;
-    private Uri _uri;
     private const string VERSION = "13";
     private TimeSpan _waitTime;
 
@@ -146,7 +133,6 @@ public class WebSocket : IDisposable
 
     static WebSocket()
     {
-        MaxRetryCountForConnect = 10;
         EmptyBytes = Array.Empty<byte>();
         FragmentLength = 1016;
         RandomNumber = RandomNumberGenerator.Create();
@@ -191,95 +177,6 @@ public class WebSocket : IDisposable
     #endregion
 
     #region Public Constructors
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="WebSocket"/> class with
-    /// <paramref name="url"/> and optionally <paramref name="protocols"/>.
-    /// </summary>
-    /// <param name="url">
-    ///   <para>
-    ///   A <see cref="string"/> that specifies the URL to which to connect.
-    ///   </para>
-    ///   <para>
-    ///   The scheme of the URL must be ws or wss.
-    ///   </para>
-    ///   <para>
-    ///   The new instance uses a secure connection if the scheme is wss.
-    ///   </para>
-    /// </param>
-    /// <param name="protocols">
-    ///   <para>
-    ///   An array of <see cref="string"/> that specifies the names of
-    ///   the subprotocols if necessary.
-    ///   </para>
-    ///   <para>
-    ///   Each value of the array must be a token defined in
-    ///   <see href="http://tools.ietf.org/html/rfc2616#section-2.2">
-    ///   RFC 2616</see>.
-    ///   </para>
-    /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="url"/> is <see langword="null"/>.
-    /// </exception>
-    /// <exception cref="ArgumentException">
-    ///   <para>
-    ///   <paramref name="url"/> is an empty string.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   <paramref name="url"/> is an invalid WebSocket URL string.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   <paramref name="protocols"/> contains a value that is not a token.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   <paramref name="protocols"/> contains a value twice.
-    ///   </para>
-    /// </exception>
-    public WebSocket(string url, params string[] protocols)
-    {
-        if (url == null)
-        {
-            throw new ArgumentNullException(nameof(url));
-        }
-
-        if (url.Length == 0)
-        {
-            throw new ArgumentException("An empty string.", nameof(url));
-        }
-
-        if (!url.TryCreateWebSocketUri(out this._uri, out var msg))
-        {
-            throw new ArgumentException(msg, nameof(url));
-        }
-
-        if (protocols != null && protocols.Length > 0)
-        {
-            if (!CheckProtocols(protocols, out msg))
-            {
-                throw new ArgumentException(msg, nameof(protocols));
-            }
-
-            this._protocols = protocols;
-        }
-
-        this._base64Key = CreateBase64Key();
-        this._client = true;
-        this._logger = new Logger();
-        this._message = this.Messagec;
-        this.IsSecure = this._uri.Scheme == "wss";
-        this._waitTime = TimeSpan.FromSeconds(5);
-
-        this.Init();
-    }
 
     #endregion
 
@@ -632,53 +529,6 @@ public class WebSocket : IDisposable
     public WebSocketState ReadyState => this._readyState;
 
     /// <summary>
-    /// Gets the configuration for secure connection.
-    /// </summary>
-    /// <remarks>
-    /// This configuration will be referenced when attempts to connect,
-    /// so it must be configured before any connect method is called.
-    /// </remarks>
-    /// <value>
-    /// A <see cref="ClientSslConfiguration"/> that represents
-    /// the configuration used to establish a secure connection.
-    /// </value>
-    /// <exception cref="InvalidOperationException">
-    ///   <para>
-    ///   This instance is not a client.
-    ///   </para>
-    ///   <para>
-    ///   This instance does not use a secure connection.
-    ///   </para>
-    /// </exception>
-    public ClientSslConfiguration SslConfiguration
-    {
-        get
-        {
-            if (!this._client)
-            {
-                var msg = "This instance is not a client.";
-                throw new InvalidOperationException(msg);
-            }
-
-            if (!this.IsSecure)
-            {
-                var msg = "This instance does not use a secure connection.";
-                throw new InvalidOperationException(msg);
-            }
-
-            return this.GetSslConfiguration();
-        }
-    }
-
-    /// <summary>
-    /// Gets the URL to which to connect.
-    /// </summary>
-    /// <value>
-    /// A <see cref="Uri"/> that represents the URL to which to connect.
-    /// </value>
-    public Uri Url => this._client ? this._uri : this._context.RequestUri;
-
-    /// <summary>
     /// Gets or sets the time to wait for the response to the ping or close.
     /// </summary>
     /// <remarks>
@@ -964,120 +814,6 @@ public class WebSocket : IDisposable
         return true;
     }
 
-    // As client
-    private bool CheckHandshakeResponse(
-      HttpResponse response, out string message
-    )
-    {
-        message = null;
-
-        if (response.IsRedirect)
-        {
-            message = "The redirection is indicated.";
-
-            return false;
-        }
-
-        if (response.IsUnauthorized)
-        {
-            message = "The authentication is required.";
-
-            return false;
-        }
-
-        if (!response.IsWebSocketResponse)
-        {
-            message = "Not a WebSocket handshake response.";
-
-            return false;
-        }
-
-        var headers = response.Headers;
-
-        var key = headers["Sec-WebSocket-Accept"];
-
-        if (key == null)
-        {
-            message = "The Sec-WebSocket-Accept header is non-existent.";
-
-            return false;
-        }
-
-        if (key != CreateResponseKey(this._base64Key))
-        {
-            message = "The Sec-WebSocket-Accept header is invalid.";
-
-            return false;
-        }
-
-        var ver = headers["Sec-WebSocket-Version"];
-
-        if (ver is not null and not VERSION)
-        {
-            message = "The Sec-WebSocket-Version header is invalid.";
-
-            return false;
-        }
-
-        var subp = headers["Sec-WebSocket-Protocol"];
-
-        if (subp == null)
-        {
-            if (this._protocolsRequested)
-            {
-                message = "The Sec-WebSocket-Protocol header is non-existent.";
-
-                return false;
-            }
-        }
-        else
-        {
-            var valid = subp.Length > 0
-                        && this._protocolsRequested
-                        && this._protocols.Contains(p => p == subp);
-
-            if (!valid)
-            {
-                message = "The Sec-WebSocket-Protocol header is invalid.";
-
-                return false;
-            }
-        }
-
-        var exts = headers["Sec-WebSocket-Extensions"];
-
-        if (!this.ValidateSecWebSocketExtensionsServerHeader(exts))
-        {
-            message = "The Sec-WebSocket-Extensions header is invalid.";
-
-            return false;
-        }
-
-        return true;
-    }
-
-    private static bool CheckProtocols(string[] protocols, out string message)
-    {
-        message = null;
-
-        static bool cond(string protocol) => protocol.IsNullOrEmpty()
-                                              || !protocol.IsToken();
-
-        if (protocols.Contains(cond))
-        {
-            message = "It contains a value that is not a token.";
-            return false;
-        }
-
-        if (protocols.ContainsTwice())
-        {
-            message = "It contains a value twice.";
-            return false;
-        }
-
-        return true;
-    }
-
     private bool CheckReceivedFrame(WebSocketFrame frame, out string message)
     {
         message = null;
@@ -1282,175 +1018,12 @@ public class WebSocket : IDisposable
         return ret;
     }
 
-    // As client
-    private bool ConnectWS()
-    {
-        if (this._readyState == WebSocketState.Open)
-        {
-            var msg = "The connection has already been established.";
-            this._logger.Warn(msg);
-
-            return false;
-        }
-
-        lock (this._forState)
-        {
-            if (this._readyState == WebSocketState.Open)
-            {
-                var msg = "The connection has already been established.";
-                this._logger.Warn(msg);
-
-                return false;
-            }
-
-            if (this._readyState == WebSocketState.Closing)
-            {
-                var msg = "The close process has set in.";
-                this._logger.Error(msg);
-
-                msg = "An interruption has occurred while attempting to connect.";
-                this.Error(msg, null);
-
-                return false;
-            }
-
-            if (this._retryCountForConnect > MaxRetryCountForConnect)
-            {
-                var msg = "An opportunity for reconnecting has been lost.";
-                this._logger.Error(msg);
-
-                msg = "An interruption has occurred while attempting to connect.";
-                this.Error(msg, null);
-
-                return false;
-            }
-
-            this._readyState = WebSocketState.Connecting;
-
-            try
-            {
-                this.DoHandshake();
-            }
-            catch (Exception ex)
-            {
-                this._retryCountForConnect++;
-
-                this._logger.Fatal(ex.Message);
-                this._logger.Debug(ex.ToString());
-
-                var msg = "An exception has occurred while attempting to connect.";
-                this.Fatal(msg, ex);
-
-                return false;
-            }
-
-            this._retryCountForConnect = 1;
-            this._readyState = WebSocketState.Open;
-
-            return true;
-        }
-    }
-
-    // As client
-    private AuthenticationResponse CreateAuthenticationResponse()
-    {
-        if (this.Credentials == null)
-        {
-            return null;
-        }
-
-        if (this._authChallenge != null)
-        {
-            var ret = new AuthenticationResponse(
-                        this._authChallenge, this.Credentials, this._nonceCount
-                      );
-
-            this._nonceCount = ret.NonceCount;
-
-            return ret;
-        }
-
-        return this._preAuth ? new AuthenticationResponse(this.Credentials) : null;
-    }
-
-    // As client
-    private string CreateExtensions()
-    {
-        var buff = new StringBuilder(80);
-
-        if (this._compression != CompressionMethod.None)
-        {
-            var str = this._compression.ToExtensionString(
-                        "server_no_context_takeover", "client_no_context_takeover"
-                      );
-
-            _ = buff.AppendFormat("{0}, ", str);
-        }
-
-        var len = buff.Length;
-
-        if (len <= 2)
-        {
-            return null;
-        }
-
-        buff.Length = len - 2;
-
-        return buff.ToString();
-    }
-
     // As server
     private static HttpResponse CreateHandshakeFailureResponse(HttpStatusCode code)
     {
         var ret = HttpResponse.CreateCloseResponse(code);
 
         ret.Headers["Sec-WebSocket-Version"] = VERSION;
-
-        return ret;
-    }
-
-    // As client
-    private HttpRequest CreateHandshakeRequest()
-    {
-        var ret = HttpRequest.CreateWebSocketHandshakeRequest(this._uri);
-
-        var headers = ret.Headers;
-
-        headers["Sec-WebSocket-Key"] = this._base64Key;
-        headers["Sec-WebSocket-Version"] = VERSION;
-
-        if (!this._origin.IsNullOrEmpty())
-        {
-            headers["Origin"] = this._origin;
-        }
-
-        if (this._protocols != null)
-        {
-            headers["Sec-WebSocket-Protocol"] = this._protocols.ToString(", ");
-
-            this._protocolsRequested = true;
-        }
-
-        var exts = this.CreateExtensions();
-
-        if (exts != null)
-        {
-            headers["Sec-WebSocket-Extensions"] = exts;
-
-            this._extensionsRequested = true;
-        }
-
-        var ares = this.CreateAuthenticationResponse();
-
-        if (ares != null)
-        {
-            headers["Authorization"] = ares.ToString();
-        }
-
-        if (this.CookieCollection.Count > 0)
-        {
-            ret.SetCookies(this.CookieCollection);
-        }
 
         return ret;
     }
@@ -1499,34 +1072,6 @@ public class WebSocket : IDisposable
         return message == null;
     }
 
-    // As client
-    private void DoHandshake()
-    {
-        this.SetClientStream();
-
-        var res = this.SendHandshakeRequest();
-
-
-        if (!this.CheckHandshakeResponse(res, out var msg))
-        {
-            throw new WebSocketException(CloseStatusCode.ProtocolError, msg);
-        }
-
-        if (this._protocolsRequested)
-        {
-            this._protocol = res.Headers["Sec-WebSocket-Protocol"];
-        }
-
-        if (this._extensionsRequested)
-        {
-            var val = res.Headers["Sec-WebSocket-Extensions"];
-
-            this.ProcessSecWebSocketExtensionsServerHeader(val);
-        }
-
-        this.ProcessCookies(res.Cookies);
-    }
-
     private void EnqueueToMessageEventQueue(MessageEventArgs e)
     {
         lock (this._forMessageEventQueue)
@@ -1564,13 +1109,6 @@ public class WebSocket : IDisposable
         var data = new PayloadData(code, message);
 
         this.Close(data, false, false);
-    }
-
-    private ClientSslConfiguration GetSslConfiguration()
-    {
-        this._sslConfig ??= new ClientSslConfiguration(this._uri.DnsSafeHost);
-
-        return this._sslConfig;
     }
 
     private void Init()
@@ -1612,44 +1150,6 @@ public class WebSocket : IDisposable
         }
 
         this._message(e);
-    }
-
-    private void Messagec(MessageEventArgs e)
-    {
-        do
-        {
-            try
-            {
-                OnMessage.Emit(this, e);
-            }
-            catch (Exception ex)
-            {
-                this._logger.Error(ex.Message);
-                this._logger.Debug(ex.ToString());
-
-                this.Error("An exception has occurred during an OnMessage event.", ex);
-            }
-
-            lock (this._forMessageEventQueue)
-            {
-                if (this._messageEventQueue.Count == 0)
-                {
-                    this._inMessage = false;
-
-                    break;
-                }
-
-                if (this._readyState != WebSocketState.Open)
-                {
-                    this._inMessage = false;
-
-                    break;
-                }
-
-                e = this._messageEventQueue.Dequeue();
-            }
-        }
-        while (true);
     }
 
     private void Messages(MessageEventArgs e)
@@ -1729,7 +1229,7 @@ public class WebSocket : IDisposable
 
         if (this._message != null)
         {
-            _ = this._message.BeginInvoke(e, ar => this._message.EndInvoke(ar), null);
+            _ = Task.Run(() => this._message(e));
         }
     }
 
@@ -1777,17 +1277,6 @@ public class WebSocket : IDisposable
         this.Close(data, send, true);
 
         return false;
-    }
-
-    // As client
-    private void ProcessCookies(CookieCollection cookies)
-    {
-        if (cookies.Count == 0)
-        {
-            return;
-        }
-
-        this.CookieCollection.SetOrRemove(cookies);
     }
 
     private bool ProcessDataFrame(WebSocketFrame frame)
@@ -1980,19 +1469,6 @@ public class WebSocket : IDisposable
         buff.Length = len - 2;
 
         this._extensions = buff.ToString();
-    }
-
-    // As client
-    private void ProcessSecWebSocketExtensionsServerHeader(string value)
-    {
-        if (value == null)
-        {
-            this._compression = CompressionMethod.None;
-
-            return;
-        }
-
-        this._extensions = value;
     }
 
     // As server
@@ -2278,122 +1754,6 @@ public class WebSocket : IDisposable
         return true;
     }
 
-    // As client
-    private HttpResponse SendHandshakeRequest()
-    {
-        var req = this.CreateHandshakeRequest();
-        var res = this.SendHttpRequest(req, 90000);
-
-        if (res.IsUnauthorized)
-        {
-            if (this.Credentials == null)
-            {
-                this._logger.Error("No credential is specified.");
-
-                return res;
-            }
-
-            var val = res.Headers["WWW-Authenticate"];
-
-            if (val.IsNullOrEmpty())
-            {
-                this._logger.Error("No authentication challenge is specified.");
-
-                return res;
-            }
-
-            var achal = AuthenticationChallenge.Parse(val);
-
-            if (achal == null)
-            {
-                this._logger.Error("An invalid authentication challenge is specified.");
-
-                return res;
-            }
-
-            this._authChallenge = achal;
-
-            var failed = this._preAuth
-                         && this._authChallenge.Scheme == AuthenticationSchemes.Basic;
-
-            if (failed)
-            {
-                this._logger.Error("The authentication has failed.");
-
-                return res;
-            }
-
-            var ares = new AuthenticationResponse(
-                         this._authChallenge, this.Credentials, this._nonceCount
-                       );
-
-            this._nonceCount = ares.NonceCount;
-
-            req.Headers["Authorization"] = ares.ToString();
-
-            if (res.CloseConnection)
-            {
-                this.ReleaseClientResources();
-                this.SetClientStream();
-            }
-
-            res = this.SendHttpRequest(req, 15000);
-        }
-
-        if (res.IsRedirect)
-        {
-            if (!this._enableRedirection)
-            {
-                return res;
-            }
-
-            var val = res.Headers["Location"];
-
-            if (val.IsNullOrEmpty())
-            {
-                this._logger.Error("No url to redirect is located.");
-
-                return res;
-            }
-
-            if (!val.TryCreateWebSocketUri(out var uri, out _))
-            {
-                this._logger.Error("An invalid url to redirect is located.");
-
-                return res;
-            }
-
-            this.ReleaseClientResources();
-
-            this._uri = uri;
-            this.IsSecure = uri.Scheme == "wss";
-
-            this.SetClientStream();
-
-            return this.SendHandshakeRequest();
-        }
-
-        return res;
-    }
-
-    // As client
-    private HttpResponse SendHttpRequest(
-      HttpRequest request, int millisecondsTimeout
-    )
-    {
-        var msg = "An HTTP request to the server:\n" + request.ToString();
-
-        this._logger.Trace(msg);
-
-        var res = request.GetResponse(this._stream, millisecondsTimeout);
-
-        msg = "An HTTP response from the server:\n" + res.ToString();
-
-        this._logger.Trace(msg);
-
-        return res;
-    }
-
     // As server
     private bool SendHttpResponse(HttpResponse response)
     {
@@ -2405,126 +1765,6 @@ public class WebSocket : IDisposable
         var bytes = response.ToByteArray();
 
         return this.SendBytes(bytes);
-    }
-
-    // As client
-    private void SendProxyConnectRequest()
-    {
-        var req = HttpRequest.CreateConnectRequest(this._uri);
-        var res = this.SendHttpRequest(req, 90000);
-
-        if (res.IsProxyAuthenticationRequired)
-        {
-            if (this._proxyCredentials == null)
-            {
-                var msg = "No credential for the proxy is specified.";
-
-                throw new WebSocketException(msg);
-            }
-
-            var val = res.Headers["Proxy-Authenticate"];
-
-            if (val.IsNullOrEmpty())
-            {
-                var msg = "No proxy authentication challenge is specified.";
-
-                throw new WebSocketException(msg);
-            }
-
-            var achal = AuthenticationChallenge.Parse(val);
-
-            if (achal == null)
-            {
-                var msg = "An invalid proxy authentication challenge is specified.";
-
-                throw new WebSocketException(msg);
-            }
-
-            var ares = new AuthenticationResponse(achal, this._proxyCredentials, 0);
-
-            req.Headers["Proxy-Authorization"] = ares.ToString();
-
-            if (res.CloseConnection)
-            {
-                this.ReleaseClientResources();
-
-                this._tcpClient = new TcpClient(this._proxyUri.DnsSafeHost, this._proxyUri.Port);
-                this._stream = this._tcpClient.GetStream();
-            }
-
-            res = this.SendHttpRequest(req, 15000);
-
-            if (res.IsProxyAuthenticationRequired)
-            {
-                var msg = "The proxy authentication has failed.";
-
-                throw new WebSocketException(msg);
-            }
-        }
-
-        if (!res.IsSuccess)
-        {
-            var msg = "The proxy has failed a connection to the requested URL.";
-
-            throw new WebSocketException(msg);
-        }
-    }
-
-    // As client
-    private void SetClientStream()
-    {
-        if (this._proxyUri != null)
-        {
-            this._tcpClient = new TcpClient(this._proxyUri.DnsSafeHost, this._proxyUri.Port);
-            this._stream = this._tcpClient.GetStream();
-
-            this.SendProxyConnectRequest();
-        }
-        else
-        {
-            this._tcpClient = new TcpClient(this._uri.DnsSafeHost, this._uri.Port);
-            this._stream = this._tcpClient.GetStream();
-        }
-
-        if (this.IsSecure)
-        {
-            var conf = this.GetSslConfiguration();
-            var host = conf.TargetHost;
-
-            if (host != this._uri.DnsSafeHost)
-            {
-                var msg = "An invalid host name is specified.";
-
-                throw new WebSocketException(
-                        CloseStatusCode.TlsHandshakeFailure, msg
-                      );
-            }
-
-            try
-            {
-                var sslStream = new SslStream(
-                                  this._stream,
-                                  false,
-                                  conf.ServerCertificateValidationCallback,
-                                  conf.ClientCertificateSelectionCallback
-                                );
-
-                sslStream.AuthenticateAsClient(
-                  host,
-                  conf.ClientCertificates,
-                  conf.EnabledSslProtocols,
-                  conf.CheckCertificateRevocation
-                );
-
-                this._stream = sslStream;
-            }
-            catch (Exception ex)
-            {
-                throw new WebSocketException(
-                        CloseStatusCode.TlsHandshakeFailure, ex
-                      );
-            }
-        }
     }
 
     private void StartReceiving()
@@ -2583,75 +1823,6 @@ public class WebSocket : IDisposable
         receive();
     }
 
-    // As client
-    private bool ValidateSecWebSocketExtensionsServerHeader(string value)
-    {
-        if (value == null)
-        {
-            return true;
-        }
-
-        if (value.Length == 0)
-        {
-            return false;
-        }
-
-        if (!this._extensionsRequested)
-        {
-            return false;
-        }
-
-        var comp = this._compression != CompressionMethod.None;
-
-        foreach (var elm in value.SplitHeaderValue(','))
-        {
-            var ext = elm.Trim();
-
-            if (comp && ext.IsCompressionExtension(this._compression))
-            {
-                var param1 = "server_no_context_takeover";
-                var param2 = "client_no_context_takeover";
-
-                if (!ext.Contains(param1))
-                {
-                    var fmt = "The server did not send back '{0}'.";
-                    var msg = string.Format(fmt, param1);
-
-                    this._logger.Error(msg);
-
-                    return false;
-                }
-
-                var name = this._compression.ToExtensionString();
-                var invalid = ext.SplitHeaderValue(';').Contains(
-                                t =>
-                                {
-                                    t = t.Trim();
-
-                                    var valid = t == name
-                                      || t == param1
-                                      || t == param2;
-
-                                    return !valid;
-                                }
-                              );
-
-                if (invalid)
-                {
-                    return false;
-                }
-
-                comp = false;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     #endregion
 
     #region Internal Methods
@@ -2667,27 +1838,6 @@ public class WebSocket : IDisposable
         }
 
         this.OpenWS();
-    }
-
-    // As server
-    internal void AcceptAsync()
-    {
-        Func<bool> acceptor = this.AcceptWS;
-
-        _ = acceptor.BeginInvoke(
-          ar =>
-          {
-              var accepted = acceptor.EndInvoke(ar);
-
-              if (!accepted)
-              {
-                  return;
-              }
-
-              this.OpenWS();
-          },
-          null
-        );
     }
 
     // As server
@@ -2760,15 +1910,6 @@ public class WebSocket : IDisposable
             this._logger.Error(ex.Message);
             this._logger.Debug(ex.ToString());
         }
-    }
-
-    // As client
-    internal static string CreateBase64Key()
-    {
-        var src = new byte[16];
-        RandomNumber.GetBytes(src);
-
-        return Convert.ToBase64String(src);
     }
 
     internal static string CreateResponseKey(string base64Key)
@@ -3571,117 +2712,6 @@ public class WebSocket : IDisposable
     }
 
     /// <summary>
-    /// Establishes a connection.
-    /// </summary>
-    /// <remarks>
-    /// This method does nothing if the connection has already been established.
-    /// </remarks>
-    /// <exception cref="InvalidOperationException">
-    ///   <para>
-    ///   This instance is not a client.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   The close process is in progress.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   A series of reconnecting has failed.
-    ///   </para>
-    /// </exception>
-    public void Connect()
-    {
-        if (!this._client)
-        {
-            var msg = "This instance is not a client.";
-            throw new InvalidOperationException(msg);
-        }
-
-        if (this._readyState == WebSocketState.Closing)
-        {
-            var msg = "The close process is in progress.";
-            throw new InvalidOperationException(msg);
-        }
-
-        if (this._retryCountForConnect > MaxRetryCountForConnect)
-        {
-            var msg = "A series of reconnecting has failed.";
-            throw new InvalidOperationException(msg);
-        }
-
-        if (this.ConnectWS())
-        {
-            this.OpenWS();
-        }
-    }
-
-    /// <summary>
-    /// Establishes a connection asynchronously.
-    /// </summary>
-    /// <remarks>
-    ///   <para>
-    ///   This method does not wait for the connect process to be complete.
-    ///   </para>
-    ///   <para>
-    ///   This method does nothing if the connection has already been
-    ///   established.
-    ///   </para>
-    /// </remarks>
-    /// <exception cref="InvalidOperationException">
-    ///   <para>
-    ///   This instance is not a client.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   The close process is in progress.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   A series of reconnecting has failed.
-    ///   </para>
-    /// </exception>
-    public void ConnectAsync()
-    {
-        if (!this._client)
-        {
-            var msg = "This instance is not a client.";
-            throw new InvalidOperationException(msg);
-        }
-
-        if (this._readyState == WebSocketState.Closing)
-        {
-            var msg = "The close process is in progress.";
-            throw new InvalidOperationException(msg);
-        }
-
-        if (this._retryCountForConnect > MaxRetryCountForConnect)
-        {
-            var msg = "A series of reconnecting has failed.";
-            throw new InvalidOperationException(msg);
-        }
-
-        Func<bool> connector = this.ConnectWS;
-        _ = connector.BeginInvoke(
-          ar =>
-          {
-              if (connector.EndInvoke(ar))
-              {
-                  this.OpenWS();
-              }
-          },
-          null
-        );
-    }
-
-    /// <summary>
     /// Sends a ping using the WebSocket connection.
     /// </summary>
     /// <returns>
@@ -4207,315 +3237,6 @@ public class WebSocket : IDisposable
         }
 
         this.SendAsync(Opcode.Binary, new MemoryStream(bytes), completed);
-    }
-
-    /// <summary>
-    /// Sets an HTTP cookie to send with the handshake request.
-    /// </summary>
-    /// <remarks>
-    /// This method does nothing if the connection has already been
-    /// established or it is closing.
-    /// </remarks>
-    /// <param name="cookie">
-    /// A <see cref="Cookie"/> that represents the cookie to send.
-    /// </param>
-    /// <exception cref="InvalidOperationException">
-    /// This instance is not a client.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="cookie"/> is <see langword="null"/>.
-    /// </exception>
-    public void SetCookie(Cookie cookie)
-    {
-        string msg;
-        if (!this._client)
-        {
-            msg = "This instance is not a client.";
-            throw new InvalidOperationException(msg);
-        }
-
-        if (cookie == null)
-        {
-            throw new ArgumentNullException(nameof(cookie));
-        }
-
-        if (!this.CanSet(out msg))
-        {
-            this._logger.Warn(msg);
-            return;
-        }
-
-        lock (this._forState)
-        {
-            if (!this.CanSet(out msg))
-            {
-                this._logger.Warn(msg);
-                return;
-            }
-
-            lock (this.CookieCollection.SyncRoot)
-            {
-                this.CookieCollection.SetOrRemove(cookie);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Sets the credentials for the HTTP authentication (Basic/Digest).
-    /// </summary>
-    /// <remarks>
-    /// This method does nothing if the connection has already been
-    /// established or it is closing.
-    /// </remarks>
-    /// <param name="username">
-    ///   <para>
-    ///   A <see cref="string"/> that represents the username associated with
-    ///   the credentials.
-    ///   </para>
-    ///   <para>
-    ///   <see langword="null"/> or an empty string if initializes
-    ///   the credentials.
-    ///   </para>
-    /// </param>
-    /// <param name="password">
-    ///   <para>
-    ///   A <see cref="string"/> that represents the password for the username
-    ///   associated with the credentials.
-    ///   </para>
-    ///   <para>
-    ///   <see langword="null"/> or an empty string if not necessary.
-    ///   </para>
-    /// </param>
-    /// <param name="preAuth">
-    /// <c>true</c> if sends the credentials for the Basic authentication in
-    /// advance with the first handshake request; otherwise, <c>false</c>.
-    /// </param>
-    /// <exception cref="InvalidOperationException">
-    /// This instance is not a client.
-    /// </exception>
-    /// <exception cref="ArgumentException">
-    ///   <para>
-    ///   <paramref name="username"/> contains an invalid character.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   <paramref name="password"/> contains an invalid character.
-    ///   </para>
-    /// </exception>
-    public void SetCredentials(string username, string password, bool preAuth)
-    {
-        string msg;
-        if (!this._client)
-        {
-            msg = "This instance is not a client.";
-            throw new InvalidOperationException(msg);
-        }
-
-        if (!username.IsNullOrEmpty())
-        {
-            if (username.Contains(':') || !username.IsText())
-            {
-                msg = "It contains an invalid character.";
-                throw new ArgumentException(msg, nameof(username));
-            }
-        }
-
-        if (!password.IsNullOrEmpty())
-        {
-            if (!password.IsText())
-            {
-                msg = "It contains an invalid character.";
-                throw new ArgumentException(msg, nameof(password));
-            }
-        }
-
-        if (!this.CanSet(out msg))
-        {
-            this._logger.Warn(msg);
-            return;
-        }
-
-        lock (this._forState)
-        {
-            if (!this.CanSet(out msg))
-            {
-                this._logger.Warn(msg);
-                return;
-            }
-
-            if (username.IsNullOrEmpty())
-            {
-                this.Credentials = null;
-                this._preAuth = false;
-
-                return;
-            }
-
-            this.Credentials = new NetworkCredential(
-                             username, password, this._uri.PathAndQuery
-                           );
-
-            this._preAuth = preAuth;
-        }
-    }
-
-    /// <summary>
-    /// Sets the URL of the HTTP proxy server through which to connect and
-    /// the credentials for the HTTP proxy authentication (Basic/Digest).
-    /// </summary>
-    /// <remarks>
-    /// This method does nothing if the connection has already been
-    /// established or it is closing.
-    /// </remarks>
-    /// <param name="url">
-    ///   <para>
-    ///   A <see cref="string"/> that represents the URL of the proxy server
-    ///   through which to connect.
-    ///   </para>
-    ///   <para>
-    ///   The syntax is http://&lt;host&gt;[:&lt;port&gt;].
-    ///   </para>
-    ///   <para>
-    ///   <see langword="null"/> or an empty string if initializes the URL and
-    ///   the credentials.
-    ///   </para>
-    /// </param>
-    /// <param name="username">
-    ///   <para>
-    ///   A <see cref="string"/> that represents the username associated with
-    ///   the credentials.
-    ///   </para>
-    ///   <para>
-    ///   <see langword="null"/> or an empty string if the credentials are not
-    ///   necessary.
-    ///   </para>
-    /// </param>
-    /// <param name="password">
-    ///   <para>
-    ///   A <see cref="string"/> that represents the password for the username
-    ///   associated with the credentials.
-    ///   </para>
-    ///   <para>
-    ///   <see langword="null"/> or an empty string if not necessary.
-    ///   </para>
-    /// </param>
-    /// <exception cref="InvalidOperationException">
-    /// This instance is not a client.
-    /// </exception>
-    /// <exception cref="ArgumentException">
-    ///   <para>
-    ///   <paramref name="url"/> is not an absolute URI string.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   The scheme of <paramref name="url"/> is not http.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   <paramref name="url"/> includes the path segments.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   <paramref name="username"/> contains an invalid character.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   <paramref name="password"/> contains an invalid character.
-    ///   </para>
-    /// </exception>
-    public void SetProxy(string url, string username, string password)
-    {
-        string msg;
-        if (!this._client)
-        {
-            msg = "This instance is not a client.";
-            throw new InvalidOperationException(msg);
-        }
-
-        Uri uri = null;
-
-        if (!url.IsNullOrEmpty())
-        {
-            if (!Uri.TryCreate(url, UriKind.Absolute, out uri))
-            {
-                msg = "Not an absolute URI string.";
-                throw new ArgumentException(msg, nameof(url));
-            }
-
-            if (uri.Scheme != "http")
-            {
-                msg = "The scheme part is not http.";
-                throw new ArgumentException(msg, nameof(url));
-            }
-
-            if (uri.Segments.Length > 1)
-            {
-                msg = "It includes the path segments.";
-                throw new ArgumentException(msg, nameof(url));
-            }
-        }
-
-        if (!username.IsNullOrEmpty())
-        {
-            if (username.Contains(':') || !username.IsText())
-            {
-                msg = "It contains an invalid character.";
-                throw new ArgumentException(msg, nameof(username));
-            }
-        }
-
-        if (!password.IsNullOrEmpty())
-        {
-            if (!password.IsText())
-            {
-                msg = "It contains an invalid character.";
-                throw new ArgumentException(msg, nameof(password));
-            }
-        }
-
-        if (!this.CanSet(out msg))
-        {
-            this._logger.Warn(msg);
-            return;
-        }
-
-        lock (this._forState)
-        {
-            if (!this.CanSet(out msg))
-            {
-                this._logger.Warn(msg);
-                return;
-            }
-
-            if (url.IsNullOrEmpty())
-            {
-                this._proxyUri = null;
-                this._proxyCredentials = null;
-
-                return;
-            }
-
-            this._proxyUri = uri;
-            this._proxyCredentials = !username.IsNullOrEmpty()
-                                ? new NetworkCredential(
-                                    username,
-                                    password,
-                                    string.Format(
-                                      "{0}:{1}", this._uri.DnsSafeHost, this._uri.Port
-                                    )
-                                  )
-                                : null;
-        }
     }
 
     #endregion

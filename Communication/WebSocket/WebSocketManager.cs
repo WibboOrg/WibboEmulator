@@ -260,14 +260,14 @@ public class GameWebSocket : WebSocketBehavior
 
     private string GetRealIP()
     {
-        var actualIP = this.Context.UserEndPoint.Address.ToString();
+        var actualIP = this.Context.UserEndPoint.Address;
 
-        if (actualIP == "127.0.0.1" && IPAddress.TryParse(this.Headers["X-Real-IP"], out var realIP))
+        if (actualIP.ToString() == "127.0.0.1" && IPAddress.TryParse(this.Headers["X-Real-IP"], out var realIP))
         {
             return realIP.ToString();
         }
 
-        if (IPAddress.TryParse(this.Headers["CF-Connecting-IP"], out realIP))
+        if (IPAddress.TryParse(this.Headers["CF-Connecting-IP"], out var connectiongIP))
         {
             string[] cloudlareIPs = {
                 "173.245.48.0/20", "103.21.244.0/22", "103.22.200.0/22", "103.31.4.0/22", "141.101.64.0/18", "108.162.192.0/18", "190.93.240.0/20",
@@ -278,13 +278,13 @@ public class GameWebSocket : WebSocketBehavior
 
             foreach (var rangeIP in cloudlareIPs)
             {
-                if (IPRange.IsInSubnet(this.Context.UserEndPoint.Address, rangeIP))
+                if (IPRange.IsInSubnet(actualIP, rangeIP))
                 {
-                    return realIP.ToString();
+                    return connectiongIP.ToString();
                 }
             }
         }
 
-        return actualIP;
+        return actualIP.ToString();
     }
 }

@@ -511,9 +511,12 @@ public class RolePlayer
             else
             {
                 this.SendPrison = false;
-                user.Client.User.IsTeleporting = true;
-                user.Client.User.TeleportingRoomID = rpManager.PrisonId;
-                user.Client.SendPacket(new RoomForwardComposer(rpManager.PrisonId));
+                if (user.Client != null && user.Client.User != null)
+                {
+                    user.Client.User.IsTeleporting = true;
+                    user.Client.User.TeleportingRoomID = rpManager.PrisonId;
+                    user.Client.SendPacket(new RoomForwardComposer(rpManager.PrisonId));
+                }
             }
         }
 
@@ -526,9 +529,12 @@ public class RolePlayer
             else
             {
                 this.Dead = false;
-                user.Client.User.IsTeleporting = true;
-                user.Client.User.TeleportingRoomID = rpManager.HopitalId;
-                user.Client.SendPacket(new RoomForwardComposer(rpManager.HopitalId));
+                if (user.Client != null && user.Client.User != null)
+                {
+                    user.Client.User.IsTeleporting = true;
+                    user.Client.User.TeleportingRoomID = rpManager.HopitalId;
+                    user.Client.SendPacket(new RoomForwardComposer(rpManager.HopitalId));
+                }
             }
         }
 
