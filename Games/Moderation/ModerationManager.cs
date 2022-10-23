@@ -338,22 +338,25 @@ public class ModerationManager
             return;
         }
 
-        if (lockRoom)
+        if (lockRoom || inappropriateRoom)
         {
-            room.RoomData.Access = RoomAccess.Doorbell;
-            room.RoomData.Name = "Cet appart ne respecte par les conditions d'utilisation";
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            RoomDao.UpdateState(dbClient, room.Id);
-        }
 
-        if (inappropriateRoom)
-        {
-            room.RoomData.Name = "Inapproprié pour l'hôtel";
-            room.RoomData.Description = "Malheureusement, cet appartement ne peut figurer dans le navigateur, car il ne respecte pas notre Wibbo Attitude ainsi que nos conditions générales d'utilisations.";
-            room.ClearTags();
-            room.RoomData.Tags.Clear();
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            RoomDao.UpdateCaptionDescTags(dbClient, room.Id);
+            if (lockRoom)
+            {
+                room.RoomData.Access = RoomAccess.Doorbell;
+                RoomDao.UpdateState(dbClient, room.Id);
+            }
+
+            if (inappropriateRoom)
+            {
+                room.RoomData.Name = "Inapproprié pour l'hôtel";
+                room.RoomData.Description = "Malheureusement, cet appartement ne peut figurer dans le navigateur, car il ne respecte pas notre Wibbo Attitude ainsi que nos conditions générales d'utilisations.";
+                room.ClearTags();
+                room.RoomData.Tags.Clear();
+
+                RoomDao.UpdateCaptionDescTags(dbClient, room.Id);
+            }
         }
 
         if (kickUsers)
