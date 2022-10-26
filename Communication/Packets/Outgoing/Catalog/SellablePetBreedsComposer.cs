@@ -1,5 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Catalog;
-using WibboEmulator.Games.Catalog.Pets;
+using WibboEmulator.Games.Catalogs.Pets;
 
 internal class SellablePetBreedsComposer : ServerPacket
 {

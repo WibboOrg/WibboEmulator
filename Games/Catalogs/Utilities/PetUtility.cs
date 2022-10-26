@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Catalog.Utilities;
+namespace WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.Rooms.AI;
 

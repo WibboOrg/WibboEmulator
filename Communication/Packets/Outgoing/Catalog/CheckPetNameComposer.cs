@@ -1,5 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Catalog;
-using WibboEmulator.Games.Catalog.Utilities;
+using WibboEmulator.Games.Catalogs.Utilities;
 
 internal class CheckPetNameComposer : ServerPacket
 {

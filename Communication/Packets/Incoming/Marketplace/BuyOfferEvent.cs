@@ -6,7 +6,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Games.Catalog.Marketplace;
+using WibboEmulator.Games.Catalogs.Marketplace;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 

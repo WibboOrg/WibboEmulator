@@ -1,5 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Catalog;
-using WibboEmulator.Games.Catalog;
+using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.Items;
 
 internal class PurchaseOKComposer : ServerPacket

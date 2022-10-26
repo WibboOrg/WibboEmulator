@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Catalog.Vouchers;
+namespace WibboEmulator.Games.Catalogs.Vouchers;
 using System.Data;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Interfaces;

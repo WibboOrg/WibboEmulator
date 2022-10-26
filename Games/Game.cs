@@ -9,7 +9,7 @@ using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Achievements;
 using WibboEmulator.Games.Animations;
 using WibboEmulator.Games.Badges;
-using WibboEmulator.Games.Catalog;
+using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.Chat;
 using WibboEmulator.Games.Effects;
 using WibboEmulator.Games.GameClients;

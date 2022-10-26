@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Catalog;
+namespace WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.Items;
 
 public class CatalogItem

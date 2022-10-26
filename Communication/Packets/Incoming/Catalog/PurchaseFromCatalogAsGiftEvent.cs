@@ -5,7 +5,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Games.Catalog.Utilities;
+using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;

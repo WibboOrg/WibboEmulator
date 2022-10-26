@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Moderation;
+namespace WibboEmulator.Games.Moderations;
 
 public class HelpCategory
 {

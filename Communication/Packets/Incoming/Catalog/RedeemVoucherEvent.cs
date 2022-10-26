@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Games.Catalog.Vouchers;
+using WibboEmulator.Games.Catalogs.Vouchers;
 using WibboEmulator.Games.GameClients;
 
 internal class RedeemVoucherEvent : IPacketEvent

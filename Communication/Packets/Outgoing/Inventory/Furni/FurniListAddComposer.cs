@@ -1,5 +1,5 @@
 ﻿namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
-using WibboEmulator.Games.Catalog.Utilities;
+using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.Items;
 
 internal class FurniListAddComposer : ServerPacket

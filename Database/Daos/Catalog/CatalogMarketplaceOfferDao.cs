@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Catalog;
 using System.Data;
 using System.Text;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Catalog.Marketplace;
+using WibboEmulator.Games.Catalogs.Marketplace;
 
 internal class CatalogMarketplaceOfferDao
 {

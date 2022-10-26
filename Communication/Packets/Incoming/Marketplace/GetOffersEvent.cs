@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos.Catalog;
-using WibboEmulator.Games.Catalog.Marketplace;
+using WibboEmulator.Games.Catalogs.Marketplace;
 using WibboEmulator.Games.GameClients;
 
 internal class GetOffersEvent : IPacketEvent

@@ -1,5 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
-using WibboEmulator.Games.Catalog.Marketplace;
+using WibboEmulator.Games.Catalogs.Marketplace;
 
 internal class MarketPlaceOffersComposer : ServerPacket
 {

@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Catalog.Vouchers;
+namespace WibboEmulator.Games.Catalogs.Vouchers;
 using WibboEmulator.Database.Daos.Catalog;
 
 public class Voucher

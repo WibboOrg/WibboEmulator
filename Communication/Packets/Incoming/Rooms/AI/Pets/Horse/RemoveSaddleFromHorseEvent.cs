@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos.Bot;
-using WibboEmulator.Games.Catalog.Utilities;
+using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 

@@ -2,8 +2,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.Item;
-using WibboEmulator.Games.Catalog.Marketplace;
-using WibboEmulator.Games.Catalog.Utilities;
+using WibboEmulator.Games.Catalogs.Marketplace;
+using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.GameClients;
 
 internal class MakeOfferEvent : IPacketEvent

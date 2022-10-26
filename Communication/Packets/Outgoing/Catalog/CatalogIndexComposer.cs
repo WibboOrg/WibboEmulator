@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Core.Language;
-using WibboEmulator.Games.Catalog;
+using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.GameClients;
 
 internal class CatalogIndexComposer : ServerPacket
