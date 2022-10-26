@@ -372,17 +372,6 @@ public class MessengerComponent : IDisposable
             return;
         }
 
-        if (client.User.IgnoreRoomInvites)
-        {
-            this.GetClient().SendPacket(new InstantMessageErrorComposer(7, toId));
-            return;
-        }
-
-        if (client.User.FloodCount > 0)
-        {
-            this.GetClient().SendPacket(new InstantMessageErrorComposer(4, toId));
-        }
-
         client.SendPacket(new NewConsoleComposer(this._userInstance.Id, message));
     }
 

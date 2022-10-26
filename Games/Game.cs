@@ -47,7 +47,7 @@ public class Game : IDisposable
     private readonly AnimationManager _animationManager;
     private readonly LootManager _lootManager;
 
-    private Task _gameLoop;
+    private Thread _gameLoop;
     private readonly int _cycleSleepTime = 25;
     private bool _cycleEnded;
     private bool _gameLoopActive;
@@ -161,7 +161,12 @@ public class Game : IDisposable
     {
         this._gameLoopActive = true;
 
-        this._gameLoop = new Task(this.MainGameLoop, TaskCreationOptions.LongRunning);
+        var receiver = new ThreadStart(this.MainGameLoop);
+        this._gameLoop = new Thread(receiver)
+        {
+            IsBackground = true
+        };
+
         this._gameLoop.Start();
     }
 
@@ -237,8 +242,6 @@ public class Game : IDisposable
 
     public void Dispose()
     {
-        this._gameLoop.Dispose();
-
         GC.SuppressFinalize(this);
     }
 }

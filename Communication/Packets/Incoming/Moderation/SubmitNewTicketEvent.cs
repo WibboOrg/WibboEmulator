@@ -10,6 +10,11 @@ internal class SubmitNewTicketEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
+        if (session.User == null)
+        {
+            return;
+        }
+
         if (WibboEnvironment.GetGame().GetModerationManager().UsersHasPendingTicket(session.User.Id))
         {
             return;
@@ -23,6 +28,11 @@ internal class SubmitNewTicketEvent : IPacketEvent
 
         _ = packet.PopInt();
         //chatEntries = packet.PopString();
+
+        if (reporterId == session.User.Id)
+        {
+            return;
+        }
 
         WibboEnvironment.GetGame().GetModerationManager().SendNewTicket(session, ticketType, reporterId, message);
         ModerationManager.ApplySanction(session, reporterId);

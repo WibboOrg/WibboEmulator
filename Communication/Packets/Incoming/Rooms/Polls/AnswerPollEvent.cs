@@ -23,7 +23,7 @@ internal class AnswerPollEvent : IPacketEvent
 
         _ = packet.PopInt();
 
-        var count = packet.PopInt();//Count
+        var count = packet.PopInt(); // Count
 
         var value = "0";
         for (var i = 0; i < count; i++)

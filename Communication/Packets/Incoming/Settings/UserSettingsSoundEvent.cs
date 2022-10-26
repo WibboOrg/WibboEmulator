@@ -18,7 +18,6 @@ internal class UserSettingsSoundEvent : IPacketEvent
         var volume2 = packet.PopInt();
         var volume3 = packet.PopInt();
 
-
         if (session.User.ClientVolume[0] == volume1 && session.User.ClientVolume[1] == volume2 && session.User.ClientVolume[2] == volume3)
         {
             return;

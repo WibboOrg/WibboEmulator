@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator;
+namespace WibboEmulator;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reflection;
@@ -365,7 +365,7 @@ public static class WibboEnvironment
 
         GetGame().GetGameClientManager().SendMessage(new BroadcastMessageAlertComposer("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes."));
         Thread.Sleep(20 * 1000); // 20 secondes
-        GetGame().StopGameLoop();
+        //GetGame().StopGameLoop();
         GetWebSocketManager().Destroy(); // Eteindre le websocket server
         GetGame().GetPacketManager().UnregisterAll(); // Dé-enregistrer les packets
         GetGame().GetGameClientManager().CloseAll(); // Fermeture et enregistrement de toutes les utilisteurs

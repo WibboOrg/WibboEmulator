@@ -19,6 +19,7 @@ internal class UpdateFigureDataEvent : IPacketEvent
 
         var gender = packet.PopString().ToUpper();
         var look = packet.PopString();
+
         if (gender is not "M" and not "F")
         {
             return;
