@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Chat.Commands.User.Several;
+namespace WibboEmulator.Games.Chats.Commands.User.Several;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games.Teams;

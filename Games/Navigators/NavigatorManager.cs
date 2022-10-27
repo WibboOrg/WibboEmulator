@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Navigator;
+namespace WibboEmulator.Games.Navigators;
 using System.Data;
 using WibboEmulator.Core.Language;
 using WibboEmulator.Database.Daos.Moderation;

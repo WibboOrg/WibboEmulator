@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion;
+namespace WibboEmulator.Games.Chats.Commands.Staff.Gestion;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;

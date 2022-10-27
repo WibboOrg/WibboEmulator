@@ -1,5 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
-using WibboEmulator.Games.Roleplay.Item;
+using WibboEmulator.Games.Roleplays.Item;
 
 internal class BuyItemsListComposer : ServerPacket
 {

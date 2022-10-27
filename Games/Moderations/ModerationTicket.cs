@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Moderation;
+namespace WibboEmulator.Games.Moderations;
 using WibboEmulator.Database.Daos.Moderation;
 using WibboEmulator.Database.Daos.User;
 

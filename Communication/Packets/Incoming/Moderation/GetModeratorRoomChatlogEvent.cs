@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
-using WibboEmulator.Games.Chat.Logs;
+using WibboEmulator.Games.Chats.Logs;
 using WibboEmulator.Games.GameClients;
 
 internal class GetModeratorRoomChatlogEvent : IPacketEvent

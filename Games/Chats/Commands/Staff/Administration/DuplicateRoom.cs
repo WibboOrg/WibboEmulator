@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
+namespace WibboEmulator.Games.Chats.Commands.Staff.Administration;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Database.Daos.Bot;

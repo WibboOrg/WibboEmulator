@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Roleplay.Player;
+namespace WibboEmulator.Games.Roleplays.Player;
 using System.Collections.Concurrent;
 using System.Data;
 using WibboEmulator.Communication.Interfaces;
@@ -6,8 +6,8 @@ using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Roleplay.Item;
-using WibboEmulator.Games.Roleplay.Weapon;
+using WibboEmulator.Games.Roleplays.Item;
+using WibboEmulator.Games.Roleplays.Weapon;
 using WibboEmulator.Games.Rooms;
 
 public class RolePlayer

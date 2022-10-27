@@ -1,5 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
-using WibboEmulator.Games.Chat.Logs;
+using WibboEmulator.Games.Chats.Logs;
 using WibboEmulator.Utilities;
 
 internal class ModeratorUserChatlogComposer : ServerPacket

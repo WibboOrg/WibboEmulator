@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Chat.Styles;
+namespace WibboEmulator.Games.Chats.Styles;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;

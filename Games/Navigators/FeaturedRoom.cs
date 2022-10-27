@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Navigator;
+namespace WibboEmulator.Games.Navigators;
 using WibboEmulator.Core.Language;
 
 public class FeaturedRoom

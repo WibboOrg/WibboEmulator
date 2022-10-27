@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using System.Collections.Concurrent;
-using WibboEmulator.Games.Roleplay.Player;
+using WibboEmulator.Games.Roleplays.Player;
 
 internal class LoadInventoryRpComposer : ServerPacket
 {

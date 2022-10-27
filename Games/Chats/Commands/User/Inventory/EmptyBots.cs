@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Chat.Commands.User.Inventory;
+namespace WibboEmulator.Games.Chats.Commands.User.Inventory;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;

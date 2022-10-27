@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Chat.Mentions;
+namespace WibboEmulator.Games.Chats.Mentions;
 using System.Text.RegularExpressions;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;

@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Roleplay.Weapon;
+namespace WibboEmulator.Games.Roleplays.Weapon;
 using System.Data;
 using WibboEmulator.Database.Daos.Roleplay;
 using WibboEmulator.Database.Interfaces;

@@ -10,19 +10,19 @@ using WibboEmulator.Games.Achievements;
 using WibboEmulator.Games.Animations;
 using WibboEmulator.Games.Badges;
 using WibboEmulator.Games.Catalogs;
-using WibboEmulator.Games.Chat;
+using WibboEmulator.Games.Chats;
 using WibboEmulator.Games.Effects;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
-using WibboEmulator.Games.Help;
+using WibboEmulator.Games.Helps;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.LandingView;
 using WibboEmulator.Games.Loots;
-using WibboEmulator.Games.Moderation;
-using WibboEmulator.Games.Navigator;
+using WibboEmulator.Games.Moderations;
+using WibboEmulator.Games.Navigators;
 using WibboEmulator.Games.Permissions;
 using WibboEmulator.Games.Quests;
-using WibboEmulator.Games.Roleplay;
+using WibboEmulator.Games.Roleplays;
 using WibboEmulator.Games.Rooms;
 
 public class Game : IDisposable

@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Moderation;
+namespace WibboEmulator.Games.Moderations;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;

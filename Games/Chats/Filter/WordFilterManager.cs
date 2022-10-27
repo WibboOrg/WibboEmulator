@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Chat.Filter;
+namespace WibboEmulator.Games.Chats.Filter;
 using System.Data;
 using System.Text.RegularExpressions;
 using WibboEmulator.Database.Daos;

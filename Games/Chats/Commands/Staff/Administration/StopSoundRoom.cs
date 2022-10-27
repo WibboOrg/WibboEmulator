@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
+namespace WibboEmulator.Games.Chats.Commands.Staff.Administration;
 
 using WibboEmulator.Communication.Packets.Outgoing.Sound;
 using WibboEmulator.Games.GameClients;

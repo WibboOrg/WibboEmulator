@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
 using System.Text.RegularExpressions;
-using WibboEmulator.Games.Moderation;
+using WibboEmulator.Games.Moderations;
 
 internal class EventHaCommand : IRCONCommand
 {

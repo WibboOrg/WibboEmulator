@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Roleplay.Player;
+using WibboEmulator.Games.Roleplays.Player;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Rooms.Games.Freeze;
 using WibboEmulator.Games.Rooms.Games.Teams;

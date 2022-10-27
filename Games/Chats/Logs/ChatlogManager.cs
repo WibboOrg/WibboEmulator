@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Chat.Logs;
+namespace WibboEmulator.Games.Chats.Logs;
 using System.Data;
 using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Database.Interfaces;

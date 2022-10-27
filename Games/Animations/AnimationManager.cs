@@ -6,7 +6,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 using WibboEmulator.Core.Language;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Moderation;
+using WibboEmulator.Games.Moderations;
 using WibboEmulator.Games.Rooms;
 
 public class AnimationManager

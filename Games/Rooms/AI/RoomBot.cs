@@ -1,5 +1,5 @@
 namespace WibboEmulator.Games.Rooms.AI;
-using WibboEmulator.Games.Roleplay.Enemy;
+using WibboEmulator.Games.Roleplays.Enemy;
 using WibboEmulator.Games.Rooms.AI.Types;
 
 public class RoomBot

@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Chat.Commands.User.Info;
+namespace WibboEmulator.Games.Chats.Commands.User.Info;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 
 using WibboEmulator.Games.GameClients;

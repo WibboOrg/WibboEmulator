@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion;
+namespace WibboEmulator.Games.Chats.Commands.Staff.Gestion;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.Item;

@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Moderation;
+using WibboEmulator.Games.Moderations;
 using WibboEmulator.Utilities;
 
 internal class SubmitNewTicketEvent : IPacketEvent

@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
-using WibboEmulator.Games.Moderation;
+using WibboEmulator.Games.Moderations;
 
 internal class HaCommand : IRCONCommand
 {

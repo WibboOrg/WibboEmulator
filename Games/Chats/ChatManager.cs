@@ -1,11 +1,11 @@
-﻿namespace WibboEmulator.Games.Chat;
+namespace WibboEmulator.Games.Chats;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Chat.Commands;
-using WibboEmulator.Games.Chat.Emotions;
-using WibboEmulator.Games.Chat.Filter;
-using WibboEmulator.Games.Chat.Mentions;
-using WibboEmulator.Games.Chat.Pets.Commands;
-using WibboEmulator.Games.Chat.Styles;
+using WibboEmulator.Games.Chats.Commands;
+using WibboEmulator.Games.Chats.Emotions;
+using WibboEmulator.Games.Chats.Filter;
+using WibboEmulator.Games.Chats.Mentions;
+using WibboEmulator.Games.Chats.Pets.Commands;
+using WibboEmulator.Games.Chats.Styles;
 
 public sealed class ChatManager
 {

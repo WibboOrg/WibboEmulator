@@ -8,7 +8,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Database.Daos.Room;
-using WibboEmulator.Games.Chat.Logs;
+using WibboEmulator.Games.Chats.Logs;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Rooms.Events;

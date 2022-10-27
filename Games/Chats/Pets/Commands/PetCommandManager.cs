@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Chat.Pets.Commands;
+﻿namespace WibboEmulator.Games.Chats.Pets.Commands;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;

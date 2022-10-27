@@ -1,5 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
-using WibboEmulator.Games.Moderation;
+using WibboEmulator.Games.Moderations;
 
 internal class ModeratorInitComposer : ServerPacket
 {

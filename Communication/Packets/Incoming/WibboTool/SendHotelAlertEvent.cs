@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.WibboTool;
 
 using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Moderation;
+using WibboEmulator.Games.Moderations;
 
 internal class SendHotelAlertEvent : IPacketEvent
 {

@@ -1,7 +1,7 @@
-namespace WibboEmulator.Games.Roleplay.Enemy;
+namespace WibboEmulator.Games.Roleplays.Enemy;
 using System.Drawing;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Roleplay.Weapon;
+using WibboEmulator.Games.Roleplays.Weapon;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Games.Rooms.PathFinding;

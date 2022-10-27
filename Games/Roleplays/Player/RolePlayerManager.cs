@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Roleplay.Player;
+namespace WibboEmulator.Games.Roleplays.Player;
 using System.Collections.Concurrent;
 using WibboEmulator.Database.Daos.User;
 

@@ -10,7 +10,7 @@ using WibboEmulator.Core.Language;
 using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Games.Chat.Logs;
+using WibboEmulator.Games.Chats.Logs;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Users.Achievements;

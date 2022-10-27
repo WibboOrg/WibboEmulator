@@ -14,7 +14,7 @@ using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Quests;
-using WibboEmulator.Games.Roleplay.Enemy;
+using WibboEmulator.Games.Roleplays.Enemy;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Rooms.Games.Teams;
 using WibboEmulator.Games.Rooms.Map;
