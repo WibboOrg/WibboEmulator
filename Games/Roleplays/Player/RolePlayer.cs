@@ -168,7 +168,6 @@ public class RolePlayer
             UserRoleplayItemDao.UpdateAddCount(dbClient, item.Id, count);
         }
 
-
         this.SendPacket(new AddInventoryItemRpComposer(rpItem, count));
     }
 

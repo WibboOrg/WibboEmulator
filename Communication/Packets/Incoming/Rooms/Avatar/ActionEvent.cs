@@ -22,12 +22,12 @@ internal class ActionEvent : IPacketEvent
         }
 
         roomUserByUserId.Unidle();
-        var i = packet.PopInt();
+        var actionId = packet.PopInt();
         roomUserByUserId.DanceId = 0;
 
-        room.SendPacket(new ActionComposer(roomUserByUserId.VirtualId, i));
+        room.SendPacket(new ActionComposer(roomUserByUserId.VirtualId, actionId));
 
-        if (i == 5)
+        if (actionId == 5)
         {
             roomUserByUserId.IsAsleep = true;
             room.SendPacket(new SleepComposer(roomUserByUserId.VirtualId, true));

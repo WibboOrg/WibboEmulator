@@ -97,6 +97,8 @@ public class AnimationManager
             return false;
         }
 
+        this._animationTime = DateTime.Now;
+
         return true;
     }
 

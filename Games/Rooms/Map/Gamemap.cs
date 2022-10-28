@@ -70,7 +70,6 @@ public class GameMap
             item.GetRoom().SendPacket(RoomItemHandling.TeleportUser(user, item.Coordinate, 0, item.Z, true));
             item.GetRoom().RoomUserManager.UpdateUserStatus(user, false);
         }
-
     }
 
     public void UpdateUserMovement(Point oldCoord, Point newCoord, RoomUser user)
