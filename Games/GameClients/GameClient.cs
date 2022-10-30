@@ -42,7 +42,7 @@ public class GameClient
             return false;
         }
 
-        if (this.User.HasPermission("perm_god"))
+        if (this.User.HasPermission("god"))
         {
             return false;
         }

@@ -9,7 +9,7 @@ internal class ModeratorActionEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.User.HasPermission("perm_alert"))
+        if (!session.User.HasPermission("alert"))
         {
             return;
         }

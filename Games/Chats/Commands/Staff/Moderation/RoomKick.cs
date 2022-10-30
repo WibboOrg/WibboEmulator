@@ -17,7 +17,7 @@ internal class RoomKick : IChatCommand
             var userKick = new List<RoomUser>();
             foreach (var user in room.RoomUserManager.GetUserList().ToList())
             {
-                if (user != null && user.Client != null && !user.Client.User.HasPermission("perm_mod") && user.Client.User.Id != session.User.Id)
+                if (user != null && user.Client != null && !user.Client.User.HasPermission("mod") && user.Client.User.Id != session.User.Id)
                 {
                     userKick.Add(user);
                 }

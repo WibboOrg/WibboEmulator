@@ -27,7 +27,7 @@ internal class ChangeMottoEvent : IPacketEvent
             return;
         }
 
-        if (!session.User.HasPermission("perm_word_filter_override"))
+        if (!session.User.HasPermission("word_filter_override"))
         {
             newMotto = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(newMotto);
         }

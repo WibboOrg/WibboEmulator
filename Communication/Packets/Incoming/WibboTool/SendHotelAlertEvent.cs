@@ -15,7 +15,7 @@ internal class SendHotelAlertEvent : IPacketEvent
             return;
         }
 
-        if (!session.User.HasPermission("perm_wibbotool"))
+        if (!session.User.HasPermission("wibbotool"))
         {
             return;
         }

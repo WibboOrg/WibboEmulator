@@ -212,7 +212,7 @@ public class ModerationManager
         }
 
         var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(userReport.Id);
-        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.User.HasPermission("perm_mod") || roomUserByUserId.Client.User.HasPermission("perm_no_kick"))
+        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.User.HasPermission("mod") || roomUserByUserId.Client.User.HasPermission("no_kick"))
         {
             return;
         }
@@ -363,7 +363,7 @@ public class ModerationManager
         {
             foreach (var roomUser in room.RoomUserManager.GetUserList().ToList())
             {
-                if (!roomUser.IsBot && !roomUser.Client.User.HasPermission("perm_no_kick"))
+                if (!roomUser.IsBot && !roomUser.Client.User.HasPermission("no_kick"))
                 {
                     room.RoomUserManager.RemoveUserFromRoom(roomUser.Client, true, true);
                 }

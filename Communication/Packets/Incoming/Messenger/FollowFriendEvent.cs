@@ -10,7 +10,7 @@ internal class FollowFriendEvent : IPacketEvent
     {
         var userId = packet.PopInt();
         var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (clientByUserId == null || clientByUserId.User == null || !clientByUserId.User.InRoom || (clientByUserId.User.HideInRoom && !session.User.HasPermission("perm_mod")))
+        if (clientByUserId == null || clientByUserId.User == null || !clientByUserId.User.InRoom || (clientByUserId.User.HideInRoom && !session.User.HasPermission("mod")))
         {
             return;
         }

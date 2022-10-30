@@ -460,7 +460,7 @@ public class RoomUserManager
             {
                 foreach (var staffUser in roomUserByRank)
                 {
-                    if (staffUser != null && staffUser.Client != null && staffUser.Client.User != null && staffUser.Client.User.HasPermission("perm_show_invisible"))
+                    if (staffUser != null && staffUser.Client != null && staffUser.Client.User != null && staffUser.Client.User.HasPermission("show_invisible"))
                     {
                         staffUser.SendWhisperChat(user.GetUsername() + " est entré dans l'appart en mode invisible !", true);
                     }
@@ -468,7 +468,7 @@ public class RoomUserManager
             }
         }
 
-        if (session.User.HasPermission("perm_owner_all_rooms"))
+        if (session.User.HasPermission("owner_all_rooms"))
         {
             user.SetStatus("flatctrl", "5");
             session.SendPacket(new YouAreOwnerComposer());
@@ -667,7 +667,7 @@ public class RoomUserManager
             {
                 foreach (var staffUser in roomUserByRank)
                 {
-                    if (staffUser != null && staffUser.Client != null && staffUser.Client.User != null && staffUser.Client.User.HasPermission("perm_show_invisible"))
+                    if (staffUser != null && staffUser.Client != null && staffUser.Client.User != null && staffUser.Client.User.HasPermission("show_invisible"))
                     {
                         staffUser.SendWhisperChat(user.GetUsername() + " était en mode invisible. Il vient de partir de l'appartement.", true);
                     }

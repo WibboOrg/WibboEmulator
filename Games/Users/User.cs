@@ -334,7 +334,7 @@ public class User : IDisposable
 
         WibboEnvironment.GetGame().GetGameClientManager().UnregisterClient(this.Id, this.Username);
 
-        if (this.HasPermission("perm_mod"))
+        if (this.HasPermission("mod"))
         {
             WibboEnvironment.GetGame().GetGameClientManager().RemoveUserStaff(this.Id);
         }

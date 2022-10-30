@@ -15,7 +15,7 @@ internal class Give : IChatCommand
             case "coins":
             case "credits":
             {
-                if (!session.User.HasPermission("perm_give_credits"))
+                if (!session.User.HasPermission("give_credits"))
                 {
                     session.SendWhisper("Désolé, vous n'avez pas la permission...");
                     break;
@@ -46,7 +46,7 @@ internal class Give : IChatCommand
             case "wbpts":
             case "wp":
             {
-                if (!session.User.HasPermission("perm_give_wibbopoints"))
+                if (!session.User.HasPermission("give_wibbopoints"))
                 {
                     session.SendWhisper("Désolé, vous n'avez pas la permission...");
                     break;
@@ -77,7 +77,7 @@ internal class Give : IChatCommand
             case "limitcoins":
             case "ltc":
             {
-                if (!session.User.HasPermission("perm_give_limitcoins"))
+                if (!session.User.HasPermission("give_limitcoins"))
                 {
                     session.SendWhisper("Désolé, vous n'avez pas la permission...");
                     break;

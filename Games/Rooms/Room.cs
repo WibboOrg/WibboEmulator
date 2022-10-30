@@ -293,14 +293,14 @@ public class Room
             return false;
         }
 
-        if (session.User.Username == this.RoomData.OwnerName || session.User.HasPermission("perm_owner_all_rooms"))
+        if (session.User.Username == this.RoomData.OwnerName || session.User.HasPermission("owner_all_rooms"))
         {
             return true;
         }
 
         if (!requireOwnership)
         {
-            if (session.User.HasPermission("perm_room_rights") || this.UsersWithRights.Contains(session.User.Id))
+            if (session.User.HasPermission("room_rights") || this.UsersWithRights.Contains(session.User.Id))
             {
                 return true;
             }

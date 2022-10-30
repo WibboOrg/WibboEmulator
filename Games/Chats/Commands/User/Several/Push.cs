@@ -35,7 +35,7 @@ internal class Push : IChatCommand
             return;
         }
 
-        if (targetRoomUser.Client.User.PremiumProtect && !session.User.HasPermission("perm_mod"))
+        if (targetRoomUser.Client.User.PremiumProtect && !session.User.HasPermission("mod"))
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
             return;

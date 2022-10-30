@@ -18,7 +18,7 @@ internal class Follow : IChatCommand
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.useroffline", session.Langue));
         }
-        else if (targetUser.User.HideInRoom && !session.User.HasPermission("perm_mod"))
+        else if (targetUser.User.HideInRoom && !session.User.HasPermission("mod"))
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.follow.notallowed", session.Langue));
         }

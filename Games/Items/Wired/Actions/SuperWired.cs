@@ -106,7 +106,6 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
         switch (effet)
         {
             case "botchoosenav":
-            case "botchoose":
             case "alert":
             case "send":
             case "enablestaff":
@@ -1090,7 +1089,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 foreach (var rUser in this.RoomInstance.RoomUserManager.GetUserList().ToList())
                 {
-                    if (rUser != null && rUser.Client != null && !rUser.Client.User.HasPermission("perm_no_kick") && this.RoomInstance.RoomData.OwnerId != rUser.UserId)
+                    if (rUser != null && rUser.Client != null && !rUser.Client.User.HasPermission("no_kick") && this.RoomInstance.RoomData.OwnerId != rUser.UserId)
                     {
                         this.RoomInstance.RoomUserManager.RemoveUserFromRoom(rUser.Client, true, false);
                     }

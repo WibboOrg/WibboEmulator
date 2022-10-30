@@ -22,7 +22,7 @@ internal class SuperPull : IChatCommand
             return;
         }
 
-        if (targetUser.Client.User.PremiumProtect && !session.User.HasPermission("perm_mod"))
+        if (targetUser.Client.User.PremiumProtect && !session.User.HasPermission("mod"))
         {
             userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
             return;

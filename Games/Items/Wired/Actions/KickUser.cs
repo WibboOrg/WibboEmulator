@@ -36,7 +36,7 @@ public class KickUser : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
     {
         if (user != null && user.Client != null && user.Client.User != null)
         {
-            if (user.Client.User.HasPermission("perm_mod") || this.RoomInstance.RoomData.OwnerId == user.UserId)
+            if (user.Client.User.HasPermission("mod") || this.RoomInstance.RoomData.OwnerId == user.UserId)
             {
                 user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("wired.kick.exception", user.Client.Langue));
 

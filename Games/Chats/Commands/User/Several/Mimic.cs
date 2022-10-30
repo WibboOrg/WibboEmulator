@@ -35,7 +35,7 @@ internal class Mimic : IChatCommand
         else
         {
 
-            if (targetUser.User.PremiumProtect && !session.User.HasPermission("perm_mod"))
+            if (targetUser.User.PremiumProtect && !session.User.HasPermission("mod"))
             {
                 session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
                 return;

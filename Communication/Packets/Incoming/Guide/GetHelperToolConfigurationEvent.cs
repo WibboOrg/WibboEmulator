@@ -8,7 +8,7 @@ internal class GetHelperToolConfigurationEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.User.HasPermission("perm_helptool"))
+        if (!session.User.HasPermission("helptool"))
         {
             return;
         }

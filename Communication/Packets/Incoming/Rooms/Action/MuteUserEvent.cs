@@ -30,7 +30,7 @@ internal class MuteUserEvent : IPacketEvent
 
         var time = packet.PopInt() * 60;
 
-        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.User.HasPermission("perm_mod"))
+        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.User.HasPermission("mod"))
         {
             return;
         }

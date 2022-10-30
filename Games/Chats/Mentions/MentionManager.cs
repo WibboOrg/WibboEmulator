@@ -76,7 +76,7 @@ public class MentionManager
             return false;
         }
 
-        if (!targetClient.User.Messenger.FriendshipExists(session.User.Id) && !session.User.HasPermission("perm_mention"))
+        if (!targetClient.User.Messenger.FriendshipExists(session.User.Id) && !session.User.HasPermission("mention"))
         {
             session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Tu as besoin d'être ami avec {targetUsername} pour pouvoir le taguer"));
             return false;

@@ -15,7 +15,7 @@ internal class ManageGroupEvent : IPacketEvent
             return;
         }
 
-        if (group.CreatorId != session.User.Id && !session.User.HasPermission("perm_owner_all_rooms"))
+        if (group.CreatorId != session.User.Id && !session.User.HasPermission("owner_all_rooms"))
         {
             return;
         }

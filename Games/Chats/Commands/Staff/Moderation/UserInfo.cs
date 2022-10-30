@@ -51,7 +51,7 @@ internal class UserInfo : IChatCommand
             _ = stringBuilder.Append("Utilisateurs: " + user.CurrentRoom.UserCount + "/" + user.CurrentRoom.RoomData.UsersMax + "\r");
         }
 
-        if (session.User.HasPermission("perm_god"))
+        if (session.User.HasPermission("god"))
         {
             _ = stringBuilder.Append("\r - Autre information - \r");
             _ = stringBuilder.Append("MachineId: " + clientByUsername.MachineId + "\r");

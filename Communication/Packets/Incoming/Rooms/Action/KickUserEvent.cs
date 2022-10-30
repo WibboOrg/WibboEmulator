@@ -25,7 +25,7 @@ internal class KickUserEvent : IPacketEvent
         var pId = packet.PopInt();
 
         var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(pId);
-        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.User.HasPermission("perm_mod") || roomUserByUserId.Client.User.HasPermission("perm_no_kick"))
+        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.User.HasPermission("mod") || roomUserByUserId.Client.User.HasPermission("no_kick"))
         {
             return;
         }

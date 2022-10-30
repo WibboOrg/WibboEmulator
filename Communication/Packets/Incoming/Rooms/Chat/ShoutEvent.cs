@@ -51,7 +51,7 @@ internal class ShoutEvent : IPacketEvent
 
         user.Unidle();
 
-        if (!session.User.HasPermission("perm_mod") && !user.IsOwner() && !room.CheckRights(session) && room.RoomMuted)
+        if (!session.User.HasPermission("mod") && !user.IsOwner() && !room.CheckRights(session) && room.RoomMuted)
         {
             user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("room.muted", session.Langue));
             return;
@@ -66,7 +66,7 @@ internal class ShoutEvent : IPacketEvent
 
             return;
         }
-        if (!session.User.HasPermission("perm_mod") && !user.IsOwner() && !room.CheckRights(session) && room.UserIsMuted(session.User.Id))
+        if (!session.User.HasPermission("mod") && !user.IsOwner() && !room.CheckRights(session) && room.UserIsMuted(session.User.Id))
         {
             if (!room.HasMuteExpired(session.User.Id))
             {
@@ -96,9 +96,9 @@ internal class ShoutEvent : IPacketEvent
             user.Client?.SendPacket(new FloodControlComposer(i));
             return;
         }
-        else if (timeSpan.TotalSeconds < 4.0 && session.User.FloodCount > 5 && !session.User.HasPermission("perm_mod"))
+        else if (timeSpan.TotalSeconds < 4.0 && session.User.FloodCount > 5 && !session.User.HasPermission("mod"))
         {
-            session.User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("perm_flood_premium") ? 5 : 15;
+            session.User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("flood_premium") ? 5 : 15;
             session.User.SpamEnable = true;
 
             user.Client?.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
@@ -110,7 +110,7 @@ internal class ShoutEvent : IPacketEvent
             user.LastMessageCount = 0;
             user.LastMessage = "";
 
-            session.User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("perm_flood_premium") ? 5 : 15;
+            session.User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("flood_premium") ? 5 : 15;
             session.User.SpamEnable = true;
             user.Client?.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
             return;
@@ -181,7 +181,7 @@ internal class ShoutEvent : IPacketEvent
             }
         }
 
-        if (!session.User.HasPermission("perm_word_filter_override"))
+        if (!session.User.HasPermission("word_filter_override"))
         {
             message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(message);
         }

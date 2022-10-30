@@ -33,7 +33,7 @@ internal class Pull : IChatCommand
             return;
         }
 
-        if (targetUser.Client.User.PremiumProtect && !session.User.HasPermission("perm_mod"))
+        if (targetUser.Client.User.PremiumProtect && !session.User.HasPermission("mod"))
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
             return;

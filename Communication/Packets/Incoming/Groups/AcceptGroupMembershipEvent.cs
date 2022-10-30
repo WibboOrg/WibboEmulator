@@ -17,7 +17,7 @@ internal class AcceptGroupMembershipEvent : IPacketEvent
             return;
         }
 
-        if (session.User.Id != group.CreatorId && !group.IsAdmin(session.User.Id) && !session.User.HasPermission("perm_delete_group_limit"))
+        if (session.User.Id != group.CreatorId && !group.IsAdmin(session.User.Id) && !session.User.HasPermission("delete_group_limit"))
         {
             return;
         }

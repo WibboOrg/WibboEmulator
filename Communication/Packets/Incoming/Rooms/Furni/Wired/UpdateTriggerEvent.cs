@@ -46,8 +46,8 @@ internal class UpdateTriggerEvent : IPacketEvent
 
         var selectionCode = packet.PopInt();
 
-        var isStaff = session.User.HasPermission("perm_superwired_staff");
-        var isGod = session.User.HasPermission("perm_superwired_god");
+        var isStaff = session.User.HasPermission("superwired_staff");
+        var isGod = session.User.HasPermission("superwired_god");
 
         WiredRegister.HandleRegister(item, room, intParams, stringParam, stuffIds, selectionCode, 0, isStaff, isGod);
 

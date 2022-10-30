@@ -8,7 +8,7 @@ internal class ModerationBanEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.User.HasPermission("perm_ban"))
+        if (!session.User.HasPermission("ban"))
         {
             return;
         }

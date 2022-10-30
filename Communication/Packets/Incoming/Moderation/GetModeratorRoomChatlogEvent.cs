@@ -9,7 +9,7 @@ internal class GetModeratorRoomChatlogEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.User.HasPermission("perm_mod"))
+        if (!session.User.HasPermission("mod"))
         {
             return;
         }

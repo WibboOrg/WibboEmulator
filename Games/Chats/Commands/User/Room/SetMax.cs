@@ -18,7 +18,7 @@ internal class SetMax : IChatCommand
             return;
         }
 
-        if ((maxUsers > 75 || maxUsers <= 0) && !session.User.HasPermission("perm_mod"))
+        if ((maxUsers > 75 || maxUsers <= 0) && !session.User.HasPermission("mod"))
         {
             room.RoomData.UsersMax = 75;
         }

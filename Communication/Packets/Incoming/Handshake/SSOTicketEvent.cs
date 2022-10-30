@@ -108,7 +108,7 @@ internal class SSOTicketEvent : IPacketEvent
                     packetList.Add(new InClientLinkComposer("nux/lobbyoffer/hide"));
                 }
 
-                if (session.User.HasPermission("perm_mod"))
+                if (session.User.HasPermission("mod"))
                 {
                     WibboEnvironment.GetGame().GetGameClientManager().AddUserStaff(session.User.Id);
                     packetList.Add(new ModeratorInitComposer(
@@ -117,7 +117,7 @@ internal class SSOTicketEvent : IPacketEvent
                         WibboEnvironment.GetGame().GetModerationManager().Tickets()));
                 }
 
-                if (session.User.HasExactPermission("perm_helptool"))
+                if (session.User.HasExactPermission("helptool"))
                 {
                     var guideManager = WibboEnvironment.GetGame().GetHelpManager();
                     guideManager.AddGuide(session.User.Id);

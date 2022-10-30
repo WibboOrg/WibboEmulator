@@ -9,7 +9,7 @@ internal class GetModeratorUserChatlogEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!session.User.HasPermission("perm_chatlog"))
+        if (!session.User.HasPermission("chatlog"))
         {
             return;
         }

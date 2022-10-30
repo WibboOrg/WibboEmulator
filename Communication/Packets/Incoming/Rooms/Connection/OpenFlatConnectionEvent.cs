@@ -54,7 +54,7 @@ internal class OpenFlatConnectionEvent : IPacketEvent
             return;
         }
 
-        if (!session.User.HasPermission("perm_mod") && room.UserIsBanned(session.User.Id))
+        if (!session.User.HasPermission("mod") && room.UserIsBanned(session.User.Id))
         {
             if (room.HasBanExpired(session.User.Id))
             {
@@ -69,7 +69,7 @@ internal class OpenFlatConnectionEvent : IPacketEvent
             }
         }
 
-        if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !session.User.HasPermission("perm_enter_full_rooms") && !session.User.HasPermission("perm_enter_full_rooms"))
+        if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !session.User.HasPermission("enter_full_rooms") && !session.User.HasPermission("enter_full_rooms"))
         {
             if (room.CloseFullRoom)
             {
@@ -88,9 +88,9 @@ internal class OpenFlatConnectionEvent : IPacketEvent
 
         var ownerEnterNotAllowed = WibboEnvironment.GetSettings().GetData<string>("room.owner.enter.not.allowed").Split(',');
 
-        if (!session.User.HasPermission("perm_access_apartments_all"))
+        if (!session.User.HasPermission("access_apartments_all"))
         {
-            if (!(session.User.HasPermission("perm_access_apartments") && !ownerEnterNotAllowed.Contains(room.RoomData.OwnerName)) && !room.CheckRights(session, true) && !(session.User.IsTeleporting && session.User.TeleportingRoomID == room.Id))
+            if (!(session.User.HasPermission("access_apartments") && !ownerEnterNotAllowed.Contains(room.RoomData.OwnerName)) && !room.CheckRights(session, true) && !(session.User.IsTeleporting && session.User.TeleportingRoomID == room.Id))
             {
                 if (room.RoomData.Access == RoomAccess.Doorbell && !room.CheckRights(session))
                 {

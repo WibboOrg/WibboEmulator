@@ -132,8 +132,6 @@ public class RoomUser : IEquatable<RoomUser>
 
     public bool IsDancing => this.DanceId >= 1;
 
-    public bool NeedsAutokick => !this.IsBot && (this.Client == null || this.Client.User == null || (this.Client.User.Rank < 2 && this.IdleTime >= 1200));
-
     public bool IsTrading => !this.IsBot && this.ContainStatus("trd");
 
     public bool IsBot => this.BotData != null;

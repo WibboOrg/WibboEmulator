@@ -18,9 +18,9 @@ internal class WhiperGroupEvent : IPacketEvent
             return;
         }
 
-        var name = packet.PopString();
+        var userId = packet.PopInt();
 
-        var roomUserByUserTarget = room.RoomUserManager.GetRoomUserByName(name);
+        var roomUserByUserTarget = room.RoomUserManager.GetRoomUserByUserId(userId);
         if (roomUserByUserTarget == null)
         {
             return;
@@ -30,7 +30,7 @@ internal class WhiperGroupEvent : IPacketEvent
         {
             if (roomUserByUserId.WhiperGroupUsers.Count >= 5)
             {
-                return;
+                roomUserByUserId.WhiperGroupUsers.RemoveAt(0);
             }
 
             roomUserByUserId.WhiperGroupUsers.Add(roomUserByUserTarget.GetUsername());

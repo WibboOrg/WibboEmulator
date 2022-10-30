@@ -21,7 +21,7 @@ internal class SaveRoomSettingsEvent : IPacketEvent
             return;
         }
 
-        if (!room.CheckRights(session, true) && !session.User.HasPermission("perm_settings_room"))
+        if (!room.CheckRights(session, true) && !session.User.HasPermission("settings_room"))
         {
             return;
         }

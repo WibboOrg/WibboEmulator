@@ -18,6 +18,7 @@ public static class ClientPacketHeader
     public const int RP_TROC_CONFIRME = 10014;
     public const int RP_TROC_STOP = 10015;
     public const int BOT_CHOOSE = 10016;
+    public const int UNIT_CHAT_WHISPER_GROUP = 1118;
 
     public const int ACHIEVEMENT_LIST = 219;
     public const int AUTHENTICATION = -1;
@@ -180,7 +181,6 @@ public static class ClientPacketHeader
     public const int UNIT_CHAT = 1314;
     public const int UNIT_CHAT_SHOUT = 2085;
     public const int UNIT_CHAT_WHISPER = 1543;
-    public const int UNIT_CHAT_WHISPER_GROUP = 1118;
     public const int UNIT_DANCE = 2080;
     public const int UNIT_DROP_HAND_ITEM = 2814;
     public const int UNIT_GIVE_HANDITEM = 2941;

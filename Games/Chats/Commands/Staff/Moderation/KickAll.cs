@@ -9,7 +9,7 @@ internal class KickAll : IChatCommand
         var roomUserList = new List<RoomUser>();
         foreach (var user in room.RoomUserManager.GetUserList().ToList())
         {
-            if (!user.IsBot && !user.Client.User.HasPermission("perm_no_kick") && session.User.Id != user.Client.User.Id)
+            if (!user.IsBot && !user.Client.User.HasPermission("no_kick") && session.User.Id != user.Client.User.Id)
             {
                 user.Client.SendNotification("Tu as été exclu de cet appart.");
 

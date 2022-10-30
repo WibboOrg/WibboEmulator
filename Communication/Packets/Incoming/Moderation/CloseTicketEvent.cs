@@ -7,7 +7,7 @@ internal class CloseTicketEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.User == null || !session.User.HasPermission("perm_mod"))
+        if (session == null || session.User == null || !session.User.HasPermission("mod"))
         {
             return;
         }

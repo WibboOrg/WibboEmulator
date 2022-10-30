@@ -18,13 +18,13 @@ internal class DeleteGroupEvent : IPacketEvent
             return;
         }
 
-        if (group.CreatorId != session.User.Id && !session.User.HasPermission("perm_delete_group"))
+        if (group.CreatorId != session.User.Id && !session.User.HasPermission("delete_group"))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.1", session.Langue));
             return;
         }
 
-        if (group.MemberCount >= 100 && !session.User.HasPermission("perm_delete_group_limit"))
+        if (group.MemberCount >= 100 && !session.User.HasPermission("delete_group_limit"))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.2", session.Langue));
             return;
