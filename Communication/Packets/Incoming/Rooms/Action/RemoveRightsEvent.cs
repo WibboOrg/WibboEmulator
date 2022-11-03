@@ -27,7 +27,7 @@ internal class RemoveRightsEvent : IPacketEvent
 
         var userIds = new List<int>();
         var amount = packet.PopInt();
-        for (var index = 0; index < amount; ++index)
+        for (var index = 0; index < amount; index++)
         {
             var userId = packet.PopInt();
             if (room.UsersWithRights.Contains(userId))

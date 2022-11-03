@@ -27,7 +27,7 @@ internal class BanDao
             return 0;
         }
 
-        _ = double.TryParse(row[0].ToString(), out var expire);
+        _ = double.TryParse(row["expire"].ToString(), out var expire);
 
         return expire;
     }

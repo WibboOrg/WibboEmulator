@@ -109,7 +109,6 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             case "alert":
             case "send":
             case "enablestaff":
-            case "teleportdisabled":
             case "roomingamechat":
             case "jackanddaisy":
             case "openpage":
@@ -1804,8 +1803,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                this.RoomInstance.
-                GameManager.AddPointToTeam(user.Team, count, user);
+                this.RoomInstance.GameManager.AddPointToTeam(user.Team, count, user);
                 break;
             }
             case "ingame":

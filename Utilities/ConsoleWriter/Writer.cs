@@ -29,12 +29,6 @@ public class Writer
         WriteLine("CRITICAL ERROR LOGGED");
     }
 
-    public static void LogCacheError(string logText)
-    {
-        WriteToFile("logs/cacheerror.txt", logText + "\r\n\r\n");
-        WriteLine("Critical error saved");
-    }
-
     public static void LogMessage(string logText) => Console.WriteLine(logText);
 
     public static void LogDDOS(string logText)
@@ -43,10 +37,10 @@ public class Writer
         WriteLine(logText);
     }
 
-    public static void LogThreadException(string exception, string threadname)
+    public static void LogThreadException(string exception, string threadName)
     {
-        WriteToFile("logs/threaderror.txt", "Error in thread " + threadname + ": \r\n" + exception + "\r\n\r\n");
-        WriteLine("Error in " + threadname + " caught");
+        WriteToFile("logs/threaderror.txt", "Error in thread " + threadName + ": \r\n" + exception + "\r\n\r\n");
+        WriteLine("Error in " + threadName + " caught");
     }
 
     public static void LogQueryError(Exception exception, string query)
@@ -114,8 +108,6 @@ public class Writer
 
         Console.Clear();
     }
-
-    public static void LogShutdown(StringBuilder builder) => WriteToFile("logs/shutdownlog.txt", builder.ToString());
 
     private static void WriteToFile(string path, string content)
     {

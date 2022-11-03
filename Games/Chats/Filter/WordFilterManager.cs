@@ -38,11 +38,11 @@ public sealed class WordFilterManager
             }
         }
 
-        var data2 = WordFilterRetroDao.GetAll(dbClient);
+        var dataTwo = WordFilterRetroDao.GetAll(dbClient);
 
-        if (data2 != null)
+        if (dataTwo != null)
         {
-            foreach (DataRow row in data2.Rows)
+            foreach (DataRow row in dataTwo.Rows)
             {
                 this._pubWords.Add(Convert.ToString(row["word"]));
             }

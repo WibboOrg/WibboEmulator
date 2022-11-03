@@ -25,10 +25,8 @@ internal class UnMute : IChatCommand
         }
         else
         {
-            var user = targetUser.User;
-
-            user.SpamProtectionTime = 10;
-            user.SpamEnable = true;
+            targetUser.User.SpamProtectionTime = 10;
+            targetUser.User.SpamEnable = true;
         }
     }
 }

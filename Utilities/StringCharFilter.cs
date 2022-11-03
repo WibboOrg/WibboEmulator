@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Utilities;
+namespace WibboEmulator.Utilities;
 using System.Text.RegularExpressions;
 
 internal static class StringCharFilter

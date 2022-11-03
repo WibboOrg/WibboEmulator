@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.LandingView;
+namespace WibboEmulator.Games.LandingView;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;
@@ -17,7 +17,9 @@ public class LandingViewManager
 
         foreach (DataRow dRow in dTable.Rows)
         {
-            this.HotelViewPromosIndexers.Add(new Promotion(Convert.ToInt32(dRow[0]), (string)dRow[1], (string)dRow[2], (string)dRow[3], Convert.ToInt32(dRow[4]), (string)dRow[5], (string)dRow[6]));
+            this.HotelViewPromosIndexers.Add(
+                new Promotion(Convert.ToInt32(dRow["index"]), (string)dRow["header"], (string)dRow["body"], (string)dRow["button"], Convert.ToInt32(dRow["in_game_promo"]), (string)dRow["special_action"], (string)dRow["image"])
+                );
         }
     }
 

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items;
+namespace WibboEmulator.Games.Items;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.Rooms;
 
@@ -14,7 +14,7 @@ public static class ItemTeleporterFinder
         }
         else
         {
-            return Convert.ToInt32(row[0]);
+            return Convert.ToInt32(row["tele_two_id"]);
         }
     }
 
@@ -43,7 +43,7 @@ public static class ItemTeleporterFinder
         }
         else
         {
-            return Convert.ToInt32(row[0]);
+            return Convert.ToInt32(row["room_id"]);
         }
     }
 

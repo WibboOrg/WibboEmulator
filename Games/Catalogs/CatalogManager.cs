@@ -130,7 +130,7 @@ public class CatalogManager
             {
                 foreach (DataRow row in bots.Rows)
                 {
-                    this._botPresets.Add(Convert.ToInt32(row[0]), new CatalogBot(Convert.ToInt32(row[0]), Convert.ToString(row[1]), Convert.ToString(row[2]), Convert.ToString(row[3]), Convert.ToString(row[4]), Convert.ToString(row[5])));
+                    this._botPresets.Add(Convert.ToInt32(row["id"]), new CatalogBot(Convert.ToInt32(row["id"]), Convert.ToString(row["name"]), Convert.ToString(row["figure"]), Convert.ToString(row["motto"]), Convert.ToString(row["gender"]), Convert.ToString(row["ai_type"])));
                 }
             }
 

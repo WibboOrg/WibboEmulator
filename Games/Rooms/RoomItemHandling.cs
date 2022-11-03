@@ -113,7 +113,7 @@ public class RoomItemHandling
         int x;
         int y;
         double z;
-        sbyte n;
+        sbyte rot;
         string wallposs;
         int limited;
         int limitedTo;
@@ -123,17 +123,17 @@ public class RoomItemHandling
 
         foreach (DataRow dataRow in itemTable.Rows)
         {
-            itemID = Convert.ToInt32(dataRow[0]);
-            userId = Convert.ToInt32(dataRow[1]);
-            baseID = Convert.ToInt32(dataRow[3]);
-            extraData = !DBNull.Value.Equals(dataRow[4]) ? (string)dataRow[4] : string.Empty;
-            x = Convert.ToInt32(dataRow[5]);
-            y = Convert.ToInt32(dataRow[6]);
-            z = Convert.ToDouble(dataRow[7]);
-            n = Convert.ToSByte(dataRow[8]);
-            wallposs = !DBNull.Value.Equals(dataRow[9]) ? (string)dataRow[9] : string.Empty;
-            limited = !DBNull.Value.Equals(dataRow[10]) ? Convert.ToInt32(dataRow[10]) : 0;
-            limitedTo = !DBNull.Value.Equals(dataRow[11]) ? Convert.ToInt32(dataRow[11]) : 0;
+            itemID = Convert.ToInt32(dataRow["id"]);
+            userId = Convert.ToInt32(dataRow["user_id"]);
+            baseID = Convert.ToInt32(dataRow["base_item"]);
+            extraData = !DBNull.Value.Equals(dataRow["extra_data"]) ? (string)dataRow["extra_data"] : string.Empty;
+            x = Convert.ToInt32(dataRow["x"]);
+            y = Convert.ToInt32(dataRow["y"]);
+            z = Convert.ToDouble(dataRow["z"]);
+            rot = Convert.ToSByte(dataRow["rot"]);
+            wallposs = !DBNull.Value.Equals(dataRow["wall_pos"]) ? (string)dataRow["wall_pos"] : string.Empty;
+            limited = !DBNull.Value.Equals(dataRow["limited_number"]) ? Convert.ToInt32(dataRow["limited_number"]) : 0;
+            limitedTo = !DBNull.Value.Equals(dataRow["limited_stack"]) ? Convert.ToInt32(dataRow["limited_stack"]) : 0;
 
             _ = WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out var data);
 
@@ -166,7 +166,7 @@ public class RoomItemHandling
             }
             else //Is flooritem
             {
-                var roomItem = new Item(itemID, this._roomInstance.Id, baseID, extraData, limited, limitedTo, x, y, (double)z, n, "", this._roomInstance);
+                var roomItem = new Item(itemID, this._roomInstance.Id, baseID, extraData, limited, limitedTo, x, y, z, rot, "", this._roomInstance);
 
                 if (!this._floorItems.ContainsKey(itemID))
                 {
