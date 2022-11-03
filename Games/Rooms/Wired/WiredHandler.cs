@@ -19,6 +19,7 @@ public class WiredHandler
 
     private readonly ConcurrentQueue<WiredCycle> _requestingUpdates;
 
+    private int _tickCounter;
     private bool _doCleanup;
 
     public event EventHandler<ItemTriggeredEventArgs> TrgBotCollision;
@@ -34,6 +35,8 @@ public class WiredHandler
 
         this._specialRandom = new List<Point>();
         this._specialUnseen = new Dictionary<Point, int>();
+
+        this._tickCounter = 0;
     }
 
     public void AddFurniture(Item item)
@@ -156,6 +159,7 @@ public class WiredHandler
                 }
             }
 
+            this._tickCounter = 0;
             this._wiredUsed.Clear();
         }
     }
@@ -226,6 +230,13 @@ public class WiredHandler
         {
             _ = this._wiredUsed.TryAdd(coordinate, new() { user?.VirtualId ?? 0 });
         }
+
+        if (this._tickCounter > 1024)
+        {
+            return;
+        }
+
+        this._tickCounter++;
 
         if (this._conditionStacks.ContainsKey(coordinate))
         {
