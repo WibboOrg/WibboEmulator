@@ -336,12 +336,11 @@ public class RoomManager
         {
             this._roomCycleStopwatch.Restart();
 
-            var emptyRoomsCount = 0;
             foreach (var room in this._rooms.ToList())
             {
-                if (room.Value.UserCount == 0)
+                if (room.Value == null)
                 {
-                    emptyRoomsCount++;
+                    continue;
                 }
 
                 if (room.Value.ProcessTask == null || room.Value.ProcessTask.IsCompleted)
@@ -360,11 +359,6 @@ public class RoomManager
                         this.UnloadRoom(room.Value);
                     }
                 }
-            }
-
-            if (emptyRoomsCount >= 10)
-            {
-                WibboEnvironment.GetGame().GetRoomManager().UnloadEmptyRooms();
             }
         }
     }

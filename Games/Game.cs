@@ -211,6 +211,10 @@ public class Game : IDisposable
             {
                 Console.WriteLine("Canceled operation {0}", e);
             }
+            catch (Exception e)
+            {
+                ExceptionLogger.LogThreadException(e.ToString(), "MainThread");
+            }
 
             this._cycleEnded = true;
 
