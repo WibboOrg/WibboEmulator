@@ -3,6 +3,18 @@ using System.Text.RegularExpressions;
 
 internal static class StringCharFilter
 {
+    private static readonly Regex _allowedChars = new(@"^[a-zA-Z0-9-.]+$");
+    private static readonly Regex _allowedAlphaNum = new(@"^[a-zA-Z0-9]+$");
+    private static readonly Regex _scapesRegex = new(@"[\u0001-\u0008\u000B-\u000C\u000E-\u001F\u007F-\u009F]");
+    private static readonly Regex _breakLinesRegex = new(@"[\r\n]");
+
+    public static bool IsValid(string input) => _allowedChars.IsMatch(input);
+
+    public static bool IsValidAlphaNumeric(char input) => _allowedAlphaNum.IsMatch(input.ToString());
+
+    public static bool IsValidAlphaNumeric(string input) => _allowedAlphaNum.IsMatch(input);
+
+
     /// <summary>
     /// Escapes the characters used for injecting special chars from a user input.
     /// </summary>
@@ -11,21 +23,16 @@ internal static class StringCharFilter
     /// <returns></returns>
     public static string Escape(string str, bool allowBreaks = false)
     {
-        char[] charsToTrim = { ' ', '\t' };
-        str = str.Trim(charsToTrim);
-        str = str.Replace(Convert.ToChar(1), ' ');
-        str = str.Replace(Convert.ToChar(2), ' ');
-        str = str.Replace(Convert.ToChar(3), ' ');
-        str = str.Replace(Convert.ToChar(9), ' ');
+        if (string.IsNullOrWhiteSpace(str))
+        {
+            return string.Empty;
+        }
 
         if (!allowBreaks)
         {
-            str = str.Replace(Convert.ToChar(10), ' ');
-            str = str.Replace(Convert.ToChar(13), ' ');
+            str = _breakLinesRegex.Replace(str, " ");
         }
 
-        str = Regex.Replace(str, "<(.|\\n)*?>", string.Empty);
-
-        return str;
+        return _scapesRegex.Replace(str, string.Empty);
     }
 }

@@ -84,6 +84,12 @@ internal class Update : IChatCommand
                 session.SendWhisper("Commands mis à jour");
                 break;
             }
+            case "chat":
+            {
+                WibboEnvironment.GetGame().GetChatManager().GetChatStyles().Init(dbClient);
+                session.SendWhisper("Chat mis à jour");
+                break;
+            }
             case "permission":
             {
                 WibboEnvironment.GetGame().GetPermissionManager().Init(dbClient);
