@@ -2,7 +2,6 @@ namespace WibboEmulator.Games.Rooms.Wired;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
-using WibboEmulator.Core.Settings;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -20,8 +19,8 @@ public class WiredHandler
 
     private readonly ConcurrentQueue<WiredCycle> _requestingUpdates;
 
+    private readonly bool _securityEnabled;
     private int _tickCounter;
-    private bool _securityEnabled;
     private bool _doCleanup;
 
     public event EventHandler<ItemTriggeredEventArgs> TrgBotCollision;
@@ -39,7 +38,7 @@ public class WiredHandler
         this._specialUnseen = new Dictionary<Point, int>();
         this._tickCounter = 0;
 
-        this._securityEnabled = WibboEnvironment.GetSettings().GetData<bool>("wired.security.enabled");
+        this._securityEnabled = WibboEnvironment.GetSettings().GetData<bool>("wired.security.enable");
     }
 
     public void AddFurniture(Item item)
