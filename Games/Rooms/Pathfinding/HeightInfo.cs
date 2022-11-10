@@ -1,6 +1,6 @@
 namespace WibboEmulator.Games.Rooms.PathFinding;
 
-public struct HeightInfo
+public readonly struct HeightInfo
 {
     private readonly double[,] _map;
     private readonly int _maxX;

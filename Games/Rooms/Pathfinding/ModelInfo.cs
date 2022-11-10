@@ -1,6 +1,6 @@
 namespace WibboEmulator.Games.Rooms.PathFinding;
 
-public struct ModelInfo
+public readonly struct ModelInfo
 {
     private readonly byte[,] _map;
     private readonly int _maxX;

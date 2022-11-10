@@ -1,6 +1,6 @@
 namespace WibboEmulator.Games.Rooms.PathFinding;
 
-public struct SquareInformation
+public readonly struct SquareInformation
 {
     private readonly SquarePoint[] _pos;
 

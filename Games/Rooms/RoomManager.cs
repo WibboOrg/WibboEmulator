@@ -411,7 +411,7 @@ public class RoomManager
 
         if (this._rooms.TryRemove(room.Id, out _))
         {
-            room.Dispose();
+            ((IDisposable)room).Dispose();
         }
     }
 }

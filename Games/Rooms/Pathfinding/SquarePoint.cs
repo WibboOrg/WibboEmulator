@@ -1,6 +1,6 @@
 namespace WibboEmulator.Games.Rooms.PathFinding;
 
-public struct SquarePoint
+public readonly struct SquarePoint
 {
     private readonly byte _squareData;
     private readonly bool _override;

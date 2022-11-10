@@ -154,6 +154,7 @@ public class WebSocket : IDisposable
         this.IsSecure = context.IsSecureConnection;
         this._stream = context.Stream;
         this._waitTime = TimeSpan.FromSeconds(1);
+        this._client = false;
 
         this.Init();
     }

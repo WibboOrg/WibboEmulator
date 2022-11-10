@@ -190,10 +190,7 @@ public class GameClient
         this._packetTimeout?.Clear();
     }
 
-    public void Disconnect()
-    {
-        this.Connection?.Disconnect();
-    }
+    public void Disconnect() => this.Connection?.Disconnect();
 
     public void SendPacket(ServerPacketList packets)
     {

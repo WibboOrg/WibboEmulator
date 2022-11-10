@@ -1,6 +1,6 @@
-﻿namespace WibboEmulator.Games.Achievements;
+namespace WibboEmulator.Games.Achievements;
 
-public struct AchievementLevel
+public readonly struct AchievementLevel
 {
     public readonly int Level { get; }
     public readonly int RewardPixels { get; }

@@ -25,7 +25,7 @@ using WibboEmulator.Games.Rooms.Trading;
 using WibboEmulator.Games.Rooms.Wired;
 using WibboEmulator.Utilities;
 
-public class Room
+public class Room : IDisposable
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new();
     private readonly TimeSpan _maximumRunTimeInSec = TimeSpan.FromSeconds(1);
@@ -614,6 +614,8 @@ public class Room
         this.RoomUserManager.UpdateUserCount(0);
         this.RoomUserManager.Destroy();
         this.GameMap.Destroy();
+
+        GC.SuppressFinalize(this);
     }
 
     public Dictionary<int, double> GetBans() => this._bans;
