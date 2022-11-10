@@ -283,10 +283,7 @@ internal sealed class EndPointListener : IDisposable
         {
             // TODO: Logging.
 
-            if (sock != null)
-            {
-                sock.Close();
-            }
+            sock?.Close();
 
             return;
         }

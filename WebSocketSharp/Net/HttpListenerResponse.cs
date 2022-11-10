@@ -1075,10 +1075,7 @@ public sealed class HttpListenerResponse : IDisposable
 
         if (headers != null)
         {
-            if (this._headers != null)
-            {
-                this._headers.Clear();
-            }
+            this._headers?.Clear();
 
             this.Headers.Add(headers);
         }

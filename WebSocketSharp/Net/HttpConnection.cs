@@ -586,10 +586,7 @@ internal sealed class HttpConnection : IDisposable
 
             if (force)
             {
-                if (this._outputStream != null)
-                {
-                    this._outputStream.Close(true);
-                }
+                this._outputStream?.Close(true);
 
                 this.Close();
 

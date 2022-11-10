@@ -176,10 +176,7 @@ public class GameClientManager
             return;
         }
 
-        if (client != null)
-        {
-            client.Dispose();
-        }
+        client?.Dispose();
 
         _ = this._clients.TryRemove(clientID, out _);
     }

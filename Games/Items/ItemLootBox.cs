@@ -154,10 +154,7 @@ internal static class ItemLootBox
             session.SendPacket(new ReceiveBadgeComposer(badgeCode));
 
             var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
-            if (roomUserByUserId != null)
-            {
-                roomUserByUserId.SendWhisperChat("Tu as reçu le badge: " + badgeCode);
-            }
+            roomUserByUserId?.SendWhisperChat("Tu as reçu le badge: " + badgeCode);
         }
 
         EndOpenBox(session, present, room, pageId, 0, badgeCode);

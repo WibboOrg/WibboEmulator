@@ -15,10 +15,7 @@ public class InteractorOneWayGate : FurniInteractor
         }
 
         var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
-        if (roomUserByUserId != null)
-        {
-            roomUserByUserId.UnlockWalking();
-        }
+        roomUserByUserId?.UnlockWalking();
 
         item.InteractingUser = 0;
     }
@@ -33,10 +30,7 @@ public class InteractorOneWayGate : FurniInteractor
         }
 
         var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
-        if (roomUserByUserId != null)
-        {
-            roomUserByUserId.UnlockWalking();
-        }
+        roomUserByUserId?.UnlockWalking();
 
         item.InteractingUser = 0;
     }

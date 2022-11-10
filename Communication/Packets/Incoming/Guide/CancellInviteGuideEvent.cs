@@ -12,9 +12,6 @@ internal class CancellInviteGuideEvent : IPacketEvent
 
         session.SendPacket(new OnGuideSessionDetachedComposer());
 
-        if (requester != null)
-        {
-            requester.SendPacket(new OnGuideSessionDetachedComposer());
-        }
+        requester?.SendPacket(new OnGuideSessionDetachedComposer());
     }
 }

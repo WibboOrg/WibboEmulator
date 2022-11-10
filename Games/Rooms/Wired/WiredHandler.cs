@@ -2,6 +2,7 @@ namespace WibboEmulator.Games.Rooms.Wired;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
+using WibboEmulator.Core.Settings;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -20,6 +21,7 @@ public class WiredHandler
     private readonly ConcurrentQueue<WiredCycle> _requestingUpdates;
 
     private int _tickCounter;
+    private bool _securityEnabled;
     private bool _doCleanup;
 
     public event EventHandler<ItemTriggeredEventArgs> TrgBotCollision;
@@ -35,8 +37,9 @@ public class WiredHandler
 
         this._specialRandom = new List<Point>();
         this._specialUnseen = new Dictionary<Point, int>();
-
         this._tickCounter = 0;
+
+        this._securityEnabled = WibboEnvironment.GetSettings().GetData<bool>("wired.security.enabled");
     }
 
     public void AddFurniture(Item item)
@@ -215,25 +218,28 @@ public class WiredHandler
             return;
         }
 
-        if (this._wiredUsed.ContainsKey(coordinate))
+        if (this._securityEnabled)
         {
-            if (this._wiredUsed[coordinate].Contains(user?.VirtualId ?? 0))
+            if (this._wiredUsed.ContainsKey(coordinate))
             {
-                return;
+                if (this._wiredUsed[coordinate].Contains(user?.VirtualId ?? 0))
+                {
+                    return;
+                }
+                else
+                {
+                    this._wiredUsed[coordinate].Add(user?.VirtualId ?? 0);
+                }
             }
             else
             {
-                this._wiredUsed[coordinate].Add(user?.VirtualId ?? 0);
+                _ = this._wiredUsed.TryAdd(coordinate, new() { user?.VirtualId ?? 0 });
             }
-        }
-        else
-        {
-            _ = this._wiredUsed.TryAdd(coordinate, new() { user?.VirtualId ?? 0 });
-        }
 
-        if (this._tickCounter > 1024)
-        {
-            return;
+            if (this._tickCounter > 1024)
+            {
+                return;
+            }
         }
 
         this._tickCounter++;
@@ -298,20 +304,11 @@ public class WiredHandler
 
     public void Destroy()
     {
-        if (this._actionStacks != null)
-        {
-            this._actionStacks.Clear();
-        }
+        this._actionStacks?.Clear();
 
-        if (this._conditionStacks != null)
-        {
-            this._conditionStacks.Clear();
-        }
+        this._conditionStacks?.Clear();
 
-        if (this._requestingUpdates != null)
-        {
-            this._requestingUpdates.Clear();
-        }
+        this._requestingUpdates?.Clear();
 
         this.TrgCollision = null;
         this.TrgBotCollision = null;
@@ -324,4 +321,6 @@ public class WiredHandler
     public void TriggerBotCollision(RoomUser roomUser, string botName) => this.TrgBotCollision?.Invoke(null, new(roomUser, null, botName));
 
     public void TriggerTimer() => this.TrgTimer?.Invoke(null, new());
+
+    public bool SecurityEnabled() => this._securityEnabled;
 }

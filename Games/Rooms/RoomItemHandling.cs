@@ -624,10 +624,7 @@ public class RoomItemHandling
         {
             if (this._floorItems.ContainsKey(item.Id))
             {
-                if (session != null)
-                {
-                    session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.itemplaced", session.Langue));
-                }
+                session?.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.itemplaced", session.Langue));
 
                 return true;
             }

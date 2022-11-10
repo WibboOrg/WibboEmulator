@@ -42,10 +42,7 @@ public class InteractorTeleport : FurniInteractor
         if (item.InteractingUser != 0)
         {
             var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
-            if (roomUserByUserId != null)
-            {
-                roomUserByUserId.UnlockWalking();
-            }
+            roomUserByUserId?.UnlockWalking();
 
             item.InteractingUser = 0;
         }
@@ -56,10 +53,7 @@ public class InteractorTeleport : FurniInteractor
         }
 
         var roomUserByUserIdTwo = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser2);
-        if (roomUserByUserIdTwo != null)
-        {
-            roomUserByUserIdTwo.UnlockWalking();
-        }
+        roomUserByUserIdTwo?.UnlockWalking();
 
         item.InteractingUser2 = 0;
     }

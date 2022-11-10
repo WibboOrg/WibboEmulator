@@ -290,10 +290,7 @@ public class ModerationManager
                 messageAlert = "Merci, ton souci est résolu ou en cours de résolution. N'hésite pas à Ignorer la personne  ou à la supprimer de ta console s'il s'agit d'insultes.";
                 break;
         }
-        if (clientByUserId != null)
-        {
-            clientByUserId.SendPacket(new ModeratorSupportTicketResponseComposer(messageAlert));
-        }
+        clientByUserId?.SendPacket(new ModeratorSupportTicketResponseComposer(messageAlert));
         ticket.Close(newStatus, true);
         SendTicketToModerators(ticket);
     }

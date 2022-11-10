@@ -1042,10 +1042,7 @@ public class RoomUserManager
                                 user.ApplyEffect(effectId);
                             }
 
-                            if (user.Client != null)
-                            {
-                                user.Client.SendPacket(new IsPlayingComposer(true));
-                            }
+                            user.Client?.SendPacket(new IsPlayingComposer(true));
                         }
                         else
                         {
@@ -1056,10 +1053,7 @@ public class RoomUserManager
                                 user.ApplyEffect(0);
                             }
 
-                            if (user.Client != null)
-                            {
-                                user.Client.SendPacket(new IsPlayingComposer(false));
-                            }
+                            user.Client?.SendPacket(new IsPlayingComposer(false));
 
                             user.Team = TeamType.None;
                             continue;
@@ -1108,10 +1102,7 @@ public class RoomUserManager
                                 user.ApplyEffect(effectId);
                             }
 
-                            if (user.Client != null)
-                            {
-                                user.Client.SendPacket(new IsPlayingComposer(true));
-                            }
+                            user.Client?.SendPacket(new IsPlayingComposer(true));
                         }
                         else
                         {
@@ -1122,10 +1113,7 @@ public class RoomUserManager
                                 user.ApplyEffect(0);
                             }
 
-                            if (user.Client != null)
-                            {
-                                user.Client.SendPacket(new IsPlayingComposer(false));
-                            }
+                            user.Client?.SendPacket(new IsPlayingComposer(false));
 
                             user.Team = TeamType.None;
                         }
@@ -1276,18 +1264,12 @@ public class RoomUserManager
                 {
                     if (user.IsBot)
                     {
-                        if (user.BotData.RoleBot != null)
-                        {
-                            user.BotData.RoleBot.OnCycle(user, this._room);
-                        }
+                        user.BotData.RoleBot?.OnCycle(user, this._room);
                     }
                     else
                     {
                         var rp = user.Roleplayer;
-                        if (rp != null)
-                        {
-                            rp.OnCycle(user, rpManager);
-                        }
+                        rp?.OnCycle(user, rpManager);
                     }
                 }
             }

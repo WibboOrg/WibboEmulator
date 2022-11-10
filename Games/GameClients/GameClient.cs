@@ -185,23 +185,14 @@ public class GameClient
             WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersBr--;
         }
 
-        if (this.User != null)
-        {
-            this.User.Dispose();
-        }
+        this.User?.Dispose();
 
-        if (this._packetTimeout != null)
-        {
-            this._packetTimeout.Clear();
-        }
+        this._packetTimeout?.Clear();
     }
 
     public void Disconnect()
     {
-        if (this.Connection != null)
-        {
-            this.Connection.Disconnect();
-        }
+        this.Connection?.Disconnect();
     }
 
     public void SendPacket(ServerPacketList packets)

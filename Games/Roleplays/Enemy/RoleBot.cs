@@ -162,10 +162,7 @@ public class RoleBot
             if (user != null && !user.IsBot)
             {
                 var rp = user.Roleplayer;
-                if (rp != null)
-                {
-                    rp.AddExp(this.Config.Health);
-                }
+                rp?.AddExp(this.Config.Health);
             }
 
             this.Health = 0;
@@ -267,17 +264,11 @@ public class RoleBot
         if (!user.IsBot)
         {
             var rp = user.Roleplayer;
-            if (rp != null)
-            {
-                rp.Hit(user, dmg, room, false, true);
-            }
+            rp?.Hit(user, dmg, room, false, true);
         }
         else
         {
-            if (user.BotData.RoleBot != null)
-            {
-                user.BotData.RoleBot.Hit(user, dmg, room, bot.VirtualId, user.BotData.RoleBot.Config.TeamId);
-            }
+            user.BotData.RoleBot?.Hit(user, dmg, room, bot.VirtualId, user.BotData.RoleBot.Config.TeamId);
         }
 
         var weaponEanble = this.WeaponCac.Enable;

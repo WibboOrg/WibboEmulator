@@ -18,10 +18,7 @@ public class InteractorWired : FurniInteractor
             return;
         }
 
-        if (item.WiredHandler != null)
-        {
-            item.WiredHandler.OnTrigger(session);
-        }
+        item.WiredHandler?.OnTrigger(session);
 
         item.ExtraData = "1";
         item.UpdateState();

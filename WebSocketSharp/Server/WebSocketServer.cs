@@ -887,10 +887,7 @@ public class WebSocketServer
                 this.Log.Fatal(ex.Message);
                 this.Log.Debug(ex.ToString());
 
-                if (cl != null)
-                {
-                    cl.Close();
-                }
+                cl?.Close();
 
                 if (this._state == ServerState.ShuttingDown)
                 {

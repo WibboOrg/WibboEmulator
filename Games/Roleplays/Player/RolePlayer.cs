@@ -200,10 +200,7 @@ public class RolePlayer
     public void SendPacket(IServerPacket message)
     {
         var session = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this._id);
-        if (session != null)
-        {
-            session.SendPacket(message);
-        }
+        session?.SendPacket(message);
     }
 
     internal void RemoveMunition(int count)

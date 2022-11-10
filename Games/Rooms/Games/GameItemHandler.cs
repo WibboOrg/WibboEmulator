@@ -284,15 +284,9 @@ public class GameItemHandler
 
     public void Destroy()
     {
-        if (this._banzaiTeleports != null)
-        {
-            this._banzaiTeleports.Clear();
-        }
+        this._banzaiTeleports?.Clear();
 
-        if (this._banzaiPyramids != null)
-        {
-            this._banzaiPyramids.Clear();
-        }
+        this._banzaiPyramids?.Clear();
 
         this._banzaiPyramids = null;
         this._banzaiTeleports = null;

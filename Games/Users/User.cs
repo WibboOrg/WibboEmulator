@@ -416,20 +416,11 @@ public class User : IDisposable
             this.AchievementComponent = null;
         }
 
-        if (this.UsersRooms != null)
-        {
-            this.UsersRooms.Clear();
-        }
+        this.UsersRooms?.Clear();
 
-        if (this.RoomRightsList != null)
-        {
-            this.RoomRightsList.Clear();
-        }
+        this.RoomRightsList?.Clear();
 
-        if (this.FavoriteRooms != null)
-        {
-            this.FavoriteRooms.Clear();
-        }
+        this.FavoriteRooms?.Clear();
 
         this.Client = null;
 

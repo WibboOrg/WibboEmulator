@@ -4,6 +4,7 @@ using System.Drawing;
 using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Freeze;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.Games.Teams;
 using WibboEmulator.Games.Rooms.Map;

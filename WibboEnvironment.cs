@@ -159,11 +159,11 @@ public static class WibboEnvironment
             _languageManager = new LanguageManager();
             _languageManager.Init(dbClient);
 
-            _game = new Game();
-            _game.StartGameLoop();
-
             _figureManager = new FigureDataManager();
             _figureManager.Init();
+
+            _game = new Game();
+            _game.StartGameLoop();
 
             var webSocketOrigins = _settingsManager.GetData<string>("game.ws.origins").Split(',').ToList();
             _webSocketManager = new WebSocketManager(_settingsManager.GetData<int>("game.ws.port"), _settingsManager.GetData<bool>("game.ssl.enable"), webSocketOrigins);

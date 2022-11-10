@@ -37,10 +37,7 @@ internal class TakeAdminRightsEvent : IPacketEvent{
                 }
 
                 userRoom.UpdateNeeded = true;
-                if (userRoom.Client != null)
-                {
-                    userRoom.Client.SendPacket(new YouAreControllerComposer(0));
-                }
+                userRoom.Client?.SendPacket(new YouAreControllerComposer(0));
             }
         }
 

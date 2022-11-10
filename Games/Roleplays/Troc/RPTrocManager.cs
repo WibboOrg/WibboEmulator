@@ -86,16 +86,10 @@ public class RPTrocManager
         }
 
         var playerOne = rpManager.GetPlayer(troc.UserOne.UserId);
-        if (playerOne != null)
-        {
-            playerOne.SendPacket(packet);
-        }
+        playerOne?.SendPacket(packet);
 
         var playerTwo = rpManager.GetPlayer(troc.UserTwo.UserId);
-        if (playerTwo != null)
-        {
-            playerTwo.SendPacket(packet);
-        }
+        playerTwo?.SendPacket(packet);
     }
 
     private void CloseTrade(RPTroc troc)

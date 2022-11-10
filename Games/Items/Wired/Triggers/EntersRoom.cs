@@ -22,10 +22,7 @@ public class EntersRoom : WiredTriggerBase, IWired
             return;
         }
 
-        if (this.RoomInstance.WiredHandler != null)
-        {
-            this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, null);
-        }
+        this.RoomInstance.WiredHandler?.ExecutePile(this.ItemInstance.Coordinate, user, null);
     }
 
     public override void Dispose()

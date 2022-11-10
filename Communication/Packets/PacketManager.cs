@@ -135,7 +135,7 @@ public sealed class PacketManager
         var timeExecution = DateTime.Now - timeStarted;
         if (timeExecution > this._maximumRunTimeInSec)
         {
-            if (WibboEnvironment.GetSettings().GetData<bool>("enable.packet.log.lantency"))
+            if (WibboEnvironment.GetSettings().GetData<bool>("packet.log.lantency.enable"))
             {
                 ExceptionLogger.LogPacketException(packet.ToString(), string.Format("High latency in {0}: {1}ms", session.User?.Username ?? session.Connection.GetIp(), timeExecution.TotalMilliseconds));
             }

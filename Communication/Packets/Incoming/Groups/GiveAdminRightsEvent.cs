@@ -42,10 +42,7 @@ internal class GiveAdminRightsEvent : IPacketEvent
 
                 userRooom.UpdateNeeded = true;
 
-                if (userRooom.Client != null)
-                {
-                    userRooom.Client.SendPacket(new YouAreControllerComposer(1));
-                }
+                userRooom.Client?.SendPacket(new YouAreControllerComposer(1));
             }
         }
 

@@ -289,10 +289,7 @@ public class Item : IEquatable<Item>
     {
         this.GetAffectedTiles.Clear();
 
-        if (this.WiredHandler != null)
-        {
-            this.WiredHandler.Dispose();
-        }
+        this.WiredHandler?.Dispose();
 
         this._roomInstance = null;
         this.WiredHandler = null;

@@ -18,10 +18,12 @@ public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
         {
             foreach (var coord in roomItem.GetAffectedTiles)
             {
-                if (coord != this.ItemInstance.Coordinate)
+                if (coord == this.ItemInstance.Coordinate && this.RoomInstance.WiredHandler.SecurityEnabled())
                 {
-                    this.RoomInstance.WiredHandler.ExecutePile(coord, user, item);
+                    continue;
                 }
+
+                this.RoomInstance.WiredHandler.ExecutePile(coord, user, item);
             }
         }
 
