@@ -1,6 +1,7 @@
 namespace WibboEmulator;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text.Json;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
@@ -172,6 +173,9 @@ public static class WibboEnvironment
             {
                 _rcon = new RCONSocket(_settingsManager.GetData<int>("mus.tcp.port"), _settingsManager.GetData<string>("mus.tcp.allowedaddr").Split(','));
             }
+
+            HttpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Wibbo", "1.0"));
+            HttpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("(+http://wibbo.org)"));
 
             ExceptionLogger.WriteLine("EMULATOR -> READY!");
 

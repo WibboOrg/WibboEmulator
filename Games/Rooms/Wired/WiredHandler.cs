@@ -234,11 +234,11 @@ public class WiredHandler
             {
                 _ = this._wiredUsed.TryAdd(coordinate, new() { user?.VirtualId ?? 0 });
             }
+        }
 
-            if (this._tickCounter > 1024)
-            {
-                return;
-            }
+        if (this._tickCounter > 1024)
+        {
+            return;
         }
 
         this._tickCounter++;
