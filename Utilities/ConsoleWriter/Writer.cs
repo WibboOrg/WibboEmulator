@@ -52,7 +52,7 @@ public class Writer
     public static void LogPacketException(string packet, string exception)
     {
         WriteToFile("logs/packeterror.txt", "Error in packet " + packet + ": \r\n" + exception + "\r\n\r\n");
-        WriteLine("User disconnection logged: " + exception);
+        WriteLine("User packet: " + exception);
     }
 
     public static void HandleException(Exception exception, string location)
