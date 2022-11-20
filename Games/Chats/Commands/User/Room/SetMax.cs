@@ -13,14 +13,14 @@ internal class SetMax : IChatCommand
             return;
         }
 
-        if (int.TryParse(parameters[1], out var maxUsers))
+        if (!int.TryParse(parameters[1], out var maxUsers))
         {
             return;
         }
 
-        if ((maxUsers > 75 || maxUsers <= 0) && !session.User.HasPermission("mod"))
+        if ((maxUsers > 100 || maxUsers <= 0) && !session.User.HasPermission("mod"))
         {
-            room.RoomData.UsersMax = 75;
+            room.RoomData.UsersMax = 100;
         }
         else
         {

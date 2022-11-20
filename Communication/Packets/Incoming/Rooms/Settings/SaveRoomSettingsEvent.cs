@@ -82,9 +82,9 @@ internal class SaveRoomSettingsEvent : IPacketEvent
             return;
         }
 
-        if (maxUsers is < 10 or > 75)
+        if (maxUsers is < 10 or > 100)
         {
-            maxUsers = 25;
+            maxUsers = 100;
         }
 
         if (trocStatus is < 0 or > 2)
