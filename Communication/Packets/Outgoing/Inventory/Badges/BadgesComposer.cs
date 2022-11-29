@@ -7,11 +7,12 @@ internal class BadgesComposer : ServerPacket
         : base(ServerPacketHeader.USER_BADGES)
     {
         var list = new List<Badge>();
+        var i = 0;
 
         this.WriteInteger(badges.Count);
         foreach (var badge in badges.Values)
         {
-            this.WriteInteger(0);
+            this.WriteInteger(i++);
             this.WriteString(badge.Code);
             if (badge.Slot > 0)
             {

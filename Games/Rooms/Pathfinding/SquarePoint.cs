@@ -12,11 +12,11 @@ public readonly struct SquarePoint
     {
         this.X = x;
         this.Y = y;
+        this.Distance = GetDistance(x, y, targetX, targetY);
         this._squareData = squareData;
         this._squareDataUser = squareDataUser;
         this._override = isOverride;
         this._lastStep = x == targetX && y == targetY;
-        this.Distance = GetDistance(x, y, targetX, targetY);
         this._allowWalkthrough = allowWalkthrough;
     }
 

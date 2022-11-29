@@ -2,41 +2,41 @@ namespace WibboEmulator.Games.Rooms.PathFinding;
 
 public static class Pathfinder
 {
-    public static SquarePoint GetNextStep(int pUserX, int pUserY, int pUserTargetX, int pUserTargetY, byte[,] pGameMap, double[,] pHeight,
-        byte[,] pUserOnMap, byte[,] pSquareTaking, int maxX, int maxY, bool pUserOverride, bool pDiagonal, bool pAllowWalkthrough, bool pOblique)
+    public static SquarePoint GetNextStep(int userX, int userY, int userTargetX, int userTargetY, byte[,] gameMap, double[,] height,
+        byte[,] userOnMap, byte[,] squareTaking, int maxX, int maxY, bool userOverride, bool diagonal, bool allowWalkthrough, bool oblique)
     {
-        var pMap = new ModelInfo(maxX, maxY, pGameMap, pUserOnMap, pSquareTaking);
-        var pTarget = new SquarePoint(pUserTargetX, pUserTargetY, pUserTargetX, pUserTargetY, pMap.GetState(pUserTargetX, pUserTargetY), pUserOverride, pAllowWalkthrough, pMap.GetStateUser(pUserTargetX, pUserTargetY));
-        if (pUserX == pUserTargetX && pUserY == pUserTargetY)
+        var map = new ModelInfo(maxX, maxY, gameMap, userOnMap, squareTaking);
+        var target = new SquarePoint(userTargetX, userTargetY, userTargetX, userTargetY, map.GetState(userTargetX, userTargetY), userOverride, allowWalkthrough, map.GetStateUser(userTargetX, userTargetY));
+        if (userX == userTargetX && userY == userTargetY)
         {
-            return pTarget;
+            return target;
         }
         else
         {
-            return GetClosetSqare(new SquareInformation(pUserX, pUserY, pTarget, pMap, pUserOverride, pDiagonal, pAllowWalkthrough, pOblique), new HeightInfo(maxX, maxY, pHeight), pUserOverride);
+            return GetClosetSqare(new SquareInformation(userX, userY, target, map, userOverride, diagonal, allowWalkthrough, oblique), new HeightInfo(maxX, maxY, height), userOverride);
         }
     }
 
-    private static SquarePoint GetClosetSqare(SquareInformation pInfo, HeightInfo height, bool pUserOverride)
+    private static SquarePoint GetClosetSqare(SquareInformation info, HeightInfo height, bool userOverride)
     {
-        var closest = pInfo.Point.Distance;
-        var squarePoint1 = pInfo.Point;
-        var state = height.GetState(pInfo.Point.X, pInfo.Point.Y);
+        var closest = info.Point.Distance;
+        var squarePoint = info.Point;
+        var state = height.GetState(info.Point.X, info.Point.Y);
 
         for (var val = 0; val < 8; val++)
         {
-            var squarePoint2 = pInfo.Pos(val);
-            if ((squarePoint2.AllowWalkthrough && squarePoint2.CanWalk && height.GetState(squarePoint2.X, squarePoint2.Y) - state < 2) || pUserOverride)
+            var squarePoint2 = info.Pos(val);
+            if ((squarePoint2.AllowWalkthrough && squarePoint2.CanWalk && height.GetState(squarePoint2.X, squarePoint2.Y) - state < 2) || userOverride)
             {
                 var getDistance = squarePoint2.Distance;
                 if (closest > getDistance)
                 {
                     closest = getDistance;
-                    squarePoint1 = squarePoint2;
+                    squarePoint = squarePoint2;
                 }
             }
         }
 
-        return squarePoint1;
+        return squarePoint;
     }
 }
