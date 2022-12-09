@@ -85,14 +85,6 @@ public class ItemsPosReset
         this.Y = y;
         this.Z = z;
         this.Rot = rot;
-
-        if (int.TryParse(extraData, out _) || (!extraData.Contains(';') && !extraData.Contains(':')))
-        {
-            this.ExtraData = extraData;
-        }
-        else
-        {
-            this.ExtraData = "Null";
-        }
+        this.ExtraData = extraData;
     }
 }
