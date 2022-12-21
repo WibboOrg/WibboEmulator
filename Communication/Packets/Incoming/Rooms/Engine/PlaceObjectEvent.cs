@@ -131,23 +131,23 @@ internal class PlaceObjectEvent : IPacketEvent
 
                 if (session.User.ForceOpenGift)
                 {
-                    if (item.GetBaseItem().InteractionType == InteractionType.EXTRABOX)
+                    if (item.GetBaseItem().InteractionType == InteractionType.EXTRA_BOX)
                     {
                         ItemLootBox.OpenExtrabox(session, item, room);
                     }
-                    else if (item.GetBaseItem().InteractionType == InteractionType.DELUXEBOX)
+                    else if (item.GetBaseItem().InteractionType == InteractionType.DELUXE_BOX)
                     {
                         ItemLootBox.OpenDeluxeBox(session, item, room);
                     }
-                    else if (item.GetBaseItem().InteractionType == InteractionType.LOOTBOX2022)
+                    else if (item.GetBaseItem().InteractionType == InteractionType.LOOTBOX_2022)
                     {
                         ItemLootBox.OpenLootBox2022(session, item, room);
                     }
-                    else if (item.GetBaseItem().InteractionType == InteractionType.LEGENDBOX)
+                    else if (item.GetBaseItem().InteractionType == InteractionType.LEGEND_BOX)
                     {
                         ItemLootBox.OpenLegendBox(session, item, room);
                     }
-                    else if (item.GetBaseItem().InteractionType == InteractionType.BADGEBOX)
+                    else if (item.GetBaseItem().InteractionType == InteractionType.BADGE_BOX)
                     {
                         ItemLootBox.OpenBadgeBox(session, item, room);
                     }

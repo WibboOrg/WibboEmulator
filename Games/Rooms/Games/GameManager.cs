@@ -113,7 +113,7 @@ public class GameManager
 
     private static bool IsScoreItem(InteractionType type) => type switch
     {
-        InteractionType.BANZAISCOREBLUE or InteractionType.BANZAISCORERED or InteractionType.BANZAISCOREYELLOW or InteractionType.BANZAISCOREGREEN or InteractionType.FREEZEBLUECOUNTER or InteractionType.FREEZEGREENCOUNTER or InteractionType.FREEZEREDCOUNTER or InteractionType.FREEZEYELLOWCOUNTER => true,
+        InteractionType.BANZAI_SCORE_BLUE or InteractionType.BANZAI_SCORE_RED or InteractionType.BANZAI_SCORE_YELLOW or InteractionType.BANZAI_SCORE_GREEN or InteractionType.FREEZE_BLUE_COUNTER or InteractionType.FREEZE_GREEN_COUNTER or InteractionType.FREEZE_RED_COUNTER or InteractionType.FREEZE_YELLOW_COUNTER => true,
         _ => false,
     };
 
@@ -198,14 +198,14 @@ public class GameManager
     {
         switch (item.GetBaseItem().InteractionType)
         {
-            case InteractionType.FREEZEBLUEGATE:
-            case InteractionType.FREEZEGREENGATE:
-            case InteractionType.FREEZEREDGATE:
-            case InteractionType.FREEZEYELLOWGATE:
-            case InteractionType.BANZAIGATEBLUE:
-            case InteractionType.BANZAIGATEGREEN:
-            case InteractionType.BANZAIGATERED:
-            case InteractionType.BANZAIGATEYELLOW:
+            case InteractionType.FREEZE_BLUE_GATE:
+            case InteractionType.FREEZE_GREEN_GATE:
+            case InteractionType.FREEZE_RED_GATE:
+            case InteractionType.FREEZE_YELLOW_GATE:
+            case InteractionType.BANZAI_GATE_BLUE:
+            case InteractionType.BANZAI_GATE_GREEN:
+            case InteractionType.BANZAI_GATE_RED:
+            case InteractionType.BANZAI_GATE_YELLOW:
                 //this.room.GetGameMap().UpdateGameMap(item, false);
                 break;
         }
@@ -238,23 +238,23 @@ public class GameManager
     {
         switch (item.GetBaseItem().InteractionType)
         {
-            case InteractionType.BANZAIGATEBLUE:
-            case InteractionType.FREEZEBLUEGATE:
+            case InteractionType.BANZAI_GATE_BLUE:
+            case InteractionType.FREEZE_BLUE_GATE:
                 item.ExtraData = this._roomInstance.TeamManager.BlueTeam.Count.ToString();
                 item.UpdateState();
                 break;
-            case InteractionType.BANZAIGATERED:
-            case InteractionType.FREEZEREDGATE:
+            case InteractionType.BANZAI_GATE_RED:
+            case InteractionType.FREEZE_RED_GATE:
                 item.ExtraData = this._roomInstance.TeamManager.RedTeam.Count.ToString();
                 item.UpdateState();
                 break;
-            case InteractionType.BANZAIGATEGREEN:
-            case InteractionType.FREEZEGREENGATE:
+            case InteractionType.BANZAI_GATE_GREEN:
+            case InteractionType.FREEZE_GREEN_GATE:
                 item.ExtraData = this._roomInstance.TeamManager.GreenTeam.Count.ToString();
                 item.UpdateState();
                 break;
-            case InteractionType.BANZAIGATEYELLOW:
-            case InteractionType.FREEZEYELLOWGATE:
+            case InteractionType.BANZAI_GATE_YELLOW:
+            case InteractionType.FREEZE_YELLOW_GATE:
                 item.ExtraData = this._roomInstance.TeamManager.YellowTeam.Count.ToString();
                 item.UpdateState();
                 break;
@@ -265,14 +265,14 @@ public class GameManager
     {
         switch (item.GetBaseItem().InteractionType)
         {
-            case InteractionType.BANZAIGATEBLUE:
-            case InteractionType.FREEZEBLUEGATE:
-            case InteractionType.FREEZEGREENGATE:
-            case InteractionType.BANZAIGATEGREEN:
-            case InteractionType.FREEZEREDGATE:
-            case InteractionType.BANZAIGATERED:
-            case InteractionType.FREEZEYELLOWGATE:
-            case InteractionType.BANZAIGATEYELLOW:
+            case InteractionType.BANZAI_GATE_BLUE:
+            case InteractionType.FREEZE_BLUE_GATE:
+            case InteractionType.FREEZE_GREEN_GATE:
+            case InteractionType.BANZAI_GATE_GREEN:
+            case InteractionType.FREEZE_RED_GATE:
+            case InteractionType.BANZAI_GATE_RED:
+            case InteractionType.FREEZE_YELLOW_GATE:
+            case InteractionType.BANZAI_GATE_YELLOW:
                 //this.room.GetGameMap().UpdateGameMap(item, true);
                 break;
         }

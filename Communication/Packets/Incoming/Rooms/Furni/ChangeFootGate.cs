@@ -19,7 +19,7 @@ internal class ChangeFootGate : IPacketEvent
         }
 
         var item = room.RoomItemHandling.GetItem(id);
-        if (item == null || item.GetBaseItem().InteractionType != InteractionType.FBGATE)
+        if (item == null || item.GetBaseItem().InteractionType != InteractionType.FOOTBALL_GATE)
         {
             return;
         }

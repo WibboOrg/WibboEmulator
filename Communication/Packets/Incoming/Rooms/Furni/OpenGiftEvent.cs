@@ -67,23 +67,23 @@ internal class OpenGiftEvent : IPacketEvent
 
             FinishOpenGift(dbClient, session, present, room, data);
         }
-        else if (present.GetBaseItem().InteractionType == InteractionType.EXTRABOX)
+        else if (present.GetBaseItem().InteractionType == InteractionType.EXTRA_BOX)
         {
             ItemLootBox.OpenExtrabox(session, present, room);
         }
-        else if (present.GetBaseItem().InteractionType == InteractionType.DELUXEBOX)
+        else if (present.GetBaseItem().InteractionType == InteractionType.DELUXE_BOX)
         {
             ItemLootBox.OpenDeluxeBox(session, present, room);
         }
-        else if (present.GetBaseItem().InteractionType == InteractionType.LOOTBOX2022)
+        else if (present.GetBaseItem().InteractionType == InteractionType.LOOTBOX_2022)
         {
             ItemLootBox.OpenLootBox2022(session, present, room);
         }
-        else if (present.GetBaseItem().InteractionType == InteractionType.LEGENDBOX)
+        else if (present.GetBaseItem().InteractionType == InteractionType.LEGEND_BOX)
         {
             ItemLootBox.OpenLegendBox(session, present, room);
         }
-        else if (present.GetBaseItem().InteractionType == InteractionType.BADGEBOX)
+        else if (present.GetBaseItem().InteractionType == InteractionType.BADGE_BOX)
         {
             ItemLootBox.OpenBadgeBox(session, present, room);
         }

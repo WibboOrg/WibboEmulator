@@ -992,7 +992,7 @@ public class RoomUserManager
                     user.RotBody = roomItem.Rotation;
                     user.UpdateNeeded = true;
                     break;
-                case InteractionType.PRESSUREPAD:
+                case InteractionType.PRESSURE_PAD:
                 case InteractionType.TRAMPOLINE:
                 case InteractionType.TREADMILL:
                 case InteractionType.CROSSTRAINER:
@@ -1003,7 +1003,7 @@ public class RoomUserManager
                     roomItem.ExtraData = "1;" + roomItem.GroupId;
                     roomItem.UpdateState(false, true);
                     break;
-                case InteractionType.ARROW:
+                case InteractionType.TELEPORT_ARROW:
                     if (!cycleGameItems || user.IsBot || user.Client == null)
                     {
                         break;
@@ -1018,10 +1018,10 @@ public class RoomUserManager
                     roomItem.InteractingUser = user.Client.User.Id;
                     roomItem.ReqUpdate(2);
                     break;
-                case InteractionType.BANZAIGATEBLUE:
-                case InteractionType.BANZAIGATERED:
-                case InteractionType.BANZAIGATEYELLOW:
-                case InteractionType.BANZAIGATEGREEN:
+                case InteractionType.BANZAI_GATE_BLUE:
+                case InteractionType.BANZAI_GATE_RED:
+                case InteractionType.BANZAI_GATE_YELLOW:
+                case InteractionType.BANZAI_GATE_GREEN:
                     if (cycleGameItems && !user.IsBot)
                     {
                         var effectId = (int)roomItem.Team + 32;
@@ -1060,29 +1060,29 @@ public class RoomUserManager
                         }
                     }
                     break;
-                case InteractionType.BANZAIBLO:
+                case InteractionType.BANZAI_BLOB_2:
                     if (cycleGameItems && user.Team != TeamType.None && !user.IsBot)
                     {
-                        this._room.GameItemHandler.OnWalkableBanzaiBlo(user, roomItem);
+                        this._room.GameItemHandler.OnWalkableBanzaiBlob2(user, roomItem);
                     }
                     break;
-                case InteractionType.BANZAIBLOB:
+                case InteractionType.BANZAI_BLOB:
                     if (cycleGameItems && user.Team != TeamType.None && !user.IsBot)
                     {
                         this._room.GameItemHandler.OnWalkableBanzaiBlob(user, roomItem);
                     }
                     break;
-                case InteractionType.BANZAITELE:
+                case InteractionType.BANZAI_TELE:
                     if (cycleGameItems)
                     {
                         this._room.GameItemHandler.OnTeleportRoomUserEnter(user, roomItem);
                     }
 
                     break;
-                case InteractionType.FREEZEYELLOWGATE:
-                case InteractionType.FREEZEREDGATE:
-                case InteractionType.FREEZEGREENGATE:
-                case InteractionType.FREEZEBLUEGATE:
+                case InteractionType.FREEZE_YELLOW_GATE:
+                case InteractionType.FREEZE_RED_GATE:
+                case InteractionType.FREEZE_GREEN_GATE:
+                case InteractionType.FREEZE_BLUE_GATE:
                     if (cycleGameItems && !user.IsBot)
                     {
                         var effectId = (int)roomItem.Team + 39;
@@ -1119,7 +1119,7 @@ public class RoomUserManager
                         }
                     }
                     break;
-                case InteractionType.FBGATE:
+                case InteractionType.FOOTBALL_GATE:
                     if (cycleGameItems || string.IsNullOrEmpty(roomItem.ExtraData) || !roomItem.ExtraData.Contains(',') || user == null || user.IsBot || user.IsTransf || user.IsSpectator || user.Client == null)
                     {
                         break;
@@ -1179,7 +1179,7 @@ public class RoomUserManager
                         this._room.SendPacket(new UserChangeComposer(user, false));
                     }
                     break;
-                case InteractionType.FREEZETILEBLOCK:
+                case InteractionType.FREEZE_TILE_BLOCK:
                     if (!cycleGameItems)
                     {
                         break;
@@ -1579,7 +1579,7 @@ public class RoomUserManager
                 roomItem.ExtraData = "0;" + roomItem.GroupId;
                 roomItem.UpdateState(false, true);
             }
-            else if (roomItem.GetBaseItem().InteractionType is InteractionType.PRESSUREPAD
+            else if (roomItem.GetBaseItem().InteractionType is InteractionType.PRESSURE_PAD
                 or InteractionType.TRAMPOLINE
                 or InteractionType.TREADMILL
                 or InteractionType.CROSSTRAINER)

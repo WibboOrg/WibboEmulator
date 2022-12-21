@@ -319,20 +319,20 @@ public class GameMap
                     InteractionType.ICESKATES => 3,
                     InteractionType.NORMSLASKATES => 2,
                     InteractionType.LOWPOOL => 4,
-                    InteractionType.HALOWEENPOOL => 5,
+                    InteractionType.HALLOWEENPOOL => 5,
                     InteractionType.TRAMPOLINE => 7,
                     InteractionType.TREADMILL => 8,
                     InteractionType.CROSSTRAINER => 9,
                     _ => 0,
                 };
-                if (item.GetBaseItem().InteractionType == InteractionType.FREEZETILEBLOCK && item.ExtraData != "")
+                if (item.GetBaseItem().InteractionType == InteractionType.FREEZE_TILE_BLOCK && item.ExtraData != "")
                 {
                     if (this.MapGame[coord.X, coord.Y] != 3)
                     {
                         this.MapGame[coord.X, coord.Y] = 1;
                     }
                 }
-                else if (item.GetBaseItem().InteractionType == InteractionType.BANZAIPYRAMID && item.ExtraData == "1")
+                else if (item.GetBaseItem().InteractionType == InteractionType.BANZAI_PYRAMID && item.ExtraData == "1")
                 {
                     if (this.MapGame[coord.X, coord.Y] != 3)
                     {
@@ -423,24 +423,24 @@ public class GameMap
             case InteractionType.GUILD_GATE:
                 this._roomInstance.GameItemHandler.AddGroupGate(item);
                 break;
-            case InteractionType.BANZAIFLOOR:
+            case InteractionType.BANZAI_FLOOR:
                 this._roomInstance.BattleBanzai.AddTile(item, item.Id);
                 break;
-            case InteractionType.BANZAITELE:
+            case InteractionType.BANZAI_TELE:
                 this._roomInstance.GameItemHandler.AddTeleport(item, item.Id);
                 item.ExtraData = "";
                 break;
-            case InteractionType.BANZAIPYRAMID:
+            case InteractionType.BANZAI_PYRAMID:
                 this._roomInstance.GameItemHandler.AddPyramid(item, item.Id);
                 break;
-            case InteractionType.BANZAIBLO:
-            case InteractionType.BANZAIBLOB:
+            case InteractionType.BANZAI_BLOB_2:
+            case InteractionType.BANZAI_BLOB:
                 this._roomInstance.GameItemHandler.AddBlob(item, item.Id);
                 break;
-            case InteractionType.FREEZEEXIT:
+            case InteractionType.FREEZE_EXIT:
                 this._roomInstance.GameItemHandler.AddExitTeleport(item);
                 break;
-            case InteractionType.FREEZETILEBLOCK:
+            case InteractionType.FREEZE_TILE_BLOCK:
                 this._roomInstance.Freeze.AddFreezeBlock(item);
                 break;
         }
@@ -453,55 +453,55 @@ public class GameMap
             case InteractionType.GUILD_GATE:
                 this._roomInstance.GameItemHandler.RemoveGroupGate(item);
                 break;
-            case InteractionType.BANZAIFLOOR:
+            case InteractionType.BANZAI_FLOOR:
                 this._roomInstance.BattleBanzai.RemoveTile(item.Id);
                 break;
-            case InteractionType.BANZAITELE:
+            case InteractionType.BANZAI_TELE:
                 this._roomInstance.GameItemHandler.RemoveTeleport(item.Id);
                 break;
-            case InteractionType.BANZAIPYRAMID:
+            case InteractionType.BANZAI_PYRAMID:
                 this._roomInstance.GameItemHandler.RemovePyramid(item.Id);
                 break;
-            case InteractionType.BANZAIBLO:
-            case InteractionType.BANZAIBLOB:
+            case InteractionType.BANZAI_BLOB_2:
+            case InteractionType.BANZAI_BLOB:
                 this._roomInstance.GameItemHandler.RemoveBlob(item.Id);
                 break;
-            case InteractionType.FREEZETILEBLOCK:
+            case InteractionType.FREEZE_TILE_BLOCK:
                 this._roomInstance.Freeze.RemoveFreezeBlock(item.Id);
                 break;
-            case InteractionType.FOOTBALLGOALGREEN:
-            case InteractionType.FOOTBALLCOUNTERGREEN:
-            case InteractionType.BANZAISCOREGREEN:
-            case InteractionType.BANZAIGATEGREEN:
-            case InteractionType.FREEZEGREENCOUNTER:
-            case InteractionType.FREEZEGREENGATE:
+            case InteractionType.FOOTBALL_GOAL_GREEN:
+            case InteractionType.FOOTBALL_COUNTER_GREEN:
+            case InteractionType.BANZAI_SCORE_GREEN:
+            case InteractionType.BANZAI_GATE_GREEN:
+            case InteractionType.FREEZE_GREEN_COUNTER:
+            case InteractionType.FREEZE_GREEN_GATE:
                 this._roomInstance.GameManager.RemoveFurnitureFromTeam(item, TeamType.Green);
                 break;
-            case InteractionType.FOOTBALLGOALYELLOW:
-            case InteractionType.FOOTBALLCOUNTERYELLOW:
-            case InteractionType.BANZAISCOREYELLOW:
-            case InteractionType.BANZAIGATEYELLOW:
-            case InteractionType.FREEZEYELLOWCOUNTER:
-            case InteractionType.FREEZEYELLOWGATE:
+            case InteractionType.FOOTBALL_GOAL_YELLOW:
+            case InteractionType.FOOTBALL_COUNTER_YELLOW:
+            case InteractionType.BANZAI_SCORE_YELLOW:
+            case InteractionType.BANZAI_GATE_YELLOW:
+            case InteractionType.FREEZE_YELLOW_COUNTER:
+            case InteractionType.FREEZE_YELLOW_GATE:
                 this._roomInstance.GameManager.RemoveFurnitureFromTeam(item, TeamType.Yellow);
                 break;
-            case InteractionType.footballgoalblue:
-            case InteractionType.FOOTBALLCOUNTERBLUE:
-            case InteractionType.BANZAISCOREBLUE:
-            case InteractionType.BANZAIGATEBLUE:
-            case InteractionType.FREEZEBLUECOUNTER:
-            case InteractionType.FREEZEBLUEGATE:
+            case InteractionType.FOOTBALL_GOAL_BLUE:
+            case InteractionType.FOOTBALL_COUNTER_BLUE:
+            case InteractionType.BANZAI_SCORE_BLUE:
+            case InteractionType.BANZAI_GATE_BLUE:
+            case InteractionType.FREEZE_BLUE_COUNTER:
+            case InteractionType.FREEZE_BLUE_GATE:
                 this._roomInstance.GameManager.RemoveFurnitureFromTeam(item, TeamType.Blue);
                 break;
-            case InteractionType.FOOTBALLGOALRED:
-            case InteractionType.FOOTBALLCOUNTERRED:
-            case InteractionType.BANZAISCORERED:
-            case InteractionType.BANZAIGATERED:
-            case InteractionType.FREEZEREDCOUNTER:
-            case InteractionType.FREEZEREDGATE:
+            case InteractionType.FOOTBALL_GOAL_RED:
+            case InteractionType.FOOTBALL_COUNTER_RED:
+            case InteractionType.BANZAI_SCORE_RED:
+            case InteractionType.BANZAI_GATE_RED:
+            case InteractionType.FREEZE_RED_COUNTER:
+            case InteractionType.FREEZE_RED_GATE:
                 this._roomInstance.GameManager.RemoveFurnitureFromTeam(item, TeamType.Red);
                 break;
-            case InteractionType.FREEZEEXIT:
+            case InteractionType.FREEZE_EXIT:
                 this._roomInstance.GameItemHandler.RemoveExitTeleport(item);
                 break;
         }
@@ -574,36 +574,36 @@ public class GameMap
                 }
 
                 break;
-            case InteractionType.FOOTBALLGOALGREEN:
-            case InteractionType.FOOTBALLCOUNTERGREEN:
-            case InteractionType.BANZAISCOREGREEN:
-            case InteractionType.BANZAIGATEGREEN:
-            case InteractionType.FREEZEGREENCOUNTER:
-            case InteractionType.FREEZEGREENGATE:
+            case InteractionType.FOOTBALL_GOAL_GREEN:
+            case InteractionType.FOOTBALL_COUNTER_GREEN:
+            case InteractionType.BANZAI_SCORE_GREEN:
+            case InteractionType.BANZAI_GATE_GREEN:
+            case InteractionType.FREEZE_GREEN_COUNTER:
+            case InteractionType.FREEZE_GREEN_GATE:
                 this._roomInstance.GameManager.AddFurnitureToTeam(item, TeamType.Green);
                 break;
-            case InteractionType.FOOTBALLGOALYELLOW:
-            case InteractionType.FOOTBALLCOUNTERYELLOW:
-            case InteractionType.BANZAISCOREYELLOW:
-            case InteractionType.BANZAIGATEYELLOW:
-            case InteractionType.FREEZEYELLOWCOUNTER:
-            case InteractionType.FREEZEYELLOWGATE:
+            case InteractionType.FOOTBALL_GOAL_YELLOW:
+            case InteractionType.FOOTBALL_COUNTER_YELLOW:
+            case InteractionType.BANZAI_SCORE_YELLOW:
+            case InteractionType.BANZAI_GATE_YELLOW:
+            case InteractionType.FREEZE_YELLOW_COUNTER:
+            case InteractionType.FREEZE_YELLOW_GATE:
                 this._roomInstance.GameManager.AddFurnitureToTeam(item, TeamType.Yellow);
                 break;
-            case InteractionType.footballgoalblue:
-            case InteractionType.FOOTBALLCOUNTERBLUE:
-            case InteractionType.BANZAISCOREBLUE:
-            case InteractionType.BANZAIGATEBLUE:
-            case InteractionType.FREEZEBLUECOUNTER:
-            case InteractionType.FREEZEBLUEGATE:
+            case InteractionType.FOOTBALL_GOAL_BLUE:
+            case InteractionType.FOOTBALL_COUNTER_BLUE:
+            case InteractionType.BANZAI_SCORE_BLUE:
+            case InteractionType.BANZAI_GATE_BLUE:
+            case InteractionType.FREEZE_BLUE_COUNTER:
+            case InteractionType.FREEZE_BLUE_GATE:
                 this._roomInstance.GameManager.AddFurnitureToTeam(item, TeamType.Blue);
                 break;
-            case InteractionType.FOOTBALLGOALRED:
-            case InteractionType.FOOTBALLCOUNTERRED:
-            case InteractionType.BANZAISCORERED:
-            case InteractionType.BANZAIGATERED:
-            case InteractionType.FREEZEREDCOUNTER:
-            case InteractionType.FREEZEREDGATE:
+            case InteractionType.FOOTBALL_GOAL_RED:
+            case InteractionType.FOOTBALL_COUNTER_RED:
+            case InteractionType.BANZAI_SCORE_RED:
+            case InteractionType.BANZAI_GATE_RED:
+            case InteractionType.FREEZE_RED_COUNTER:
+            case InteractionType.FREEZE_RED_GATE:
                 this._roomInstance.GameManager.AddFurnitureToTeam(item, TeamType.Red);
                 break;
         }

@@ -62,7 +62,7 @@ internal class DuplicateRoom : IChatCommand
 
                 newItemsId.Add(oldItemId, itemId);
 
-                if (data.InteractionType is InteractionType.TELEPORT or InteractionType.ARROW)
+                if (data.InteractionType is InteractionType.TELEPORT or InteractionType.TELEPORT_ARROW)
                 {
                     teleportId.Add(oldItemId);
                 }

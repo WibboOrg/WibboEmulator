@@ -66,14 +66,14 @@ public class WiredHandler
                 _ = this._conditionStacks.TryAdd(itemCoord, new List<Item>() { item });
             }
         }
-        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALRANDOM)
+        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_RANDOM)
         {
             if (!this._specialRandom.Contains(itemCoord))
             {
                 this._specialRandom.Add(itemCoord);
             }
         }
-        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALUNSEEN)
+        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_UNSEEN)
         {
             if (!this._specialUnseen.ContainsKey(itemCoord))
             {
@@ -110,14 +110,14 @@ public class WiredHandler
                 _ = this._conditionStacks.TryRemove(itemCoord, out _);
             }
         }
-        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALRANDOM)
+        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_RANDOM)
         {
             if (this._specialRandom.Contains(itemCoord))
             {
                 _ = this._specialRandom.Remove(itemCoord);
             }
         }
-        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALUNSEEN)
+        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_UNSEEN)
         {
             if (this._specialUnseen.ContainsKey(itemCoord))
             {

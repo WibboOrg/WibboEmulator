@@ -25,7 +25,7 @@ internal class UpdateMagicTileEvent : IPacketEvent
             }
 
             var item = room.RoomItemHandling.GetItem(itemId);
-            if (item != null && item.GetBaseItem().InteractionType == InteractionType.PILEMAGIC)
+            if (item != null && item.GetBaseItem().InteractionType == InteractionType.PILE_MAGIC)
             {
                 if (heightToSet > 5000)
                 {

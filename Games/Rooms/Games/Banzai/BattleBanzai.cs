@@ -53,7 +53,7 @@ public class BattleBanzai
 
         foreach (var ball in roomItemForSquare)
         {
-            if (ball.GetBaseItem().InteractionType != InteractionType.BANZAIPUCK)
+            if (ball.GetBaseItem().InteractionType != InteractionType.BANZAI_PUCK)
             {
                 continue;
             }
@@ -292,7 +292,7 @@ public class BattleBanzai
     {
         foreach (var roomItem in this._roomInstance.GameMap.GetCoordinatedItems(new Point(x, y)))
         {
-            if (roomItem.GetBaseItem().InteractionType == InteractionType.BANZAIFLOOR)
+            if (roomItem.GetBaseItem().InteractionType == InteractionType.BANZAI_FLOOR)
             {
                 return roomItem;
             }

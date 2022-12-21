@@ -8,7 +8,7 @@ internal class ObjectUpdateComposer : ServerPacket
         : base(ServerPacketHeader.FURNITURE_FLOOR_UPDATE)
     {
         this.WriteInteger(item.Id);
-        this.WriteInteger((hideWired && WiredUtillity.TypeIsWired(item.GetBaseItem().InteractionType) && item.GetBaseItem().InteractionType != InteractionType.HIGHSCORE && item.GetBaseItem().InteractionType != InteractionType.HIGHSCOREPOINTS) ? 31294061 : item.GetBaseItem().SpriteId);
+        this.WriteInteger((hideWired && WiredUtillity.TypeIsWired(item.GetBaseItem().InteractionType) && item.GetBaseItem().InteractionType != InteractionType.HIGH_SCORE && item.GetBaseItem().InteractionType != InteractionType.HIGH_SCORE_POINTS) ? 31294061 : item.GetBaseItem().SpriteId);
         this.WriteInteger(item.X);
         this.WriteInteger(item.Y);
         this.WriteInteger(item.Rotation);

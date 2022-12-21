@@ -224,7 +224,7 @@ public class Freeze
     {
         foreach (var roomItem in this._roomInstance.GameMap.GetCoordinatedItems(new Point(x, y)))
         {
-            if (roomItem.GetBaseItem().InteractionType == InteractionType.FREEZETILE)
+            if (roomItem.GetBaseItem().InteractionType == InteractionType.FREEZE_TILE)
             {
                 return roomItem;
             }
@@ -272,11 +272,11 @@ public class Freeze
         {
             switch (roomItem.GetBaseItem().InteractionType)
             {
-                case InteractionType.FREEZETILEBLOCK:
+                case InteractionType.FREEZE_TILE_BLOCK:
                     this.SetRandomPowerUp(roomItem);
                     roomItem.UpdateState(false, true);
                     continue;
-                case InteractionType.FREEZETILE:
+                case InteractionType.FREEZE_TILE:
                     roomItem.ExtraData = "11000";
                     roomItem.UpdateState(false, true);
                     continue;
@@ -620,7 +620,7 @@ public class Freeze
     {
         foreach (var roomItem in items)
         {
-            if (roomItem.GetBaseItem().InteractionType == InteractionType.FREEZETILE)
+            if (roomItem.GetBaseItem().InteractionType == InteractionType.FREEZE_TILE)
             {
                 return true;
             }
@@ -632,7 +632,7 @@ public class Freeze
     {
         foreach (var roomItem in items)
         {
-            if (roomItem.GetBaseItem().InteractionType == InteractionType.FREEZETILEBLOCK)
+            if (roomItem.GetBaseItem().InteractionType == InteractionType.FREEZE_TILE_BLOCK)
             {
                 return true;
             }

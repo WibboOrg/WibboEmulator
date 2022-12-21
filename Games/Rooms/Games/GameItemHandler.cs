@@ -113,7 +113,7 @@ public class GameItemHandler
         item.UpdateState();
     }
 
-    public void OnWalkableBanzaiBlo(RoomUser user, Item item)
+    public void OnWalkableBanzaiBlob2(RoomUser user, Item item)
     {
         if (item.ExtraData == "1")
         {

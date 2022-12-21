@@ -12,7 +12,7 @@ public static class ItemUtility
 
         if (!item.Data.AllowGift || item.IsLimited || item.Amount > 1 || item.Data.InteractionType == InteractionType.EXCHANGE ||
             item.Data.InteractionType == InteractionType.BADGE || (item.Data.Type != 's' && item.Data.Type != 'i') || item.CostWibboPoints > 0 ||
-            item.Data.InteractionType == InteractionType.TELEPORT || item.Data.InteractionType == InteractionType.ARROW)
+            item.Data.InteractionType == InteractionType.TELEPORT || item.Data.InteractionType == InteractionType.TELEPORT_ARROW)
         {
             return false;
         }

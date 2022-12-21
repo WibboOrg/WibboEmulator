@@ -144,10 +144,10 @@ public class WiredRegister
             case InteractionType.ACTION_JOIN_TEAM:
                 handler = new TeamJoin(item, room);
                 break;
-            case InteractionType.HIGHSCORE:
+            case InteractionType.HIGH_SCORE:
                 handler = new HighScore(item, room);
                 break;
-            case InteractionType.HIGHSCOREPOINTS:
+            case InteractionType.HIGH_SCORE_POINTS:
                 handler = new HighScorePoints(item, room);
                 break;
 

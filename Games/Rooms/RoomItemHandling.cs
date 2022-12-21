@@ -535,7 +535,7 @@ public class RoomItemHandling
         var construitHeigth = 1.0;
         var pileMagic = false;
 
-        if (item.GetBaseItem().InteractionType == InteractionType.PILEMAGIC)
+        if (item.GetBaseItem().InteractionType == InteractionType.PILE_MAGIC)
         {
             pileMagic = true;
         }
@@ -564,7 +564,7 @@ public class RoomItemHandling
         {
             foreach (var roomItem in itemsComplete)
             {
-                if (roomItem.GetBaseItem().InteractionType == InteractionType.PILEMAGIC)
+                if (roomItem.GetBaseItem().InteractionType == InteractionType.PILE_MAGIC)
                 {
                     pZ = roomItem.Z;
                     pileMagic = true;

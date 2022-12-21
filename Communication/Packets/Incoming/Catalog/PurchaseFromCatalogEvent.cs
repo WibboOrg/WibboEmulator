@@ -285,7 +285,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
                         break;
 
                     case InteractionType.TELEPORT:
-                    case InteractionType.ARROW:
+                    case InteractionType.TELEPORT_ARROW:
                         for (var i = 0; i < amountPurchase; i++)
                         {
                             var teleItems = ItemFactory.CreateTeleporterItems(item.Data, session.User);

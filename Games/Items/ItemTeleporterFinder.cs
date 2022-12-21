@@ -56,6 +56,6 @@ public static class ItemTeleporterFinder
         }
 
         var roomItem = room.RoomItemHandling.GetItem(linkedTele);
-        return (roomItem != null && (roomItem.GetBaseItem().InteractionType == InteractionType.TELEPORT || roomItem.GetBaseItem().InteractionType == InteractionType.ARROW)) || GetTeleRoomId(linkedTele, room) != 0;
+        return (roomItem != null && (roomItem.GetBaseItem().InteractionType == InteractionType.TELEPORT || roomItem.GetBaseItem().InteractionType == InteractionType.TELEPORT_ARROW)) || GetTeleRoomId(linkedTele, room) != 0;
     }
 }

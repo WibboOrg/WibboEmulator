@@ -157,17 +157,10 @@ internal class SaveBotActionEvent : IPacketEvent
                     return;
                 }
 
-                if (dataString.Contains("<img ") || dataString.Contains("<font ") || dataString.Contains("</font>") || dataString.Contains("</a>") || dataString.Contains("<i>"))
-                {
-                    return;
-                }
-
                 bot.BotData.Name = dataString;
 
-                using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    BotUserDao.UpdateName(dbClient, bot.BotData.Id, dataString);
-                }
+                using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                BotUserDao.UpdateName(dbClient, bot.BotData.Id, dataString);
 
                 room.SendPacket(new UserNameChangeComposer(bot.BotData.Name, bot.VirtualId));
                 break;

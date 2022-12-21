@@ -64,10 +64,10 @@ public class Soccer
         {
             switch (roomItem.GetBaseItem().InteractionType)
             {
-                case InteractionType.FOOTBALLCOUNTERBLUE:
-                case InteractionType.FOOTBALLCOUNTERGREEN:
-                case InteractionType.FOOTBALLCOUNTERRED:
-                case InteractionType.FOOTBALLCOUNTERYELLOW:
+                case InteractionType.FOOTBALL_COUNTER_BLUE:
+                case InteractionType.FOOTBALL_COUNTER_GREEN:
+                case InteractionType.FOOTBALL_COUNTER_RED:
+                case InteractionType.FOOTBALL_COUNTER_YELLOW:
                     _ = int.TryParse(roomItem.ExtraData, out var num);
                     num++;
                     if (num >= 100)

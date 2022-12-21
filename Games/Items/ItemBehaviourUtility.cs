@@ -41,13 +41,13 @@ internal static class ItemBehaviourUtility
                 }
 
                 message.WriteString("state");
-                message.WriteString((itemData.InteractionType is not InteractionType.TONER and not InteractionType.FBGATE) ? item.ExtraData : string.Empty);
+                message.WriteString((itemData.InteractionType is not InteractionType.TONER and not InteractionType.FOOTBALL_GATE) ? item.ExtraData : string.Empty);
                 break;
 
             case InteractionType.TROPHY:
             case InteractionType.PHOTO:
                 message.WriteInteger(item.Limited > 0 ? 256 : 0);
-                message.WriteString((itemData.InteractionType is not InteractionType.TONER and not InteractionType.FBGATE) ? item.ExtraData : string.Empty);
+                message.WriteString((itemData.InteractionType is not InteractionType.TONER and not InteractionType.FOOTBALL_GATE) ? item.ExtraData : string.Empty);
                 break;
 
             case InteractionType.WALLPAPER:
@@ -85,8 +85,8 @@ internal static class ItemBehaviourUtility
                 }
                 break;
 
-            case InteractionType.HIGHSCORE:
-            case InteractionType.HIGHSCOREPOINTS:
+            case InteractionType.HIGH_SCORE:
+            case InteractionType.HIGH_SCORE_POINTS:
                 message.WriteInteger(6); //Type
 
                 message.WriteString(item.ExtraData);
@@ -159,22 +159,22 @@ internal static class ItemBehaviourUtility
                 }
                 break;
 
-            case InteractionType.LEGENDBOX:
-            case InteractionType.DELUXEBOX:
-            case InteractionType.EXTRABOX:
-            case InteractionType.LOOTBOX2022:
-            case InteractionType.BADGEBOX:
+            case InteractionType.LEGEND_BOX:
+            case InteractionType.DELUXE_BOX:
+            case InteractionType.EXTRA_BOX:
+            case InteractionType.LOOTBOX_2022:
+            case InteractionType.BADGE_BOX:
             {
                 var lotName = "RareBox";
                 switch (itemData.InteractionType)
                 {
-                    case InteractionType.LEGENDBOX:
+                    case InteractionType.LEGEND_BOX:
                         lotName = "LegendBox";
                         break;
-                    case InteractionType.DELUXEBOX:
+                    case InteractionType.DELUXE_BOX:
                         lotName = "RareBox Deluxe";
                         break;
-                    case InteractionType.BADGEBOX:
+                    case InteractionType.BADGE_BOX:
                         lotName = "BadgeBox";
                         break;
                 }
@@ -286,7 +286,7 @@ internal static class ItemBehaviourUtility
                 }
                 break;
 
-            case InteractionType.TVYOUTUBE:
+            case InteractionType.TV_YOUTUBE:
                 message.WriteInteger(1);
                 message.WriteInteger(2);
                 message.WriteString("THUMBNAIL_URL");
@@ -319,7 +319,7 @@ internal static class ItemBehaviourUtility
 
     public static int ItemCategory(Item item) => item.GetBaseItem().InteractionType switch
     {
-        InteractionType.GIFT or InteractionType.LEGENDBOX or InteractionType.BADGEBOX or InteractionType.LOOTBOX2022 or InteractionType.DELUXEBOX or InteractionType.EXTRABOX => 9,
+        InteractionType.GIFT or InteractionType.LEGEND_BOX or InteractionType.BADGE_BOX or InteractionType.LOOTBOX_2022 or InteractionType.DELUXE_BOX or InteractionType.EXTRA_BOX => 9,
         InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE => 17,
         InteractionType.LANDSCAPE => 4,
         InteractionType.FLOOR => 3,

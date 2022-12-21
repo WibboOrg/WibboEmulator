@@ -201,35 +201,35 @@ public class Item : IEquatable<Item>
 
             switch (this.GetBaseItem().InteractionType)
             {
-                case InteractionType.FOOTBALLCOUNTERGREEN:
-                case InteractionType.BANZAIGATEGREEN:
-                case InteractionType.BANZAISCOREGREEN:
-                case InteractionType.FREEZEGREENCOUNTER:
-                case InteractionType.FREEZEGREENGATE:
+                case InteractionType.FOOTBALL_COUNTER_GREEN:
+                case InteractionType.BANZAI_GATE_GREEN:
+                case InteractionType.BANZAI_SCORE_GREEN:
+                case InteractionType.FREEZE_GREEN_COUNTER:
+                case InteractionType.FREEZE_GREEN_GATE:
                     this.Team = TeamType.Green;
                     break;
-                case InteractionType.FOOTBALLCOUNTERYELLOW:
-                case InteractionType.BANZAIGATEYELLOW:
-                case InteractionType.BANZAISCOREYELLOW:
-                case InteractionType.FREEZEYELLOWCOUNTER:
-                case InteractionType.FREEZEYELLOWGATE:
+                case InteractionType.FOOTBALL_COUNTER_YELLOW:
+                case InteractionType.BANZAI_GATE_YELLOW:
+                case InteractionType.BANZAI_SCORE_YELLOW:
+                case InteractionType.FREEZE_YELLOW_COUNTER:
+                case InteractionType.FREEZE_YELLOW_GATE:
                     this.Team = TeamType.Yellow;
                     break;
-                case InteractionType.FOOTBALLCOUNTERBLUE:
-                case InteractionType.BANZAIGATEBLUE:
-                case InteractionType.BANZAISCOREBLUE:
-                case InteractionType.FREEZEBLUECOUNTER:
-                case InteractionType.FREEZEBLUEGATE:
+                case InteractionType.FOOTBALL_COUNTER_BLUE:
+                case InteractionType.BANZAI_GATE_BLUE:
+                case InteractionType.BANZAI_SCORE_BLUE:
+                case InteractionType.FREEZE_BLUE_COUNTER:
+                case InteractionType.FREEZE_BLUE_GATE:
                     this.Team = TeamType.Blue;
                     break;
-                case InteractionType.FOOTBALLCOUNTERRED:
-                case InteractionType.BANZAIGATERED:
-                case InteractionType.BANZAISCORERED:
-                case InteractionType.FREEZEREDCOUNTER:
-                case InteractionType.FREEZEREDGATE:
+                case InteractionType.FOOTBALL_COUNTER_RED:
+                case InteractionType.BANZAI_GATE_RED:
+                case InteractionType.BANZAI_SCORE_RED:
+                case InteractionType.FREEZE_RED_COUNTER:
+                case InteractionType.FREEZE_RED_GATE:
                     this.Team = TeamType.Red;
                     break;
-                case InteractionType.BANZAITELE:
+                case InteractionType.BANZAI_TELE:
                     this.ExtraData = "";
                     break;
                 case InteractionType.GUILD_ITEM:
@@ -559,35 +559,35 @@ public class Item : IEquatable<Item>
 
         switch (this.GetBaseItem().InteractionType)
         {
-            case InteractionType.FOOTBALLCOUNTERGREEN:
-            case InteractionType.BANZAIGATEGREEN:
-            case InteractionType.BANZAISCOREGREEN:
-            case InteractionType.FREEZEGREENCOUNTER:
-            case InteractionType.FREEZEGREENGATE:
+            case InteractionType.FOOTBALL_COUNTER_GREEN:
+            case InteractionType.BANZAI_GATE_GREEN:
+            case InteractionType.BANZAI_SCORE_GREEN:
+            case InteractionType.FREEZE_GREEN_COUNTER:
+            case InteractionType.FREEZE_GREEN_GATE:
                 this.Team = TeamType.Green;
                 break;
-            case InteractionType.FOOTBALLCOUNTERYELLOW:
-            case InteractionType.BANZAIGATEYELLOW:
-            case InteractionType.BANZAISCOREYELLOW:
-            case InteractionType.FREEZEYELLOWCOUNTER:
-            case InteractionType.FREEZEYELLOWGATE:
+            case InteractionType.FOOTBALL_COUNTER_YELLOW:
+            case InteractionType.BANZAI_GATE_YELLOW:
+            case InteractionType.BANZAI_SCORE_YELLOW:
+            case InteractionType.FREEZE_YELLOW_COUNTER:
+            case InteractionType.FREEZE_YELLOW_GATE:
                 this.Team = TeamType.Yellow;
                 break;
-            case InteractionType.FOOTBALLCOUNTERBLUE:
-            case InteractionType.BANZAIGATEBLUE:
-            case InteractionType.BANZAISCOREBLUE:
-            case InteractionType.FREEZEBLUECOUNTER:
-            case InteractionType.FREEZEBLUEGATE:
+            case InteractionType.FOOTBALL_COUNTER_BLUE:
+            case InteractionType.BANZAI_GATE_BLUE:
+            case InteractionType.BANZAI_SCORE_BLUE:
+            case InteractionType.FREEZE_BLUE_COUNTER:
+            case InteractionType.FREEZE_BLUE_GATE:
                 this.Team = TeamType.Blue;
                 break;
-            case InteractionType.FOOTBALLCOUNTERRED:
-            case InteractionType.BANZAIGATERED:
-            case InteractionType.BANZAISCORERED:
-            case InteractionType.FREEZEREDCOUNTER:
-            case InteractionType.FREEZEREDGATE:
+            case InteractionType.FOOTBALL_COUNTER_RED:
+            case InteractionType.BANZAI_GATE_RED:
+            case InteractionType.BANZAI_SCORE_RED:
+            case InteractionType.FREEZE_RED_COUNTER:
+            case InteractionType.FREEZE_RED_GATE:
                 this.Team = TeamType.Red;
                 break;
-            case InteractionType.BANZAITELE:
+            case InteractionType.BANZAI_TELE:
                 this.ExtraData = "";
                 break;
             case InteractionType.GUILD_ITEM:
