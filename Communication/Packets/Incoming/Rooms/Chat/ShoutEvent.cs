@@ -165,7 +165,7 @@ internal class ShoutEvent : IPacketEvent
 
             if (!user.IsBot)
             {
-                if (session.Antipub(message, "<TCHAT>"))
+                if (session.Antipub(message, "<TCHAT>", room.Id))
                 {
                     return;
                 }

@@ -22,17 +22,17 @@ internal class ChangeMottoEvent : IPacketEvent
             newMotto = newMotto[..38];
         }
 
-        if (session.Antipub(newMotto, "<MOTTO>"))
-        {
-            return;
-        }
-
         if (!session.User.HasPermission("word_filter_override"))
         {
             newMotto = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(newMotto);
         }
 
         if (session.User.IgnoreAll)
+        {
+            return;
+        }
+
+        if (session.Antipub(newMotto, "<MOTTO>"))
         {
             return;
         }

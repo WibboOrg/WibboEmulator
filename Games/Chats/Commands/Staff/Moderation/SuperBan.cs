@@ -41,7 +41,7 @@ internal class SuperBan : IChatCommand
                 session.SendWhisper("Tu as SuperBan " + targetUser.User.Username + " pour" + raison + "!");
 
                 WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.User.Username, num, raison, false, false);
-                _ = session.Antipub(raison, "<CMD>");
+                _ = session.Antipub(raison, "<CMD>", room.Id);
             }
         }
     }

@@ -7,7 +7,7 @@ internal class RoomKick : IChatCommand
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var messageAlert = CommandManager.MergeParams(parameters, 1);
-        if (session.Antipub(messageAlert, "<CMD>"))
+        if (session.Antipub(messageAlert, "<CMD>", room.Id))
         {
             return;
         }

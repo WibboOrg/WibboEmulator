@@ -41,7 +41,7 @@ internal class WhisperEvent : IPacketEvent
             color = 0;
         }
 
-        if (session.Antipub(message, "<MP>"))
+        if (session.Antipub(message, "<MP>", room.Id))
         {
             return;
         }

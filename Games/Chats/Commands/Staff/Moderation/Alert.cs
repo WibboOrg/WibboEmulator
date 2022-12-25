@@ -19,7 +19,7 @@ internal class Alert : IChatCommand
         else
         {
             var message = CommandManager.MergeParams(parameters, 2);
-            if (session.Antipub(message, "<CMD>"))
+            if (session.Antipub(message, "<CMD>", room.Id))
             {
                 return;
             }
