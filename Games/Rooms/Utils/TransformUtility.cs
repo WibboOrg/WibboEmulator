@@ -6,6 +6,10 @@ internal static class TransformUtility
     {
         switch (namePet.ToLower())
         {
+            case "dragondog":
+            {
+                return "86 " + raceId + " FFFFFF";
+            }
             /*case "bigeuthanasie":
                 {
                     return "85 0 FFFFFF";
