@@ -40,10 +40,10 @@ internal class AllIgnore : IChatCommand
         var reason = CommandManager.MergeParams(parameters, 3);
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        var isIgnoreall = BanDao.GetOneIgnoreAll(dbClient, targetUser.User.Username);
+        var isIgnoreall = BanDao.GetOneIgnoreAll(dbClient, targetUser.User.Id);
         if (isIgnoreall == 0)
         {
-            BanDao.InsertBan(dbClient, expireTime, "ignoreall", targetUser.User.Username, reason, session.User.Username);
+            BanDao.InsertBan(dbClient, expireTime, "ignoreall", targetUser.User.Id.ToString(), reason, session.User.Username);
         }
 
         targetUser.User.IgnoreAllExpireTime = expireTime;

@@ -31,14 +31,15 @@ public class UserFactory
                     return null;
                 }
 
-                var ignoreAll = BanDao.GetOneIgnoreAll(dbClient, dUserInfo["username"].ToString());
+                userId = Convert.ToInt32(dUserInfo["id"]);
+                var username = (string)dUserInfo["username"];
+
+                var ignoreAll = BanDao.GetOneIgnoreAll(dbClient, userId);
                 if (ignoreAll > 0)
                 {
                     ignoreAllExpire = ignoreAll;
                 }
 
-                userId = Convert.ToInt32(dUserInfo["id"]);
-                var username = (string)dUserInfo["username"];
                 if (WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId) != null)
                 {
                     WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId).Disconnect();
