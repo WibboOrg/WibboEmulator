@@ -36,12 +36,12 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
 
             if (!this._itemsData.ContainsKey(roomItem.Id))
             {
-                this._itemsData.Add(roomItem.Id, new ItemsPosReset(roomItem.Id, roomItem.X, roomItem.Y, roomItem.Z, roomItem.Rotation, isDice ? "Null" : roomItem.ExtraData));
+                this._itemsData.Add(roomItem.Id, new ItemsPosReset(roomItem.Id, roomItem.X, roomItem.Y, roomItem.Z, roomItem.Rotation, isDice ? "0" : roomItem.ExtraData));
             }
             else
             {
                 _ = this._itemsData.Remove(roomItem.Id);
-                this._itemsData.Add(roomItem.Id, new ItemsPosReset(roomItem.Id, roomItem.X, roomItem.Y, roomItem.Z, roomItem.Rotation, isDice ? "Null" : roomItem.ExtraData));
+                this._itemsData.Add(roomItem.Id, new ItemsPosReset(roomItem.Id, roomItem.X, roomItem.Y, roomItem.Z, roomItem.Rotation, isDice ? "0" : roomItem.ExtraData));
             }
         }
     }

@@ -22,7 +22,7 @@ public class BadgeManager
             return true;
         }
 
-        if (badgeId.StartsWith("MRUN"))
+        if (badgeId.StartsWith("MRUN") || badgeId.StartsWith("WORLDRUNSAVE"))
         {
             return true;
         }
