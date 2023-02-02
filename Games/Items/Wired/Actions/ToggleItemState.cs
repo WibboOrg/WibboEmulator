@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -25,7 +25,6 @@ public class ToggleItemState : WiredActionBase, IWired, IWiredEffect
                 {
                     roomItem.Interactor.OnTrigger(null, roomItem, 0, true, isReverse);
                 }
-
             }
         }
 
