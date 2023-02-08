@@ -52,9 +52,9 @@ public class RoomManager
             return GetCustomData(roomID);
         }
 
-        if (this._roomModels.ContainsKey(model))
+        if (this._roomModels.TryGetValue(model, out var value))
         {
-            return this._roomModels[model];
+            return value;
         }
         else
         {

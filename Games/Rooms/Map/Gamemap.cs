@@ -49,9 +49,9 @@ public class GameMap
 
     public void AddUserToMap(RoomUser user, Point coord)
     {
-        if (this._userMap.ContainsKey(coord))
+        if (this._userMap.TryGetValue(coord, out var value))
         {
-            this._userMap[coord].Add(user);
+            value.Add(user);
         }
         else
         {
@@ -142,9 +142,9 @@ public class GameMap
 
     public List<RoomUser> GetRoomUsers(Point coord)
     {
-        if (this._userMap.ContainsKey(coord))
+        if (this._userMap.TryGetValue(coord, out var value))
         {
-            return this._userMap[coord];
+            return value;
         }
         else
         {
@@ -395,9 +395,9 @@ public class GameMap
     public List<Item> GetCoordinatedItems(Point coord)
     {
         var point = new Point(coord.X, coord.Y);
-        if (this.CoordinatedItems.ContainsKey(point))
+        if (this.CoordinatedItems.TryGetValue(point, out var value))
         {
-            return this.CoordinatedItems[point];
+            return value;
         }
         else
         {
@@ -528,9 +528,9 @@ public class GameMap
         var noDoublons = new Dictionary<Point, List<Item>>();
         foreach (var tile in item.GetAffectedTiles)
         {
-            if (this.CoordinatedItems.ContainsKey(tile))
+            if (this.CoordinatedItems.TryGetValue(tile, out var value))
             {
-                var list = this.CoordinatedItems[tile];
+                var list = value;
                 if (!noDoublons.ContainsKey(tile))
                 {
                     noDoublons.Add(tile, list);
@@ -817,9 +817,9 @@ public class GameMap
     {
         var list = new List<Item>();
         var point = new Point(pX, pY);
-        if (this.CoordinatedItems.ContainsKey(point))
+        if (this.CoordinatedItems.TryGetValue(point, out var value))
         {
-            foreach (var roomItem in this.CoordinatedItems[point])
+            foreach (var roomItem in value)
             {
                 if (roomItem.Z > minZ && roomItem.X == pX && roomItem.Y == pY)
                 {

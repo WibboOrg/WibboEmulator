@@ -54,9 +54,9 @@ public class BadgeComponent : IDisposable
 
     public bool HasBadgeSlot(string badge)
     {
-        if (this.BadgeList.ContainsKey(badge))
+        if (this.BadgeList.TryGetValue(badge, out var value))
         {
-            return this.BadgeList[badge].Slot > 0;
+            return value.Slot > 0;
         }
         else
         {
@@ -68,9 +68,9 @@ public class BadgeComponent : IDisposable
 
     public Badge GetBadge(string badge)
     {
-        if (this.BadgeList.ContainsKey(badge))
+        if (this.BadgeList.TryGetValue(badge, out var value))
         {
-            return this.BadgeList[badge];
+            return value;
         }
         else
         {

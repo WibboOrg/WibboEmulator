@@ -80,9 +80,9 @@ internal class BuyOfferEvent : IPacketEvent
 
             CatalogMarketplaceDataDao.Replace(dbClient, item.SpriteId, Convert.ToInt32(row["total_price"]));
 
-            if (WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.ContainsKey(item.SpriteId) && WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.ContainsKey(item.SpriteId))
+            if (WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.TryGetValue(item.SpriteId, out var value) && WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.ContainsKey(item.SpriteId))
             {
-                var num3 = WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts[item.SpriteId];
+                var num3 = value;
                 var num4 = WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages[item.SpriteId] += Convert.ToInt32(row["total_price"]);
 
                 _ = WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.Remove(item.SpriteId);
@@ -138,7 +138,7 @@ internal class BuyOfferEvent : IPacketEvent
 
         foreach (var item in WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems)
         {
-            if (dictionary.ContainsKey(item.SpriteId))
+            if (dictionary.TryGetValue(item.SpriteId, out int value))
             {
                 if (dictionary[item.SpriteId].TotalPrice > item.TotalPrice)
                 {
@@ -146,7 +146,7 @@ internal class BuyOfferEvent : IPacketEvent
                     dictionary.Add(item.SpriteId, item);
                 }
 
-                var num = dictionary2[item.SpriteId];
+                var num = value;
                 _ = dictionary2.Remove(item.SpriteId);
                 dictionary2.Add(item.SpriteId, num + 1);
             }

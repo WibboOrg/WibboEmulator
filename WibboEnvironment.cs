@@ -268,9 +268,9 @@ public static class WibboEnvironment
             return client.User.Username;
         }
 
-        if (UsersCached.ContainsKey(userId))
+        if (UsersCached.TryGetValue(userId, out var value))
         {
-            return UsersCached[userId].Username;
+            return value.Username;
         }
 
         using var dbClient = GetDatabaseManager().GetQueryReactor();
@@ -318,9 +318,9 @@ public static class WibboEnvironment
             {
                 try
                 {
-                    if (UsersCached.ContainsKey(userId))
+                    if (UsersCached.TryGetValue(userId, out var value))
                     {
-                        return UsersCached[userId];
+                        return value;
                     }
                     else
                     {

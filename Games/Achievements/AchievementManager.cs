@@ -167,9 +167,9 @@ public class AchievementManager
 
     public AchievementData GetAchievement(string achievementGroup)
     {
-        if (this._achievements.ContainsKey(achievementGroup))
+        if (this._achievements.TryGetValue(achievementGroup, out var value))
         {
-            return this._achievements[achievementGroup];
+            return value;
         }
 
         return null;

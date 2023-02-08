@@ -77,9 +77,9 @@ public class MessengerComponent : IDisposable
 
     public MessengerRequest GetRequest(int senderID)
     {
-        if (this.Requests.ContainsKey(senderID))
+        if (this.Requests.TryGetValue(senderID, out var value))
         {
-            return this.Requests[senderID];
+            return value;
         }
         else
         {

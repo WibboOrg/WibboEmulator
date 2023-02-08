@@ -120,7 +120,7 @@ public class CatalogManager
                         Convert.ToString(row["page_link"]), Convert.ToInt32(row["icon_image"]), Convert.ToInt32(row["min_rank"]), Convert.ToString(row["page_layout"]),
                         Convert.ToString(row["page_strings_1"]), Convert.ToString(row["page_strings_2"]), Convert.ToString(row["caption_en"]),
                         Convert.ToString(row["caption_br"]), Convert.ToString(row["page_strings_2_en"]), Convert.ToString(row["page_strings_2_br"]), row["is_premium"].ToString(),
-                        this._items.ContainsKey(Convert.ToInt32(row["id"])) ? this._items[Convert.ToInt32(row["id"])] : new Dictionary<int, CatalogItem>()));
+                        this._items.TryGetValue(Convert.ToInt32(row["id"]), out var value) ? value : new Dictionary<int, CatalogItem>()));
                 }
             }
 
@@ -188,9 +188,9 @@ public class CatalogManager
             return null;
         }
 
-        if (page.Items.ContainsKey(itemId))
+        if (page.Items.TryGetValue(itemId, out var value))
         {
-            return page.Items[itemId];
+            return value;
         }
 
         return null;

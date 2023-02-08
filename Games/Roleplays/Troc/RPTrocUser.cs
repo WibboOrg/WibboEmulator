@@ -17,9 +17,9 @@ public class RPTrocUser
 
     public int GetCountItem(int itemId)
     {
-        if (this.ItemIds.ContainsKey(itemId))
+        if (this.ItemIds.TryGetValue(itemId, out var value))
         {
-            return this.ItemIds[itemId];
+            return value;
         }
         else
         {

@@ -36,9 +36,9 @@ internal class SetRelationshipEvent : IPacketEvent
         }
         else
         {
-            if (session.User.Messenger.Relation.ContainsKey(user))
+            if (session.User.Messenger.Relation.TryGetValue(user, out var value))
             {
-                session.User.Messenger.Relation[user].Type = type;
+                value.Type = type;
             }
             else
             {

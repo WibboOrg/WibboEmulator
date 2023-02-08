@@ -727,9 +727,9 @@ public class RoomUserManager
 
     public RoomUser GetRoomUserByUserId(int id)
     {
-        if (this._usersByUserID.ContainsKey(id))
+        if (this._usersByUserID.TryGetValue(id, out var value))
         {
-            return this._usersByUserID[id];
+            return value;
         }
         else
         {
@@ -808,9 +808,9 @@ public class RoomUserManager
 
     public RoomUser GetRoomUserByName(string pName)
     {
-        if (this._usersByUsername.ContainsKey(pName.ToLower()))
+        if (this._usersByUsername.TryGetValue(pName.ToLower(), out var value))
         {
-            return this._usersByUsername[pName.ToLower()];
+            return value;
         }
         else
         {

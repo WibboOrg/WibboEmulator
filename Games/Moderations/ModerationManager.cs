@@ -51,11 +51,11 @@ public class ModerationManager
             {
                 result.Add(category.Value, new List<ModerationPresetActions>());
 
-                if (this._moderationCFHTopicActions.ContainsKey(category.Key))
+                if (this._moderationCFHTopicActions.TryGetValue(category.Key, out var value))
                 {
-                    foreach (var data in this._moderationCFHTopicActions[category.Key])
+                    foreach (var data in value)
                     {
-                        result[category.Value].Add(data);
+                        value.Add(data);
                     }
                 }
             }

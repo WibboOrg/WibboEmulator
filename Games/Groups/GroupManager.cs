@@ -132,16 +132,16 @@ public class GroupManager
     {
         if (colourOne)
         {
-            if (this._symbolColours.ContainsKey(id))
+            if (this._symbolColours.TryGetValue(id, out var value))
             {
-                return this._symbolColours[id].Colour;
+                return value.Colour;
             }
         }
         else
         {
-            if (this._backgroundColours.ContainsKey(id))
+            if (this._backgroundColours.TryGetValue(id, out var value))
             {
-                return this._backgroundColours[id].Colour;
+                return value.Colour;
             }
         }
 

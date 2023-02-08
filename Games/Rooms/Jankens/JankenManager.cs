@@ -323,9 +323,9 @@ public class JankenManager
 
     public Janken GetParty(int id)
     {
-        if (this._party.ContainsKey(id))
+        if (this._party.TryGetValue(id, out var value))
         {
-            return this._party[id];
+            return value;
         }
         else
         {

@@ -260,9 +260,9 @@ public class InventoryComponent : IDisposable
 
     public Item GetItem(int id)
     {
-        if (this._userItems.ContainsKey(id))
+        if (this._userItems.TryGetValue(id, out var value))
         {
-            return this._userItems[id];
+            return value;
         }
         else
         {

@@ -114,9 +114,9 @@ public class CatalogPage
 
     public CatalogItem GetItem(int pId)
     {
-        if (this.Items.ContainsKey(pId))
+        if (this.Items.TryGetValue(pId, out var value))
         {
-            return this.Items[pId];
+            return value;
         }
 
         return null;

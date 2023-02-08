@@ -149,9 +149,9 @@ public class CommandManager
     public string GetCommandList(GameClient client, Room room)
     {
         var rank = client.User.Rank + client.User.Langue.ToString();
-        if (this._listCommande.ContainsKey(rank))
+        if (this._listCommande.TryGetValue(rank, out var value))
         {
-            return this._listCommande[rank];
+            return value;
         }
 
         var notDoublons = new List<string>();

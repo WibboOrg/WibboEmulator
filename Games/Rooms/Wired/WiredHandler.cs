@@ -46,9 +46,9 @@ public class WiredHandler
         var itemCoord = item.Coordinate;
         if (WiredUtillity.TypeIsWiredAction(item.GetBaseItem().InteractionType))
         {
-            if (this._actionStacks.ContainsKey(itemCoord))
+            if (this._actionStacks.TryGetValue(itemCoord, out var value))
             {
-                this._actionStacks[itemCoord].Add(item);
+                value.Add(item);
             }
             else
             {
@@ -57,9 +57,9 @@ public class WiredHandler
         }
         else if (WiredUtillity.TypeIsWiredCondition(item.GetBaseItem().InteractionType))
         {
-            if (this._conditionStacks.ContainsKey(itemCoord))
+            if (this._conditionStacks.TryGetValue(itemCoord, out var value))
             {
-                this._conditionStacks[itemCoord].Add(item);
+                value.Add(item);
             }
             else
             {
@@ -243,9 +243,9 @@ public class WiredHandler
 
         this._tickCounter++;
 
-        if (this._conditionStacks.ContainsKey(coordinate))
+        if (this._conditionStacks.TryGetValue(coordinate, out var value))
         {
-            var conditionStack = this._conditionStacks[coordinate];
+            var conditionStack = value;
             foreach (var roomItem in conditionStack.Take(20).ToArray())
             {
                 if (roomItem == null || roomItem.WiredHandler == null)
@@ -268,18 +268,18 @@ public class WiredHandler
             var actRand = actionStack[rdnWired];
             ((IWiredEffect)actRand.WiredHandler).Handle(user, item);
         }
-        else if (this._specialUnseen.ContainsKey(coordinate))
+        else if (this._specialUnseen.TryGetValue(coordinate, out var value))
         {
             var countAct = actionStack.Count - 1;
 
-            var nextWired = this._specialUnseen[coordinate];
+            var nextWired = value;
             if (nextWired > countAct)
             {
                 nextWired = 0;
                 this._specialUnseen[coordinate] = 0;
             }
 
-            this._specialUnseen[coordinate]++;
+            value++;
 
             var actNext = actionStack[nextWired];
             if (actNext != null && actNext.WiredHandler != null)

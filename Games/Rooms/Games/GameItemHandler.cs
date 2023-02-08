@@ -142,9 +142,9 @@ public class GameItemHandler
 
     public void AddGroupGate(Item item)
     {
-        if (this._groupGate.ContainsKey(item.Coordinate))
+        if (this._groupGate.TryGetValue(item.Coordinate, out var value))
         {
-            this._groupGate[item.Coordinate].Add(item);
+            value.Add(item);
         }
         else
         {

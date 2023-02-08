@@ -54,19 +54,19 @@ public class LanguageManager
     {
         if (language == Language.French)
         {
-            return this._valuesFr.ContainsKey(value) ? this._valuesFr[value] : "Pas de language locale trouver pour [" + value + "] (fr)";
+            return this._valuesFr.TryGetValue(value, out var value) ? value : "Pas de language locale trouver pour [" + value + "] (fr)";
         }
         else if (language == Language.English)
         {
-            return this._valuesEn.ContainsKey(value) ? this._valuesEn[value] : "Pas de language locale trouver pour [" + value + "] (en)";
+            return this._valuesEn.TryGetValue(value, out var value) ? value : "Pas de language locale trouver pour [" + value + "] (en)";
         }
         else if (language == Language.Portuguese)
         {
-            return this._valuesBr.ContainsKey(value) ? this._valuesBr[value] : "Pas de language locale trouver pour [" + value + "] (br)";
+            return this._valuesBr.TryGetValue(value, out var value) ? value : "Pas de language locale trouver pour [" + value + "] (br)";
         }
         else
         {
-            return this._valuesFr.ContainsKey(value) ? this._valuesFr[value] : "Pas de language locale trouver pour [" + value + "] (def)";
+            return this._valuesFr.TryGetValue(value, out var value) ? value : "Pas de language locale trouver pour [" + value + "] (def)";
         }
     }
 

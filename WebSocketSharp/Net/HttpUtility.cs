@@ -180,9 +180,9 @@ internal static class HttpUtility
                     var name = entity[1..^1];
 
                     var entities = GetEntities();
-                    if (entities.ContainsKey(name))
+                    if (entities.TryGetValue(name, out var value))
                     {
-                        _ = buff.Append(entities[name]);
+                        _ = buff.Append(value);
                     }
                     else
                     {
