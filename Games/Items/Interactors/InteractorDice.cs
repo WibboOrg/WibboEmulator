@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Interactors;
+namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.Map;
 
@@ -48,7 +48,7 @@ public class InteractorDice : FurniInteractor
             else
             {
                 item.ExtraData = "-1";
-                item.UpdateState(false, true);
+                item.UpdateState(false);
                 item.ReqUpdate(4);
 
                 item.InteractingUser = roomUser.UserId;

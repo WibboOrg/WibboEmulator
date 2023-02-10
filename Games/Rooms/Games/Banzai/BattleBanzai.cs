@@ -319,7 +319,7 @@ public class BattleBanzai
         }
 
         this.SetTile(roomItem, team, user);
-        roomItem.UpdateState(false, true);
+        roomItem.UpdateState(false);
 
         if (this._tilesUsed != this.BanzaiTiles.Count)
         {
@@ -350,7 +350,7 @@ public class BattleBanzai
         SetMaxForTile(roomItem, team);
         this._roomInstance.GameManager.AddPointToTeam(team, user);
         this._roomInstance.GameManager.AddPointToTeam(oldteam, -1, user);
-        roomItem.UpdateState(false, true);
+        roomItem.UpdateState(false);
     }
 
     private static void SetMaxForTile(Item item, TeamType team)

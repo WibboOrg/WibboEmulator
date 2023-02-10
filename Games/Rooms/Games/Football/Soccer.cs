@@ -76,7 +76,7 @@ public class Soccer
                     }
 
                     roomItem.ExtraData = num.ToString();
-                    roomItem.UpdateState(false, true);
+                    roomItem.UpdateState(false);
                     break;
             }
         }
@@ -189,7 +189,7 @@ public class Soccer
             item.Value = 0;
         }
 
-        item.UpdateState(false, true);
+        item.UpdateState(false);
 
         var z = this._roomInstance.GameMap.SqAbsoluteHeight(newX, newY);
         this._roomInstance.RoomItemHandling.PositionReset(item, newX, newY, z);

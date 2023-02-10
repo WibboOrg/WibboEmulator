@@ -122,7 +122,7 @@ public class InteractorTeleport : FurniInteractor
                                 roomUserTarget.SetRot(roomItem.Rotation, false);
                                 GameMap.TeleportToItem(roomUserTarget, roomItem);
                                 roomItem.ExtraData = "2";
-                                roomItem.UpdateState(false, true);
+                                roomItem.UpdateState(false);
                                 roomItem.InteractingUser2 = item.InteractingUser;
                                 roomItem.ReqUpdate(2);
                             }
@@ -182,7 +182,7 @@ public class InteractorTeleport : FurniInteractor
             if (item.ExtraData != "1")
             {
                 item.ExtraData = "1";
-                item.UpdateState(false, true);
+                item.UpdateState(false);
             }
         }
         else if (showTeleEffect)
@@ -190,13 +190,13 @@ public class InteractorTeleport : FurniInteractor
             if (item.ExtraData != "2")
             {
                 item.ExtraData = "2";
-                item.UpdateState(false, true);
+                item.UpdateState(false);
             }
         }
         else if (item.ExtraData != "0")
         {
             item.ExtraData = "0";
-            item.UpdateState(false, true);
+            item.UpdateState(false);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Interactors;
+namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
 
 public class InteractorLoveShuffler : FurniInteractor
@@ -15,7 +15,7 @@ public class InteractorLoveShuffler : FurniInteractor
         }
 
         item.ExtraData = "0";
-        item.UpdateState(false, true);
+        item.UpdateState(false);
         item.ReqUpdate(10);
     }
 
@@ -31,6 +31,6 @@ public class InteractorLoveShuffler : FurniInteractor
             item.ExtraData = "-1";
         }
 
-        item.UpdateState(false, true);
+        item.UpdateState(false);
     }
 }

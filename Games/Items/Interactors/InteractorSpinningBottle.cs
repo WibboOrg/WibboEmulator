@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Interactors;
+namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
 
 public class InteractorSpinningBottle : FurniInteractor
@@ -6,7 +6,7 @@ public class InteractorSpinningBottle : FurniInteractor
     public override void OnPlace(GameClient session, Item item)
     {
         item.ExtraData = "0";
-        item.UpdateState(true, false);
+        item.UpdateState();
     }
 
     public override void OnRemove(GameClient session, Item item) => item.ExtraData = "0";
@@ -19,7 +19,7 @@ public class InteractorSpinningBottle : FurniInteractor
         }
 
         item.ExtraData = "-1";
-        item.UpdateState(false, true);
+        item.UpdateState(false);
         item.ReqUpdate(3);
     }
 

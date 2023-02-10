@@ -433,13 +433,6 @@ public class RoomItemHandling
         _ = this.SetFloorItem(item, x, y, z);
     }
 
-    public void RotReset(Item pItem, int newRot)
-    {
-        pItem.Rotation = newRot;
-
-        this._roomInstance.SendPacket(new ObjectUpdateComposer(pItem, this._roomInstance.RoomData.OwnerId));
-    }
-
     public static ServerPacket TeleportUser(RoomUser user, Point nextCoord, int rollerID, double nextZ, bool noAnimation = false)
     {
         var x = noAnimation ? nextCoord.X : user.X;
@@ -651,7 +644,7 @@ public class RoomItemHandling
             this.UpdateItem(item);
             if (!onRoller && sendMessage)
             {
-                this._roomInstance.SendPacket(new ObjectUpdateComposer(item, this._roomInstance.RoomData.OwnerId));
+                item.UpdateState(false);
             }
         }
 

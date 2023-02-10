@@ -39,7 +39,7 @@ internal sealed class UpdateStickyNoteEvent : IPacketEvent
             case "9CCEFF":
             case "9CFF9C":
                 roomItem.ExtraData = color + " " + message;
-                roomItem.UpdateState(true, true);
+                roomItem.UpdateState();
                 break;
         }
 

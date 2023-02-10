@@ -278,7 +278,7 @@ public class GameItemHandler
         banzaiItem2.ReqUpdate(2);
 
         item.ExtraData = "1";
-        item.UpdateState(false, true);
+        item.UpdateState(false);
         item.ReqUpdate(2);
     }
 

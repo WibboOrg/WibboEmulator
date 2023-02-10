@@ -128,7 +128,7 @@ public class Freeze
             if (!string.IsNullOrEmpty(roomItem.ExtraData))
             {
                 roomItem.ExtraData = "";
-                roomItem.UpdateState(false, true);
+                roomItem.UpdateState(false);
                 this._roomInstance.GameMap.UpdateMapForItem(roomItem);
             }
         }
@@ -274,11 +274,11 @@ public class Freeze
             {
                 case InteractionType.FREEZE_TILE_BLOCK:
                     this.SetRandomPowerUp(roomItem);
-                    roomItem.UpdateState(false, true);
+                    roomItem.UpdateState(false);
                     continue;
                 case InteractionType.FREEZE_TILE:
                     roomItem.ExtraData = "11000";
-                    roomItem.UpdateState(false, true);
+                    roomItem.UpdateState(false);
                     continue;
                 default:
                     continue;
@@ -325,7 +325,7 @@ public class Freeze
                 break;
         }
         this._roomInstance.GameMap.UpdateMapForItem(item);
-        item.UpdateState(false, true);
+        item.UpdateState(false);
     }
 
     private void PickUpPowerUp(Item item, RoomUser user)
@@ -355,7 +355,7 @@ public class Freeze
         }
         item.FreezePowerUp = FreezePowerUp.None;
         item.ExtraData = "1" + item.ExtraData;
-        item.UpdateState(false, true);
+        item.UpdateState(false);
     }
 
     public void AddFreezeBlock(Item item)

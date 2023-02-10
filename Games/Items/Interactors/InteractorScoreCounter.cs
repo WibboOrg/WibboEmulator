@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Interactors;
+namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.Games.Teams;
 
@@ -12,7 +12,7 @@ public class InteractorScoreCounter : FurniInteractor
         }
 
         item.ExtraData = item.GetRoom().GameManager.Points[(int)item.Team].ToString();
-        item.UpdateState(false, true);
+        item.UpdateState(false);
     }
 
     public override void OnRemove(GameClient session, Item item)
@@ -46,7 +46,7 @@ public class InteractorScoreCounter : FurniInteractor
         }
 
         item.ExtraData = num.ToString();
-        item.UpdateState(false, true);
+        item.UpdateState(false);
     }
 
     public override void OnTick(Item item)

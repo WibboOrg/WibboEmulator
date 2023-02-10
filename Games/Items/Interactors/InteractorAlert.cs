@@ -15,7 +15,7 @@ public class InteractorAlert : FurniInteractor
         }
 
         item.ExtraData = "1";
-        item.UpdateState(false, true);
+        item.UpdateState(false);
         item.ReqUpdate(4);
     }
 
@@ -27,6 +27,6 @@ public class InteractorAlert : FurniInteractor
         }
 
         item.ExtraData = "0";
-        item.UpdateState(false, true);
+        item.UpdateState(false);
     }
 }

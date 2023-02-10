@@ -197,6 +197,6 @@ public class RoomRoleplay
         var saturation = 180;
         var luminosite = (int)Math.Floor((double)this.Intensity / 2);
         roomItem.ExtraData = "on," + teinte + "," + saturation + "," + luminosite;
-        roomItem.UpdateState(true, true);
+        roomItem.UpdateState();
     }
 }

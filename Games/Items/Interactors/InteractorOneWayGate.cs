@@ -79,7 +79,7 @@ public class InteractorOneWayGate : FurniInteractor
             roomUser.MoveTo(item.SquareBehind);
 
             item.ExtraData = "1";
-            item.UpdateState(false, true);
+            item.UpdateState(false);
 
             item.ReqUpdate(1);
         }
@@ -104,7 +104,7 @@ public class InteractorOneWayGate : FurniInteractor
             roomUserTarget.UnlockWalking();
             item.ExtraData = "0";
             item.InteractingUser = 0;
-            item.UpdateState(false, true);
+            item.UpdateState(false);
         }
         else
         {

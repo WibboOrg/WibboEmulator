@@ -179,6 +179,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             case "pushpull":
             case "stand":
             case "usermute":
+            case "resetclassement":
                 return;
         }
 
@@ -1079,6 +1080,18 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
     {
         switch (command)
         {
+            case "resetclassement":
+            {
+                var itemHighScore = this.RoomInstance.RoomItemHandling.GetFloor.First(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                if (itemHighScore == null)
+                {
+                    break;
+                }
+
+                itemHighScore.Scores.Clear();
+                itemHighScore.UpdateState(false);
+                break;
+            }
             case "roomfreeze":
             {
                 this.RoomInstance.FreezeRoom = value == "true";

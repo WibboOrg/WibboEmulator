@@ -31,6 +31,6 @@ internal sealed class SetTonerEvent : IPacketEvent
         var num4 = packet.PopInt();
 
         roomItem.ExtraData = "on," + num2 + "," + num3 + "," + num4;
-        roomItem.UpdateState(true, true);
+        roomItem.UpdateState();
     }
 }

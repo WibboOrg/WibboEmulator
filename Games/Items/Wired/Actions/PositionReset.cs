@@ -87,7 +87,9 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
             {
                 if (itemPosReset.Rot != roomItem.Rotation)
                 {
-                    this.RoomInstance.RoomItemHandling.RotReset(roomItem, itemPosReset.Rot);
+                    roomItem.Rotation = itemPosReset.Rot;
+
+                    roomItem.UpdateState(false);
                 }
             }
 

@@ -110,7 +110,7 @@ internal sealed class ConfirmLoveLockEvent : IPacketEvent
                 userOne.LLPartner = 0;
                 userTwo.LLPartner = 0;
 
-                item.UpdateState(true, true);
+                item.UpdateState();
 
                 userOne.Client.SendPacket(new LoveLockDialogueCloseComposer(id));
                 userTwo.Client.SendPacket(new LoveLockDialogueCloseComposer(id));

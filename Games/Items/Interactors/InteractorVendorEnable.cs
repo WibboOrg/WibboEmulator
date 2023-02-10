@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Interactors;
+namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.Map;
 using WibboEmulator.Games.Rooms.PathFinding;
@@ -50,7 +50,7 @@ public class InteractorVendorEnable : FurniInteractor
             roomUserByUserId.SetRot(Rotation.Calculate(roomUserByUserId.X, roomUserByUserId.Y, item.X, item.Y), false);
             item.ReqUpdate(2);
             item.ExtraData = "1";
-            item.UpdateState(false, true);
+            item.UpdateState(false);
         }
     }
 
@@ -70,6 +70,6 @@ public class InteractorVendorEnable : FurniInteractor
 
         item.InteractingUser = 0;
         item.ExtraData = "0";
-        item.UpdateState(false, true);
+        item.UpdateState(false);
     }
 }

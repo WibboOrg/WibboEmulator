@@ -997,11 +997,11 @@ public class RoomUserManager
                 case InteractionType.TREADMILL:
                 case InteractionType.CROSSTRAINER:
                     roomItem.ExtraData = "1";
-                    roomItem.UpdateState(false, true);
+                    roomItem.UpdateState(false);
                     break;
                 case InteractionType.GUILD_GATE:
                     roomItem.ExtraData = "1;" + roomItem.GroupId;
-                    roomItem.UpdateState(false, true);
+                    roomItem.UpdateState(false);
                     break;
                 case InteractionType.TELEPORT_ARROW:
                     if (!cycleGameItems || user.IsBot || user.Client == null)
@@ -1577,7 +1577,7 @@ public class RoomUserManager
             if (roomItem.GetBaseItem().InteractionType == InteractionType.GUILD_GATE)
             {
                 roomItem.ExtraData = "0;" + roomItem.GroupId;
-                roomItem.UpdateState(false, true);
+                roomItem.UpdateState(false);
             }
             else if (roomItem.GetBaseItem().InteractionType is InteractionType.PRESSURE_PAD
                 or InteractionType.TRAMPOLINE
@@ -1585,7 +1585,7 @@ public class RoomUserManager
                 or InteractionType.CROSSTRAINER)
             {
                 roomItem.ExtraData = "0";
-                roomItem.UpdateState(false, true);
+                roomItem.UpdateState(false);
             }
             else if (roomItem.GetBaseItem().InteractionType == InteractionType.FOOTBALL)
             {

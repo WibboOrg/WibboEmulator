@@ -43,14 +43,6 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "notwork":
             case "moneyplus":
             case "moneymoins":
-            case "money1plus":
-            case "money1moins":
-            case "money2plus":
-            case "money2moins":
-            case "money3plus":
-            case "money3moins":
-            case "money4plus":
-            case "money4moins":
             case "levelplus":
             case "levelmoins":
             case "healthplus":
@@ -129,6 +121,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "usertimerplus":
             case "usertimermoins":
             case "point":
+            case "notpoint":
             case "pointplus":
             case "pointmoins":
             case "ingame":
@@ -165,6 +158,12 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "itemdistancemoins":
             case "winuserpoint":
             case "notwinuserpoint":
+            case "classement":
+            case "notclassement":
+            case "ptsclassementplus":
+            case "ptsclassementmoins":
+            case "ptsclassement":
+            case "notptsclassement":
                 return;
         }
 
@@ -768,6 +767,73 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
         var result = false;
         switch (effect)
         {
+            case "classement":
+            case "notclassement":
+            {
+                var itemHighScore = room.RoomItemHandling.GetFloor.First(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                if (itemHighScore == null)
+                {
+                    break;
+                }
+
+                if (itemHighScore.Scores.TryGetValue(user.GetUsername(), out var score))
+                {
+                    result = true;
+                }
+
+                break;
+            }
+            case "ptsclassementplus":
+            {
+                var itemHighScore = room.RoomItemHandling.GetFloor.First(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                if (itemHighScore == null)
+                {
+                    break;
+                }
+
+                _ = int.TryParse(value, out var valueInt);
+
+                if (itemHighScore.Scores.TryGetValue(user.GetUsername(), out var score) && score > valueInt)
+                {
+                    result = true;
+                }
+
+                break;
+            }
+            case "ptsclassementmoins":
+            {
+                var itemHighScore = room.RoomItemHandling.GetFloor.First(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                if (itemHighScore == null)
+                {
+                    break;
+                }
+
+                _ = int.TryParse(value, out var valueInt);
+
+                if (itemHighScore.Scores.TryGetValue(user.GetUsername(), out var score) && score < valueInt)
+                {
+                    result = true;
+                }
+
+                break;
+            }
+            case "ptsclassement":
+            case "notptsclassement":
+            {
+                var itemHighScore = room.RoomItemHandling.GetFloor.First(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                if (itemHighScore == null)
+                {
+                    break;
+                }
+                _ = int.TryParse(value, out var valueInt);
+
+                if (itemHighScore.Scores.TryGetValue(user.GetUsername(), out var score) && score == valueInt)
+                {
+                    result = true;
+                }
+
+                break;
+            }
             case "winuserpoint":
             case "notwinuserpoint":
             {
@@ -948,6 +1014,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                 break;
             }
             case "point":
+            case "notpoint":
             {
                 _ = int.TryParse(value, out var point);
 

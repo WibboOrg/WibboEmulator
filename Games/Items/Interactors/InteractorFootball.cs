@@ -119,7 +119,7 @@ public class InteractorFootball : FurniInteractor
         if (item.InteractionCountHelper is <= 0 or > 6)
         {
             item.ExtraData = "0";
-            item.UpdateState(false, true);
+            item.UpdateState(false);
 
             item.InteractionCountHelper = 0;
             return;
@@ -139,21 +139,21 @@ public class InteractorFootball : FurniInteractor
             length = 3;
 
             item.ExtraData = "6";
-            item.UpdateState(false, true);
+            item.UpdateState(false);
         }
         else if (item.InteractionCountHelper is > 1 and < 4)
         {
             length = 2;
 
             item.ExtraData = "4";
-            item.UpdateState(false, true);
+            item.UpdateState(false);
         }
         else
         {
             length = 1;
 
             item.ExtraData = "2";
-            item.UpdateState(false, true);
+            item.UpdateState(false);
         }
 
 

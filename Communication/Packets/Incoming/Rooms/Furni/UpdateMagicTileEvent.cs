@@ -40,7 +40,7 @@ internal sealed class UpdateMagicTileEvent : IPacketEvent
 
                 item.SetState(item.X, item.Y, totalZ);
 
-                room.SendPacket(new ObjectUpdateComposer(item, room.RoomData.OwnerId));
+                item.UpdateState(false);
             }
         }
     }

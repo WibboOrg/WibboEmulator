@@ -53,7 +53,7 @@ internal sealed class MoveObjectEvent : IPacketEvent
 
         if (!room.RoomItemHandling.SetFloorItem(session, roomItem, newX, newY, newRot, false, false, true))
         {
-            room.SendPacket(new ObjectUpdateComposer(roomItem, room.RoomData.OwnerId));
+            roomItem.UpdateState(false);
             return;
         }
     }

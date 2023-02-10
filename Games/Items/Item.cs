@@ -523,9 +523,7 @@ public class Item : IEquatable<Item>
         this.GetRoom().RoomItemHandling.QueueRoomItemUpdate(this);
     }
 
-    public void UpdateState() => this.UpdateState(true, true);
-
-    public void UpdateState(bool inDb, bool inRoom)
+    public void UpdateState(bool inDb = true)
     {
         if (this.GetRoom() == null)
         {
@@ -535,11 +533,6 @@ public class Item : IEquatable<Item>
         if (inDb)
         {
             this.GetRoom().RoomItemHandling.UpdateItem(this);
-        }
-
-        if (!inRoom)
-        {
-            return;
         }
 
         if (this.IsFloorItem)
