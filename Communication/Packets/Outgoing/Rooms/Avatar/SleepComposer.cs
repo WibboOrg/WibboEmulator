@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 
-internal class SleepComposer : ServerPacket
+internal sealed class SleepComposer : ServerPacket
 {
     public SleepComposer(int virtualId, bool isSleeping)
         : base(ServerPacketHeader.UNIT_IDLE)

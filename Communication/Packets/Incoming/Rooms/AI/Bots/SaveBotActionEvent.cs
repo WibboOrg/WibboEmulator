@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
 
-internal class SaveBotActionEvent : IPacketEvent
+internal sealed class SaveBotActionEvent : IPacketEvent
 {
     public double Delay => 250;
 

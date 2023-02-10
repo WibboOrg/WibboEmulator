@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 
-internal class AddWinwinCommand : IRCONCommand
+internal sealed class AddWinwinCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
     {

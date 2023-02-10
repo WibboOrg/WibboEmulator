@@ -2,7 +2,7 @@
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class UserWardrobeDao
+internal sealed class UserWardrobeDao
 {
     internal static void Insert(IQueryAdapter dbClient, int userId, int slotId, string look, string gender)
     {

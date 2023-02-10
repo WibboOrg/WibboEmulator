@@ -46,7 +46,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-internal class ChunkStream
+internal sealed class ChunkStream
 {
     #region Private Fields
 

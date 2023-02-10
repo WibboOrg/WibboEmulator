@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class RemoveBadge : IChatCommand
+internal sealed class RemoveBadge : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

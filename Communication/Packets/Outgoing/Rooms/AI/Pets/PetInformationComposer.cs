@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Users;
 
-internal class PetInformationComposer : ServerPacket
+internal sealed class PetInformationComposer : ServerPacket
 {
     public PetInformationComposer(Pet pet, bool isRide = false)
         : base(ServerPacketHeader.PET_INFO)

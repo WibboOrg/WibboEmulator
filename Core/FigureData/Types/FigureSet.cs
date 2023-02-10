@@ -1,6 +1,6 @@
 namespace WibboEmulator.Core.FigureData.Types;
 
-internal class FigureSet
+internal sealed class FigureSet
 {
     public SetType Type { get; private set; }
     public int PalletId { get; private set; }

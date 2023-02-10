@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 using WibboEmulator.Games.Achievements;
 
-internal class AchievementUnlockedComposer : ServerPacket
+internal sealed class AchievementUnlockedComposer : ServerPacket
 {
     public AchievementUnlockedComposer(AchievementData achievement, int level, int pointReward, int pixelReward)
         : base(ServerPacketHeader.ACHIEVEMENT_NOTIFICATION)

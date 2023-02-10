@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni;
 using WibboEmulator.Games.Items;
 
-internal class OpenGiftComposer : ServerPacket
+internal sealed class OpenGiftComposer : ServerPacket
 {
     public OpenGiftComposer(ItemData data, string text, Item item, bool itemIsInRoom)
         : base(ServerPacketHeader.GIFT_OPENED)

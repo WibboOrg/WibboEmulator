@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Televisions;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class EditTvYoutubeEvent : IPacketEvent
+internal sealed class EditTvYoutubeEvent : IPacketEvent
 {
     public double Delay => 500;
 

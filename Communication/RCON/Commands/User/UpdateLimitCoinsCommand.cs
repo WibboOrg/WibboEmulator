@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 
-internal class UpdateLimitCoinsCommand : IRCONCommand
+internal sealed class UpdateLimitCoinsCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
     {

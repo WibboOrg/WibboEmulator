@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 using WibboEmulator.Games.Achievements;
 using WibboEmulator.Games.GameClients;
 
-internal class AchievementsComposer : ServerPacket
+internal sealed class AchievementsComposer : ServerPacket
 {
     public AchievementsComposer(GameClient session, List<AchievementData> achievements)
         : base(ServerPacketHeader.ACHIEVEMENT_LIST)

@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Communication.RCON.Commands.Hotel;
 
-internal class AutoGameCommand : IRCONCommand
+internal sealed class AutoGameCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
     {

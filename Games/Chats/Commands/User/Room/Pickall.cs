@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class Pickall : IChatCommand
+internal sealed class Pickall : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

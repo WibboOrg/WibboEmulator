@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.User;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class UserQuestDao
+internal sealed class UserQuestDao
 {
     internal static void Update(IQueryAdapter dbClient, int userId, int questId, int progress) => dbClient.RunQuery("UPDATE `user_quest` SET `progress` = '" + progress + "' WHERE `user_id` = '" + userId + "' AND `quest_id` = '" + questId + "'");
 

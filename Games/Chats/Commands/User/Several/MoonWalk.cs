@@ -3,7 +3,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games.Teams;
 
-internal class MoonWalk : IChatCommand
+internal sealed class MoonWalk : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

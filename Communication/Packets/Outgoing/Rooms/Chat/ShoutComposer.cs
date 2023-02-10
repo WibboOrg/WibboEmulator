@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 
-internal class ShoutComposer : ServerPacket
+internal sealed class ShoutComposer : ServerPacket
 {
     public ShoutComposer(int virtualId, string message, int color)
         : base(ServerPacketHeader.UNIT_CHAT_SHOUT)

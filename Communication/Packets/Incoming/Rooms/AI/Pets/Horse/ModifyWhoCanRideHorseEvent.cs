@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
 
-internal class ModifyWhoCanRideHorseEvent : IPacketEvent
+internal sealed class ModifyWhoCanRideHorseEvent : IPacketEvent
 {
     public double Delay => 250;
 

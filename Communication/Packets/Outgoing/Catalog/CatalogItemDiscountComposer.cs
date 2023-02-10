@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Catalog;
 
-internal class CatalogItemDiscountComposer : ServerPacket
+internal sealed class CatalogItemDiscountComposer : ServerPacket
 {
     public CatalogItemDiscountComposer()
         : base(ServerPacketHeader.BUNDLE_DISCOUNT_RULESET)

@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Handshake;
 using WibboEmulator.Games.GameClients;
 
-internal class PingEvent : IPacketEvent
+internal sealed class PingEvent : IPacketEvent
 {
     public double Delay => 0;
 

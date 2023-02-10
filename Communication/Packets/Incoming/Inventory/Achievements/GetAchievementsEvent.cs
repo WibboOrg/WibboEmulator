@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Achievements;
 using WibboEmulator.Games.GameClients;
 
-internal class GetAchievementsEvent : IPacketEvent
+internal sealed class GetAchievementsEvent : IPacketEvent
 {
     public double Delay => 0;
 

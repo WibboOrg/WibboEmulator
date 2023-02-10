@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 
-internal class BotChooseComposer : ServerPacket
+internal sealed class BotChooseComposer : ServerPacket
 {
     public BotChooseComposer(List<string[]> chooseList)
       : base(ServerPacketHeader.BOT_CHOOSE)

@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Stickys;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class GetStickyNoteEvent : IPacketEvent
+internal sealed class GetStickyNoteEvent : IPacketEvent
 {
     public double Delay => 250;
 

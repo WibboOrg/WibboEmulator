@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
 
-internal class GetUserGroupBadgesEvent : IPacketEvent
+internal sealed class GetUserGroupBadgesEvent : IPacketEvent
 {
     public double Delay => 250;
 

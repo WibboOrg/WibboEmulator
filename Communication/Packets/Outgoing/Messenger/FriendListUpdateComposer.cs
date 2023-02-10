@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Messenger;
 using WibboEmulator.Games.Users.Messenger;
 
-internal class FriendListUpdateComposer : ServerPacket
+internal sealed class FriendListUpdateComposer : ServerPacket
 {
     public FriendListUpdateComposer(MessengerBuddy friend, int friendId = 0)
         : base(ServerPacketHeader.MESSENGER_UPDATE)

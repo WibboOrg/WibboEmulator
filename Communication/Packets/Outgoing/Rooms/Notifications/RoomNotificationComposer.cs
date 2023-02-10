@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 
-internal class RoomNotificationComposer : ServerPacket
+internal sealed class RoomNotificationComposer : ServerPacket
 {
     public RoomNotificationComposer(string type, string key, string value)
        : base(ServerPacketHeader.NOTIFICATION_LIST)

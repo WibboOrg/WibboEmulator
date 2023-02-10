@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 
-internal class MarketplaceItemStatsComposer : ServerPacket
+internal sealed class MarketplaceItemStatsComposer : ServerPacket
 {
     public MarketplaceItemStatsComposer(int itemId, int spriteId, int averagePrice)
         : base(ServerPacketHeader.MARKETPLACE_ITEM_STATS)

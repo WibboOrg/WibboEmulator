@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Users;
 
-internal class ReceiveBadgeComposer : ServerPacket
+internal sealed class ReceiveBadgeComposer : ServerPacket
 {
     public ReceiveBadgeComposer(string badgeCode)
         : base(ServerPacketHeader.USER_BADGES_ADD)

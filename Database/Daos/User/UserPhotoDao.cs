@@ -1,7 +1,7 @@
 ﻿namespace WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
 
-internal class UserPhotoDao
+internal sealed class UserPhotoDao
 {
     internal static void Insert(IQueryAdapter dbClient, int userId, string photoId, int time)
     {

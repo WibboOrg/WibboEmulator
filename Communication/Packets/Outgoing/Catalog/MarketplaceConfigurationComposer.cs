@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Communication.Packets.Outgoing.Catalog;
 
-internal class MarketplaceConfigurationComposer : ServerPacket
+internal sealed class MarketplaceConfigurationComposer : ServerPacket
 {
     public MarketplaceConfigurationComposer()
         : base(ServerPacketHeader.MARKETPLACE_CONFIG)

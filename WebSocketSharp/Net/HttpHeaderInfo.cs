@@ -28,7 +28,7 @@ namespace WibboEmulator.WebSocketSharp.Net;
 #endregion
 
 
-internal class HttpHeaderInfo
+internal sealed class HttpHeaderInfo
 {
     #region Private Fields
 

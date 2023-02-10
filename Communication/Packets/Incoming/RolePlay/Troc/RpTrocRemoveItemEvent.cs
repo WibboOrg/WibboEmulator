@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.RolePlay.Troc;
 using WibboEmulator.Games.GameClients;
 
-internal class RpTrocRemoveItemEvent : IPacketEvent
+internal sealed class RpTrocRemoveItemEvent : IPacketEvent
 {
     public double Delay => 100;
 

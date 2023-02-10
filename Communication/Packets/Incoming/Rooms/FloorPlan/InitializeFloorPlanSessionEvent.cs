@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.FloorPlan;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.FloorPlan;
 using WibboEmulator.Games.GameClients;
 
-internal class InitializeFloorPlanSessionEvent : IPacketEvent
+internal sealed class InitializeFloorPlanSessionEvent : IPacketEvent
 {
     public double Delay => 0;
 

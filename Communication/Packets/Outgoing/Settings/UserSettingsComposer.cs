@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Settings;
 
-internal class UserSettingsComposer : ServerPacket
+internal sealed class UserSettingsComposer : ServerPacket
 {
     public UserSettingsComposer(ICollection<int> clientVolumes, bool oldChat, bool roomInvites, bool cameraFollow, int flags, int chatType)
         : base(ServerPacketHeader.USER_SETTINGS)

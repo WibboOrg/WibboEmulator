@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Catalog;
 
-internal class GiftWrappingConfigurationComposer : ServerPacket
+internal sealed class GiftWrappingConfigurationComposer : ServerPacket
 {
     public GiftWrappingConfigurationComposer()
         : base(ServerPacketHeader.GIFT_WRAPPER_CONFIG)

@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Games.GameClients;
 
-internal class GetUserFlatCatsEvent : IPacketEvent
+internal sealed class GetUserFlatCatsEvent : IPacketEvent
 {
     public double Delay => 0;
 

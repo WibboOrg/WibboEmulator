@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
 
-internal class GetCatalogIndexEvent : IPacketEvent
+internal sealed class GetCatalogIndexEvent : IPacketEvent
 {
     public double Delay => 0;
 

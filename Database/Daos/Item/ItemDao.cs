@@ -5,7 +5,7 @@ using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Utilities;
 
-internal class ItemDao
+internal sealed class ItemDao
 {
     internal static void SaveUpdateItems(IQueryAdapter dbClient, ConcurrentDictionary<int, Item> updateItems)
     {

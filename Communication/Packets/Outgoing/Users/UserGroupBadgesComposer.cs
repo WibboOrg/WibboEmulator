@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.Groups;
 
-internal class UserGroupBadgesComposer : ServerPacket
+internal sealed class UserGroupBadgesComposer : ServerPacket
 {
     public UserGroupBadgesComposer(Dictionary<int, string> badges)
         : base(ServerPacketHeader.GROUP_BADGES)

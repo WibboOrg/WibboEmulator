@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Messenger;
 
-internal class NewConsoleComposer : ServerPacket
+internal sealed class NewConsoleComposer : ServerPacket
 {
     public NewConsoleComposer(int sender, string message, int time = 0)
         : base(ServerPacketHeader.MESSENGER_CHAT)

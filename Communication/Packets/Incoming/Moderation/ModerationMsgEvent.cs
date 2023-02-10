@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Moderations;
 
-internal class ModerationMsgEvent : IPacketEvent
+internal sealed class ModerationMsgEvent : IPacketEvent
 {
     public double Delay => 0;
 

@@ -6,7 +6,7 @@ using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
-internal class UpdateFigureDataEvent : IPacketEvent
+internal sealed class UpdateFigureDataEvent : IPacketEvent
 {
     public double Delay => 500;
 

@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Quests;
 using WibboEmulator.Games.GameClients;
 
-internal class StartQuestEvent : IPacketEvent
+internal sealed class StartQuestEvent : IPacketEvent
 {
     public double Delay => 0;
 

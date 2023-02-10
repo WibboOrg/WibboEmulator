@@ -88,8 +88,6 @@ public class RoomUser : IEquatable<RoomUser>
     public int PartyId { get; set; }
     public int TimerResetEffect { get; set; }
 
-    public string LoaderVideoId { get; set; }
-
     public int WiredPoints { get; set; }
     public bool InGame { get; set; }
     public bool WiredGivelot { get; set; }

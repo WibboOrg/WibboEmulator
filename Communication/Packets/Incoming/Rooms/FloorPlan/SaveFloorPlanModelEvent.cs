@@ -5,7 +5,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 
-internal class SaveFloorPlanModelEvent : IPacketEvent
+internal sealed partial class SaveFloorPlanModelEvent : IPacketEvent
 {
     public double Delay => 1000;
 
@@ -47,7 +47,7 @@ internal class SaveFloorPlanModelEvent : IPacketEvent
             return;
         }
 
-        map = new Regex(@"[^a-z0-9\r]", RegexOptions.IgnoreCase).Replace(map, string.Empty);
+        map = MyRegex().Replace(map, string.Empty);
 
         if (string.IsNullOrEmpty(map))
         {
@@ -186,4 +186,6 @@ internal class SaveFloorPlanModelEvent : IPacketEvent
         'w' => 32,
         _ => 0,
     };
+    [GeneratedRegex("[^a-z0-9\\r]", RegexOptions.IgnoreCase, "fr-BE")]
+    private static partial Regex MyRegex();
 }

@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Moderations;
 
-internal class ModeratorInitComposer : ServerPacket
+internal sealed class ModeratorInitComposer : ServerPacket
 {
     public ModeratorInitComposer(List<string> userPresets, List<string> roomPresets, List<ModerationTicket> tickets)
         : base(ServerPacketHeader.MODERATION_TOOL)

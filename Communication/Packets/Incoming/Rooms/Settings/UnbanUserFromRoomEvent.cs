@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Settings;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 using WibboEmulator.Games.GameClients;
 
-internal class UnbanUserFromRoomEvent : IPacketEvent
+internal sealed class UnbanUserFromRoomEvent : IPacketEvent
 {
     public double Delay => 250;
 

@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 using WibboEmulator.Games.Achievements;
 using WibboEmulator.Games.Users.Achievements;
 
-internal class AchievementProgressedComposer : ServerPacket
+internal sealed class AchievementProgressedComposer : ServerPacket
 {
     public AchievementProgressedComposer(AchievementData achievement, int targetLevel, AchievementLevel targetLevelData, int totalLevels, UserAchievement userData)
         : base(ServerPacketHeader.ACHIEVEMENT_PROGRESSED)

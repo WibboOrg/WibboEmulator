@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Avatar;
 using WibboEmulator.Games.GameClients;
 
-internal class SitEvent : IPacketEvent
+internal sealed class SitEvent : IPacketEvent
 {
     public double Delay => 250;
 

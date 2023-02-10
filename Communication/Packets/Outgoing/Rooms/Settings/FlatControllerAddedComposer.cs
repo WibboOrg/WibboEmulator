@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 
-internal class FlatControllerAddedComposer : ServerPacket
+internal sealed class FlatControllerAddedComposer : ServerPacket
 {
     public FlatControllerAddedComposer(int roomId, int userId, string userName)
         : base(ServerPacketHeader.ROOM_RIGHTS_LIST_ADD)

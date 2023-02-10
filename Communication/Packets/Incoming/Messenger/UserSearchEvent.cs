@@ -4,7 +4,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Messenger;
 using WibboEmulator.Utilities;
 
-internal class UserSearchEvent : IPacketEvent
+internal sealed class UserSearchEvent : IPacketEvent
 {
     public double Delay => 500;
 

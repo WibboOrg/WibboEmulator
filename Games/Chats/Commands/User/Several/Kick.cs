@@ -2,7 +2,7 @@ namespace WibboEmulator.Games.Chats.Commands.User.Several;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class Kick : IChatCommand
+internal sealed class Kick : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser user, string[] parameters)
     {

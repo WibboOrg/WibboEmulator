@@ -41,7 +41,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-internal class WebSocketFrame : IEnumerable<byte>
+internal sealed class WebSocketFrame : IEnumerable<byte>
 {
     #region Private Fields
 

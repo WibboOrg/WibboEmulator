@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Handshake;
 
-internal class UserRightsComposer : ServerPacket
+internal sealed class UserRightsComposer : ServerPacket
 {
     public UserRightsComposer(int rank)
         : base(ServerPacketHeader.USER_PERMISSIONS)

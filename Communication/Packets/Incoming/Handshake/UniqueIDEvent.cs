@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Core;
 using WibboEmulator.Games.GameClients;
 
-internal class UniqueIDEvent : IPacketEvent
+internal sealed class UniqueIDEvent : IPacketEvent
 {
     public double Delay => 0;
 

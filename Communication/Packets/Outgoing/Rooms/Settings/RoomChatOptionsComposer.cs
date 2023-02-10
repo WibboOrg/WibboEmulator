@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 
-internal class RoomChatOptionsComposer : ServerPacket
+internal sealed class RoomChatOptionsComposer : ServerPacket
 {
     public RoomChatOptionsComposer(int chatType, int chatBalloon, int chatSpeed, int chatMaxDistance, int chatFloodProtection)
         : base(ServerPacketHeader.ROOM_SETTINGS_CHAT)

@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Utilities;
 
-internal class BotUserDao
+internal sealed class BotUserDao
 {
     internal static void SaveBots(IQueryAdapter dbClient, List<RoomUser> botList)
     {

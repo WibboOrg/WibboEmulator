@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
-internal class MoveObjectEvent : IPacketEvent
+internal sealed class MoveObjectEvent : IPacketEvent
 {
     public double Delay => 100;
 

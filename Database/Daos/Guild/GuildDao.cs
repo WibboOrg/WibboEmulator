@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Guild;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class GuildDao
+internal sealed class GuildDao
 {
     internal static void UpdateBadge(IQueryAdapter dbClient, int groupId, string badge)
     {

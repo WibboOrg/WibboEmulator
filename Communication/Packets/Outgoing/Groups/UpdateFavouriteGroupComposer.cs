@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.Groups;
 
-internal class UpdateFavouriteGroupComposer : ServerPacket
+internal sealed class UpdateFavouriteGroupComposer : ServerPacket
 {
     public UpdateFavouriteGroupComposer(Group group, int virtualId)
         : base(ServerPacketHeader.FAVORITE_GROUP_UDPATE)

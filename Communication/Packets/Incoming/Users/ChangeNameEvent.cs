@@ -8,7 +8,7 @@ using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
-internal class ChangeNameEvent : IPacketEvent
+internal sealed class ChangeNameEvent : IPacketEvent
 {
     public double Delay => 5000;
 

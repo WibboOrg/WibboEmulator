@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 
-internal class ObjectRemoveComposer : ServerPacket
+internal sealed class ObjectRemoveComposer : ServerPacket
 {
     public ObjectRemoveComposer(int itemId, int ownerId)
         : base(ServerPacketHeader.FURNITURE_FLOOR_REMOVE)

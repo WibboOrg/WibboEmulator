@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class StaffAlert : IChatCommand
+internal sealed class StaffAlert : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser roomUser, string[] parameters)
     {

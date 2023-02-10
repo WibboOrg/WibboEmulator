@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
-internal class UseFurnitureEvent : IPacketEvent
+internal sealed class UseFurnitureEvent : IPacketEvent
 {
     public double Delay => 100;
 

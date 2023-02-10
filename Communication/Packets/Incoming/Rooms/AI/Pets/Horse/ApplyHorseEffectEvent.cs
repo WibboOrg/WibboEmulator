@@ -6,7 +6,7 @@ using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class ApplyHorseEffectEvent : IPacketEvent
+internal sealed class ApplyHorseEffectEvent : IPacketEvent
 {
     public double Delay => 250;
 

@@ -2,7 +2,7 @@ namespace WibboEmulator.Games.Chats.Commands.Staff.Animation;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class RoomFreeze : IChatCommand
+internal sealed class RoomFreeze : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

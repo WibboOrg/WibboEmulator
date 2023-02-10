@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using System.Collections.Concurrent;
 using WibboEmulator.Games.Roleplays.Player;
 
-internal class LoadInventoryRpComposer : ServerPacket
+internal sealed class LoadInventoryRpComposer : ServerPacket
 {
     public LoadInventoryRpComposer(ConcurrentDictionary<int, RolePlayInventoryItem> items)
       : base(ServerPacketHeader.LOAD_INVENTORY_RP)

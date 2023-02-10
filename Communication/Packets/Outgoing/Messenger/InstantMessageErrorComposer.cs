@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Messenger;
 
-internal class InstantMessageErrorComposer : ServerPacket
+internal sealed class InstantMessageErrorComposer : ServerPacket
 {
     public InstantMessageErrorComposer(int error, int target)
         : base(ServerPacketHeader.MESSENGER_INSTANCE_MESSAGE_ERROR)

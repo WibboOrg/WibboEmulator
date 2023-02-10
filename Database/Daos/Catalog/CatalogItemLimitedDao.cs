@@ -1,7 +1,7 @@
 namespace WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Interfaces;
 
-internal class CatalogItemLimitedDao
+internal sealed class CatalogItemLimitedDao
 {
     internal static void Update(IQueryAdapter dbClient, int itemId, int limitedEditionSells)
     {

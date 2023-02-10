@@ -5,7 +5,7 @@ using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Games.Catalogs.Marketplace;
 using WibboEmulator.Games.GameClients;
 
-internal class GetOffersEvent : IPacketEvent
+internal sealed class GetOffersEvent : IPacketEvent
 {
     public double Delay => 0;
 

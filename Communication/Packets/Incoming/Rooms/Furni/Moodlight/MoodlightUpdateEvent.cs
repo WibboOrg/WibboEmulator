@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.Moodlight;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class MoodlightUpdateEvent : IPacketEvent
+internal sealed class MoodlightUpdateEvent : IPacketEvent
 {
     public double Delay => 250;
 

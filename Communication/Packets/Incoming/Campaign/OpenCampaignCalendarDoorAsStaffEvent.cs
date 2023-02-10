@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Campaign;
 using WibboEmulator.Communication.Packets.Outgoing.Campaign;
 using WibboEmulator.Games.GameClients;
 
-internal class OpenCampaignCalendarDoorAsStaffEvent : IPacketEvent
+internal sealed class OpenCampaignCalendarDoorAsStaffEvent : IPacketEvent
 {
     public double Delay => 0;
 

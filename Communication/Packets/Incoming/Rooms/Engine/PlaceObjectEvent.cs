@@ -7,7 +7,7 @@ using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Quests;
 
-internal class PlaceObjectEvent : IPacketEvent
+internal sealed class PlaceObjectEvent : IPacketEvent
 {
     public double Delay => 100;
 

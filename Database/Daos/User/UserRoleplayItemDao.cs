@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.User;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class UserRoleplayItemDao
+internal sealed class UserRoleplayItemDao
 {
     internal static void Delete(IQueryAdapter dbClient, int userId, int roleplayId) => dbClient.RunQuery("DELETE FROM `user_roleplay_item` WHERE `user_id` = '" + userId + "' AND `rp_id` = '" + roleplayId + "'");
 

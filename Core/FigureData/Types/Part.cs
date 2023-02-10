@@ -1,6 +1,6 @@
 namespace WibboEmulator.Core.FigureData.Types;
 
-internal class Part
+internal sealed class Part
 {
     public int Id { get; set; }
     public SetType SetType { get; set; }

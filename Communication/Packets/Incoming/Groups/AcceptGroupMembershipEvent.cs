@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Groups;
 
 using WibboEmulator.Games.GameClients;
 
-internal class AcceptGroupMembershipEvent : IPacketEvent
+internal sealed class AcceptGroupMembershipEvent : IPacketEvent
 {
     public double Delay => 100;
 

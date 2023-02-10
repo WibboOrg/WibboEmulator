@@ -2,7 +2,7 @@ namespace WibboEmulator.Games.Chats.Commands.User.Several;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class SuperPull : IChatCommand
+internal sealed class SuperPull : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

@@ -1,7 +1,7 @@
 namespace WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Database.Interfaces;
 
-internal class LogFlagmeDao
+internal sealed class LogFlagmeDao
 {
     internal static void Insert(IQueryAdapter dbClient, int userId, string username, string newUsername)
     {

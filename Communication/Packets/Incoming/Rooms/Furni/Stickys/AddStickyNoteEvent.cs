@@ -3,7 +3,7 @@ using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class AddStickyNoteEvent : IPacketEvent
+internal sealed class AddStickyNoteEvent : IPacketEvent
 {
     public double Delay => 250;
 

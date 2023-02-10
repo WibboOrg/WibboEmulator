@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Games.Users;
 
-internal class UserObjectComposer : ServerPacket
+internal sealed class UserObjectComposer : ServerPacket
 {
     public UserObjectComposer(User user)
         : base(ServerPacketHeader.USER_INFO)

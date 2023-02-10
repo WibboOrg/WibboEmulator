@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Action;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Action;
 using WibboEmulator.Games.GameClients;
 
-internal class UnIgnoreUserEvent : IPacketEvent
+internal sealed class UnIgnoreUserEvent : IPacketEvent
 {
     public double Delay => 250;
 

@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map;
 
-internal class HeightMapComposer : ServerPacket
+internal sealed class HeightMapComposer : ServerPacket
 {
     public HeightMapComposer(RoomModelDynamic map, double height = 0.0)
         : base(ServerPacketHeader.ROOM_HEIGHT_MAP)

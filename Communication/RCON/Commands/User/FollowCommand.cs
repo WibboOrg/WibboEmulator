@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 
-internal class FollowCommand : IRCONCommand
+internal sealed class FollowCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
     {

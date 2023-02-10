@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Notifications;
 
-internal class MOTDNotificationComposer : ServerPacket
+internal sealed class MOTDNotificationComposer : ServerPacket
 {
     public MOTDNotificationComposer(string message)
         : base(ServerPacketHeader.MOTD_MESSAGES)

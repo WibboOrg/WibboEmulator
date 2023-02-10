@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.Users;
 
-internal class GroupMemberUpdatedComposer : ServerPacket
+internal sealed class GroupMemberUpdatedComposer : ServerPacket
 {
     public GroupMemberUpdatedComposer(int groupId, User user, int type)
         : base(ServerPacketHeader.GROUP_MEMBER)

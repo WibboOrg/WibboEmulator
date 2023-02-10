@@ -4,7 +4,7 @@ using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
-internal class SetActivatedBadgesEvent : IPacketEvent
+internal sealed class SetActivatedBadgesEvent : IPacketEvent
 {
     public double Delay => 250;
 

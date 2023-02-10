@@ -49,7 +49,7 @@ namespace WibboEmulator.WebSocketSharp.Net;
 using System;
 using System.Threading;
 
-internal class HttpListenerAsyncResult : IAsyncResult, IDisposable
+internal sealed class HttpListenerAsyncResult : IAsyncResult, IDisposable
 {
     #region Private Fields
 

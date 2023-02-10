@@ -10,7 +10,7 @@ using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Rooms;
 
-internal class DuplicateRoom : IChatCommand
+internal sealed class DuplicateRoom : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

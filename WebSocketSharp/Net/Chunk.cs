@@ -41,7 +41,7 @@ namespace WibboEmulator.WebSocketSharp.Net;
 
 using System;
 
-internal class Chunk
+internal sealed class Chunk
 {
     #region Private Fields
 

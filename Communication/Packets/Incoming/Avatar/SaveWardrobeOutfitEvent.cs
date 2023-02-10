@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Avatar;
 using WibboEmulator.Games.GameClients;
 
-internal class SaveWardrobeOutfitEvent : IPacketEvent
+internal sealed class SaveWardrobeOutfitEvent : IPacketEvent
 {
     public double Delay => 250;
 

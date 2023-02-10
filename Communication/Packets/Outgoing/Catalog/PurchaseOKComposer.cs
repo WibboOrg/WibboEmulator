@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.Items;
 
-internal class PurchaseOKComposer : ServerPacket
+internal sealed class PurchaseOKComposer : ServerPacket
 {
     public PurchaseOKComposer(CatalogItem item, ItemData baseItem)
         : base(ServerPacketHeader.CATALOG_PURCHASE_OK)

@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Handshake;
 using WibboEmulator.Games.GameClients;
 
-internal class GetClientVersionEvent : IPacketEvent
+internal sealed class GetClientVersionEvent : IPacketEvent
 {
     public double Delay => 5000;
 

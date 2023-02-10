@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Polls;
 
-internal class QuestionAnsweredComposer : ServerPacket
+internal sealed class QuestionAnsweredComposer : ServerPacket
 {
     public QuestionAnsweredComposer(int userId, string value, int votedCountNo, int votedCountYes)
   : base(ServerPacketHeader.QUESTION_ANSWERED)

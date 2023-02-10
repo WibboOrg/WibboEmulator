@@ -3,7 +3,7 @@ using WibboEmulator.Database.Daos.Messenger;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Messenger;
 
-internal class SetRelationshipEvent : IPacketEvent
+internal sealed class SetRelationshipEvent : IPacketEvent
 {
     public double Delay => 250;
 

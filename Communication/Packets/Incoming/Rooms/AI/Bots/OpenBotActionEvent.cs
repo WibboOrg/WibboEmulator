@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Bots;
 using WibboEmulator.Games.GameClients;
 
-internal class OpenBotActionEvent : IPacketEvent
+internal sealed class OpenBotActionEvent : IPacketEvent
 {
     public double Delay => 0;
 

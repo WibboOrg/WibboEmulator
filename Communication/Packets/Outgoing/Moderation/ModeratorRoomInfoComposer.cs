@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Rooms;
 
-internal class ModeratorRoomInfoComposer : ServerPacket
+internal sealed class ModeratorRoomInfoComposer : ServerPacket
 {
     public ModeratorRoomInfoComposer(RoomData data, bool ownerInRoom)
         : base(ServerPacketHeader.MODTOOL_ROOM_INFO)

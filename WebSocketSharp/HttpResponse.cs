@@ -33,7 +33,7 @@ using System.Collections.Specialized;
 using System.IO;
 using WibboEmulator.WebSocketSharp.Net;
 
-internal class HttpResponse : HttpBase
+internal sealed class HttpResponse : HttpBase
 {
     #region Private Fields
 

@@ -1,7 +1,7 @@
 namespace WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 
-internal class BanDao
+internal sealed class BanDao
 {
     internal static bool IsBanned(IQueryAdapter dbClient, string username, string ip, string ipTwo, string machineId)
     {

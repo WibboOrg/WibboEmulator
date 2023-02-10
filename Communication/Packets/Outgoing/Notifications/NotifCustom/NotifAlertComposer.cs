@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 
-internal class NotifAlertComposer : ServerPacket
+internal sealed class NotifAlertComposer : ServerPacket
 {
     public NotifAlertComposer(string image, string title, string message, string textButton, int roomId, string url)
      : base(ServerPacketHeader.NOTIF_ALERT)

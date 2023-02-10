@@ -3,7 +3,7 @@ using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class DeleteStickyNoteEvent : IPacketEvent
+internal sealed class DeleteStickyNoteEvent : IPacketEvent
 {
     public double Delay => 250;
 

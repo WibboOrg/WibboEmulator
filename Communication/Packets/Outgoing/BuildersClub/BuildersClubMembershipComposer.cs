@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.BuildersClub;
 
-internal class BuildersClubMembershipComposer : ServerPacket
+internal sealed class BuildersClubMembershipComposer : ServerPacket
 {
     public BuildersClubMembershipComposer()
         : base(ServerPacketHeader.BUILDERS_CLUB_EXPIRED)

@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class UpdateMagicTileEvent : IPacketEvent
+internal sealed class UpdateMagicTileEvent : IPacketEvent
 {
     public double Delay => 0;
 

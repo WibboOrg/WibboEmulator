@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Games.Catalogs.Pets;
 
-internal class SellablePetBreedsComposer : ServerPacket
+internal sealed class SellablePetBreedsComposer : ServerPacket
 {
     public SellablePetBreedsComposer(string petType, int petId, ICollection<PetRace> races)
          : base(ServerPacketHeader.CATALOG_RECEIVE_PET_BREEDS)

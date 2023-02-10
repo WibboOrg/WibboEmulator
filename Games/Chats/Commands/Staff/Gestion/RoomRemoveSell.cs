@@ -3,7 +3,7 @@ using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class RoomRemoveSell : IChatCommand
+internal sealed class RoomRemoveSell : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

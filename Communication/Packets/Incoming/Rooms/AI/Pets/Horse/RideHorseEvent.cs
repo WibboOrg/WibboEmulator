@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class RideHorseEvent : IPacketEvent
+internal sealed class RideHorseEvent : IPacketEvent
 {
     public double Delay => 250;
 

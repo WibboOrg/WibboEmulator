@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Misc;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Games.GameClients;
 
-internal class RoomNuxAlertEvent : IPacketEvent
+internal sealed class RoomNuxAlertEvent : IPacketEvent
 {
     public double Delay => 0;
 

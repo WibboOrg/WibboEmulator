@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 
 using WibboEmulator.Games.GameClients;
 
-internal class CanCreateRoomEvent : IPacketEvent
+internal sealed class CanCreateRoomEvent : IPacketEvent
 {
     public double Delay => 0;
 

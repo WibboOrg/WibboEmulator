@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Avatar;
 using WibboEmulator.Games.GameClients;
 
-internal class DropHandItemEvent : IPacketEvent
+internal sealed class DropHandItemEvent : IPacketEvent
 {
     public double Delay => 250;
 

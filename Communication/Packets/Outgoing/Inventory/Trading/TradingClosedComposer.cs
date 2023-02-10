@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Trading;
 
-internal class TradingClosedComposer : ServerPacket
+internal sealed class TradingClosedComposer : ServerPacket
 {
     public TradingClosedComposer(int userId)
         : base(ServerPacketHeader.TRADE_CLOSED)

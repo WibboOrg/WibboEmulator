@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Games.Catalogs.Marketplace;
 
-internal class MarketPlaceOffersComposer : ServerPacket
+internal sealed class MarketPlaceOffersComposer : ServerPacket
 {
     public MarketPlaceOffersComposer(Dictionary<int, MarketOffer> dictionary, Dictionary<int, int> dictionary2)
         : base(ServerPacketHeader.MARKETPLACE_ITEMS_SEARCHED)

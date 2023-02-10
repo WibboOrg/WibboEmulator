@@ -1,7 +1,7 @@
 ﻿namespace WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
 
-internal class UserVoucherDao
+internal sealed class UserVoucherDao
 {
     internal static bool HaveVoucher(IQueryAdapter dbClient, int userId, string voucherCode)
     {

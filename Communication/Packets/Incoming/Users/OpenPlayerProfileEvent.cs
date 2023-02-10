@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.Messenger;
 using WibboEmulator.Games.GameClients;
 
-internal class OpenPlayerProfileEvent : IPacketEvent
+internal sealed class OpenPlayerProfileEvent : IPacketEvent
 {
     public double Delay => 250;
 

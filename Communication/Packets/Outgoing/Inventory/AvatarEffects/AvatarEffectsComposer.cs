@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 
-internal class AvatarEffectsComposer : ServerPacket
+internal sealed class AvatarEffectsComposer : ServerPacket
 {
     public AvatarEffectsComposer(List<int> enable)
         : base(ServerPacketHeader.USER_EFFECTS)

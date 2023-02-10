@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 using WibboEmulator.Games.Rooms;
 
-internal class GetRoomBannedUsersComposer : ServerPacket
+internal sealed class GetRoomBannedUsersComposer : ServerPacket
 {
     public GetRoomBannedUsersComposer(Room instance)
         : base(ServerPacketHeader.ROOM_BAN_LIST)

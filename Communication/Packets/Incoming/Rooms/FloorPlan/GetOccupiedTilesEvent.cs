@@ -2,7 +2,7 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.FloorPlan;
 using WibboEmulator.Games.GameClients;
 
-internal class GetOccupiedTilesEvent : IPacketEvent
+internal sealed class GetOccupiedTilesEvent : IPacketEvent
 {
     public double Delay => 0;
 

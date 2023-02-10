@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Messenger;
 using WibboEmulator.Games.Users.Messenger;
 
-internal class BuddyRequestsComposer : ServerPacket
+internal sealed class BuddyRequestsComposer : ServerPacket
 {
     public BuddyRequestsComposer(Dictionary<int, MessengerRequest> requests)
         : base(ServerPacketHeader.MESSENGER_REQUESTS)

@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Catalog;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class CatalogItemDao
+internal sealed class CatalogItemDao
 {
     internal static DataTable GetAll(IQueryAdapter dbClient)
     {

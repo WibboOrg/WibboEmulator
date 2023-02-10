@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Games.Rooms;
 
-internal class PetHorseFigureInformationComposer : ServerPacket
+internal sealed class PetHorseFigureInformationComposer : ServerPacket
 {
     public PetHorseFigureInformationComposer(RoomUser petUser)
         : base(ServerPacketHeader.PET_FIGURE_UPDATE)

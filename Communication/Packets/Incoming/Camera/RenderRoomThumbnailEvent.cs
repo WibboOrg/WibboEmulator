@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera;
 using WibboEmulator.Communication.Packets.Outgoing.Camera;
 using WibboEmulator.Games.GameClients;
 
-internal class RenderRoomThumbnailEvent : IPacketEvent
+internal sealed class RenderRoomThumbnailEvent : IPacketEvent
 {
     public double Delay => 5000;
 

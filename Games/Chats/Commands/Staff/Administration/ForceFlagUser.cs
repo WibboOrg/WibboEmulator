@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class ForceFlagUser : IChatCommand
+internal sealed class ForceFlagUser : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

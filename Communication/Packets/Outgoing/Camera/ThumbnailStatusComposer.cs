@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Communication.Packets.Outgoing.Camera;
 
-internal class ThumbnailStatusComposer : ServerPacket
+internal sealed class ThumbnailStatusComposer : ServerPacket
 {
     public ThumbnailStatusComposer(bool ok, bool renderLimitHit)
         : base(ServerPacketHeader.THUMBNAIL_STATUS)

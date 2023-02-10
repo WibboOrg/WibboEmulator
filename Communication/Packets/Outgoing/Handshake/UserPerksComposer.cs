@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Games.Users;
 
-internal class UserPerksComposer : ServerPacket
+internal sealed class UserPerksComposer : ServerPacket
 {
     public UserPerksComposer(User user)
         : base(ServerPacketHeader.USER_PERKS)

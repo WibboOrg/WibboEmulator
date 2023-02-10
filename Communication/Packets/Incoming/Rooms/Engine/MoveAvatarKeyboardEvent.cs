@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 
-internal class MoveAvatarKeyboardEvent : IPacketEvent
+internal sealed class MoveAvatarKeyboardEvent : IPacketEvent
 {
     public double Delay => 0;
 

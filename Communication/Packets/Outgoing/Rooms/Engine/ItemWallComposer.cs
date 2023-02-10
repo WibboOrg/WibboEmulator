@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
 
-internal class ItemWallComposer : ServerPacket
+internal sealed class ItemWallComposer : ServerPacket
 {
     public ItemWallComposer(Item[] items, Room room)
         : base(ServerPacketHeader.ITEM_WALL)

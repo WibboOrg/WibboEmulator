@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 
-internal class UserTypingComposer : ServerPacket
+internal sealed class UserTypingComposer : ServerPacket
 {
     public UserTypingComposer(int virtualId, bool typing)
         : base(ServerPacketHeader.UNIT_TYPING)

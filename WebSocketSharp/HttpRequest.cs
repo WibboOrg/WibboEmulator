@@ -41,7 +41,7 @@ using System.IO;
 using System.Text;
 using WebSocketSharp.Net;
 
-internal class HttpRequest : HttpBase
+internal sealed class HttpRequest : HttpBase
 {
     #region Private Fields
 

@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Messenger;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class MessengerOfflineMessageDao
+internal sealed class MessengerOfflineMessageDao
 {
     internal static void Insert(IQueryAdapter dbClient, int toId, int userId, string message)
     {

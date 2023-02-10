@@ -1,5 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay.Troc;
-internal class RpTrocUpdateItemsComposer : ServerPacket
+internal sealed class RpTrocUpdateItemsComposer : ServerPacket
 {
     public RpTrocUpdateItemsComposer(int userId, Dictionary<int, int> items)
       : base(ServerPacketHeader.RP_TROC_UPDATE_ITEMS)

@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Help;
 
-internal class OnGuideSessionDetachedComposer : ServerPacket
+internal sealed class OnGuideSessionDetachedComposer : ServerPacket
 {
     public OnGuideSessionDetachedComposer()
         : base(ServerPacketHeader.GUIDE_SESSION_DETACHED)

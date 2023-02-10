@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Messenger;
 using WibboEmulator.Games.GameClients;
 
-internal class RemoveBuddyEvent : IPacketEvent
+internal sealed class RemoveBuddyEvent : IPacketEvent
 {
     public double Delay => 0;
 

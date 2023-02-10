@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 using WibboEmulator.Games.Rooms;
 
-internal class RoomSettingsDataComposer : ServerPacket
+internal sealed class RoomSettingsDataComposer : ServerPacket
 {
     public RoomSettingsDataComposer(RoomData room)
         : base(ServerPacketHeader.ROOM_SETTINGS)

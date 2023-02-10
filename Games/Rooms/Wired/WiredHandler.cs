@@ -268,18 +268,18 @@ public class WiredHandler
             var actRand = actionStack[rdnWired];
             ((IWiredEffect)actRand.WiredHandler).Handle(user, item);
         }
-        else if (this._specialUnseen.TryGetValue(coordinate, out var value))
+        else if (this._specialUnseen.TryGetValue(coordinate, out var nextWiredIndex))
         {
             var countAct = actionStack.Count - 1;
 
-            var nextWired = value;
+            var nextWired = nextWiredIndex;
             if (nextWired > countAct)
             {
                 nextWired = 0;
                 this._specialUnseen[coordinate] = 0;
             }
 
-            value++;
+            nextWiredIndex++;
 
             var actNext = actionStack[nextWired];
             if (actNext != null && actNext.WiredHandler != null)

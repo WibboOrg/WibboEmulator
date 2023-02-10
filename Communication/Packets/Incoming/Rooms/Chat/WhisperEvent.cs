@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
 
-internal class WhisperEvent : IPacketEvent
+internal sealed class WhisperEvent : IPacketEvent
 {
     public double Delay => 100;
 

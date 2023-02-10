@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.LandingView;
 using WibboEmulator.Communication.Packets.Outgoing.LandingView;
 using WibboEmulator.Games.GameClients;
 
-internal class RefreshCampaignEvent : IPacketEvent
+internal sealed class RefreshCampaignEvent : IPacketEvent
 {
     public double Delay => 0;
 

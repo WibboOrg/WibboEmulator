@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Navigator;
 
-internal class FlatAccessDeniedComposer : ServerPacket
+internal sealed class FlatAccessDeniedComposer : ServerPacket
 {
     public FlatAccessDeniedComposer(string username)
         : base(ServerPacketHeader.ROOM_DOORBELL_REJECTED)

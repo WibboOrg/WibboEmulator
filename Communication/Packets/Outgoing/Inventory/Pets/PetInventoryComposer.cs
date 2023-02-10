@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Games.Rooms.AI;
 
-internal class PetInventoryComposer : ServerPacket
+internal sealed class PetInventoryComposer : ServerPacket
 {
     public PetInventoryComposer(ICollection<Pet> pets)
         : base(ServerPacketHeader.USER_PETS)

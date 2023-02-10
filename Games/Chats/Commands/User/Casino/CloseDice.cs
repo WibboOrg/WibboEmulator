@@ -4,7 +4,7 @@ using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map;
 
-internal class CloseDice : IChatCommand
+internal sealed class CloseDice : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

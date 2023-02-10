@@ -8,7 +8,7 @@ using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class RemoveSaddleFromHorseEvent : IPacketEvent
+internal sealed class RemoveSaddleFromHorseEvent : IPacketEvent
 {
     public double Delay => 250;
 

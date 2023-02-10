@@ -1,7 +1,7 @@
 namespace WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Database.Interfaces;
 
-internal class LogChatPubDao
+internal sealed class LogChatPubDao
 {
     internal static void Insert(IQueryAdapter dbClient, int userId, string message, string username)
     {

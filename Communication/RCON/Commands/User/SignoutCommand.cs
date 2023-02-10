@@ -1,5 +1,5 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
-internal class SignOutCommand : IRCONCommand
+internal sealed class SignOutCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
     {

@@ -1,5 +1,5 @@
 namespace WibboEmulator.Communication.RCON.Commands.Hotel;
-internal class UnloadCommand : IRCONCommand
+internal sealed class UnloadCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
     {

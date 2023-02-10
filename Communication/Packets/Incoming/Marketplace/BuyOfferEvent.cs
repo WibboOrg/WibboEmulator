@@ -10,7 +10,7 @@ using WibboEmulator.Games.Catalogs.Marketplace;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class BuyOfferEvent : IPacketEvent
+internal sealed class BuyOfferEvent : IPacketEvent
 {
     public double Delay => 1000;
 
@@ -138,7 +138,7 @@ internal class BuyOfferEvent : IPacketEvent
 
         foreach (var item in WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems)
         {
-            if (dictionary.TryGetValue(item.SpriteId, out int value))
+            if (dictionary.TryGetValue(item.SpriteId, out var marketOffer))
             {
                 if (dictionary[item.SpriteId].TotalPrice > item.TotalPrice)
                 {
@@ -146,7 +146,7 @@ internal class BuyOfferEvent : IPacketEvent
                     dictionary.Add(item.SpriteId, item);
                 }
 
-                var num = value;
+                var num = dictionary2[item.SpriteId];
                 _ = dictionary2.Remove(item.SpriteId);
                 dictionary2.Add(item.SpriteId, num + 1);
             }

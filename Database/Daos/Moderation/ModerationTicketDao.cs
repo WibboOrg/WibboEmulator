@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Moderation;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class ModerationTicketDao
+internal sealed class ModerationTicketDao
 {
     internal static DataTable GetAll(IQueryAdapter dbClient)
     {

@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Inventory.AvatarEffects;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.Games.Teams;
 
-internal class AvatarEffectActivatedEvent : IPacketEvent
+internal sealed class AvatarEffectActivatedEvent : IPacketEvent
 {
     public double Delay => 500;
 

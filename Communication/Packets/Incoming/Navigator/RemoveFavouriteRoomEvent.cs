@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
-internal class RemoveFavouriteRoomEvent : IPacketEvent
+internal sealed class RemoveFavouriteRoomEvent : IPacketEvent
 {
     public double Delay => 250;
 

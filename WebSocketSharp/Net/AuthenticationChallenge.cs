@@ -31,7 +31,7 @@ namespace WibboEmulator.WebSocketSharp.Net;
 using System.Collections.Specialized;
 using System.Text;
 
-internal class AuthenticationChallenge : AuthenticationBase
+internal sealed class AuthenticationChallenge : AuthenticationBase
 {
     #region Private Constructors
 

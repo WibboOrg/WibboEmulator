@@ -2,7 +2,7 @@
 using WibboEmulator.Communication.Packets.Outgoing.Messenger;
 using WibboEmulator.Games.GameClients;
 
-internal class MessengerInitEvent : IPacketEvent
+internal sealed class MessengerInitEvent : IPacketEvent
 {
     public double Delay => 0;
 

@@ -5,7 +5,7 @@ using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
-internal class RedeemOfferCreditsEvent : IPacketEvent
+internal sealed class RedeemOfferCreditsEvent : IPacketEvent
 {
     public double Delay => 500;
 

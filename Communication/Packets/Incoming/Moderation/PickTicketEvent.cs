@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Games.GameClients;
 
-internal class PickTicketEvent : IPacketEvent
+internal sealed class PickTicketEvent : IPacketEvent
 {
     public double Delay => 0;
 

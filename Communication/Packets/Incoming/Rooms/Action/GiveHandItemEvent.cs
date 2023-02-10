@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Action;
 using WibboEmulator.Games.GameClients;
 
-internal class GiveHandItemEvent : IPacketEvent
+internal sealed class GiveHandItemEvent : IPacketEvent
 {
     public double Delay => 250;
 

@@ -4,7 +4,7 @@ using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.AI;
 
-internal class PlacePetEvent : IPacketEvent
+internal sealed class PlacePetEvent : IPacketEvent
 {
     public double Delay => 250;
 

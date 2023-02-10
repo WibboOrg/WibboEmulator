@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.Items;
 
-internal class AddPhotoCommand : IRCONCommand
+internal sealed class AddPhotoCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
     {

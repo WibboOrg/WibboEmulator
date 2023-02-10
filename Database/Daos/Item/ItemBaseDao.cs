@@ -3,7 +3,7 @@ namespace WibboEmulator.Database.Daos.Item;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class ItemBaseDao
+internal sealed class ItemBaseDao
 {
     internal static DataTable GetAll(IQueryAdapter dbClient)
     {

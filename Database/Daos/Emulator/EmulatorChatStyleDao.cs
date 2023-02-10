@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Emulator;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class EmulatorChatStyleDao
+internal sealed class EmulatorChatStyleDao
 {
     internal static DataTable GetAll(IQueryAdapter dbClient)
     {

@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Games.GameClients;
 
-internal class GetPetInventoryEvent : IPacketEvent
+internal sealed class GetPetInventoryEvent : IPacketEvent
 {
     public double Delay => 5000;
 

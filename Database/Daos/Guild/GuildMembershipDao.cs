@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Guild;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class GuildMembershipDao
+internal sealed class GuildMembershipDao
 {
     internal static void Delete(IQueryAdapter dbClient, int groupId) => dbClient.RunQuery("DELETE FROM `guild_membership` WHERE group_id = '" + groupId + "'");
 

@@ -4,7 +4,7 @@ using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 
-internal class UpdateGroupBadgeEvent : IPacketEvent
+internal sealed class UpdateGroupBadgeEvent : IPacketEvent
 {
     public double Delay => 500;
 

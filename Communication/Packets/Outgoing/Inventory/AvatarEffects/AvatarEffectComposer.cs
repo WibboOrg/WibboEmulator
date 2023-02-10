@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 
-internal class AvatarEffectComposer : ServerPacket
+internal sealed class AvatarEffectComposer : ServerPacket
 {
     public AvatarEffectComposer(int virtualId, int effectID, int delay = 0)
         : base(ServerPacketHeader.UNIT_EFFECT)

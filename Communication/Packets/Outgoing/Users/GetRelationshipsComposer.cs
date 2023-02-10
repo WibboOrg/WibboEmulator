@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Users;
 
 using WibboEmulator.Games.Users.Messenger;
 
-internal class GetRelationshipsComposer : ServerPacket
+internal sealed class GetRelationshipsComposer : ServerPacket
 {
     public GetRelationshipsComposer(int userId, List<Relationship> relationships)
         : base(ServerPacketHeader.MESSENGER_RELATIONSHIPS)

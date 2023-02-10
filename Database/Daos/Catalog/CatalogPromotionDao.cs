@@ -2,7 +2,7 @@
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class CatalogPromotionDao
+internal sealed class CatalogPromotionDao
 {
     internal static DataTable GetAll(IQueryAdapter dbClient)
     {

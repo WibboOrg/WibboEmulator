@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Trading;
 using WibboEmulator.Games.GameClients;
 
-internal class InitTradeEvent : IPacketEvent
+internal sealed class InitTradeEvent : IPacketEvent
 {
     public double Delay => 100;
 

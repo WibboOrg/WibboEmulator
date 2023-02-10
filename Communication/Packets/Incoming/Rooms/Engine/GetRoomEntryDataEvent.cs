@@ -7,7 +7,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Utilities;
 
-internal class GetRoomEntryDataEvent : IPacketEvent
+internal sealed class GetRoomEntryDataEvent : IPacketEvent
 {
     public double Delay => 0;
 

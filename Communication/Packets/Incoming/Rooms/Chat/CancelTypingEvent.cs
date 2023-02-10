@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Chat;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Games.GameClients;
 
-internal class CancelTypingEvent : IPacketEvent
+internal sealed class CancelTypingEvent : IPacketEvent
 {
     public double Delay => 0;
 

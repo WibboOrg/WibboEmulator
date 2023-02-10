@@ -1,6 +1,6 @@
 namespace WibboEmulator.Games.Permissions;
 
-internal class Permission
+internal sealed class Permission
 {
     public int Id { get; set; }
     public int Rank { get; set; }

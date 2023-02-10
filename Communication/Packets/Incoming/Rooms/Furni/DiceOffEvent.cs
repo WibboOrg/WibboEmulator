@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni;
 using WibboEmulator.Games.GameClients;
 
-internal class DiceOffEvent : IPacketEvent
+internal sealed class DiceOffEvent : IPacketEvent
 {
     public double Delay => 250;
 

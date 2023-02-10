@@ -6,7 +6,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class OpenFlatConnectionEvent : IPacketEvent
+internal sealed class OpenFlatConnectionEvent : IPacketEvent
 {
     public double Delay => 250;
 

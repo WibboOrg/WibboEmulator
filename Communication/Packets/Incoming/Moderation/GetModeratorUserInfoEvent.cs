@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
-internal class GetModeratorUserInfoEvent : IPacketEvent
+internal sealed class GetModeratorUserInfoEvent : IPacketEvent
 {
     public double Delay => 0;
 

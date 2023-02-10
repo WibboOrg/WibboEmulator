@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Games.GameClients;
 
-internal class UpdateGroupIdentityEvent : IPacketEvent
+internal sealed class UpdateGroupIdentityEvent : IPacketEvent
 {
     public double Delay => 500;
 

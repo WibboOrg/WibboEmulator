@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 
-internal class ObjectUpdateComposer : ServerPacket
+internal sealed class ObjectUpdateComposer : ServerPacket
 {
     public ObjectUpdateComposer(Item item, int userId, bool hideWired = false)
         : base(ServerPacketHeader.FURNITURE_FLOOR_UPDATE)

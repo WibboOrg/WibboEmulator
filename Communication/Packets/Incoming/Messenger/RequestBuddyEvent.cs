@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Messenger;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
-internal class RequestBuddyEvent : IPacketEvent
+internal sealed class RequestBuddyEvent : IPacketEvent
 {
     public double Delay => 0;
 

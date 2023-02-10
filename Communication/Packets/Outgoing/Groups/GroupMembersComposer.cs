@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Users;
 
-internal class GroupMembersComposer : ServerPacket
+internal sealed class GroupMembersComposer : ServerPacket
 {
     public GroupMembersComposer(Group group, ICollection<User> members, int membersCount, int page, bool admin, int reqType, string searchVal)
         : base(ServerPacketHeader.GROUP_MEMBERS)

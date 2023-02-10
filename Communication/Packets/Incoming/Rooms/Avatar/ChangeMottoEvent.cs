@@ -5,7 +5,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 using WibboEmulator.Utilities;
 
-internal class ChangeMottoEvent : IPacketEvent
+internal sealed class ChangeMottoEvent : IPacketEvent
 {
     public double Delay => 250;
 

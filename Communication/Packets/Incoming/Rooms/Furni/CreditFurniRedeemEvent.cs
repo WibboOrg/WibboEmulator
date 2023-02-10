@@ -7,7 +7,7 @@ using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class CreditFurniRedeemEvent : IPacketEvent
+internal sealed class CreditFurniRedeemEvent : IPacketEvent
 {
     public double Delay => 250;
 

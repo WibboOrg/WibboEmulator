@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.User;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class UserAchievementDao
+internal sealed class UserAchievementDao
 {
     internal static void Replace(IQueryAdapter dbClient, int userId, int newLevel, int newProgress, string achievementGroup)
     {

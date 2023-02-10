@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.GameClients;
 
-internal class GetModeratorRoomInfoEvent : IPacketEvent
+internal sealed class GetModeratorRoomInfoEvent : IPacketEvent
 {
     public double Delay => 0;
 

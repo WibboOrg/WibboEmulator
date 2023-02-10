@@ -3,7 +3,7 @@ using System.Data;
 using System.Text;
 using WibboEmulator.Database.Interfaces;
 
-internal class RoomRightDao
+internal sealed class RoomRightDao
 {
     internal static void Insert(IQueryAdapter dbClient, int roomId, int userId) => dbClient.RunQuery("INSERT INTO `room_right` (room_id, user_id) VALUES ('" + roomId + "', '" + userId + "')");
 

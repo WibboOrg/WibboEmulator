@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Settings;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 using WibboEmulator.Games.GameClients;
 
-internal class GetRoomSettingsEvent : IPacketEvent
+internal sealed class GetRoomSettingsEvent : IPacketEvent
 {
     public double Delay => 0;
 

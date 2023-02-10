@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.LandingView;
 
 using WibboEmulator.Games.LandingView;
 
-internal class PromoArticlesComposer : ServerPacket
+internal sealed class PromoArticlesComposer : ServerPacket
 {
     public PromoArticlesComposer(List<Promotion> hotelViewPromosIndexers)
         : base(ServerPacketHeader.DESKTOP_NEWS)

@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Messenger;
 
-internal class MessengerInitComposer : ServerPacket
+internal sealed class MessengerInitComposer : ServerPacket
 {
     public MessengerInitComposer()
         : base(ServerPacketHeader.MESSENGER_INIT)

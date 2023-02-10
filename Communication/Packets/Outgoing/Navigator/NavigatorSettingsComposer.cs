@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Communication.Packets.Outgoing.Navigator;
 
-internal class NavigatorSettingsComposer : ServerPacket
+internal sealed class NavigatorSettingsComposer : ServerPacket
 {
     public NavigatorSettingsComposer(int windowX, int windowY, int windowWidth, int windowHeight, bool leftPanelHidden, int resultsMode)
         : base(ServerPacketHeader.NAVIGATOR_SETTINGS)

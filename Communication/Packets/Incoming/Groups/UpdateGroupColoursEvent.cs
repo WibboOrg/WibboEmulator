@@ -5,7 +5,7 @@ using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class UpdateGroupColoursEvent : IPacketEvent
+internal sealed class UpdateGroupColoursEvent : IPacketEvent
 {
     public double Delay => 500;
 

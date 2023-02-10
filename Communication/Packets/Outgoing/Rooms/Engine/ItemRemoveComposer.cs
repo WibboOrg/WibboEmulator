@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 
-internal class ItemRemoveComposer : ServerPacket
+internal sealed class ItemRemoveComposer : ServerPacket
 {
     public ItemRemoveComposer(int itemId, int ownerId)
         : base(ServerPacketHeader.ITEM_WALL_REMOVE)

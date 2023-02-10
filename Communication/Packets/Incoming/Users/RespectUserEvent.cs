@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
-internal class RespectUserEvent : IPacketEvent
+internal sealed class RespectUserEvent : IPacketEvent
 {
     public double Delay => 100;
 

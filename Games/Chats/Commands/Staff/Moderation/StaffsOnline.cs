@@ -2,7 +2,7 @@ namespace WibboEmulator.Games.Chats.Commands.Staff.Moderation;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class StaffsOnline : IChatCommand
+internal sealed class StaffsOnline : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

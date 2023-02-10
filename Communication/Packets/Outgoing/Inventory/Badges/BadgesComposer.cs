@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Games.Users.Badges;
 
-internal class BadgesComposer : ServerPacket
+internal sealed class BadgesComposer : ServerPacket
 {
     public BadgesComposer(Dictionary<string, Badge> badges)
         : base(ServerPacketHeader.USER_BADGES)

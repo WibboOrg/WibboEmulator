@@ -50,7 +50,7 @@ using WibboEmulator.WebSocketSharp.Net;
 /// Provides the access to the information in a WebSocket handshake request
 /// to a <see cref="TcpListener"/> instance.
 /// </summary>
-internal class TcpListenerWebSocketContext : WebSocketContext, IDisposable
+internal sealed class TcpListenerWebSocketContext : WebSocketContext, IDisposable
 {
     #region Private Fields
 

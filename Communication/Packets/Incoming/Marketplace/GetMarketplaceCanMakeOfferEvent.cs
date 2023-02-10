@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Games.GameClients;
 
-internal class GetMarketplaceCanMakeOfferEvent : IPacketEvent
+internal sealed class GetMarketplaceCanMakeOfferEvent : IPacketEvent
 {
     public double Delay => 0;
 

@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Stickys;
 
-internal class StickyNoteComposer : ServerPacket
+internal sealed class StickyNoteComposer : ServerPacket
 {
     public StickyNoteComposer(int id, string extraData)
         : base(ServerPacketHeader.FURNITURE_ITEMDATA)

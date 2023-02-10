@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 
-internal class FloorHeightMapComposer : ServerPacket
+internal sealed class FloorHeightMapComposer : ServerPacket
 {
     public FloorHeightMapComposer(int wallHeight, string mapFloor)
         : base(ServerPacketHeader.ROOM_MODEL)

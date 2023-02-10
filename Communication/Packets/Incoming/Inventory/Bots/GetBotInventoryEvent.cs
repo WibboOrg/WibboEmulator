@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
 using WibboEmulator.Games.GameClients;
 
-internal class GetBotInventoryEvent : IPacketEvent
+internal sealed class GetBotInventoryEvent : IPacketEvent
 {
     public double Delay => 0;
 

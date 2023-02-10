@@ -5,7 +5,7 @@ using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
-internal class DeleteGroupEvent : IPacketEvent
+internal sealed class DeleteGroupEvent : IPacketEvent
 {
     public double Delay => 1000;
 

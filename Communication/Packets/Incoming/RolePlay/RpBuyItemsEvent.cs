@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.RolePlay;
 using WibboEmulator.Games.GameClients;
 
-internal class RpBuyItemsEvent : IPacketEvent
+internal sealed class RpBuyItemsEvent : IPacketEvent
 {
     public double Delay => 250;
 

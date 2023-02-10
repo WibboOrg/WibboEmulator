@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Utilities;
 
-internal class BotPetDao
+internal sealed class BotPetDao
 {
     internal static void SavePet(IQueryAdapter dbClient, List<RoomUser> petList)
     {

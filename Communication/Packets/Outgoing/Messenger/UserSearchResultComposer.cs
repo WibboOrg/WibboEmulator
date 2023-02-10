@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Messenger;
 using WibboEmulator.Games.Users.Messenger;
 
-internal class UserSearchResultComposer : ServerPacket
+internal sealed class UserSearchResultComposer : ServerPacket
 {
     public UserSearchResultComposer(List<SearchResult> friend, List<SearchResult> other)
         : base(ServerPacketHeader.MESSENGER_SEARCH)

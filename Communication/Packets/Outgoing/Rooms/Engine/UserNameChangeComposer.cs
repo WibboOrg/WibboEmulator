@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 
-internal class UserNameChangeComposer : ServerPacket
+internal sealed class UserNameChangeComposer : ServerPacket
 {
     public UserNameChangeComposer(string name, int virtualId)
         : base(ServerPacketHeader.UNIT_CHANGE_NAME)

@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Log;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class LogChatDao
+internal sealed class LogChatDao
 {
     internal static DataTable GetAllByUserId(IQueryAdapter dbClient, int userId)
     {

@@ -19,7 +19,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Authentificator;
 using WibboEmulator.Utilities;
 
-internal class SSOTicketEvent : IPacketEvent
+internal sealed class SSOTicketEvent : IPacketEvent
 {
     public double Delay => 5000;
 

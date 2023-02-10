@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Games.GameClients;
 
-internal class GoToHotelViewEvent : IPacketEvent
+internal sealed class GoToHotelViewEvent : IPacketEvent
 {
     public double Delay => 0;
 

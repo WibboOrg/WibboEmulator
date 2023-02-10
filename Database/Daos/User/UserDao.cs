@@ -2,7 +2,7 @@
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class UserDao
+internal sealed class UserDao
 {
     internal static string BuildUpdateQuery(int userId, int duckets, int credits) => "UPDATE `user` SET `user`.online = '0', `user`.last_online = '" + WibboEnvironment.GetUnixTimestamp() + "', activity_points = '" + duckets + "', credits = '" + credits + "' WHERE id = '" + userId + "';";
 

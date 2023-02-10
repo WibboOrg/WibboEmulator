@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Guide;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Games.GameClients;
 
-internal class GuideToolMessageNewEvent : IPacketEvent
+internal sealed class GuideToolMessageNewEvent : IPacketEvent
 {
     public double Delay => 250;
 

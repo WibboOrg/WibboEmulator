@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
-internal class RespectPetEvent : IPacketEvent
+internal sealed class RespectPetEvent : IPacketEvent
 {
     public double Delay => 100;
 

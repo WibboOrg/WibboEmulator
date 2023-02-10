@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Games.Rooms.AI;
 
-internal class PetTrainingPanelComposer : ServerPacket
+internal sealed class PetTrainingPanelComposer : ServerPacket
 {
     public PetTrainingPanelComposer(Pet petData)
         : base(ServerPacketHeader.PET_TRAINING_PANEL_MESSAGE_COMPOSER)

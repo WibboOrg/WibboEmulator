@@ -39,7 +39,7 @@ using System.Security.Principal;
 using System.Text;
 using WebSocketSharp;
 
-internal class AuthenticationResponse : AuthenticationBase
+internal sealed class AuthenticationResponse : AuthenticationBase
 {
     #region Private Fields
 
@@ -127,8 +127,7 @@ internal class AuthenticationResponse : AuthenticationBase
     private static string Hash(string value)
     {
         var src = Encoding.UTF8.GetBytes(value);
-        var md5 = MD5.Create();
-        var hashed = md5.ComputeHash(src);
+        var hashed = MD5.HashData(src);
 
         var res = new StringBuilder(64);
         foreach (var b in hashed)

@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 
-internal class UpdateWibboPointsCommand : IRCONCommand
+internal sealed class UpdateWibboPointsCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
     {

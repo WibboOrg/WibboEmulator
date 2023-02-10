@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.User;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class UserPresentDao
+internal sealed class UserPresentDao
 {
     internal static void Insert(IQueryAdapter dbClient, int itemId, int baseId, string extraData)
     {

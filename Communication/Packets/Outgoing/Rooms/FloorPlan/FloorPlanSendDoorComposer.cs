@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.FloorPlan;
 
-internal class FloorPlanSendDoorComposer : ServerPacket
+internal sealed class FloorPlanSendDoorComposer : ServerPacket
 {
     public FloorPlanSendDoorComposer(int doorX, int doorY, int doorOrientation)
         : base(ServerPacketHeader.ROOM_MODEL_DOOR)

@@ -1,6 +1,6 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Wireds;
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Wireds;
 
-internal class WiredFurniTriggerComposer : ServerPacket
+internal sealed class WiredFurniTriggerComposer : ServerPacket
 {
     public WiredFurniTriggerComposer(bool stuffTypeSelectionEnabled, int furniLimit, List<int> stuffIds, int stuffTypeId, int id, string stringParam,
         List<int> intParams, int stuffTypeSelectionCode, int type, List<int> conflictingActions)

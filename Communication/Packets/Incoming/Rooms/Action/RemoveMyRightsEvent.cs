@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 
-internal class RemoveMyRightsEvent : IPacketEvent
+internal sealed class RemoveMyRightsEvent : IPacketEvent
 {
     public double Delay => 250;
 

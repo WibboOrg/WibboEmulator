@@ -3,7 +3,7 @@ using WibboEmulator.Games.Chats.Logs;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Utilities;
 
-internal class ModeratorRoomChatlogComposer : ServerPacket
+internal sealed class ModeratorRoomChatlogComposer : ServerPacket
 {
     public ModeratorRoomChatlogComposer(Room room, List<ChatlogEntry> chatlogs)
         : base(ServerPacketHeader.MODTOOL_ROOM_CHATLOG)

@@ -43,7 +43,7 @@ using System;
 using System.IO;
 using System.Text;
 
-internal class ResponseStream : Stream
+internal sealed class ResponseStream : Stream
 {
     #region Private Fields
 
@@ -65,8 +65,8 @@ internal class ResponseStream : Stream
 
     static ResponseStream()
     {
-        Crlf = new byte[] { 13, 10 }; // "\r\n"
-        LastChunk = new byte[] { 48, 13, 10, 13, 10 }; // "0\r\n\r\n"
+        Crlf = "\r\n"u8.ToArray();
+        LastChunk = "0\r\n\r\n"u8.ToArray();
         MaxHeadersLength = 32768;
     }
 

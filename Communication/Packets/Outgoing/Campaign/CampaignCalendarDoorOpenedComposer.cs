@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Communication.Packets.Outgoing.Campaign;
 
-internal class CampaignCalendarDoorOpenedComposer : ServerPacket
+internal sealed class CampaignCalendarDoorOpenedComposer : ServerPacket
 {
     public CampaignCalendarDoorOpenedComposer(bool doorOpened, string productName, string customImage, string furnitureClassName)
         : base(ServerPacketHeader.CAMPAIGN_CALENDAR_DOOR_OPENED)

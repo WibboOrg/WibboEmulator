@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Games.GameClients;
 
-internal class RequestFurniInventoryEvent : IPacketEvent
+internal sealed class RequestFurniInventoryEvent : IPacketEvent
 {
     public double Delay => 5000;
 

@@ -2,7 +2,7 @@ namespace WibboEmulator.Games.Chats.Commands.Staff.Moderation;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class BanIP : IChatCommand
+internal sealed class BanIP : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Roleplay;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class RoleplayWeaponDao
+internal sealed class RoleplayWeaponDao
 {
     internal static DataTable GetAll(IQueryAdapter dbClient)
     {

@@ -6,7 +6,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
 
-internal class RegenLTD : IChatCommand
+internal sealed class RegenLTD : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

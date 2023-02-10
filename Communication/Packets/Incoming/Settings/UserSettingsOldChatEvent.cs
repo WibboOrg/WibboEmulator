@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Settings;
 using WibboEmulator.Games.GameClients;
 
-internal class UserSettingsOldChatEvent : IPacketEvent
+internal sealed class UserSettingsOldChatEvent : IPacketEvent
 {
     public double Delay => 0;
 

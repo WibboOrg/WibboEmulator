@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 using WibboEmulator.Games.Rooms;
 
-internal class RoomRightsListComposer : ServerPacket
+internal sealed class RoomRightsListComposer : ServerPacket
 {
     public RoomRightsListComposer(Room instance)
         : base(ServerPacketHeader.ROOM_RIGHTS_LIST)

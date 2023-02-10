@@ -4,7 +4,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 using WibboEmulator.Utilities;
 
-internal class ShoutEvent : IPacketEvent
+internal sealed class ShoutEvent : IPacketEvent
 {
     public double Delay => 100;
 

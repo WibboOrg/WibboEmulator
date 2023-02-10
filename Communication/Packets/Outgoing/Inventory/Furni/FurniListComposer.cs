@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.Items;
 
-internal class FurniListComposer : ServerPacket
+internal sealed class FurniListComposer : ServerPacket
 {
     public FurniListComposer(ICollection<Item> items, int pages, int page)
         : base(ServerPacketHeader.USER_FURNITURE)

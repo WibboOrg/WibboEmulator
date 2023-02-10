@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.User;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class UserFavoriteDao
+internal sealed class UserFavoriteDao
 {
     internal static void Insert(IQueryAdapter dbClient, int userId, int roomId) => dbClient.RunQuery("INSERT INTO `user_favorite` (`user_id`, `room_id`) VALUES ('" + userId + "','" + roomId + "')");
 

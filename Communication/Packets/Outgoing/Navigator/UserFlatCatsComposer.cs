@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Games.Navigators;
 
-internal class UserFlatCatsComposer : ServerPacket
+internal sealed class UserFlatCatsComposer : ServerPacket
 {
     public UserFlatCatsComposer(ICollection<SearchResultList> categories, int rank)
         : base(ServerPacketHeader.NAVIGATOR_CATEGORIES)

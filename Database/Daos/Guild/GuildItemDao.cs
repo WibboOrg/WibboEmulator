@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Guild;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class GuildItemDao
+internal sealed class GuildItemDao
 {
     internal static DataTable GetAll(IQueryAdapter dbClient)
     {

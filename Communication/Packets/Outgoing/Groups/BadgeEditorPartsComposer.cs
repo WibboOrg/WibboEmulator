@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.Groups;
 
-internal class BadgeEditorPartsComposer : ServerPacket
+internal sealed class BadgeEditorPartsComposer : ServerPacket
 {
     public BadgeEditorPartsComposer(ICollection<GroupBadgeParts> bases, ICollection<GroupBadgeParts> symbols, ICollection<GroupColours> baseColours, ICollection<GroupColours> symbolColours,
       ICollection<GroupColours> backgroundColours)

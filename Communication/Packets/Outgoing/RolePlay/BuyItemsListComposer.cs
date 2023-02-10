@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Games.Roleplays.Item;
 
-internal class BuyItemsListComposer : ServerPacket
+internal sealed class BuyItemsListComposer : ServerPacket
 {
     public BuyItemsListComposer(List<RPItem> itemsBuy)
       : base(ServerPacketHeader.BUY_ITEMS_LIST)

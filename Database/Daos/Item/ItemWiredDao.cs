@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Item;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class ItemWiredDao
+internal sealed class ItemWiredDao
 {
     internal static void InsertDuplicate(IQueryAdapter dbClient, int itemId, int oldItemId) => dbClient.RunQuery("INSERT INTO `item_wired` (trigger_id, trigger_data_2, trigger_data, all_user_triggerable, triggers_item, delay) " +
                              "SELECT '" + itemId + "', trigger_data_2, trigger_data, all_user_triggerable, triggers_item, delay FROM `item_wired` WHERE trigger_id = '" + oldItemId + "'");

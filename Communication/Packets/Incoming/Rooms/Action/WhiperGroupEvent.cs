@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Action;
 using WibboEmulator.Games.GameClients;
 
-internal class WhiperGroupEvent : IPacketEvent
+internal sealed class WhiperGroupEvent : IPacketEvent
 {
     public double Delay => 250;
 

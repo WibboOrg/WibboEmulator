@@ -4,7 +4,7 @@ using WibboEmulator.Games.Moderations;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Utilities;
 
-internal class ModeratorTicketChatlogComposer : ServerPacket
+internal sealed class ModeratorTicketChatlogComposer : ServerPacket
 {
     public ModeratorTicketChatlogComposer(ModerationTicket ticket, RoomData roomData, List<ChatlogEntry> chatlogs)
         : base(ServerPacketHeader.CFH_CHATLOG)

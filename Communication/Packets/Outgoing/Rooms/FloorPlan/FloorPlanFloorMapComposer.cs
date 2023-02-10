@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Drawing;
 using WibboEmulator.Games.Items;
 
-internal class FloorPlanFloorMapComposer : ServerPacket
+internal sealed class FloorPlanFloorMapComposer : ServerPacket
 {
     public FloorPlanFloorMapComposer(ConcurrentDictionary<Point, List<Item>> coordinatedItems)
         : base(ServerPacketHeader.ROOM_MODEL_BLOCKED_TILES)

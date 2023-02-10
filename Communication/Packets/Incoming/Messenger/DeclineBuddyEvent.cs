@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Messenger;
 using WibboEmulator.Games.GameClients;
 
-internal class DeclineBuddyEvent : IPacketEvent
+internal sealed class DeclineBuddyEvent : IPacketEvent
 {
     public double Delay => 250;
 

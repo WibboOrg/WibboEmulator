@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Room;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class RoomModelDao
+internal sealed class RoomModelDao
 {
     internal static DataTable GetAll(IQueryAdapter dbClient)
     {

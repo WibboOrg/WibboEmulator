@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using System.Data;
 using WibboEmulator.Database.Daos.Catalog;
 
-internal class MarketPlaceOwnOffersComposer : ServerPacket
+internal sealed class MarketPlaceOwnOffersComposer : ServerPacket
 {
     public MarketPlaceOwnOffersComposer(int userId)
        : base(ServerPacketHeader.MARKETPLACE_OWN_ITEMS)

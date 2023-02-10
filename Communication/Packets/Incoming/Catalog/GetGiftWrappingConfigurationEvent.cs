@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Games.GameClients;
 
-internal class GetGiftWrappingConfigurationEvent : IPacketEvent
+internal sealed class GetGiftWrappingConfigurationEvent : IPacketEvent
 {
     public double Delay => 0;
 

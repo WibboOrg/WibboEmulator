@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.RolePlay;
 using WibboEmulator.Games.GameClients;
 
-internal class RpBotChooseEvent : IPacketEvent
+internal sealed class RpBotChooseEvent : IPacketEvent
 {
     public double Delay => 100;
 

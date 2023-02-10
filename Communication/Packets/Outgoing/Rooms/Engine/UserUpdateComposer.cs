@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using System.Text;
 using WibboEmulator.Games.Rooms;
 
-internal class UserUpdateComposer : ServerPacket
+internal sealed class UserUpdateComposer : ServerPacket
 {
     public UserUpdateComposer(ICollection<RoomUser> roomUsers)
         : base(ServerPacketHeader.UNIT_STATUS)

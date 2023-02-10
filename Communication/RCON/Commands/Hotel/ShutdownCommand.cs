@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Communication.RCON.Commands.Hotel;
 
-internal class ShutdownCommand : IRCONCommand
+internal sealed class ShutdownCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
     {

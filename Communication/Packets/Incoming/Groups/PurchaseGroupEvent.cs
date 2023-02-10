@@ -6,7 +6,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 
-internal class PurchaseGroupEvent : IPacketEvent
+internal sealed class PurchaseGroupEvent : IPacketEvent
 {
     public double Delay => 1000;
 

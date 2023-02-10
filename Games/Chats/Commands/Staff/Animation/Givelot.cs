@@ -6,7 +6,7 @@ using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Moderations;
 using WibboEmulator.Games.Rooms;
 
-internal class GiveLot : IChatCommand
+internal sealed class GiveLot : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser user, string[] parts)
     {

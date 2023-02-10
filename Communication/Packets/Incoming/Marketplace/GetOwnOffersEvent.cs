@@ -2,7 +2,7 @@
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Games.GameClients;
 
-internal class GetOwnOffersEvent : IPacketEvent
+internal sealed class GetOwnOffersEvent : IPacketEvent
 {
     public double Delay => 0;
 

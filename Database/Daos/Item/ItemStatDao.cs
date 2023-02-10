@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Utilities;
 
-internal class ItemStatDao
+internal sealed class ItemStatDao
 {
     internal static int GetOne(IQueryAdapter dbClient, int baseId)
     {

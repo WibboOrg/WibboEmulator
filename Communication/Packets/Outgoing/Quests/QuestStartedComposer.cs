@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Quests;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
-internal class QuestStartedComposer : ServerPacket
+internal sealed class QuestStartedComposer : ServerPacket
 {
     public QuestStartedComposer(GameClient session, Quest quest)
         : base(ServerPacketHeader.QUEST)

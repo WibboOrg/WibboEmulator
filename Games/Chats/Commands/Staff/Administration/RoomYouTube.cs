@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Televisions;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class RoomYouTube : IChatCommand
+internal sealed class RoomYouTube : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

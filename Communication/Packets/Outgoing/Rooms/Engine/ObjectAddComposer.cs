@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.Items;
 
-internal class ObjectAddComposer : ServerPacket
+internal sealed class ObjectAddComposer : ServerPacket
 {
     public ObjectAddComposer(Item item, string userame, int userId)
         : base(ServerPacketHeader.FURNITURE_FLOOR_ADD)

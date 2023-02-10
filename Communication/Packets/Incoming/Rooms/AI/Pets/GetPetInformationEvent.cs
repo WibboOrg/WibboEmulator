@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Games.GameClients;
 
-internal class GetPetInformationEvent : IPacketEvent
+internal sealed class GetPetInformationEvent : IPacketEvent
 {
     public double Delay => 0;
 

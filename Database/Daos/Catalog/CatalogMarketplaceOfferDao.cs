@@ -4,7 +4,7 @@ using System.Text;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalogs.Marketplace;
 
-internal class CatalogMarketplaceOfferDao
+internal sealed class CatalogMarketplaceOfferDao
 {
     internal static DataRow GetOneByOfferId(IQueryAdapter dbClient, int offerId)
     {

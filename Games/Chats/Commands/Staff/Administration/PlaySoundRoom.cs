@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Sound;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class PlaySoundRoom : IChatCommand
+internal sealed class PlaySoundRoom : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

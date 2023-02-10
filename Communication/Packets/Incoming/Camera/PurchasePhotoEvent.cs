@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Camera;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class PurchasePhotoEvent : IPacketEvent
+internal sealed class PurchasePhotoEvent : IPacketEvent
 {
     public double Delay => 100;
 

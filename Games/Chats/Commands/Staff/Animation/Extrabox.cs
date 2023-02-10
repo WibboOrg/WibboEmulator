@@ -4,7 +4,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
 
-internal class ExtraBox : IChatCommand
+internal sealed class ExtraBox : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

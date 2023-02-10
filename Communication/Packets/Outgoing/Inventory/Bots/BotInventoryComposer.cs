@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
 using WibboEmulator.Games.Users.Inventory.Bots;
 
-internal class BotInventoryComposer : ServerPacket
+internal sealed class BotInventoryComposer : ServerPacket
 {
     public BotInventoryComposer(ICollection<Bot> bots)
        : base(ServerPacketHeader.USER_BOTS)

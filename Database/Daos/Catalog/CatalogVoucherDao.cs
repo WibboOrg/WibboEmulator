@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Catalog;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class CatalogVoucherDao
+internal sealed class CatalogVoucherDao
 {
     internal static void Update(IQueryAdapter dbClient, string code)
     {

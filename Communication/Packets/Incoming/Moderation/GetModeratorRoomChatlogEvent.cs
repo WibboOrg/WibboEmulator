@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Chats.Logs;
 using WibboEmulator.Games.GameClients;
 
-internal class GetModeratorRoomChatlogEvent : IPacketEvent
+internal sealed class GetModeratorRoomChatlogEvent : IPacketEvent
 {
     public double Delay => 0;
 

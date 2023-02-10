@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 
-internal class MentionComposer : ServerPacket
+internal sealed class MentionComposer : ServerPacket
 {
     public MentionComposer(int userId, string username, string look, string msg)
      : base(ServerPacketHeader.MENTION)

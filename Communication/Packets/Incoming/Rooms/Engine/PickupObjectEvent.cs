@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
-internal class PickupObjectEvent : IPacketEvent
+internal sealed class PickupObjectEvent : IPacketEvent
 {
     public double Delay => 100;
 

@@ -8,7 +8,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Utilities;
 
-internal class SaveRoomSettingsEvent : IPacketEvent
+internal sealed class SaveRoomSettingsEvent : IPacketEvent
 {
     public double Delay => 500;
 

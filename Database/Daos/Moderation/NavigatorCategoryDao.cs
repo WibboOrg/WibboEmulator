@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Moderation;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class NavigatorCategoryDao
+internal sealed class NavigatorCategoryDao
 {
     internal static DataTable GetAll(IQueryAdapter dbClient)
     {

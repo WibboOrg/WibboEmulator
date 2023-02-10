@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 
-internal class JoinGroupEvent : IPacketEvent
+internal sealed class JoinGroupEvent : IPacketEvent
 {
     public double Delay => 500;
 

@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Polls;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Polls;
 using WibboEmulator.Games.GameClients;
 
-internal class AnswerPollEvent : IPacketEvent
+internal sealed class AnswerPollEvent : IPacketEvent
 {
     public double Delay => 250;
 

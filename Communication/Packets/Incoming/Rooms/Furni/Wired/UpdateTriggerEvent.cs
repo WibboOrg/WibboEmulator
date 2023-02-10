@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Wireds;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items.Wired;
 
-internal class UpdateTriggerEvent : IPacketEvent
+internal sealed class UpdateTriggerEvent : IPacketEvent
 {
     public double Delay => 250;
 

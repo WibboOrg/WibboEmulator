@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 
-internal class GiveRoomScoreEvent : IPacketEvent
+internal sealed class GiveRoomScoreEvent : IPacketEvent
 {
     public double Delay => 250;
 

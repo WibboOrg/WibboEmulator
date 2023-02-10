@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Badges;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Games.GameClients;
 
-internal class GetBadgesEvent : IPacketEvent
+internal sealed class GetBadgesEvent : IPacketEvent
 {
     public double Delay => 0;
 

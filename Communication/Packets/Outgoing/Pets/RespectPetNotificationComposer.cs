@@ -3,7 +3,7 @@ using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Users;
 
-internal class RespectPetNotificationComposer : ServerPacket
+internal sealed class RespectPetNotificationComposer : ServerPacket
 {
     public RespectPetNotificationComposer(Pet pet)
         : base(ServerPacketHeader.PET_RESPECTED)

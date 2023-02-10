@@ -345,7 +345,7 @@ public class RoomManager
 
                 if (room.Value.ProcessTask == null || room.Value.ProcessTask.IsCompleted)
                 {
-                    room.Value.ProcessTask = room.Value.RunTask(() => room.Value.ProcessRoom());
+                    room.Value.ProcessTask = room.Value.RunTask(room.Value.ProcessRoom);
 
                     room.Value.IsLagging = 0;
                 }

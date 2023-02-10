@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 
-internal class RoomReadyComposer : ServerPacket
+internal sealed class RoomReadyComposer : ServerPacket
 {
     public RoomReadyComposer(int roomId, string model)
         : base(ServerPacketHeader.ROOM_MODEL_NAME)

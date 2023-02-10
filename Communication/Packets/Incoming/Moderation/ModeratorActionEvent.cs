@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Moderations;
 
-internal class ModeratorActionEvent : IPacketEvent
+internal sealed class ModeratorActionEvent : IPacketEvent
 {
     public double Delay => 0;
 

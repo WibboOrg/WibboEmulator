@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Games.Roleplays.Item;
 
-internal class AddInventoryItemRpComposer : ServerPacket
+internal sealed class AddInventoryItemRpComposer : ServerPacket
 {
     public AddInventoryItemRpComposer(RPItem item, int count)
       : base(ServerPacketHeader.ADD_INVENTORY_ITEM_RP)

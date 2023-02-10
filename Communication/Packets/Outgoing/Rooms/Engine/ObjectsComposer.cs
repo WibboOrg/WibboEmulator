@@ -3,7 +3,7 @@ using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Rooms;
 
-internal class ObjectsComposer : ServerPacket
+internal sealed class ObjectsComposer : ServerPacket
 {
     public ObjectsComposer(Item[] items, Room room)
         : base(ServerPacketHeader.FURNITURE_FLOOR)

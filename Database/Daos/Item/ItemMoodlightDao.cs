@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Item;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class ItemMoodlightDao
+internal sealed class ItemMoodlightDao
 {
     internal static DataRow GetOne(IQueryAdapter dbClient, int itemId)
     {

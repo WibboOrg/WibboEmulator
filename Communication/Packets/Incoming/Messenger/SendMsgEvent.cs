@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Messenger;
 using WibboEmulator.Games.GameClients;
 
-internal class SendMsgEvent : IPacketEvent
+internal sealed class SendMsgEvent : IPacketEvent
 {
     public double Delay => 100;
 

@@ -3,7 +3,7 @@ using System.Text;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class LootboxInfo : IChatCommand
+internal sealed class LootboxInfo : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

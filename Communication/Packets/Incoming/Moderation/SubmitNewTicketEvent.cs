@@ -4,7 +4,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Moderations;
 using WibboEmulator.Utilities;
 
-internal class SubmitNewTicketEvent : IPacketEvent
+internal sealed class SubmitNewTicketEvent : IPacketEvent
 {
     public double Delay => 1000;
 

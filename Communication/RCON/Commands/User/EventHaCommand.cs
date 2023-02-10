@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.RCON.Commands.User;
 using System.Text.RegularExpressions;
 using WibboEmulator.Games.Moderations;
 
-internal class EventHaCommand : IRCONCommand
+internal sealed partial class EventHaCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
     {
@@ -42,9 +42,9 @@ internal class EventHaCommand : IRCONCommand
 
         message = message.Replace("<", "&lt;").Replace(">", "&gt;");
 
-        message = new Regex(@"\[b\](.*?)\[\/b\]").Replace(message, "<b>$1</b>");
-        message = new Regex(@"\[i\](.*?)\[\/i\]").Replace(message, "<i>$1</i>");
-        message = new Regex(@"\[u\](.*?)\[\/u\]").Replace(message, "<u>$1</u>");
+        message = MyRegex().Replace(message, "<b>$1</b>");
+        message = MyRegex1().Replace(message, "<i>$1</i>");
+        message = MyRegex2().Replace(message, "<u>$1</u>");
 
         var alertMessage = message + "\r\n- " + client.User.Username;
         WibboEnvironment.GetGame().GetGameClientManager().SendSuperNotif("Message des Staffs", alertMessage, "game_promo_small", "event:navigator/goto/" + client.User.CurrentRoom.Id, "Je veux y accéder!");
@@ -52,4 +52,11 @@ internal class EventHaCommand : IRCONCommand
 
         return true;
     }
+
+    [GeneratedRegex("\\[b\\](.*?)\\[\\/b\\]")]
+    private static partial Regex MyRegex();
+    [GeneratedRegex("\\[i\\](.*?)\\[\\/i\\]")]
+    private static partial Regex MyRegex1();
+    [GeneratedRegex("\\[u\\](.*?)\\[\\/u\\]")]
+    private static partial Regex MyRegex2();
 }

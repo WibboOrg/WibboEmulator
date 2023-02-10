@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
-internal class SetGroupFavouriteEvent : IPacketEvent
+internal sealed class SetGroupFavouriteEvent : IPacketEvent
 {
     public double Delay => 100;
 

@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 
-internal class RoomPropertyComposer : ServerPacket
+internal sealed class RoomPropertyComposer : ServerPacket
 {
     public RoomPropertyComposer(string name, string val)
         : base(ServerPacketHeader.ROOM_PAINT)

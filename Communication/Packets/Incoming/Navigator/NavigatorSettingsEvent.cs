@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 
 using WibboEmulator.Games.GameClients;
 
-internal class NavigatorSettingsEvent : IPacketEvent
+internal sealed class NavigatorSettingsEvent : IPacketEvent
 {
     public double Delay => 0;
 

@@ -3,7 +3,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Settings;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
-internal class UserSettingsSoundEvent : IPacketEvent
+internal sealed class UserSettingsSoundEvent : IPacketEvent
 {
     public double Delay => 250;
 

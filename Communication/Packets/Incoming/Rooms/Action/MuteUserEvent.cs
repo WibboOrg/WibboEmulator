@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Action;
 using WibboEmulator.Games.GameClients;
 
-internal class MuteUserEvent : IPacketEvent
+internal sealed class MuteUserEvent : IPacketEvent
 {
     public double Delay => 250;
 

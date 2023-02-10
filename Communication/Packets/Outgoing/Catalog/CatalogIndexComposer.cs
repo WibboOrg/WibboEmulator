@@ -3,7 +3,7 @@ using WibboEmulator.Core.Language;
 using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.GameClients;
 
-internal class CatalogIndexComposer : ServerPacket
+internal sealed class CatalogIndexComposer : ServerPacket
 {
     public CatalogIndexComposer(GameClient session, ICollection<CatalogPage> pages)
          : base(ServerPacketHeader.CATALOG_PAGE_LIST)

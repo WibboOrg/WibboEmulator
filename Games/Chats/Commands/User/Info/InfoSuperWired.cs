@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class InfoSuperWired : IChatCommand
+internal sealed class InfoSuperWired : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

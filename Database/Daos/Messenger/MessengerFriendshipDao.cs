@@ -1,7 +1,7 @@
 namespace WibboEmulator.Database.Daos.Messenger;
 using WibboEmulator.Database.Interfaces;
 
-internal class MessengerFriendshipDao
+internal sealed class MessengerFriendshipDao
 {
     internal static int GetCount(IQueryAdapter dbClient, int userId)
     {

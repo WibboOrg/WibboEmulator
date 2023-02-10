@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Games.GameClients;
 
-internal class CloseTicketEvent : IPacketEvent
+internal sealed class CloseTicketEvent : IPacketEvent
 {
     public double Delay => 0;
 

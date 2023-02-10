@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Help;
 
-internal class OpenHelpToolComposer : ServerPacket
+internal sealed class OpenHelpToolComposer : ServerPacket
 {
     public OpenHelpToolComposer(int type)
         : base(ServerPacketHeader.CFH_PENDING_CALLS) => this.WriteInteger(type);

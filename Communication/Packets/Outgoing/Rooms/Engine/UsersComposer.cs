@@ -3,7 +3,7 @@ using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
 
-internal class UsersComposer : ServerPacket
+internal sealed class UsersComposer : ServerPacket
 {
     public UsersComposer(ICollection<RoomUser> users)
         : base(ServerPacketHeader.UNIT)

@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Games.GameClients;
 
-internal class GetMarketplaceItemStatsEvent : IPacketEvent
+internal sealed class GetMarketplaceItemStatsEvent : IPacketEvent
 {
     public double Delay => 0;
 

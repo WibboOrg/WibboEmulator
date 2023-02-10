@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.User;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class UserStatsDao
+internal sealed class UserStatsDao
 {
     internal static string BuildUpdateQuery(int userId, int favouriteGroupId, int timeOnlineSec, int currentQuestId, int respect, int dailyRespectPoints, int dailyPetRespectPoints) => "UPDATE `user_stats` SET `group_id` = " + favouriteGroupId + ", `online_time` = `online_time` + " + timeOnlineSec + ", `quest_id` = '" + currentQuestId + "', `respect` = '" + respect + "', `daily_respect_points` = '" + dailyRespectPoints + "', `daily_pet_respect_points` = '" + dailyPetRespectPoints + "' WHERE `id` = '" + userId + "';";
 

@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 
-internal class GetFurnitureAliasesMessageEvent : IPacketEvent
+internal sealed class GetFurnitureAliasesMessageEvent : IPacketEvent
 {
     public double Delay => 0;
 

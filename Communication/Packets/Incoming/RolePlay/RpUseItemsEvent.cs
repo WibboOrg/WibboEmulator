@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Games.GameClients;
 
-internal class RpUseItemsEvent : IPacketEvent
+internal sealed class RpUseItemsEvent : IPacketEvent
 {
     public double Delay => 250;
 

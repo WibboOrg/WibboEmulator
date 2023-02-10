@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.Groups;
 
-internal class ManageGroupComposer : ServerPacket
+internal sealed class ManageGroupComposer : ServerPacket
 {
     public ManageGroupComposer(Group group, string[] badgeParts)
         : base(ServerPacketHeader.GROUP_SETTINGS)

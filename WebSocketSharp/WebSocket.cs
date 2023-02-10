@@ -975,7 +975,7 @@ public class WebSocket : IDisposable
         Action<PayloadData, bool, bool> closer = this.Close;
 
         _ = closer.BeginInvoke(
-          payloadData, send, received, ar => closer.EndInvoke(ar), null
+          payloadData, send, received, closer.EndInvoke, null
         );
     }
 
@@ -1917,8 +1917,7 @@ public class WebSocket : IDisposable
     {
         var buff = new StringBuilder(base64Key, 64);
         _ = buff.Append(GUID);
-        var sha1 = SHA1.Create();
-        var src = sha1.ComputeHash(buff.ToString().GetUTF8EncodedBytes());
+        var src = SHA1.HashData(buff.ToString().GetUTF8EncodedBytes());
 
         return Convert.ToBase64String(src);
     }

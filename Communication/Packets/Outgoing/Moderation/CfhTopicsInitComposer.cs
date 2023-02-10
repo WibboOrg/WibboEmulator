@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Moderations;
 
-internal class CfhTopicsInitComposer : ServerPacket
+internal sealed class CfhTopicsInitComposer : ServerPacket
 {
     public CfhTopicsInitComposer(Dictionary<string, List<ModerationPresetActions>> userActionPresets)
         : base(ServerPacketHeader.CFH_TOPICS)

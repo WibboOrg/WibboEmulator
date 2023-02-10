@@ -2,7 +2,7 @@ namespace WibboEmulator.Games.Chats.Commands.User.Build;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class SetZStop : IChatCommand
+internal sealed class SetZStop : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

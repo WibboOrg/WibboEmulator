@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Trading;
 
-internal class TradingAcceptComposer : ServerPacket
+internal sealed class TradingAcceptComposer : ServerPacket
 {
     public TradingAcceptComposer(int userId, int statut)
         : base(ServerPacketHeader.TRADE_ACCEPTED)

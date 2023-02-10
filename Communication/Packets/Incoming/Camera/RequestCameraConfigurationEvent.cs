@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera;
 using WibboEmulator.Communication.Packets.Outgoing.Camera;
 using WibboEmulator.Games.GameClients;
 
-internal class RequestCameraConfigurationEvent : IPacketEvent
+internal sealed class RequestCameraConfigurationEvent : IPacketEvent
 {
     public double Delay => 0;
 

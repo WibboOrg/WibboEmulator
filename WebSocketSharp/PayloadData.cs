@@ -32,7 +32,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-internal class PayloadData : IEnumerable<byte>
+internal sealed class PayloadData : IEnumerable<byte>
 {
     #region Private Fields
 

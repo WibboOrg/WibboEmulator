@@ -6,7 +6,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Quests;
 
-internal class ApplyDecorationEvent : IPacketEvent
+internal sealed class ApplyDecorationEvent : IPacketEvent
 {
     public double Delay => 100;
 

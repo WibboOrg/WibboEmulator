@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Room;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class RoomModelCustomDao
+internal sealed class RoomModelCustomDao
 {
     internal static void Replace(IQueryAdapter dbClient, int roomId, int doorX, int doorY, double doorZ, int doorDirection, string map, int wallHeight)
     {

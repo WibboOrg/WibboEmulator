@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Games.Users;
 
-internal class OnGuideSessionStartedComposer : ServerPacket
+internal sealed class OnGuideSessionStartedComposer : ServerPacket
 {
     public OnGuideSessionStartedComposer(User session, User requester)
         : base(ServerPacketHeader.GUIDE_SESSION_STARTED)

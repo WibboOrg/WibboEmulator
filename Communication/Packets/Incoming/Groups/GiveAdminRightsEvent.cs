@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Games.GameClients;
 
-internal class GiveAdminRightsEvent : IPacketEvent
+internal sealed class GiveAdminRightsEvent : IPacketEvent
 {
     public double Delay => 100;
 

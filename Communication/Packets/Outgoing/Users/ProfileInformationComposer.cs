@@ -3,7 +3,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Users;
 
-internal class ProfileInformationComposer : ServerPacket
+internal sealed class ProfileInformationComposer : ServerPacket
 {
     public ProfileInformationComposer(User habbo, GameClient session, List<Group> groups, int friendCount)
         : base(ServerPacketHeader.USER_PROFILE)

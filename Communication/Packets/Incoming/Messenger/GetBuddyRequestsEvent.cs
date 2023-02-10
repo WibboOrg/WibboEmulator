@@ -2,7 +2,7 @@
 using WibboEmulator.Communication.Packets.Outgoing.Messenger;
 using WibboEmulator.Games.GameClients;
 
-internal class GetBuddyRequestsEvent : IPacketEvent
+internal sealed class GetBuddyRequestsEvent : IPacketEvent
 {
     public double Delay => 0;
 

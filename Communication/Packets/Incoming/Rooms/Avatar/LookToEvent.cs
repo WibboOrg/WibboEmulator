@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Avatar;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.PathFinding;
 
-internal class LookToEvent : IPacketEvent
+internal sealed class LookToEvent : IPacketEvent
 {
     public double Delay => 50;
 

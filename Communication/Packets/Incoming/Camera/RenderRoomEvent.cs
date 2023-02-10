@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Camera;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
-internal class RenderRoomEvent : IPacketEvent
+internal sealed class RenderRoomEvent : IPacketEvent
 {
     public double Delay => 5000;
 

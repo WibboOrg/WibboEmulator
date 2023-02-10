@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Trading;
 
-internal class TradingStartComposer : ServerPacket
+internal sealed class TradingStartComposer : ServerPacket
 {
     public TradingStartComposer(int userOneId, int userTwoId)
         : base(ServerPacketHeader.TRADE_OPEN)

@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Handshake;
 
-internal class AvailabilityStatusComposer : ServerPacket
+internal sealed class AvailabilityStatusComposer : ServerPacket
 {
     public AvailabilityStatusComposer()
         : base(ServerPacketHeader.AVAILABILITY_STATUS)

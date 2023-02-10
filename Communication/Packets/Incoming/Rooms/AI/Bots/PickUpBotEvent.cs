@@ -5,7 +5,7 @@ using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Inventory.Bots;
 
-internal class PickUpBotEvent : IPacketEvent
+internal sealed class PickUpBotEvent : IPacketEvent
 {
     public double Delay => 250;
 

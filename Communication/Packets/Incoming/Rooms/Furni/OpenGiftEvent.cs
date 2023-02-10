@@ -8,7 +8,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
 
-internal class OpenGiftEvent : IPacketEvent
+internal sealed class OpenGiftEvent : IPacketEvent
 {
     public double Delay => 250;
 

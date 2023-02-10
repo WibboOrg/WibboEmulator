@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 
-internal class MoveWallItemEvent : IPacketEvent
+internal sealed class MoveWallItemEvent : IPacketEvent
 {
     public double Delay => 200;
 

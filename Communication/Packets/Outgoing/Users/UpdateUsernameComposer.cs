@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Users;
 
-internal class UpdateUsernameComposer : ServerPacket
+internal sealed class UpdateUsernameComposer : ServerPacket
 {
     public UpdateUsernameComposer(string name)
         : base(ServerPacketHeader.USER_CHANGE_NAME)

@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.RolePlay.Troc;
 using WibboEmulator.Games.GameClients;
 
-internal class RpTrocConfirmeEvent : IPacketEvent
+internal sealed class RpTrocConfirmeEvent : IPacketEvent
 {
     public double Delay => 0;
 

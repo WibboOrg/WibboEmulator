@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Messenger;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Games.GameClients;
 
-internal class FindNewFriendsEvent : IPacketEvent
+internal sealed class FindNewFriendsEvent : IPacketEvent
 {
     public double Delay => 0;
 

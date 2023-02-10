@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 
 using WibboEmulator.Games.GameClients;
 
-internal class CheckPetNameEvent : IPacketEvent
+internal sealed class CheckPetNameEvent : IPacketEvent
 {
     public double Delay => 0;
 

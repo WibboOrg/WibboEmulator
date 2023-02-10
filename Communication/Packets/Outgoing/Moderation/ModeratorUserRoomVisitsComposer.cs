@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Users;
 using WibboEmulator.Utilities;
 
-internal class ModeratorUserRoomVisitsComposer : ServerPacket
+internal sealed class ModeratorUserRoomVisitsComposer : ServerPacket
 {
     public ModeratorUserRoomVisitsComposer(User user, Dictionary<double, int> visits)
         : base(ServerPacketHeader.MODTOOL_VISITED_ROOMS_USER)

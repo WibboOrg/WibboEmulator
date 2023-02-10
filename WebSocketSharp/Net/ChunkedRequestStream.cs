@@ -42,7 +42,7 @@ namespace WibboEmulator.WebSocketSharp.Net;
 using System;
 using System.IO;
 
-internal class ChunkedRequestStream : RequestStream
+internal sealed class ChunkedRequestStream : RequestStream
 {
     #region Private Fields
 

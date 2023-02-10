@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.Groups;
 
-internal class GroupFurniSettingsComposer : ServerPacket
+internal sealed class GroupFurniSettingsComposer : ServerPacket
 {
     public GroupFurniSettingsComposer(Group group, int itemId, int userId)
         : base(ServerPacketHeader.FURNITURE_GROUP_CONTEXT_MENU_INFO)

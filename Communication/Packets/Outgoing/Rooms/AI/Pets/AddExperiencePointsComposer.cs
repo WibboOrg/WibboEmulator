@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 
-internal class AddExperiencePointsComposer : ServerPacket
+internal sealed class AddExperiencePointsComposer : ServerPacket
 {
     public AddExperiencePointsComposer(int petId, int virtualId, int amount)
         : base(ServerPacketHeader.PET_EXPERIENCE)

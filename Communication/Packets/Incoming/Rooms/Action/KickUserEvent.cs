@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Action;
 using WibboEmulator.Games.GameClients;
 
-internal class KickUserEvent : IPacketEvent
+internal sealed class KickUserEvent : IPacketEvent
 {
     public double Delay => 250;
 

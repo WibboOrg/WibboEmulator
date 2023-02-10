@@ -5,7 +5,7 @@ using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users;
 
-internal class GetGroupMembersEvent : IPacketEvent
+internal sealed class GetGroupMembersEvent : IPacketEvent
 {
     public double Delay => 250;
 

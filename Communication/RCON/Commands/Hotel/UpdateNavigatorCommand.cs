@@ -1,5 +1,5 @@
 ﻿namespace WibboEmulator.Communication.RCON.Commands.Hotel;
-internal class UpdateNavigatorCommand : IRCONCommand
+internal sealed class UpdateNavigatorCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
     {

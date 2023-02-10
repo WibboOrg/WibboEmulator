@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 
-internal class GroupInfoComposer : ServerPacket
+internal sealed class GroupInfoComposer : ServerPacket
 {
     public GroupInfoComposer(Group group, GameClient session, bool newWindow = false)
         : base(ServerPacketHeader.GROUP_INFO)

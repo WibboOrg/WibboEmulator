@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.Users;
 
-internal class UserBadgesComposer : ServerPacket
+internal sealed class UserBadgesComposer : ServerPacket
 {
     public UserBadgesComposer(User user)
         : base(ServerPacketHeader.USER_BADGES_CURRENT)

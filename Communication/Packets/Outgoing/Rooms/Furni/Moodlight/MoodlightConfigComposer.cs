@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Moodlight;
 using WibboEmulator.Games.Rooms.Moodlight;
 
-internal class MoodlightConfigComposer : ServerPacket
+internal sealed class MoodlightConfigComposer : ServerPacket
 {
     public MoodlightConfigComposer(MoodlightData moodlightData)
         : base(ServerPacketHeader.ITEM_DIMMER_SETTINGS)

@@ -2,7 +2,7 @@
 using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.Items;
 
-internal class FurniListAddComposer : ServerPacket
+internal sealed class FurniListAddComposer : ServerPacket
 {
     public FurniListAddComposer(Item item)
         : base(ServerPacketHeader.USER_FURNITURE_ADD)

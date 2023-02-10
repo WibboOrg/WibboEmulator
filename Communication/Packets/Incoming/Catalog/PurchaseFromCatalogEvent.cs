@@ -14,7 +14,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
 
-internal class PurchaseFromCatalogEvent : IPacketEvent
+internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 {
     public double Delay => 500;
 

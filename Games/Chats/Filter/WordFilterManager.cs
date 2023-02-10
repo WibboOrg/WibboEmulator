@@ -5,7 +5,7 @@ using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Interfaces;
 
-public sealed class WordFilterManager
+public sealed partial class WordFilterManager
 {
     private readonly List<string> _filteredWords;
     private readonly List<string> _pubWords;
@@ -112,7 +112,7 @@ public sealed class WordFilterManager
 
         if (onlyLetter)
         {
-            message = new Regex(@"[^a-z]", RegexOptions.IgnoreCase).Replace(message, string.Empty);
+            message = MyRegex().Replace(message, string.Empty);
         }
 
         message = message.ToLower();
@@ -208,4 +208,7 @@ public sealed class WordFilterManager
 
         return false;
     }
+
+    [GeneratedRegex("[^a-z]", RegexOptions.IgnoreCase, "fr-BE")]
+    private static partial Regex MyRegex();
 }

@@ -2,7 +2,7 @@
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
 
-internal class ScrGetUserInfoMessageEvent : IPacketEvent
+internal sealed class ScrGetUserInfoMessageEvent : IPacketEvent
 {
     public double Delay => 0;
 

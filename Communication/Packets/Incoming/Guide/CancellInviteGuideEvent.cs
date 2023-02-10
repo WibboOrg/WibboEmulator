@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Guide;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Games.GameClients;
 
-internal class CancellInviteGuideEvent : IPacketEvent
+internal sealed class CancellInviteGuideEvent : IPacketEvent
 {
     public double Delay => 0;
 

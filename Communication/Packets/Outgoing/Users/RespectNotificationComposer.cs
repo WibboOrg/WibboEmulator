@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Users;
 
-internal class RespectNotificationComposer : ServerPacket
+internal sealed class RespectNotificationComposer : ServerPacket
 {
     public RespectNotificationComposer(int id, int respect)
         : base(ServerPacketHeader.USER_RESPECT)

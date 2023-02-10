@@ -6,7 +6,7 @@ using WibboEmulator.Games.Catalogs.Marketplace;
 using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.GameClients;
 
-internal class MakeOfferEvent : IPacketEvent
+internal sealed class MakeOfferEvent : IPacketEvent
 {
     public double Delay => 1000;
 

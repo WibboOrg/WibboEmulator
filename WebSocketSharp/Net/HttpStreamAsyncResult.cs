@@ -42,7 +42,7 @@ namespace WibboEmulator.WebSocketSharp.Net;
 using System;
 using System.Threading;
 
-internal class HttpStreamAsyncResult : IAsyncResult, IDisposable
+internal sealed class HttpStreamAsyncResult : IAsyncResult, IDisposable
 {
     #region Private Fields
 
@@ -133,7 +133,7 @@ internal class HttpStreamAsyncResult : IAsyncResult, IDisposable
 
             if (this._callback != null)
             {
-                _ = this._callback.BeginInvoke(this, ar => this._callback.EndInvoke(ar), null);
+                _ = this._callback.BeginInvoke(this, this._callback.EndInvoke, null);
             }
         }
     }
@@ -157,7 +157,7 @@ internal class HttpStreamAsyncResult : IAsyncResult, IDisposable
 
             if (this._callback != null)
             {
-                _ = this._callback.BeginInvoke(this, ar => this._callback.EndInvoke(ar), null);
+                _ = this._callback.BeginInvoke(this, this._callback.EndInvoke, null);
             }
         }
     }

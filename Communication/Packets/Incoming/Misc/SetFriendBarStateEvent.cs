@@ -1,7 +1,7 @@
 ﻿namespace WibboEmulator.Communication.Packets.Incoming.Misc;
 using WibboEmulator.Games.GameClients;
 
-internal class SetFriendBarStateEvent : IPacketEvent
+internal sealed class SetFriendBarStateEvent : IPacketEvent
 {
     public double Delay => 0;
 

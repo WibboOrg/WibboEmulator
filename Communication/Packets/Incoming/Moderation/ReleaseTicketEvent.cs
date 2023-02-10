@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Games.GameClients;
 
-internal class ReleaseTicketEvent : IPacketEvent
+internal sealed class ReleaseTicketEvent : IPacketEvent
 {
     public double Delay => 0;
 

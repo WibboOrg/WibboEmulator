@@ -31,7 +31,7 @@ namespace WibboEmulator.WebSocketSharp.Server;
 using System;
 using WibboEmulator.WebSocketSharp;
 
-internal class WebSocketServiceHost<TBehavior> : WebSocketServiceHost
+internal sealed class WebSocketServiceHost<TBehavior> : WebSocketServiceHost
 where TBehavior : WebSocketBehavior, new()
 {
     #region Private Fields

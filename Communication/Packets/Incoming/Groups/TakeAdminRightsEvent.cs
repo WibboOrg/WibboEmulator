@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Groups;using WibboEmulat
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Games.GameClients;
 
-internal class TakeAdminRightsEvent : IPacketEvent{
+internal sealed class TakeAdminRightsEvent : IPacketEvent{
     public double Delay => 100;
 
     public void Parse(GameClient session, ClientPacket packet)    {        var groupId = packet.PopInt();

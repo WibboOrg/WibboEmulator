@@ -2,7 +2,7 @@
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Games.GameClients;
 
-internal class InfoRetrieveEvent : IPacketEvent
+internal sealed class InfoRetrieveEvent : IPacketEvent
 {
     public double Delay => 0;
 

@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Avatar;
 using WibboEmulator.Games.Users.Wardrobes;
 
-internal class WardrobeComposer : ServerPacket
+internal sealed class WardrobeComposer : ServerPacket
 {
     public WardrobeComposer(Dictionary<int, Wardrobe> wardrobes)
         : base(ServerPacketHeader.USER_OUTFITS)

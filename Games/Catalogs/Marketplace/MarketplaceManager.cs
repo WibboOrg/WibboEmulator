@@ -55,7 +55,7 @@ public class MarketplaceManager
         var dictionary2 = new Dictionary<int, int>();
         foreach (var item in this.MarketItems)
         {
-            if (dictionary.TryGetValue(item.SpriteId, out int value))
+            if (dictionary.TryGetValue(item.SpriteId, out var _))
             {
                 if (dictionary[item.SpriteId].TotalPrice > item.TotalPrice)
                 {
@@ -63,7 +63,7 @@ public class MarketplaceManager
                     dictionary.Add(item.SpriteId, item);
                 }
 
-                var num = value;
+                var num = dictionary2[item.SpriteId];
                 _ = dictionary2.Remove(item.SpriteId);
                 dictionary2.Add(item.SpriteId, num + 1);
             }

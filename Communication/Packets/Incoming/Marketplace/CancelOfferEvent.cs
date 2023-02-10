@@ -5,7 +5,7 @@ using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class CancelOfferEvent : IPacketEvent
+internal sealed class CancelOfferEvent : IPacketEvent
 {
     public double Delay => 250;
 

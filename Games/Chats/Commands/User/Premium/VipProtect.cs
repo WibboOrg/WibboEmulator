@@ -2,7 +2,7 @@ namespace WibboEmulator.Games.Chats.Commands.User.Premium;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class VipProtect : IChatCommand
+internal sealed class VipProtect : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

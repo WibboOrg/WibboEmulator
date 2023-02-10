@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Communication.Packets.Outgoing.Campaign;
 
-internal class CampaignCalendarDataComposer : ServerPacket
+internal sealed class CampaignCalendarDataComposer : ServerPacket
 {
     public CampaignCalendarDataComposer(string campaignName, string campaignImage, int currentDay, int campaignDays, List<int> openedDays, List<int> missedDays)
         : base(ServerPacketHeader.CAMPAIGN_CALENDAR_DATA)

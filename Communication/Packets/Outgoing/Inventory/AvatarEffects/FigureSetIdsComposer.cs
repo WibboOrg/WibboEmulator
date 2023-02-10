@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 
-internal class FigureSetIdsComposer : ServerPacket
+internal sealed class FigureSetIdsComposer : ServerPacket
 {
     public FigureSetIdsComposer()
         : base(ServerPacketHeader.USER_CLOTHING)

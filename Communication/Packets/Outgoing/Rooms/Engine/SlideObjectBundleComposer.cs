@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 
-internal class SlideObjectBundleComposer : ServerPacket
+internal sealed class SlideObjectBundleComposer : ServerPacket
 {
     public SlideObjectBundleComposer(int x, int y, double z, int nextX, int nextY, double nextHeight, int id, int rollerId = 0, bool isItem = true)
         : base(ServerPacketHeader.ROOM_ROLLING)

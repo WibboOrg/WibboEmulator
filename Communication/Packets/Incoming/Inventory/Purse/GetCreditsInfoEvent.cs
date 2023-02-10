@@ -2,7 +2,7 @@
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Games.GameClients;
 
-internal class GetCreditsInfoEvent : IPacketEvent
+internal sealed class GetCreditsInfoEvent : IPacketEvent
 {
     public double Delay => 0;
 

@@ -1,7 +1,7 @@
 namespace WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Interfaces;
 
-internal class CatalogMarketplaceDataDao
+internal sealed class CatalogMarketplaceDataDao
 {
     internal static void Replace(IQueryAdapter dbClient, int spriteId, int totalPrice)
     {

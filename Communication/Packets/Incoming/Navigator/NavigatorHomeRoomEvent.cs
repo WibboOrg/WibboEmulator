@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
-internal class NavigatorHomeRoomEvent : IPacketEvent
+internal sealed class NavigatorHomeRoomEvent : IPacketEvent
 {
     public double Delay => 250;
 

@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
 
-internal class DeclineGroupMembershipEvent : IPacketEvent
+internal sealed class DeclineGroupMembershipEvent : IPacketEvent
 {
     public double Delay => 100;
 

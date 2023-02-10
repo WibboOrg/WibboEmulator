@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Sound;
 
-internal class PlaySoundComposer : ServerPacket
+internal sealed class PlaySoundComposer : ServerPacket
 {
     public PlaySoundComposer(string name, int type, bool loop = false)
         : base(ServerPacketHeader.PLAY_SOUND)

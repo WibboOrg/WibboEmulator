@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class ChangeFootGate : IPacketEvent
+internal sealed class ChangeFootGate : IPacketEvent
 {
     public double Delay => 250;
 

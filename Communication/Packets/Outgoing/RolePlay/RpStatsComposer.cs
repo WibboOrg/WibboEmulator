@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 
-internal class RpStatsComposer : ServerPacket
+internal sealed class RpStatsComposer : ServerPacket
 {
     public RpStatsComposer(int pRpId, int pHealth, int pHealMax, int pEnergy, int pMoney, int pMunition, int pLevel)
         : base(ServerPacketHeader.RP_STATS)

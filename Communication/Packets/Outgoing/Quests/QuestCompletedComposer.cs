@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Quests;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
-internal class QuestCompletedComposer : ServerPacket
+internal sealed class QuestCompletedComposer : ServerPacket
 {
     public QuestCompletedComposer(GameClient session, Quest quest)
         : base(ServerPacketHeader.QUEST_COMPLETED)

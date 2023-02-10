@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Groups;
 
 using WibboEmulator.Games.GameClients;
 
-internal class RemoveGroupFavouriteEvent : IPacketEvent
+internal sealed class RemoveGroupFavouriteEvent : IPacketEvent
 {
     public double Delay => 250;
 

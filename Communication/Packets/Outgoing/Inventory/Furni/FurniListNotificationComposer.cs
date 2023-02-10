@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Games.Items;
 
-internal class FurniListNotificationComposer : ServerPacket
+internal sealed class FurniListNotificationComposer : ServerPacket
 {
     public FurniListNotificationComposer(int id, int type)
         : base(ServerPacketHeader.UNSEEN_ITEMS)

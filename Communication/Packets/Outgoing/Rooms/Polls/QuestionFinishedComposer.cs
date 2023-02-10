@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Polls;
 
-internal class QuestionFinishedComposer : ServerPacket
+internal sealed class QuestionFinishedComposer : ServerPacket
 {
     public QuestionFinishedComposer(int voteCountNo, int voteCountYes)
         : base(ServerPacketHeader.QUESTION_FINISHED)

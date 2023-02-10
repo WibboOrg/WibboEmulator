@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 
-internal class ActivityPointsComposer : ServerPacket
+internal sealed class ActivityPointsComposer : ServerPacket
 {
     public ActivityPointsComposer(int wibboPoints, int limitCoins = 0)
         : base(ServerPacketHeader.USER_CURRENCY)

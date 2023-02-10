@@ -2,7 +2,7 @@ namespace WibboEmulator.Games.Chats.Commands.User.Inventory;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class EmptyItems : IChatCommand
+internal sealed class EmptyItems : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

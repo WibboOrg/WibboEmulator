@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class GetGroupCreationWindowEvent : IPacketEvent
+internal sealed class GetGroupCreationWindowEvent : IPacketEvent
 {
     public double Delay => 0;
 

@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 
-internal class RemoveItemInventoryRpComposer : ServerPacket
+internal sealed class RemoveItemInventoryRpComposer : ServerPacket
 {
     public RemoveItemInventoryRpComposer(int itemId, int count)
       : base(ServerPacketHeader.REMOVE_ITEM_INVENTORY_RP)

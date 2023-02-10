@@ -1,7 +1,7 @@
 namespace WibboEmulator.Database.Daos.Messenger;
 using WibboEmulator.Database.Interfaces;
 
-internal class MessengerRequestDao
+internal sealed class MessengerRequestDao
 {
     internal static void Delete(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("DELETE FROM `messenger_request` WHERE from_id = '" + userId + "' OR to_id = '" + userId + "'");
 

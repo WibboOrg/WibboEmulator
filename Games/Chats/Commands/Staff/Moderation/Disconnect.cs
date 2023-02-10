@@ -2,7 +2,7 @@ namespace WibboEmulator.Games.Chats.Commands.Staff.Moderation;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class Disconnect : IChatCommand
+internal sealed class Disconnect : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser roomUser, string[] parameters)
     {

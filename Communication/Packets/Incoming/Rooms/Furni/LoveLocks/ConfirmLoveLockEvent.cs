@@ -4,7 +4,7 @@ using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class ConfirmLoveLockEvent : IPacketEvent
+internal sealed class ConfirmLoveLockEvent : IPacketEvent
 {
     public double Delay => 250;
 

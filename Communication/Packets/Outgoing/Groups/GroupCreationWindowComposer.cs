@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.Rooms;
 
-internal class GroupCreationWindowComposer : ServerPacket
+internal sealed class GroupCreationWindowComposer : ServerPacket
 {
     public GroupCreationWindowComposer(ICollection<RoomData> rooms)
         : base(ServerPacketHeader.GROUP_CREATE_OPTIONS)

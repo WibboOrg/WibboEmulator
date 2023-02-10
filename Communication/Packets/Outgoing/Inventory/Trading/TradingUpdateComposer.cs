@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Trading;
 using WibboEmulator.Games.Items;
 
-internal class TradingUpdateComposer : ServerPacket
+internal sealed class TradingUpdateComposer : ServerPacket
 {
     public TradingUpdateComposer(int userOneId, List<Item> userOneItems, int userTwoId, List<Item> userTwoItems)
         : base(ServerPacketHeader.TRADE_LIST_ITEM)

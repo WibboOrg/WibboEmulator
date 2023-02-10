@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 
-internal class RoomEntryInfoComposer : ServerPacket
+internal sealed class RoomEntryInfoComposer : ServerPacket
 {
     public RoomEntryInfoComposer(int roomID, bool isOwner)
         : base(ServerPacketHeader.ROOM_INFO_OWNER)

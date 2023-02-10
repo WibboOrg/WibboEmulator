@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Settings;
 using WibboEmulator.Games.GameClients;
 
-internal class ToggleMuteToolEvent : IPacketEvent
+internal sealed class ToggleMuteToolEvent : IPacketEvent
 {
     public double Delay => 0;
 

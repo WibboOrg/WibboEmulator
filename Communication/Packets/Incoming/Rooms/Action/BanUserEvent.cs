@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Action;
 using WibboEmulator.Games.GameClients;
 
-internal class BanUserEvent : IPacketEvent
+internal sealed class BanUserEvent : IPacketEvent
 {
     public double Delay => 250;
 

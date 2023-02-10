@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.Users;
 
-internal class GroupMembershipRequestedComposer : ServerPacket
+internal sealed class GroupMembershipRequestedComposer : ServerPacket
 {
     public GroupMembershipRequestedComposer(int groupId, User user, int type)
         : base(ServerPacketHeader.GROUP_MEMBERSHIP_REQUESTED_MESSAGE_COMPOSER)

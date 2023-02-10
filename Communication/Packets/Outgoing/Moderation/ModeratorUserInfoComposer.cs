@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using System.Data;
 
-internal class ModeratorUserInfoComposer : ServerPacket
+internal sealed class ModeratorUserInfoComposer : ServerPacket
 {
     public ModeratorUserInfoComposer(DataRow user)
         : base(ServerPacketHeader.MODERATION_USER_INFO)

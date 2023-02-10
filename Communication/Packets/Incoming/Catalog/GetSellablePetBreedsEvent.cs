@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Games.GameClients;
 
-internal class GetSellablePetBreedsEvent : IPacketEvent
+internal sealed class GetSellablePetBreedsEvent : IPacketEvent
 {
     public double Delay => 0;
 

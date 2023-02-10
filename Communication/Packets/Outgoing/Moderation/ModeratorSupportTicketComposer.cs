@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Moderations;
 
-internal class ModeratorSupportTicketComposer : ServerPacket
+internal sealed class ModeratorSupportTicketComposer : ServerPacket
 {
     public ModeratorSupportTicketComposer(ModerationTicket ticket)
         : base(ServerPacketHeader.ISSUE_INFO)

@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class GetGuestRoomResultComposer : ServerPacket
+internal sealed class GetGuestRoomResultComposer : ServerPacket
 {
     public GetGuestRoomResultComposer(GameClient session, RoomData data, bool isLoading, bool checkEntry)
         : base(ServerPacketHeader.ROOM_INFO)

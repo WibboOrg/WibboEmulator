@@ -39,7 +39,7 @@ namespace WibboEmulator.WebSocketSharp.Net;
 #endregion
 
 
-internal class ReadBufferState
+internal sealed class ReadBufferState
 {
     #region Private Fields
 

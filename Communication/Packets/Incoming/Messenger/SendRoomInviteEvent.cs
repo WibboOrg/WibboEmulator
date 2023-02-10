@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Messenger;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
 
-internal class SendRoomInviteEvent : IPacketEvent
+internal sealed class SendRoomInviteEvent : IPacketEvent
 {
     public double Delay => 1000;
 

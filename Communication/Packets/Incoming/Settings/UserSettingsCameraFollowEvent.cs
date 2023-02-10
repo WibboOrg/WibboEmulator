@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
-internal class UserSettingsCameraFollowEvent : IPacketEvent
+internal sealed class UserSettingsCameraFollowEvent : IPacketEvent
 {
     public double Delay => 0;
 

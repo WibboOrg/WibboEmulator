@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Communication.Packets.Outgoing.Users;
 
-internal class ScrSendUserInfoComposer : ServerPacket
+internal sealed class ScrSendUserInfoComposer : ServerPacket
 {
     public ScrSendUserInfoComposer(int timeLeft, int totalDaysLeft, int monthsLeft)
         : base(ServerPacketHeader.USER_SUBSCRIPTION)

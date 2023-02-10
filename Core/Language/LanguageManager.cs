@@ -50,23 +50,23 @@ public class LanguageManager
         }
     }
 
-    public string TryGetValue(string value, Language language)
+    public string TryGetValue(string key, Language language)
     {
         if (language == Language.French)
         {
-            return this._valuesFr.TryGetValue(value, out var value) ? value : "Pas de language locale trouver pour [" + value + "] (fr)";
+            return this._valuesFr.TryGetValue(key, out var value) ? value : "Pas de language locale trouver pour [" + key + "] (fr)";
         }
         else if (language == Language.English)
         {
-            return this._valuesEn.TryGetValue(value, out var value) ? value : "Pas de language locale trouver pour [" + value + "] (en)";
+            return this._valuesEn.TryGetValue(key, out var value) ? value : "Pas de language locale trouver pour [" + key + "] (en)";
         }
         else if (language == Language.Portuguese)
         {
-            return this._valuesBr.TryGetValue(value, out var value) ? value : "Pas de language locale trouver pour [" + value + "] (br)";
+            return this._valuesBr.TryGetValue(key, out var value) ? value : "Pas de language locale trouver pour [" + key + "] (br)";
         }
         else
         {
-            return this._valuesFr.TryGetValue(value, out var value) ? value : "Pas de language locale trouver pour [" + value + "] (def)";
+            return this._valuesFr.TryGetValue(key, out var value) ? value : "Pas de language locale trouver pour [" + key + "] (def)";
         }
     }
 

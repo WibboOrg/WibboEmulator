@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Room;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class RoomDao
+internal sealed class RoomDao
 {
     internal static void UpdateResetGroupId(IQueryAdapter dbClient, int id) => dbClient.RunQuery("UPDATE `room` SET group_id = '0' WHERE id = '" + id + "' LIMIT 1");
 

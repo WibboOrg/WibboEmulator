@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Communication.Packets.Outgoing.Groups;
 
-internal class UnknownGroupComposer : ServerPacket
+internal sealed class UnknownGroupComposer : ServerPacket
 {
     public UnknownGroupComposer(int groupId, int userId)
         : base(ServerPacketHeader.GROUP_MEMBERS_REFRESH)

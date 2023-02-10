@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-internal class SaveBrandingItemEvent : IPacketEvent
+internal sealed class SaveBrandingItemEvent : IPacketEvent
 {
     public double Delay => 250;
 

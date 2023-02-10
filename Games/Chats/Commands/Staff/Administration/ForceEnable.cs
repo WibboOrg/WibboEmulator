@@ -2,7 +2,7 @@ namespace WibboEmulator.Games.Chats.Commands.Staff.Administration;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class ForceEnable : IChatCommand
+internal sealed class ForceEnable : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

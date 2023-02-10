@@ -2,7 +2,7 @@ namespace WibboEmulator.Games.Chats.Commands.User.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class OldFoot : IChatCommand
+internal sealed class OldFoot : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

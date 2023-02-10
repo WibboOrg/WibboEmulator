@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Chats.Logs;
 using WibboEmulator.Utilities;
 
-internal class ModeratorUserChatlogComposer : ServerPacket
+internal sealed class ModeratorUserChatlogComposer : ServerPacket
 {
     public ModeratorUserChatlogComposer(int userId, string username, int roomId, List<ChatlogEntry> chatlogs)
         : base(ServerPacketHeader.MODTOOL_USER_CHATLOG)

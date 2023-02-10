@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Messenger;
 
-internal class GetRelationshipsEvent : IPacketEvent
+internal sealed class GetRelationshipsEvent : IPacketEvent
 {
     public double Delay => 0;
 

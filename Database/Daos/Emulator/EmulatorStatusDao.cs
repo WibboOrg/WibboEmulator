@@ -1,7 +1,7 @@
 namespace WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;
 
-internal class EmulatorStatusDao
+internal sealed class EmulatorStatusDao
 {
     internal static int GetUserpeak(IQueryAdapter dbClient)
     {

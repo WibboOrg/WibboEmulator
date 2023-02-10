@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Navigator.New;
 using WibboEmulator.Games.Navigators;
 
-internal class NavigatorMetaDataParserComposer : ServerPacket
+internal sealed class NavigatorMetaDataParserComposer : ServerPacket
 {
     public NavigatorMetaDataParserComposer(ICollection<TopLevelItem> topLevelItems)
         : base(ServerPacketHeader.NAVIGATOR_METADATA)

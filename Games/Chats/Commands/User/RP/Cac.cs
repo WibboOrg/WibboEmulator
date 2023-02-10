@@ -2,7 +2,7 @@ namespace WibboEmulator.Games.Chats.Commands.User.RP;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-internal class Cac : IChatCommand
+internal sealed class Cac : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {

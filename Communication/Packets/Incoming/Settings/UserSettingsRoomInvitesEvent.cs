@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
-internal class UserSettingsRoomInvitesEvent : IPacketEvent
+internal sealed class UserSettingsRoomInvitesEvent : IPacketEvent
 {
     public double Delay => 0;
 

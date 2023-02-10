@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
 
-internal class GetGroupInfoEvent : IPacketEvent
+internal sealed class GetGroupInfoEvent : IPacketEvent
 {
     public double Delay => 0;
 

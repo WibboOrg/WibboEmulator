@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Connection;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Games.GameClients;
 
-internal class GoToFlatEvent : IPacketEvent
+internal sealed class GoToFlatEvent : IPacketEvent
 {
     public double Delay => 0;
 

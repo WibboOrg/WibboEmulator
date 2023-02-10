@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Navigator;
 
-internal class RoomRatingComposer : ServerPacket
+internal sealed class RoomRatingComposer : ServerPacket
 {
     public RoomRatingComposer(int score, bool canVote)
         : base(ServerPacketHeader.ROOM_SCORE)

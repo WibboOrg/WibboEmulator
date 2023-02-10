@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Moderations;
 
-internal class SendHotelAlertEvent : IPacketEvent
+internal sealed class SendHotelAlertEvent : IPacketEvent
 {
     public double Delay => 1000;
 

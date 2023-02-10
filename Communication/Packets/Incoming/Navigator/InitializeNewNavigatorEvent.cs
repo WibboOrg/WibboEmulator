@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Navigator.New;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
 
-internal class InitializeNewNavigatorEvent : IPacketEvent
+internal sealed class InitializeNewNavigatorEvent : IPacketEvent
 {
     public double Delay => 0;
 

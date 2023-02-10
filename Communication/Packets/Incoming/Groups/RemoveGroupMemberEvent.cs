@@ -6,7 +6,7 @@ using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users;
 
-internal class RemoveGroupMemberEvent : IPacketEvent
+internal sealed class RemoveGroupMemberEvent : IPacketEvent
 {
     public double Delay => 100;
 

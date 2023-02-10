@@ -3,7 +3,7 @@ using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.Items;
 
-internal class CatalogOfferComposer : ServerPacket
+internal sealed class CatalogOfferComposer : ServerPacket
 {
     public CatalogOfferComposer(CatalogItem item)
         : base(ServerPacketHeader.PRODUCT_OFFER)

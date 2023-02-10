@@ -2,7 +2,7 @@ namespace WibboEmulator.Database.Daos.Item;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-internal class ItemTeleportDao
+internal sealed class ItemTeleportDao
 {
     internal static DataRow GetOne(IQueryAdapter dbClient, int teleId)
     {

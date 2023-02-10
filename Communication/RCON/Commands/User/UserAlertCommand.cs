@@ -1,5 +1,5 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
-internal class UserAlertCommand : IRCONCommand
+internal sealed class UserAlertCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
     {

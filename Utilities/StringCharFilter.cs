@@ -1,12 +1,12 @@
 namespace WibboEmulator.Utilities;
 using System.Text.RegularExpressions;
 
-internal static class StringCharFilter
+internal static partial class StringCharFilter
 {
-    private static readonly Regex AllowedChars = new(@"^[a-zA-Z0-9-.]+$");
-    private static readonly Regex AllowedAlphaNum = new(@"^[a-zA-Z0-9]+$");
-    private static readonly Regex ScapesRegex = new(@"[\u0001-\u0008\u000B-\u000C\u000E-\u001F\u007F-\u009F]");
-    private static readonly Regex BreakLinesRegex = new(@"[\r\n]");
+    private static readonly Regex AllowedChars = MyRegex();
+    private static readonly Regex AllowedAlphaNum = MyRegex1();
+    private static readonly Regex ScapesRegex = MyRegex2();
+    private static readonly Regex BreakLinesRegex = MyRegex3();
 
     public static bool IsValid(string input) => AllowedChars.IsMatch(input);
 
@@ -35,4 +35,13 @@ internal static class StringCharFilter
 
         return ScapesRegex.Replace(str, string.Empty);
     }
+
+    [GeneratedRegex("^[a-zA-Z0-9-.]+$")]
+    private static partial Regex MyRegex();
+    [GeneratedRegex("^[a-zA-Z0-9]+$")]
+    private static partial Regex MyRegex1();
+    [GeneratedRegex("[\\u0001-\\u0008\\u000B-\\u000C\\u000E-\\u001F\\u007F-\\u009F]")]
+    private static partial Regex MyRegex2();
+    [GeneratedRegex("[\\r\\n]")]
+    private static partial Regex MyRegex3();
 }
