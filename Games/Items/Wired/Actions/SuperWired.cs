@@ -1092,6 +1092,34 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 itemHighScore.UpdateState(false);
                 break;
             }
+            case "addclassement":
+            {
+                var itemHighScore = this.RoomInstance.RoomItemHandling.GetFloor.First(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                if (itemHighScore == null)
+                {
+                    break;
+                }
+
+                if (!int.TryParse(value, out var valueInt))
+                {
+                    break;
+                }
+
+                if (itemHighScore.Scores.TryGetValue(user.GetUsername(), out var score))
+                {
+                    itemHighScore.Scores[user.GetUsername()] = score + valueInt;
+                }
+                else
+                {
+                    itemHighScore.Scores.Add(user.GetUsername(), valueInt);
+                }
+
+                this.ItemInstance.UpdateState(false);
+
+                itemHighScore.UpdateState(false);
+                break;
+            }
+
             case "roomfreeze":
             {
                 this.RoomInstance.FreezeRoom = value == "true";

@@ -22,18 +22,16 @@ public class HighScorePoints : WiredActionBase, IWired, IWiredEffect
 
         var scores = this.ItemInstance.Scores;
 
-        var listUsernameScore = new List<string>() { user.GetUsername() };
-
-        if (scores.ContainsKey(listUsernameScore[0]))
+        if (scores.TryGetValue(user.GetUsername(), out var score))
         {
-            if (user.WiredPoints > scores[listUsernameScore[0]])
+            if (user.WiredPoints > score)
             {
-                scores[listUsernameScore[0]] = user.WiredPoints;
+                scores[user.GetUsername()] = user.WiredPoints;
             }
         }
         else
         {
-            scores.Add(listUsernameScore[0], user.WiredPoints);
+            scores.Add(user.GetUsername(), user.WiredPoints);
         }
 
         this.ItemInstance.UpdateState(false);

@@ -1,6 +1,5 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -22,15 +21,13 @@ public class HighScore : WiredActionBase, IWired, IWiredEffect
 
         var scores = this.ItemInstance.Scores;
 
-        var listUsernameScore = new List<string>() { user.GetUsername() };
-
-        if (scores.ContainsKey(listUsernameScore[0]))
+        if (scores.TryGetValue(user.GetUsername(), out var score))
         {
-            scores[listUsernameScore[0]] += 1;
+            scores[user.GetUsername()] = score + 1;
         }
         else
         {
-            scores.Add(listUsernameScore[0], 1);
+            scores.Add(user.GetUsername(), 1);
         }
 
         this.ItemInstance.UpdateState(false);
