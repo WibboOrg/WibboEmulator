@@ -55,7 +55,7 @@ public class ModerationManager
                 {
                     foreach (var data in value)
                     {
-                        value.Add(data);
+                        result[category.Value].Add(data);
                     }
                 }
             }
