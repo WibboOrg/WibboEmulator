@@ -37,6 +37,11 @@ internal sealed class SSOTicketEvent : IPacketEvent
             return;
         }
 
+        if (WibboEnvironment.GetGame().GetGameClientManager().TryReconnection(session, ssoTicket))
+        {
+            return;
+        }
+
         try
         {
             var ip = session.Connection.GetIp();
@@ -51,6 +56,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
                 WibboEnvironment.GetGame().GetGameClientManager().LogClonesOut(user.Id);
                 session.User = user;
                 session.Langue = user.Langue;
+                session.SSOTicket = ssoTicket;
 
                 WibboEnvironment.GetGame().GetGameClientManager().RegisterClient(session, user.Id, user.Username);
 

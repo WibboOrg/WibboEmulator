@@ -198,6 +198,15 @@ public class Game : IDisposable
 
                 this._moduleWatch.Restart();
 
+                this._gameClientManager.OnCycle();
+
+                if (this._moduleWatch.ElapsedMilliseconds > 500)
+                {
+                    Console.WriteLine("High latency in GameClientManager ({0} ms)", this._moduleWatch.ElapsedMilliseconds);
+                }
+
+                this._moduleWatch.Restart();
+
                 this._animationManager.OnCycle(this._moduleWatch);
 
                 if (this._moduleWatch.ElapsedMilliseconds > 500)

@@ -1,4 +1,5 @@
 namespace WibboEmulator.Games.GameClients;
+
 using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
@@ -18,6 +19,7 @@ public class GameClient
     private double _packetLastTimestamp;
 
     public string MachineId { get; set; }
+    public string SSOTicket { get; set; }
     public Language Langue { get; set; }
     public string ConnectionID { get; set; }
     public bool ShowGameAlert { get; set; }
@@ -27,12 +29,18 @@ public class GameClient
     public GameClient(string clientId, GameWebSocket connection)
     {
         this.ConnectionID = clientId;
-        this.Langue = Language.French;
         this.Connection = connection;
+        this.Langue = Language.French;
 
         this._packetTimeout = new Dictionary<int, double>();
         this._packetCount = 0;
         this._packetLastTimestamp = UnixTimestamp.GetNow();
+    }
+
+    public void UpdateClient(GameClient oldClient)
+    {
+        this.ConnectionID = oldClient.ConnectionID;
+        this.Connection = oldClient.Connection;
     }
 
     public bool Antipub(string message, string type, int roomId = 0)

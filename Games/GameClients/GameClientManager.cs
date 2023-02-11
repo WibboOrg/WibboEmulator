@@ -14,6 +14,8 @@ public class GameClientManager
     private readonly ConcurrentDictionary<string, string> _usernameRegister;
     private readonly ConcurrentDictionary<int, string> _userIDRegister;
 
+    private readonly ConcurrentDictionary<string, DateTime> _pendingDisconnect;
+
     public int OnlineUsersFr { get; set; }
     public int OnlineUsersEn { get; set; }
     public int OnlineUsersBr { get; set; }
@@ -27,6 +29,7 @@ public class GameClientManager
         this._clients = new ConcurrentDictionary<string, GameClient>();
         this._usernameRegister = new ConcurrentDictionary<string, string>();
         this._userIDRegister = new ConcurrentDictionary<int, string>();
+        this._pendingDisconnect = new ConcurrentDictionary<string, DateTime>();
         this._userStaff = new List<int>();
     }
 
@@ -169,6 +172,88 @@ public class GameClientManager
         }
     }
 
+    public void OnCycle()
+    {
+        if (this._pendingDisconnect.IsEmpty)
+        {
+            return;
+        }
+
+        var removeIds = new List<string>();
+        foreach (var pending in this._pendingDisconnect)
+        {
+            var timeExecution = DateTime.Now - pending.Value;
+
+            if (timeExecution <= TimeSpan.FromSeconds(5))
+            {
+                continue;
+            }
+
+            removeIds.Add(pending.Key);
+
+            this.DisposeConnection(pending.Key);
+        }
+
+        foreach (var id in removeIds)
+        {
+            _ = this._pendingDisconnect.TryRemove(id, out _);
+        }
+
+        removeIds.Clear();
+    }
+
+    public bool TryReconnection(GameClient newClient, string ssoTicket)
+    {
+        var oldClient = this._clients.Values.FirstOrDefault(x => x.SSOTicket == ssoTicket);
+
+        if (oldClient == null || oldClient.User == null)
+        {
+            return false;
+        }
+
+        if (oldClient.Connection.GetIp() != newClient.Connection.GetIp())
+        {
+            return false;
+        }
+
+        if (!this._pendingDisconnect.TryGetValue(oldClient.ConnectionID, out _))
+        {
+            return false;
+        }
+
+        _ = this._pendingDisconnect.TryRemove(oldClient.ConnectionID, out _);
+
+        _ = this._clients.TryRemove(oldClient.ConnectionID, out _);
+
+        //Update oldClient with new connectionId
+        oldClient.UpdateClient(newClient);
+
+        //Change the connectionId
+        this.UnregisterClient(oldClient.User.Id, oldClient.User.Username);
+        this.RegisterClient(oldClient, oldClient.User.Id, oldClient.User.Username);
+
+        //Replace newClient per the oldClient
+        this._clients[newClient.ConnectionID] = oldClient;
+
+        return true;
+    }
+
+    public void DisconnectConnection(string clientID)
+    {
+        if (!this.TryGetClient(clientID, out var client))
+        {
+            return;
+        }
+
+        if (client.User == null)
+        {
+            this.DisposeConnection(clientID);
+            return;
+        }
+
+        _ = this._pendingDisconnect.TryAdd(clientID, DateTime.Now);
+    }
+
     public void DisposeConnection(string clientID)
     {
         if (!this.TryGetClient(clientID, out var client))
@@ -176,7 +261,7 @@ public class GameClientManager
             return;
         }
 
-        client?.Dispose();
+        client.Dispose();
 
         _ = this._clients.TryRemove(clientID, out _);
     }

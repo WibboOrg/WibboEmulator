@@ -65,7 +65,7 @@ public class WebSocketManager
 
         this.AlterIpConnectionCount(ip, this.GetAmountOfConnectionFromIp(ip) - 1);
 
-        WibboEnvironment.GetGame().GetGameClientManager().DisposeConnection(connection.ID);
+        WibboEnvironment.GetGame().GetGameClientManager().DisconnectConnection(connection.ID);
     }
 
     public void CreatedClient(GameWebSocket connection)

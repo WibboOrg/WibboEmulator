@@ -52,6 +52,7 @@ using WibboEmulator.Games.GameClients;
 public sealed class PacketManager
 {
     private readonly Dictionary<int, IPacketEvent> _incomingPackets;
+    private readonly List<int> _handshakePacketIds = new() { ClientPacketHeader.RELEASE_VERSION, ClientPacketHeader.SECURITY_TICKET, ClientPacketHeader.CLIENT_PONG };
 
     private readonly TimeSpan _maximumRunTimeInSec = TimeSpan.FromSeconds(5);
 
@@ -98,6 +99,17 @@ public sealed class PacketManager
     public void TryExecutePacket(GameClient session, ClientPacket packet)
     {
         var timeStarted = DateTime.Now;
+
+        if (session.User == null && !this._handshakePacketIds.Contains(packet.Id))
+        {
+            if (Debugger.IsAttached)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("[" + packet.Id + "] unauthorized packet Id");
+                Console.ResetColor();
+            }
+            return;
+        }
 
         if (!this._incomingPackets.TryGetValue(packet.Id, out var pak))
         {
