@@ -35,7 +35,7 @@ public class WiredBase
         this.StuffTypeId = item.GetBaseItem().SpriteId;
 
         this.StuffTypeSelectionEnabled = false;
-        this.FurniLimit = 10;
+        this.FurniLimit = WibboEnvironment.GetSettings().GetData<int>("wired.furni.limit");
         this.StuffIds = new List<int>();
         this.StringParam = "";
         this.IntParams = new List<int>();
