@@ -32,7 +32,7 @@ public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEf
         }
         else if (this.Items.Count == 1)
         {
-            GameMap.TeleportToItem(user, Enumerable.First(this.Items));
+            GameMap.TeleportToItem(user, Enumerable.FirstOrDefault(this.Items));
         }
 
         user.ApplyEffect(user.CurrentEffect, true);

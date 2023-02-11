@@ -770,7 +770,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "classement":
             case "notclassement":
             {
-                var itemHighScore = room.RoomItemHandling.GetFloor.First(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = room.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
@@ -785,7 +785,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "ptsclassementplus":
             {
-                var itemHighScore = room.RoomItemHandling.GetFloor.First(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = room.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
@@ -802,7 +802,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "ptsclassementmoins":
             {
-                var itemHighScore = room.RoomItemHandling.GetFloor.First(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = room.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
@@ -820,7 +820,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "ptsclassement":
             case "notptsclassement":
             {
-                var itemHighScore = room.RoomItemHandling.GetFloor.First(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = room.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;

@@ -1082,7 +1082,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
         {
             case "resetclassement":
             {
-                var itemHighScore = this.RoomInstance.RoomItemHandling.GetFloor.First(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = this.RoomInstance.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
@@ -1094,7 +1094,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "addclassement":
             {
-                var itemHighScore = this.RoomInstance.RoomItemHandling.GetFloor.First(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = this.RoomInstance.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
