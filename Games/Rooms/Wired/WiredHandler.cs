@@ -200,7 +200,7 @@ public class WiredHandler
 
     public void OnPickall() => this._doCleanup = true;
 
-    public void ExecutePile(Point coordinate, RoomUser user, Item item)
+    public void ExecutePile(Point coordinate, RoomUser user, Item item, bool ignoreCondition = false)
     {
         if (this._doCleanup)
         {
@@ -243,7 +243,7 @@ public class WiredHandler
 
         this._tickCounter++;
 
-        if (this._conditionStacks.TryGetValue(coordinate, out var value))
+        if (this._conditionStacks.TryGetValue(coordinate, out var value) && !ignoreCondition)
         {
             var conditionStack = value;
             foreach (var roomItem in conditionStack.Take(20).ToArray())

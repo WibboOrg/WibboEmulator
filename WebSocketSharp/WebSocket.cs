@@ -1383,7 +1383,7 @@ public class WebSocket : IDisposable
 
         try
         {
-            _ = this._pongReceived.Set();
+            _ = this._pongReceived?.Set();
         }
         catch (NullReferenceException)
         {

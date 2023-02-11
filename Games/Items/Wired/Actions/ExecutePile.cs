@@ -14,6 +14,8 @@ public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
 
     public override bool OnCycle(RoomUser user, Item item)
     {
+        var ignoreCondition = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+
         foreach (var roomItem in this.Items.ToList())
         {
             foreach (var coord in roomItem.GetAffectedTiles)
@@ -23,7 +25,7 @@ public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
                     continue;
                 }
 
-                this.RoomInstance.WiredHandler.ExecutePile(coord, user, item);
+                this.RoomInstance.WiredHandler.ExecutePile(coord, user, item, ignoreCondition);
             }
         }
 
