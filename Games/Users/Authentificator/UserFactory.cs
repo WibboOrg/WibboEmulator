@@ -40,9 +40,10 @@ public class UserFactory
                     ignoreAllExpire = ignoreAll;
                 }
 
-                if (WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId) != null)
+                var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+
+                if (client != null)
                 {
-                    WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId).Disconnect();
                     return null;
                 }
 

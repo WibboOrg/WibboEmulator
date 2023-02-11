@@ -332,7 +332,7 @@ public class User : IDisposable
 
         this.IsDisposed = true;
 
-        WibboEnvironment.GetGame().GetGameClientManager().UnregisterClient(this.Id, this.Username);
+        WibboEnvironment.GetGame().GetGameClientManager().UnregisterClient(this.Id, this.Username, this.Client.SSOTicket);
 
         if (this.HasPermission("mod"))
         {

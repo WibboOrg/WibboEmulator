@@ -22,6 +22,7 @@ public class GameClient
     public string SSOTicket { get; set; }
     public Language Langue { get; set; }
     public string ConnectionID { get; set; }
+    public bool IsDisconnected { get; set; }
     public bool ShowGameAlert { get; set; }
     public GameWebSocket Connection { get; private set; }
     public User User { get; set; }
@@ -153,7 +154,7 @@ public class GameClient
             this._packetLastTimestamp = timestampNow + 1;
         }
 
-        if (this._packetCount >= 20)
+        if (this._packetCount >= 100)
         {
             return true;
         }
@@ -193,12 +194,19 @@ public class GameClient
             WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersBr--;
         }
 
+        this.IsDisconnected = true;
+
         this.User?.Dispose();
 
         this._packetTimeout?.Clear();
     }
 
-    public void Disconnect() => this.Connection?.Disconnect();
+    public void Disconnect()
+    {
+        this.IsDisconnected = true;
+
+        this.Connection.Disconnect();
+    }
 
     public void SendPacket(ServerPacketList packets)
     {

@@ -13,6 +13,7 @@ public class GameClientManager
     private readonly ConcurrentDictionary<string, GameClient> _clients;
     private readonly ConcurrentDictionary<string, string> _usernameRegister;
     private readonly ConcurrentDictionary<int, string> _userIDRegister;
+    private readonly ConcurrentDictionary<string, string> _ssoTicketRegister;
 
     private readonly ConcurrentDictionary<string, DateTime> _pendingDisconnect;
 
@@ -29,6 +30,7 @@ public class GameClientManager
         this._clients = new ConcurrentDictionary<string, GameClient>();
         this._usernameRegister = new ConcurrentDictionary<string, string>();
         this._userIDRegister = new ConcurrentDictionary<int, string>();
+        this._ssoTicketRegister = new ConcurrentDictionary<string, string>();
         this._pendingDisconnect = new ConcurrentDictionary<string, DateTime>();
         this._userStaff = new List<int>();
     }
@@ -58,11 +60,28 @@ public class GameClientManager
         return client;
     }
 
+    public GameClient GetClientBySSOTicket(string ssoTicket)
+    {
+        if (this._ssoTicketRegister.TryGetValue(ssoTicket.ToLower(), out var clientId))
+        {
+            if (!this.TryGetClient(clientId, out var client))
+            {
+                return null;
+            }
+
+            return client;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public GameClient GetClientByUserID(int userID)
     {
-        if (this._userIDRegister.ContainsKey(userID))
+        if (this._userIDRegister.TryGetValue(userID, out var clientId))
         {
-            if (!this.TryGetClient(this._userIDRegister[userID], out var client))
+            if (!this.TryGetClient(clientId, out var client))
             {
                 return null;
             }
@@ -77,9 +96,9 @@ public class GameClientManager
 
     public GameClient GetClientByUsername(string username)
     {
-        if (this._usernameRegister.ContainsKey(username.ToLower()))
+        if (this._usernameRegister.TryGetValue(username.ToLower(), out var clientId))
         {
-            if (!this.TryGetClient(this._usernameRegister[username.ToLower()], out var client))
+            if (!this.TryGetClient(clientId, out var client))
             {
                 return null;
             }
@@ -202,22 +221,30 @@ public class GameClientManager
         removeIds.Clear();
     }
 
-    public bool TryReconnection(GameClient newClient, string ssoTicket)
+    public bool TryReconnection(ref GameClient newClient, string ssoTicket)
     {
-        var oldClient = this._clients.Values.FirstOrDefault(x => x.SSOTicket == ssoTicket);
+        var oldClient = this.GetClientBySSOTicket(ssoTicket);
 
-        if (oldClient == null || oldClient.User == null)
-        {
-            return false;
-        }
-
-        if (oldClient.Connection.GetIp() != newClient.Connection.GetIp())
+        if (oldClient == null)
         {
             return false;
         }
 
         if (!this._pendingDisconnect.TryGetValue(oldClient.ConnectionID, out _))
         {
+            newClient.IsDisconnected = true;
+            return false;
+        }
+
+        if (oldClient.IsDisconnected || oldClient.User == null)
+        {
+            newClient.IsDisconnected = true;
+            return false;
+        }
+
+        if (oldClient.Connection.GetIp() != newClient.Connection.GetIp())
+        {
+            newClient.IsDisconnected = true;
             return false;
         }
 
@@ -229,11 +256,13 @@ public class GameClientManager
         oldClient.UpdateClient(newClient);
 
         //Change the connectionId
-        this.UnregisterClient(oldClient.User.Id, oldClient.User.Username);
-        this.RegisterClient(oldClient, oldClient.User.Id, oldClient.User.Username);
+        this.UnregisterClient(oldClient.User.Id, oldClient.User.Username, oldClient.SSOTicket);
+        this.RegisterClient(oldClient, oldClient.User.Id, oldClient.User.Username, oldClient.SSOTicket);
 
         //Replace newClient per the oldClient
         this._clients[newClient.ConnectionID] = oldClient;
+
+        newClient = oldClient;
 
         return true;
     }
@@ -245,7 +274,7 @@ public class GameClientManager
             return;
         }
 
-        if (client.User == null)
+        if (client.User == null || client.IsDisconnected)
         {
             this.DisposeConnection(clientID);
             return;
@@ -266,9 +295,9 @@ public class GameClientManager
         _ = this._clients.TryRemove(clientID, out _);
     }
 
-    public void LogClonesOut(int userID)
+    public void LogClonesOut(int userId)
     {
-        var clientByUserId = this.GetClientByUserID(userID);
+        var clientByUserId = this.GetClientByUserID(userId);
         if (clientByUserId == null)
         {
             return;
@@ -277,7 +306,7 @@ public class GameClientManager
         clientByUserId.Disconnect();
     }
 
-    public void RegisterClient(GameClient client, int userID, string username)
+    public void RegisterClient(GameClient client, int userID, string username, string ssoTicket)
     {
         if (this._usernameRegister.ContainsKey(username.ToLower()))
         {
@@ -296,12 +325,22 @@ public class GameClientManager
         {
             _ = this._userIDRegister.TryAdd(userID, client.ConnectionID);
         }
+
+        if (this._ssoTicketRegister.ContainsKey(ssoTicket.ToLower()))
+        {
+            this._ssoTicketRegister[ssoTicket.ToLower()] = client.ConnectionID;
+        }
+        else
+        {
+            _ = this._ssoTicketRegister.TryAdd(ssoTicket.ToLower(), client.ConnectionID);
+        }
     }
 
-    public void UnregisterClient(int userId, string username)
+    public void UnregisterClient(int userId, string username, string ssoTicket)
     {
         _ = this._userIDRegister.TryRemove(userId, out var _);
         _ = this._usernameRegister.TryRemove(username.ToLower(), out _);
+        _ = this._ssoTicketRegister.TryRemove(ssoTicket.ToLower(), out _);
     }
 
     public void AddUserStaff(int userId)
@@ -366,7 +405,7 @@ public class GameClientManager
 
             try
             {
-                client.Connection.Disconnect();
+                client.Disconnect();
             }
             catch
             {

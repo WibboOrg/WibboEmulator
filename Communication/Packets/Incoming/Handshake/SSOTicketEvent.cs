@@ -37,8 +37,15 @@ internal sealed class SSOTicketEvent : IPacketEvent
             return;
         }
 
-        if (WibboEnvironment.GetGame().GetGameClientManager().TryReconnection(session, ssoTicket))
+        if (WibboEnvironment.GetGame().GetGameClientManager().TryReconnection(ref session, ssoTicket))
         {
+            session.SendPacket(new AuthenticationOKComposer());
+            return;
+        }
+
+        if (session.IsDisconnected)
+        {
+            session.Disconnect();
             return;
         }
 
@@ -49,6 +56,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
 
             if (user == null)
             {
+                session.Disconnect();
                 return;
             }
             else
@@ -58,7 +66,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
                 session.Langue = user.Langue;
                 session.SSOTicket = ssoTicket;
 
-                WibboEnvironment.GetGame().GetGameClientManager().RegisterClient(session, user.Id, user.Username);
+                WibboEnvironment.GetGame().GetGameClientManager().RegisterClient(session, user.Id, user.Username, ssoTicket);
 
                 if (session.Langue == Language.French)
                 {
