@@ -21,24 +21,30 @@ public class UserSays : WiredTriggerBase, IWired
         var message = args.Message;
 
         var isOwnerOnly = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+        var isContains = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0) == 1;
 
         if (user == null)
         {
             return;
         }
 
-        if ((!isOwnerOnly && this.CanBeTriggered(message) && !string.IsNullOrEmpty(message)) || (isOwnerOnly && user.IsOwner() && this.CanBeTriggered(message) && !string.IsNullOrEmpty(message)))
+        if ((!isOwnerOnly && this.CanBeTriggered(message, isContains) && !string.IsNullOrEmpty(message)) || (isOwnerOnly && user.IsOwner() && this.CanBeTriggered(message, isContains) && !string.IsNullOrEmpty(message)))
         {
             this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, null);
             args.Result = true;
         }
     }
 
-    private bool CanBeTriggered(string message)
+    private bool CanBeTriggered(string message, bool isContains)
     {
         if (string.IsNullOrEmpty(this.StringParam))
         {
             return false;
+        }
+
+        if (isContains)
+        {
+            return message.ToLower().Contains(this.StringParam.ToLower());
         }
 
         return message.ToLower() == this.StringParam.ToLower();
