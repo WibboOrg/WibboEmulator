@@ -12,13 +12,6 @@ public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        this.HandleItems();
-
-        return false;
-    }
-
-    private void HandleItems()
-    {
         var managerForBanzai = this.RoomInstance.TeamManager;
 
         var listTeam = new List<RoomUser>();
@@ -43,15 +36,15 @@ public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
         }
         else
         {
-            return;
+            return false;
         }
 
         if (listTeam.Count == 0)
         {
-            return;
+            return false;
         }
 
-        foreach (var teamUser in listTeam)
+        foreach (var teamUser in listTeam.OrderBy(a => Guid.NewGuid()).ToList())
         {
             if (teamUser == null)
             {
@@ -60,6 +53,8 @@ public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
 
             this.RoomInstance.WiredHandler.TriggerCollision(teamUser, null);
         }
+
+        return false;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)
