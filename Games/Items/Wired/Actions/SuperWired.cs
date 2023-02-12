@@ -180,6 +180,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             case "stand":
             case "usermute":
             case "resetclassement":
+            case "addclassement":
                 return;
         }
 

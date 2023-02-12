@@ -276,10 +276,9 @@ public class WiredHandler
             if (nextWired > countAct)
             {
                 nextWired = 0;
-                this._specialUnseen[coordinate] = 0;
             }
 
-            nextWiredIndex++;
+            this._specialUnseen[coordinate] = nextWired + 1;
 
             var actNext = actionStack[nextWired];
             if (actNext != null && actNext.WiredHandler != null)
