@@ -42,11 +42,22 @@ internal sealed class ShoutEvent : IPacketEvent
             message = message[..100];
         }
 
-        var colour = packet.PopInt();
+        var color = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(colour, out var style) || (style.RequiredRight.Length > 0 && !session.User.HasPermission(style.RequiredRight)))
+        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(color, out var style) || (style.RequiredRight.Length > 0 && !session.User.HasPermission(style.RequiredRight)))
         {
-            colour = 0;
+            color = 0;
+        }
+
+        if (color != 23)
+        {
+            message = StringCharFilter.Escape(message);
+        }
+
+        var staffBulleId = session.User.BadgeComponent.GetStaffBulleId();
+        if (color == 23 && staffBulleId > 0)
+        {
+            color = staffBulleId;
         }
 
         user.Unidle();
@@ -176,7 +187,7 @@ internal sealed class ShoutEvent : IPacketEvent
 
                 if (user.TransfBot)
                 {
-                    colour = 2;
+                    color = 2;
                 }
             }
         }
@@ -209,6 +220,6 @@ internal sealed class ShoutEvent : IPacketEvent
             message = user.ChatTextColor + " " + message;
         }
 
-        user.OnChat(message, colour, true);
+        user.OnChat(message, color, true);
     }
 }

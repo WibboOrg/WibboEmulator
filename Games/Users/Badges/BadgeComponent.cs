@@ -128,6 +128,71 @@ public class BadgeComponent : IDisposable
         _ = this.BadgeList.Remove(this.GetBadge(badge).Code);
     }
 
+    public int GetEmblemId()
+    {
+        var emblems = new Dictionary<string, int>
+        {
+            { "STAFF_ADMIN", 583 },
+            { "STAFF_ANIMATEUR", 584 },
+            { "STAFF_ARCHITECTE", 585 },
+            { "STAFF_CASINO", 586 },
+            { "STAFF_GESTION", 587 },
+            { "STAFF_GRAPH", 588 },
+            { "STAFF_MODO", 589 },
+            { "STAFF_PROWIRED", 590 },
+            { "ADM", 540 },
+            { "PRWRD1", 580 },
+            { "GPHWIB", 557 },
+            { "wibbo.helpeur", 544 },
+            { "WIBARC", 546 },
+            { "CRPOFFI", 570 },
+            { "ZEERSWS", 552 },
+            { "WBASSO", 576 },
+            { "WIBBOCOM", 581 },
+        };
+
+        var enableId = 0;
+
+        foreach (var emblem in emblems)
+        {
+            if (this.HasBadgeSlot(emblem.Key))
+            {
+                enableId = emblem.Value;
+                break;
+            }
+        }
+
+        return enableId;
+    }
+
+    public int GetStaffBulleId()
+    {
+        var bubbles = new Dictionary<string, int>
+        {
+            { "STAFF_ADMIN", 41 },
+            { "STAFF_ANIMATEUR", 42 },
+            { "STAFF_ARCHITECTE", 43 },
+            { "STAFF_CASINO", 44 },
+            { "STAFF_GESTION", 45 },
+            { "STAFF_GRAPH", 46 },
+            { "STAFF_MODO", 47 },
+            { "STAFF_PROWIRED", 48 },
+        };
+
+        var bubbleId = 0;
+
+        foreach (var bubble in bubbles)
+        {
+            if (this.HasBadgeSlot(bubble.Key))
+            {
+                bubbleId = bubble.Value;
+                break;
+            }
+        }
+
+        return bubbleId;
+    }
+
     public void Dispose()
     {
         this.BadgeList.Clear();

@@ -56,6 +56,12 @@ internal sealed partial class ChatEvent : IPacketEvent
             message = StringCharFilter.Escape(message);
         }
 
+        var staffBulleId = session.User.BadgeComponent.GetStaffBulleId();
+        if (color == 23 && staffBulleId > 0)
+        {
+            color = staffBulleId;
+        }
+
         user.Unidle();
 
         if (!session.User.HasPermission("no_mute") && !user.IsOwner() && !room.CheckRights(session) && room.RoomMuted)

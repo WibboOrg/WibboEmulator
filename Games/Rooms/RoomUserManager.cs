@@ -493,45 +493,11 @@ public class RoomUserManager
 
         if (!user.IsBot)
         {
-            if (session.User.BadgeComponent.HasBadgeSlot("ADM")) // STAFF
-            {
-                user.CurrentEffect = 540;
-            }
-            else if (session.User.BadgeComponent.HasBadgeSlot("PRWRD1")) // PROWIRED
-            {
-                user.CurrentEffect = 580;
-            }
-            else if (session.User.BadgeComponent.HasBadgeSlot("GPHWIB")) // GRAPHISTE
-            {
-                user.CurrentEffect = 557;
-            }
-            else if (session.User.BadgeComponent.HasBadgeSlot("wibbo.helpeur")) // HELPEUR
-            {
-                user.CurrentEffect = 544;
-            }
-            else if (session.User.BadgeComponent.HasBadgeSlot("WIBARC")) // ARCHI
-            {
-                user.CurrentEffect = 546;
-            }
-            else if (session.User.BadgeComponent.HasBadgeSlot("CRPOFFI")) // CROUPIER
-            {
-                user.CurrentEffect = 570;
-            }
-            else if (session.User.BadgeComponent.HasBadgeSlot("ZEERSWS")) // WIBBOSTATIONORIGINERADIO
-            {
-                user.CurrentEffect = 552;
-            }
-            else if (session.User.BadgeComponent.HasBadgeSlot("WBASSO")) // ASSOCIER
-            {
-                user.CurrentEffect = 576;
-            }
-            else if (session.User.BadgeComponent.HasBadgeSlot("WIBBOCOM")) // AGENT DE COMMUNICATION
-            {
-                user.CurrentEffect = 581;
-            }
+            var emblemId = session.User.BadgeComponent.GetEmblemId();
 
-            if (user.CurrentEffect > 0)
+            if (emblemId > 0)
             {
+                user.CurrentEffect = emblemId;
                 this._room.SendPacket(new AvatarEffectComposer(user.VirtualId, user.CurrentEffect));
             }
         }
