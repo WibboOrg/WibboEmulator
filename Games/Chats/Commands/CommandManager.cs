@@ -45,7 +45,7 @@ public class CommandManager
         this.RegisterOwner();
         this.RegisterUserRight();
         this.RegisterPremium();
-        this.RegisterAssStaffs();
+        this.RegisterAsStaffs();
         this.RegisterModeration();
         this.RegisterAnimation();
         this.RegisterAdministrator();
@@ -128,9 +128,9 @@ public class CommandManager
         {
             var key = Convert.ToInt32(dataRow["id"]);
             var pRank = Convert.ToInt32(dataRow["minrank"]);
-            var pDescriptionFr = (string)dataRow["description_fr"];
-            var pDescriptionEn = (string)dataRow["description_en"];
-            var pDescriptionBr = (string)dataRow["description_br"];
+            var pDescriptionFr = DBNull.Value.Equals(dataRow["description_fr"]) ? "" : (string)dataRow["description_fr"];
+            var pDescriptionEn = DBNull.Value.Equals(dataRow["description_en"]) ? "" : (string)dataRow["description_en"];
+            var pDescriptionBr = DBNull.Value.Equals(dataRow["description_br"]) ? "" : (string)dataRow["description_br"];
             var input = (string)dataRow["input"];
             var strArray = input.ToLower().Split(new char[1] { ',' });
 
@@ -210,6 +210,7 @@ public class CommandManager
         this.Register(4, new RoomFreeze());
         this.Register(5, new MaxFloor());
         this.Register(6, new AutoFloor());
+        this.Register(157, new WiredLimit());
     }
 
     public void RegisterUserRight()
@@ -288,6 +289,7 @@ public class CommandManager
         this.Register(76, new CloseDice());
         this.Register(77, new DND());
         this.Register(78, new Dance());
+        this.Register(158, new ConvertMagot());
     }
 
     public void RegisterPremium()
@@ -300,14 +302,12 @@ public class CommandManager
         this.Register(84, new TransfBot());
         this.Register(85, new RandomLook());
         this.Register(86, new GameTime());
-
     }
 
-    public void RegisterAssStaffs()
+    public void RegisterAsStaffs()
     {
         this.Register(87, new StaffAlert());
         this.Register(88, new StaffsOnline());
-
     }
 
     public void RegisterModeration()

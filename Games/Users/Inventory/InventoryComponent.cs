@@ -1,11 +1,18 @@
 namespace WibboEmulator.Games.Users.Inventory;
 using System.Collections.Concurrent;
 using System.Data;
+using Google.Protobuf.WellKnownTypes;
+using MySqlX.XDevAPI;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Users.Inventory.Bots;
 
@@ -90,6 +97,79 @@ public class InventoryComponent : IDisposable
         }
 
         this.GetClient().SendPacket(new FurniListUpdateComposer());
+    }
+
+    public void ConvertMagot()
+    {
+        var wibboPointsCount = 0;
+        var creditCount = 0;
+        var winwinCount = 0;
+
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+        foreach (var roomItem in this.GetWallAndFloor)
+        {
+            if (roomItem == null || roomItem.GetBaseItem() == null || roomItem.GetBaseItem().InteractionType != InteractionType.EXCHANGE)
+            {
+                continue;
+            }
+
+            ItemDao.Delete(dbClient, roomItem.Id);
+
+            this.RemoveItem(roomItem.Id);
+
+            var value = int.Parse(roomItem.GetBaseItem().ItemName.Split(new char[1] { '_' })[1]);
+
+            if (value > 0)
+            {
+                if (roomItem.GetBaseItem().ItemName.StartsWith("CF_") || roomItem.GetBaseItem().ItemName.StartsWith("CFC_"))
+                {
+                    creditCount += value;
+                }
+                else if (roomItem.GetBaseItem().ItemName.StartsWith("PntEx_"))
+                {
+                    wibboPointsCount += value;
+                }
+                else if (roomItem.GetBaseItem().ItemName.StartsWith("WwnEx_"))
+                {
+                    winwinCount += value;
+                }
+            }
+        }
+
+        if (creditCount > 0)
+        {
+            this._userInstance.Credits += creditCount;
+            this._userInstance.Client.SendPacket(new CreditBalanceComposer(this._userInstance.Credits));
+        }
+
+        if (wibboPointsCount > 0)
+        {
+            this._userInstance.WibboPoints += wibboPointsCount;
+            this._userInstance.Client.SendPacket(new ActivityPointNotificationComposer(this._userInstance.WibboPoints, 0, 105));
+
+            UserDao.UpdateAddPoints(dbClient, this._userInstance.Id, wibboPointsCount);
+        }
+
+        if (winwinCount > 0)
+        {
+            UserStatsDao.UpdateAchievementScore(dbClient, this._userInstance.Id, winwinCount);
+
+            this._userInstance.AchievementPoints += winwinCount;
+            this._userInstance.Client.SendPacket(new AchievementScoreComposer(this._userInstance.AchievementPoints));
+
+            var room = this._userInstance.CurrentRoom;
+
+            if (room != null)
+            {
+                var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(this._userInstance.Id);
+                if (roomUserByUserId != null)
+                {
+                    this._userInstance.Client.SendPacket(new UserChangeComposer(roomUserByUserId, true));
+                    room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
+                }
+            }
+        }
     }
 
     public void ClearPets()
