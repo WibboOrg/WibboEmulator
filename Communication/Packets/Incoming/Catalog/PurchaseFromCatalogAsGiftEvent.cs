@@ -105,6 +105,7 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 
         switch (item.Data.InteractionType)
         {
+            case InteractionType.WIRED_ITEM:
             case InteractionType.NONE:
                 extraData = "";
                 break;

@@ -6,13 +6,13 @@ public class WiredUtillity
 {
     public static bool TypeIsWiredTrigger(InteractionType type) => type switch
     {
-        InteractionType.TRIGGER_COLLISION or InteractionType.TRIGGER_ONCE or InteractionType.TRIGGER_AVATAR_ENTERS_ROOM or InteractionType.TRIGGER_GAME_ENDS or InteractionType.TRIGGER_GAME_STARTS or InteractionType.TRIGGER_PERIODICALLY or InteractionType.TRIGGER_PERIODICALLY_LONG or InteractionType.TRIGGER_AVATAR_SAYS_SOMETHING or InteractionType.TRIGGER_COMMAND or InteractionType.TRIGGER_SELF or InteractionType.TRIGGER_COLLISION_USER or InteractionType.TRIGGER_SCORE_ACHIEVED or InteractionType.TRIGGER_STATE_CHANGED or InteractionType.TRIGGER_WALK_ON_FURNI or InteractionType.TRIGGER_WALK_OFF_FURNI or InteractionType.TRIGGER_BOT_REACHED_AVTR or InteractionType.TRIGGER_BOT_REACHED_STF => true,
+        InteractionType.TRIGGER_SAYS_COMMAND_TRANSFERT or InteractionType.TRIGGER_SAYS_COMMAND_RECOVER or InteractionType.TRIGGER_COLLISION or InteractionType.TRIGGER_ONCE or InteractionType.TRIGGER_AVATAR_ENTERS_ROOM or InteractionType.TRIGGER_GAME_ENDS or InteractionType.TRIGGER_GAME_STARTS or InteractionType.TRIGGER_PERIODICALLY or InteractionType.TRIGGER_PERIODICALLY_LONG or InteractionType.TRIGGER_AVATAR_SAYS_SOMETHING or InteractionType.TRIGGER_COMMAND or InteractionType.TRIGGER_SELF or InteractionType.TRIGGER_COLLISION_USER or InteractionType.TRIGGER_SCORE_ACHIEVED or InteractionType.TRIGGER_STATE_CHANGED or InteractionType.TRIGGER_WALK_ON_FURNI or InteractionType.TRIGGER_WALK_OFF_FURNI or InteractionType.TRIGGER_BOT_REACHED_AVTR or InteractionType.TRIGGER_BOT_REACHED_STF => true,
         _ => false,
     };
 
     public static bool TypeIsWiredAction(InteractionType type) => type switch
     {
-        InteractionType.ACTION_GIVE_SCORE or InteractionType.ACTION_POS_RESET or InteractionType.ACTION_MOVE_ROTATE or InteractionType.ACTION_RESET_TIMER or InteractionType.ACTIONSHOWMESSAGE or InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS or InteractionType.ACTION_SUPER_WIRED or InteractionType.ACTION_KICK_USER or InteractionType.ACTION_TELEPORT_TO or InteractionType.ACTION_ENDGAME_TEAM or InteractionType.ACTION_TOGGLE_STATE or InteractionType.ACTION_CALL_STACKS or InteractionType.ACTION_FLEE or InteractionType.ACTION_CHASE or InteractionType.ACTION_COLLISION_CASE or InteractionType.ACTION_COLLISION_TEAM or InteractionType.ACTION_GIVE_REWARD or InteractionType.ACTION_MOVE_TO_DIR or InteractionType.ACTION_BOT_CLOTHES or InteractionType.ACTION_BOT_TELEPORT or InteractionType.ACTION_BOT_FOLLOW_AVATAR or InteractionType.ACTION_BOT_GIVE_HANDITEM or InteractionType.ACTION_BOT_MOVE or InteractionType.ACTION_USER_MOVE or InteractionType.ACTION_BOT_TALK_TO_AVATAR or InteractionType.ACTION_BOT_TALK or InteractionType.ACTION_JOIN_TEAM or InteractionType.ACTION_LEAVE_TEAM or InteractionType.ACTION_GIVE_SCORE_TM => true,
+        InteractionType.ACTION_TRIDIMENSION or InteractionType.ACTION_TELEPORT_FURNI or InteractionType.ACTION_ROOM_MESSAGE or InteractionType.ACTION_GIVE_SCORE or InteractionType.ACTION_POS_RESET or InteractionType.ACTION_MOVE_ROTATE or InteractionType.ACTION_RESET_TIMER or InteractionType.ACTION_SHOW_MESSAGE or InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS or InteractionType.ACTION_SUPER_WIRED or InteractionType.ACTION_KICK_USER or InteractionType.ACTION_TELEPORT_TO or InteractionType.ACTION_ENDGAME_TEAM or InteractionType.ACTION_TOGGLE_STATE or InteractionType.ACTION_CALL_STACKS or InteractionType.ACTION_FLEE or InteractionType.ACTION_CHASE or InteractionType.ACTION_COLLISION_CASE or InteractionType.ACTION_COLLISION_TEAM or InteractionType.ACTION_GIVE_REWARD or InteractionType.ACTION_MOVE_TO_DIR or InteractionType.ACTION_BOT_CLOTHES or InteractionType.ACTION_BOT_TELEPORT or InteractionType.ACTION_BOT_FOLLOW_AVATAR or InteractionType.ACTION_BOT_GIVE_HANDITEM or InteractionType.ACTION_BOT_MOVE or InteractionType.ACTION_USER_MOVE or InteractionType.ACTION_BOT_TALK_TO_AVATAR or InteractionType.ACTION_BOT_TALK or InteractionType.ACTION_JOIN_TEAM or InteractionType.ACTION_LEAVE_TEAM or InteractionType.ACTION_GIVE_SCORE_TM => true,
         _ => false,
     };
 
@@ -44,10 +44,34 @@ public class WiredUtillity
         {
             return true;
         }
+        else if (type == InteractionType.SPECIAL_ANIMATE)
+        {
+            return true;
+        }
         else
         {
             return false;
         }
+    }
+
+    public static bool AllowHideWiredType(InteractionType type)
+    {
+        if (type is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS)
+        {
+            return false;
+        }
+
+        if (type is InteractionType.WIRED_ITEM)
+        {
+            return true;
+        }
+
+        if (TypeIsWired(type))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public static void SaveTriggerItem(IQueryAdapter dbClient, int triggerId, string triggerData2, string triggerData, bool allUsertriggerable, List<Item> itemslist, int delay = 0)
