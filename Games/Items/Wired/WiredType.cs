@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired;
+namespace WibboEmulator.Games.Items.Wired;
 
 public enum WiredConditionType
 {
@@ -58,6 +58,7 @@ public enum WiredActionType
     BOT_FOLLOW_AVATAR = 25,
     BOT_CHANGE_FIGURE = 26,
     BOT_TALK_DIRECT_TO_AVTR = 27,
+    TRI_DIMENSION = 28,
 }
 
 public enum WiredTriggerType

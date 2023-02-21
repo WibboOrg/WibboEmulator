@@ -15,11 +15,12 @@ public class WiredHandler
     private readonly ConcurrentDictionary<Point, List<int>> _wiredUsed;
 
     private readonly List<Point> _specialRandom;
+    private readonly List<Point> _specialAnimate;
     private readonly Dictionary<Point, int> _specialUnseen;
 
     private readonly ConcurrentQueue<WiredCycle> _requestingUpdates;
 
-    private readonly bool _securityEnabled;
+    private bool _securityEnabled;
     private int _tickCounter;
     private bool _doCleanup;
 
@@ -35,6 +36,7 @@ public class WiredHandler
         this._wiredUsed = new ConcurrentDictionary<Point, List<int>>();
 
         this._specialRandom = new List<Point>();
+        this._specialAnimate = new List<Point>();
         this._specialUnseen = new Dictionary<Point, int>();
         this._tickCounter = 0;
 
@@ -80,6 +82,13 @@ public class WiredHandler
                 this._specialUnseen.Add(itemCoord, 0);
             }
         }
+        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_ANIMATE)
+        {
+            if (!this._specialAnimate.Contains(itemCoord))
+            {
+                this._specialAnimate.Add(itemCoord);
+            }
+        }
     }
 
     public void RemoveFurniture(Item item)
@@ -122,6 +131,13 @@ public class WiredHandler
             if (this._specialUnseen.ContainsKey(itemCoord))
             {
                 _ = this._specialUnseen.Remove(itemCoord);
+            }
+        }
+        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_ANIMATE)
+        {
+            if (this._specialAnimate.Contains(itemCoord))
+            {
+                _ = this._specialAnimate.Remove(itemCoord);
             }
         }
     }
@@ -321,4 +337,5 @@ public class WiredHandler
     public void TriggerTimer() => this.TrgTimer?.Invoke(null, new());
 
     public bool SecurityEnabled() => this._securityEnabled;
+    public void ToggleSecurityEnabled() => this._securityEnabled = !this._securityEnabled;
 }
