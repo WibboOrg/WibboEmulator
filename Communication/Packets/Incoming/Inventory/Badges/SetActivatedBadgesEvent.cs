@@ -32,7 +32,9 @@ internal sealed class SetActivatedBadgesEvent : IPacketEvent
             UserBadgeDao.UpdateResetSlot(dbClient, session.User.Id);
         }
 
-        for (var i = 0; i < 5; i++)
+        var maxBadgeCount = session.User.BadgeComponent.BadgeMaxCount();
+
+        for (var i = 0; i < maxBadgeCount; i++)
         {
             var slot = packet.PopInt();
             var badge = packet.PopString();
@@ -42,7 +44,7 @@ internal sealed class SetActivatedBadgesEvent : IPacketEvent
                 continue;
             }
 
-            if (!session.User.BadgeComponent.HasBadge(badge) || slot < 1 || slot > 5)
+            if (!session.User.BadgeComponent.HasBadge(badge) || slot < 1 || slot > maxBadgeCount)
             {
                 continue;
             }

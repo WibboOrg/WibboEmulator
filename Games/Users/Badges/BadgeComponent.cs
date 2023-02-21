@@ -1,6 +1,7 @@
 namespace WibboEmulator.Games.Users.Badges;
 using System.Collections;
 using System.Data;
+using System.Security.Cryptography.X509Certificates;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Users;
@@ -8,10 +9,12 @@ using WibboEmulator.Games.Users;
 public class BadgeComponent : IDisposable
 {
     private readonly User _userInstance;
+    private readonly int _maxBadgeCount;
 
     public BadgeComponent(User user)
     {
         this._userInstance = user;
+        this._maxBadgeCount = WibboEnvironment.GetSettings().GetData<int>("badge.max.count");
         this.BadgeList = new Dictionary<string, Badge>();
     }
 
@@ -35,18 +38,18 @@ public class BadgeComponent : IDisposable
     {
         get
         {
-            var num = 0;
-            foreach (Badge badge in (IEnumerable)this.BadgeList.Values)
+            var count = 0;
+            foreach (var badge in this.BadgeList.Values)
             {
                 if (badge.Slot == 0)
                 {
                     continue;
                 }
 
-                num++;
+                count++;
             }
 
-            return (num > 5) ? 5 : num;
+            return (count > this._maxBadgeCount) ? this._maxBadgeCount : count;
         }
     }
 
@@ -192,6 +195,8 @@ public class BadgeComponent : IDisposable
 
         return bubbleId;
     }
+
+    public int BadgeMaxCount() => this._maxBadgeCount;
 
     public void Dispose()
     {
