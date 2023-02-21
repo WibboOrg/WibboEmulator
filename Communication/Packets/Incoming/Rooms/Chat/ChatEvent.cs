@@ -56,10 +56,9 @@ internal sealed partial class ChatEvent : IPacketEvent
             message = StringCharFilter.Escape(message);
         }
 
-        var staffBulleId = session.User.BadgeComponent.GetStaffBulleId();
-        if (color == 23 && staffBulleId > 0)
+        if (color == 23)
         {
-            color = staffBulleId;
+            color = session.User.BadgeComponent.GetStaffBulleId();
         }
 
         user.Unidle();

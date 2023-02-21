@@ -41,10 +41,9 @@ internal sealed class WhisperEvent : IPacketEvent
             color = 0;
         }
 
-        var staffBulleId = session.User.BadgeComponent.GetStaffBulleId();
-        if (color == 23 && staffBulleId > 0)
+        if (color == 23)
         {
-            color = staffBulleId;
+            color = session.User.BadgeComponent.GetStaffBulleId();
         }
 
         if (session.Antipub(message, "<MP>", room.Id))
