@@ -78,7 +78,10 @@ public class WiredRegister
             case InteractionType.ACTION_RESET_TIMER:
                 handler = new TimerReset(item, room);
                 break;
-            case InteractionType.ACTIONSHOWMESSAGE:
+            case InteractionType.ACTION_ROOM_MESSAGE:
+                handler = new ShowMessageRoom(item, room);
+                break;
+            case InteractionType.ACTION_SHOW_MESSAGE:
                 handler = new ShowMessage(item, room);
                 break;
             case InteractionType.ACTION_SUPER_WIRED:
@@ -86,6 +89,9 @@ public class WiredRegister
                 break;
             case InteractionType.ACTION_KICK_USER:
                 handler = new KickUser(item, room);
+                break;
+            case InteractionType.ACTION_TELEPORT_FURNI:
+                handler = new TeleportFurniToUser(item, room);
                 break;
             case InteractionType.ACTION_TELEPORT_TO:
                 handler = new TeleportToItem(item, room);
@@ -144,6 +150,10 @@ public class WiredRegister
             case InteractionType.ACTION_JOIN_TEAM:
                 handler = new TeamJoin(item, room);
                 break;
+            case InteractionType.ACTION_TRIDIMENSION:
+                handler = new Tridimension(item, room);
+                break;
+
             case InteractionType.HIGH_SCORE:
                 handler = new HighScore(item, room);
                 break;
