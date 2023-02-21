@@ -20,7 +20,7 @@ public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
         {
             foreach (var coord in roomItem.GetAffectedTiles)
             {
-                if (coord == this.ItemInstance.Coordinate && this.RoomInstance.WiredHandler.SecurityEnabled())
+                if (coord == this.ItemInstance.Coordinate && this.RoomInstance.WiredHandler.SecurityEnabled)
                 {
                     continue;
                 }

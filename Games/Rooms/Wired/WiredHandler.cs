@@ -2,6 +2,7 @@ namespace WibboEmulator.Games.Rooms.Wired;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
+using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -9,6 +10,8 @@ using WibboEmulator.Games.Rooms.Events;
 
 public class WiredHandler
 {
+    private readonly Room _roomInstance;
+
     private readonly ConcurrentDictionary<Point, List<Item>> _actionStacks;
     private readonly ConcurrentDictionary<Point, List<Item>> _conditionStacks;
 
@@ -19,17 +22,20 @@ public class WiredHandler
     private readonly Dictionary<Point, int> _specialUnseen;
 
     private readonly ConcurrentQueue<WiredCycle> _requestingUpdates;
-
-    private bool _securityEnabled;
     private int _tickCounter;
     private bool _doCleanup;
+    private DateTime _blockWiredDateTime;
+    private bool _blockWired;
+
+    public bool SecurityEnabled { get; set; }
 
     public event EventHandler<ItemTriggeredEventArgs> TrgBotCollision;
     public event EventHandler<ItemTriggeredEventArgs> TrgCollision;
     public event EventHandler TrgTimer;
 
-    public WiredHandler()
+    public WiredHandler(Room room)
     {
+        this._roomInstance = room;
         this._actionStacks = new ConcurrentDictionary<Point, List<Item>>();
         this._conditionStacks = new ConcurrentDictionary<Point, List<Item>>();
         this._requestingUpdates = new ConcurrentQueue<WiredCycle>();
@@ -40,7 +46,7 @@ public class WiredHandler
         this._specialUnseen = new Dictionary<Point, int>();
         this._tickCounter = 0;
 
-        this._securityEnabled = WibboEnvironment.GetSettings().GetData<bool>("wired.security.enable");
+        this.SecurityEnabled = WibboEnvironment.GetSettings().GetData<bool>("wired.security.enable");
     }
 
     public void AddFurniture(Item item)
@@ -150,6 +156,16 @@ public class WiredHandler
         }
         else
         {
+            if (this._blockWired)
+            {
+                var wiredDateTime = DateTime.Now - this._blockWiredDateTime;
+                if (wiredDateTime > TimeSpan.FromMinutes(2))
+                {
+                    this._blockWired = false;
+                }
+                return;
+            }
+
             if (!this._requestingUpdates.IsEmpty)
             {
                 var toAdd = new List<WiredCycle>();
@@ -218,7 +234,7 @@ public class WiredHandler
 
     public void ExecutePile(Point coordinate, RoomUser user, Item item, bool ignoreCondition = false)
     {
-        if (this._doCleanup)
+        if (this._doCleanup || this._blockWired)
         {
             return;
         }
@@ -233,7 +249,7 @@ public class WiredHandler
             return;
         }
 
-        if (this._securityEnabled)
+        if (this.SecurityEnabled)
         {
             if (this._wiredUsed.ContainsKey(coordinate))
             {
@@ -254,6 +270,9 @@ public class WiredHandler
 
         if (this._tickCounter > 1024)
         {
+            this._blockWired = true;
+            this._blockWiredDateTime = DateTime.Now;
+            this._roomInstance.SendPacket(new BroadcastMessageAlertComposer("Attention la limite d'effets wired est dépasser, ils sont par conséquent désactiver durant quelques minutes"));
             return;
         }
 
@@ -335,7 +354,4 @@ public class WiredHandler
     public void TriggerBotCollision(RoomUser roomUser, string botName) => this.TrgBotCollision?.Invoke(null, new(roomUser, null, botName));
 
     public void TriggerTimer() => this.TrgTimer?.Invoke(null, new());
-
-    public bool SecurityEnabled() => this._securityEnabled;
-    public void ToggleSecurityEnabled() => this._securityEnabled = !this._securityEnabled;
 }

@@ -7,6 +7,5 @@ internal sealed class MOTDNotificationComposer : ServerPacket
     {
         this.WriteInteger(1);
         this.WriteString(message);
-
     }
 }

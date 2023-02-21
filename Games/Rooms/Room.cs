@@ -102,7 +102,7 @@ public class Room : IDisposable
         this.GameMap = new GameMap(this);
         this.RoomItemHandling = new RoomItemHandling(this);
         this.RoomUserManager = new RoomUserManager(this);
-        this.WiredHandler = new WiredHandler();
+        this.WiredHandler = new WiredHandler(this);
         this.ProjectileManager = new ProjectileManager(this);
         this.ChatlogManager = new ChatlogManager();
         this.GameItemHandler = new GameItemHandler(this);
@@ -125,6 +125,9 @@ public class Room : IDisposable
         this.LoadRights();
         this.LoadBots();
         this.LoadPets();
+
+        this.WiredHandler.SecurityEnabled = data.WiredSecurity;
+
         this.LastTimerReset = DateTime.Now;
     }
 

@@ -240,7 +240,7 @@ public class User : IDisposable
         this.Messenger.Init(dbClient, this.HideOnline);
         this.ChatMessageManager.LoadUserChatlogs(dbClient, this.Id);
 
-        var dUserRooms = RoomDao.GetAllByOwner(dbClient, this.Username);
+        var dUserRooms = RoomDao.GetAllIdByOwner(dbClient, this.Username);
         foreach (DataRow dRow in dUserRooms.Rows)
         {
             this.UsersRooms.Add(Convert.ToInt32(dRow["id"]));

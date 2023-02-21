@@ -44,6 +44,7 @@ public class RoomData
     public Group Group { get; set; }
     public bool HideWireds { get; set; }
     public int SellPrice { get; set; }
+    public bool WiredSecurity { get; set; }
     public int TagCount => this.Tags.Count;
 
     public RoomData()
@@ -164,6 +165,7 @@ public class RoomData
         }
 
         this.SellPrice = Convert.ToInt32(row["price"]);
+        this.WiredSecurity = WibboEnvironment.EnumToBool(row["wired_security"].ToString());
         this.Model = WibboEnvironment.GetGame().GetRoomManager().GetModel(this.ModelName, this.Id);
     }
 }

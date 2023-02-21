@@ -40,9 +40,9 @@ public class LanguageManager
         foreach (DataRow dataRow in table.Rows)
         {
             var key = (string)dataRow["identifiant"];
-            var value_fr = (string)dataRow["value_fr"];
-            var value_en = (string)dataRow["value_en"];
-            var value_br = (string)dataRow["value_br"];
+            var value_fr = DBNull.Value.Equals(dataRow["value_fr"]) ? "" : (string)dataRow["value_fr"];
+            var value_en = DBNull.Value.Equals(dataRow["value_en"]) ? "" : (string)dataRow["value_en"];
+            var value_br = DBNull.Value.Equals(dataRow["value_br"]) ? "" : (string)dataRow["value_br"];
 
             this._valuesFr.Add(key, value_fr);
             this._valuesEn.Add(key, value_en);

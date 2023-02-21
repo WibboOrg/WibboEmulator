@@ -14,6 +14,15 @@ internal sealed class RoomDao
         dbClient.RunQuery();
     }
 
+
+    internal static void UpdateWiredSecurity(IQueryAdapter dbClient, int roomId, bool enabled)
+    {
+        dbClient.SetQuery("UPDATE `room` SET wired_security = @enabled WHERE id = @id LIMIT 1");
+        dbClient.AddParameter("enabled", enabled ? 1 : 0);
+        dbClient.AddParameter("id", roomId);
+        dbClient.RunQuery();
+    }
+
     internal static void UpdateScore(IQueryAdapter dbClient, int roomId, int score) => dbClient.RunQuery("UPDATE `room` SET score = '" + score + "' WHERE id = '" + roomId + "'");
 
     internal static void UpdateDecoration(IQueryAdapter dbClient, int roomId, string decorationKey, string extraData)
@@ -49,13 +58,6 @@ internal sealed class RoomDao
     {
         dbClient.SetQuery("SELECT id FROM `room` WHERE owner = @name");
         dbClient.AddParameter("name", username);
-
-        return dbClient.GetTable();
-    }
-
-    internal static DataTable GetAllId(IQueryAdapter dbClient)
-    {
-        dbClient.SetQuery("SELECT id FROM `room`");
 
         return dbClient.GetTable();
     }
@@ -117,7 +119,7 @@ internal sealed class RoomDao
 
     internal static DataRow GetOne(IQueryAdapter dbClient, int roomId)
     {
-        dbClient.SetQuery("SELECT `id`, `caption`, `owner`, `description`, `category`, `state`, `users_max`, `model_name`, `score`, `tags`, `password`, `wallpaper`, `floor`, `landscape`, `allow_pets`, `allow_pets_eat`, `allow_walkthrough`, `allow_hidewall`, `wallthick`, `floorthick`, `moderation_mute_fuse`, `allow_rightsoverride`, `moderation_kick_fuse`, `moderation_ban_fuse`, `group_id`, `chat_type`, `chat_balloon`, `chat_speed`, `chat_max_distance`, `chat_flood_protection`, `troc_status`, `users_now`, `allow_hidewireds`, `price` FROM `room` WHERE id = '" + roomId + "'");
+        dbClient.SetQuery("SELECT `id`, `caption`, `owner`, `description`, `category`, `state`, `users_max`, `model_name`, `score`, `tags`, `password`, `wallpaper`, `floor`, `landscape`, `allow_pets`, `allow_pets_eat`, `allow_walkthrough`, `allow_hidewall`, `wallthick`, `floorthick`, `moderation_mute_fuse`, `allow_rightsoverride`, `moderation_kick_fuse`, `moderation_ban_fuse`, `group_id`, `chat_type`, `chat_balloon`, `chat_speed`, `chat_max_distance`, `chat_flood_protection`, `troc_status`, `users_now`, `allow_hidewireds`, `price`, `wired_security` FROM `room` WHERE id = '" + roomId + "'");
         return dbClient.GetRow();
     }
 
@@ -138,11 +140,4 @@ internal sealed class RoomDao
     internal static void UpdateState(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("UPDATE `room` SET state = 'locked' WHERE id = '" + roomId + "'");
 
     internal static void UpdateCaptionDescTags(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("UPDATE `room` SET caption = 'Cet appart ne respect par les conditions dutilisation', description = 'Cet appart ne respect par les conditions dutilisation', tags = '' WHERE id = '" + roomId + "'");
-
-    internal static DataTable GetAllByOwner(IQueryAdapter dbClient, string username)
-    {
-        dbClient.SetQuery("SELECT `id`, `caption`, `owner`, `description`, `category`, `state`, `users_max`, `model_name`, `score`, `tags`, `password`, `wallpaper`, `floor`, `landscape`, `allow_pets`, `allow_pets_eat`, `allow_walkthrough`, `allow_hidewall`, `wallthick`, `floorthick`, `moderation_mute_fuse`, `allow_rightsoverride`, `moderation_kick_fuse`, `moderation_ban_fuse`, `group_id`, `chat_type`, `chat_balloon`, `chat_speed`, `chat_max_distance`, `chat_flood_protection`, `troc_status`, `users_now`, `allow_hidewireds`, `price` FROM `room` WHERE owner = @name ORDER BY id ASC");
-        dbClient.AddParameter("name", username);
-        return dbClient.GetTable();
-    }
 }
