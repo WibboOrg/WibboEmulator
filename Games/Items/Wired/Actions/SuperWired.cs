@@ -1938,14 +1938,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                if (points >= user.WiredPoints)
-                {
-                    user.WiredPoints = 0;
-                }
-                else
+                if (user.WiredPoints - points >= int.MinValue)
                 {
                     user.WiredPoints -= points;
                 }
+
                 break;
             }
             case "freeze":
