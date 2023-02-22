@@ -286,14 +286,14 @@ public class RoomUser : IEquatable<RoomUser>
 
     public void MoveTo(Point c, bool @override = false) => this.MoveTo(c.X, c.Y, @override);
 
-    public void MoveTo(int pX, int pY, bool pOverride = false)
+    public void MoveTo(int x, int y, bool isOverride = false)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.GameMap.CanWalkState(pX, pY, pOverride) || this.Freeze || !this.AllowMoveTo)
+        if (!room.GameMap.CanWalkState(x, y, isOverride) || this.Freeze || !this.AllowMoveTo)
         {
             return;
         }
@@ -301,13 +301,13 @@ public class RoomUser : IEquatable<RoomUser>
         this.Unidle();
         if (this.TeleportEnabled)
         {
-            room.SendPacket(RoomItemHandling.TeleportUser(this, new Point(pX, pY), 0, room.GameMap.SqAbsoluteHeight(pX, pY)));
+            room.SendPacket(RoomItemHandling.TeleportUser(this, new Point(x, y), 0, room.GameMap.SqAbsoluteHeight(x, y)));
         }
         else
         {
             this.IsWalking = true;
-            this.GoalX = pX;
-            this.GoalY = pY;
+            this.GoalX = x;
+            this.GoalY = y;
         }
     }
 

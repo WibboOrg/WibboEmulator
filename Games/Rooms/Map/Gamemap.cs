@@ -657,7 +657,7 @@ public class GameMap
         };
     }
 
-    public bool CanWalkState(int x, int y, bool @override)
+    public bool CanWalkState(int x, int y, bool isOverride)
     {
         if (!this.ValidTile(x, y))
         {
@@ -665,7 +665,7 @@ public class GameMap
         }
         else
         {
-            return CanWalkState(this.MapGame[x, y], @override);
+            return CanWalkState(this.MapGame[x, y], isOverride);
         }
     }
 
@@ -683,9 +683,9 @@ public class GameMap
 
     public static bool CanWalkState(byte state, bool isOverride) => isOverride || state == 3 || state == 1;
 
-    public bool ValidTile(int x, int y)
+    public bool ValidTile(int x, int y, double z = 0.0)
     {
-        if (x < 0 || y < 0 || x >= this.Model.MapSizeX || y >= this.Model.MapSizeY)
+        if (x < 0 || y < 0 || x >= this.Model.MapSizeX || y >= this.Model.MapSizeY || z > 1000)
         {
             return false;
         }

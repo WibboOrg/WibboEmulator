@@ -6,6 +6,7 @@ using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Games.Chats.Commands.User.Several;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
@@ -495,9 +496,9 @@ public class RoomItemHandling
         }
 
         var affectedTiles = GameMap.GetAffectedTiles(item.GetBaseItem().Length, item.GetBaseItem().Width, newX, newY, newRot);
-        foreach (var threeDcoord in affectedTiles)
+        foreach (var coord in affectedTiles)
         {
-            if (!this._roomInstance.GameMap.ValidTile(threeDcoord.X, threeDcoord.Y) || (this._roomInstance.GameMap.SquareHasUsers(threeDcoord.X, threeDcoord.Y) && !item.GetBaseItem().IsSeat && item.GetBaseItem().InteractionType != InteractionType.BED) || this._roomInstance.GameMap.Model.SqState[threeDcoord.X, threeDcoord.Y] != SquareStateType.Open)
+            if (!this._roomInstance.GameMap.ValidTile(coord.X, coord.Y) || (this._roomInstance.GameMap.SquareHasUsers(coord.X, coord.Y) && !item.GetBaseItem().IsSeat && item.GetBaseItem().InteractionType != InteractionType.BED) || this._roomInstance.GameMap.Model.SqState[coord.X, coord.Y] != SquareStateType.Open)
             {
                 if (needsReAdd)
                 {

@@ -40,11 +40,6 @@ public class ShowMessageRoom : WiredActionBase, IWired, IWiredEffect
             this.Delay = delay;
         }
 
-        if (int.TryParse(row["trigger_data_2"].ToString(), out delay))
-        {
-            this.Delay = delay;
-        }
-
         this.StringParam = row["trigger_data"].ToString();
     }
 }

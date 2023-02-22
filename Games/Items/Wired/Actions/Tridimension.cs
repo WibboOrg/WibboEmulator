@@ -2,6 +2,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Chats.Commands.User.Several;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -42,23 +43,50 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
 
         var newX = item.X + x;
         var newY = item.Y + y;
-        double newZ = item.Z + z;
+        var newZ = item.Z + z;
+
+        if (newX > this.RoomInstance.GameMap.Model.MapSizeX)
+        {
+            newX = this.RoomInstance.GameMap.Model.MapSizeX - 1;
+        }
+
+        if (newY > this.RoomInstance.GameMap.Model.MapSizeY)
+        {
+            newY = this.RoomInstance.GameMap.Model.MapSizeY - 1;
+        }
+
+        if (newZ > 1000)
+        {
+            newZ = 1000;
+        }
+
+        if (newX < 0)
+        {
+            newX = 0;
+        }
+
+        if (newY < 0)
+        {
+            newY = 0;
+        }
+
+        if (newZ < -1000)
+        {
+            newZ = -1000;
+        }
+
         if (newX != item.X || newY != item.Y || newZ != item.Z)
         {
-            this.RoomInstance.RoomItemHandling.PositionReset(item, newX, newY, newZ);
+            if (this.RoomInstance.GameMap.ValidTile(newX, newY, newZ))
+            {
+                this.RoomInstance.RoomItemHandling.PositionReset(item, newX, newY, newZ);
+            }
         }
 
         return;
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient)
-    {
-        var movement = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
-        var rotation = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
-
-        var rotAndMove = rotation + ";" + movement;
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, rotAndMove, string.Empty, false, this.Items, this.Delay);
-    }
+    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, this.Items, this.Delay);
 
     public void LoadFromDatabase(DataRow row)
     {
@@ -69,24 +97,7 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
             this.Delay = delay;
         }
 
-        if (int.TryParse(row["trigger_data"].ToString(), out delay))
-        {
-            this.Delay = delay;
-        }
-
-        var triggerData2 = row["trigger_data_2"].ToString();
-        if (triggerData2 != null && triggerData2.Contains(';'))
-        {
-            if (int.TryParse(triggerData2.Split(';')[1], out var movement))
-            {
-                this.IntParams.Add(movement);
-            }
-
-            if (int.TryParse(triggerData2.Split(';')[0], out var rotationint))
-            {
-                this.IntParams.Add(rotationint);
-            }
-        }
+        this.StringParam = row["trigger_data"].ToString();
 
         var triggerItems = row["triggers_item"].ToString();
         if (triggerItems is null or "")
