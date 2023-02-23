@@ -862,8 +862,8 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
 
                 break;
             }
-            case "missioncontais":
-            case "notmissioncontais":
+            case "missioncontains":
+            case "notmissioncontains":
             {
                 if (!user.IsBot && user.Client.User.Motto.Contains(value))
                 {
