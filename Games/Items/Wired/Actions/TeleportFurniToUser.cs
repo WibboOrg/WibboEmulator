@@ -29,12 +29,12 @@ public class TeleportFurniToUser : WiredActionBase, IWired, IWiredCycleable, IWi
 
             if (roomItem.Coordinate != user.Coordinate)
             {
-                this.RoomInstance.RoomItemHandling.PositionReset(roomItem, user.X, user.Y, user.Z, disableAnimation);
+                this.RoomInstance.RoomItemHandling.PositionReset(roomItem, user.SetX, user.SetY, user.SetZ, disableAnimation);
             }
         }
         else if (this.Items.Count == 1)
         {
-            this.RoomInstance.RoomItemHandling.PositionReset(Enumerable.FirstOrDefault(this.Items), user.X, user.Y, user.Z, disableAnimation);
+            this.RoomInstance.RoomItemHandling.PositionReset(Enumerable.FirstOrDefault(this.Items), user.SetX, user.SetY, user.SetZ, disableAnimation);
         }
 
         return false;
