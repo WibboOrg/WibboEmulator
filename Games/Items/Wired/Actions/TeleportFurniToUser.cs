@@ -17,6 +17,8 @@ public class TeleportFurniToUser : WiredActionBase, IWired, IWiredCycleable, IWi
             return false;
         }
 
+        var disableAnimation = this.RoomInstance.WiredHandler.DisableAnimate(this.ItemInstance.Coordinate);
+
         if (this.Items.Count > 1)
         {
             var roomItem = this.Items[WibboEnvironment.GetRandomNumber(0, this.Items.Count - 1)];
@@ -27,12 +29,12 @@ public class TeleportFurniToUser : WiredActionBase, IWired, IWiredCycleable, IWi
 
             if (roomItem.Coordinate != user.Coordinate)
             {
-                this.RoomInstance.RoomItemHandling.PositionReset(roomItem, user.X, user.Y, user.Z);
+                this.RoomInstance.RoomItemHandling.PositionReset(roomItem, user.X, user.Y, user.Z, disableAnimation);
             }
         }
         else if (this.Items.Count == 1)
         {
-            this.RoomInstance.RoomItemHandling.PositionReset(Enumerable.FirstOrDefault(this.Items), user.X, user.Y, user.Z);
+            this.RoomInstance.RoomItemHandling.PositionReset(Enumerable.FirstOrDefault(this.Items), user.X, user.Y, user.Z, disableAnimation);
         }
 
         return false;

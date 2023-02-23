@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Interfaces;
@@ -17,39 +17,34 @@ public class MoveRotate : WiredActionBase, IWiredEffect, IWired
 
     public override bool OnCycle(RoomUser user, Item item)
     {
+        var disableAnimation = this.RoomInstance.WiredHandler.DisableAnimate(this.ItemInstance.Coordinate);
+
         foreach (var roomItem in this.Items.ToList())
         {
-            this.HandleMovement(roomItem);
-        }
-
-        return false;
-    }
-
-    private void HandleMovement(Item item)
-    {
-        if (this.RoomInstance.RoomItemHandling.GetItem(item.Id) == null)
-        {
-            return;
-        }
-
-        var movement = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
-        var rotation = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
-
-        var newPoint = MovementUtility.HandleMovement(item.Coordinate, (MovementState)movement);
-        var newRot = MovementUtility.HandleRotation(item.Rotation, (RotationState)rotation);
-
-        if (newPoint != item.Coordinate || newRot != item.Rotation)
-        {
-            var oldX = item.X;
-            var oldY = item.Y;
-            var oldZ = item.Z;
-            if (this.RoomInstance.RoomItemHandling.SetFloorItem(null, item, newPoint.X, newPoint.Y, newRot, false, false, newRot != item.Rotation))
+            if (this.RoomInstance.RoomItemHandling.GetItem(roomItem.Id) == null)
             {
-                this.RoomInstance.SendPacket(new SlideObjectBundleComposer(oldX, oldY, oldZ, newPoint.X, newPoint.Y, item.Z, item.Id));
+                continue;
+            }
+
+            var movement = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+            var rotation = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
+
+            var newPoint = MovementUtility.HandleMovement(roomItem.Coordinate, (MovementState)movement);
+            var newRot = MovementUtility.HandleRotation(roomItem.Rotation, (RotationState)rotation);
+
+            if (newPoint != roomItem.Coordinate || newRot != roomItem.Rotation)
+            {
+                var oldX = disableAnimation ? newPoint.X : roomItem.X;
+                var oldY = disableAnimation ? newPoint.Y : roomItem.Y;
+                var oldZ = roomItem.Z;
+                if (this.RoomInstance.RoomItemHandling.SetFloorItem(null, roomItem, newPoint.X, newPoint.Y, newRot, false, false, newRot != roomItem.Rotation))
+                {
+                    this.RoomInstance.SendPacket(new SlideObjectBundleComposer(oldX, oldY, disableAnimation ? roomItem.Z : oldZ, newPoint.X, newPoint.Y, roomItem.Z, roomItem.Id));
+                }
             }
         }
 
-        return;
+        return false;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)

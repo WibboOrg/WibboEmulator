@@ -645,7 +645,7 @@ public class GameMap
         }
     }
 
-    public bool CanWalk(int x, int y, bool @override = false)
+    public bool CanWalk(int x, int y, bool isOverride = false)
     {
         if (!this.ValidTile(x, y))
         {
@@ -653,7 +653,7 @@ public class GameMap
         }
         else
         {
-            return (this._roomInstance.RoomData.AllowWalkthrough || @override || this.UserOnMap[x, y] == 0) && CanWalkState(this.MapGame[x, y], @override);
+            return (this._roomInstance.RoomData.AllowWalkthrough || isOverride || this.UserOnMap[x, y] == 0) && CanWalkState(this.MapGame[x, y], isOverride);
         };
     }
 

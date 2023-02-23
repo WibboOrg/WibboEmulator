@@ -349,6 +349,8 @@ public class WiredHandler
         this._wiredUsed.Clear();
     }
 
+    public bool DisableAnimate(Point coord) => this._specialAnimate.Contains(coord);
+
     public void TriggerCollision(RoomUser roomUser, Item item) => this.TrgCollision?.Invoke(this, new(roomUser, item));
 
     public void TriggerBotCollision(RoomUser roomUser, string botName) => this.TrgBotCollision?.Invoke(null, new(roomUser, null, botName));

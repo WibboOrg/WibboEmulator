@@ -2,7 +2,6 @@ namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Chats.Commands.User.Several;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -13,17 +12,19 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
 
     public override bool OnCycle(RoomUser user, Item item)
     {
+        var disableAnimation = this.RoomInstance.WiredHandler.DisableAnimate(this.ItemInstance.Coordinate);
+
         foreach (var roomItem in this.Items.ToList())
         {
-            this.HandleMovement(roomItem);
+            this.HandleMovement(roomItem, disableAnimation);
         }
 
         return false;
     }
 
-    private void HandleMovement(Item item)
+    private void HandleMovement(Item roomItem, bool disableAnimation)
     {
-        if (this.RoomInstance.RoomItemHandling.GetItem(item.Id) == null)
+        if (this.RoomInstance.RoomItemHandling.GetItem(roomItem.Id) == null)
         {
             return;
         }
@@ -41,9 +42,9 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
             _ = double.TryParse(parts[2], out z);
         }
 
-        var newX = item.X + x;
-        var newY = item.Y + y;
-        var newZ = item.Z + z;
+        var newX = roomItem.X + x;
+        var newY = roomItem.Y + y;
+        var newZ = roomItem.Z + z;
 
         if (newX > this.RoomInstance.GameMap.Model.MapSizeX)
         {
@@ -75,11 +76,11 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
             newZ = -1000;
         }
 
-        if (newX != item.X || newY != item.Y || newZ != item.Z)
+        if (newX != roomItem.X || newY != roomItem.Y || newZ != roomItem.Z)
         {
             if (this.RoomInstance.GameMap.ValidTile(newX, newY, newZ))
             {
-                this.RoomInstance.RoomItemHandling.PositionReset(item, newX, newY, newZ);
+                this.RoomInstance.RoomItemHandling.PositionReset(roomItem, newX, newY, newZ, disableAnimation);
             }
         }
 

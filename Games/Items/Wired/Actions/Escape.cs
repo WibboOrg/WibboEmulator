@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Interfaces;
@@ -15,47 +15,44 @@ public class Escape : WiredActionBase, IWiredEffect, IWired
 
     public override bool OnCycle(RoomUser user, Item item)
     {
+        var disableAnimation = this.RoomInstance.WiredHandler.DisableAnimate(this.ItemInstance.Coordinate);
+
         foreach (var roomItem in this.Items.ToList())
         {
-            this.HandleMovement(roomItem);
+            if (this.RoomInstance.RoomItemHandling.GetItem(roomItem.Id) == null)
+            {
+                continue;
+            }
+
+            var roomUser = this.RoomInstance.GameMap.SquareHasUserNear(roomItem.X, roomItem.Y);
+            if (roomUser != null)
+            {
+                this.RoomInstance.WiredHandler.TriggerCollision(roomUser, roomItem);
+                continue;
+            }
+
+            roomItem.Movement = this.RoomInstance.GameMap.GetEscapeMovement(roomItem.X, roomItem.Y, roomItem.Movement);
+            if (roomItem.Movement == MovementState.none)
+            {
+                continue;
+            }
+
+            var newPoint = MovementUtility.HandleMovement(roomItem.Coordinate, roomItem.Movement);
+
+            if (newPoint != roomItem.Coordinate)
+            {
+                var oldX = disableAnimation ? newPoint.X : roomItem.X;
+                var oldY = disableAnimation ? newPoint.Y : roomItem.Y;
+                var oldZ = roomItem.Z;
+
+                if (this.RoomInstance.RoomItemHandling.SetFloorItem(null, roomItem, newPoint.X, newPoint.Y, roomItem.Rotation, false, false, false))
+                {
+                    this.RoomInstance.SendPacket(new SlideObjectBundleComposer(oldX, oldY, disableAnimation ? roomItem.Z : oldZ, newPoint.X, newPoint.Y, roomItem.Z, roomItem.Id));
+                }
+            }
         }
 
         return false;
-    }
-
-    private void HandleMovement(Item item)
-    {
-        if (this.RoomInstance.RoomItemHandling.GetItem(item.Id) == null)
-        {
-            return;
-        }
-
-        var roomUser = this.RoomInstance.GameMap.SquareHasUserNear(item.X, item.Y);
-        if (roomUser != null)
-        {
-            this.RoomInstance.WiredHandler.TriggerCollision(roomUser, item);
-            return;
-        }
-
-        item.Movement = this.RoomInstance.GameMap.GetEscapeMovement(item.X, item.Y, item.Movement);
-        if (item.Movement == MovementState.none)
-        {
-            return;
-        }
-
-        var newPoint = MovementUtility.HandleMovement(item.Coordinate, item.Movement);
-
-        if (newPoint != item.Coordinate)
-        {
-            var oldX = item.X;
-            var oldY = item.Y;
-            var oldZ = item.Z;
-            if (this.RoomInstance.RoomItemHandling.SetFloorItem(null, item, newPoint.X, newPoint.Y, item.Rotation, false, false, false))
-            {
-                this.RoomInstance.SendPacket(new SlideObjectBundleComposer(oldX, oldY, oldZ, newPoint.X, newPoint.Y, item.Z, item.Id));
-            }
-        }
-        return;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items, this.Delay);

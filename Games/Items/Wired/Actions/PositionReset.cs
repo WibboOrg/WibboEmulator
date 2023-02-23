@@ -54,6 +54,8 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
 
     private void HandleItems()
     {
+        var disableAnimation = this.RoomInstance.WiredHandler.DisableAnimate(this.ItemInstance.Coordinate);
+
         var state = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
         var direction = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0) == 1;
         var position = ((this.IntParams.Count > 2) ? this.IntParams[2] : 0) == 1;
@@ -97,7 +99,7 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
             {
                 if (itemPosReset.X != roomItem.X || itemPosReset.Y != roomItem.Y || itemPosReset.Z != roomItem.Z)
                 {
-                    this.RoomInstance.RoomItemHandling.PositionReset(roomItem, itemPosReset.X, itemPosReset.Y, itemPosReset.Z);
+                    this.RoomInstance.RoomItemHandling.PositionReset(roomItem, itemPosReset.X, itemPosReset.Y, itemPosReset.Z, disableAnimation);
                 }
             }
         }

@@ -427,18 +427,18 @@ public class RoomItemHandling
         return new ServerPacketList();
     }
 
-    public void PositionReset(Item item, int x, int y, double z)
+    public void PositionReset(Item item, int x, int y, double z, bool disableAnimation = false)
     {
-        this._roomInstance.SendPacket(new SlideObjectBundleComposer(item.X, item.Y, item.Z, x, y, z, item.Id));
+        this._roomInstance.SendPacket(new SlideObjectBundleComposer(disableAnimation ? x : item.X, disableAnimation ? y : item.Y, disableAnimation ? z : item.Z, x, y, z, item.Id));
 
         _ = this.SetFloorItem(item, x, y, z);
     }
 
-    public static ServerPacket TeleportUser(RoomUser user, Point nextCoord, int rollerID, double nextZ, bool noAnimation = false)
+    public static ServerPacket TeleportUser(RoomUser user, Point nextCoord, int rollerID, double nextZ, bool disableAnimation = false)
     {
-        var x = noAnimation ? nextCoord.X : user.X;
-        var y = noAnimation ? nextCoord.Y : user.Y;
-        var z = noAnimation ? nextZ : user.Z;
+        var x = disableAnimation ? nextCoord.X : user.X;
+        var y = disableAnimation ? nextCoord.Y : user.Y;
+        var z = disableAnimation ? nextZ : user.Z;
 
         user.SetPos(nextCoord.X, nextCoord.Y, nextZ);
 
