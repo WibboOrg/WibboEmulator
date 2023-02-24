@@ -32,13 +32,25 @@ public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
         return false;
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items, this.Delay);
+    public void SaveToDatabase(IQueryAdapter dbClient)
+    {
+        var ignoreCondition = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+
+        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, ignoreCondition.ToString(), false, this.Items, this.Delay);
+    }
 
     public void LoadFromDatabase(DataRow row)
     {
+        this.IntParams.Clear();
+
         if (int.TryParse(row["delay"].ToString(), out var delay))
         {
             this.Delay = delay;
+        }
+
+        if (int.TryParse(row["trigger_data"].ToString(), out var ignoreCondition))
+        {
+            this.IntParams.Add(ignoreCondition);
         }
 
         if (int.TryParse(row["trigger_data_2"].ToString(), out delay))
