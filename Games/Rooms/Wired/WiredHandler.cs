@@ -159,7 +159,7 @@ public class WiredHandler
             if (this._blockWired)
             {
                 var wiredDateTime = DateTime.Now - this._blockWiredDateTime;
-                if (wiredDateTime > TimeSpan.FromMinutes(2))
+                if (wiredDateTime > TimeSpan.FromSeconds(5))
                 {
                     this._blockWired = false;
                 }
@@ -272,7 +272,7 @@ public class WiredHandler
         {
             this._blockWired = true;
             this._blockWiredDateTime = DateTime.Now;
-            this._roomInstance.SendPacket(new BroadcastMessageAlertComposer("Attention la limite d'effets wired est dépasser, ils sont par conséquent désactiver durant quelques minutes"));
+            this._roomInstance.SendPacket(new BroadcastMessageAlertComposer("Attention la limite d'effets wired est dépassée, ils sont par conséquent désactivés durant 5 secondes"));
             return;
         }
 
