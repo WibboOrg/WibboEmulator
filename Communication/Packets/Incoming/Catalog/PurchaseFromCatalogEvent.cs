@@ -53,6 +53,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 
         if (page.IsPremium && session.User.Rank < 2)
         {
+            session.SendNotification("Vous devez être membre du premium club pour pouvoir acheter ce mobilier");
             session.SendPacket(new PurchaseErrorComposer());
             return;
         }
