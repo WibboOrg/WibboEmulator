@@ -34,7 +34,7 @@ public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
 
     public void SaveToDatabase(IQueryAdapter dbClient)
     {
-        var ignoreCondition = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+        var ignoreCondition = this.IntParams.Count > 0 ? this.IntParams[0] : 0;
 
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, ignoreCondition.ToString(), false, this.Items, this.Delay);
     }
