@@ -2210,9 +2210,12 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 user.Client.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", user.Client.Langue), nbLot));
 
-                using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+                if (this.RoomInstance.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
                 {
-                    UserDao.UpdateAddGamePoints(dbClient, user.Client.User.Id);
+                    using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+                    {
+                        UserDao.UpdateAddGamePoints(dbClient, user.Client.User.Id);
+                    }
                 }
 
                 _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.Client, "ACH_Extrabox", 1);
