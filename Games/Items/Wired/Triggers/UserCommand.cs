@@ -45,7 +45,7 @@ public class UserCommand : WiredTriggerBase, IWired
         var messageCommand = messageParts[0];
         var messageUserName = messageParts[1];
 
-        if (messageCommand != commandName)
+        if (messageCommand.ToLower() != commandName.ToLower())
         {
             return;
         }
