@@ -498,7 +498,7 @@ public class RoomItemHandling
         var affectedTiles = GameMap.GetAffectedTiles(item.GetBaseItem().Length, item.GetBaseItem().Width, newX, newY, newRot);
         foreach (var coord in affectedTiles)
         {
-            if (!this._roomInstance.GameMap.ValidTile(coord.X, coord.Y) || (this._roomInstance.GameMap.SquareHasUsers(coord.X, coord.Y) && !item.GetBaseItem().IsSeat && item.GetBaseItem().InteractionType != InteractionType.BED) || this._roomInstance.GameMap.Model.SqState[coord.X, coord.Y] != SquareStateType.Open)
+            if (!this._roomInstance.GameMap.ValidTile(coord.X, coord.Y) || (this._roomInstance.GameMap.SquareHasUsers(coord.X, coord.Y) && !item.GetBaseItem().Walkable && !item.GetBaseItem().IsSeat && item.GetBaseItem().InteractionType != InteractionType.BED) || this._roomInstance.GameMap.Model.SqState[coord.X, coord.Y] != SquareStateType.Open)
             {
                 if (needsReAdd)
                 {
