@@ -21,7 +21,7 @@ public class ShowMessage : WiredActionBase, IWired, IWiredEffect
         if (user != null && !user.IsBot && user.Client != null)
         {
             var textMessage = this.StringParam;
-            WiredUtillity.ParseMessage(user, this.RoomInstance, ref message);
+            WiredUtillity.ParseMessage(user, this.RoomInstance, ref textMessage);
 
             user.SendWhisperChat(textMessage);
         }
