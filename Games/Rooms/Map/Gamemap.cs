@@ -144,7 +144,7 @@ public class GameMap
     {
         if (this._userMap.TryGetValue(coord, out var value))
         {
-            return value;
+            return value.ToList();
         }
         else
         {

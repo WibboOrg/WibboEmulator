@@ -77,8 +77,8 @@ public class Room : IDisposable
     public int UserCount => this.RoomUserManager.GetRoomUserCount();
 
     public event EventHandler<UserSaysEventArgs> OnUserSays;
-    public event EventHandler OnTrigger;
-    public event EventHandler OnTriggerSelf;
+    public event EventHandler<UserSaysEventArgs> OnTriggerTarget;
+    public event EventHandler<UserSaysEventArgs> OnTriggerSelf;
     public event EventHandler OnUserCls;
 
     public Room(RoomData data)
@@ -202,16 +202,18 @@ public class Room : IDisposable
         this.OnUserCls(userGoal, new());
     }
 
-    public void OnTriggerUser(RoomUser roomUser, bool isTarget)
+    public void OnCommandTarget(RoomUser user, string message)
     {
-        if (isTarget)
-        {
-            this.OnTrigger?.Invoke(roomUser, new());
-        }
-        else
-        {
-            this.OnTriggerSelf?.Invoke(roomUser, new());
-        }
+        var args = new UserSaysEventArgs(user, message);
+        this.OnTriggerTarget?.Invoke(null, args);
+    }
+
+    public bool OnCommandSelf(RoomUser user, string message)
+    {
+        var args = new UserSaysEventArgs(user, message);
+        this.OnTriggerSelf?.Invoke(null, args);
+
+        return args.Result;
     }
 
     public void ClearTags() => this.RoomData.Tags.Clear();

@@ -373,7 +373,7 @@ public class ModerationManager
     public static void KickUser(GameClient modSession, int userId, string message, bool soft)
     {
         var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (clientByUserId == null || clientByUserId.User.CurrentRoomId < 1 || clientByUserId.User.Id == modSession.User.Id)
+        if (clientByUserId == null || !clientByUserId.User.InRoom || clientByUserId.User.Id == modSession.User.Id)
         {
             return;
         }

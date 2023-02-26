@@ -20,7 +20,7 @@ internal sealed class KickBan : IChatCommand
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
         }
-        else if (targetUser.User.CurrentRoomId <= 0)
+        else if (!targetUser.User.InRoom)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("kick.error", session.Langue));
         }

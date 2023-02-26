@@ -138,12 +138,7 @@ public class RoomUser : IEquatable<RoomUser>
     {
         get
         {
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out var room))
-            {
-                return null;
-            }
-
-            var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(room.RoomData.OwnerId);
+            var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this.Room.RoomData.OwnerId);
             if (rpManager == null)
             {
                 return null;
@@ -218,12 +213,7 @@ public class RoomUser : IEquatable<RoomUser>
         }
         else
         {
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out var room))
-            {
-                return false;
-            }
-
-            return this.GetUsername() == room.RoomData.OwnerName;
+            return this.GetUsername() == this.Room.RoomData.OwnerName;
         }
     }
 
@@ -237,20 +227,13 @@ public class RoomUser : IEquatable<RoomUser>
 
         this.IsAsleep = false;
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out var room))
-        {
-            return;
-        }
-
-        room.SendPacket(new SleepComposer(this.VirtualId, false));
+        this.Room.SendPacket(new SleepComposer(this.VirtualId, false));
     }
 
     public void Dispose()
     {
         this.Statusses.Clear();
         this.IsDispose = true;
-        this.Room = null;
-        this.Client = null;
     }
 
     public void SendWhisperChat(string message, bool info = true) => this.Client?.SendPacket(new WhisperComposer(this.VirtualId, message, info ? 34 : 0));
@@ -269,18 +252,13 @@ public class RoomUser : IEquatable<RoomUser>
 
     public void OnChat(string messageText, int color = 0, bool shout = false)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out var room))
-        {
-            return;
-        }
-
         if (shout)
         {
-            room.SendPacketOnChat(new ShoutComposer(this.VirtualId, messageText, color), this, true, this.Team == TeamType.None && !this.IsBot);
+            this.Room.SendPacketOnChat(new ShoutComposer(this.VirtualId, messageText, color), this, true, this.Team == TeamType.None && !this.IsBot);
         }
         else
         {
-            room.SendPacketOnChat(new ChatComposer(this.VirtualId, messageText, color), this, true, this.Team == TeamType.None && !this.IsBot);
+            this.Room.SendPacketOnChat(new ChatComposer(this.VirtualId, messageText, color), this, true, this.Team == TeamType.None && !this.IsBot);
         }
     }
 
@@ -288,12 +266,7 @@ public class RoomUser : IEquatable<RoomUser>
 
     public void MoveTo(int x, int y, bool isOverride = false)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out var room))
-        {
-            return;
-        }
-
-        if (!room.GameMap.CanWalkState(x, y, isOverride) || this.Freeze || !this.AllowMoveTo)
+        if (!this.Room.GameMap.CanWalkState(x, y, isOverride) || this.Freeze || !this.AllowMoveTo)
         {
             return;
         }
@@ -301,7 +274,7 @@ public class RoomUser : IEquatable<RoomUser>
         this.Unidle();
         if (this.TeleportEnabled)
         {
-            room.SendPacket(RoomItemHandling.TeleportUser(this, new Point(x, y), 0, room.GameMap.SqAbsoluteHeight(x, y)));
+            this.Room.SendPacket(RoomItemHandling.TeleportUser(this, new Point(x, y), 0, this.Room.GameMap.SqAbsoluteHeight(x, y)));
         }
         else
         {
@@ -327,18 +300,12 @@ public class RoomUser : IEquatable<RoomUser>
         this.UpdateNeeded = false;
         this.IsWalking = false;
 
-        if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out var room))
-        {
-            room.GameMap.AddTakingSquare(pX, pY);
-        }
+        this.Room.GameMap.AddTakingSquare(pX, pY);
     }
 
     public void SetPos(int pX, int pY, double pZ)
     {
-        if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out var room))
-        {
-            room.GameMap.UpdateUserMovement(this.Coordinate, new Point(pX, pY), this);
-        }
+        this.Room.GameMap.UpdateUserMovement(this.Coordinate, new Point(pX, pY), this);
 
         this.X = pX;
         this.Y = pY;
@@ -360,12 +327,7 @@ public class RoomUser : IEquatable<RoomUser>
         this.CarryItemID = itemId;
         this.CarryTimer = itemId <= 0 || notTimer ? 0 : 240;
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out var room))
-        {
-            return;
-        }
-
-        room.SendPacket(new CarryObjectComposer(this.VirtualId, itemId));
+        this.Room.SendPacket(new CarryObjectComposer(this.VirtualId, itemId));
     }
 
     public void SetRot(int rotation, bool headOnly, bool ignoreWalk = false)

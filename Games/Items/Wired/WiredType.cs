@@ -77,4 +77,5 @@ public enum WiredTriggerType
     TRIGGER_PERIODICALLY_LONG = 12,
     BOT_REACHED_STUFF = 13,
     BOT_REACHED_AVATAR = 14,
+    AVATAR_SAYS_COMMAND = 15,
 }

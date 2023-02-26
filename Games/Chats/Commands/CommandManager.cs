@@ -269,7 +269,6 @@ public class CommandManager
         this.Register(55, new EmptyPets());
         this.Register(56, new Construit());
         this.Register(57, new ConstruitStop());
-        this.Register(58, new Trigger());
         this.Register(59, new EmptyBots());
         this.Register(60, new DisableFollow());
         this.Register(61, new InfoSuperWired());
