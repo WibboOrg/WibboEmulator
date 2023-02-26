@@ -31,25 +31,11 @@ public class BotTalk : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        var textMessage = message;
-        if (user != null && user.Client != null)
-        {
-            textMessage = textMessage.Replace("#username#", user.GetUsername());
-            textMessage = textMessage.Replace("#point#", user.WiredPoints.ToString());
-            textMessage = textMessage.Replace("#roomname#", this.RoomInstance.RoomData.Name.ToString());
-            textMessage = textMessage.Replace("#vote_yes#", this.RoomInstance.VotedYesCount.ToString());
-            textMessage = textMessage.Replace("#vote_no#", this.RoomInstance.VotedNoCount.ToString());
-            textMessage = textMessage.Replace("#wpcount#", user.Client.User != null ? user.Client.User.WibboPoints.ToString() : "0");
-
-            if (user.Roleplayer != null)
-            {
-                textMessage = textMessage.Replace("#money#", user.Roleplayer.Money.ToString());
-            }
-        }
+        WiredUtillity.ParseMessage(user, this.RoomInstance, ref message);
 
         var isShout = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
 
-        bot.OnChat(textMessage, bot.IsPet ? 0 : 2, isShout);
+        bot.OnChat(message, bot.IsPet ? 0 : 2, isShout);
 
         return false;
     }

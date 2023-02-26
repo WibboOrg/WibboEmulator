@@ -1,6 +1,8 @@
 namespace WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 
 public class WiredUtillity
 {
@@ -90,6 +92,32 @@ public class WiredUtillity
 
         ItemWiredDao.Delete(dbClient, triggerId);
         ItemWiredDao.Insert(dbClient, triggerId, triggerData, triggerData2, allUsertriggerable, triggerItems, delay);
+    }
+
+    public static void ParseMessage(RoomUser user, Room room, ref string textMessage)
+    {
+        if (user != null)
+        {
+            textMessage = textMessage.Replace("#username#", user.GetUsername());
+            textMessage = textMessage.Replace("#point#", user.WiredPoints.ToString());
+
+            if (user.Client != null)
+            {
+                textMessage = textMessage.Replace("#wpcount#", user.Client.User != null ? user.Client.User.WibboPoints.ToString() : "0");
+            }
+
+            if (user.Roleplayer != null)
+            {
+                textMessage = textMessage.Replace("#money#", user.Roleplayer.Money.ToString());
+            }
+        }
+
+        if (room != null)
+        {
+            textMessage = textMessage.Replace("#roomname#", room.RoomData.Name.ToString());
+            textMessage = textMessage.Replace("#vote_yes#", room.VotedYesCount.ToString());
+            textMessage = textMessage.Replace("#vote_no#", room.VotedNoCount.ToString());
+        }
     }
 }
 

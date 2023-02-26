@@ -29,11 +29,7 @@ public class GameMap
         this.ObliqueDisable = true;
         this.DiagonalEnabled = true;
 
-        var staticModel = WibboEnvironment.GetGame().GetRoomManager().GetModel(room.RoomData.ModelName, room.Id);
-        if (staticModel == null)
-        {
-            throw new ArgumentNullException("No modeldata found for roomID " + room.Id);
-        }
+        var staticModel = WibboEnvironment.GetGame().GetRoomManager().GetModel(room.RoomData.ModelName, room.Id) ?? throw new ArgumentNullException("No modeldata found for roomID " + room.Id);
 
         this.Model = new RoomModelDynamic(staticModel);
 

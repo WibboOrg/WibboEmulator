@@ -80,7 +80,7 @@ public class UserCommand : WiredTriggerBase, IWired
         this.RoomInstance.OnTriggerTarget -= this.OnUserSays;
     }
 
-     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null);
+    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null);
 
     public void LoadFromDatabase(DataRow row)
     {

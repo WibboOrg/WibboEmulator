@@ -21,17 +21,7 @@ public class ShowMessage : WiredActionBase, IWired, IWiredEffect
         if (user != null && !user.IsBot && user.Client != null)
         {
             var textMessage = this.StringParam;
-            textMessage = textMessage.Replace("#username#", user.GetUsername());
-            textMessage = textMessage.Replace("#point#", user.WiredPoints.ToString());
-            textMessage = textMessage.Replace("#roomname#", this.RoomInstance.RoomData.Name.ToString());
-            textMessage = textMessage.Replace("#vote_yes#", this.RoomInstance.VotedYesCount.ToString());
-            textMessage = textMessage.Replace("#vote_no#", this.RoomInstance.VotedNoCount.ToString());
-            textMessage = textMessage.Replace("#wpcount#", user.Client.User != null ? user.Client.User.WibboPoints.ToString() : "0");
-
-            if (user.Roleplayer != null)
-            {
-                textMessage = textMessage.Replace("#money#", user.Roleplayer.Money.ToString());
-            }
+            WiredUtillity.ParseMessage(user, this.RoomInstance, ref message);
 
             user.SendWhisperChat(textMessage);
         }
