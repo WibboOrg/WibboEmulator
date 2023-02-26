@@ -14,7 +14,7 @@ public class UserCommand : WiredTriggerBase, IWired
     {
         if (!this.StringParam.Contains(':'))
         {
-            return;
+            this.StringParam = "trigger:1";
         }
 
         var parts = this.StringParam.Split(':');

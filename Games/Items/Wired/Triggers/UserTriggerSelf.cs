@@ -14,7 +14,7 @@ public class UserTriggerSelf : WiredTriggerBase, IWired
     {
         if (!this.StringParam.Contains(':'))
         {
-            return;
+            this.StringParam = "trigger:1";
         }
 
         var parts = this.StringParam.Split(':');
@@ -47,6 +47,7 @@ public class UserTriggerSelf : WiredTriggerBase, IWired
 
         if (messageCommand.ToLower() != commandName.ToLower())
         {
+            e.Result = true;
             return;
         }
 
