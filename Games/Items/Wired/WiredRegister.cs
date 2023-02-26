@@ -179,6 +179,12 @@ public class WiredRegister
             case InteractionType.CONDITION_NOT_STUFF_IS:
                 handler = new FurniNotStuffIs(item, room);
                 break;
+            case InteractionType.CONDITION_COLLISION_IS:
+                handler = new FurniCollisionIs(item, room);
+                break;
+            case InteractionType.CONDITION_NOT_COLLISION_IS:
+                handler = new FurniNotCollisionIs(item, room);
+                break;
             case InteractionType.CONDITION_DATE_RNG_ACTIVE:
                 handler = new DateRangeActive(item, room);
                 break;

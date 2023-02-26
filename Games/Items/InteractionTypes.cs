@@ -109,6 +109,8 @@ public class InteractionTypes
         "conditionstatepos" => InteractionType.CONDITION_STATE_POS,
         "wf_cnd_stuff_is" => InteractionType.CONDITION_STUFF_IS,
         "wf_cnd_not_stuff_is" => InteractionType.CONDITION_NOT_STUFF_IS,
+        "wf_cnd_not_collision_is" => InteractionType.CONDITION_NOT_COLLISION_IS,
+        "wf_cnd_collision_is" => InteractionType.CONDITION_COLLISION_IS,
         "wf_cnd_not_match_snap" => InteractionType.CONDITION_STATE_POS_NEGATIVE,
         "conditiontimelessthan" => InteractionType.CONDITION_TIME_LESS_THAN,
         "conditiontimemorethan" => InteractionType.CONDITION_TIME_MORE_THAN,
