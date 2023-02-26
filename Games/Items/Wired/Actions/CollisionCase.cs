@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -7,42 +7,64 @@ using WibboEmulator.Games.Rooms;
 
 public class CollisionCase : WiredActionBase, IWiredEffect, IWired
 {
-    public CollisionCase(Item item, Room room) : base(item, room, (int)WiredActionType.CHASE)
+    public CollisionCase(Item item, Room room) : base(item, room, (int)WiredActionType.COLLISION_CASE)
     {
     }
 
     public override bool OnCycle(RoomUser user, Item item)
     {
+        var isAllUser = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+
         foreach (var roomItem in this.Items.ToList())
         {
-            this.HandleMovement(roomItem);
+            if (this.RoomInstance.RoomItemHandling.GetItem(roomItem.Id) == null)
+            {
+                continue;
+            }
+
+            if (isAllUser)
+            {
+                var roomUsers = this.RoomInstance.RoomUserManager.GetUsersForSquare(roomItem.X, roomItem.Y);
+                if (roomUsers.Count != 0)
+                {
+                    foreach (var roomUser in roomUsers)
+                    {
+                        this.RoomInstance.WiredHandler.TriggerCollision(roomUser, roomItem);
+                    }
+                }
+            }
+            else
+            {
+                var roomUser = this.RoomInstance.RoomUserManager.GetUserForSquare(roomItem.X, roomItem.Y);
+                if (roomUser != null)
+                {
+                    this.RoomInstance.WiredHandler.TriggerCollision(roomUser, roomItem);
+                }
+            }
         }
 
         return false;
     }
 
-    private void HandleMovement(Item item)
+    public void SaveToDatabase(IQueryAdapter dbClient)
     {
-        if (this.RoomInstance.RoomItemHandling.GetItem(item.Id) == null)
-        {
-            return;
-        }
+        var isAllUser = this.IntParams.Count > 0 ? this.IntParams[0] : 0;
 
-        var roomUser = this.RoomInstance.RoomUserManager.GetUserForSquare(item.X, item.Y);
-        if (roomUser != null)
-        {
-            this.RoomInstance.WiredHandler.TriggerCollision(roomUser, item);
-            return;
-        }
+        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, isAllUser.ToString(), false, this.Items, this.Delay);
     }
-
-    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items, this.Delay);
 
     public void LoadFromDatabase(DataRow row)
     {
+        this.IntParams.Clear();
+
         if (int.TryParse(row["delay"].ToString(), out var delay))
         {
             this.Delay = delay;
+        }
+
+        if (int.TryParse(row["trigger_data"].ToString(), out var isAllUser))
+        {
+            this.IntParams.Add(isAllUser);
         }
 
         var triggerItems = row["triggers_item"].ToString();

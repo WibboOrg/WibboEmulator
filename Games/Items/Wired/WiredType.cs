@@ -59,6 +59,7 @@ public enum WiredActionType
     BOT_CHANGE_FIGURE = 26,
     BOT_TALK_DIRECT_TO_AVTR = 27,
     TRI_DIMENSION = 28,
+    COLLISION_CASE = 29,
 }
 
 public enum WiredTriggerType
