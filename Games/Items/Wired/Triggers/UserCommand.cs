@@ -50,6 +50,8 @@ public class UserCommand : WiredTriggerBase, IWired
             return;
         }
 
+        e.Result = true;
+
         var targetUser = this.RoomInstance.RoomUserManager.GetRoomUserByName(messageUserName);
         targetUser ??= this.RoomInstance.RoomUserManager.GetBotOrPetByName(messageUserName);
 
@@ -67,8 +69,6 @@ public class UserCommand : WiredTriggerBase, IWired
         {
             return;
         }
-
-        e.Result = true;
 
         this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, targetUser, null);
     }

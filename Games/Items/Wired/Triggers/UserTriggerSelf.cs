@@ -47,9 +47,10 @@ public class UserTriggerSelf : WiredTriggerBase, IWired
 
         if (messageCommand.ToLower() != commandName.ToLower())
         {
-            e.Result = true;
             return;
         }
+
+        e.Result = true;
 
         var targetUser = this.RoomInstance.RoomUserManager.GetRoomUserByName(messageUserName);
         targetUser ??= this.RoomInstance.RoomUserManager.GetBotOrPetByName(messageUserName);
@@ -68,8 +69,6 @@ public class UserTriggerSelf : WiredTriggerBase, IWired
         {
             return;
         }
-
-        e.Result = true;
 
         this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, null);
     }
