@@ -32,7 +32,7 @@ public class TeamLeave : WiredActionBase, IWired, IWiredEffect
             user.Client.SendPacket(new IsPlayingComposer(false));
         }
 
-        return true;
+        return false;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, null, this.Delay);
