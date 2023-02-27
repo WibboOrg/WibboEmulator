@@ -29,7 +29,7 @@ public class UserTriggerSelf : WiredTriggerBase, IWired
         var user = e.User;
         var message = e.Message;
 
-        if (message.Contains(' ') || message.StartsWith(':'))
+        if (!message.Contains(' ') || !message.StartsWith(':'))
         {
             return;
         }
