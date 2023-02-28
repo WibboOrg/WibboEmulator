@@ -38,17 +38,23 @@ public class WiredRegister
             case InteractionType.TRIGGER_AVATAR_SAYS_SOMETHING:
                 handler = new UserSays(item, room);
                 break;
+            case InteractionType.TRIGGER_AVATAR_EXIT:
+                handler = new UserExit(item, room);
+                break;
             case InteractionType.TRIGGER_COMMAND:
                 handler = new UserCommand(item, room);
                 break;
             case InteractionType.TRIGGER_SELF:
-                handler = new UserTriggerSelf(item, room);
+                handler = new UserCommandSelf(item, room);
                 break;
             case InteractionType.TRIGGER_BOT_REACHED_AVTR:
                 handler = new BotReadchedAvatar(item, room);
                 break;
             case InteractionType.TRIGGER_COLLISION_USER:
                 handler = new UserCollision(item, room);
+                break;
+            case InteractionType.TRIGGER_COLLISION_USER_SELF:
+                handler = new UserCollisionSelf(item, room);
                 break;
             case InteractionType.TRIGGER_SCORE_ACHIEVED:
                 handler = new ScoreAchieved(item, room);

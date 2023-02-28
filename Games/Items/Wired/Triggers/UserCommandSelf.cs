@@ -6,9 +6,9 @@ using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Events;
 
-public class UserTriggerSelf : WiredTriggerBase, IWired
+public class UserCommandSelf : WiredTriggerBase, IWired
 {
-    public UserTriggerSelf(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_SAYS_COMMAND) => room.OnTriggerSelf += this.OnUserSays;
+    public UserCommandSelf(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_SAYS_COMMAND) => room.OnTriggerSelf += this.OnUserSays;
 
     private void OnUserSays(object sender, UserSaysEventArgs e)
     {
@@ -77,11 +77,6 @@ public class UserTriggerSelf : WiredTriggerBase, IWired
         }
 
         var isExecute = this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, null);
-
-        if (isExecute)
-        {
-            this.RoomInstance.OnCommandTarget(user, message);
-        }
     }
 
     public override void Dispose()

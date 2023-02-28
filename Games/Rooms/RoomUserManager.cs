@@ -38,6 +38,7 @@ public class RoomUserManager
     public int BotPetCount => this._pets.Count + this._bots.Count;
 
     public event EventHandler OnUserEnter;
+    public event EventHandler OnUserExit;
 
     public RoomUserManager(Room room)
     {
@@ -52,6 +53,8 @@ public class RoomUserManager
     }
 
     public void UserEnter(RoomUser thisUser) => this.OnUserEnter?.Invoke(thisUser, new());
+
+    public void UserExit(RoomUser thisUser) => this.OnUserExit?.Invoke(thisUser, new());
 
     public int GetRoomUserCount() => this._room.RoomData.UsersNow;
 
@@ -582,6 +585,11 @@ public class RoomUserManager
         if (user == null)
         {
             return;
+        }
+
+        if(!user.IsSpectator)
+        {
+            this._room.RoomUserManager.UserExit(user);
         }
 
         if (this._usersRank.Contains(user.UserId))

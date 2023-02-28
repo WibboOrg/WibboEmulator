@@ -80,6 +80,7 @@ public class Room : IDisposable
     public event EventHandler<UserSaysEventArgs> OnTriggerTarget;
     public event EventHandler<UserSaysEventArgs> OnTriggerSelf;
     public event EventHandler OnUserCls;
+    public event EventHandler OnUserClsSelf;
 
     public Room(RoomData data)
     {
@@ -141,7 +142,7 @@ public class Room : IDisposable
 
     public void CollisionUser(RoomUser user)
     {
-        if (this.OnUserCls == null)
+        if (this.OnUserCls == null && this.OnUserClsSelf == null)
         {
             return;
         }
@@ -199,18 +200,15 @@ public class Room : IDisposable
             return;
         }
 
-        this.OnUserCls(userGoal, new());
-    }
-
-    public void OnCommandTarget(RoomUser user, string message)
-    {
-        var args = new UserSaysEventArgs(user, message);
-        this.OnTriggerTarget?.Invoke(null, args);
+        this.OnUserCls?.Invoke(userGoal, new());
+        this.OnUserClsSelf?.Invoke(user, new());
     }
 
     public bool OnCommandSelf(RoomUser user, string message)
     {
         var args = new UserSaysEventArgs(user, message);
+
+        this.OnTriggerTarget?.Invoke(null, args);
         this.OnTriggerSelf?.Invoke(null, args);
 
         return args.Result;
