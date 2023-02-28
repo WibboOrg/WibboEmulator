@@ -17,7 +17,7 @@ public class WalksOnFurni : WiredTriggerBase, IWired, IWiredCycleable
     {
         if (user != null)
         {
-            this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, item);
+            _ = this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, item);
         }
 
         return false;
@@ -31,7 +31,7 @@ public class WalksOnFurni : WiredTriggerBase, IWired, IWiredCycleable
         }
         else
         {
-            this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, args.User, args.Item);
+            _ = this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, args.User, args.Item);
         }
     }
 

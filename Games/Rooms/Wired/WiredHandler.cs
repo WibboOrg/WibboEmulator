@@ -232,21 +232,21 @@ public class WiredHandler
 
     public void OnPickall() => this._doCleanup = true;
 
-    public void ExecutePile(Point coordinate, RoomUser user, Item item, bool ignoreCondition = false)
+    public bool ExecutePile(Point coordinate, RoomUser user, Item item, bool ignoreCondition = false)
     {
         if (this._doCleanup || this._blockWired)
         {
-            return;
+            return false;
         }
 
         if (!this._actionStacks.ContainsKey(coordinate))
         {
-            return;
+            return false;
         }
 
         if (user != null && user.IsSpectator)
         {
-            return;
+            return false;
         }
 
         if (this.SecurityEnabled)
@@ -255,7 +255,7 @@ public class WiredHandler
             {
                 if (this._wiredUsed[coordinate].Contains(user?.VirtualId ?? 0))
                 {
-                    return;
+                    return false;
                 }
                 else
                 {
@@ -273,7 +273,7 @@ public class WiredHandler
             this._blockWired = true;
             this._blockWiredDateTime = DateTime.Now;
             this._roomInstance.SendPacket(new BroadcastMessageAlertComposer("Attention la limite d'effets wired est dépassée, ils sont par conséquent désactivés durant 5 secondes"));
-            return;
+            return false;
         }
 
         this._tickCounter++;
@@ -290,7 +290,7 @@ public class WiredHandler
 
                 if (!((IWiredCondition)roomItem.WiredHandler).AllowsExecution(user, item))
                 {
-                    return;
+                    return false;
                 }
             }
         }
@@ -331,6 +331,8 @@ public class WiredHandler
                 }
             }
         }
+
+        return true;
     }
 
     public void RequestCycle(WiredCycle handler) => this._requestingUpdates.Enqueue(handler);

@@ -30,7 +30,7 @@ public class UserSays : WiredTriggerBase, IWired
 
         if ((!isOwnerOnly && this.CanBeTriggered(message, isContains) && !string.IsNullOrEmpty(message)) || (isOwnerOnly && user.IsOwner() && this.CanBeTriggered(message, isContains) && !string.IsNullOrEmpty(message)))
         {
-            this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, null);
+            _ = this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, null);
             args.Result = true;
         }
     }

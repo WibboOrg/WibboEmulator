@@ -76,7 +76,12 @@ public class UserTriggerSelf : WiredTriggerBase, IWired
             return;
         }
 
-        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, null);
+        var isExecute = this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, null);
+
+        if (isExecute)
+        {
+            this.RoomInstance.OnCommandTarget(user, message);
+        }
     }
 
     public override void Dispose()
