@@ -587,7 +587,7 @@ public class RoomUserManager
             return;
         }
 
-        if(!user.IsSpectator)
+        if (!user.IsSpectator)
         {
             this._room.RoomUserManager.UserExit(user);
         }

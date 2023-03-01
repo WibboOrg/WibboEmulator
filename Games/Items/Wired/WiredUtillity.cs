@@ -2,13 +2,12 @@ namespace WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Users;
 
 public class WiredUtillity
 {
     public static bool TypeIsWiredTrigger(InteractionType type) => type switch
     {
-        InteractionType.TRIGGER_SAYS_COMMAND_TRANSFERT or InteractionType.TRIGGER_SAYS_COMMAND_RECOVER or InteractionType.TRIGGER_COLLISION or InteractionType.TRIGGER_ONCE or InteractionType.TRIGGER_AVATAR_ENTERS_ROOM or InteractionType.TRIGGER_GAME_ENDS or InteractionType.TRIGGER_GAME_STARTS or InteractionType.TRIGGER_PERIODICALLY or InteractionType.TRIGGER_PERIODICALLY_LONG or InteractionType.TRIGGER_AVATAR_SAYS_SOMETHING or InteractionType.TRIGGER_COMMAND or InteractionType.TRIGGER_SELF or InteractionType.TRIGGER_COLLISION_USER or InteractionType.TRIGGER_COLLISION_USER_SELF or InteractionType.TRIGGER_SCORE_ACHIEVED or InteractionType.TRIGGER_STATE_CHANGED or InteractionType.TRIGGER_WALK_ON_FURNI or InteractionType.TRIGGER_WALK_OFF_FURNI or InteractionType.TRIGGER_BOT_REACHED_AVTR or InteractionType.TRIGGER_BOT_REACHED_STF or InteractionType.TRIGGER_AVATAR_EXIT => true,
+        InteractionType.TRIGGER_SAYS_COMMAND_TRANSFERT or InteractionType.TRIGGER_SAYS_COMMAND_RECOVER or InteractionType.TRIGGER_COLLISION or InteractionType.TRIGGER_ONCE or InteractionType.TRIGGER_AVATAR_ENTERS_ROOM or InteractionType.TRIGGER_GAME_ENDS or InteractionType.TRIGGER_GAME_STARTS or InteractionType.TRIGGER_PERIODICALLY or InteractionType.TRIGGER_PERIODICALLY_LONG or InteractionType.TRIGGER_AVATAR_SAYS_SOMETHING or InteractionType.TRIGGER_COMMAND or InteractionType.TRIGGER_COMMAND_SELF or InteractionType.TRIGGER_COLLISION_USER or InteractionType.TRIGGER_COLLISION_USER_SELF or InteractionType.TRIGGER_SCORE_ACHIEVED or InteractionType.TRIGGER_STATE_CHANGED or InteractionType.TRIGGER_WALK_ON_FURNI or InteractionType.TRIGGER_WALK_OFF_FURNI or InteractionType.TRIGGER_BOT_REACHED_AVTR or InteractionType.TRIGGER_BOT_REACHED_STF or InteractionType.TRIGGER_AVATAR_EXIT or InteractionType.TRIGGER_USER_CLICK or InteractionType.TRIGGER_USER_CLICK_SELF => true,
         _ => false,
     };
 

@@ -10,15 +10,7 @@ public class Collision : WiredTriggerBase, IWired
 {
     public Collision(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION) => this.RoomInstance.WiredHandler.TrgCollision += this.OnFurniCollision;
 
-    private void OnFurniCollision(object obj, ItemTriggeredEventArgs args)
-    {
-        if (args.User == null)
-        {
-            return;
-        }
-
-        _ = this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, args.User, args.Item);
-    }
+    private void OnFurniCollision(object obj, ItemTriggeredEventArgs args) => this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, args.User, args.Item);
 
     public override void Dispose()
     {

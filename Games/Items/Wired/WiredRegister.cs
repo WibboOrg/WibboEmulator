@@ -44,7 +44,7 @@ public class WiredRegister
             case InteractionType.TRIGGER_COMMAND:
                 handler = new UserCommand(item, room);
                 break;
-            case InteractionType.TRIGGER_SELF:
+            case InteractionType.TRIGGER_COMMAND_SELF:
                 handler = new UserCommandSelf(item, room);
                 break;
             case InteractionType.TRIGGER_BOT_REACHED_AVTR:
@@ -52,6 +52,12 @@ public class WiredRegister
                 break;
             case InteractionType.TRIGGER_COLLISION_USER:
                 handler = new UserCollision(item, room);
+                break;
+            case InteractionType.TRIGGER_USER_CLICK:
+                handler = new UserClick(item, room);
+                break;
+            case InteractionType.TRIGGER_USER_CLICK_SELF:
+                handler = new UserClickSelf(item, room);
                 break;
             case InteractionType.TRIGGER_COLLISION_USER_SELF:
                 handler = new UserCollisionSelf(item, room);

@@ -79,6 +79,8 @@ public class Room : IDisposable
     public event EventHandler<UserSaysEventArgs> OnUserSays;
     public event EventHandler<UserSaysEventArgs> OnTriggerTarget;
     public event EventHandler<UserSaysEventArgs> OnTriggerSelf;
+    public event EventHandler<UserTargetEventArgs> OnUserClick;
+    public event EventHandler<UserTargetEventArgs> OnUserClickSelf;
     public event EventHandler OnUserCls;
     public event EventHandler OnUserClsSelf;
 
@@ -130,6 +132,13 @@ public class Room : IDisposable
         this.WiredHandler.SecurityEnabled = data.WiredSecurity;
 
         this.LastTimerReset = DateTime.Now;
+    }
+
+    public void UserClick(RoomUser user, RoomUser userTarget)
+    {
+        var args = new UserTargetEventArgs(userTarget);
+        this.OnUserClick?.Invoke(user, args);
+        this.OnUserClickSelf?.Invoke(user, args);
     }
 
     public bool AllowsShous(RoomUser user, string message)

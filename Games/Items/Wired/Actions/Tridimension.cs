@@ -14,9 +14,17 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
     {
         var disableAnimation = this.RoomInstance.WiredHandler.DisableAnimate(this.ItemInstance.Coordinate);
 
-        foreach (var roomItem in this.Items.ToList())
+        var itemList = this.Items.ToList();
+        if (itemList.Count >= 1)
         {
-            this.HandleMovement(roomItem, disableAnimation);
+            foreach (var roomItem in this.Items.ToList())
+            {
+                this.HandleMovement(roomItem, disableAnimation);
+            }
+        }
+        else if (item != null)
+        {
+            this.HandleMovement(item, disableAnimation);
         }
 
         return false;

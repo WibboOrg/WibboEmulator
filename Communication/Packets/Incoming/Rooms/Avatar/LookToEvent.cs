@@ -13,16 +13,34 @@ internal sealed class LookToEvent : IPacketEvent
             return;
         }
 
+        var targetX = packet.PopInt();
+        var targetY = packet.PopInt();
+        var targetUserId = packet.PopInt();
+
         var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
-        if (user == null || user.RidingHorse)
+        if (user == null)
+        {
+            return;
+        }
+
+        var userTarget = room.RoomUserManager.GetRoomUserByVirtualId(targetUserId);
+        if (userTarget == null)
+        {
+            return;
+        }
+
+        if (user != userTarget)
+        {
+            room.UserClick(user, userTarget);
+        }
+
+        if (user.RidingHorse)
         {
             return;
         }
 
         user.Unidle();
-        var x2 = packet.PopInt();
-        var y2 = packet.PopInt();
-        if (x2 == user.X && y2 == user.Y)
+        if (targetX == user.X && targetY == user.Y)
         {
             if (user.SetStep)
             {
@@ -32,7 +50,7 @@ internal sealed class LookToEvent : IPacketEvent
             return;
         }
 
-        var rotation2 = Rotation.Calculate(user.X, user.Y, x2, y2);
+        var rotation2 = Rotation.Calculate(user.X, user.Y, targetX, targetY);
         user.SetRot(rotation2, false);
     }
 }

@@ -16,7 +16,7 @@ public class UserExit : WiredTriggerBase, IWired
             return;
         }
 
-        _ = this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, (RoomUser)sender, null);
+        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, (RoomUser)sender, null);
     }
     public override void Dispose()
     {

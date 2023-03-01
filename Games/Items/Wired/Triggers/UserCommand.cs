@@ -76,7 +76,7 @@ public class UserCommand : WiredTriggerBase, IWired
             return;
         }
 
-        _ = this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, targetUser, null);
+        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, targetUser, null);
     }
 
     public override void Dispose()

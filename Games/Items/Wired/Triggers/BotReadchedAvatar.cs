@@ -22,7 +22,7 @@ public class BotReadchedAvatar : WiredTriggerBase, IWired
             return;
         }
 
-        _ = this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, args.User, null);
+        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, args.User, null);
     }
 
 

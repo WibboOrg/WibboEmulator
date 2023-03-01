@@ -25,7 +25,7 @@ public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
                     continue;
                 }
 
-                _ = this.RoomInstance.WiredHandler.ExecutePile(coord, user, item, ignoreCondition);
+                this.RoomInstance.WiredHandler.ExecutePile(coord, user, item, ignoreCondition);
             }
         }
 

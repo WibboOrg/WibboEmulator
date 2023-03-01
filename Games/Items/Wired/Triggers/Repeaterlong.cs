@@ -19,7 +19,7 @@ public class Repeaterlong : WiredTriggerBase, IWired, IWiredCycleable
 
     public bool OnCycle(RoomUser user, Item item)
     {
-        _ = this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, null, null);
+        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, null, null);
         return true;
     }
 

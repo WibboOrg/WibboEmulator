@@ -23,7 +23,7 @@ public class ScoreAchieved : WiredTriggerBase, IWired
             return;
         }
 
-        _ = this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, e.User, null);
+        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, e.User, null);
     }
 
     public override void Dispose()

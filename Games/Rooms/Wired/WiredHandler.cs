@@ -232,21 +232,21 @@ public class WiredHandler
 
     public void OnPickall() => this._doCleanup = true;
 
-    public bool ExecutePile(Point coordinate, RoomUser user, Item item, bool ignoreCondition = false)
+    public void ExecutePile(Point coordinate, RoomUser user, Item item, bool ignoreCondition = false)
     {
         if (this._doCleanup || this._blockWired)
         {
-            return false;
+            return;
         }
 
         if (!this._actionStacks.ContainsKey(coordinate))
         {
-            return false;
+            return;
         }
 
         if (user != null && user.IsSpectator)
         {
-            return false;
+            return;
         }
 
         if (this.SecurityEnabled)
@@ -255,7 +255,7 @@ public class WiredHandler
             {
                 if (this._wiredUsed[coordinate].Contains(user?.VirtualId ?? 0))
                 {
-                    return false;
+                    return;
                 }
                 else
                 {
@@ -273,7 +273,7 @@ public class WiredHandler
             this._blockWired = true;
             this._blockWiredDateTime = DateTime.Now;
             this._roomInstance.SendPacket(new BroadcastMessageAlertComposer("Attention la limite d'effets wired est dépassée, ils sont par conséquent désactivés durant 5 secondes"));
-            return false;
+            return;
         }
 
         this._tickCounter++;
@@ -281,7 +281,7 @@ public class WiredHandler
         if (this._conditionStacks.TryGetValue(coordinate, out var value) && !ignoreCondition)
         {
             var conditionStack = value;
-            foreach (var roomItem in conditionStack.Take(20).ToArray())
+            foreach (var roomItem in conditionStack.Take(this.SecurityEnabled ? 20 : 1024).ToArray())
             {
                 if (roomItem == null || roomItem.WiredHandler == null)
                 {
@@ -290,7 +290,7 @@ public class WiredHandler
 
                 if (!((IWiredCondition)roomItem.WiredHandler).AllowsExecution(user, item))
                 {
-                    return false;
+                    return;
                 }
             }
         }
@@ -323,7 +323,7 @@ public class WiredHandler
         }
         else
         {
-            foreach (var roomItem in actionStack.Take(20).ToArray())
+            foreach (var roomItem in actionStack.Take(this.SecurityEnabled ? 20 : 1024).ToArray())
             {
                 if (roomItem != null && roomItem.WiredHandler != null)
                 {
@@ -331,8 +331,6 @@ public class WiredHandler
                 }
             }
         }
-
-        return true;
     }
 
     public void RequestCycle(WiredCycle handler) => this._requestingUpdates.Enqueue(handler);
