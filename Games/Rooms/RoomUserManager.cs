@@ -1242,8 +1242,7 @@ public class RoomUserManager
                     }
                     else
                     {
-                        var rp = user.Roleplayer;
-                        rp?.OnCycle(user, rpManager);
+                        user.Roleplayer?.OnCycle(user, rpManager);
                     }
                 }
             }

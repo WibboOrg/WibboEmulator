@@ -77,8 +77,8 @@ public class Room : IDisposable
     public int UserCount => this.RoomUserManager.GetRoomUserCount();
 
     public event EventHandler<UserSaysEventArgs> OnUserSays;
-    public event EventHandler<UserSaysEventArgs> OnTriggerTarget;
-    public event EventHandler<UserSaysEventArgs> OnTriggerSelf;
+    public event EventHandler<UserSaysEventArgs> OnCommandTarget;
+    public event EventHandler<UserSaysEventArgs> OnCommandSelf;
     public event EventHandler<UserTargetEventArgs> OnUserClick;
     public event EventHandler<UserTargetEventArgs> OnUserClickSelf;
     public event EventHandler OnUserCls;
@@ -213,12 +213,12 @@ public class Room : IDisposable
         this.OnUserClsSelf?.Invoke(user, new());
     }
 
-    public bool OnCommandSelf(RoomUser user, string message)
+    public bool OnCommand(RoomUser user, string message)
     {
         var args = new UserSaysEventArgs(user, message);
 
-        this.OnTriggerTarget?.Invoke(null, args);
-        this.OnTriggerSelf?.Invoke(null, args);
+        this.OnCommandTarget?.Invoke(null, args);
+        this.OnCommandSelf?.Invoke(null, args);
 
         return args.Result;
     }

@@ -195,7 +195,7 @@ internal sealed partial class ChatEvent : IPacketEvent
             return;
         }
 
-        if (message.StartsWith(":", StringComparison.CurrentCulture) && room.OnCommandSelf(user, message))
+        if (message.StartsWith(":", StringComparison.CurrentCulture) && room.OnCommand(user, message))
         {
             return;
         }

@@ -377,14 +377,14 @@ public class GameMap
         }
         else
         {
-            var list2 = this.CoordinatedItems[coord];
-            if (list2.Contains(item))
+            var items = this.CoordinatedItems[coord];
+            if (items.Contains(item))
             {
                 return;
             }
 
-            list2.Add(item);
-            this.CoordinatedItems[coord] = list2;
+            items.Add(item);
+            this.CoordinatedItems[coord] = items;
         }
     }
 

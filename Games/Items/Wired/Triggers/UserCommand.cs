@@ -8,7 +8,7 @@ using WibboEmulator.Games.Rooms.Events;
 
 public class UserCommand : WiredTriggerBase, IWired
 {
-    public UserCommand(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_SAYS_COMMAND) => room.OnTriggerTarget += this.OnUserSays;
+    public UserCommand(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_SAYS_COMMAND) => room.OnCommandTarget += this.OnUserSays;
 
     private void OnUserSays(object sender, UserSaysEventArgs e)
     {
@@ -41,7 +41,7 @@ public class UserCommand : WiredTriggerBase, IWired
 
         if (!int.TryParse(commandValue, out var distance))
         {
-            return;
+            distance = 1;
         }
 
         distance += 1;
@@ -83,7 +83,7 @@ public class UserCommand : WiredTriggerBase, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.OnTriggerTarget -= this.OnUserSays;
+        this.RoomInstance.OnCommandTarget -= this.OnUserSays;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null);
