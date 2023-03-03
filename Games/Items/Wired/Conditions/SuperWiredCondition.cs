@@ -165,8 +165,8 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "ptsclassementmoins":
             case "ptsclassement":
             case "notptsclassement":
-            case "issurvive":
-            case "isnotsurvive":
+            case "itemissurvive":
+            case "itemisnotsurvive":
                 return;
         }
 
@@ -180,8 +180,8 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             return false;
         }
 
-        string value;
         string effect;
+        string value;
         if (this.StringParam.Contains(':'))
         {
             effect = this.StringParam.Split(':')[0].ToLower();
@@ -610,8 +610,8 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
         var result = false;
         switch (effect)
         {
-            case "issurvive":
-            case "isnotsurvive":
+            case "itemissurvive":
+            case "itemisnotsurvive":
             {
                 var count = 0;
 

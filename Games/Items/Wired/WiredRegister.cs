@@ -129,6 +129,9 @@ public class WiredRegister
             case InteractionType.ACTION_COLLISION_CASE:
                 handler = new CollisionCase(item, room);
                 break;
+            case InteractionType.ACTION_COLLISION_ITEM:
+                handler = new CollisionItem(item, room);
+                break;
             case InteractionType.ACTION_MOVE_TO_DIR:
                 handler = new MoveToDir(item, room);
                 break;

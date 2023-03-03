@@ -103,6 +103,7 @@ public class InteractionTypes
         "wf_act_flee" => InteractionType.ACTION_FLEE,
         "wf_act_chase" => InteractionType.ACTION_CHASE,
         "wf_act_collisioncase" => InteractionType.ACTION_COLLISION_CASE,
+        "wf_act_collisionitem" => InteractionType.ACTION_COLLISION_ITEM,
         "wf_act_collisionteam" => InteractionType.ACTION_COLLISION_TEAM,
         "wf_act_move_to_dir" => InteractionType.ACTION_MOVE_TO_DIR,
         "wf_act_room_message" => InteractionType.ACTION_ROOM_MESSAGE,
