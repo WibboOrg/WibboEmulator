@@ -17,12 +17,21 @@ public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
         this.IntParams.Add(0);
         this.IntParams.Add(0);
         this.IntParams.Add(0);
+        this.IntParams.Add(0);
+        this.IntParams.Add(1);
     }
     public bool AllowsExecution(RoomUser user, Item item)
     {
+        if (this.Items.Count == 0)
+        {
+            return false;
+        }
+
         var state = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
         var direction = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0) == 1;
         var position = ((this.IntParams.Count > 2) ? this.IntParams[2] : 0) == 1;
+        var height = ((this.IntParams.Count > 3) ? this.IntParams[3] : 0) == 1;
+        var requireAll = ((this.IntParams.Count > 4) ? this.IntParams[4] : 0) == 1;
 
         foreach (var roomItem in this.Items.ToList())
         {
@@ -31,16 +40,17 @@ public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
                 continue;
             }
 
+            var isValide = true;
+
             if (state)
             {
                 if (itemPosReset.ExtraData != "Null")
                 {
                     if (!(roomItem.ExtraData == "" && itemPosReset.ExtraData == "0") && !(roomItem.ExtraData == "0" && itemPosReset.ExtraData == ""))
                     {
-
                         if (roomItem.ExtraData != itemPosReset.ExtraData)
                         {
-                            return false;
+                            isValide = false;
                         }
                     }
                 }
@@ -50,7 +60,7 @@ public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
             {
                 if (itemPosReset.Rot != roomItem.Rotation)
                 {
-                    return false;
+                    isValide = false;
                 }
             }
 
@@ -58,12 +68,30 @@ public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
             {
                 if (itemPosReset.X != roomItem.X || itemPosReset.Y != roomItem.Y)
                 {
-                    return false;
+                    isValide = false;
                 }
+            }
+
+            if (height)
+            {
+                if (itemPosReset.Z != roomItem.Z)
+                {
+                    isValide = false;
+                }
+            }
+
+            if (!requireAll && isValide)
+            {
+                return true;
+            }
+
+            if (requireAll && !isValide)
+            {
+                return false;
             }
         }
 
-        return true;
+        return requireAll;
     }
 
     public override void LoadItems(bool inDatabase = false)
@@ -105,8 +133,10 @@ public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
         var state = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
         var direction = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
         var position = (this.IntParams.Count > 2) ? this.IntParams[2] : 0;
+        var height = (this.IntParams.Count > 3) ? this.IntParams[3] : 0;
+        var requireAll = (this.IntParams.Count > 4) ? this.IntParams[4] : 1;
 
-        var triggerData2 = state + ";" + direction + ";" + position;
+        var triggerData2 = string.Join(";", new int[] { state, direction, position, height, requireAll });
 
         ItemWiredDao.Delete(dbClient, this.ItemInstance.Id);
         ItemWiredDao.Insert(dbClient, this.ItemInstance.Id, "", triggerData2, false, triggerItems, this.Delay);
@@ -116,31 +146,27 @@ public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
     {
         this.IntParams.Clear();
 
-        if (int.TryParse(row["trigger_data"].ToString(), out var delay))
-        {
-            this.Delay = delay;
-        }
-
         var triggerData2 = row["trigger_data_2"].ToString();
 
-        if (triggerData2 != null && triggerData2.Length == 5)
+        if (triggerData2 != null && triggerData2.Contains(';'))
         {
-            var dataSplit = triggerData2.Split(';');
-
-            if (int.TryParse(dataSplit[0], out var state))
+            foreach (var index in triggerData2.Split(';'))
             {
-                this.IntParams.Add(state);
+                if (int.TryParse(index, out var state))
+                {
+                    this.IntParams.Add(state);
+                }
             }
+        }
 
-            if (int.TryParse(dataSplit[1], out var direction))
-            {
-                this.IntParams.Add(direction);
-            }
+        if (this.IntParams.Count <= 3)
+        {
+            this.IntParams.Add(0);
+        }
 
-            if (int.TryParse(dataSplit[2], out var position))
-            {
-                this.IntParams.Add(position);
-            }
+        if (this.IntParams.Count <= 4)
+        {
+            this.IntParams.Add(1);
         }
 
         var triggerItems = row["triggers_item"].ToString();
