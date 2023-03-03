@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Items.Wired.Conditions;
 using System.Data;
+using System.Drawing;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -164,6 +165,8 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "ptsclassementmoins":
             case "ptsclassement":
             case "notptsclassement":
+            case "issurvive":
+            case "isnotsurvive":
                 return;
         }
 
@@ -213,7 +216,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
 
         if (result == false && item != null)
         {
-            result = ItemCommand(item, user, effect, value);
+            result = ItemCommand(this.RoomInstance, item, user, effect, value);
         }
 
         if (effect.Contains("not"))
@@ -602,11 +605,64 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
         return result;
     }
 
-    private static bool ItemCommand(Item item, RoomUser user, string effect, string value)
+    private static bool ItemCommand(Room room, Item item, RoomUser user, string effect, string value)
     {
         var result = false;
         switch (effect)
         {
+            case "issurvive":
+            case "isnotsurvive":
+            {
+                var count = 0;
+
+                var itemTest = room.GameMap.GetCoordinatedItems(new Point(item.X - 1, item.Y - 1)).FirstOrDefault();
+                if (itemTest != null && itemTest.ExtraData == "1")
+                {
+                    count++;
+                }
+                itemTest = room.GameMap.GetCoordinatedItems(new Point(item.X, item.Y - 1)).FirstOrDefault();
+                if (itemTest != null && itemTest.ExtraData == "1")
+                {
+                    count++;
+                }
+                itemTest = room.GameMap.GetCoordinatedItems(new Point(item.X + 1, item.Y - 1)).FirstOrDefault();
+                if (itemTest != null && itemTest.ExtraData == "1")
+                {
+                    count++;
+                }
+                itemTest = room.GameMap.GetCoordinatedItems(new Point(item.X - 1, item.Y)).FirstOrDefault();
+                if (itemTest != null && itemTest.ExtraData == "1")
+                {
+                    count++;
+                }
+                itemTest = room.GameMap.GetCoordinatedItems(new Point(item.X + 1, item.Y)).FirstOrDefault();
+                if (itemTest != null && itemTest.ExtraData == "1")
+                {
+                    count++;
+                }
+                itemTest = room.GameMap.GetCoordinatedItems(new Point(item.X - 1, item.Y + 1)).FirstOrDefault();
+                if (itemTest != null && itemTest.ExtraData == "1")
+                {
+                    count++;
+                }
+                itemTest = room.GameMap.GetCoordinatedItems(new Point(item.X, item.Y + 1)).FirstOrDefault();
+                if (itemTest != null && itemTest.ExtraData == "1")
+                {
+                    count++;
+                }
+                itemTest = room.GameMap.GetCoordinatedItems(new Point(item.X + 1, item.Y + 1)).FirstOrDefault();
+                if (itemTest != null && itemTest.ExtraData == "1")
+                {
+                    count++;
+                }
+
+                if (count == 3 || (item.ExtraData == "1" && count == 2))
+                {
+                    result = true;
+                }
+
+                break;
+            }
             case "itemmode":
             case "itemnotmode":
             {
