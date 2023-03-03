@@ -6,7 +6,6 @@ using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.Item;
-using WibboEmulator.Games.Chats.Commands.User.Several;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;

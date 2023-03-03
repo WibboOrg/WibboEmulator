@@ -8,6 +8,8 @@ using WibboEmulator.Games.Rooms.Map;
 
 public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
 {
+    public new bool IsTeleport => true;
+
     public TeleportToItem(Item item, Room room) : base(item, room, (int)WiredActionType.TELEPORT) => this.Delay = 1;
 
     public override bool OnCycle(RoomUser user, Item item)
@@ -15,6 +17,15 @@ public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEf
         if (user == null)
         {
             return false;
+        }
+
+        if (!user.PendingTeleport && this.Delay > 0)
+        {
+            user.PendingTeleport = true;
+
+            user.ApplyEffect(4, true);
+            user.Freeze = true;
+            return true;
         }
 
         if (this.Items.Count > 1)
@@ -35,6 +46,7 @@ public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEf
             GameMap.TeleportToItem(user, Enumerable.FirstOrDefault(this.Items));
         }
 
+        user.PendingTeleport = false;
         user.ApplyEffect(user.CurrentEffect, true);
         if (user.FreezeEndCounter <= 0)
         {
@@ -50,9 +62,6 @@ public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEf
         {
             return;
         }
-
-        user.ApplyEffect(4, true);
-        user.Freeze = true;
 
         base.Handle(user, item);
     }

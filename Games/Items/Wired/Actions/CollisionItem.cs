@@ -26,12 +26,7 @@ public class CollisionItem : WiredActionBase, IWiredEffect, IWired
         return false;
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient)
-    {
-        var isAllUser = this.IntParams.Count > 0 ? this.IntParams[0] : 0;
-
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items, this.Delay);
-    }
+    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items, this.Delay);
 
     public void LoadFromDatabase(DataRow row)
     {

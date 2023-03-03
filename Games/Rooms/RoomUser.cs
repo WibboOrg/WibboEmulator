@@ -68,6 +68,7 @@ public class RoomUser : IEquatable<RoomUser>
     public bool ConstruitZMode { get; set; }
     public double ConstruitHeigth { get; set; }
 
+    public bool PendingTeleport { get; set; }
     public bool Freeze { get; set; }
     public int FreezeEndCounter { get; set; }
 

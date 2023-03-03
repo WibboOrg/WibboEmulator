@@ -207,14 +207,81 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             value = string.Empty;
         }
 
+        this.ItemCommand(command, value, item);
+        this.RoomCommand(command, value, user);
         this.RpCommand(command, value, user);
-        this.RoomCommand(command, value, user, item);
         this.UserCommand(command, value, user);
         this.BotCommand(command, value, user);
 
         return false;
     }
 
+    private void ItemCommand(string command, string value, Item item)
+    {
+        switch (command)
+        {
+
+            case "setitemmode":
+            {
+                if (item == null)
+                {
+                    break;
+                }
+
+                if (!int.TryParse(value, out var count))
+                {
+                    break;
+                }
+
+                if (count > item.GetBaseItem().Modes - 1)
+                {
+                    break;
+                }
+
+                if (!int.TryParse(item.ExtraData, out _))
+                {
+                    break;
+                }
+
+                item.ExtraData = count.ToString();
+                item.UpdateState();
+                this.RoomInstance.GameMap.UpdateMapForItem(item);
+
+                break;
+            }
+
+            case "useitem":
+            {
+                if (item == null)
+                {
+                    break;
+                }
+
+                if (item.GetBaseItem().Modes == 0)
+                {
+                    break;
+                }
+
+                if (!int.TryParse(value, out var count))
+                {
+                    break;
+                }
+
+                if (!int.TryParse(item.ExtraData, out var itemCount))
+                {
+                    break;
+                }
+
+                var newCount = (itemCount + count < item.GetBaseItem().Modes) ? itemCount + count : 0;
+
+                item.ExtraData = newCount.ToString();
+                item.UpdateState();
+                this.RoomInstance.GameMap.UpdateMapForItem(item);
+
+                break;
+            }
+        }
+    }
 
     private void RpCommand(string command, string value, RoomUser user)
     {
@@ -1077,7 +1144,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
         }
     }
 
-    private void RoomCommand(string command, string value, RoomUser user, Item item)
+    private void RoomCommand(string command, string value, RoomUser user)
     {
         switch (command)
         {
@@ -1524,68 +1591,6 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 break;
             }
-
-            case "setitemmode":
-            {
-                if (item == null)
-                {
-                    break;
-                }
-
-                if (!int.TryParse(value, out var count))
-                {
-                    break;
-                }
-
-                if (count > item.GetBaseItem().Modes - 1)
-                {
-                    break;
-                }
-
-                if (!int.TryParse(item.ExtraData, out _))
-                {
-                    break;
-                }
-
-                item.ExtraData = count.ToString();
-                item.UpdateState();
-                this.RoomInstance.GameMap.UpdateMapForItem(item);
-
-                break;
-            }
-
-            case "useitem":
-            {
-                if (item == null)
-                {
-                    break;
-                }
-
-                if (item.GetBaseItem().Modes == 0)
-                {
-                    break;
-                }
-
-                if (!int.TryParse(value, out var count))
-                {
-                    break;
-                }
-
-                if (!int.TryParse(item.ExtraData, out var itemCount))
-                {
-                    break;
-                }
-
-                var newCount = (itemCount + count < item.GetBaseItem().Modes) ? itemCount + count : 0;
-
-                item.ExtraData = newCount.ToString();
-                item.UpdateState();
-                this.RoomInstance.GameMap.UpdateMapForItem(item);
-
-                break;
-            }
-
-
             case "pushpull":
             {
                 if (value == "true")
@@ -2212,10 +2217,9 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 if (this.RoomInstance.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
                 {
-                    using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    {
-                        UserDao.UpdateAddGamePoints(dbClient, user.Client.User.Id);
-                    }
+                    using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+                    UserDao.UpdateAddGamePoints(dbClient, user.Client.User.Id);
                 }
 
                 _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.Client, "ACH_Extrabox", 1);

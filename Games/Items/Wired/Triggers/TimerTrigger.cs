@@ -9,6 +9,8 @@ using WibboEmulator.Games.Rooms.Wired;
 public class TimerTrigger : WiredTriggerBase, IWired, IWiredCycleable
 {
     public int DelayCycle => (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+    public bool IsTeleport => false;
+
     private int _skipCycleCount;
 
     public TimerTrigger(Item item, Room room) : base(item, room, (int)WiredTriggerType.TRIGGER_ONCE)

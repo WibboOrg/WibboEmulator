@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Bases;
+namespace WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Wireds;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -8,6 +8,7 @@ using WibboEmulator.Games.Rooms.Wired;
 public class WiredActionBase : WiredBase, IWiredCycleable
 {
     public int DelayCycle => this.Delay;
+    public bool IsTeleport => false;
 
     public virtual void Handle(RoomUser user, Item item)
     {

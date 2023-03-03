@@ -5,37 +5,12 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Events;
-using WibboEmulator.Games.Rooms.Wired;
 
-public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
+public class SateChanged : WiredTriggerBase, IWired
 {
-    public int DelayCycle => this.Delay;
-
     public SateChanged(Item item, Room room) : base(item, room, (int)WiredTriggerType.TOGGLE_FURNI) { }
 
-    public bool OnCycle(RoomUser user, Item item)
-    {
-        if (user != null)
-        {
-            this.OnTriggered(user, item);
-        }
-
-        return false;
-    }
-
-    private void OnTriggered(object sender, ItemTriggeredEventArgs e)
-    {
-        if (this.Delay > 0)
-        {
-            this.RoomInstance.WiredHandler.RequestCycle(new WiredCycle(this, e.User, e.Item));
-        }
-        else
-        {
-            this.OnTriggered(e.User, e.Item);
-        }
-    }
-
-    private void OnTriggered(RoomUser user, Item item) => this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, item);
+    private void OnTriggered(object sender, ItemTriggeredEventArgs e) => this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, e.User, e.Item);
 
     public override void LoadItems(bool inDatabase = false)
     {
@@ -63,15 +38,10 @@ public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
         base.Dispose();
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.DelayCycle.ToString(), false, this.Items);
+    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, string.Empty, false, this.Items);
 
     public void LoadFromDatabase(DataRow row)
     {
-        if (int.TryParse(row["trigger_data"].ToString(), out var delay))
-        {
-            this.Delay = delay;
-        }
-
         var triggerItems = row["triggers_item"].ToString();
 
         if (triggerItems is null or "")

@@ -63,6 +63,8 @@ public class GameMap
     {
         if (item.GetRoom() != null)
         {
+            user.RemoveStatus("mv");
+            user.UpdateNeeded = true;
             item.GetRoom().SendPacket(RoomItemHandling.TeleportUser(user, item.Coordinate, 0, item.Z, true));
             item.GetRoom().RoomUserManager.UpdateUserStatus(user, false);
         }

@@ -610,6 +610,15 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
         var result = false;
         switch (effect)
         {
+            case "itemcollision":
+            case "itemnotcollision":
+            {
+                if (user == null && item != null)
+                {
+                    result = true;
+                }
+                break;
+            }
             case "itemissurvive":
             case "itemisnotsurvive":
             {

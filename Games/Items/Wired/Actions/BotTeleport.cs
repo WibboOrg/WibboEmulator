@@ -8,6 +8,8 @@ using WibboEmulator.Games.Rooms.Map;
 
 public class BotTeleport : WiredActionBase, IWired, IWiredEffect
 {
+    public new bool IsTeleport => true;
+
     public BotTeleport(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_TELEPORT)
     {
     }
@@ -25,6 +27,15 @@ public class BotTeleport : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
+        if (!bot.PendingTeleport && this.Delay > 0)
+        {
+            bot.PendingTeleport = true;
+
+            bot.ApplyEffect(4, true);
+            bot.Freeze = true;
+            return true;
+        }
+
         var roomItem = this.Items[WibboEnvironment.GetRandomNumber(0, this.Items.Count - 1)];
         if (roomItem == null)
         {
@@ -34,6 +45,13 @@ public class BotTeleport : WiredActionBase, IWired, IWiredEffect
         if (roomItem.Coordinate != bot.Coordinate)
         {
             GameMap.TeleportToItem(bot, roomItem);
+        }
+
+        bot.PendingTeleport = false;
+        bot.ApplyEffect(bot.CurrentEffect, true);
+        if (bot.FreezeEndCounter <= 0)
+        {
+            bot.Freeze = false;
         }
 
         return false;

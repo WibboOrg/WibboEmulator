@@ -8,4 +8,6 @@ public interface IWiredCycleable
     bool Disposed();
 
     int DelayCycle { get; }
+
+    bool IsTeleport { get; }
 }
