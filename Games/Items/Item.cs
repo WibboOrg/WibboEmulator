@@ -109,7 +109,7 @@ public class Item : IEquatable<Item>
             {
                 point.X--;
             }
-            else if (this.Rotation == 6)
+            else if (this.Rotation == 7)
             {
                 point.X--;
                 point.Y--;
