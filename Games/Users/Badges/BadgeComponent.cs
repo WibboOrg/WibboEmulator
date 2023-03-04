@@ -1,7 +1,6 @@
 namespace WibboEmulator.Games.Users.Badges;
 using System.Collections;
 using System.Data;
-using System.Security.Cryptography.X509Certificates;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Users;

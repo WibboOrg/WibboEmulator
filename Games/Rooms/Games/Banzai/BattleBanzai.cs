@@ -1,7 +1,6 @@
 namespace WibboEmulator.Games.Rooms.Games.Banzai;
 using System.Collections;
 using System.Drawing;
-using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;

@@ -63,7 +63,12 @@ public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEf
             return;
         }
 
-        if (!user.PendingTeleport && this.Delay <= 1)
+        if (user.PendingTeleport)
+        {
+            return;
+        }
+
+        if (this.Delay <= 1)
         {
             user.PendingTeleport = true;
 

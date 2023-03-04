@@ -1,7 +1,6 @@
 namespace WibboEmulator.Games.Rooms;
 using System.Collections.Concurrent;
 using System.Drawing;
-using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;

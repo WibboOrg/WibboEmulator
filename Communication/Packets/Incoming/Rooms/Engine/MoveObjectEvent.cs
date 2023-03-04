@@ -1,5 +1,4 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 

@@ -1,8 +1,6 @@
 namespace WibboEmulator.Games.Users.Inventory;
 using System.Collections.Concurrent;
 using System.Data;
-using Google.Protobuf.WellKnownTypes;
-using MySqlX.XDevAPI;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
@@ -12,7 +10,6 @@ using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Users.Inventory.Bots;
 

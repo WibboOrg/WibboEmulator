@@ -1,7 +1,6 @@
 namespace WibboEmulator.Games.Rooms.Games.Freeze;
 using System.Collections;
 using System.Drawing;
-using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Freeze;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;

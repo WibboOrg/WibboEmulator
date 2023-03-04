@@ -1,5 +1,4 @@
 namespace WibboEmulator.Core;
-using System.Text;
 using WibboEmulator.Utilities.ConsoleWriter;
 
 public static class ExceptionLogger
