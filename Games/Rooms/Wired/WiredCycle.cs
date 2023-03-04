@@ -21,19 +21,29 @@ public class WiredCycle
     {
         this.Cycle++;
 
-        if (this.WiredCycleable.IsTeleport && this.Cycle == this.WiredCycleable.DelayCycle && this.WiredCycleable.DelayCycle > 1)
+        if (this.User != null && this.User.IsDispose)
         {
-            return this.WiredCycleable.OnCycle(this.User, this.Item);
+            this.User = null;
+        }
+
+        if (this.WiredCycleable.IsTeleport && this.WiredCycleable.DelayCycle > 1)
+        {
+            if (this.Cycle == this.WiredCycleable.DelayCycle - 1)
+            {
+                return this.WiredCycleable.OnCycle(this.User, this.Item);
+            }
+
+            else if (this.Cycle == this.WiredCycleable.DelayCycle)
+            {
+                this.Cycle = 0;
+
+                return this.WiredCycleable.OnCycle(this.User, this.Item);
+            }
         }
 
         if (this.Cycle <= this.WiredCycleable.DelayCycle)
         {
             return true;
-        }
-
-        if (this.User != null && this.User.IsDispose)
-        {
-            this.User = null;
         }
 
         this.Cycle = 0;

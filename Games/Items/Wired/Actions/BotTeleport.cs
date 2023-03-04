@@ -6,7 +6,7 @@ using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map;
 
-public class BotTeleport : WiredActionBase, IWired, IWiredEffect
+public class BotTeleport : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
 {
     public new bool IsTeleport => true;
 
