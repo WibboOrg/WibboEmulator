@@ -21,6 +21,11 @@ public class WiredCycle
     {
         this.Cycle++;
 
+        if (this.WiredCycleable.IsTeleport && this.Cycle == this.WiredCycleable.DelayCycle && this.WiredCycleable.DelayCycle > 1)
+        {
+            return this.WiredCycleable.OnCycle(this.User, this.Item);
+        }
+
         if (this.Cycle <= this.WiredCycleable.DelayCycle)
         {
             return true;
@@ -29,11 +34,6 @@ public class WiredCycle
         if (this.User != null && this.User.IsDispose)
         {
             this.User = null;
-        }
-
-        if (this.WiredCycleable.IsTeleport && this.Cycle == this.WiredCycleable.DelayCycle + 1)
-        {
-            return this.WiredCycleable.OnCycle(this.User, this.Item);
         }
 
         this.Cycle = 0;

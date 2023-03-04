@@ -57,6 +57,35 @@ public class BotTeleport : WiredActionBase, IWired, IWiredEffect
         return false;
     }
 
+    public override void Handle(RoomUser user, Item item)
+    {
+        if (string.IsNullOrWhiteSpace(this.StringParam) || this.Items.Count == 0)
+        {
+            return;
+        }
+
+        var bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName(this.StringParam);
+        if (bot == null)
+        {
+            return;
+        }
+
+        if (!bot.PendingTeleport && this.Delay <= 1)
+        {
+            bot.PendingTeleport = true;
+
+            bot.ApplyEffect(4, true);
+            bot.Freeze = true;
+            if (bot.ContainStatus("mv"))
+            {
+                bot.RemoveStatus("mv");
+                bot.UpdateNeeded = true;
+            }
+        }
+
+        base.Handle(user, item);
+    }
+
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, this.Items, this.Delay);
 
     public void LoadFromDatabase(DataRow row)

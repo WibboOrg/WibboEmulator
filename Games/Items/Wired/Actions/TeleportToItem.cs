@@ -19,7 +19,7 @@ public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEf
             return false;
         }
 
-        if (!user.PendingTeleport && this.Delay > 0)
+        if (!user.PendingTeleport)
         {
             user.PendingTeleport = true;
 
@@ -61,6 +61,19 @@ public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEf
         if (this.Items.Count == 0 || user == null)
         {
             return;
+        }
+
+        if (!user.PendingTeleport && this.Delay <= 1)
+        {
+            user.PendingTeleport = true;
+
+            user.ApplyEffect(4, true);
+            user.Freeze = true;
+            if (user.ContainStatus("mv"))
+            {
+                user.RemoveStatus("mv");
+                user.UpdateNeeded = true;
+            }
         }
 
         base.Handle(user, item);
