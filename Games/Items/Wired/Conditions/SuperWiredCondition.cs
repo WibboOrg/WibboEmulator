@@ -90,8 +90,8 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "notfavogroupid":
             case "mission":
             case "notmission":
-            case "missioncontais":
-            case "notmissioncontais":
+            case "missioncontains":
+            case "notmissioncontains":
             case "usergirl":
             case "notusergirl":
             case "userboy":
