@@ -24,7 +24,6 @@ internal sealed class MassBadge : IChatCommand
             if (client.User != null)
             {
                 client.User.BadgeComponent.GiveBadge(badge, true);
-                client.SendPacket(new ReceiveBadgeComposer(badge));
                 client.SendNotification("Vous venez de recevoir le badge : " + badge + " !");
             }
         }

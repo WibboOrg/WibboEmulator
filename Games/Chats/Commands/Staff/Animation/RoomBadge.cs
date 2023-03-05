@@ -23,7 +23,6 @@ internal sealed class RoomBadge : IChatCommand
                     if (user.Client.User != null)
                     {
                         user.Client.User.BadgeComponent.GiveBadge(badgeId, true);
-                        user.Client.SendPacket(new ReceiveBadgeComposer(badgeId));
                     }
                 }
             }

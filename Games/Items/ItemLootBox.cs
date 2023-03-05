@@ -151,7 +151,6 @@ internal static class ItemLootBox
         if (!string.IsNullOrEmpty(badgeCode) && !session.User.BadgeComponent.HasBadge(badgeCode))
         {
             session.User.BadgeComponent.GiveBadge(badgeCode, true);
-            session.SendPacket(new ReceiveBadgeComposer(badgeCode));
 
             var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
             roomUserByUserId?.SendWhisperChat("Tu as reçu le badge: " + badgeCode);
@@ -246,7 +245,6 @@ internal static class ItemLootBox
         if (!string.IsNullOrEmpty(badgeCode))
         {
             session.User.BadgeComponent.GiveBadge(badgeCode, true);
-            session.SendPacket(new ReceiveBadgeComposer(badgeCode));
         }
 
         EndOpenBox(session, present, room, pageId, forceItem);

@@ -1,8 +1,11 @@
 namespace WibboEmulator.Games.Users.Badges;
 using System.Collections;
 using System.Data;
+using Google.Protobuf.WellKnownTypes;
+using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Chats.Commands.User.Build;
 using WibboEmulator.Games.Users;
 
 public class BadgeComponent : IDisposable
@@ -104,7 +107,10 @@ public class BadgeComponent : IDisposable
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             UserBadgeDao.Insert(dbClient, this._userInstance.Id, slot, badge);
         }
+
         this.BadgeList.Add(badge, new Badge(badge, slot));
+
+        this._userInstance.Client?.SendPacket(new ReceiveBadgeComposer(badge));
     }
 
     public void ResetSlots()

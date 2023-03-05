@@ -76,7 +76,6 @@ internal sealed class PlaceObjectEvent : IPacketEvent
             session.User.InventoryComponent.RemoveItem(itemId);
 
             session.User.BadgeComponent.GiveBadge(userItem.ExtraData, true);
-            session.SendPacket(new ReceiveBadgeComposer(userItem.ExtraData));
 
             session.SendNotification("Vous avez reçu le badge: " + userItem.ExtraData + " !");
             return;

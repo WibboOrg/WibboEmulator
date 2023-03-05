@@ -12,7 +12,6 @@ internal sealed class GiveBadge : IChatCommand
         {
             var badgeCode = parameters[2];
             clientByUsername.User.BadgeComponent.GiveBadge(badgeCode, true);
-            clientByUsername.SendPacket(new ReceiveBadgeComposer(badgeCode));
         }
         else
         {

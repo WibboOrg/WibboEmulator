@@ -2115,7 +2115,6 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             case "badge":
             {
                 user.Client.User.BadgeComponent.GiveBadge(value, true);
-                user.Client.SendPacket(new ReceiveBadgeComposer(value));
                 break;
             }
             case "removebadge":

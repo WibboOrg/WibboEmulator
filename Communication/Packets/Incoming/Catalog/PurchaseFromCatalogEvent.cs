@@ -384,7 +384,6 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
         if (!string.IsNullOrEmpty(item.Badge) && !session.User.BadgeComponent.HasBadge(item.Badge))
         {
             session.User.BadgeComponent.GiveBadge(item.Badge, true);
-            session.SendPacket(new ReceiveBadgeComposer(item.Badge));
 
             session.SendPacket(new FurniListNotificationComposer(0, 4));
         }

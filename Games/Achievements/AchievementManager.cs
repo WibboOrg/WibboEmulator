@@ -99,7 +99,6 @@ public class AchievementManager
             newProgress = 0;
 
             session.User.BadgeComponent.GiveBadge(achievementGroup + targetLevel, true);
-            session.SendPacket(new ReceiveBadgeComposer(achievementGroup + targetLevel));
 
             if (newTarget > totalLevels)
             {
