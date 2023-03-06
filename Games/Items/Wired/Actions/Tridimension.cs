@@ -1,13 +1,15 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
+using System.Diagnostics.Metrics;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.WebSocketSharp.Net;
 
 public class Tridimension : WiredActionBase, IWiredEffect, IWired
 {
-    public Tridimension(Item item, Room room) : base(item, room, (int)WiredActionType.TRI_DIMENSION) => this.StringParam = "0;0;0.0";
+    public Tridimension(Item item, Room room) : base(item, room, (int)WiredActionType.TRI_DIMENSION) => this.StringParam = "0;0;0.0;0;0";
 
     public override bool OnCycle(RoomUser user, Item item)
     {
@@ -18,20 +20,25 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
         {
             foreach (var roomItem in this.Items.ToList())
             {
-                this.HandleMovement(roomItem, disableAnimation);
+                this.HandleItem(roomItem, disableAnimation);
             }
         }
         else if (item != null)
         {
-            this.HandleMovement(item, disableAnimation);
+            this.HandleItem(item, disableAnimation);
         }
 
         return false;
     }
 
-    private void HandleMovement(Item roomItem, bool disableAnimation)
+    private void HandleItem(Item roomItem, bool disableAnimation)
     {
         if (this.RoomInstance.RoomItemHandling.GetItem(roomItem.Id) == null)
+        {
+            return;
+        }
+
+        if (this.StringParam.Contains(';') == false)
         {
             return;
         }
@@ -41,12 +48,20 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
         var x = 0;
         var y = 0;
         var z = 0.0;
+        var rot = 0;
+        var state = 0;
 
-        if (parts.Length == 3)
+        if (parts.Length >= 3)
         {
             _ = int.TryParse(parts[0], out x);
             _ = int.TryParse(parts[1], out y);
             _ = double.TryParse(parts[2], out z);
+        }
+
+        if (parts.Length == 5)
+        {
+            _ = int.TryParse(parts[3], out rot);
+            _ = int.TryParse(parts[4], out state);
         }
 
         var newX = roomItem.X + x;
@@ -63,11 +78,6 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
             newY = this.RoomInstance.GameMap.Model.MapSizeY - 1;
         }
 
-        if (newZ > 1000)
-        {
-            newZ = 1000;
-        }
-
         if (newX < 0)
         {
             newX = 0;
@@ -76,6 +86,11 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
         if (newY < 0)
         {
             newY = 0;
+        }
+
+        if (newZ > 1000)
+        {
+            newZ = 1000;
         }
 
         if (newZ < -1000)
@@ -89,6 +104,38 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
             {
                 this.RoomInstance.RoomItemHandling.PositionReset(roomItem, newX, newY, newZ, disableAnimation);
             }
+        }
+
+        var needUpdate = false;
+
+        var newRot = (roomItem.Rotation + rot) % 8;
+
+        newRot = newRot < 0 ? newRot + 8 : newRot;
+
+        if (roomItem.Rotation != newRot)
+        {
+            roomItem.Rotation = newRot;
+            needUpdate = true;
+        }
+
+        if (roomItem.GetBaseItem().Modes > 1)
+        {
+            if (int.TryParse(roomItem.ExtraData, out var stateItem))
+            {
+                var newState = (stateItem + state) % roomItem.GetBaseItem().Modes;
+                newState = newState < 0 ? newState + roomItem.GetBaseItem().Modes : newState;
+
+                if (newState != stateItem)
+                {
+                    roomItem.ExtraData = newState.ToString();
+                    needUpdate = true;
+                }
+            }
+        }
+
+        if (needUpdate)
+        {
+            roomItem.UpdateState();
         }
 
         return;
