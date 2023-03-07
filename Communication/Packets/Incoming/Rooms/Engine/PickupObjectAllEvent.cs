@@ -5,7 +5,7 @@ using WibboEmulator.Games.GameClients;
 
 internal sealed class PickupObjectAllEvent : IPacketEvent
 {
-    public double Delay => 500;
+    public double Delay => 1000;
 
     public void Parse(GameClient session, ClientPacket packet)
     {
@@ -28,6 +28,8 @@ internal sealed class PickupObjectAllEvent : IPacketEvent
         var itemIds = new List<int>();
         var itemCount = packet.PopInt();
 
+        itemCount = itemCount > 100 ? 100 : itemCount;
+
         for (var i = 0; i < itemCount; i++)
         {
             var itemId = packet.PopInt();
@@ -35,7 +37,7 @@ internal sealed class PickupObjectAllEvent : IPacketEvent
             itemIds.Add(itemId);
         }
 
-        session.User.InventoryComponent.AddItemArray(room.RoomItemHandling.RemoveAllFurnitureByIds(session, itemIds));
+        session.User.InventoryComponent.AddItemArray(room.RoomItemHandling.RemoveFurnitureToInventoryByIds(session, itemIds));
         session.SendPacket(new FurniListUpdateComposer());
     }
 }

@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
-using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -31,18 +30,15 @@ public class ShowMessage : WiredActionBase, IWired, IWiredEffect
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null, this.Delay);
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        if (int.TryParse(row["delay"].ToString(), out var delay))
+        this.Delay = wiredDelay;
+
+        if (int.TryParse(wiredTriggerData2, out var delay))
         {
             this.Delay = delay;
         }
 
-        if (int.TryParse(row["trigger_data_2"].ToString(), out delay))
-        {
-            this.Delay = delay;
-        }
-
-        this.StringParam = row["trigger_data"].ToString();
+        this.StringParam = wiredTriggerData;
     }
 }

@@ -47,7 +47,6 @@ internal sealed class MakeOfferEvent : IPacketEvent
             ItemDao.Delete(dbClient, itemId);
 
             CatalogMarketplaceOfferDao.Insert(dbClient, item.GetBaseItem().ItemName, item.ExtraData, itemId, item.BaseItem, session.User.Id, sellingPrice, totalPrice, item.GetBaseItem().SpriteId, itemType, item.Limited, item.LimitedStack);
-
         }
 
         session.User.InventoryComponent.RemoveItem(itemId);

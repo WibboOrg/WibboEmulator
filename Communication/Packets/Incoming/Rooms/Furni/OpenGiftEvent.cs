@@ -47,7 +47,7 @@ internal sealed class OpenGiftEvent : IPacketEvent
             {
                 room.RoomItemHandling.RemoveFurniture(null, present.Id);
 
-                ItemDao.Delete(dbClient, present.Id);
+                ItemDao.DeleteById(dbClient, present.Id);
                 UserPresentDao.Delete(dbClient, present.Id);
 
                 session.User.InventoryComponent.RemoveItem(present.Id);
@@ -58,7 +58,7 @@ internal sealed class OpenGiftEvent : IPacketEvent
             {
                 room.RoomItemHandling.RemoveFurniture(null, present.Id);
 
-                ItemDao.Delete(dbClient, present.Id);
+                ItemDao.DeleteById(dbClient, present.Id);
                 UserPresentDao.Delete(dbClient, present.Id);
 
                 session.User.InventoryComponent.RemoveItem(present.Id);

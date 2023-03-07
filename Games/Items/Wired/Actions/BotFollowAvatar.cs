@@ -1,5 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
-using System.Data;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -48,20 +47,14 @@ public class BotFollowAvatar : WiredActionBase, IWired, IWiredEffect
         WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, isFollow, null, this.Delay);
     }
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.IntParams.Clear();
 
-        if (int.TryParse(row["delay"].ToString(), out var delay))
-        {
-            this.Delay = delay;
-        }
+        this.Delay = wiredDelay;
 
-        if (bool.TryParse(row["all_user_triggerable"].ToString(), out var isFollow))
-        {
-            this.IntParams.Add(isFollow ? 1 : 0);
-        }
+        this.IntParams.Add(wiredAllUserTriggerable ? 1 : 0);
 
-        this.StringParam = row["trigger_data"].ToString();
+        this.StringParam = wiredTriggerData;
     }
 }

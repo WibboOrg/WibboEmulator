@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Conditions;
-using System.Data;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -139,15 +138,14 @@ public class FurniStatePosMatchNegative : WiredConditionBase, IWiredCondition, I
 
         var triggerData2 = string.Join(";", new int[] { state, direction, position, height, requireAll });
 
-        ItemWiredDao.Delete(dbClient, this.ItemInstance.Id);
-        ItemWiredDao.Insert(dbClient, this.ItemInstance.Id, "", triggerData2, false, triggerItems, this.Delay);
+        ItemWiredDao.Replace(dbClient, this.ItemInstance.Id, "", triggerData2, false, triggerItems, this.Delay);
     }
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.IntParams.Clear();
 
-        var triggerData2 = row["trigger_data_2"].ToString();
+        var triggerData2 = wiredTriggerData2;
 
         if (triggerData2 != null && triggerData2.Contains(';'))
         {
@@ -170,7 +168,7 @@ public class FurniStatePosMatchNegative : WiredConditionBase, IWiredCondition, I
             this.IntParams.Add(1);
         }
 
-        var triggerItems = row["triggers_item"].ToString();
+        var triggerItems = wiredTriggersItem;
 
         if (triggerItems is null or "")
         {

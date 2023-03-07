@@ -1,11 +1,9 @@
 namespace WibboEmulator.Games.Users.Badges;
 using System.Collections;
 using System.Data;
-using Google.Protobuf.WellKnownTypes;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Chats.Commands.User.Build;
 using WibboEmulator.Games.Users;
 
 public class BadgeComponent : IDisposable

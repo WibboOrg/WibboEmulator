@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 
@@ -9,7 +8,7 @@ public interface IWired
 
     void SaveToDatabase(IQueryAdapter dbClient);
 
-    void LoadFromDatabase(DataRow row);
+    void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay);
 
     void OnTrigger(GameClient session);
 

@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
-using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -141,18 +140,15 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, this.Items, this.Delay);
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.IntParams.Clear();
 
-        if (int.TryParse(row["delay"].ToString(), out var delay))
-        {
-            this.Delay = delay;
-        }
+        this.Delay = wiredDelay;
 
-        this.StringParam = row["trigger_data"].ToString();
+        this.StringParam = wiredTriggerData;
 
-        var triggerItems = row["triggers_item"].ToString();
+        var triggerItems = wiredTriggersItem;
         if (triggerItems is null or "")
         {
             return;

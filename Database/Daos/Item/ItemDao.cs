@@ -34,13 +34,12 @@ internal sealed class ItemDao
         standardQueries.Dispose();
     }
 
-    internal static void DeleteItems(IQueryAdapter dbClient, List<Item> deleteItems)
+    internal static void UpdateItems(IQueryAdapter dbClient, List<Item> updateItems, int userId)
     {
         var standardQueries = new QueryChunk();
-
-        foreach (var roomItem in deleteItems)
+        foreach (var roomItem in updateItems)
         {
-             standardQueries.AddQuery("DELETE `item`, `item_limited` FROM `item` LEFT JOIN `item_limited` ON(`item_limited`.item_id = `item`.id) WHERE id = '" + roomItem.Id + "'");
+            standardQueries.AddQuery("UPDATE `item` SET room_id = '0', user_id = '" + userId + "' WHERE id = '" + roomItem.Id + "'");
         }
 
         standardQueries.Execute(dbClient);
@@ -79,7 +78,9 @@ internal sealed class ItemDao
 
     internal static void Delete(IQueryAdapter dbClient, int itemId) => dbClient.RunQuery("DELETE `item`, `item_limited` FROM `item` LEFT JOIN `item_limited` ON(`item_limited`.item_id = `item`.id) WHERE id = '" + itemId + "'");
 
-    internal static void DeleteAllByRoomId(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("DELETE `item`, `item_limited` FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) LEFT JOIN `item_present` ON (`item_present`.item_id = `item`.id) LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_teleport` ON (tele_one_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) WHERE room_id = '" + roomId + "'");
+    internal static void DeleteById(IQueryAdapter dbClient, int itemId) => dbClient.RunQuery("DELETE `item`, `item_limited`, `item_present`, `item_moodlight`, `item_teleport`, `item_wired` FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) LEFT JOIN `item_present` ON (`item_present`.item_id = `item`.id) LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_teleport` ON (tele_one_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) WHERE id = '" + itemId + "'");
+
+    internal static void DeleteAllByRoomId(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("DELETE `item`, `item_limited`, `item_present`, `item_moodlight`, `item_teleport`, `item_wired` FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) LEFT JOIN `item_present` ON (`item_present`.item_id = `item`.id) LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_teleport` ON (tele_one_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) WHERE room_id = '" + roomId + "'");
 
     internal static void DeleteAll(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("DELETE `item`, `item_limited`, `item_present`, `item_moodlight`, `item_teleport`, `item_wired` FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) LEFT JOIN `item_present` ON (`item_present`.item_id = `item`.id) LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_teleport` ON (tele_one_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) WHERE room_id = '0' AND user_id = '" + userId + "'");
 
@@ -127,7 +128,7 @@ internal sealed class ItemDao
 
     internal static DataTable GetAll(IQueryAdapter dbClient, int roomId)
     {
-        dbClient.SetQuery("SELECT `item`.id, `item`.user_id, `item`.room_id, `item`.base_item, `item`.extra_data, `item`.x, `item`.y, `item`.z, `item`.rot, `item`.wall_pos, `item_limited`.limited_number, `item_limited`.limited_stack FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) WHERE `item`.room_id = @roomid");
+        dbClient.SetQuery("SELECT `item`.id, `item`.user_id, `item`.room_id, `item`.base_item, `item`.extra_data, `item`.x, `item`.y, `item`.z, `item`.rot, `item`.wall_pos, `item_limited`.limited_number, `item_limited`.limited_stack, `item_wired`.trigger_data, `item_wired`.trigger_data_2, `item_wired`.triggers_item, `item_wired`.all_user_triggerable, `item_wired`.delay, `item_moodlight`.enabled, `item_moodlight`.current_preset, `item_moodlight`.preset_one, `item_moodlight`.preset_two, `item_moodlight`.preset_three FROM `item` LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) WHERE `item`.room_id = @roomid");
         dbClient.AddParameter("roomid", roomId);
 
         return dbClient.GetTable();

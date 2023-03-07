@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Conditions;
-using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -24,11 +23,11 @@ public class LessThanTimer : WiredConditionBase, IWiredCondition, IWired
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, timeout.ToString(), false, null);
     }
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.IntParams.Clear();
 
-        if (int.TryParse(row["trigger_data"].ToString(), out var timeout))
+        if (int.TryParse(wiredTriggerData, out var timeout))
         {
             this.IntParams.Add(timeout);
         }

@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
-using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -39,26 +38,23 @@ public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, ignoreCondition.ToString(), false, this.Items, this.Delay);
     }
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.IntParams.Clear();
 
-        if (int.TryParse(row["delay"].ToString(), out var delay))
-        {
-            this.Delay = delay;
-        }
+        this.Delay = wiredDelay;
 
-        if (int.TryParse(row["trigger_data"].ToString(), out var ignoreCondition))
+        if (int.TryParse(wiredTriggerData, out var ignoreCondition))
         {
             this.IntParams.Add(ignoreCondition);
         }
 
-        if (int.TryParse(row["trigger_data_2"].ToString(), out delay))
+        if (int.TryParse(wiredTriggerData2, out var delay))
         {
             this.Delay = delay;
         }
 
-        var triggerItems = row["triggers_item"].ToString();
+        var triggerItems = wiredTriggersItem;
 
         if (triggerItems is null or "")
         {

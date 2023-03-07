@@ -3,7 +3,6 @@ using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;

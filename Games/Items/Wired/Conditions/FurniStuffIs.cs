@@ -1,5 +1,4 @@
 ﻿namespace WibboEmulator.Games.Items.Wired.Conditions;
-using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -31,9 +30,9 @@ public class FurniStuffIs : WiredConditionBase, IWiredCondition, IWired
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items);
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        var triggerItems = row["triggers_item"].ToString();
+        var triggerItems = wiredTriggersItem;
 
         if (triggerItems is null or "")
         {

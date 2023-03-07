@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Animation;
-using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -18,13 +17,7 @@ internal sealed class RoomBadge : IChatCommand
         {
             if (!user.IsBot)
             {
-                if (user.Client != null)
-                {
-                    if (user.Client.User != null)
-                    {
-                        user.Client.User.BadgeComponent.GiveBadge(badgeId, true);
-                    }
-                }
+                user.Client?.User?.BadgeComponent.GiveBadge(badgeId, true);
             }
         }
 

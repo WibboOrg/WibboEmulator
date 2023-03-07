@@ -13,7 +13,7 @@ internal sealed class Pickall : IChatCommand
             return;
         }
 
-        session.User.InventoryComponent.AddItemArray(room.RoomItemHandling.RemoveAllFurniture(session));
+        session.User.InventoryComponent.AddItemArray(room.RoomItemHandling.RemoveAllFurnitureToInventory(session));
         session.SendPacket(new FurniListUpdateComposer());
     }
 }

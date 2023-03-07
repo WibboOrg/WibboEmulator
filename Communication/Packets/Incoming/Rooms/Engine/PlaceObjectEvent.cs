@@ -1,6 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
-using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
@@ -70,7 +69,7 @@ internal sealed class PlaceObjectEvent : IPacketEvent
 
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                ItemDao.Delete(dbClient, itemId);
+                ItemDao.DeleteById(dbClient, itemId);
             }
 
             session.User.InventoryComponent.RemoveItem(itemId);

@@ -57,14 +57,11 @@ public class HighScore : WiredActionBase, IWired, IWiredEffect
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, triggerItems, false, null, this.Delay);
     }
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        if (int.TryParse(row["delay"].ToString(), out var delay))
-        {
-            this.Delay = delay;
-        }
+        this.Delay = wiredDelay;
 
-        var triggerData = row["trigger_data"].ToString();
+        var triggerData = wiredTriggerData;
 
         if (triggerData is null or "")
         {

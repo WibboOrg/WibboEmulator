@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
-using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -1220,23 +1219,20 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, Convert.ToInt32(startDirection).ToString(), Convert.ToInt32(whenMoveIsBlocked).ToString(), false, this.Items, this.Delay);
     }
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.IntParams.Clear();
 
-        if (int.TryParse(row["delay"].ToString(), out var delay))
-        {
-            this.Delay = delay;
-        }
+        this.Delay = wiredDelay;
 
-        var triggerItems = row["triggers_item"].ToString();
+        var triggerItems = wiredTriggersItem;
 
-        if (int.TryParse(row["trigger_data_2"].ToString(), out var startDirection))
+        if (int.TryParse(wiredTriggerData2, out var startDirection))
         {
             this.IntParams.Add(startDirection);
         }
 
-        if (int.TryParse(row["trigger_data"].ToString(), out var whenMoveIsBlocked))
+        if (int.TryParse(wiredTriggerData, out var whenMoveIsBlocked))
         {
             this.IntParams.Add(whenMoveIsBlocked);
         }

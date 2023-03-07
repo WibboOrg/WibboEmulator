@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Conditions;
-using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -35,7 +34,7 @@ public class HasUserNotInGroup : WiredConditionBase, IWiredCondition, IWired
     {
     }
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
     }
 }

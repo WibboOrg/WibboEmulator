@@ -5,7 +5,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
-using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
@@ -310,7 +309,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                                 generatedGenericItems.AddRange(items);
                                 foreach (var itemMoodlight in items)
                                 {
-                                    ItemFactory.CreateMoodlightData(itemMoodlight);
+                                    ItemMoodlightDao.Insert(dbClient, itemMoodlight.Id);
                                 }
                             }
                         }
@@ -321,7 +320,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                             if (newItem != null)
                             {
                                 generatedGenericItems.Add(newItem);
-                                ItemFactory.CreateMoodlightData(newItem);
+                                ItemMoodlightDao.Insert(dbClient, newItem.Id);
                             }
                         }
                     }

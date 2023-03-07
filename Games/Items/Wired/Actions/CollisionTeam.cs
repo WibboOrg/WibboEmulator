@@ -64,16 +64,13 @@ public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, team.ToString(), false, null, this.Delay);
     }
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.IntParams.Clear();
 
-        if (int.TryParse(row["delay"].ToString(), out var delay))
-        {
-            this.Delay = delay;
-        }
+        this.Delay = wiredDelay;
 
-        if (int.TryParse(row["trigger_data"].ToString(), out var team))
+        if (int.TryParse(wiredTriggerData, out var team))
         {
             this.IntParams.Add(team);
         }

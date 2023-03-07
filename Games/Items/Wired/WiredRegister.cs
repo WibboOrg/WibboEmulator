@@ -1,6 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired;
-using WibboEmulator.Database.Daos.Item;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Actions;
 using WibboEmulator.Games.Items.Wired.Conditions;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -277,19 +275,13 @@ public class WiredRegister
         }
     }
 
-    public static void HandleRegister(Item item, Room room, IQueryAdapter dbClient)
+    public static void HandleRegister(Item item, Room room, string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         var handler = GetWiredHandler(item, room);
 
         if (handler != null)
         {
-            var row = ItemWiredDao.GetOne(dbClient, item.Id);
-            if (row != null)
-            {
-                handler.LoadFromDatabase(row);
-            }
-
-            handler.LoadItems(true);
+            handler.LoadFromDatabase(wiredTriggerData, wiredTriggerData2, wiredTriggersItem, wiredAllUserTriggerable, wiredDelay);
 
             HandleSave(handler, item);
         }

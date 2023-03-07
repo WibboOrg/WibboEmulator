@@ -67,7 +67,7 @@ internal sealed class ApplyDecorationEvent : IPacketEvent
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
             RoomDao.UpdateDecoration(dbClient, room.Id, decorationKey, userItem.ExtraData);
-            ItemDao.Delete(dbClient, userItem.Id);
+            ItemDao.DeleteById(dbClient, userItem.Id);
         }
 
         session.User.InventoryComponent.RemoveItem(userItem.Id);

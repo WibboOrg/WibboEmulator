@@ -111,7 +111,7 @@ public class InventoryComponent : IDisposable
                 continue;
             }
 
-            ItemDao.Delete(dbClient, roomItem.Id);
+            ItemDao.DeleteById(dbClient, roomItem.Id);
 
             this.RemoveItem(roomItem.Id);
 

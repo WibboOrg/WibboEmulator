@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Triggers;
-using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -64,15 +63,12 @@ public class UserSays : WiredTriggerBase, IWired
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, isOwnerOnly, null);
     }
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.IntParams.Clear();
 
-        this.StringParam = row["trigger_data"].ToString();
+        this.StringParam = wiredTriggerData;
 
-        if (bool.TryParse(row["all_user_triggerable"].ToString(), out var isOwnerOnly))
-        {
-            this.IntParams.Add(isOwnerOnly ? 1 : 0);
-        }
+        this.IntParams.Add(wiredAllUserTriggerable ? 1 : 0);
     }
 }

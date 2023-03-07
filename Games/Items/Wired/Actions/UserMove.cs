@@ -1,5 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
-using System.Data;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -36,19 +35,16 @@ public class UserMove : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items, this.Delay);
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        if (int.TryParse(row["delay"].ToString(), out var delay))
+        this.Delay = wiredDelay;
+
+        if (int.TryParse(wiredTriggerData, out var delay))
         {
             this.Delay = delay;
         }
 
-        if (int.TryParse(row["trigger_data"].ToString(), out delay))
-        {
-            this.Delay = delay;
-        }
-
-        var triggerItems = row["triggers_item"].ToString();
+        var triggerItems = wiredTriggersItem;
 
         if (triggerItems is null or "")
         {

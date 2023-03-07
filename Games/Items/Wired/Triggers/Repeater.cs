@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Triggers;
-using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -26,11 +25,11 @@ public class Repeater : WiredTriggerBase, IWired, IWiredCycleable
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.DelayCycle.ToString(), false, null);
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.IntParams.Clear();
 
-        if (int.TryParse(row["trigger_data"].ToString(), out var delay))
+        if (int.TryParse(wiredTriggerData, out var delay))
         {
             this.IntParams.Add(delay);
         }

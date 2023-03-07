@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Triggers;
-using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -51,11 +50,11 @@ public class UserClickSelf : WiredTriggerBase, IWired
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, distance.ToString(), false, null);
     }
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.IntParams.Clear();
 
-        var triggerData = row["trigger_data"].ToString();
+        var triggerData = wiredTriggerData;
 
         if (int.TryParse(triggerData, out var distance))
         {

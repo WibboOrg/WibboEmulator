@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Conditions;
-using System.Data;
 using System.Drawing;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -1272,5 +1271,5 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null);
 
-    public void LoadFromDatabase(DataRow row) => this.StringParam = row["trigger_data"].ToString();
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay) => this.StringParam = wiredTriggerData;
 }

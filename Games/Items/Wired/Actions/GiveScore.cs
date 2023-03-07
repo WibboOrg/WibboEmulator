@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
-using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -53,21 +52,18 @@ public class GiveScore : WiredActionBase, IWiredEffect, IWired
         WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, scoreToGive.ToString(), maxCountPerGame.ToString(), false, null, this.Delay);
     }
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.IntParams.Clear();
 
-        if (int.TryParse(row["delay"].ToString(), out var delay))
-        {
-            this.Delay = delay;
-        }
+        this.Delay = wiredDelay;
 
-        if (int.TryParse(row["trigger_data"].ToString(), out var maxCount))
+        if (int.TryParse(wiredTriggerData, out var maxCount))
         {
             this.IntParams.Add(maxCount);
         }
 
-        if (int.TryParse(row["trigger_data_2"].ToString(), out var score))
+        if (int.TryParse(wiredTriggerData2, out var score))
         {
             this.IntParams.Add(score);
         }

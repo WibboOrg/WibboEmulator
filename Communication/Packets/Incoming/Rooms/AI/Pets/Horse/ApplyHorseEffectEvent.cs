@@ -47,7 +47,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 BotPetDao.UpdateHaveSaddle(dbClient, petUser.PetData.PetId, 1);
-                ItemDao.Delete(dbClient, item.Id);
+                ItemDao.DeleteById(dbClient, item.Id);
             }
 
             room.RoomItemHandling.RemoveFurniture(session, item.Id);
@@ -58,7 +58,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 BotPetDao.UpdateHaveSaddle(dbClient, petUser.PetData.PetId, 2);
-                ItemDao.Delete(dbClient, item.Id);
+                ItemDao.DeleteById(dbClient, item.Id);
             }
 
             room.RoomItemHandling.RemoveFurniture(session, item.Id);
@@ -74,7 +74,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 BotPetDao.UpdatePethair(dbClient, petUser.PetData.PetId, petUser.PetData.PetHair);
-                ItemDao.Delete(dbClient, item.Id);
+                ItemDao.DeleteById(dbClient, item.Id);
             }
 
             room.RoomItemHandling.RemoveFurniture(session, item.Id);
@@ -90,7 +90,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 BotPetDao.UpdateHairdye(dbClient, petUser.PetData.PetId, petUser.PetData.HairDye);
-                ItemDao.Delete(dbClient, item.Id);
+                ItemDao.DeleteById(dbClient, item.Id);
             }
 
             room.RoomItemHandling.RemoveFurniture(session, item.Id);
@@ -122,7 +122,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 BotPetDao.UpdateRace(dbClient, petUser.PetData.PetId, petUser.PetData.Race);
-                ItemDao.Delete(dbClient, item.Id);
+                ItemDao.DeleteById(dbClient, item.Id);
             }
 
             //We only want to use this if we're successful. 

@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Triggers;
-using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -35,5 +34,5 @@ public class BotReadchedAvatar : WiredTriggerBase, IWired
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, false, null);
 
-    public void LoadFromDatabase(DataRow row) => this.StringParam = row["trigger_data"].ToString();
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay) => this.StringParam = wiredTriggerData;
 }

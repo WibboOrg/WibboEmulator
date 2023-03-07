@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
-using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -47,21 +46,15 @@ public class BotTalk : WiredActionBase, IWired, IWiredEffect
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, isShout, null, this.Delay);
     }
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.IntParams.Clear();
 
-        if (int.TryParse(row["delay"].ToString(), out var delay))
-        {
-            this.Delay = delay;
-        }
+        this.Delay = wiredDelay;
 
-        if (bool.TryParse(row["all_user_triggerable"].ToString(), out var isShout))
-        {
-            this.IntParams.Add(isShout ? 1 : 0);
-        }
+        this.IntParams.Add(wiredAllUserTriggerable ? 1 : 0);
 
-        var data = row["trigger_data"].ToString();
+        var data = wiredTriggerData;
 
         if (data == null)
         {

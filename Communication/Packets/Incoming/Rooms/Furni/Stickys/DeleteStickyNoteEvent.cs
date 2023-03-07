@@ -28,6 +28,6 @@ internal sealed class DeleteStickyNoteEvent : IPacketEvent
 
         room.RoomItemHandling.RemoveFurniture(session, roomItem.Id);
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        ItemDao.Delete(dbClient, roomItem.Id);
+        ItemDao.DeleteById(dbClient, roomItem.Id);
     }
 }

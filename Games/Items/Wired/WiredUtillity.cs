@@ -89,8 +89,7 @@ public class WiredUtillity
 
         triggerItems = triggerItems.TrimEnd(';');
 
-        ItemWiredDao.Delete(dbClient, triggerId);
-        ItemWiredDao.Insert(dbClient, triggerId, triggerData, triggerData2, allUsertriggerable, triggerItems, delay);
+        ItemWiredDao.Replace(dbClient, triggerId, triggerData, triggerData2, allUsertriggerable, triggerItems, delay);
     }
 
     public static void ParseMessage(RoomUser user, Room room, ref string textMessage)

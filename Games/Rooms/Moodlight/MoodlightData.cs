@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Rooms.Moodlight;
-using System.Data;
 using System.Text;
 using WibboEmulator.Database.Daos.Item;
 
@@ -11,31 +10,17 @@ public class MoodlightData
 
     public List<MoodlightPreset> Presets { get; set; }
 
-    public MoodlightData(int itemId)
+    public MoodlightData(int itemId, bool enabled, int currentPreset, string presetOne, string presetTwo, string presetThree)
     {
         this.ItemId = itemId;
 
-        DataRow row = null;
-
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            row = ItemMoodlightDao.GetOne(dbClient, itemId);
-        }
-
-        if (row == null)
-        {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            ItemMoodlightDao.Insert(dbClient, itemId);
-            row = ItemMoodlightDao.GetOne(dbClient, itemId);
-        }
-
-        this.Enabled = WibboEnvironment.EnumToBool(row["enabled"].ToString());
-        this.CurrentPreset = Convert.ToInt32(row["current_preset"]);
+        this.Enabled = enabled;
+        this.CurrentPreset = currentPreset;
         this.Presets = new List<MoodlightPreset>
         {
-            GeneratePreset(Convert.ToString(row["preset_one"])),
-            GeneratePreset(Convert.ToString(row["preset_two"])),
-            GeneratePreset(Convert.ToString(row["preset_three"]))
+            GeneratePreset(presetOne),
+            GeneratePreset(presetTwo),
+            GeneratePreset(presetThree)
         };
     }
 

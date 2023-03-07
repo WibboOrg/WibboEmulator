@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
-using System.Data;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -122,25 +121,21 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
 
         var triggerData2 = state + ";" + direction + ";" + position;
 
-        ItemWiredDao.Delete(dbClient, this.ItemInstance.Id);
-        ItemWiredDao.Insert(dbClient, this.ItemInstance.Id, "", triggerData2, false, triggerItems, this.Delay);
+        ItemWiredDao.Replace(dbClient, this.ItemInstance.Id, "", triggerData2, false, triggerItems, this.Delay);
     }
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.IntParams.Clear();
 
-        if (int.TryParse(row["delay"].ToString(), out var delay))
+        this.Delay = wiredDelay;
+
+        if (int.TryParse(wiredTriggerData, out var delay))
         {
             this.Delay = delay;
         }
 
-        if (int.TryParse(row["trigger_data"].ToString(), out delay))
-        {
-            this.Delay = delay;
-        }
-
-        var triggerData2 = row["trigger_data_2"].ToString();
+        var triggerData2 = wiredTriggerData2;
 
         if (triggerData2 != null && triggerData2.Length == 5)
         {
@@ -162,7 +157,7 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
             }
         }
 
-        var triggerItems = row["triggers_item"].ToString();
+        var triggerItems = wiredTriggersItem;
 
         if (triggerItems is null or "")
         {

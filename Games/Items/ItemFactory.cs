@@ -96,12 +96,6 @@ public class ItemFactory
         return items;
     }
 
-    public static void CreateMoodlightData(Item item)
-    {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        ItemMoodlightDao.Insert(dbClient, item.Id);
-    }
-
     public static FurniInteractor CreateInteractor(Item item) => item.GetBaseItem().InteractionType switch
     {
         InteractionType.GATE or InteractionType.BANZAI_PYRAMID => new InteractorGate(),

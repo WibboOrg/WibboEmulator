@@ -1,5 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
-using System.Data;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -18,18 +17,15 @@ public class BotGiveHanditem : WiredActionBase, IWired, IWiredEffect
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, handItemId.ToString(), this.StringParam, false, null, this.Delay);
     }
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.IntParams.Clear();
 
-        if (int.TryParse(row["delay"].ToString(), out var delay))
-        {
-            this.Delay = delay;
-        }
+        this.Delay = wiredDelay;
 
-        this.StringParam = row["trigger_data"].ToString();
+        this.StringParam = wiredTriggerData;
 
-        if (int.TryParse(row["trigger_data_2"].ToString(), out var handItemId))
+        if (int.TryParse(wiredTriggerData2, out var handItemId))
         {
             this.IntParams.Add(handItemId);
         }

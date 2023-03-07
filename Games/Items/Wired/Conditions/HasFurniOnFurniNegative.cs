@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Items.Wired.Conditions;
-using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -48,16 +47,16 @@ public class HasFurniOnFurniNegative : WiredConditionBase, IWiredCondition, IWir
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, requireAll.ToString(), false, this.Items);
     }
 
-    public void LoadFromDatabase(DataRow row)
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.IntParams.Clear();
 
-        if (int.TryParse(row["trigger_data"].ToString(), out var requireAll))
+        if (int.TryParse(wiredTriggerData, out var requireAll))
         {
             this.IntParams.Add(requireAll);
         }
 
-        var triggerItems = row["triggers_item"].ToString();
+        var triggerItems = wiredTriggersItem;
 
         if (triggerItems is null or "")
         {

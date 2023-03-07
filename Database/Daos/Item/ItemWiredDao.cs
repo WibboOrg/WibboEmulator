@@ -22,11 +22,9 @@ internal sealed class ItemWiredDao
         dbClient.RunQuery();
     }
 
-    internal static void Delete(IQueryAdapter dbClient, int triggerId) => dbClient.RunQuery("DELETE FROM `item_wired` WHERE trigger_id = '" + triggerId + "'");
-
-    internal static void Insert(IQueryAdapter dbClient, int triggerId, string triggerData, string triggerData2, bool allUsertriggerable, string triggersitem, int delay)
+    internal static void Replace(IQueryAdapter dbClient, int triggerId, string triggerData, string triggerData2, bool allUsertriggerable, string triggersitem, int delay)
     {
-        dbClient.SetQuery("INSERT INTO `item_wired` (trigger_id, trigger_data, trigger_data_2, all_user_triggerable, triggers_item, delay) VALUES (@id, @trigger_data, @trigger_data_2, @triggerable, @triggers_item, @delay)");
+        dbClient.SetQuery("REPLACE INTO `item_wired` (trigger_id, trigger_data, trigger_data_2, all_user_triggerable, triggers_item, delay) VALUES (@id, @trigger_data, @trigger_data_2, @triggerable, @triggers_item, @delay)");
         dbClient.AddParameter("id", triggerId);
         dbClient.AddParameter("trigger_data", triggerData);
         dbClient.AddParameter("trigger_data_2", triggerData2);

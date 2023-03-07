@@ -54,7 +54,7 @@ public class RoomItemHandling
 
     public void QueueRoomItemUpdate(Item item) => this._roomItemUpdateQueue.Enqueue(item);
 
-    public List<Item> RemoveAllFurniture(GameClient session)
+    public List<Item> RemoveAllFurnitureToInventory(GameClient session)
     {
         var listMessage = new ServerPacketList();
         var items = new List<Item>();
@@ -95,7 +95,7 @@ public class RoomItemHandling
         return items;
     }
 
-    public List<Item> RemoveAllFurnitureByIds(GameClient session, List<int> itemIds)
+    public List<Item> RemoveFurnitureToInventoryByIds(GameClient session, List<int> itemIds)
     {
         var listMessage = new ServerPacketList();
         var items = new List<Item>();
@@ -109,19 +109,17 @@ public class RoomItemHandling
             }
 
             item.Interactor.OnRemove(session, item);
-
-            listMessage.Add(this.RemoveRoomItem(item));
+            this.RemoveRoomItem(item);
             item.Destroy();
+
             items.Add(item);
+            listMessage.Add(item.IsWallItem ? new ItemRemoveComposer(item.Id, this._roomInstance.RoomData.OwnerId) : new ObjectRemoveComposer(item.Id, this._roomInstance.RoomData.OwnerId));
         }
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        ItemDao.DeleteItems(dbClient, items);
+        ItemDao.UpdateItems(dbClient, items, session.User.Id);
 
         this._roomInstance.SendMessage(listMessage);
-
-        this._roomInstance.GameMap.GenerateMaps();
-        this._roomInstance.RoomUserManager.UpdateUserStatusses();
 
         return items;
     }
@@ -150,6 +148,18 @@ public class RoomItemHandling
         int limitedTo;
         string wallCoord;
 
+        string wiredTriggerData;
+        string wiredTriggerData2;
+        string wiredTriggersItem;
+        bool wiredAllUserTriggerable;
+        int wiredDelay;
+
+        bool moodlightEnabled;
+        int moodlightCurrentPreset;
+        string moodlightPresetOne;
+        string moodlightPresetTwo;
+        string moodlightPresetThree;
+
         var itemTable = ItemDao.GetAll(dbClient, (roomId == 0) ? this._roomInstance.Id : roomId);
 
         foreach (DataRow dataRow in itemTable.Rows)
@@ -166,9 +176,7 @@ public class RoomItemHandling
             limited = !DBNull.Value.Equals(dataRow["limited_number"]) ? Convert.ToInt32(dataRow["limited_number"]) : 0;
             limitedTo = !DBNull.Value.Equals(dataRow["limited_stack"]) ? Convert.ToInt32(dataRow["limited_stack"]) : 0;
 
-            _ = WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out var data);
-
-            if (data == null)
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out var data))
             {
                 continue;
             }
@@ -192,7 +200,13 @@ public class RoomItemHandling
 
                 if (roomItem.GetBaseItem().InteractionType == InteractionType.MOODLIGHT)
                 {
-                    this._roomInstance.MoodlightData ??= new MoodlightData(roomItem.Id);
+                    moodlightEnabled = !DBNull.Value.Equals(dataRow["enabled"]) && Convert.ToInt32(dataRow["enabled"]) == 1;
+                    moodlightCurrentPreset = !DBNull.Value.Equals(dataRow["current_preset"]) ? Convert.ToInt32(dataRow["current_preset"]) : 1;
+                    moodlightPresetOne = !DBNull.Value.Equals(dataRow["preset_one"]) ? (string)dataRow["preset_one"] : "#000000,255,0";
+                    moodlightPresetTwo = !DBNull.Value.Equals(dataRow["preset_two"]) ? (string)dataRow["preset_two"] : "#000000,255,0";
+                    moodlightPresetThree = !DBNull.Value.Equals(dataRow["preset_three"]) ? (string)dataRow["preset_three"] : "#000000,255,0";
+
+                    this._roomInstance.MoodlightData ??= new MoodlightData(roomItem.Id, moodlightEnabled, moodlightCurrentPreset, moodlightPresetOne, moodlightPresetTwo, moodlightPresetThree);
                 }
             }
             else //Is flooritem
@@ -203,6 +217,17 @@ public class RoomItemHandling
                 {
                     _ = this._floorItems.TryAdd(itemID, roomItem);
                 }
+
+                if (WiredUtillity.TypeIsWired(data.InteractionType))
+                {
+                    wiredTriggerData = !DBNull.Value.Equals(dataRow["trigger_data"]) ? (string)dataRow["trigger_data"] : "";
+                    wiredTriggerData2 = !DBNull.Value.Equals(dataRow["trigger_data_2"]) ? (string)dataRow["trigger_data_2"] : "";
+                    wiredTriggersItem = !DBNull.Value.Equals(dataRow["triggers_item"]) ? (string)dataRow["triggers_item"] : "";
+                    wiredAllUserTriggerable = !DBNull.Value.Equals(dataRow["all_user_triggerable"]) && Convert.ToInt32(dataRow["all_user_triggerable"]) == 1;
+                    wiredDelay = !DBNull.Value.Equals(dataRow["delay"]) ? Convert.ToInt32(dataRow["delay"]) : 0;
+
+                    WiredRegister.HandleRegister(roomItem, this._roomInstance, wiredTriggerData, wiredTriggerData2, wiredTriggersItem, wiredAllUserTriggerable, wiredDelay);
+                }
             }
         }
 
@@ -212,7 +237,7 @@ public class RoomItemHandling
             {
                 if (WiredUtillity.TypeIsWired(item.GetBaseItem().InteractionType))
                 {
-                    WiredRegister.HandleRegister(item, this._roomInstance, dbClient);
+                    item.WiredHandler?.LoadItems(true);
                 }
             }
         }
@@ -288,10 +313,10 @@ public class RoomItemHandling
         }
 
         roomItem.Interactor.OnRemove(session, roomItem);
-
-        this._roomInstance.SendPacket(this.RemoveRoomItem(roomItem));
-
+        this.RemoveRoomItem(roomItem);
         roomItem.Destroy();
+
+        this._roomInstance.SendPacket(roomItem.IsWallItem ? new ItemRemoveComposer(roomItem.Id, this._roomInstance.RoomData.OwnerId) : new ObjectRemoveComposer(roomItem.Id, this._roomInstance.RoomData.OwnerId));
     }
 
     public void RemoveTempItem(int id)
@@ -306,7 +331,7 @@ public class RoomItemHandling
         _ = this._itemsTemp.TryRemove(id, out _);
     }
 
-    private ServerPacket RemoveRoomItem(Item item)
+    private void RemoveRoomItem(Item item)
     {
         if (item.IsWallItem)
         {
@@ -351,13 +376,6 @@ public class RoomItemHandling
                 }
             }
         }
-
-        if (item.IsWallItem)
-        {
-            return new ItemRemoveComposer(item.Id, this._roomInstance.RoomData.OwnerId);
-        }
-
-        return new ObjectRemoveComposer(item.Id, this._roomInstance.RoomData.OwnerId);
     }
 
     private ServerPacketList CycleRollers()
@@ -726,7 +744,17 @@ public class RoomItemHandling
             item.Interactor.OnPlace(session, item);
             if (item.GetBaseItem().InteractionType == InteractionType.MOODLIGHT && this._roomInstance.MoodlightData == null)
             {
-                this._roomInstance.MoodlightData = new MoodlightData(item.Id);
+                using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+                var moodlightRow = ItemMoodlightDao.GetOne(dbClient, item.Id);
+
+                var moodlightEnabled = moodlightRow != null && Convert.ToInt32(moodlightRow["enabled"]) == 1;
+                var moodlightCurrentPreset = moodlightRow != null ? Convert.ToInt32(moodlightRow["current_preset"]) : 1;
+                var moodlightPresetOne = moodlightRow != null ? (string)moodlightRow["preset_one"] : "#000000,255,0";
+                var moodlightPresetTwo = moodlightRow != null ? (string)moodlightRow["preset_two"] : "#000000,255,0";
+                var moodlightPresetThree = moodlightRow != null ? (string)moodlightRow["preset_three"] : "#000000,255,0";
+
+                this._roomInstance.MoodlightData = new MoodlightData(item.Id, moodlightEnabled, moodlightCurrentPreset, moodlightPresetOne, moodlightPresetTwo, moodlightPresetThree);
                 item.ExtraData = this._roomInstance.MoodlightData.GenerateExtraData();
             }
             _ = this._wallItems.TryAdd(item.Id, item);
