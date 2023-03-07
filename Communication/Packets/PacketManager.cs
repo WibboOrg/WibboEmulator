@@ -317,6 +317,7 @@ public sealed class PacketManager
         this._incomingPackets.Add(ClientPacketHeader.UNIT_WALK, new MoveAvatarEvent());
         this._incomingPackets.Add(ClientPacketHeader.FURNITURE_FLOOR_UPDATE, new MoveObjectEvent());
         this._incomingPackets.Add(ClientPacketHeader.FURNITURE_PICKUP, new PickupObjectEvent());
+        this._incomingPackets.Add(ClientPacketHeader.FURNITURE_PICKUP_ALL, new PickupObjectAllEvent());
         this._incomingPackets.Add(ClientPacketHeader.FURNITURE_WALL_UPDATE, new MoveWallItemEvent());
         this._incomingPackets.Add(ClientPacketHeader.ITEM_PAINT, new ApplyDecorationEvent());
         this._incomingPackets.Add(ClientPacketHeader.FURNITURE_PLACE, new PlaceObjectEvent());

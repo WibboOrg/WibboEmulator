@@ -18,6 +18,7 @@ public static class ClientPacketHeader
     public const int RP_TROC_CONFIRME = 10014;
     public const int RP_TROC_STOP = 10015;
     public const int BOT_CHOOSE = 10016;
+    public const int FURNITURE_PICKUP_ALL = 10017;
     public const int UNIT_CHAT_WHISPER_GROUP = 1118;
 
     public const int ACHIEVEMENT_LIST = 219;

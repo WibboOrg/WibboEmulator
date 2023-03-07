@@ -1,11 +1,9 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
-using System.Diagnostics.Metrics;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.WebSocketSharp.Net;
 
 public class Tridimension : WiredActionBase, IWiredEffect, IWired
 {

@@ -50,7 +50,6 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
                 ItemDao.Delete(dbClient, item.Id);
             }
 
-            //We only want to use this if we're successful. 
             room.RoomItemHandling.RemoveFurniture(session, item.Id);
         }
         else if (item.Data.InteractionType == InteractionType.HORSE_SADDLE_2)
@@ -62,7 +61,6 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
                 ItemDao.Delete(dbClient, item.Id);
             }
 
-            //We only want to use this if we're successful. 
             room.RoomItemHandling.RemoveFurniture(session, item.Id);
         }
         else if (item.Data.InteractionType == InteractionType.HORSE_HAIRSTYLE)
@@ -79,7 +77,6 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
                 ItemDao.Delete(dbClient, item.Id);
             }
 
-            //We only want to use this if we're successful. 
             room.RoomItemHandling.RemoveFurniture(session, item.Id);
         }
         else if (item.Data.InteractionType == InteractionType.HORSE_HAIR_DYE)
@@ -96,7 +93,6 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
                 ItemDao.Delete(dbClient, item.Id);
             }
 
-            //We only want to use this if we're successful. 
             room.RoomItemHandling.RemoveFurniture(session, item.Id);
         }
         else if (item.Data.InteractionType == InteractionType.HORSE_BODY_DYE)

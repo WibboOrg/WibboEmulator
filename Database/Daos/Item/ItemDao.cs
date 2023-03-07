@@ -34,6 +34,19 @@ internal sealed class ItemDao
         standardQueries.Dispose();
     }
 
+    internal static void DeleteItems(IQueryAdapter dbClient, List<Item> deleteItems)
+    {
+        var standardQueries = new QueryChunk();
+
+        foreach (var roomItem in deleteItems)
+        {
+             standardQueries.AddQuery("DELETE `item`, `item_limited` FROM `item` LEFT JOIN `item_limited` ON(`item_limited`.item_id = `item`.id) WHERE id = '" + roomItem.Id + "'");
+        }
+
+        standardQueries.Execute(dbClient);
+        standardQueries.Dispose();
+    }
+
     internal static int Insert(IQueryAdapter dbClient, int baseItem, int userId, string extraData)
     {
         dbClient.SetQuery("INSERT INTO `item` (base_item,user_id,extra_data) VALUES (@baseId, @userId, @extra_data)");

@@ -95,6 +95,37 @@ public class RoomItemHandling
         return items;
     }
 
+    public List<Item> RemoveAllFurnitureByIds(GameClient session, List<int> itemIds)
+    {
+        var listMessage = new ServerPacketList();
+        var items = new List<Item>();
+
+        foreach (var itemId in itemIds)
+        {
+            var item = this.GetItem(itemId);
+            if (item == null)
+            {
+                continue;
+            }
+
+            item.Interactor.OnRemove(session, item);
+
+            listMessage.Add(this.RemoveRoomItem(item));
+            item.Destroy();
+            items.Add(item);
+        }
+
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        ItemDao.DeleteItems(dbClient, items);
+
+        this._roomInstance.SendMessage(listMessage);
+
+        this._roomInstance.GameMap.GenerateMaps();
+        this._roomInstance.RoomUserManager.UpdateUserStatusses();
+
+        return items;
+    }
+
     public void SetSpeed(int p) => this._rollerSpeed = p;
 
     public void LoadFurniture(int roomId = 0)
@@ -248,9 +279,9 @@ public class RoomItemHandling
 
     public IEnumerable<Item> GetWallAndFloor => this._floorItems.Values.Concat(this._wallItems.Values);
 
-    public void RemoveFurniture(GameClient session, int pId)
+    public void RemoveFurniture(GameClient session, int id)
     {
-        var roomItem = this.GetItem(pId);
+        var roomItem = this.GetItem(id);
         if (roomItem == null)
         {
             return;
@@ -258,7 +289,7 @@ public class RoomItemHandling
 
         roomItem.Interactor.OnRemove(session, roomItem);
 
-        this.RemoveRoomItem(roomItem);
+        this._roomInstance.SendPacket(this.RemoveRoomItem(roomItem));
 
         roomItem.Destroy();
     }
@@ -275,17 +306,8 @@ public class RoomItemHandling
         _ = this._itemsTemp.TryRemove(id, out _);
     }
 
-    private void RemoveRoomItem(Item item)
+    private ServerPacket RemoveRoomItem(Item item)
     {
-        if (item.IsWallItem)
-        {
-            this._roomInstance.SendPacket(new ItemRemoveComposer(item.Id, this._roomInstance.RoomData.OwnerId));
-        }
-        else if (item.IsFloorItem)
-        {
-            this._roomInstance.SendPacket(new ObjectRemoveComposer(item.Id, this._roomInstance.RoomData.OwnerId));
-        }
-
         if (item.IsWallItem)
         {
             _ = this._wallItems.TryRemove(item.Id, out _);
@@ -308,11 +330,6 @@ public class RoomItemHandling
 
         if (item.WiredHandler != null)
         {
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                ItemWiredDao.Delete(dbClient, item.Id);
-            }
-
             item.WiredHandler.Dispose();
             this._roomInstance.WiredHandler.RemoveFurniture(item);
             item.WiredHandler = null;
@@ -334,6 +351,13 @@ public class RoomItemHandling
                 }
             }
         }
+
+        if (item.IsWallItem)
+        {
+            return new ItemRemoveComposer(item.Id, this._roomInstance.RoomData.OwnerId);
+        }
+
+        return new ObjectRemoveComposer(item.Id, this._roomInstance.RoomData.OwnerId);
     }
 
     private ServerPacketList CycleRollers()
