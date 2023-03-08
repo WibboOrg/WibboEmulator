@@ -15,7 +15,7 @@ internal sealed class RoomYouTube : IChatCommand
 
         var url = parameters[1];
 
-        if (string.IsNullOrEmpty(url) || (!url.Contains("?v=") && !url.Contains("youtu.be/"))) //https://youtu.be/_mNig3ZxYbM
+        if (string.IsNullOrEmpty(url) || (!url.Contains("?v=") && !url.Contains("youtu.be/")))
         {
             return;
         }

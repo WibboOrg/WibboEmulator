@@ -553,7 +553,6 @@ public class RoomUserManager
             }
         }
 
-
         user.InGame = this._room.IsRoleplay;
 
         return true;

@@ -41,7 +41,7 @@ internal sealed class AvatarEffectActivatedEvent : IPacketEvent
             return;
         }
 
-        if (user.Team != TeamType.None || user.InGame)
+        if (user.Team != TeamType.None || user.InGame || room.IsGameMode)
         {
             return;
         }

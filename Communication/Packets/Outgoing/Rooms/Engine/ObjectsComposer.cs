@@ -2,6 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 
 internal sealed class ObjectsComposer : ServerPacket
 {
@@ -16,8 +17,12 @@ internal sealed class ObjectsComposer : ServerPacket
         this.WriteInteger(items.Length);
         foreach (var item in items)
         {
-            this.WriteFloorItem(item, Convert.ToInt32(room.RoomData.OwnerId), room.RoomData.HideWireds);
+            this.WriteFloorItem(item, room.RoomData.HideWireds);
         }
+
+        this.WriteInteger(-1); // expires
+        this.WriteInteger(room.IsGameMode ? 0 : 1); //(Item.GetBaseItem().Modes > 1) ? 1 : 0
+        this.WriteInteger(Convert.ToInt32(room.RoomData.OwnerId));
     }
 
     public ObjectsComposer(ItemTemp[] items, Room room)
@@ -31,11 +36,15 @@ internal sealed class ObjectsComposer : ServerPacket
         this.WriteInteger(items.Length);
         foreach (var item in items)
         {
-            this.WriteFloorItem(item, Convert.ToInt32(room.RoomData.OwnerId));
+            this.WriteFloorItem(item);
         }
+
+        this.WriteInteger(-1); // expires
+        this.WriteInteger(room.IsGameMode ? 0 : 1); //(Item.GetBaseItem().Modes > 1) ? 1 : 0
+        this.WriteInteger(Convert.ToInt32(room.RoomData.OwnerId));
     }
 
-    private void WriteFloorItem(ItemTemp item, int userId)
+    private void WriteFloorItem(ItemTemp item)
     {
         this.WriteInteger(item.Id);
         this.WriteInteger(item.SpriteId);
@@ -55,7 +64,7 @@ internal sealed class ObjectsComposer : ServerPacket
             this.WriteString("state");
             this.WriteString("0");
             this.WriteString("imageUrl");
-            this.WriteString("https://swf.wibbo.me/items/" + item.ExtraData + ".png");
+            this.WriteString("https://cdn.wibbo.org/items/" + item.ExtraData + ".png");
             this.WriteString("offsetX");
             this.WriteString("-20");
             this.WriteString("offsetY");
@@ -69,13 +78,9 @@ internal sealed class ObjectsComposer : ServerPacket
             this.WriteInteger(0);
             this.WriteString(item.ExtraData);
         }
-
-        this.WriteInteger(-1); // to-do: check
-        this.WriteInteger(1); //(Item.GetBaseItem().Modes > 1) ? 1 : 0
-        this.WriteInteger(userId);
     }
 
-    private void WriteFloorItem(Item item, int userId, bool hideWired)
+    private void WriteFloorItem(Item item, bool hideWired)
     {
 
         this.WriteInteger(item.Id);
@@ -87,9 +92,5 @@ internal sealed class ObjectsComposer : ServerPacket
         this.WriteString(item.GetBaseItem().Height.ToString());
 
         ItemBehaviourUtility.GenerateExtradata(item, this);
-
-        this.WriteInteger(-1); // expires
-        this.WriteInteger(2); //(Item.GetBaseItem().Modes > 1) ? 1 : 0
-        this.WriteInteger(userId);
     }
 }

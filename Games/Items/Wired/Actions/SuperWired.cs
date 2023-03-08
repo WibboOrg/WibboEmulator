@@ -178,6 +178,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             case "usermute":
             case "resetclassement":
             case "addclassement":
+            case "roomgame":
                 return;
         }
 
@@ -1597,6 +1598,19 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 else
                 {
                     this.RoomInstance.PushPullAllowed = false;
+                }
+
+                break;
+            }
+            case "roomgame":
+            {
+                if (value == "true")
+                {
+                    this.RoomInstance.IsGameMode = true;
+                }
+                else
+                {
+                    this.RoomInstance.IsGameMode = false;
                 }
 
                 break;

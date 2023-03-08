@@ -13,12 +13,7 @@ internal sealed class TransfLittle : IChatCommand
             return;
         }
 
-        if (userRoom.Team != TeamType.None || userRoom.InGame)
-        {
-            return;
-        }
-
-        if (session.User.SpectatorMode || userRoom.InGame)
+        if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode || session.User.SpectatorMode)
         {
             return;
         }

@@ -28,7 +28,7 @@ internal sealed class EditTvYoutubeEvent : IPacketEvent
             return;
         }
 
-        if (string.IsNullOrEmpty(url) || (!url.Contains("?v=") && !url.Contains("youtu.be/"))) //https://youtu.be/_mNig3ZxYbM
+        if (string.IsNullOrEmpty(url) || (!url.Contains("?v=") && !url.Contains("youtu.be/")))
         {            return;        }        var split = "";        if (url.Contains("?v="))        {            split = url.Split(new string[] { "?v=" }, StringSplitOptions.None)[1];        }        else if (url.Contains("youtu.be/"))        {            split = url.Split(new string[] { "youtu.be/" }, StringSplitOptions.None)[1];        }        if (split.Length < 11)        {            return;        }        var videoId = split[..11];
 
         item.ExtraData = videoId;

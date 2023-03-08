@@ -66,6 +66,7 @@ public class Room : IDisposable
     public bool RoomMutePets { get; set; }
     public bool FreezeRoom { get; set; }
     public bool PushPullAllowed { get; set; }
+    public bool IsGameMode { get; set; }
     public bool CloseFullRoom { get; set; }
     public bool OldFoot { get; set; }
     public bool IngameChat { get; set; }

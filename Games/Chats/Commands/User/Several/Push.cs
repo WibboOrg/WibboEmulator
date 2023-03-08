@@ -7,7 +7,7 @@ internal sealed class Push : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (userRoom.Team != TeamType.None || userRoom.InGame)
+        if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode)
         {
             return;
         }

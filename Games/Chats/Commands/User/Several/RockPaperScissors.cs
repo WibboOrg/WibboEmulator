@@ -12,7 +12,7 @@ internal sealed class RockPaperScissors : IChatCommand
             return;
         }
 
-        if (userRoom.Team != TeamType.None || userRoom.InGame)
+        if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode)
         {
             return;
         }

@@ -22,7 +22,7 @@ internal sealed class Enable : IChatCommand
             return;
         }
 
-        if (userRoom.Team != TeamType.None || userRoom.InGame)
+        if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode)
         {
             return;
         }
