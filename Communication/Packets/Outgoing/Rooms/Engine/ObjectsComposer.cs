@@ -2,7 +2,6 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Users;
 
 internal sealed class ObjectsComposer : ServerPacket
 {
@@ -18,11 +17,11 @@ internal sealed class ObjectsComposer : ServerPacket
         foreach (var item in items)
         {
             this.WriteFloorItem(item, room.RoomData.HideWireds);
-        }
 
-        this.WriteInteger(-1); // expires
-        this.WriteInteger(room.IsGameMode ? 0 : 1); //(Item.GetBaseItem().Modes > 1) ? 1 : 0
-        this.WriteInteger(Convert.ToInt32(room.RoomData.OwnerId));
+            this.WriteInteger(-1); // expires
+            this.WriteInteger(room.IsGameMode ? 0 : 1); //(Item.GetBaseItem().Modes > 1) ? 1 : 0
+            this.WriteInteger(room.RoomData.OwnerId);
+        }
     }
 
     public ObjectsComposer(ItemTemp[] items, Room room)
@@ -37,11 +36,11 @@ internal sealed class ObjectsComposer : ServerPacket
         foreach (var item in items)
         {
             this.WriteFloorItem(item);
-        }
 
-        this.WriteInteger(-1); // expires
-        this.WriteInteger(room.IsGameMode ? 0 : 1); //(Item.GetBaseItem().Modes > 1) ? 1 : 0
-        this.WriteInteger(Convert.ToInt32(room.RoomData.OwnerId));
+            this.WriteInteger(-1); // expires
+            this.WriteInteger(room.IsGameMode ? 0 : 1); //(Item.GetBaseItem().Modes > 1) ? 1 : 0
+            this.WriteInteger(room.RoomData.OwnerId);
+        }
     }
 
     private void WriteFloorItem(ItemTemp item)
@@ -82,7 +81,6 @@ internal sealed class ObjectsComposer : ServerPacket
 
     private void WriteFloorItem(Item item, bool hideWired)
     {
-
         this.WriteInteger(item.Id);
         this.WriteInteger(hideWired && WiredUtillity.AllowHideWiredType(item.GetBaseItem().InteractionType) ? WibboEnvironment.GetSettings().GetData<int>("wired.hide.item.id") : item.GetBaseItem().SpriteId);
         this.WriteInteger(item.X);
