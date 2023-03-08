@@ -326,7 +326,7 @@ internal static class ItemLootBox
 
         if (!itemIsInRoom)
         {
-            _ = session.User.InventoryComponent.TryAddItem(present);
+            session.User.InventoryComponent.TryAddItem(present);
         }
     }
 }

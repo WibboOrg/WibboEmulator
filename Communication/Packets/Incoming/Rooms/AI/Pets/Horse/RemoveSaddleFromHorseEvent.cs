@@ -1,6 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Pets.Horse;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos.Bot;
@@ -51,8 +50,8 @@ internal sealed class RemoveSaddleFromHorseEvent : IPacketEvent
         var item = ItemFactory.CreateSingleItemNullable(itemData, session.User, "");
         if (item != null)
         {
-            _ = session.User.InventoryComponent.TryAddItem(item);
-            session.SendPacket(new FurniListNotificationComposer(item.Id, 1));
+            session.User.InventoryComponent.TryAddItem(item);
+
             session.SendPacket(new PurchaseOKComposer());
         }
 

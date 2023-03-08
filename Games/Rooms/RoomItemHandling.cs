@@ -220,9 +220,9 @@ public class RoomItemHandling
 
                 if (WiredUtillity.TypeIsWired(data.InteractionType))
                 {
-                    wiredTriggerData = !DBNull.Value.Equals(dataRow["trigger_data"]) ? (string)dataRow["trigger_data"] : "";
-                    wiredTriggerData2 = !DBNull.Value.Equals(dataRow["trigger_data_2"]) ? (string)dataRow["trigger_data_2"] : "";
-                    wiredTriggersItem = !DBNull.Value.Equals(dataRow["triggers_item"]) ? (string)dataRow["triggers_item"] : "";
+                    wiredTriggerData = !DBNull.Value.Equals(dataRow["trigger_data"]) ? (string)dataRow["trigger_data"] : string.Empty;
+                    wiredTriggerData2 = !DBNull.Value.Equals(dataRow["trigger_data_2"]) ? (string)dataRow["trigger_data_2"] : string.Empty;
+                    wiredTriggersItem = !DBNull.Value.Equals(dataRow["triggers_item"]) ? (string)dataRow["triggers_item"] : string.Empty;
                     wiredAllUserTriggerable = !DBNull.Value.Equals(dataRow["all_user_triggerable"]) && Convert.ToInt32(dataRow["all_user_triggerable"]) == 1;
                     wiredDelay = !DBNull.Value.Equals(dataRow["delay"]) ? Convert.ToInt32(dataRow["delay"]) : 0;
 

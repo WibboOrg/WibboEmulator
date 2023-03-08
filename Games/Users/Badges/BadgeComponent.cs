@@ -1,6 +1,7 @@
 namespace WibboEmulator.Games.Users.Badges;
 using System.Collections;
 using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
@@ -11,10 +12,13 @@ public class BadgeComponent : IDisposable
     private readonly User _userInstance;
     private readonly int _maxBadgeCount;
 
+    private int _virutalBadgeId;
+
     public BadgeComponent(User user)
     {
         this._userInstance = user;
         this._maxBadgeCount = WibboEnvironment.GetSettings().GetData<int>("badge.max.count");
+        this._virutalBadgeId = 0;
         this.BadgeList = new Dictionary<string, Badge>();
     }
 
@@ -108,7 +112,10 @@ public class BadgeComponent : IDisposable
 
         this.BadgeList.Add(badge, new Badge(badge, slot));
 
-        this._userInstance.Client?.SendPacket(new ReceiveBadgeComposer(badge));
+        this._virutalBadgeId++;
+
+        this._userInstance.Client?.SendPacket(new UnseenItemsComposer(this._virutalBadgeId, 4));
+        this._userInstance.Client?.SendPacket(new ReceiveBadgeComposer(this._virutalBadgeId, badge));
     }
 
     public void ResetSlots()

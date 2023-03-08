@@ -109,7 +109,7 @@ internal sealed class OpenGiftEvent : IPacketEvent
             {
                 ItemDao.UpdateResetRoomId(dbClient, present.Id);
 
-                _ = session.User.InventoryComponent.TryAddItem(present);
+                session.User.InventoryComponent.TryAddItem(present);
 
                 itemIsInRoom = false;
             }
@@ -118,7 +118,7 @@ internal sealed class OpenGiftEvent : IPacketEvent
         {
             ItemDao.UpdateResetRoomId(dbClient, present.Id);
 
-            _ = session.User.InventoryComponent.TryAddItem(present);
+            session.User.InventoryComponent.TryAddItem(present);
 
             itemIsInRoom = false;
         }

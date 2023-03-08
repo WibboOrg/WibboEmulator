@@ -1,7 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
@@ -233,8 +232,7 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             var receiver = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(user.Id);
             if (receiver != null)
             {
-                _ = receiver.User.InventoryComponent.TryAddItem(giveItem);
-                receiver.SendPacket(new FurniListNotificationComposer(giveItem.Id, 1));
+                receiver.User.InventoryComponent.TryAddItem(giveItem);
                 receiver.SendPacket(new PurchaseOKComposer());
             }
 

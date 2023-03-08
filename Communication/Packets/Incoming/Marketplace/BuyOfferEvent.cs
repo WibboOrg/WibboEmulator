@@ -1,7 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos.Catalog;
@@ -70,8 +69,7 @@ internal sealed class BuyOfferEvent : IPacketEvent
             var giveItem = ItemFactory.CreateSingleItem(item, session.User, Convert.ToString(row["extra_data"]), Convert.ToInt32(row["furni_id"]), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"]));
             if (giveItem != null)
             {
-                _ = session.User.InventoryComponent.TryAddItem(giveItem);
-                session.SendPacket(new FurniListNotificationComposer(giveItem.Id, 1));
+                session.User.InventoryComponent.TryAddItem(giveItem);
 
                 session.SendPacket(new PurchaseOKComposer());
             }

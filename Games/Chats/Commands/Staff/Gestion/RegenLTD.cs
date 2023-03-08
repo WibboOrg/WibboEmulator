@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Gestion;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
@@ -43,10 +42,7 @@ internal sealed class RegenLTD : IChatCommand
                     continue;
                 }
 
-                if (session.User.InventoryComponent.TryAddItem(newItem))
-                {
-                    session.SendPacket(new FurniListNotificationComposer(newItem.Id, 1));
-                }
+                session.User.InventoryComponent.TryAddItem(newItem);
             }
         }
     }

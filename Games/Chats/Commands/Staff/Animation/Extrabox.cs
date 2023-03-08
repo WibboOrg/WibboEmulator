@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Animation;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
@@ -25,10 +24,7 @@ internal sealed class ExtraBox : IChatCommand
         var items = ItemFactory.CreateMultipleItems(itemData, session.User, "", nbLot);
         foreach (var purchasedItem in items)
         {
-            if (session.User.InventoryComponent.TryAddItem(purchasedItem))
-            {
-                session.SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
-            }
+            session.User.InventoryComponent.TryAddItem(purchasedItem);
         }
     }
 }

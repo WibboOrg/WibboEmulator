@@ -329,10 +329,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 
                 foreach (var purchasedItem in generatedGenericItems)
                 {
-                    if (session.User.InventoryComponent.TryAddItem(purchasedItem))
-                    {
-                        session.SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
-                    }
+                    session.User.InventoryComponent.TryAddItem(purchasedItem);
                 }
 
                 if (item.Data.Amount >= 0)
@@ -351,8 +348,8 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                         break;
                     }
 
+                    session.SendPacket(new UnseenItemsComposer(bot.Id, 5));
                     session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.GetBots()));
-                    session.SendPacket(new FurniListNotificationComposer(bot.Id, 5));
                 }
                 break;
 
@@ -368,7 +365,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                         break;
                     }
 
-                    session.SendPacket(new FurniListNotificationComposer(generatedPet.PetId, 3));
+                    session.SendPacket(new UnseenItemsComposer(generatedPet.PetId, 3));
                     session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.GetPets()));
                 }
                 break;
@@ -383,8 +380,6 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
         if (!string.IsNullOrEmpty(item.Badge) && !session.User.BadgeComponent.HasBadge(item.Badge))
         {
             session.User.BadgeComponent.GiveBadge(item.Badge, true);
-
-            session.SendPacket(new FurniListNotificationComposer(0, 4));
         }
 
         session.SendPacket(new PurchaseOKComposer(item, item.Data));

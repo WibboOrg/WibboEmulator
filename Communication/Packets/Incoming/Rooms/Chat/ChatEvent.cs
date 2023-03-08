@@ -186,8 +186,9 @@ internal sealed partial class ChatEvent : IPacketEvent
         if (!session.User.HasPermission("word_filter_override"))
         {
             message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(message);
-            message = MyRegex().Replace(message, "<tag>$1</tag>");
         }
+
+        message = MyRegex().Replace(message, "<tag>$1</tag>");
 
         if (room.AllowsShous(user, message))
         {

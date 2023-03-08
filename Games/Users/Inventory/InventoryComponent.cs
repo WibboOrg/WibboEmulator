@@ -264,11 +264,13 @@ public class InventoryComponent : IDisposable
 
     public ICollection<Bot> GetBots() => this._botItems.Values;
 
-    public bool TryAddItem(Item item)
+    public void TryAddItem(Item item)
     {
-        this._userInstance.Client.SendPacket(new FurniListAddComposer(item));
-
-        return this._userItems.TryAdd(item.Id, item);
+        if (this._userItems.TryAdd(item.Id, item))
+        {
+            this._userInstance.Client.SendPacket(new UnseenItemsComposer(item.Id, 1));
+            this._userInstance.Client.SendPacket(new FurniListAddComposer(item));
+        }
     }
 
     public void LoadInventory()

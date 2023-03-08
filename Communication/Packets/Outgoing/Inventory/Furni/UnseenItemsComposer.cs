@@ -1,9 +1,9 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Games.Items;
 
-internal sealed class FurniListNotificationComposer : ServerPacket
+internal sealed class UnseenItemsComposer : ServerPacket
 {
-    public FurniListNotificationComposer(int id, int type)
+    public UnseenItemsComposer(int id, int type)
         : base(ServerPacketHeader.UNSEEN_ITEMS)
     {
         this.WriteInteger(1);
@@ -12,7 +12,7 @@ internal sealed class FurniListNotificationComposer : ServerPacket
         this.WriteInteger(id);
     }
 
-    public FurniListNotificationComposer(List<Item> items, int type)
+    public UnseenItemsComposer(List<Item> items, int type)
         : base(ServerPacketHeader.UNSEEN_ITEMS)
     {
         this.WriteInteger(1);

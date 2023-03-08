@@ -1,6 +1,5 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
@@ -2204,10 +2203,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 foreach (var purchasedItem in items)
                 {
-                    if (user.Client.User.InventoryComponent.TryAddItem(purchasedItem))
-                    {
-                        user.Client.SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
-                    }
+                    user.Client.User.InventoryComponent.TryAddItem(purchasedItem);
                 }
 
                 user.Client.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", user.Client.Langue), nbLot));

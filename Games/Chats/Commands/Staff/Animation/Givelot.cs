@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Animation;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
@@ -45,10 +44,7 @@ internal sealed class GiveLot : IChatCommand
 
         foreach (var purchasedItem in items)
         {
-            if (roomUserByUserId.Client.User.InventoryComponent.TryAddItem(purchasedItem))
-            {
-                roomUserByUserId.Client.SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
-            }
+            roomUserByUserId.Client.User.InventoryComponent.TryAddItem(purchasedItem);
         }
 
         roomUserByUserId.Client.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUserByUserId.Client.Langue), lotCount));

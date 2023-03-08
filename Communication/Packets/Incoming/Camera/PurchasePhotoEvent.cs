@@ -43,10 +43,10 @@ internal sealed class PurchasePhotoEvent : IPacketEvent
         var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + session.User.Username + "\", \"s\":\"" + session.User.Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
 
         var itemSmall = ItemFactory.CreateSingleItemNullable(itemDataSmall, session.User, extraData);
-        _ = session.User.InventoryComponent.TryAddItem(itemSmall);
+        session.User.InventoryComponent.TryAddItem(itemSmall);
 
         var item = ItemFactory.CreateSingleItemNullable(itemData, session.User, extraData);
-        _ = session.User.InventoryComponent.TryAddItem(item);
+        session.User.InventoryComponent.TryAddItem(item);
 
         session.SendPacket(new CameraPurchaseSuccesfullComposer());
     }

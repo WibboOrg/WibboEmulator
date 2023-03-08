@@ -1,5 +1,4 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Games.GameClients;
@@ -52,8 +51,7 @@ internal sealed class CancelOfferEvent : IPacketEvent
 
         if (giveItem != null)
         {
-            _ = session.User.InventoryComponent.TryAddItem(giveItem);
-            session.SendPacket(new FurniListNotificationComposer(giveItem.Id, 1));
+            session.User.InventoryComponent.TryAddItem(giveItem);
         }
 
         session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, true));

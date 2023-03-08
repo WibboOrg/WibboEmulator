@@ -1,10 +1,12 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Chat;
+
+using System.Text.RegularExpressions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 using WibboEmulator.Utilities;
 
-internal sealed class ShoutEvent : IPacketEvent
+internal sealed partial class ShoutEvent : IPacketEvent
 {
     public double Delay => 100;
 
@@ -196,6 +198,8 @@ internal sealed class ShoutEvent : IPacketEvent
             message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(message);
         }
 
+        message = MyRegex().Replace(message, "<tag>$1</tag>");
+
         if (room.AllowsShous(user, message))
         {
             user.SendWhisperChat(message, true);
@@ -221,4 +225,7 @@ internal sealed class ShoutEvent : IPacketEvent
 
         user.OnChat(message, color, true);
     }
+
+    [GeneratedRegex("\\[tag\\](.*?)\\[\\/tag\\]")]
+    private static partial Regex MyRegex();
 }
