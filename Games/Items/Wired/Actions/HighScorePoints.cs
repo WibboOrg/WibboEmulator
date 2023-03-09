@@ -64,14 +64,12 @@ public class HighScorePoints : WiredActionBase, IWired, IWiredEffect
     {
         this.Delay = wiredDelay;
 
-        var triggerData = wiredTriggerData;
-
-        if (triggerData is null or "")
+        if (wiredTriggerData is "")
         {
             return;
         }
 
-        foreach (var data in triggerData.Split(';'))
+        foreach (var data in wiredTriggerData.Split(';'))
         {
             var userData = data.Split(':');
 

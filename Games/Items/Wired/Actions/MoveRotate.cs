@@ -8,11 +8,7 @@ using WibboEmulator.Games.Rooms.Map.Movement;
 
 public class MoveRotate : WiredActionBase, IWiredEffect, IWired
 {
-    public MoveRotate(Item item, Room room) : base(item, room, (int)WiredActionType.MOVE_FURNI)
-    {
-        this.IntParams.Add(0);
-        this.IntParams.Add(0);
-    }
+    public MoveRotate(Item item, Room room) : base(item, room, (int)WiredActionType.MOVE_FURNI) => this.DefaultIntParams(new int[] { 0, 0 });
 
     public override bool OnCycle(RoomUser user, Item item)
     {
@@ -25,8 +21,8 @@ public class MoveRotate : WiredActionBase, IWiredEffect, IWired
                 continue;
             }
 
-            var movement = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
-            var rotation = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
+            var movement = this.GetIntParam(0);
+            var rotation = this.GetIntParam(1);
 
             var newPoint = MovementUtility.HandleMovement(roomItem.Coordinate, (MovementState)movement);
             var newRot = MovementUtility.HandleRotation(roomItem.Rotation, (RotationState)rotation);
@@ -48,8 +44,8 @@ public class MoveRotate : WiredActionBase, IWiredEffect, IWired
 
     public void SaveToDatabase(IQueryAdapter dbClient)
     {
-        var movement = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
-        var rotation = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
+        var movement = this.GetIntParam(0);
+        var rotation = this.GetIntParam(1);
 
         var rotAndMove = rotation + ";" + movement;
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, rotAndMove, string.Empty, false, this.Items, this.Delay);
@@ -57,8 +53,6 @@ public class MoveRotate : WiredActionBase, IWiredEffect, IWired
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
         this.Delay = wiredDelay;
 
         if (int.TryParse(wiredTriggerData, out var delay))
@@ -66,37 +60,19 @@ public class MoveRotate : WiredActionBase, IWiredEffect, IWired
             this.Delay = delay;
         }
 
-        var triggerData2 = wiredTriggerData2;
-        if (triggerData2 != null && triggerData2.Contains(';'))
+        if (wiredTriggerData2.Contains(';'))
         {
-            if (int.TryParse(triggerData2.Split(';')[1], out var movement))
+            if (int.TryParse(wiredTriggerData2.Split(';')[1], out var movement))
             {
-                this.IntParams.Add(movement);
+                this.SetIntParam(0, movement);
             }
 
-            if (int.TryParse(triggerData2.Split(';')[0], out var rotationint))
+            if (int.TryParse(wiredTriggerData2.Split(';')[0], out var rotationint))
             {
-                this.IntParams.Add(rotationint);
+                this.SetIntParam(1, rotationint);
             }
         }
 
-        var triggerItems = wiredTriggersItem;
-        if (triggerItems is null or "")
-        {
-            return;
-        }
-
-        foreach (var itemId in triggerItems.Split(';'))
-        {
-            if (!int.TryParse(itemId, out var id))
-            {
-                continue;
-            }
-
-            if (!this.StuffIds.Contains(id))
-            {
-                this.StuffIds.Add(id);
-            }
-        }
+        this.LoadStuffIds(wiredTriggersItem);
     }
 }

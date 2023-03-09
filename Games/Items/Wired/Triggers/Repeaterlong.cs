@@ -7,12 +7,12 @@ using WibboEmulator.Games.Rooms.Wired;
 
 public class Repeaterlong : WiredTriggerBase, IWired, IWiredCycleable
 {
-    public int DelayCycle => this.IntParams.Count > 0 ? this.IntParams[0] * 10 : 0;
+    public int DelayCycle => this.GetIntParam(0) * 10;
     public bool IsTeleport => false;
 
     public Repeaterlong(Item item, Room room) : base(item, room, (int)WiredTriggerType.TRIGGER_PERIODICALLY_LONG)
     {
-        this.IntParams.Add(0);
+        this.DefaultIntParams(new int[] { 0 });
 
         this.RoomInstance.WiredHandler.RequestCycle(new WiredCycle(this, null, null));
     }
@@ -23,15 +23,15 @@ public class Repeaterlong : WiredTriggerBase, IWired, IWiredCycleable
         return true;
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.DelayCycle.ToString(), false, null);
+    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, null, this.DelayCycle / 10);
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
+        this.SetIntParam(0, wiredDelay);
 
         if (int.TryParse(wiredTriggerData, out var delay))
         {
-            this.IntParams.Add(delay);
+            this.SetIntParam(0, delay);
         }
     }
 }

@@ -13,9 +13,7 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
     {
         this._itemsData = new Dictionary<int, ItemsPosReset>();
 
-        this.IntParams.Add(0);
-        this.IntParams.Add(0);
-        this.IntParams.Add(0);
+        this.DefaultIntParams(new int[] { 0, 0, 0 });
     }
 
     public override void LoadItems(bool inDatabase = false)
@@ -55,9 +53,9 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
     {
         var disableAnimation = this.RoomInstance.WiredHandler.DisableAnimate(this.ItemInstance.Coordinate);
 
-        var state = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
-        var direction = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0) == 1;
-        var position = ((this.IntParams.Count > 2) ? this.IntParams[2] : 0) == 1;
+        var state = this.GetIntParam(0) == 1;
+        var direction = this.GetIntParam(1) == 1;
+        var position = this.GetIntParam(2) == 1;
 
         foreach (var roomItem in this.Items.ToList())
         {
@@ -115,9 +113,9 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
 
         triggerItems = triggerItems.TrimEnd(';');
 
-        var state = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
-        var direction = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
-        var position = (this.IntParams.Count > 2) ? this.IntParams[2] : 0;
+        var state = this.GetIntParam(0);
+        var direction = this.GetIntParam(1);
+        var position = this.GetIntParam(2);
 
         var triggerData2 = state + ";" + direction + ";" + position;
 
@@ -126,8 +124,6 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
         this.Delay = wiredDelay;
 
         if (int.TryParse(wiredTriggerData, out var delay))
@@ -135,36 +131,35 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
             this.Delay = delay;
         }
 
-        var triggerData2 = wiredTriggerData2;
-
-        if (triggerData2 != null && triggerData2.Length == 5)
+        if (wiredTriggerData2.Length == 5)
         {
-            var dataSplit = triggerData2.Split(';');
+            var dataSplit = wiredTriggerData2.Split(';');
 
-            if (int.TryParse(dataSplit[0], out var state))
+            if (dataSplit.Length == 3)
             {
-                this.IntParams.Add(state);
-            }
+                if (int.TryParse(dataSplit[0], out var state))
+                {
+                    this.SetIntParam(0, state);
+                }
 
-            if (int.TryParse(dataSplit[1], out var direction))
-            {
-                this.IntParams.Add(direction);
-            }
+                if (int.TryParse(dataSplit[1], out var direction))
+                {
+                    this.SetIntParam(1, direction);
+                }
 
-            if (int.TryParse(dataSplit[2], out var position))
-            {
-                this.IntParams.Add(position);
+                if (int.TryParse(dataSplit[2], out var position))
+                {
+                    this.SetIntParam(2, position);
+                }
             }
         }
 
-        var triggerItems = wiredTriggersItem;
-
-        if (triggerItems is null or "")
+        if (wiredTriggersItem is "")
         {
             return;
         }
 
-        foreach (var item in triggerItems.Split(';'))
+        foreach (var item in wiredTriggersItem.Split(';'))
         {
             var itemData = item.Split(':');
             if (itemData.Length != 6)

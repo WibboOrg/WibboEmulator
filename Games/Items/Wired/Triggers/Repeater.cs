@@ -7,12 +7,12 @@ using WibboEmulator.Games.Rooms.Wired;
 
 public class Repeater : WiredTriggerBase, IWired, IWiredCycleable
 {
-    public int DelayCycle => this.IntParams.Count > 0 ? this.IntParams[0] : 0;
+    public int DelayCycle => this.GetIntParam(0);
     public bool IsTeleport => false;
 
     public Repeater(Item item, Room room) : base(item, room, (int)WiredTriggerType.TRIGGER_PERIODICALLY)
     {
-        this.IntParams.Add(0);
+        this.DefaultIntParams(new int[] { 0 });
 
         this.RoomInstance.WiredHandler.RequestCycle(new WiredCycle(this, null, null));
     }
@@ -27,11 +27,9 @@ public class Repeater : WiredTriggerBase, IWired, IWiredCycleable
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
         if (int.TryParse(wiredTriggerData, out var delay))
         {
-            this.IntParams.Add(delay);
+            this.SetIntParam(0, delay);
         }
     }
 }

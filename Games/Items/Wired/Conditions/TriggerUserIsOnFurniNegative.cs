@@ -32,26 +32,5 @@ public class TriggerUserIsOnFurniNegative : WiredConditionBase, IWiredCondition,
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items);
 
-    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
-    {
-        var triggerItems = wiredTriggersItem;
-
-        if (triggerItems is null or "")
-        {
-            return;
-        }
-
-        foreach (var itemId in triggerItems.Split(';'))
-        {
-            if (!int.TryParse(itemId, out var id))
-            {
-                continue;
-            }
-
-            if (!this.StuffIds.Contains(id))
-            {
-                this.StuffIds.Add(id);
-            }
-        }
-    }
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay) => this.LoadStuffIds(wiredTriggersItem);
 }

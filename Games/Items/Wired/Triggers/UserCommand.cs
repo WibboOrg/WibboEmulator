@@ -87,10 +87,5 @@ public class UserCommand : WiredTriggerBase, IWired
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null);
 
-    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
-    {
-        var triggerData = wiredTriggerData;
-
-        this.StringParam = triggerData == "" ? "trigger:1" : triggerData;
-    }
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay) => this.StringParam = wiredTriggerData == "" ? "trigger:1" : wiredTriggerData;
 }

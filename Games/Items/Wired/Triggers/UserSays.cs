@@ -9,9 +9,9 @@ public class UserSays : WiredTriggerBase, IWired
 {
     public UserSays(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_SAYS_SOMETHING)
     {
-        room.OnUserSays += this.OnUserSays;
+        this.DefaultIntParams(new int[] { 0 });
 
-        this.IntParams.Add(0);
+        room.OnUserSays += this.OnUserSays;
     }
 
     private void OnUserSays(object sender, UserSaysEventArgs args)
@@ -19,8 +19,8 @@ public class UserSays : WiredTriggerBase, IWired
         var user = args.User;
         var message = args.Message;
 
-        var isOwnerOnly = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
-        var isContains = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0) == 1;
+        var isOwnerOnly = this.GetIntParam(0) == 1;
+        var isContains = this.GetIntParam(1) == 1;
 
         if (user == null)
         {
@@ -58,17 +58,15 @@ public class UserSays : WiredTriggerBase, IWired
 
     public void SaveToDatabase(IQueryAdapter dbClient)
     {
-        var isOwnerOnly = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+        var isOwnerOnly = this.GetIntParam(0) == 1;
 
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, isOwnerOnly, null);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
         this.StringParam = wiredTriggerData;
 
-        this.IntParams.Add(wiredAllUserTriggerable ? 1 : 0);
+        this.SetIntParam(0, wiredAllUserTriggerable ? 1 : 0);
     }
 }

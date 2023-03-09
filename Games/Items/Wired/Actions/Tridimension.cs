@@ -142,29 +142,10 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
         this.Delay = wiredDelay;
 
         this.StringParam = wiredTriggerData;
 
-        var triggerItems = wiredTriggersItem;
-        if (triggerItems is null or "")
-        {
-            return;
-        }
-
-        foreach (var itemId in triggerItems.Split(';'))
-        {
-            if (!int.TryParse(itemId, out var id))
-            {
-                continue;
-            }
-
-            if (!this.StuffIds.Contains(id))
-            {
-                this.StuffIds.Add(id);
-            }
-        }
+        this.LoadStuffIds(wiredTriggersItem);
     }
 }

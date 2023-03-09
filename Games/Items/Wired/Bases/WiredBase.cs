@@ -59,6 +59,18 @@ public class WiredBase
         this.IsGod = isGod;
     }
 
+    public void DefaultIntParams(int[] intParams) => this.IntParams = intParams.ToList();
+
+    public void SetIntParam(int index, int value)
+    {
+        if (this.IntParams.Count > index)
+        {
+            this.IntParams[index] = value;
+        }
+    }
+
+    public int GetIntParam(int index) => (this.IntParams.Count > index) ? this.IntParams[index] : 0;
+
     public virtual void OnTrigger(GameClient session)
     {
 
@@ -103,6 +115,25 @@ public class WiredBase
         foreach (var item in this.Items.ToList())
         {
             this.StuffIds.Add(item.Id);
+        }
+    }
+
+    public void LoadStuffIds(string wiredTriggersItem)
+    {
+        if (wiredTriggersItem != "")
+        {
+            foreach (var itemId in wiredTriggersItem.Split(';'))
+            {
+                if (!int.TryParse(itemId, out var id))
+                {
+                    continue;
+                }
+
+                if (!this.StuffIds.Contains(id))
+                {
+                    this.StuffIds.Add(id);
+                }
+            }
         }
     }
 

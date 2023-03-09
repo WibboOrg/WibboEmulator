@@ -7,7 +7,12 @@ using WibboEmulator.Games.Rooms.Events;
 
 public class UserClick : WiredTriggerBase, IWired
 {
-    public UserClick(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_CLICK) => room.OnUserClick += this.OnUserClick;
+    public UserClick(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_CLICK)
+    {
+        this.DefaultIntParams(new int[] { 1 });
+
+        room.OnUserClick += this.OnUserClick;
+    }
 
     private void OnUserClick(object sender, UserTargetEventArgs e)
     {
@@ -24,7 +29,7 @@ public class UserClick : WiredTriggerBase, IWired
             return;
         }
 
-        var distance = (this.IntParams.Count > 0) ? this.IntParams[0] : 1;
+        var distance = this.GetIntParam(0);
 
         distance += 1;
 
@@ -45,20 +50,16 @@ public class UserClick : WiredTriggerBase, IWired
 
     public void SaveToDatabase(IQueryAdapter dbClient)
     {
-        var distance = (this.IntParams.Count > 0) ? this.IntParams[0] : 1;
+        var distance = this.GetIntParam(0);
 
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, distance.ToString(), false, null);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
-        var triggerData = wiredTriggerData;
-
-        if (int.TryParse(triggerData, out var distance))
+        if (int.TryParse(wiredTriggerData, out var distance))
         {
-            this.IntParams.Add(distance);
+            this.SetIntParam(0, distance);
         }
     }
 }

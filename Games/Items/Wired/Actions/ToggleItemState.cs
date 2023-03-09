@@ -6,11 +6,11 @@ using WibboEmulator.Games.Rooms;
 
 public class ToggleItemState : WiredActionBase, IWired, IWiredEffect
 {
-    public ToggleItemState(Item item, Room room) : base(item, room, (int)WiredActionType.TOGGLE_FURNI_STATE) => this.IntParams.Add(0);
+    public ToggleItemState(Item item, Room room) : base(item, room, (int)WiredActionType.TOGGLE_FURNI_STATE) => this.DefaultIntParams(new int[] { 0 });
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        var isReverse = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+        var isReverse = this.GetIntParam(0) == 1;
 
         foreach (var roomItem in this.Items.ToList())
         {
@@ -32,15 +32,13 @@ public class ToggleItemState : WiredActionBase, IWired, IWiredEffect
 
     public void SaveToDatabase(IQueryAdapter dbClient)
     {
-        var reverse = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+        var reverse = this.GetIntParam(0);
 
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, reverse.ToString(), string.Empty, false, this.Items, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
         this.Delay = wiredDelay;
 
         if (int.TryParse(wiredTriggerData, out var delay))
@@ -50,27 +48,9 @@ public class ToggleItemState : WiredActionBase, IWired, IWiredEffect
 
         if (int.TryParse(wiredTriggerData2, out var reverse))
         {
-            this.IntParams.Add(reverse);
+            this.SetIntParam(0, reverse);
         }
 
-        var triggerItems = wiredTriggersItem;
-
-        if (triggerItems is null or "")
-        {
-            return;
-        }
-
-        foreach (var itemId in triggerItems.Split(';'))
-        {
-            if (!int.TryParse(itemId, out var id))
-            {
-                continue;
-            }
-
-            if (!this.StuffIds.Contains(id))
-            {
-                this.StuffIds.Add(id);
-            }
-        }
+        this.LoadStuffIds(wiredTriggersItem);
     }
 }

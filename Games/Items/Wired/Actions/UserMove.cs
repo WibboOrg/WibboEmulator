@@ -44,24 +44,6 @@ public class UserMove : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
             this.Delay = delay;
         }
 
-        var triggerItems = wiredTriggersItem;
-
-        if (triggerItems is null or "")
-        {
-            return;
-        }
-
-        foreach (var itemId in triggerItems.Split(';'))
-        {
-            if (!int.TryParse(itemId, out var id))
-            {
-                continue;
-            }
-
-            if (!this.StuffIds.Contains(id))
-            {
-                this.StuffIds.Add(id);
-            }
-        }
+        this.LoadStuffIds(wiredTriggersItem);
     }
 }

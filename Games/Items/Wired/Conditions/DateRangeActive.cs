@@ -6,18 +6,14 @@ using WibboEmulator.Games.Rooms;
 
 public class DateRangeActive : WiredConditionBase, IWiredCondition, IWired
 {
-    public DateRangeActive(Item item, Room room) : base(item, room, (int)WiredConditionType.DATE_RANGE_ACTIVE)
-    {
-        this.IntParams.Add(WibboEnvironment.GetUnixTimestamp());
-        this.IntParams.Add(WibboEnvironment.GetUnixTimestamp());
-    }
+    public DateRangeActive(Item item, Room room) : base(item, room, (int)WiredConditionType.DATE_RANGE_ACTIVE) => this.DefaultIntParams(new int[] { WibboEnvironment.GetUnixTimestamp(), WibboEnvironment.GetUnixTimestamp() });
 
     public bool AllowsExecution(RoomUser user, Item item)
     {
         var unixNow = WibboEnvironment.GetUnixTimestamp();
 
-        var startDate = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
-        var endDate = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
+        var startDate = this.GetIntParam(0);
+        var endDate = this.GetIntParam(1);
 
         if (startDate > unixNow || endDate < unixNow)
         {
@@ -29,30 +25,27 @@ public class DateRangeActive : WiredConditionBase, IWiredCondition, IWired
 
     public void SaveToDatabase(IQueryAdapter dbClient)
     {
-        var startDate = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
-        var endDate = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
+        var startDate = this.GetIntParam(0);
+        var endDate = this.GetIntParam(1);
 
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, startDate + ":" + endDate, false, null);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
-        var triggerData = wiredTriggerData;
-        if (triggerData == null || !triggerData.Contains(':'))
+        if (!wiredTriggerData.Contains(':'))
         {
             return;
         }
 
-        if (int.TryParse(triggerData.Split(':')[0], out var startDate))
+        if (int.TryParse(wiredTriggerData.Split(':')[0], out var startDate))
         {
-            this.IntParams.Add(startDate);
+            this.SetIntParam(0, startDate);
         }
 
-        if (int.TryParse(triggerData.Split(':')[1], out var endDate))
+        if (int.TryParse(wiredTriggerData.Split(':')[1], out var endDate))
         {
-            this.IntParams.Add(endDate);
+            this.SetIntParam(1, endDate);
         }
     }
 }

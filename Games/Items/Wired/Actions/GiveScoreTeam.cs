@@ -14,18 +14,16 @@ public class GiveScoreTeam : WiredActionBase, IWiredEffect, IWired
         this._currentGameCount = 0;
         this.RoomInstance.GameManager.OnGameStart += this.OnGameStart;
 
-        this.IntParams.Add(1);
-        this.IntParams.Add(1);
-        this.IntParams.Add((int)TeamType.Red);
+        this.DefaultIntParams(new int[] { 1, 1, (int)TeamType.Red });
     }
 
     private void OnGameStart(object sender, EventArgs e) => this._currentGameCount = 0;
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        var scoreToGive = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
-        var maxCountPerGame = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
-        var team = (TeamType)((this.IntParams.Count > 2) ? this.IntParams[2] : 1);
+        var scoreToGive = this.GetIntParam(0);
+        var maxCountPerGame = this.GetIntParam(1);
+        var team = (TeamType)this.GetIntParam(2);
 
         if (maxCountPerGame <= this._currentGameCount)
         {
@@ -42,48 +40,42 @@ public class GiveScoreTeam : WiredActionBase, IWiredEffect, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.
-        GameManager.OnGameStart -= this.OnGameStart;
+        this.RoomInstance.GameManager.OnGameStart -= this.OnGameStart;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)
     {
-        var scoreToGive = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
-        var maxCountPerGame = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
-        var team = (this.IntParams.Count > 2) ? this.IntParams[2] : 0;
+        var scoreToGive = this.GetIntParam(0);
+        var maxCountPerGame = this.GetIntParam(1);
+        var team = this.GetIntParam(2);
 
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, team.ToString(), maxCountPerGame.ToString() + ":" + scoreToGive.ToString(), false, null, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
         this.Delay = wiredDelay;
 
-        var triggerData = wiredTriggerData;
-        var triggerData2 = wiredTriggerData2;
+        var dataSplit = wiredTriggerData.Split(':');
 
-        if (triggerData == null || !triggerData.Contains(':'))
+        if (dataSplit.Length != 3)
         {
             return;
         }
 
-        var dataSplit = triggerData.Split(':');
-
         if (int.TryParse(dataSplit[1], out var score))
         {
-            this.IntParams.Add(score);
+            this.SetIntParam(0, score);
         }
 
         if (int.TryParse(dataSplit[0], out var maxCount))
         {
-            this.IntParams.Add(maxCount);
+            this.SetIntParam(1, maxCount);
         }
 
-        if (int.TryParse(triggerData2, out var team))
+        if (int.TryParse(wiredTriggerData2, out var team))
         {
-            this.IntParams.Add(team);
+            this.SetIntParam(2, team);
         }
     }
 }

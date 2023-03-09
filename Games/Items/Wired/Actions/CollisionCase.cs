@@ -12,7 +12,7 @@ public class CollisionCase : WiredActionBase, IWiredEffect, IWired
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        var isAllUser = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+        var isAllUser = this.GetIntParam(0) == 1;
 
         foreach (var roomItem in this.Items.ToList())
         {
@@ -47,40 +47,20 @@ public class CollisionCase : WiredActionBase, IWiredEffect, IWired
 
     public void SaveToDatabase(IQueryAdapter dbClient)
     {
-        var isAllUser = this.IntParams.Count > 0 ? this.IntParams[0] : 0;
+        var isAllUser = this.GetIntParam(0);
 
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, isAllUser.ToString(), false, this.Items, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
         this.Delay = wiredDelay;
 
         if (int.TryParse(wiredTriggerData, out var isAllUser))
         {
-            this.IntParams.Add(isAllUser);
+            this.SetIntParam(0, isAllUser);
         }
 
-        var triggerItems = wiredTriggersItem;
-
-        if (triggerItems is null or "")
-        {
-            return;
-        }
-
-        foreach (var itemId in triggerItems.Split(';'))
-        {
-            if (!int.TryParse(itemId, out var id))
-            {
-                continue;
-            }
-
-            if (!this.StuffIds.Contains(id))
-            {
-                this.StuffIds.Add(id);
-            }
-        }
+        this.LoadStuffIds(wiredTriggersItem);
     }
 }

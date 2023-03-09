@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 public class ActorNotInTeam : WiredConditionBase, IWiredCondition, IWired
 {
-    public ActorNotInTeam(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_ACTOR_IN_TEAM) => this.IntParams.Add((int)TeamType.Red);
+    public ActorNotInTeam(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_ACTOR_IN_TEAM) => this.DefaultIntParams(new int[] { (int)TeamType.Red });
 
     public bool AllowsExecution(RoomUser user, Item item)
     {
@@ -16,7 +16,7 @@ public class ActorNotInTeam : WiredConditionBase, IWiredCondition, IWired
             return false;
         }
 
-        var teamId = (this.IntParams.Count > 0) ? this.IntParams[0] : 1;
+        var teamId = this.GetIntParam(0);
         if (teamId is < 1 or > 4)
         {
             teamId = 1;
@@ -32,18 +32,16 @@ public class ActorNotInTeam : WiredConditionBase, IWiredCondition, IWired
 
     public void SaveToDatabase(IQueryAdapter dbClient)
     {
-        var teamId = (this.IntParams.Count > 0) ? this.IntParams[0] : 1;
+        var teamId = this.GetIntParam(0);
 
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, teamId.ToString(), false, null);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
         if (int.TryParse(wiredTriggerData, out var teamId))
         {
-            this.IntParams.Add(teamId);
+            this.SetIntParam(0, teamId);
         }
     }
 }

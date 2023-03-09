@@ -46,13 +46,6 @@ public class BotClothes : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
     {
         this.Delay = wiredDelay;
 
-        var triggerData = wiredTriggerData;
-
-        if (string.IsNullOrWhiteSpace(triggerData) || !triggerData.Contains('\t'))
-        {
-            return;
-        }
-
-        this.StringParam = triggerData;
+        this.StringParam = wiredTriggerData;
     }
 }

@@ -10,7 +10,7 @@ using WibboEmulator.Games.Rooms.AI;
 
 public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
 {
-    public BotTalkToAvatar(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_TALK_DIRECT_TO_AVTR) => this.IntParams.Add(0);
+    public BotTalkToAvatar(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_TALK_DIRECT_TO_AVTR) => this.DefaultIntParams(new int[] { 0 });
 
     public override bool OnCycle(RoomUser user, Item item)
     {
@@ -35,7 +35,7 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        var isWhisper = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+        var isWhisper = this.GetIntParam(0) == 1;
 
         WiredUtillity.ParseMessage(user, this.RoomInstance, ref message);
 
@@ -80,26 +80,17 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
 
     public void SaveToDatabase(IQueryAdapter dbClient)
     {
-        var isWhisper = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+        var isWhisper = this.GetIntParam(0) == 1;
 
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, isWhisper, null, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
         this.Delay = wiredDelay;
 
-        this.IntParams.Add(wiredAllUserTriggerable ? 1 : 0);
+        this.SetIntParam(0, wiredAllUserTriggerable ? 1 : 0);
 
-        var data = wiredTriggerData;
-
-        if (string.IsNullOrWhiteSpace(data) || !data.Contains('\t'))
-        {
-            return;
-        }
-
-        this.StringParam = data;
+        this.StringParam = wiredTriggerData;
     }
 }

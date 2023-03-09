@@ -11,12 +11,12 @@ public class ScoreAchieved : WiredTriggerBase, IWired
     {
         this.RoomInstance.GameManager.OnScoreChanged += this.OnScoreChanged;
 
-        this.IntParams.Add(0);
+        this.DefaultIntParams(new int[] { 0 });
     }
 
     private void OnScoreChanged(object sender, TeamScoreChangedEventArgs e)
     {
-        var scoreLevel = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+        var scoreLevel = this.GetIntParam(0);
         if (e.Points <= scoreLevel - 1)
         {
             return;
@@ -34,17 +34,15 @@ public class ScoreAchieved : WiredTriggerBase, IWired
 
     public void SaveToDatabase(IQueryAdapter dbClient)
     {
-        var scoreLevel = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+        var scoreLevel = this.GetIntParam(0);
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, scoreLevel.ToString(), false, null);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
         if (int.TryParse(wiredTriggerData, out var score))
         {
-            this.IntParams.Add(score);
+            this.SetIntParam(0, score);
         }
     }
 }

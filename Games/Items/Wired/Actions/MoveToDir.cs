@@ -14,8 +14,7 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
     {
         this._moveToDirMovement = MovementDirection.none;
 
-        this.IntParams.Add(0);
-        this.IntParams.Add(0);
+        this.DefaultIntParams(new int[] { 0, 0 });
     }
 
     public override bool OnCycle(RoomUser user, Item item)
@@ -34,7 +33,7 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
     {
         base.LoadItems();
 
-        var startDirection = (MovementDirection)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+        var startDirection = (MovementDirection)this.GetIntParam(0);
 
         this._moveToDirMovement = startDirection;
     }
@@ -55,8 +54,8 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
             return;
         }
 
-        //var startDirection = (MovementDirection)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
-        var whenMoveIsBlocked = (WhenMovementBlock)((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
+        //var startDirection = (MovementDirection)(this.GetIntParam(0));
+        var whenMoveIsBlocked = (WhenMovementBlock)this.GetIntParam(1);
 
         var oldX = disableAnimation ? newPoint.X : roomItem.X;
         var oldY = disableAnimation ? newPoint.Y : roomItem.Y;
@@ -1213,46 +1212,26 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
 
     public void SaveToDatabase(IQueryAdapter dbClient)
     {
-        var startDirection = (MovementDirection)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
-        var whenMoveIsBlocked = (WhenMovementBlock)((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
+        var startDirection = (MovementDirection)this.GetIntParam(0);
+        var whenMoveIsBlocked = (WhenMovementBlock)this.GetIntParam(1);
 
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, Convert.ToInt32(startDirection).ToString(), Convert.ToInt32(whenMoveIsBlocked).ToString(), false, this.Items, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
         this.Delay = wiredDelay;
-
-        var triggerItems = wiredTriggersItem;
 
         if (int.TryParse(wiredTriggerData2, out var startDirection))
         {
-            this.IntParams.Add(startDirection);
+            this.SetIntParam(0, startDirection);
         }
 
         if (int.TryParse(wiredTriggerData, out var whenMoveIsBlocked))
         {
-            this.IntParams.Add(whenMoveIsBlocked);
+            this.SetIntParam(1, whenMoveIsBlocked);
         }
 
-        if (triggerItems is null or "")
-        {
-            return;
-        }
-
-        foreach (var itemId in triggerItems.Split(';'))
-        {
-            if (!int.TryParse(itemId, out var id))
-            {
-                continue;
-            }
-
-            if (!this.StuffIds.Contains(id))
-            {
-                this.StuffIds.Add(id);
-            }
-        }
+        this.LoadStuffIds(wiredTriggersItem);
     }
 }

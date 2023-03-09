@@ -8,7 +8,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
 {
-    public CollisionTeam(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM) => this.IntParams.Add((int)TeamType.Red);
+    public CollisionTeam(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM) => this.DefaultIntParams(new int[] { (int)TeamType.Red });
 
     public override bool OnCycle(RoomUser user, Item item)
     {
@@ -16,7 +16,7 @@ public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
 
         var listTeam = new List<RoomUser>();
 
-        var team = (TeamType)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+        var team = (TeamType)this.GetIntParam(0);
 
         if (team == TeamType.Blue)
         {
@@ -59,20 +59,18 @@ public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
 
     public void SaveToDatabase(IQueryAdapter dbClient)
     {
-        var team = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+        var team = this.GetIntParam(0);
 
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, team.ToString(), false, null, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
         this.Delay = wiredDelay;
 
         if (int.TryParse(wiredTriggerData, out var team))
         {
-            this.IntParams.Add(team);
+            this.SetIntParam(0, team);
         }
     }
 }

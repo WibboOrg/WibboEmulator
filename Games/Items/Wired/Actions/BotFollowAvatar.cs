@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class BotFollowAvatar : WiredActionBase, IWired, IWiredEffect
 {
-    public BotFollowAvatar(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_FOLLOW_AVATAR) => this.IntParams.Add(0);
+    public BotFollowAvatar(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_FOLLOW_AVATAR) => this.DefaultIntParams(new int[] { 0 });
 
     public override bool OnCycle(RoomUser user, Item item)
     {
@@ -23,7 +23,7 @@ public class BotFollowAvatar : WiredActionBase, IWired, IWiredEffect
 
         if (user != null && !user.IsBot && user.Client != null)
         {
-            var isFollow = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+            var isFollow = this.GetIntParam(0) == 1;
             if (isFollow)
             {
                 if (bot.BotData.FollowUser != user.VirtualId)
@@ -42,18 +42,16 @@ public class BotFollowAvatar : WiredActionBase, IWired, IWiredEffect
 
     public void SaveToDatabase(IQueryAdapter dbClient)
     {
-        var isFollow = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+        var isFollow = this.GetIntParam(0) == 1;
 
         WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, isFollow, null, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
         this.Delay = wiredDelay;
 
-        this.IntParams.Add(wiredAllUserTriggerable ? 1 : 0);
+        this.SetIntParam(0, wiredAllUserTriggerable ? 1 : 0);
 
         this.StringParam = wiredTriggerData;
     }

@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms.Wired;
 
 public class TimerTrigger : WiredTriggerBase, IWired, IWiredCycleable
 {
-    public int DelayCycle => (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+    public int DelayCycle => this.GetIntParam(0);
     public bool IsTeleport => false;
 
     private int _skipCycleCount;
@@ -16,7 +16,7 @@ public class TimerTrigger : WiredTriggerBase, IWired, IWiredCycleable
     {
         this.RoomInstance.WiredHandler.TrgTimer += this.OnResetTimer;
 
-        this.IntParams.Add(0);
+        this.DefaultIntParams(new int[] { 0 });
     }
 
     public void OnResetTimer(object sender, EventArgs e)
@@ -45,15 +45,15 @@ public class TimerTrigger : WiredTriggerBase, IWired, IWiredCycleable
         base.Dispose();
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.DelayCycle.ToString(), false, null);
+    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, null, this.DelayCycle);
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
+        this.SetIntParam(0, wiredDelay);
 
         if (int.TryParse(wiredTriggerData, out var delay))
         {
-            this.IntParams.Add(delay);
+            this.SetIntParam(0, delay);
         }
     }
 }

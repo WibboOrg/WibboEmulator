@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Items.Wired.Conditions;
+
+using System;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -13,11 +15,7 @@ public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
     {
         this._itemsData = new Dictionary<int, ItemsPosReset>();
 
-        this.IntParams.Add(0);
-        this.IntParams.Add(0);
-        this.IntParams.Add(0);
-        this.IntParams.Add(0);
-        this.IntParams.Add(1);
+        this.DefaultIntParams(new int[] { 0, 0, 0, 0, 1 });
     }
     public bool AllowsExecution(RoomUser user, Item item)
     {
@@ -26,11 +24,11 @@ public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
             return false;
         }
 
-        var state = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
-        var direction = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0) == 1;
-        var position = ((this.IntParams.Count > 2) ? this.IntParams[2] : 0) == 1;
-        var height = ((this.IntParams.Count > 3) ? this.IntParams[3] : 0) == 1;
-        var requireAll = ((this.IntParams.Count > 4) ? this.IntParams[4] : 0) == 1;
+        var state = this.GetIntParam(0) == 1;
+        var direction = this.GetIntParam(1) == 1;
+        var position = this.GetIntParam(2) == 1;
+        var height = this.GetIntParam(3) == 1;
+        var requireAll = this.GetIntParam(4) == 1;
 
         foreach (var roomItem in this.Items.ToList())
         {
@@ -129,52 +127,39 @@ public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
 
         triggerItems = triggerItems.TrimEnd(';');
 
-        var state = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
-        var direction = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
-        var position = (this.IntParams.Count > 2) ? this.IntParams[2] : 0;
-        var height = (this.IntParams.Count > 3) ? this.IntParams[3] : 0;
-        var requireAll = (this.IntParams.Count > 4) ? this.IntParams[4] : 1;
+        var state = this.GetIntParam(0);
+        var direction = this.GetIntParam(1);
+        var position = this.GetIntParam(2);
+        var height = this.GetIntParam(3);
+        var requireAll = this.GetIntParam(4);
 
         var triggerData2 = string.Join(";", new int[] { state, direction, position, height, requireAll });
 
-        ItemWiredDao.Replace(dbClient, this.ItemInstance.Id, "", triggerData2, false, triggerItems, this.Delay);
+        ItemWiredDao.Replace(dbClient, this.ItemInstance.Id, string.Empty, triggerData2, false, triggerItems, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
-        this.IntParams.Clear();
-
-        var triggerData2 = wiredTriggerData2;
-
-        if (triggerData2 != null && triggerData2.Contains(';'))
+        if (wiredTriggerData2.Contains(';'))
         {
-            foreach (var index in triggerData2.Split(';'))
+            var index = 0;
+            foreach (var value in wiredTriggerData2.Split(';'))
             {
-                if (int.TryParse(index, out var state))
+                if (int.TryParse(value, out var state))
                 {
-                    this.IntParams.Add(state);
+                    this.SetIntParam(index, state);
                 }
+
+                index++;
             }
         }
 
-        if (this.IntParams.Count <= 3)
-        {
-            this.IntParams.Add(0);
-        }
-
-        if (this.IntParams.Count <= 4)
-        {
-            this.IntParams.Add(1);
-        }
-
-        var triggerItems = wiredTriggersItem;
-
-        if (triggerItems is null or "")
+        if (wiredTriggersItem is "")
         {
             return;
         }
 
-        foreach (var item in triggerItems.Split(';'))
+        foreach (var item in wiredTriggersItem.Split(';'))
         {
             var itemData = item.Split(':');
             if (itemData.Length != 6)
