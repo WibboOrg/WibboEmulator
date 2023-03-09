@@ -51,7 +51,7 @@ public class RoomUserNotCount : WiredConditionBase, IWiredCondition, IWired
 
         if (int.TryParse(countMax, out var maxUsers))
         {
-            this.SetIntParam(1, (maxUsers);
+            this.SetIntParam(1, maxUsers);
         }
     }
 }
