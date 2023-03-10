@@ -135,7 +135,7 @@ public class InventoryComponent : IDisposable
         }
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        ItemDao.DeleteAllByBaseItem(dbClient, this._userInstance.Id, baseItem);
+        ItemDao.DeleteAllByRooIdAndBaseItem(dbClient, 0, this._userInstance.Id, baseItem);
         ItemStatDao.UpdateRemove(dbClient, rareAmounts);
 
         this._userInstance.Client.SendPacket(listMessage);
