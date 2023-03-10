@@ -9,6 +9,11 @@ internal sealed class ItemDao
 {
     internal static void SaveUpdateItems(IQueryAdapter dbClient, ConcurrentDictionary<int, Item> updateItems)
     {
+        if (updateItems.IsEmpty)
+        {
+            return;
+        }
+
         var standardQueries = new QueryChunk();
 
         foreach (var roomItem in updateItems.Values)
@@ -36,10 +41,32 @@ internal sealed class ItemDao
 
     internal static void UpdateItems(IQueryAdapter dbClient, List<Item> updateItems, int userId)
     {
+        if (updateItems.Count == 0)
+        {
+            return;
+        }
+
         var standardQueries = new QueryChunk();
         foreach (var roomItem in updateItems)
         {
             standardQueries.AddQuery("UPDATE `item` SET room_id = '0', user_id = '" + userId + "' WHERE id = '" + roomItem.Id + "'");
+        }
+
+        standardQueries.Execute(dbClient);
+        standardQueries.Dispose();
+    }
+
+    internal static void DeleteItems(IQueryAdapter dbClient, List<Item> deleteItems)
+    {
+        if (deleteItems.Count == 0)
+        {
+            return;
+        }
+
+        var standardQueries = new QueryChunk();
+        foreach (var roomItem in deleteItems)
+        {
+            standardQueries.AddQuery("DELETE `item`, `item_limited`, `item_present`, `item_moodlight`, `item_teleport`, `item_wired` FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) LEFT JOIN `item_present` ON (`item_present`.item_id = `item`.id) LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_teleport` ON (tele_one_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) WHERE id = '" + roomItem.Id + "'");
         }
 
         standardQueries.Execute(dbClient);
@@ -81,6 +108,8 @@ internal sealed class ItemDao
     internal static void DeleteById(IQueryAdapter dbClient, int itemId) => dbClient.RunQuery("DELETE `item`, `item_limited`, `item_present`, `item_moodlight`, `item_teleport`, `item_wired` FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) LEFT JOIN `item_present` ON (`item_present`.item_id = `item`.id) LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_teleport` ON (tele_one_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) WHERE id = '" + itemId + "'");
 
     internal static void DeleteAllByRoomId(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("DELETE `item`, `item_limited`, `item_present`, `item_moodlight`, `item_teleport`, `item_wired` FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) LEFT JOIN `item_present` ON (`item_present`.item_id = `item`.id) LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_teleport` ON (tele_one_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) WHERE room_id = '" + roomId + "'");
+
+    internal static void DeleteAllByBaseItem(IQueryAdapter dbClient, int userId, int baseItem) => dbClient.RunQuery("DELETE `item`, `item_limited`, `item_present`, `item_moodlight`, `item_teleport`, `item_wired` FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) LEFT JOIN `item_present` ON (`item_present`.item_id = `item`.id) LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_teleport` ON (tele_one_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) WHERE user_id = '" + userId + "' AND base_item = '" + baseItem + "'");
 
     internal static void DeleteAll(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("DELETE `item`, `item_limited`, `item_present`, `item_moodlight`, `item_teleport`, `item_wired` FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) LEFT JOIN `item_present` ON (`item_present`.item_id = `item`.id) LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_teleport` ON (tele_one_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) WHERE room_id = '0' AND user_id = '" + userId + "'");
 

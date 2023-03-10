@@ -19,7 +19,7 @@ internal sealed class ObjectsComposer : ServerPacket
             this.WriteFloorItem(item, room.RoomData.HideWireds);
 
             this.WriteInteger(-1); // expires
-            this.WriteInteger(room.IsGameMode ? 0 : 1); //(Item.GetBaseItem().Modes > 1) ? 1 : 0
+            this.WriteInteger(room.IsGameMode ? 0 : 2);
             this.WriteInteger(room.RoomData.OwnerId);
         }
     }
@@ -38,7 +38,7 @@ internal sealed class ObjectsComposer : ServerPacket
             this.WriteFloorItem(item);
 
             this.WriteInteger(-1); // expires
-            this.WriteInteger(room.IsGameMode ? 0 : 1); //(Item.GetBaseItem().Modes > 1) ? 1 : 0
+            this.WriteInteger(room.IsGameMode ? 0 : 2);
             this.WriteInteger(room.RoomData.OwnerId);
         }
     }

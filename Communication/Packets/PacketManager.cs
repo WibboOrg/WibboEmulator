@@ -362,6 +362,9 @@ public sealed class PacketManager
         this._incomingPackets.Add(ClientPacketHeader.USER_PETS, new GetPetInventoryEvent());
         this._incomingPackets.Add(ClientPacketHeader.USER_EFFECT_ACTIVATE, new AvatarEffectActivatedEvent());
         this._incomingPackets.Add(ClientPacketHeader.USER_EFFECT_ENABLE, new AvatarEffectSelectedEvent());
+
+        this._incomingPackets.Add(ClientPacketHeader.DELETE_BADGE_INVENTORY, new DeleteBadgeInventoryEvent());
+        this._incomingPackets.Add(ClientPacketHeader.DELETE_FURNITURE_TYPE_INVENTORY, new DeleteFurniTypeInventoryEvent());
     }
 
     private void RegisterPurse() => this._incomingPackets.Add(ClientPacketHeader.USER_CURRENCY, new GetCreditsInfoEvent());

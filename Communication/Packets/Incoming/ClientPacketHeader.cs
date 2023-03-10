@@ -19,6 +19,8 @@ public static class ClientPacketHeader
     public const int RP_TROC_STOP = 10015;
     public const int BOT_CHOOSE = 10016;
     public const int FURNITURE_PICKUP_ALL = 10017;
+    public const int DELETE_FURNITURE_TYPE_INVENTORY = 10018;
+    public const int DELETE_BADGE_INVENTORY = 10019;
     public const int UNIT_CHAT_WHISPER_GROUP = 1118;
 
     public const int ACHIEVEMENT_LIST = 219;

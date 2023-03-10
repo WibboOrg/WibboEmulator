@@ -12,6 +12,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Users.Inventory.Bots;
+using WibboEmulator.Utilities;
 
 public class InventoryComponent : IDisposable
 {
@@ -96,13 +97,59 @@ public class InventoryComponent : IDisposable
         this.GetClient().SendPacket(new FurniListUpdateComposer());
     }
 
+    public void DeleteItemByType(int baseItem)
+    {
+        var listMessage = new ServerPacketList();
+        var deleteItem = new List<Item>();
+        var rareAmounts = new Dictionary<int, int>();
+
+        foreach (var roomItem in this.GetWallAndFloor)
+        {
+            if (roomItem == null || roomItem.BaseItem != baseItem)
+            {
+                continue;
+            }
+
+            if (roomItem.GetBaseItem().Amount > 0)
+            {
+                roomItem.Data.Amount -= 1;
+
+                if (!rareAmounts.TryGetValue(roomItem.BaseItem, out var value))
+                {
+                    rareAmounts.Add(roomItem.BaseItem, 1);
+                }
+                else
+                {
+                    _ = rareAmounts.Remove(roomItem.BaseItem);
+                    rareAmounts.Add(roomItem.BaseItem, value + 1);
+                }
+            }
+
+            listMessage.Add(new FurniListRemoveComposer(roomItem.Id));
+            deleteItem.Add(roomItem);
+        }
+
+        foreach (var roomItem in deleteItem)
+        {
+            this.RemoveItem(roomItem.Id, false);
+        }
+
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        ItemDao.DeleteAllByBaseItem(dbClient, this._userInstance.Id, baseItem);
+        ItemStatDao.UpdateRemove(dbClient, rareAmounts);
+
+        this._userInstance.Client.SendPacket(listMessage);
+    }
+
     public void ConvertMagot()
     {
         var wibboPointsCount = 0;
         var creditCount = 0;
         var winwinCount = 0;
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        var listMessage = new ServerPacketList();
+        var deleteItem = new List<Item>();
+        var rareAmounts = new Dictionary<int, int>();
 
         foreach (var roomItem in this.GetWallAndFloor)
         {
@@ -111,28 +158,51 @@ public class InventoryComponent : IDisposable
                 continue;
             }
 
-            ItemDao.DeleteById(dbClient, roomItem.Id);
+            var magotCount = int.Parse(roomItem.GetBaseItem().ItemName.Split(new char[1] { '_' })[1]);
 
-            this.RemoveItem(roomItem.Id);
-
-            var value = int.Parse(roomItem.GetBaseItem().ItemName.Split(new char[1] { '_' })[1]);
-
-            if (value > 0)
+            if (magotCount > 0)
             {
                 if (roomItem.GetBaseItem().ItemName.StartsWith("CF_") || roomItem.GetBaseItem().ItemName.StartsWith("CFC_"))
                 {
-                    creditCount += value;
+                    creditCount += magotCount;
                 }
                 else if (roomItem.GetBaseItem().ItemName.StartsWith("PntEx_"))
                 {
-                    wibboPointsCount += value;
+                    wibboPointsCount += magotCount;
                 }
                 else if (roomItem.GetBaseItem().ItemName.StartsWith("WwnEx_"))
                 {
-                    winwinCount += value;
+                    winwinCount += magotCount;
                 }
             }
+
+            if (roomItem.GetBaseItem().Amount > 0)
+            {
+                roomItem.Data.Amount -= 1;
+
+                if (!rareAmounts.TryGetValue(roomItem.BaseItem, out var value))
+                {
+                    rareAmounts.Add(roomItem.BaseItem, 1);
+                }
+                else
+                {
+                    _ = rareAmounts.Remove(roomItem.BaseItem);
+                    rareAmounts.Add(roomItem.BaseItem, value + 1);
+                }
+            }
+
+            listMessage.Add(new FurniListRemoveComposer(roomItem.Id));
+            deleteItem.Add(roomItem);
         }
+
+        foreach (var roomItem in deleteItem)
+        {
+            this.RemoveItem(roomItem.Id, false);
+        }
+
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        ItemDao.DeleteItems(dbClient, deleteItem);
+        ItemStatDao.UpdateRemove(dbClient, rareAmounts);
 
         if (creditCount > 0)
         {
@@ -167,6 +237,8 @@ public class InventoryComponent : IDisposable
                 }
             }
         }
+
+        this._userInstance.Client.SendPacket(listMessage);
     }
 
     public void ClearPets()
@@ -371,14 +443,17 @@ public class InventoryComponent : IDisposable
 
     private bool UserHoldsItem(int itemID) => this._userItems.ContainsKey(itemID);
 
-    public void RemoveItem(int id)
+    public void RemoveItem(int id, bool sendComposed = true)
     {
         if (this._userItems.ContainsKey(id))
         {
             _ = this._userItems.TryRemove(id, out _);
         }
 
-        this.GetClient().SendPacket(new FurniListRemoveComposer(id));
+        if (sendComposed)
+        {
+            this.GetClient().SendPacket(new FurniListRemoveComposer(id));
+        }
     }
 
     public IEnumerable<Item> GetWallAndFloor => this._userItems.Values;

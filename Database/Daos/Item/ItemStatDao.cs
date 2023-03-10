@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Database.Daos.Item;
+namespace WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Utilities;
 
@@ -13,6 +13,11 @@ internal sealed class ItemStatDao
 
     internal static void UpdateRemove(IQueryAdapter dbClient, Dictionary<int, int> rareAmounts)
     {
+        if (rareAmounts.Count == 0)
+        {
+            return;
+        }
+
         var standardQueries = new QueryChunk();
 
         foreach (var rare in rareAmounts)
