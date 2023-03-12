@@ -6,6 +6,7 @@ using WibboEmulator.Games.Catalogs.Marketplace;
 using WibboEmulator.Games.Catalogs.Pets;
 using WibboEmulator.Games.Catalogs.Vouchers;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Users;
 
 public class CatalogManager
 {
@@ -72,11 +73,11 @@ public class CatalogManager
 
         this._voucherManager.Init(dbClient);
 
-        var catalogueItems = CatalogItemDao.GetAll(dbClient);
+        var catalogItems = CatalogItemDao.GetAll(dbClient);
 
-        if (catalogueItems != null)
+        if (catalogItems != null)
         {
-            foreach (DataRow row in catalogueItems.Rows)
+            foreach (DataRow row in catalogItems.Rows)
             {
                 if (Convert.ToInt32(row["amount"]) <= 0)
                 {
@@ -117,7 +118,7 @@ public class CatalogManager
                 foreach (DataRow row in catalogPages.Rows)
                 {
                     this._pages.Add(Convert.ToInt32(row["id"]), new CatalogPage(Convert.ToInt32(row["id"]), Convert.ToInt32(row["parent_id"]), row["enabled"].ToString(), Convert.ToString(row["caption"]),
-                        Convert.ToString(row["page_link"]), Convert.ToInt32(row["icon_image"]), Convert.ToInt32(row["min_rank"]), Convert.ToString(row["page_layout"]),
+                        Convert.ToString(row["page_link"]), Convert.ToInt32(row["icon_image"]), Convert.ToString(row["required_right"]), Convert.ToString(row["page_layout"]),
                         Convert.ToString(row["page_strings_1"]), Convert.ToString(row["page_strings_2"]), Convert.ToString(row["caption_en"]),
                         Convert.ToString(row["caption_br"]), Convert.ToString(row["page_strings_2_en"]), Convert.ToString(row["page_strings_2_br"]), row["is_premium"].ToString(),
                         this._items.TryGetValue(Convert.ToInt32(row["id"]), out var value) ? value : new Dictionary<int, CatalogItem>()));
@@ -169,7 +170,7 @@ public class CatalogManager
 
     public bool HasBadge(string code) => this._badges.Contains(code);
 
-    public CatalogItem FindItem(int itemId, int rank)
+    public CatalogItem FindItem(int itemId, User user)
     {
         if (!this._itemsPage.ContainsKey(itemId))
         {
@@ -183,7 +184,7 @@ public class CatalogManager
         }
 
         var page = this._pages[pageId];
-        if (page == null || !page.Enabled || page.MinimumRank > rank)
+        if (page == null || !page.Enabled || !page.HavePermission(user))
         {
             return null;
         }

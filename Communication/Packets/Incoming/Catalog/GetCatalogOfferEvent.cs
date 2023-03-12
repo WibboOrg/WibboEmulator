@@ -10,7 +10,7 @@ internal sealed class GetCatalogOfferEvent : IPacketEvent
     {
         var id = packet.PopInt();
 
-        var item = WibboEnvironment.GetGame().GetCatalog().FindItem(id, session.User.Rank);
+        var item = WibboEnvironment.GetGame().GetCatalog().FindItem(id, session.User);
         if (item == null)
         {
             return;
@@ -21,7 +21,7 @@ internal sealed class GetCatalogOfferEvent : IPacketEvent
             return;
         }
 
-        if (!page.Enabled || page.MinimumRank > session.User.Rank)
+        if (!page.Enabled || !page.HavePermission(session.User))
         {
             return;
         }

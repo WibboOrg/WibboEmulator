@@ -33,7 +33,7 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             return;
         }
 
-        if (!page.Enabled || page.MinimumRank > session.User.Rank)
+        if (!page.Enabled || !page.HavePermission(session.User))
         {
             return;
         }

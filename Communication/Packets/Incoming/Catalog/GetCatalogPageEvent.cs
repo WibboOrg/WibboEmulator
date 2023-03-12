@@ -14,7 +14,7 @@ internal sealed class GetCatalogPageEvent : IPacketEvent
         var cataMode = packet.PopString();
 
         _ = WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out var page);
-        if (page == null || page.MinimumRank > session.User.Rank)
+        if (page == null || !page.HavePermission(session.User))
         {
             return;
         }

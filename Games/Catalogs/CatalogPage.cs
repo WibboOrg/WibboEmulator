@@ -1,5 +1,7 @@
 namespace WibboEmulator.Games.Catalogs;
 using WibboEmulator.Core.Language;
+using WibboEmulator.Games.Users;
+using WibboEmulator.WebSocketSharp;
 
 public class CatalogPage
 {
@@ -12,7 +14,7 @@ public class CatalogPage
     public string CaptionBr { get; set; }
     public string PageLink { get; set; }
     public int Icon { get; set; }
-    public int MinimumRank { get; set; }
+    public string RequiredRight { get; set; }
     public string Template { get; set; }
     public List<string> PageStrings1 { get; private set; }
     public Dictionary<int, CatalogItem> Items { get; private set; }
@@ -22,7 +24,7 @@ public class CatalogPage
     private readonly List<string> _pageStrings2En;
     private readonly List<string> _pageStrings2Br;
 
-    public CatalogPage(int id, int parentId, string enabled, string caption, string pageLink, int icon, int minRank,
+    public CatalogPage(int id, int parentId, string enabled, string caption, string pageLink, int icon, string requiredRight,
         string template, string pageStrings1, string pageStrings2, string captionEn, string captionBr, string pageStrings2En,
         string pageStrings2Br, string isPremium, Dictionary<int, CatalogItem> items)
     {
@@ -37,7 +39,7 @@ public class CatalogPage
 
         this.PageLink = pageLink;
         this.Icon = icon;
-        this.MinimumRank = minRank;
+        this.RequiredRight = requiredRight;
         this.Template = template;
 
         foreach (var str in pageStrings1.Split('|'))
@@ -112,13 +114,15 @@ public class CatalogPage
         return this._pageStrings2;
     }
 
-    public CatalogItem GetItem(int pId)
+    public CatalogItem GetItem(int id)
     {
-        if (this.Items.TryGetValue(pId, out var value))
+        if (this.Items.TryGetValue(id, out var value))
         {
             return value;
         }
 
         return null;
     }
+
+    public bool HavePermission(User user) => this.RequiredRight.IsNullOrEmpty() || user.HasPermission(this.RequiredRight);
 }

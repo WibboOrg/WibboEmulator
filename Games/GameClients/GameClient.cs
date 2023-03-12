@@ -121,6 +121,7 @@ public class GameClient
         }
         return true;
     }
+
     public void SendWhisper(string message, bool info = true)
     {
         if (this.User == null || this.User.CurrentRoom == null)
@@ -136,6 +137,7 @@ public class GameClient
 
         this.SendPacket(new WhisperComposer(user.VirtualId, message, info ? 34 : 0));
     }
+
     public void SendNotification(string message) => this.SendPacket(new BroadcastMessageAlertComposer(message));
 
     public void SendHugeNotif(string message) => this.SendPacket(new MOTDNotificationComposer(message));
