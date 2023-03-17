@@ -99,13 +99,13 @@ internal sealed class SaveBotActionEvent : IPacketEvent
                 var text = "";
                 for (var i = 0; i <= speechData.Length - 1; i++)
                 {
-                    var phrase = speechData[i];
-                    if (phrase.Length > 150)
+                    var line = speechData[i];
+                    if (line.Length > 150)
                     {
-                        phrase = phrase[..150];
+                        line = line[..150];
                     }
 
-                    text += phrase[i] + "\r";
+                    text += line + "\r";
                 }
 
                 roomBot.ChatText = text;
