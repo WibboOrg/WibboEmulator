@@ -109,6 +109,13 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 
             case InteractionType.PET:
                 var bits = extraData.Split('\n');
+
+                if (bits.Length < 3)
+                {
+                    session.SendPacket(new PurchaseErrorComposer());
+                    return;
+                }
+
                 var petName = bits[0];
                 var race = bits[1];
                 var color = bits[2];
@@ -355,9 +362,13 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 
             case "p":
             {
-                var petData = extraData.Split('\n');
+                var bits = extraData.Split('\n');
 
-                var generatedPet = PetUtility.CreatePet(session.User.Id, petData[0], item.Data.SpriteId, petData[1], petData[2]);
+                var petName = bits[0];
+                var race = bits[1];
+                var color = bits[2];
+
+                var generatedPet = PetUtility.CreatePet(session.User.Id, petName, item.Data.SpriteId, race, color);
                 if (generatedPet != null)
                 {
                     if (!session.User.InventoryComponent.TryAddPet(generatedPet))
