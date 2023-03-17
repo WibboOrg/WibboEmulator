@@ -11,9 +11,9 @@ internal sealed class CatalogItemDao
         return dbClient.GetTable();
     }
 
-    internal static DataTable GetItemIdByRank(IQueryAdapter dbClient, int rank)
+    internal static DataTable GetItemIdByRank(IQueryAdapter dbClient, string permission)
     {
-        dbClient.SetQuery("SELECT `item_id` FROM `catalog_item` WHERE `page_id` IN (SELECT `id` FROM `catalog_page` WHERE `min_rank` <= '" + rank + "') AND `cost_pixels` = '0' AND `cost_diamonds` = '0' AND `offer_active` = '1' GROUP BY `item_id`");
+        dbClient.SetQuery("SELECT `item_id` FROM `catalog_item` WHERE `page_id` IN (SELECT `id` FROM `catalog_page` WHERE `required_right` <= '" + permission + "') AND `cost_pixels` = '0' AND `cost_diamonds` = '0' AND `offer_active` = '1' GROUP BY `item_id`");
 
         return dbClient.GetTable();
     }

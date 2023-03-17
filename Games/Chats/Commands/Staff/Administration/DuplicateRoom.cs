@@ -27,7 +27,7 @@ internal sealed class DuplicateRoom : IChatCommand
 
             var furniIdAllow = new List<int>();
 
-            var catalogItemTable = CatalogItemDao.GetItemIdByRank(dbClient, session.User.Rank);
+            var catalogItemTable = CatalogItemDao.GetItemIdByRank(dbClient, "");
             foreach (DataRow dataRow in catalogItemTable.Rows)
             {
                 _ = int.TryParse(dataRow["item_id"].ToString(), out var itemId);
