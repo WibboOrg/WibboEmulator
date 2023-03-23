@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.BuildersClub;
+using WibboEmulator.Communication.Packets.Outgoing.Campaign;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
@@ -106,15 +107,20 @@ internal sealed class SSOTicketEvent : IPacketEvent
                 packetList.Add(new ActivityPointNotificationComposer(session.User.Duckets, 1));
                 packetList.Add(new CreditBalanceComposer(session.User.Credits));
 
-                /*int day = (int)DateTime.Now.Day;
-                int days = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+                if (user.Rank > 12)
+                {
+                    var day = DateTime.Now.Day;
+                    var days = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
 
-                List<int> missDays = new List<int>();
-                for (int i = 0; i < day; i++)
-                    missDays.Add(i);
+                    var missDays = new List<int>();
+                    for (var i = 0; i < day; i++)
+                    {
+                        missDays.Add(i);
+                    }
 
-                packetList.Add(new CampaignCalendarDataComposer("", "", day, days, new List<int>(), missDays));
-                packetList.Add(new InClientLinkComposer("openView/calendar"));*/
+                    packetList.Add(new CampaignCalendarDataComposer("", "", day, days, new List<int>(), missDays));
+                    packetList.Add(new InClientLinkComposer("openView/calendar"));
+                }
 
                 if (IsNewUser(session))
                 {

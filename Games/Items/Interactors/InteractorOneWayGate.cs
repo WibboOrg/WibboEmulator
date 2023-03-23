@@ -1,4 +1,6 @@
-﻿namespace WibboEmulator.Games.Items.Interactors;
+namespace WibboEmulator.Games.Items.Interactors;
+
+using System.Drawing;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map;
@@ -48,7 +50,9 @@ public class InteractorOneWayGate : FurniInteractor
             return;
         }
 
-        if (roomUser.Coordinate != item.SquareInFront && roomUser.CanWalk)
+        var userCoords = new Point(roomUser.SetX, roomUser.SetY);
+
+        if (userCoords != item.SquareInFront && roomUser.CanWalk)
         {
             roomUser.MoveTo(item.SquareInFront);
         }
@@ -99,7 +103,9 @@ public class InteractorOneWayGate : FurniInteractor
             return;
         }
 
-        if (roomUserTarget.Coordinate == item.SquareBehind || !GameMap.TilesTouching(item.X, item.Y, roomUserTarget.X, roomUserTarget.Y))
+        var userCoords = new Point(roomUserTarget.SetX, roomUserTarget.SetY);
+
+        if (userCoords == item.SquareBehind || roomUserTarget.Coordinate == item.SquareBehind || !GameMap.TilesTouching(item.X, item.Y, roomUserTarget.X, roomUserTarget.Y))
         {
             roomUserTarget.UnlockWalking();
             item.ExtraData = "0";
