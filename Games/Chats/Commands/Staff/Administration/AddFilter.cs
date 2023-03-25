@@ -12,6 +12,6 @@ internal sealed class AddFilter : IChatCommand
         }
 
         WibboEnvironment.GetGame().GetChatManager().GetFilter().AddFilterPub(parameters[1].ToLower());
-        session.SendWhisper("Le mot" + parameters[1] + " vient d'être ajouté au filtre");
+        session.SendWhisper("Le mot" + parameters[1] + " vient d'être ajouté au filtre des mots interdits.");
     }
 }

@@ -17,7 +17,7 @@ internal sealed class Dance : IChatCommand
         {
             if (danceId is > 4 or < 0)
             {
-                session.SendWhisper("Entre un numéro entre 0 et 4");
+                session.SendWhisper("Choisit un numéro entre 0 et 4");
                 return;
             }
 
