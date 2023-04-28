@@ -31,6 +31,6 @@ internal sealed class GetCatalogOfferEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new CatalogOfferComposer(item));
+        session.SendPacket(new CatalogOfferComposer(item, page.IsPremium));
     }
 }

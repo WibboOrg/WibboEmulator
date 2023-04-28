@@ -210,7 +210,12 @@ public enum InteractionType
     BOTTLE,
     CRACKABLE,
     DICE,
+
     EXCHANGE,
+    EXCHANGE_TREE,
+    EXCHANGE_TREE_CLASSIC,
+    EXCHANGE_TREE_EPIC,
+    EXCHANGE_TREE_LEGEND,
 
     FLOOR,
     LANDSCAPE,

@@ -193,6 +193,25 @@ public class GameClientManager
 
     public void OnCycle()
     {
+        this.PendingDisconnectCycle();
+        this.CheckPremiumCycle();
+    }
+
+    private void CheckPremiumCycle()
+    {
+        foreach (var client in this._clients.Values.ToList())
+        {
+            if (client == null || client.User == null || client.User.Premium == null || client.User.Rank != 2)
+            {
+                continue;
+            }
+
+            client.User.Premium.CheckPremiumTimeout();
+        }
+    }
+
+    private void PendingDisconnectCycle()
+    {
         if (this._pendingDisconnect.IsEmpty)
         {
             return;

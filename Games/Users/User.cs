@@ -19,7 +19,9 @@ using WibboEmulator.Games.Users.Inventory;
 using WibboEmulator.Games.Users.Messenger;
 using WibboEmulator.Games.Users.Permissions;
 using WibboEmulator.Games.Users.Wardrobes;
+using WibboEmulator.Games.Users.Premium;
 using WibboEmulator.Utilities;
+using WibboEmulator.Database.Interfaces;
 
 public class User : IDisposable
 {
@@ -31,6 +33,7 @@ public class User : IDisposable
     public InventoryComponent InventoryComponent { get; private set; }
     public ChatlogManager ChatMessageManager { get; private set; }
     public PermissionComponent Permissions { get; private set; }
+    public PremiumComponent Premium { get; private set; }
 
     public int Id { get; set; }
     public string Username { get; set; }
@@ -106,6 +109,7 @@ public class User : IDisposable
     public int PassedNuxCount { get; set; }
     public bool AllowDoorBell { get; set; }
     public bool CanChangeName { get; set; }
+    public bool IsFirstConnexionToday { get; set; }
     public int GiftPurchasingWarnings { get; set; }
     public bool SessionGiftBlocked { get; set; }
     public int RolePlayId { get; set; }
@@ -141,7 +145,7 @@ public class User : IDisposable
         int dailyPetRespectPoints, bool hasFriendRequestsDisabled, int currentQuestID, int achievementPoints,
         int lastOnline, int favoriteGroup, int accountCreated, bool accepttrading, string ip, bool hideInroom,
         bool hideOnline, int mazoHighScore, int mazo, string clientVolume, bool nuxenable, string machineId,
-        bool changeName, Language langue, double ignoreAllExpire, bool ignoreRoomInvite, bool cameraFollowDisabled)
+        bool isFirstConnexionToday, Language langue, double ignoreAllExpire, bool ignoreRoomInvite, bool cameraFollowDisabled)
     {
         this.Id = id;
         this.Username = username;
@@ -170,7 +174,8 @@ public class User : IDisposable
         this.TeleporterId = 0;
         this.HasFriendRequestsDisabled = hasFriendRequestsDisabled;
         this.ClientVolume = new List<int>(3);
-        this.CanChangeName = changeName;
+        this.CanChangeName = isFirstConnexionToday;
+        this.IsFirstConnexionToday = isFirstConnexionToday;
         this.Langue = langue;
         this.IgnoreAllExpireTime = ignoreAllExpire;
 
@@ -221,7 +226,7 @@ public class User : IDisposable
         this.OldChat = false;
     }
 
-    public void Init(GameClient client)
+    public void Init(IQueryAdapter dbClient, GameClient client)
     {
         this.Client = client;
 
@@ -232,13 +237,14 @@ public class User : IDisposable
         this.Messenger = new MessengerComponent(this);
         this.ChatMessageManager = new ChatlogManager();
         this.Permissions = new PermissionComponent();
+        this.Premium = new PremiumComponent(this);
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         this.BadgeComponent.Init(dbClient);
         this.WardrobeComponent.Init(dbClient);
         this.AchievementComponent.Init(dbClient);
         this.Messenger.Init(dbClient, this.HideOnline);
         this.ChatMessageManager.LoadUserChatlogs(dbClient, this.Id);
+        this.Premium.Init(dbClient);
 
         var dUserRooms = RoomDao.GetAllIdByOwner(dbClient, this.Username);
         foreach (DataRow dRow in dUserRooms.Rows)
@@ -315,6 +321,13 @@ public class User : IDisposable
 
     public bool HasPermission(string fuse)
     {
+        if ((fuse == "premium_classic" && this.Premium.IsPremiumClassic) ||
+           (fuse == "premium_epic" && this.Premium.IsPremiumEpic) ||
+           (fuse == "premium_legend" && this.Premium.IsPremiumLegend))
+        {
+            return true;
+        }
+
         if (WibboEnvironment.GetGame().GetPermissionManager().RankHasRight(this.Rank, fuse))
         {
             return true;

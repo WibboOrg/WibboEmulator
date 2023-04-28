@@ -16,6 +16,11 @@ internal sealed class DeleteBadgeInventoryEvent : IPacketEvent
 
         var badgeCode = packet.PopString();
 
+        if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(badgeCode))
+        {
+            return;
+        }
+
         session.User.BadgeComponent.RemoveBadge(badgeCode);
 
         session.SendPacket(new BadgesComposer(session.User.BadgeComponent.BadgeList));

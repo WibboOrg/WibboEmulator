@@ -105,8 +105,11 @@ public class CatalogManager
                 }
 
                 this._items[pageId].Add(Convert.ToInt32(row["id"]), new CatalogItem(Convert.ToInt32(row["id"]), Convert.ToInt32(row["item_id"]),
-                    data, Convert.ToString(row["catalog_name"]), Convert.ToInt32(row["page_id"]), Convert.ToInt32(row["cost_credits"]), Convert.ToInt32(row["cost_pixels"]), Convert.ToInt32(row["cost_diamonds"]), Convert.ToInt32(row["cost_limitcoins"]),
-                    Convert.ToInt32(row["amount"]), DBNull.Value.Equals(row["limited_sells"]) ? 0 : Convert.ToInt32(row["limited_sells"]), DBNull.Value.Equals(row["limited_stack"]) ? 0 : Convert.ToInt32(row["limited_stack"]), WibboEnvironment.EnumToBool(row["offer_active"].ToString()), Convert.ToString(row["badge"])));
+                    data, Convert.ToString(row["catalog_name"]), Convert.ToInt32(row["page_id"]), Convert.ToInt32(row["cost_credits"]),
+                    Convert.ToInt32(row["cost_pixels"]), Convert.ToInt32(row["cost_diamonds"]), Convert.ToInt32(row["cost_limitcoins"]),
+                    Convert.ToInt32(row["amount"]), DBNull.Value.Equals(row["limited_sells"]) ? 0 : Convert.ToInt32(row["limited_sells"]),
+                    DBNull.Value.Equals(row["limited_stack"]) ? 0 : Convert.ToInt32(row["limited_stack"]), Convert.ToInt32(row["offer_active"]) == 1,
+                    Convert.ToString(row["badge"])));
 
                 this._itemsPage.Add(Convert.ToInt32(row["id"]), pageId);
             }

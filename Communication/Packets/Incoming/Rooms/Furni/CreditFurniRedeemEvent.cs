@@ -28,7 +28,9 @@ internal sealed class CreditFurniRedeemEvent : IPacketEvent
             return;
         }
 
-        var exchange = room.RoomItemHandling.GetItem(packet.PopInt());
+        var itemId = packet.PopInt();
+
+        var exchange = room.RoomItemHandling.GetItem(itemId);
         if (exchange == null)
         {
             return;

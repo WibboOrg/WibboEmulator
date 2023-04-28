@@ -33,8 +33,7 @@ internal sealed class UpdateCreditsCommand : IRCONCommand
             credits = UserDao.GetCredits(dbClient, client.User.Id);
         }
 
-        client.
-        User.Credits = credits;
+        client.User.Credits = credits;
         client.SendPacket(new CreditBalanceComposer(client.User.Credits));
 
         return true;

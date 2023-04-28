@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Moderation;
+
+using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -36,12 +38,25 @@ internal sealed class RoomKick : IChatCommand
 
             foreach (var user in userKick)
             {
+                if (user == null || user.Client == null)
+                {
+                    continue;
+                }
+
                 if (messageAlert.Length > 0)
                 {
-                    user.Client?.SendNotification(messageAlert);
+                    user.Client.SendNotification(messageAlert);
                 }
 
                 room.RoomUserManager.RemoveUserFromRoom(user.Client, true, false);
+
+                if (user.Client.User.HomeRoom > 0)
+                {
+                    if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoomData(user.Client.User.HomeRoom, out var roomHome))
+                    {
+                        user.Client.SendPacket(new GetGuestRoomResultComposer(user.Client, roomHome, false, true));
+                    }
+                }
             }
         });
     }

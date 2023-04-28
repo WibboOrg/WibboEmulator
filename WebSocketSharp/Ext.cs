@@ -737,7 +737,7 @@ public static class Ext
       Action<Exception> error
     )
     {
-        if (stream == null)
+        if (stream == null || stream.CanRead == false)
         {
             return;
         }
@@ -751,7 +751,7 @@ public static class Ext
         {
             try
             {
-                if (stream == null)
+                if (stream == null || stream.CanRead == false)
                 {
                     return;
                 }

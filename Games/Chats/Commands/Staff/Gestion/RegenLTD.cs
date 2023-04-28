@@ -35,7 +35,7 @@ internal sealed class RegenLTD : IChatCommand
                     continue;
                 }
 
-                var newItem = ItemFactory.CreateSingleItemNullable(item.Data, session.User, "", limitedNumber, limitedStack);
+                var newItem = ItemFactory.CreateSingleItemNullable(dbClient, item.Data, session.User, "", limitedNumber, limitedStack);
 
                 if (newItem == null)
                 {

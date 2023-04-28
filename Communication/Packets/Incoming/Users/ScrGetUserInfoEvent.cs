@@ -1,5 +1,4 @@
 ﻿namespace WibboEmulator.Communication.Packets.Incoming.Users;
-using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class ScrGetUserInfoMessageEvent : IPacketEvent
@@ -8,16 +7,11 @@ internal sealed class ScrGetUserInfoMessageEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-
-        double timeLeft = 30000000;
-        var totalDaysLeft = (int)Math.Ceiling(timeLeft / 86400);
-        var monthsLeft = totalDaysLeft / 31;
-
-        if (monthsLeft >= 1)
+        if (session == null || session.User == null)
         {
-            monthsLeft--;
+            return;
         }
 
-        session.SendPacket(new ScrSendUserInfoComposer(Convert.ToInt32(timeLeft), totalDaysLeft, monthsLeft));
+        session.User.Premium.SendPackets(true);
     }
 }

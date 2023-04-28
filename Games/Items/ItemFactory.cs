@@ -1,21 +1,22 @@
 namespace WibboEmulator.Games.Items;
 using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.Users;
 
 public class ItemFactory
 {
-    public static Item CreateSingleItemNullable(ItemData data, User user, string extraData, int limitedNumber = 0, int limitedStack = 0)
+    public static Item CreateSingleItemNullable(IQueryAdapter dbClient, ItemData data, User user, string extraData, int limitedNumber = 0, int limitedStack = 0)
     {
         if (data == null)
         {
             throw new InvalidOperationException("Data cannot be null.");
         }
 
-        var item = new Item(0, 0, data.Id, extraData, limitedNumber, limitedStack, 0, 0, 0, 0, "", null);
-
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        item.Id = ItemDao.Insert(dbClient, data.Id, user.Id, extraData);
+        var item = new Item(0, 0, data.Id, extraData, limitedNumber, limitedStack, 0, 0, 0, 0, "", null)
+        {
+            Id = ItemDao.Insert(dbClient, data.Id, user.Id, extraData)
+        };
 
         if (limitedNumber > 0)
         {
@@ -25,7 +26,7 @@ public class ItemFactory
         return item;
     }
 
-    public static Item CreateSingleItem(ItemData data, User user, string extraData, int itemId, int limitedNumber = 0, int limitedStack = 0)
+    public static Item CreateSingleItem(IQueryAdapter dbClient, ItemData data, User user, string extraData, int itemId, int limitedNumber = 0, int limitedStack = 0)
     {
         if (data == null)
         {
@@ -33,14 +34,12 @@ public class ItemFactory
         }
 
         var insertId = 0;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            insertId = ItemDao.Insert(dbClient, itemId, data.Id, user.Id, extraData);
 
-            if (limitedNumber > 0 && insertId > 0)
-            {
-                ItemLimitedDao.Insert(dbClient, itemId, limitedNumber, limitedStack);
-            }
+        insertId = ItemDao.Insert(dbClient, itemId, data.Id, user.Id, extraData);
+
+        if (limitedNumber > 0 && insertId > 0)
+        {
+            ItemLimitedDao.Insert(dbClient, itemId, limitedNumber, limitedStack);
         }
 
         if (insertId <= 0)
@@ -52,7 +51,7 @@ public class ItemFactory
         return item;
     }
 
-    public static List<Item> CreateMultipleItems(ItemData data, User user, string extraData, int amount)
+    public static List<Item> CreateMultipleItems(IQueryAdapter dbClient, ItemData data, User user, string extraData, int amount)
     {
         if (data == null)
         {
@@ -60,39 +59,33 @@ public class ItemFactory
         }
 
         var items = new List<Item>();
-
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        for (var i = 0; i < amount; i++)
         {
-            for (var i = 0; i < amount; i++)
-            {
-                var itemId = ItemDao.Insert(dbClient, data.Id, user.Id, extraData);
+            var itemId = ItemDao.Insert(dbClient, data.Id, user.Id, extraData);
 
-                var item = new Item(itemId, 0, data.Id, extraData, 0, 0, 0, 0, 0, 0, "", null);
+            var item = new Item(itemId, 0, data.Id, extraData, 0, 0, 0, 0, 0, 0, "", null);
 
-                items.Add(item);
-            }
+            items.Add(item);
         }
         return items;
     }
 
-    public static List<Item> CreateTeleporterItems(ItemData data, User user)
+    public static List<Item> CreateTeleporterItems(IQueryAdapter dbClient, ItemData data, User user)
     {
         var items = new List<Item>();
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            var item1Id = ItemDao.Insert(dbClient, data.Id, user.Id, "");
-            var item2Id = ItemDao.Insert(dbClient, data.Id, user.Id, item1Id.ToString());
+        var item1Id = ItemDao.Insert(dbClient, data.Id, user.Id, "");
+        var item2Id = ItemDao.Insert(dbClient, data.Id, user.Id, item1Id.ToString());
 
-            var item1 = new Item(item1Id, 0, data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
-            var item2 = new Item(item2Id, 0, data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
+        var item1 = new Item(item1Id, 0, data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
+        var item2 = new Item(item2Id, 0, data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
 
-            ItemTeleportDao.Insert(dbClient, item1Id, item2Id);
-            ItemTeleportDao.Insert(dbClient, item2Id, item1Id);
+        ItemTeleportDao.Insert(dbClient, item1Id, item2Id);
+        ItemTeleportDao.Insert(dbClient, item2Id, item1Id);
 
-            items.Add(item1);
-            items.Add(item2);
-        }
+        items.Add(item1);
+        items.Add(item2);
+
         return items;
     }
 
@@ -127,6 +120,10 @@ public class ItemFactory
         InteractionType.TV_YOUTUBE => new InteractorTvYoutube(),
         InteractionType.LOVELOCK => new InteractorLoveLock(),
         InteractionType.PHOTO => new InteractorIgnore(),
+        InteractionType.EXCHANGE_TREE => new InteractorExchangeTree(),
+        InteractionType.EXCHANGE_TREE_CLASSIC => new InteractorExchangeTree(),
+        InteractionType.EXCHANGE_TREE_EPIC => new InteractorExchangeTree(),
+        InteractionType.EXCHANGE_TREE_LEGEND => new InteractorExchangeTree(),
         InteractionType.BANZAI_TELE => new InteractorBanzaiTele(),
         InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS => new InteractorGenericSwitch(2),
         _ => new InteractorGenericSwitch(item.GetBaseItem().Modes),

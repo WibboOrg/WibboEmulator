@@ -231,6 +231,8 @@ public sealed class PacketManager
         this._incomingPackets.Add(ClientPacketHeader.CATALOG_REQUESET_PET_BREEDS, new GetSellablePetBreedsEvent());
         this._incomingPackets.Add(ClientPacketHeader.GROUP_MEMBERSHIPS, new GetGroupFurniConfigEvent());
         this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_CONFIG, new GetMarketplaceConfigurationEvent());
+        this._incomingPackets.Add(ClientPacketHeader.GET_CLUB_OFFERS, new GetClubOffersEvent());
+        this._incomingPackets.Add(ClientPacketHeader.CATALOG_SELECT_VIP_GIFT, new SelectVipGiftEvent());
     }
 
     private void RegisterCamera()

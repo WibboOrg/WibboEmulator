@@ -19,6 +19,10 @@ public class ServerPacket : IServerPacket
 
     public void WriteInteger(int i) => this.WriteByte(BitConverter.GetBytes(i), true);
 
+    public void WriteDouble(double i) => this.WriteByte(BitConverter.GetBytes(i), true);
+
+    public void WriteFloat(float i) => this.WriteByte(BitConverter.GetBytes(i), true);
+
     public void WriteBoolean(bool b) => this.WriteByte(new byte[1] { b ? (byte)1 : (byte)0 }, false);
 
     public void WriteString(string s)

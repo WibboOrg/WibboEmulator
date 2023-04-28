@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Database.Daos.User;
+namespace WibboEmulator.Database.Daos.User;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
@@ -56,11 +56,9 @@ internal sealed class UserDao
         return dbClient.GetTable();
     }
 
-
-
     internal static DataRow GetOneByTicket(IQueryAdapter dbClient, string sessionTicket)
     {
-        dbClient.SetQuery("SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `machine_id`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `jetons`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned` FROM `user` WHERE auth_ticket = @sso LIMIT 1");
+        dbClient.SetQuery("SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `machine_id`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned` FROM `user` WHERE auth_ticket = @sso LIMIT 1");
         dbClient.AddParameter("sso", sessionTicket);
         return dbClient.GetRow();
     }
@@ -79,7 +77,7 @@ internal sealed class UserDao
 
     internal static DataRow GetOne(IQueryAdapter dbClient, int userId)
     {
-        dbClient.SetQuery("SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `machine_id`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `jetons`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned` FROM `user` WHERE id = @id LIMIT 1");
+        dbClient.SetQuery("SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `machine_id`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned` FROM `user` WHERE id = @id LIMIT 1");
         dbClient.AddParameter("id", userId);
         return dbClient.GetRow();
     }
@@ -112,6 +110,10 @@ internal sealed class UserDao
         dbClient.AddParameter("motto", motto);
         dbClient.RunQuery();
     }
+
+    internal static void UpdateAddMonthPremium(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("UPDATE `user` SET `mois_vip` = mois_vip + '1' WHERE `id` = '" + userId + "' LIMIT 1");
+
+    internal static void UpdateRank(IQueryAdapter dbClient, int userId, int rank) => dbClient.RunQuery("UPDATE `user` SET `rank` = '" + rank + "' WHERE `id` = '" + userId + "' LIMIT 1");
 
     internal static void UpdateIgnoreRoomInvites(IQueryAdapter dbClient, int userId, bool flag) => dbClient.RunQuery("UPDATE `user` SET `ignore_room_invite` = '" + WibboEnvironment.BoolToEnum(flag) + "' WHERE `id` = '" + userId + "' LIMIT 1");
 

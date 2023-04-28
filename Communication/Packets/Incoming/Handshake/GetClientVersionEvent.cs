@@ -7,13 +7,5 @@ internal sealed class GetClientVersionEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        _ = packet.PopString();
-
-        _ = packet.PopString();
-
-        _ = packet.PopInt();
-
-        _ = packet.PopInt();
-
     }
 }

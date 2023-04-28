@@ -37,17 +37,16 @@ internal sealed class RemoveSaddleFromHorseEvent : IPacketEvent
 
         petUser.PetData.Saddle = 0;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            BotPetDao.UpdateHaveSaddle(dbClient, petUser.PetData.PetId, 0);
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+        BotPetDao.UpdateHaveSaddle(dbClient, petUser.PetData.PetId, 0);
 
         if (!WibboEnvironment.GetGame().GetItemManager().GetItem(saddleId, out var itemData))
         {
             return;
         }
 
-        var item = ItemFactory.CreateSingleItemNullable(itemData, session.User, "");
+        var item = ItemFactory.CreateSingleItemNullable(dbClient, itemData, session.User, "");
         if (item != null)
         {
             session.User.InventoryComponent.TryAddItem(item);

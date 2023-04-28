@@ -276,7 +276,7 @@ internal static class ItemLootBox
 
         room.RoomItemHandling.RemoveFurniture(session, present.Id);
 
-        var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
         if (lotData.IsRare)
         {

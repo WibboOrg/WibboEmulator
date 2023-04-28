@@ -4,10 +4,11 @@ using WibboEmulator.Core;
 using WibboEmulator.Core.Language;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Database.Interfaces;
 
 public class UserFactory
 {
-    public static User GetUserData(string sessionTicket, string ip, string machineid)
+    public static User GetUserData(IQueryAdapter dbClient, string sessionTicket, string ip, string machineid)
     {
         try
         {
@@ -15,72 +16,57 @@ public class UserFactory
             DataRow dUserInfo;
             DataRow dUserStats;
             double ignoreAllExpire = 0;
-            var changeName = false;
+            var isFirstConnexionToday = false;
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            dUserInfo = UserDao.GetOneByTicket(dbClient, sessionTicket);
+            if (dUserInfo == null)
             {
-                dUserInfo = UserDao.GetOneByTicket(dbClient, sessionTicket);
-                if (dUserInfo == null)
-                {
-                    return null;
-                }
-
-                var isBanned = BanDao.IsBanned(dbClient, dUserInfo["username"].ToString(), ip, dUserInfo["ip_last"].ToString(), machineid);
-                if (isBanned)
-                {
-                    return null;
-                }
-
-                userId = Convert.ToInt32(dUserInfo["id"]);
-                var username = (string)dUserInfo["username"];
-
-                var ignoreAll = BanDao.GetOneIgnoreAll(dbClient, userId);
-                if (ignoreAll > 0)
-                {
-                    ignoreAllExpire = ignoreAll;
-                }
-
-                var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-
-                if (client != null)
-                {
-                    return null;
-                }
-
-                var lastDailyCredits = (string)dUserInfo["lastdailycredits"];
-                var lastDaily = DateTime.Today.ToString("MM/dd");
-                if (lastDailyCredits != lastDaily)
-                {
-                    UserDao.UpdateLastDailyCredits(dbClient, userId, lastDaily);
-                    dUserInfo["credits"] = Convert.ToInt32(dUserInfo["credits"]) + 3000;
-
-                    if (Convert.ToInt32(dUserInfo["rank"]) <= 1)
-                    {
-                        UserStatsDao.UpdateRespectPoint(dbClient, userId, 5);
-                    }
-                    else
-                    {
-                        UserStatsDao.UpdateRespectPoint(dbClient, userId, 20);
-                    }
-
-                    changeName = true;
-                }
-
-                if (!sessionTicket.StartsWith("monticket"))
-                {
-                    UserDao.UpdateOnline(dbClient, userId);
-                }
-
-                dUserStats = UserStatsDao.GetOne(dbClient, userId);
-
-                if (dUserStats == null)
-                {
-                    UserStatsDao.Insert(dbClient, userId);
-                    dUserStats = UserStatsDao.GetOne(dbClient, userId);
-                }
+                return null;
             }
 
-            return GenerateUser(dUserInfo, dUserStats, changeName, ignoreAllExpire);
+            var isBanned = BanDao.IsBanned(dbClient, dUserInfo["username"].ToString(), ip, dUserInfo["ip_last"].ToString(), machineid);
+            if (isBanned)
+            {
+                return null;
+            }
+
+            userId = Convert.ToInt32(dUserInfo["id"]);
+
+            var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+
+            if (client != null)
+            {
+                return null;
+            }
+
+            var lastDailyCredits = (string)dUserInfo["lastdailycredits"];
+            var lastDaily = DateTime.Today.ToString("MM/dd");
+            if (lastDailyCredits != lastDaily)
+            {
+                UserDao.UpdateLastDailyCredits(dbClient, userId, lastDaily);
+                isFirstConnexionToday = true;
+            }
+
+            if (!sessionTicket.StartsWith("monticket"))
+            {
+                UserDao.UpdateOnline(dbClient, userId);
+            }
+
+            dUserStats = UserStatsDao.GetOne(dbClient, userId);
+
+            if (dUserStats == null)
+            {
+                UserStatsDao.Insert(dbClient, userId);
+                dUserStats = UserStatsDao.GetOne(dbClient, userId);
+            }
+
+            var ignoreAll = BanDao.GetOneIgnoreAll(dbClient, userId);
+            if (ignoreAll > 0)
+            {
+                ignoreAllExpire = ignoreAll;
+            }
+
+            return GenerateUser(dUserInfo, dUserStats, isFirstConnexionToday, ignoreAllExpire);
         }
         catch (Exception ex)
         {
@@ -119,7 +105,7 @@ public class UserFactory
         return GenerateUser(dUserInfo, dUserStats, false, 0);
     }
 
-    public static User GenerateUser(DataRow dRow, DataRow dRow2, bool changeName, double ignoreAllExpire)
+    public static User GenerateUser(DataRow dRow, DataRow dRow2, bool isFirstConnexionToday, double ignoreAllExpire)
     {
         var id = Convert.ToInt32(dRow["id"]);
         var username = (string)dRow["username"];
@@ -155,6 +141,6 @@ public class UserFactory
         var achievementPoints = Convert.ToInt32(dRow2["achievement_score"]);
         var favoriteGroup = Convert.ToInt32(dRow2["group_id"]);
 
-        return new User(id, username, rank, motto, look, gender, credits, diamonds, limitCoins, activityPoints, homeRoom, respect, dailyRespectPoints, dailyPetRespectPoints, hasFriendRequestsDisabled, currentQuestID, achievementPoints, lastOnline, favoriteGroup, accountCreated, acceptTrading, ip, hideInroom, hideOnline, mazoHighScore, mazo, clientVolume, nuxEnable, machineId, changeName, langue, ignoreAllExpire, ignoreRoomInvite, cameraFollowDisabled);
+        return new User(id, username, rank, motto, look, gender, credits, diamonds, limitCoins, activityPoints, homeRoom, respect, dailyRespectPoints, dailyPetRespectPoints, hasFriendRequestsDisabled, currentQuestID, achievementPoints, lastOnline, favoriteGroup, accountCreated, acceptTrading, ip, hideInroom, hideOnline, mazoHighScore, mazo, clientVolume, nuxEnable, machineId, isFirstConnexionToday, langue, ignoreAllExpire, ignoreRoomInvite, cameraFollowDisabled);
     }
 }

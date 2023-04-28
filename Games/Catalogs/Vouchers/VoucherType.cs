@@ -7,5 +7,4 @@ public enum VoucherType
     Badge,
     Winwin,
     WibboPoint,
-    Jeton,
 }

@@ -44,6 +44,39 @@ internal static class ItemBehaviourUtility
                 message.WriteString((itemData.InteractionType is not InteractionType.TONER and not InteractionType.FOOTBALL_GATE) ? item.ExtraData : string.Empty);
                 break;
 
+            case InteractionType.EXCHANGE_TREE:
+            case InteractionType.EXCHANGE_TREE_CLASSIC:
+            case InteractionType.EXCHANGE_TREE_EPIC:
+            case InteractionType.EXCHANGE_TREE_LEGEND:
+                var days = 0;
+                switch (itemData.InteractionType)
+                {
+                    case InteractionType.EXCHANGE_TREE:
+                        days = 1;
+                        break;
+                    case InteractionType.EXCHANGE_TREE_CLASSIC:
+                        days = 2;
+                        break;
+                    case InteractionType.EXCHANGE_TREE_EPIC:
+                        days = 4;
+                        break;
+                    case InteractionType.EXCHANGE_TREE_LEGEND:
+                        days = 8;
+                        break;
+                }
+
+                var expireSeconds = days * 24 * 60 * 60;
+
+                _ = int.TryParse(item.ExtraData, out var activateTime);
+
+                var secondeLeft = activateTime + expireSeconds - WibboEnvironment.GetUnixTimestamp();
+
+                var state = secondeLeft > 0 ? 10 - (int)Math.Ceiling((double)secondeLeft / expireSeconds * 10) : 10;
+
+                message.WriteInteger(item.Limited > 0 ? 256 : 0);
+                message.WriteString(state.ToString());
+                break;
+
             case InteractionType.TROPHY:
             case InteractionType.PHOTO:
                 message.WriteInteger(item.Limited > 0 ? 256 : 0);
@@ -133,7 +166,7 @@ internal static class ItemBehaviourUtility
 
                 message.WriteString(item.ExtraData);
                 message.WriteInteger(clickNumber);
-                message.WriteInteger(itemData.Modes - 1); //Type de duré
+                message.WriteInteger(itemData.Modes - 1);
                 break;
 
             case InteractionType.ADS_BACKGROUND:

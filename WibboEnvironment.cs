@@ -227,7 +227,7 @@ public static class WibboEnvironment
         }
     }
 
-    public static int GetUnixTimestamp() => (int)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
+    public static int GetUnixTimestamp() => (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
     private static bool IsValid(char character) => Allowedchars.Contains(character);
 

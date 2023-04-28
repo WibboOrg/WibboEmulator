@@ -19,8 +19,7 @@ internal sealed class ForceFlagUser : IChatCommand
             return;
         }
 
-        clientByUsername.
-        User.CanChangeName = true;
+        clientByUsername.User.CanChangeName = true;
         clientByUsername.SendPacket(new UserObjectComposer(clientByUsername.User));
         clientByUsername.SendNotification("Merci de procéder au changement de votre pseudonyme. Votre pseudonyme étant jugé comme innaproprié, vous serez banni sans aucun doute. \r\r Fermer cette fênetre et cliquez sur vous-même pour commencer à choisir un nouveau pseudonyme");
     }

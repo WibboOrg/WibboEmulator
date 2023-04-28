@@ -231,6 +231,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
+                if (item.GetBaseItem().Modes <= 1)
+                {
+                    break;
+                }
+
                 if (count > item.GetBaseItem().Modes - 1)
                 {
                     break;
@@ -2206,14 +2211,28 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                var nbLot = WibboEnvironment.GetRandomNumber(1, 2);
+                int nbLot;
 
-                if (user.Client.User.Rank > 1)
+                if (user.Client.User.Premium.IsPremiumLegend)
+                {
+                    nbLot = 5;
+                }
+                else if (user.Client.User.Premium.IsPremiumEpic)
+                {
+                    nbLot = WibboEnvironment.GetRandomNumber(3, 5);
+                }
+                else if (user.Client.User.Premium.IsPremiumClassic)
                 {
                     nbLot = WibboEnvironment.GetRandomNumber(2, 3);
                 }
+                else
+                {
+                    nbLot = WibboEnvironment.GetRandomNumber(1, 2);
+                }
 
-                var items = ItemFactory.CreateMultipleItems(itemData, user.Client.User, "", nbLot);
+                using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+                var items = ItemFactory.CreateMultipleItems(dbClient, itemData, user.Client.User, "", nbLot);
 
                 foreach (var purchasedItem in items)
                 {
@@ -2224,8 +2243,6 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 if (this.RoomInstance.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
                 {
-                    using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-
                     UserDao.UpdateAddGamePoints(dbClient, user.Client.User.Id);
                 }
 

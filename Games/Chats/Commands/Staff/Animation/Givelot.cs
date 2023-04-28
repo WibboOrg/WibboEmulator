@@ -27,10 +27,23 @@ internal sealed class GiveLot : IChatCommand
             return;
         }
 
-        var lotCount = WibboEnvironment.GetRandomNumber(1, 2);
-        if (roomUserByUserId.Client.User.Rank > 1)
+        int lotCount;
+
+        if (user.Client.User.Premium.IsPremiumLegend)
+        {
+            lotCount = 5;
+        }
+        else if (user.Client.User.Premium.IsPremiumEpic)
+        {
+            lotCount = WibboEnvironment.GetRandomNumber(3, 5);
+        }
+        else if (user.Client.User.Premium.IsPremiumClassic)
         {
             lotCount = WibboEnvironment.GetRandomNumber(2, 3);
+        }
+        else
+        {
+            lotCount = WibboEnvironment.GetRandomNumber(1, 2);
         }
 
         var lootboxId = WibboEnvironment.GetSettings().GetData<int>("givelot.lootbox.id");
@@ -40,7 +53,9 @@ internal sealed class GiveLot : IChatCommand
             return;
         }
 
-        var items = ItemFactory.CreateMultipleItems(itemData, roomUserByUserId.Client.User, "", lotCount);
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+        var items = ItemFactory.CreateMultipleItems(dbClient, itemData, roomUserByUserId.Client.User, "", lotCount);
 
         foreach (var purchasedItem in items)
         {
@@ -50,10 +65,7 @@ internal sealed class GiveLot : IChatCommand
         roomUserByUserId.Client.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUserByUserId.Client.Langue), lotCount));
         session.SendWhisper(roomUserByUserId.GetUsername() + " à reçu " + lotCount + " RareBox!");
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            UserDao.UpdateAddGamePoints(dbClient, roomUserByUserId.Client.User.Id);
-        }
+        UserDao.UpdateAddGamePoints(dbClient, roomUserByUserId.Client.User.Id);
 
         _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByUserId.Client, "ACH_Extrabox", 1);
     }

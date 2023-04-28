@@ -66,7 +66,7 @@ internal sealed class BuyOfferEvent : IPacketEvent
 
             UserDao.UpdateRemovePoints(dbClient, session.User.Id, Convert.ToInt32(row["total_price"]));
 
-            var giveItem = ItemFactory.CreateSingleItem(item, session.User, Convert.ToString(row["extra_data"]), Convert.ToInt32(row["furni_id"]), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"]));
+            var giveItem = ItemFactory.CreateSingleItem(dbClient, item, session.User, Convert.ToString(row["extra_data"]), Convert.ToInt32(row["furni_id"]), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"]));
             if (giveItem != null)
             {
                 session.User.InventoryComponent.TryAddItem(giveItem);

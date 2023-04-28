@@ -21,13 +21,28 @@ internal sealed class Premium : IChatCommand
             return;
         }
 
-        if (userRoom.CurrentEffect == 569)
+        var numEnable = 0;
+
+        if (session.User.Premium.IsPremiumLegend)
+        {
+            numEnable = 593;
+        }
+        else if (session.User.Premium.IsPremiumEpic)
+        {
+            numEnable = 592;
+        }
+        else if (session.User.Premium.IsPremiumClassic)
+        {
+            numEnable = 591;
+        }
+
+        if (userRoom.CurrentEffect == numEnable)
         {
             userRoom.ApplyEffect(0);
         }
         else
         {
-            userRoom.ApplyEffect(569);
+            userRoom.ApplyEffect(numEnable);
         }
     }
 }

@@ -230,7 +230,6 @@ public class CommandManager
         this.Register(19, new SetZ());
         this.Register(20, new SetZStop());
         this.Register(21, new DisableOblique());
-        //this.Register(22, new BreakWalk());
         this.Register(23, new HideWireds());
         this.Register(24, new AllWarp());
         this.Register(25, new Use());
@@ -360,7 +359,6 @@ public class CommandManager
     {
         this.Register(125, new HotelAlert());
         this.Register(126, new MassBadge());
-        //this.Register(127, new UnBan());
         this.Register(128, new AddFilter());
         this.Register(129, new EventAlert());
         this.Register(130, new ForceControlUser());

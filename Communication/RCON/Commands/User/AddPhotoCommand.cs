@@ -38,13 +38,12 @@ internal sealed class AddPhotoCommand : IRCONCommand
         var time = WibboEnvironment.GetUnixTimestamp();
         var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + client.User.Username + "\", \"s\":\"" + client.User.Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
 
-        var item = ItemFactory.CreateSingleItemNullable(itemData, client.User, extraData);
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+        var item = ItemFactory.CreateSingleItemNullable(dbClient, itemData, client.User, extraData);
         client.User.InventoryComponent.TryAddItem(item);
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            UserPhotoDao.Insert(dbClient, client.User.Id, photoId, time);
-        }
+        UserPhotoDao.Insert(dbClient, client.User.Id, photoId, time);
 
         client.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.valide", client.Langue));
 

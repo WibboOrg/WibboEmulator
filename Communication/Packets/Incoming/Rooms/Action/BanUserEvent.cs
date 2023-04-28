@@ -46,7 +46,7 @@ internal sealed class BanUserEvent : IPacketEvent
 
             time = 429496729;
         }
-        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.User.HasPermission("kick"))
+        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.User.HasPermission("kick") || roomUserByUserId.Client.User.HasPermission("no_kick"))
         {
             return;
         }

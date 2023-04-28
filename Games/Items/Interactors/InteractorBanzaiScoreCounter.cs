@@ -26,8 +26,7 @@ public class InteractorBanzaiScoreCounter : FurniInteractor
             return;
         }
 
-        item.GetRoom().
-        GameManager.Points[(int)item.Team] = 0;
+        item.GetRoom().GameManager.Points[(int)item.Team] = 0;
         item.ExtraData = "0";
         item.UpdateState();
     }

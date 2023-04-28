@@ -19,6 +19,11 @@ internal sealed class GetCatalogPageEvent : IPacketEvent
             return;
         }
 
+        if (page.Template == "club_gifts")
+        {
+            session.SendPacket(new ClubGiftInfoComposer(page.Items.Values.ToList()));
+        }
+
         session.SendPacket(new CatalogPageComposer(page, cataMode, session.Langue));
     }
 }

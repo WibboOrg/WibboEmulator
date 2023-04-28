@@ -1,10 +1,13 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
+using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
@@ -66,12 +69,12 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 
         var totalCreditsCost = amount > 1 ? (item.CostCredits * amount) - ((int)Math.Floor((double)amount / 6) * item.CostCredits) : item.CostCredits;
         var totalPixelCost = amount > 1 ? (item.CostDuckets * amount) - ((int)Math.Floor((double)amount / 6) * item.CostDuckets) : item.CostDuckets;
-        var totalDiamondCost = amount > 1 ? (item.CostWibboPoints * amount) - ((int)Math.Floor((double)amount / 6) * item.CostWibboPoints) : item.CostWibboPoints;
+        var totalWibboPointCost = amount > 1 ? (item.CostWibboPoints * amount) - ((int)Math.Floor((double)amount / 6) * item.CostWibboPoints) : item.CostWibboPoints;
         var totalLimitCoinCost = amount > 1 ? (item.CostLimitCoins * amount) - ((int)Math.Floor((double)amount / 6) * item.CostLimitCoins) : item.CostLimitCoins;
 
         if (session.User.Credits < totalCreditsCost ||
             session.User.Duckets < totalPixelCost ||
-            session.User.WibboPoints < totalDiamondCost ||
+            session.User.WibboPoints < totalWibboPointCost ||
             session.User.LimitCoins < totalLimitCoinCost)
         {
             session.SendPacket(new PurchaseErrorComposer());
@@ -86,6 +89,13 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
             case InteractionType.WIRED_ITEM:
             case InteractionType.NONE:
                 extraData = "";
+                break;
+
+            case InteractionType.EXCHANGE_TREE:
+            case InteractionType.EXCHANGE_TREE_CLASSIC:
+            case InteractionType.EXCHANGE_TREE_EPIC:
+            case InteractionType.EXCHANGE_TREE_LEGEND:
+                extraData = WibboEnvironment.GetUnixTimestamp().ToString();
                 break;
 
             case InteractionType.GUILD_ITEM:
@@ -249,16 +259,60 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 
         if (item.CostWibboPoints > 0)
         {
-            session.User.WibboPoints -= totalDiamondCost;
+            session.User.WibboPoints -= totalWibboPointCost;
             session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
 
-            UserDao.UpdateRemovePoints(dbClient, session.User.Id, totalDiamondCost);
+            UserDao.UpdateRemovePoints(dbClient, session.User.Id, totalWibboPointCost);
         }
 
         if (item.CostLimitCoins > 0)
         {
             session.User.LimitCoins -= totalLimitCoinCost;
             session.SendPacket(new ActivityPointNotificationComposer(session.User.LimitCoins, 0, 55));
+
+            var notifImage = "";
+            var wibboPointCount = 0;
+            var winwinCount = totalLimitCoinCost * 10;
+
+            if (session.User.Premium.IsPremiumLegend)
+            {
+                notifImage = "premium_legend";
+                wibboPointCount = totalLimitCoinCost * 3;
+                winwinCount += (int)Math.Floor(winwinCount * 1.5);
+            }
+            else if (session.User.Premium.IsPremiumEpic)
+            {
+                notifImage = "premium_epic";
+                wibboPointCount = totalLimitCoinCost * 2;
+                winwinCount += winwinCount;
+            }
+            else if (session.User.Premium.IsPremiumClassic)
+            {
+                notifImage = "premium_classic";
+                wibboPointCount = totalLimitCoinCost;
+                winwinCount += (int)Math.Floor(winwinCount * 0.5);
+            }
+
+            if (wibboPointCount > 0)
+            {
+                session.User.WibboPoints += wibboPointCount;
+                session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
+
+                UserDao.UpdateAddPoints(dbClient, session.User.Id, wibboPointCount);
+            }
+
+            if (winwinCount > 0)
+            {
+                UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, winwinCount);
+
+                session.User.AchievementPoints += winwinCount;
+                session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));
+            }
+
+            if (winwinCount > 0 || wibboPointCount > 0)
+            {
+                session.SendPacket(RoomNotificationComposer.SendBubble(notifImage, $"Vous avez reçu {wibboPointCount} WibboPoints ainsi que {winwinCount} Win-wins!"));
+            }
 
             UserDao.UpdateRemoveLimitCoins(dbClient, session.User.Id, totalLimitCoinCost);
         }
@@ -274,7 +328,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                     default:
                         if (amountPurchase > 1)
                         {
-                            var items = ItemFactory.CreateMultipleItems(item.Data, session.User, extraData, amountPurchase);
+                            var items = ItemFactory.CreateMultipleItems(dbClient, item.Data, session.User, extraData, amountPurchase);
 
                             if (items != null)
                             {
@@ -283,7 +337,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                         }
                         else
                         {
-                            newItem = ItemFactory.CreateSingleItemNullable(item.Data, session.User, extraData, limitedEditionSells, limitedEditionStack);
+                            newItem = ItemFactory.CreateSingleItemNullable(dbClient, item.Data, session.User, extraData, limitedEditionSells, limitedEditionStack);
 
                             if (newItem != null)
                             {
@@ -296,7 +350,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                     case InteractionType.TELEPORT_ARROW:
                         for (var i = 0; i < amountPurchase; i++)
                         {
-                            var teleItems = ItemFactory.CreateTeleporterItems(item.Data, session.User);
+                            var teleItems = ItemFactory.CreateTeleporterItems(dbClient, item.Data, session.User);
 
                             if (teleItems != null)
                             {
@@ -309,7 +363,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                     {
                         if (amountPurchase > 1)
                         {
-                            var items = ItemFactory.CreateMultipleItems(item.Data, session.User, extraData, amountPurchase);
+                            var items = ItemFactory.CreateMultipleItems(dbClient, item.Data, session.User, extraData, amountPurchase);
 
                             if (items != null)
                             {
@@ -322,7 +376,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                         }
                         else
                         {
-                            newItem = ItemFactory.CreateSingleItemNullable(item.Data, session.User, extraData);
+                            newItem = ItemFactory.CreateSingleItemNullable(dbClient, item.Data, session.User, extraData);
 
                             if (newItem != null)
                             {
@@ -384,6 +438,29 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 
             case "b":
             {
+                break;
+            }
+
+            case "c":
+            {
+                if (item.Name == "premium_club_3") //Legend
+                {
+                    session.User.Premium.AddPremiumDays(dbClient, 31, 3);
+                }
+                else if (item.Name == "premium_club_2") //Epic
+                {
+                    session.User.Premium.AddPremiumDays(dbClient, 31, 2);
+                }
+                else if (item.Name == "premium_club_1") //Classic
+                {
+                    session.User.Premium.AddPremiumDays(dbClient, 31, 1);
+                }
+                else
+                {
+                    break;
+                }
+
+                session.User.Premium.SendPackets();
                 break;
             }
         }

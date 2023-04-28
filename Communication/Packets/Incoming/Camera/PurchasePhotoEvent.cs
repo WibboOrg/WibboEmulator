@@ -42,10 +42,11 @@ internal sealed class PurchasePhotoEvent : IPacketEvent
         var time = WibboEnvironment.GetUnixTimestamp();
         var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + session.User.Username + "\", \"s\":\"" + session.User.Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
 
-        var itemSmall = ItemFactory.CreateSingleItemNullable(itemDataSmall, session.User, extraData);
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        var itemSmall = ItemFactory.CreateSingleItemNullable(dbClient, itemDataSmall, session.User, extraData);
         session.User.InventoryComponent.TryAddItem(itemSmall);
 
-        var item = ItemFactory.CreateSingleItemNullable(itemData, session.User, extraData);
+        var item = ItemFactory.CreateSingleItemNullable(dbClient, itemData, session.User, extraData);
         session.User.InventoryComponent.TryAddItem(item);
 
         session.SendPacket(new CameraPurchaseSuccesfullComposer());

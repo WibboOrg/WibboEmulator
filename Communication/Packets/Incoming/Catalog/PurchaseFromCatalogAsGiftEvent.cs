@@ -109,6 +109,12 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
                 extraData = "";
                 break;
 
+            case InteractionType.EXCHANGE_TREE:
+            case InteractionType.EXCHANGE_TREE_CLASSIC:
+            case InteractionType.EXCHANGE_TREE_EPIC:
+            case InteractionType.EXCHANGE_TREE_LEGEND:
+                extraData = WibboEnvironment.GetUnixTimestamp().ToString();
+                break;
             case InteractionType.GUILD_ITEM:
             case InteractionType.GUILD_GATE:
                 int groupId;
@@ -226,7 +232,7 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 
         ItemDao.Delete(dbClient, newItemId);
 
-        var giveItem = ItemFactory.CreateSingleItem(presentData, user, ed, newItemId);
+        var giveItem = ItemFactory.CreateSingleItem(dbClient, presentData, user, ed, newItemId);
         if (giveItem != null)
         {
             var receiver = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(user.Id);

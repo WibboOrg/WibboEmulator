@@ -21,7 +21,9 @@ internal sealed class ExtraBox : IChatCommand
             return;
         }
 
-        var items = ItemFactory.CreateMultipleItems(itemData, session.User, "", nbLot);
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+        var items = ItemFactory.CreateMultipleItems(dbClient, itemData, session.User, "", nbLot);
         foreach (var purchasedItem in items)
         {
             session.User.InventoryComponent.TryAddItem(purchasedItem);
