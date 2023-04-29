@@ -39,8 +39,8 @@ internal sealed class Laser : IChatCommand
             return;
         }
 
-        userRoom.OnChat($"*Découpe au sabre laser {targetUser.GetUsername()}*");
-        targetUser.OnChat($"*Se fait découper en 2 par {userRoom.GetUsername()}");
+        userRoom.OnChat($"*Découpe au sabre laser {targetUser.GetUsername()}*", 22);
+        targetUser.OnChat($"*Se fait découper en 2 par {userRoom.GetUsername()}*", 18);
 
         userRoom.ApplyEffect(196, true);
         userRoom.TimerResetEffect = 6;

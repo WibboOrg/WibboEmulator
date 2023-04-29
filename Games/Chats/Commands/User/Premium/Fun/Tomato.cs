@@ -34,8 +34,8 @@ internal sealed class Tomato : IChatCommand
             return;
         }
 
-        userRoom.OnChat($"*Lance une tomate sur {targetUser.GetUsername()}*");
-        targetUser.OnChat($"*Se prend une tomate de {userRoom.GetUsername()} en pleine tête*");
+        userRoom.OnChat($"*Lance une tomate sur {targetUser.GetUsername()}*", 3);
+        targetUser.OnChat($"*Se prend une tomate de {userRoom.GetUsername()} en pleine tête*", 3);
 
         targetUser.CarryItem(98);
     }

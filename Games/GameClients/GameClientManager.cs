@@ -34,6 +34,12 @@ public class GameClientManager
         this._ssoTicketRegister = new ConcurrentDictionary<string, string>();
         this._pendingDisconnect = new ConcurrentDictionary<string, DateTime>();
         this._userStaff = new List<int>();
+
+        this._premiumCycleStopwatch = new();
+        this._disconnectCycleStopwatch = new();
+
+        this._premiumCycleStopwatch.Start();
+        this._disconnectCycleStopwatch.Start();
     }
 
     public List<GameClient> GetStaffUsers()

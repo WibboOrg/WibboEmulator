@@ -36,20 +36,20 @@ public class InteractorExchangeTree : FurniInteractor
             return;
         }
 
-        var days = 0;
+        var days = 31;
         switch (item.Data.InteractionType)
         {
             case InteractionType.EXCHANGE_TREE:
-                days = 1;
+                days = 3;
                 break;
             case InteractionType.EXCHANGE_TREE_CLASSIC:
-                days = 2;
+                days = 7;
                 break;
             case InteractionType.EXCHANGE_TREE_EPIC:
-                days = 4;
+                days = 14;
                 break;
             case InteractionType.EXCHANGE_TREE_LEGEND:
-                days = 8;
+                days = 31;
                 break;
         }
 
@@ -61,7 +61,7 @@ public class InteractorExchangeTree : FurniInteractor
 
         if (timeLeft.TotalSeconds > 0)
         {
-            roomUser.SendWhisperChat($"Il reste encore {timeLeft.Days} jours, {timeLeft.Hours} heures, {timeLeft.Minutes} minutes et {timeLeft.Seconds} secondes avant que votre plante ne soit prête pour la récolte.");
+            roomUser.SendWhisperChat($"Il reste encore {timeLeft.Days} jours, {timeLeft.Hours} heures et {timeLeft.Minutes} minutes avant que votre plante ne soit prête pour la récolte.");
         }
         else if (timeLeft.TotalSeconds <= 0)
         {

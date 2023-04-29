@@ -35,7 +35,7 @@ internal sealed class Slime : IChatCommand
         }
 
         userRoom.OnChat($"*Jette du slime dans la direction de {targetUser.GetUsername()}*");
-        targetUser.OnChat($"*Je suis couvert de slime à cause de {userRoom.GetUsername()}*");
+        targetUser.OnChat($"*S'est fait recouvrir de slime par {userRoom.GetUsername()}*");
 
         targetUser.ApplyEffect(169, true);
         targetUser.TimerResetEffect = 6;

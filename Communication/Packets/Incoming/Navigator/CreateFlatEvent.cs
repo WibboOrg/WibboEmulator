@@ -14,9 +14,26 @@ internal sealed class CreateFlatEvent : IPacketEvent
             return;
         }
 
-        if (session.User.UsersRooms.Count >= 200)
+        var maxRoom = 200;
+
+        if(session.User.Premium.IsPremiumLegend)
         {
-            session.SendPacket(new CanCreateRoomComposer(true, 200));
+            maxRoom = 400;
+        }
+
+        if(session.User.Premium.IsPremiumEpic)
+        {
+            maxRoom = 300;
+        }
+
+        if(session.User.Premium.IsPremiumClassic)
+        {
+            maxRoom = 250;
+        }
+
+        if (session.User.UsersRooms.Count >= maxRoom)
+        {
+            session.SendPacket(new CanCreateRoomComposer(true, maxRoom));
             return;
         }
 

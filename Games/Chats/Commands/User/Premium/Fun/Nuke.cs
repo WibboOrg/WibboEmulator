@@ -34,8 +34,8 @@ internal sealed class Nuke : IChatCommand
             return;
         }
 
-        userRoom.OnChat($"*Lance une bombe vers {targetUser.GetUsername()}*");
-        targetUser.OnChat($"*S'est pris une bombe par {userRoom.GetUsername()}*");
+        userRoom.OnChat($"*Lance une bombe vers {targetUser.GetUsername()}*", 27);
+        targetUser.OnChat($"*S'est pris une bombe par {userRoom.GetUsername()}*", 18);
 
         targetUser.ApplyEffect(108, true);
         targetUser.TimerResetEffect = 6;

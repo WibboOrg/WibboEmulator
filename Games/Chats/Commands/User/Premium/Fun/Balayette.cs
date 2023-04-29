@@ -34,8 +34,8 @@ internal sealed class Balayette : IChatCommand
             return;
         }
 
-        userRoom.OnChat($"*{userRoom.GetUsername()} balaye {targetUser.GetUsername()}*");
-        targetUser.OnChat("*Tombe au sol*");
+        userRoom.OnChat($"*Fait une balayette à {targetUser.GetUsername()}*", 32);
+        targetUser.OnChat($"*S'est fait balayer par {userRoom.GetUsername()}*", 18);
 
         if (targetUser.ContainStatus("lay") || targetUser.ContainStatus("sit"))
         {
