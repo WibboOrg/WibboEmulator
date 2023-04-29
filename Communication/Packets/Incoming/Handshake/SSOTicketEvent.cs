@@ -235,8 +235,8 @@ internal sealed class SSOTicketEvent : IPacketEvent
         }
 
         session.User.Credits += creditCount;
-        session.User.DailyRespectPoints += respectCount;
-        session.User.DailyPetRespectPoints += respectCount;
+        session.User.DailyRespectPoints = respectCount;
+        session.User.DailyPetRespectPoints = respectCount;
 
         if (winwinCount > 0 || wibboPointCount > 0 || nbLot > 0)
         {
