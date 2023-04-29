@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.GameClients;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Text;
 using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
@@ -197,19 +198,26 @@ public class GameClientManager
         this.CheckPremiumCycle();
     }
 
+    private readonly Stopwatch _premiumCycleStopwatch;
     private void CheckPremiumCycle()
     {
-        foreach (var client in this._clients.Values.ToList())
+        if (this._premiumCycleStopwatch.ElapsedMilliseconds >= 60000)
         {
-            if (client == null || client.User == null || client.User.Premium == null || client.User.Rank != 2)
-            {
-                continue;
-            }
+            this._premiumCycleStopwatch.Restart();
 
-            client.User.Premium.CheckPremiumTimeout();
+            foreach (var client in this._clients.Values.ToList())
+            {
+                if (client == null || client.User == null || client.User.Premium == null || client.User.Rank != 2)
+                {
+                    continue;
+                }
+
+                client.User.Premium.CheckPremiumTimeout();
+            }
         }
     }
 
+    private readonly Stopwatch _disconnectCycleStopwatch;
     private void PendingDisconnectCycle()
     {
         if (this._pendingDisconnect.IsEmpty)
@@ -217,27 +225,32 @@ public class GameClientManager
             return;
         }
 
-        var removeIds = new List<string>();
-        foreach (var pending in this._pendingDisconnect)
+        if (this._disconnectCycleStopwatch.ElapsedMilliseconds >= 5000)
         {
-            var timeExecution = DateTime.Now - pending.Value;
+            this._disconnectCycleStopwatch.Restart();
 
-            if (timeExecution <= TimeSpan.FromSeconds(5))
+            var removeIds = new List<string>();
+            foreach (var pending in this._pendingDisconnect)
             {
-                continue;
+                var timeExecution = DateTime.Now - pending.Value;
+
+                if (timeExecution <= TimeSpan.FromSeconds(5))
+                {
+                    continue;
+                }
+
+                removeIds.Add(pending.Key);
+
+                this.DisposeConnection(pending.Key);
             }
 
-            removeIds.Add(pending.Key);
+            foreach (var id in removeIds)
+            {
+                _ = this._pendingDisconnect.TryRemove(id, out _);
+            }
 
-            this.DisposeConnection(pending.Key);
+            removeIds.Clear();
         }
-
-        foreach (var id in removeIds)
-        {
-            _ = this._pendingDisconnect.TryRemove(id, out _);
-        }
-
-        removeIds.Clear();
     }
 
     public bool TryReconnection(ref GameClient newClient, string ssoTicket)
