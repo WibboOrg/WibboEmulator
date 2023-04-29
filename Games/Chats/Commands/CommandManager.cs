@@ -300,6 +300,12 @@ public class CommandManager
         this.Register(84, new TransfBot());
         this.Register(85, new RandomLook());
         this.Register(86, new GameTime());
+        this.Register(159, new Balayette());
+        this.Register(160, new Hug());
+        this.Register(161, new Laser());
+        this.Register(162, new Nuke());
+        this.Register(163, new Slime());
+        this.Register(164, new Tomato());
     }
 
     public void RegisterAsStaffs()

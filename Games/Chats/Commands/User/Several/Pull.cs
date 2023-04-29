@@ -39,11 +39,6 @@ internal sealed class Pull : IChatCommand
             return;
         }
 
-        if (userRoom.SetX - 1 == room.GameMap.Model.DoorX)
-        {
-            return;
-        }
-
         if (Math.Abs(userRoom.X - targetUser.X) < 3 && Math.Abs(userRoom.Y - targetUser.Y) < 3)
         {
             userRoom.OnChat("*Tire " + parameters[1] + "*", 0, false);

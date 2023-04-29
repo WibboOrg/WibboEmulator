@@ -79,6 +79,16 @@ public class PremiumComponent : IDisposable
                 UserDao.UpdateRank(dbClient, this._userInstance.Id, 1);
             }
         }
+        else if (this.IsPremiumLegend || this.IsPremiumEpic || this.IsPremiumClassic)
+        {
+            if (this._userInstance.Rank == 1)
+            {
+                this._userInstance.Rank = 2;
+
+                dbClient ??= WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                UserDao.UpdateRank(dbClient, this._userInstance.Id, 2);
+            }
+        }
     }
 
     public void AddPremiumDays(IQueryAdapter dbClient, int days, int clubLevel)

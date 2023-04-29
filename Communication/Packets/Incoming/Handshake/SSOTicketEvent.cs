@@ -113,20 +113,20 @@ internal sealed class SSOTicketEvent : IPacketEvent
 
             packetList.Add(new CreditBalanceComposer(session.User.Credits));
 
-            if (user.Rank > 12)
-            {
-                var day = DateTime.Now.Day;
-                var days = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            // if (user.Rank > 12)
+            // {
+            //     var day = DateTime.Now.Day;
+            //     var days = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
 
-                var missDays = new List<int>();
-                for (var i = 0; i < day; i++)
-                {
-                    missDays.Add(i);
-                }
+            //     var missDays = new List<int>();
+            //     for (var i = 0; i < day; i++)
+            //     {
+            //         missDays.Add(i);
+            //     }
 
-                packetList.Add(new CampaignCalendarDataComposer("premium", "/album1584/LOL.gif", day, days, missDays, missDays));
-                packetList.Add(new InClientLinkComposer("openView/calendar"));
-            }
+            //     packetList.Add(new CampaignCalendarDataComposer("premium", "/album1584/LOL.gif", day, days, missDays, missDays));
+            //     packetList.Add(new InClientLinkComposer("openView/calendar"));
+            // }
 
             if (IsNewUser(session, dbClient))
             {
