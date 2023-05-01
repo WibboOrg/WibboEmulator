@@ -49,7 +49,7 @@ internal sealed class Tied : IChatCommand
         session.User.CommandFunTimer = DateTime.Now;
 
         userRoom.OnChat($"*Ligote {targetUser.GetUsername()} avec une corde*", 32);
-        targetUser.OnChat($"*S'est ligoter par {userRoom.GetUsername()}*", 18);
+        targetUser.OnChat($"*S'est fait ligoter par {userRoom.GetUsername()}*", 18);
 
         targetUser.ApplyEffect(729, true);
         targetUser.TimerResetEffect = 6;
