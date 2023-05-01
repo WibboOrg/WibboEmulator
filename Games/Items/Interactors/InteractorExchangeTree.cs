@@ -71,16 +71,16 @@ public class InteractorExchangeTree : FurniInteractor
             switch (item.Data.InteractionType)
             {
                 case InteractionType.EXCHANGE_TREE:
-                    rewards = WibboEnvironment.GetRandomNumber(1000, 1050);
+                    rewards = WibboEnvironment.GetRandomNumber(100, 105);
                     break;
                 case InteractionType.EXCHANGE_TREE_CLASSIC:
-                    rewards = WibboEnvironment.GetRandomNumber(2000, 2200);
+                    rewards = WibboEnvironment.GetRandomNumber(500, 550);
                     break;
                 case InteractionType.EXCHANGE_TREE_EPIC:
-                    rewards = WibboEnvironment.GetRandomNumber(3000, 3450);
+                    rewards = WibboEnvironment.GetRandomNumber(1000, 1150);
                     break;
                 case InteractionType.EXCHANGE_TREE_LEGEND:
-                    rewards = WibboEnvironment.GetRandomNumber(4000, 4800);
+                    rewards = WibboEnvironment.GetRandomNumber(2000, 2400);
                     break;
             }
 
