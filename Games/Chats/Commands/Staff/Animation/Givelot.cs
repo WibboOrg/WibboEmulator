@@ -14,30 +14,30 @@ internal sealed class GiveLot : IChatCommand
             return;
         }
 
-        var roomUserByUserId = room.RoomUserManager.GetRoomUserByName(parts[1]);
-        if (roomUserByUserId == null || roomUserByUserId.Client == null)
+        var targetRoomUser = room.RoomUserManager.GetRoomUserByName(parts[1]);
+        if (targetRoomUser == null || targetRoomUser.Client == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
             return;
         }
-        if (roomUserByUserId.GetUsername() == session.User.Username || roomUserByUserId.Client.User.IP == session.User.IP)
+        if (targetRoomUser.GetUsername() == session.User.Username || targetRoomUser.Client.User.IP == session.User.IP)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.error", session.Langue));
-            ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + roomUserByUserId.GetUsername());
+            ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + targetRoomUser.GetUsername());
             return;
         }
 
         int lotCount;
 
-        if (user.Client.User.HasPermission("premium_legend"))
+        if (targetRoomUser.Client.User.HasPermission("premium_legend"))
         {
             lotCount = 5;
         }
-        else if (user.Client.User.HasPermission("premium_epic"))
+        else if (targetRoomUser.Client.User.HasPermission("premium_epic"))
         {
             lotCount = WibboEnvironment.GetRandomNumber(3, 5);
         }
-        else if (user.Client.User.HasPermission("premium_classic"))
+        else if (targetRoomUser.Client.User.HasPermission("premium_classic"))
         {
             lotCount = WibboEnvironment.GetRandomNumber(2, 3);
         }
@@ -55,18 +55,18 @@ internal sealed class GiveLot : IChatCommand
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
-        var items = ItemFactory.CreateMultipleItems(dbClient, itemData, roomUserByUserId.Client.User, "", lotCount);
+        var items = ItemFactory.CreateMultipleItems(dbClient, itemData, targetRoomUser.Client.User, "", lotCount);
 
         foreach (var purchasedItem in items)
         {
-            roomUserByUserId.Client.User.InventoryComponent.TryAddItem(purchasedItem);
+            targetRoomUser.Client.User.InventoryComponent.TryAddItem(purchasedItem);
         }
 
-        roomUserByUserId.Client.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUserByUserId.Client.Langue), lotCount));
-        session.SendWhisper(roomUserByUserId.GetUsername() + " à reçu " + lotCount + " RareBox!");
+        targetRoomUser.Client.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", targetRoomUser.Client.Langue), lotCount));
+        session.SendWhisper(targetRoomUser.GetUsername() + " à reçu " + lotCount + " RareBox!");
 
-        UserDao.UpdateAddGamePoints(dbClient, roomUserByUserId.Client.User.Id);
+        UserDao.UpdateAddGamePoints(dbClient, targetRoomUser.Client.User.Id);
 
-        _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByUserId.Client, "ACH_Extrabox", 1);
+        _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(targetRoomUser.Client, "ACH_Extrabox", 1);
     }
 }
