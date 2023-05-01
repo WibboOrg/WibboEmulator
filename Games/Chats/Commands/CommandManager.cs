@@ -306,6 +306,7 @@ public class CommandManager
         this.Register(162, new Nuke());
         this.Register(163, new Slime());
         this.Register(164, new Tomato());
+        this.Register(165, new Tied());
     }
 
     public void RegisterAsStaffs()
