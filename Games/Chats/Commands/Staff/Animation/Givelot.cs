@@ -29,15 +29,15 @@ internal sealed class GiveLot : IChatCommand
 
         int lotCount;
 
-        if (user.Client.User.Premium.IsPremiumLegend)
+        if (user.Client.User.HasPermission("premium_legend"))
         {
             lotCount = 5;
         }
-        else if (user.Client.User.Premium.IsPremiumEpic)
+        else if (user.Client.User.HasPermission("premium_epic"))
         {
             lotCount = WibboEnvironment.GetRandomNumber(3, 5);
         }
-        else if (user.Client.User.Premium.IsPremiumClassic)
+        else if (user.Client.User.HasPermission("premium_classic"))
         {
             lotCount = WibboEnvironment.GetRandomNumber(2, 3);
         }

@@ -176,7 +176,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
         var wibboPointCount = 0;
         var winwinCount = 0;
 
-        if (session.User.Premium.IsPremiumLegend)
+        if (session.User.HasPermission("premium_legend"))
         {
             notifImage = "premium_legend";
             nbLot = 5;
@@ -185,7 +185,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
             wibboPointCount = 65;
             winwinCount = 100;
         }
-        else if (session.User.Premium.IsPremiumEpic)
+        else if (session.User.HasPermission("premium_epic"))
         {
             notifImage = "premium_epic";
             nbLot = 3;
@@ -194,7 +194,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
             wibboPointCount = 32;
             winwinCount = 50;
         }
-        else if (session.User.Premium.IsPremiumClassic)
+        else if (session.User.HasPermission("premium_classic"))
         {
             notifImage = "premium_classic";
             nbLot = 1;

@@ -274,19 +274,19 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
             var wibboPointCount = 0;
             var winwinCount = totalLimitCoinCost * 10;
 
-            if (session.User.Premium.IsPremiumLegend)
+            if (session.User.HasPermission("premium_legend"))
             {
                 notifImage = "premium_legend";
                 wibboPointCount = totalLimitCoinCost * 3;
                 winwinCount += (int)Math.Floor(winwinCount * 1.5);
             }
-            else if (session.User.Premium.IsPremiumEpic)
+            else if (session.User.HasPermission("premium_epic"))
             {
                 notifImage = "premium_epic";
                 wibboPointCount = totalLimitCoinCost * 2;
                 winwinCount += winwinCount;
             }
-            else if (session.User.Premium.IsPremiumClassic)
+            else if (session.User.HasPermission("premium_classic"))
             {
                 notifImage = "premium_classic";
                 wibboPointCount = totalLimitCoinCost;

@@ -23,15 +23,15 @@ internal sealed class Premium : IChatCommand
 
         var numEnable = 0;
 
-        if (session.User.Premium.IsPremiumLegend)
+        if (session.User.HasPermission("premium_legend"))
         {
             numEnable = 593;
         }
-        else if (session.User.Premium.IsPremiumEpic)
+        else if (session.User.HasPermission("premium_epic"))
         {
             numEnable = 592;
         }
-        else if (session.User.Premium.IsPremiumClassic)
+        else if (session.User.HasPermission("premium_classic"))
         {
             numEnable = 591;
         }

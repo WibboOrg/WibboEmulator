@@ -16,17 +16,17 @@ internal sealed class CreateFlatEvent : IPacketEvent
 
         var maxRoom = 200;
 
-        if(session.User.Premium.IsPremiumLegend)
+        if (session.User.HasPermission("premium_legend"))
         {
             maxRoom = 400;
         }
 
-        if(session.User.Premium.IsPremiumEpic)
+        if (session.User.HasPermission("premium_epic"))
         {
             maxRoom = 300;
         }
 
-        if(session.User.Premium.IsPremiumClassic)
+        if (session.User.HasPermission("premium_classic"))
         {
             maxRoom = 250;
         }

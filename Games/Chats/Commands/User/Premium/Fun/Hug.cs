@@ -40,7 +40,7 @@ internal sealed class Hug : IChatCommand
         }
 
         userRoom.OnChat($"*Serre {targetUser.GetUsername()} dans ses bras*", 16);
-        targetUser.OnChat($"*Se fait câlinner chaleureusement par {userRoom.GetUsername()}*", 16);
+        targetUser.OnChat($"*Se fait câliner chaleureusement par {userRoom.GetUsername()}*", 16);
 
         userRoom.ApplyEffect(9, true);
         userRoom.TimerResetEffect = 6;

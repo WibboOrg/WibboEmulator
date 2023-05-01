@@ -2213,15 +2213,15 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 int nbLot;
 
-                if (user.Client.User.Premium.IsPremiumLegend)
+                if (user.Client.User.HasPermission("premium_legend"))
                 {
                     nbLot = 5;
                 }
-                else if (user.Client.User.Premium.IsPremiumEpic)
+                else if (user.Client.User.HasPermission("premium_epic"))
                 {
                     nbLot = WibboEnvironment.GetRandomNumber(3, 5);
                 }
-                else if (user.Client.User.Premium.IsPremiumClassic)
+                else if (user.Client.User.HasPermission("premium_classic"))
                 {
                     nbLot = WibboEnvironment.GetRandomNumber(2, 3);
                 }
