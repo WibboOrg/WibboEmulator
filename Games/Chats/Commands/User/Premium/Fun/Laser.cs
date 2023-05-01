@@ -39,6 +39,15 @@ internal sealed class Laser : IChatCommand
             return;
         }
 
+        var timeSpan = DateTime.Now - session.User.CommandFunTimer;
+        if (timeSpan.TotalSeconds < 10)
+        {
+            userRoom.SendWhisperChat($"Veuillez patienter pendant {timeSpan.TotalSeconds} secondes avant de pouvoir réutiliser la commande fun.");
+            return;
+        }
+
+        session.User.CommandFunTimer = DateTime.Now;
+
         userRoom.OnChat($"*Découpe au sabre laser {targetUser.GetUsername()}*", 22);
         targetUser.OnChat($"*Se fait découper en 2 par {userRoom.GetUsername()}*", 18);
 

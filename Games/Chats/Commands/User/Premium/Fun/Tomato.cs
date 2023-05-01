@@ -34,6 +34,15 @@ internal sealed class Tomato : IChatCommand
             return;
         }
 
+        var timeSpan = DateTime.Now - session.User.CommandFunTimer;
+        if (timeSpan.TotalSeconds < 10)
+        {
+            userRoom.SendWhisperChat($"Veuillez patienter pendant {timeSpan.TotalSeconds} secondes avant de pouvoir réutiliser la commande fun.");
+            return;
+        }
+
+        session.User.CommandFunTimer = DateTime.Now;
+
         userRoom.OnChat($"*Lance une tomate sur {targetUser.GetUsername()}*", 3);
         targetUser.OnChat($"*Se prend la tomate de {userRoom.GetUsername()} en pleine tête*", 3);
 

@@ -309,9 +309,13 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                 session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));
             }
 
-            if (winwinCount > 0 || wibboPointCount > 0)
+            if (winwinCount > 0 && wibboPointCount > 0)
             {
                 session.SendPacket(RoomNotificationComposer.SendBubble(notifImage, $"Vous avez reçu {wibboPointCount} WibboPoints ainsi que {winwinCount} Win-wins!"));
+            }
+            else
+            {
+                session.SendPacket(RoomNotificationComposer.SendBubble(notifImage, $"Vous avez reçu {winwinCount} Win-wins!"));
             }
 
             UserDao.UpdateRemoveLimitCoins(dbClient, session.User.Id, totalLimitCoinCost);

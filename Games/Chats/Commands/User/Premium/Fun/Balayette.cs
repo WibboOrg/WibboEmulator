@@ -34,6 +34,20 @@ internal sealed class Balayette : IChatCommand
             return;
         }
 
+        if (Math.Abs(targetUser.X - userRoom.X) >= 2 || Math.Abs(targetUser.Y - userRoom.Y) >= 2)
+        {
+            return;
+        }
+
+        var timeSpan = DateTime.Now - session.User.CommandFunTimer;
+        if (timeSpan.TotalSeconds < 10)
+        {
+            userRoom.SendWhisperChat($"Veuillez patienter pendant {timeSpan.TotalSeconds} secondes avant de pouvoir réutiliser la commande fun.");
+            return;
+        }
+
+        session.User.CommandFunTimer = DateTime.Now;
+
         userRoom.OnChat($"*Fait une balayette à {targetUser.GetUsername()}*", 32);
         targetUser.OnChat($"*S'est fait balayer par {userRoom.GetUsername()}*", 18);
 

@@ -39,6 +39,15 @@ internal sealed class Hug : IChatCommand
             return;
         }
 
+        var timeSpan = DateTime.Now - session.User.CommandFunTimer;
+        if (timeSpan.TotalSeconds < 10)
+        {
+            userRoom.SendWhisperChat($"Veuillez patienter pendant {timeSpan.TotalSeconds} secondes avant de pouvoir réutiliser la commande fun.");
+            return;
+        }
+
+        session.User.CommandFunTimer = DateTime.Now;
+
         userRoom.OnChat($"*Serre {targetUser.GetUsername()} dans ses bras*", 16);
         targetUser.OnChat($"*Se fait câliner chaleureusement par {userRoom.GetUsername()}*", 16);
 

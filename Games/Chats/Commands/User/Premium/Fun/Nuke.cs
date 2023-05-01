@@ -34,6 +34,15 @@ internal sealed class Nuke : IChatCommand
             return;
         }
 
+        var timeSpan = DateTime.Now - session.User.CommandFunTimer;
+        if (timeSpan.TotalSeconds < 10)
+        {
+            userRoom.SendWhisperChat($"Veuillez patienter pendant {timeSpan.TotalSeconds} secondes avant de pouvoir réutiliser la commande fun.");
+            return;
+        }
+
+        session.User.CommandFunTimer = DateTime.Now;
+
         userRoom.OnChat($"*Lance une bombe vers {targetUser.GetUsername()}*", 27);
         targetUser.OnChat($"*S'est pris une bombe par {userRoom.GetUsername()}*", 18);
 

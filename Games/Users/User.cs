@@ -84,6 +84,7 @@ public class User : IDisposable
     public int SpamProtectionTime { get; set; }
     public DateTime SpamFloodTime { get; set; }
     public DateTime EveryoneTimer { get; set; }
+    public DateTime CommandFunTimer { get; set; }
     public DateTime LastGiftPurchaseTime { get; set; }
     public SpamDetect LastLoadedRoomTime { get; } = new(TimeSpan.FromSeconds(2), TimeSpan.FromMinutes(1), 5);
     public int CurrentQuestId { get; set; }

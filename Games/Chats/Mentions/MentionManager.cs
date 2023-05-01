@@ -98,7 +98,7 @@ public class MentionManager
         var timeSpan = DateTime.Now - session.User.EveryoneTimer;
         if (timeSpan.TotalSeconds < 120)
         {
-            session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Veuille attendre 2 minute avant de pouvoir réutiliser @everyone"));
+            session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Veuillez patienter pendant 2 minutes avant de pouvoir réutiliser @everyone."));
             return false;
         }
 

@@ -34,6 +34,15 @@ internal sealed class Slime : IChatCommand
             return;
         }
 
+        var timeSpan = DateTime.Now - session.User.CommandFunTimer;
+        if (timeSpan.TotalSeconds < 10)
+        {
+            userRoom.SendWhisperChat($"Veuillez patienter pendant {timeSpan.TotalSeconds} secondes avant de pouvoir réutiliser la commande fun.");
+            return;
+        }
+
+        session.User.CommandFunTimer = DateTime.Now;
+
         userRoom.OnChat($"*Jette du slime dans la direction de {targetUser.GetUsername()}*");
         targetUser.OnChat($"*S'est fait recouvrir de slime par {userRoom.GetUsername()}*");
 
