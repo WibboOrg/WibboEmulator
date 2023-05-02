@@ -7,10 +7,11 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
-using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
@@ -270,55 +271,10 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
             session.User.LimitCoins -= totalLimitCoinCost;
             session.SendPacket(new ActivityPointNotificationComposer(session.User.LimitCoins, 0, 55));
 
-            var notifImage = "";
-            var wibboPointCount = 0;
-            var winwinCount = totalLimitCoinCost * 10;
-
-            if (session.User.HasPermission("premium_legend"))
-            {
-                notifImage = "premium_legend";
-                wibboPointCount = totalLimitCoinCost * 3;
-                winwinCount += (int)Math.Floor(winwinCount * 1.5);
-            }
-            else if (session.User.HasPermission("premium_epic"))
-            {
-                notifImage = "premium_epic";
-                wibboPointCount = totalLimitCoinCost * 2;
-                winwinCount += winwinCount;
-            }
-            else if (session.User.HasPermission("premium_classic"))
-            {
-                notifImage = "premium_classic";
-                wibboPointCount = totalLimitCoinCost;
-                winwinCount += (int)Math.Floor(winwinCount * 0.5);
-            }
-
-            if (wibboPointCount > 0)
-            {
-                session.User.WibboPoints += wibboPointCount;
-                session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
-
-                UserDao.UpdateAddPoints(dbClient, session.User.Id, wibboPointCount);
-            }
-
-            if (winwinCount > 0)
-            {
-                UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, winwinCount);
-
-                session.User.AchievementPoints += winwinCount;
-                session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));
-            }
-
-            if (winwinCount > 0 && wibboPointCount > 0)
-            {
-                session.SendPacket(RoomNotificationComposer.SendBubble(notifImage, $"Vous avez reçu {wibboPointCount} WibboPoints ainsi que {winwinCount} Win-wins!"));
-            }
-            else
-            {
-                session.SendPacket(RoomNotificationComposer.SendBubble(notifImage, $"Vous avez reçu {winwinCount} Win-wins!"));
-            }
+            PurchaseFromCatalogEvent.LimitCoinsPrime(dbClient, session, totalLimitCoinCost);
 
             UserDao.UpdateRemoveLimitCoins(dbClient, session.User.Id, totalLimitCoinCost);
+            LogShopDao.Insert(dbClient, session.User.Id, totalLimitCoinCost, $"Achat de {item.Name}", item.Id);
         }
 
         switch (item.Data.Type.ToString().ToLower())
@@ -475,5 +431,56 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
         }
 
         session.SendPacket(new PurchaseOKComposer(item, item.Data));
+    }
+
+    private static void LimitCoinsPrime(IQueryAdapter dbClient, GameClient session, int totalLimitCoinCost)
+    {
+        var notifImage = "";
+        var wibboPointCount = 0;
+        var winwinCount = totalLimitCoinCost * 10;
+
+        if (session.User.HasPermission("premium_legend"))
+        {
+            notifImage = "premium_legend";
+            wibboPointCount = totalLimitCoinCost * 3;
+            winwinCount += (int)Math.Floor(winwinCount * 1.5);
+        }
+        else if (session.User.HasPermission("premium_epic"))
+        {
+            notifImage = "premium_epic";
+            wibboPointCount = totalLimitCoinCost * 2;
+            winwinCount += winwinCount;
+        }
+        else if (session.User.HasPermission("premium_classic"))
+        {
+            notifImage = "premium_classic";
+            wibboPointCount = totalLimitCoinCost;
+            winwinCount += (int)Math.Floor(winwinCount * 0.5);
+        }
+
+        if (wibboPointCount > 0)
+        {
+            session.User.WibboPoints += wibboPointCount;
+            session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
+
+            UserDao.UpdateAddPoints(dbClient, session.User.Id, wibboPointCount);
+        }
+
+        if (winwinCount > 0)
+        {
+            UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, winwinCount);
+
+            session.User.AchievementPoints += winwinCount;
+            session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));
+        }
+
+        if (winwinCount > 0 && wibboPointCount > 0)
+        {
+            session.SendPacket(RoomNotificationComposer.SendBubble(notifImage, $"Vous avez reçu {wibboPointCount} WibboPoints ainsi que {winwinCount} Win-wins!"));
+        }
+        else
+        {
+            session.SendPacket(RoomNotificationComposer.SendBubble(notifImage, $"Vous avez reçu {winwinCount} Win-wins!"));
+        }
     }
 }
