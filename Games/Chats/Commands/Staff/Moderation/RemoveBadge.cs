@@ -15,7 +15,7 @@ internal sealed class RemoveBadge : IChatCommand
         }
         else
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
+            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
         }
     }
 }

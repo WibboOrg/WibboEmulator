@@ -9,6 +9,6 @@ internal sealed class EmptyBots : IChatCommand
     {
         session.User.InventoryComponent.ClearBots();
         session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.GetBots()));
-        session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("empty.cleared", session.Langue));
+        userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("empty.cleared", session.Langue));
     }
 }

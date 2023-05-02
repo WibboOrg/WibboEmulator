@@ -4,7 +4,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class StaffKick : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser user, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
@@ -14,15 +14,15 @@ internal sealed class StaffKick : IChatCommand
         var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
         if (targetUser == null || targetUser.User == null)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
+            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
         }
         else if (session.User.Rank <= targetUser.User.Rank)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
+            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
         }
         else if (!targetUser.User.InRoom)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("kick.error", session.Langue));
+            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("kick.error", session.Langue));
         }
         else
         {

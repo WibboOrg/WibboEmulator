@@ -14,7 +14,7 @@ internal sealed class MachineBan : IChatCommand
         var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
         if (clientByUsername == null)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
+            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
         }
         else if (string.IsNullOrEmpty(clientByUsername.MachineId))
         {
@@ -22,7 +22,7 @@ internal sealed class MachineBan : IChatCommand
         }
         else if (clientByUsername.User.Rank >= session.User.Rank)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
+            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
             WibboEnvironment.GetGame().GetGameClientManager().BanUser(session, "Robot", 788922000, "Votre compte a été banni par sécurité", false, false);
         }
         else

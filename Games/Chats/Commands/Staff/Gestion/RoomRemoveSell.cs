@@ -24,6 +24,6 @@ internal sealed class RoomRemoveSell : IChatCommand
             RoomDao.UpdatePrice(dbClient, room.Id, 0);
         }
 
-        session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.remove", session.Langue));
+        userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.remove", session.Langue));
     }
 }

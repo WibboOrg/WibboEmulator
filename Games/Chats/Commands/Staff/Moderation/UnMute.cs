@@ -21,7 +21,7 @@ internal sealed class UnMute : IChatCommand
         var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
         if (targetUser == null || targetUser.User == null)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
+            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
         }
         else
         {

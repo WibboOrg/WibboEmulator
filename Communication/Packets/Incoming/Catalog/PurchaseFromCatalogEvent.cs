@@ -274,7 +274,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
             PurchaseFromCatalogEvent.LimitCoinsPrime(dbClient, session, totalLimitCoinCost);
 
             UserDao.UpdateRemoveLimitCoins(dbClient, session.User.Id, totalLimitCoinCost);
-            LogShopDao.Insert(dbClient, session.User.Id, totalLimitCoinCost, $"Achat de {item.Name}", item.Id);
+            LogShopDao.Insert(dbClient, session.User.Id, totalLimitCoinCost, $"Achat de {item.Name} (x{item.Amount})", item.Id);
         }
 
         switch (item.Data.Type.ToString().ToLower())

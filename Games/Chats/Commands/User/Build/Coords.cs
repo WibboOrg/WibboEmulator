@@ -4,5 +4,5 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Coords : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters) => session.SendNotification("X: " + userRoom.X + " - Y: " + userRoom.Y + " - Z: " + userRoom.Z + " - Rot: " + userRoom.RotBody);
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters) => userRoom.SendWhisperChat("X: " + userRoom.X + " - Y: " + userRoom.Y + " - Z: " + userRoom.Z + " - Rot: " + userRoom.RotBody);
 }

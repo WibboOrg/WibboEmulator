@@ -13,6 +13,6 @@ internal sealed class ConvertMagot : IChatCommand
         }
 
         session.User.InventoryComponent.ConvertMagot();
-        session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("convert.magot", session.Langue));
+        userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("convert.magot", session.Langue));
     }
 }

@@ -20,7 +20,7 @@ internal sealed class AllIgnore : IChatCommand
 
         if (targetUser.User.Rank >= session.User.Rank)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
+            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
             return;
         }
 
@@ -32,7 +32,7 @@ internal sealed class AllIgnore : IChatCommand
 
         if (lengthSeconds <= 600)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("ban.toolesstime", session.Langue));
+            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("ban.toolesstime", session.Langue));
             return;
         }
 

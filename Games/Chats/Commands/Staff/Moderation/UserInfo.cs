@@ -16,13 +16,13 @@ internal sealed class UserInfo : IChatCommand
 
         if (string.IsNullOrEmpty(username))
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.userparammissing", session.Langue));
+            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.userparammissing", session.Langue));
             return;
         }
         var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
         if (clientByUsername == null || clientByUsername.User == null)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.useroffline", session.Langue));
+            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.useroffline", session.Langue));
             return;
         }
 

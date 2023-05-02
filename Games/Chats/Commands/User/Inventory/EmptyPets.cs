@@ -9,7 +9,6 @@ internal sealed class EmptyPets : IChatCommand
     {
         session.User.InventoryComponent.ClearPets();
         session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.GetPets()));
-        session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("empty.cleared", session.Langue));
-
+        userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("empty.cleared", session.Langue));
     }
 }

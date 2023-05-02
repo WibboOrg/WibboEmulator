@@ -14,6 +14,8 @@ internal sealed class DuplicateRoom : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
+        userRoom.SendWhisperChat("Copie de l'appartement " + oldRoomId + " en cours de chargement...");
+        
         var oldRoomId = room.Id;
         int roomId;
 
@@ -176,7 +178,6 @@ internal sealed class DuplicateRoom : IChatCommand
             session.User.UsersRooms.Add(roomId);
         }
 
-        session.SendNotification("Copie de l'appartement " + oldRoomId + " en cours de chargement...");
         session.SendPacket(new FlatCreatedComposer(roomId, "Appart " + oldRoomId + " copie"));
     }
 }

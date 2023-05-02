@@ -40,7 +40,7 @@ internal sealed class RoomBuy : IChatCommand
             RoomDao.UpdatePrice(dbClient, room.Id, 0);
         }
 
-        session.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("roombuy.sucess", session.Langue), room.RoomData.SellPrice));
+        userRoom.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("roombuy.sucess", session.Langue), room.RoomData.SellPrice));
 
         room.RoomData.SellPrice = 0;
 

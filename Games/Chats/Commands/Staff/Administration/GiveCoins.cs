@@ -15,16 +15,16 @@ internal sealed class GiveCoins : IChatCommand
                 clientByUsername.User.Credits = clientByUsername.User.Credits + result;
                 clientByUsername.SendPacket(new CreditBalanceComposer(clientByUsername.User.Credits));
                 clientByUsername.SendNotification(session.User.Username + WibboEnvironment.GetLanguageManager().TryGetValue("coins.awardmessage1", session.Langue) + result.ToString() + WibboEnvironment.GetLanguageManager().TryGetValue("coins.awardmessage2", session.Langue));
-                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("coins.updateok", session.Langue));
+                userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("coins.updateok", session.Langue));
             }
             else
             {
-                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.intonly", session.Langue));
+                userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.intonly", session.Langue));
             }
         }
         else
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
+            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
         }
     }
 }
