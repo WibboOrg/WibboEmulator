@@ -14,10 +14,10 @@ internal sealed class DuplicateRoom : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        userRoom.SendWhisperChat("Copie de l'appartement " + oldRoomId + " en cours de chargement...");
-        
         var oldRoomId = room.Id;
         int roomId;
+
+        userRoom.SendWhisperChat("Copie de l'appartement " + oldRoomId + " en cours de chargement...");
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
