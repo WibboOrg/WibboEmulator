@@ -325,6 +325,7 @@ public sealed class PacketManager
         this._incomingPackets.Add(ClientPacketHeader.FURNITURE_PLACE, new PlaceObjectEvent());
         this._incomingPackets.Add(ClientPacketHeader.FURNITURE_MULTISTATE, new UseFurnitureEvent());
         this._incomingPackets.Add(ClientPacketHeader.FURNITURE_WALL_MULTISTATE, new UseFurnitureEvent());
+        this._incomingPackets.Add(ClientPacketHeader.FURNITURE_RANDOMSTATE, new UseFurnitureEvent());
         this._incomingPackets.Add(ClientPacketHeader.POLL_ANSWER, new AnswerPollEvent());
         this._incomingPackets.Add(ClientPacketHeader.ROOM_FAVORITE, new AddFavouriteRoomEvent());
         this._incomingPackets.Add(ClientPacketHeader.ROOM_FAVORITE_REMOVE, new RemoveFavouriteRoomEvent());

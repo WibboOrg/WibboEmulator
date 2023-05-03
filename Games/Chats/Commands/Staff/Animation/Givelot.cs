@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class GiveLot : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser user, string[] parts)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parts)
     {
         if (parts.Length != 2)
         {
