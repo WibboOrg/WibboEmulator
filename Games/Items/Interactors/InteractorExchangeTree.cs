@@ -61,7 +61,7 @@ public class InteractorExchangeTree : FurniInteractor
 
         if (timeLeft.TotalSeconds > 0)
         {
-            roomUser.SendWhisperChat($"Il reste encore {timeLeft.Days} jours, {timeLeft.Hours} heures et {timeLeft.Minutes} minutes avant que votre plante ne soit prête pour la récolte.");
+            roomUser.SendWhisperChat($"Il reste {timeLeft.Days} jours, {timeLeft.Hours} heures et {timeLeft.Minutes} minutes avant que votre plante ne soit prête pour la récolte.");
         }
         else if (timeLeft.TotalSeconds <= 0)
         {
@@ -94,7 +94,7 @@ public class InteractorExchangeTree : FurniInteractor
 
             UserDao.UpdateAddPoints(dbClient, session.User.Id, rewards);
 
-            roomUser.SendWhisperChat($"Félicitations ! Vous avez obtenu {rewards} WibboPoints pour votre récolte réussie.");
+            roomUser.SendWhisperChat($"Vous obtenez {rewards} WibboPoints de votre arbre. Votre plante était magnifique !");
         }
     }
 
