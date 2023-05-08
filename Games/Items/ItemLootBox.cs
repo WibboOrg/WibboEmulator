@@ -95,11 +95,6 @@ internal static class ItemLootBox
         }
         else if (probab <= 933)
         {
-            pageId = 15987; // 10wps
-            forceItem = 11068;
-        }
-        else if (probab <= 10933)
-        {
             pageId = 15987; // 1wp
             forceItem = 23584;
         }
