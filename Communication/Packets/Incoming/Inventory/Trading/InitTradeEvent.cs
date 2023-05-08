@@ -31,14 +31,14 @@ internal sealed class InitTradeEvent : IPacketEvent
             var rp = roomUser.Roleplayer;
             if (rp == null || rp.TradeId > 0 || rp.Dead || rp.SendPrison || (rp.PvpEnable && room.RoomRoleplay.Pvp) || rp.AggroTimer > 0)
             {
-                roomUser.SendWhisperChat("Vous devez être en zone safe pour pouvoir troquer");
+                roomUser.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.troc.zonesafe", session.Langue));
                 return;
             }
 
             var rpTarget = roomUserTarget.Roleplayer;
             if (rpTarget == null || rpTarget.TradeId > 0 || rpTarget.Dead || rpTarget.SendPrison || (rpTarget.PvpEnable && room.RoomRoleplay.Pvp) || rpTarget.AggroTimer > 0)
             {
-                roomUser.SendWhisperChat("Ce joueur ne peut pas troc");
+                roomUser.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.troc.fail", session.Langue));
                 return;
             }
 

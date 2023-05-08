@@ -10,13 +10,13 @@ internal sealed class WiredLimit : IChatCommand
     {
         room.WiredHandler.SecurityEnabled = !room.WiredHandler.SecurityEnabled;
 
-        if (!room.WiredHandler.SecurityEnabled)
+        if (room.WiredHandler.SecurityEnabled)
         {
-            userRoom.SendWhisperChat("Attention tu as désactivé la sécurité des wireds. Une mauvaise utilisation de cette commande pourrait détruire ton appartement");
+            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.wiredlimit.true", session.Langue));
         }
         else
         {
-            userRoom.SendWhisperChat("La sécurité des wireds a été activée");
+            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.wiredlimit.false", session.Langue));
         }
 
         room.RoomData.WiredSecurity = room.WiredHandler.SecurityEnabled;

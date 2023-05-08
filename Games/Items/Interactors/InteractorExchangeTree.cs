@@ -61,7 +61,7 @@ public class InteractorExchangeTree : FurniInteractor
 
         if (timeLeft.TotalSeconds > 0)
         {
-            roomUser.SendWhisperChat($"Il reste {timeLeft.Days} jours, {timeLeft.Hours} heures et {timeLeft.Minutes} minutes avant que votre plante ne soit prête pour la récolte.");
+            roomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("tree.exchange.timeout", session.Langue), timeLeft.Days, timeLeft.Hours, timeLeft.Minutes));
         }
         else if (timeLeft.TotalSeconds <= 0)
         {
@@ -94,7 +94,7 @@ public class InteractorExchangeTree : FurniInteractor
 
             UserDao.UpdateAddPoints(dbClient, session.User.Id, rewards);
 
-            roomUser.SendWhisperChat($"Vous obtenez {rewards} WibboPoints de votre arbre. Votre plante était magnifique !");
+            roomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("tree.exchange.convert", session.Langue), rewards));
         }
     }
 

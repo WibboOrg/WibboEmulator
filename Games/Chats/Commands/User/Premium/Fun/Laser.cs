@@ -42,14 +42,14 @@ internal sealed class Laser : IChatCommand
         var timeSpan = DateTime.Now - session.User.CommandFunTimer;
         if (timeSpan.TotalSeconds < 10)
         {
-            userRoom.SendWhisperChat($"Veuillez patienter pendant {timeSpan.TotalSeconds} secondes avant de pouvoir réutiliser la commande fun.");
+            userRoom.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.fun.timeout", session.Langue), timeSpan.TotalSeconds));
             return;
         }
 
         session.User.CommandFunTimer = DateTime.Now;
 
-        userRoom.OnChat($"*Découpe au sabre laser {targetUser.GetUsername()}*", 22);
-        targetUser.OnChat($"*Se fait découper en 2 par {userRoom.GetUsername()}*", 18);
+        userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.laser.chat", session.Langue), targetUser.GetUsername()), 22);
+        targetUser.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.laser.chat.target", session.Langue), userRoom.GetUsername()), 18);
 
         userRoom.ApplyEffect(196, true);
         userRoom.TimerResetEffect = 6;

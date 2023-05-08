@@ -103,7 +103,7 @@ internal sealed class RpUseItemsEvent : IPacketEvent
             }
             case "showtime":
             {
-                user.SendWhisperChat("Il est " + room.RoomRoleplay.Hour + " heures et " + room.RoomRoleplay.Minute + " minutes");
+                user.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.useitem.showtime", session.Langue), room.RoomRoleplay.Hour, room.RoomRoleplay.Minute));
                 break;
             }
             case "money":
@@ -130,7 +130,8 @@ internal sealed class RpUseItemsEvent : IPacketEvent
                 rp.SendUpdate();
                 rp.RemoveInventoryItem(rpItem.Id, useCount);
 
-                user.OnChat("*Consomme " + char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..] + "*");
+                var titleItem = char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..];
+                user.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.consumes", session.Langue), titleItem));
                 break;
             }
             case "healthtired":
@@ -143,7 +144,8 @@ internal sealed class RpUseItemsEvent : IPacketEvent
                 rp.SendUpdate();
                 rp.RemoveInventoryItem(rpItem.Id, useCount);
 
-                user.OnChat("*Consomme " + char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..] + "*");
+                var titleItem = char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..];
+                user.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.consumes", session.Langue), titleItem));
                 break;
             }
             case "healthenergy":
@@ -156,7 +158,8 @@ internal sealed class RpUseItemsEvent : IPacketEvent
                 rp.SendUpdate();
                 rp.RemoveInventoryItem(rpItem.Id, useCount);
 
-                user.OnChat("*Consomme " + char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..] + "*");
+                var titleItem = char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..];
+                user.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.consumes", session.Langue), titleItem));
                 break;
             }
             case "energy":
@@ -168,7 +171,8 @@ internal sealed class RpUseItemsEvent : IPacketEvent
                 rp.SendUpdate();
                 rp.RemoveInventoryItem(rpItem.Id, useCount);
 
-                user.OnChat("*Consomme " + char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..] + "*");
+                var titleItem = char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..];
+                user.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.consumes", session.Langue), titleItem));
                 break;
             }
             case "health":
@@ -180,7 +184,8 @@ internal sealed class RpUseItemsEvent : IPacketEvent
                 rp.SendUpdate();
                 rp.RemoveInventoryItem(rpItem.Id, useCount);
 
-                user.OnChat("*Consomme " + char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..] + "*");
+                var titleItem = char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..];
+                user.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.consumes", session.Langue), titleItem));
                 break;
             }
             case "weapon_cac":

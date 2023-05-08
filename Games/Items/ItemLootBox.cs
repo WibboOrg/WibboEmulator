@@ -147,7 +147,7 @@ internal static class ItemLootBox
             session.User.BadgeComponent.GiveBadge(badgeCode, true);
 
             var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
-            roomUserByUserId?.SendWhisperChat("Tu as reçu le badge: " + badgeCode);
+            roomUserByUserId?.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("give.badge", roomUserByUserId.Client.Langue), badgeCode));
         }
 
         EndOpenBox(session, present, room, pageId, 0, badgeCode);

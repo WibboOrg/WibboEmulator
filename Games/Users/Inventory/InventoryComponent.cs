@@ -375,7 +375,7 @@ public class InventoryComponent : IDisposable
 
         if (this._userItems.Count >= this._furniLimit)
         {
-            this._userInstance.Client.SendHugeNotif($"Attention votre inventaire n'a pas été charger complètement car il contient plus de {this._furniLimit} mobiliers");
+            this._userInstance.Client.SendHugeNotif(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("inventory.limit.furni", this._userInstance.Client.Langue), this._furniLimit));
         }
 
         var dPets = BotPetDao.GetAllByUserId(dbClient, this._userInstance.Id, this._petLimit);
@@ -390,7 +390,7 @@ public class InventoryComponent : IDisposable
 
         if (this._petItems.Count >= this._petLimit)
         {
-            this._userInstance.Client.SendHugeNotif($"Attention votre inventaire d'animaux n'a pas été charger complètement car il contient plus de {this._petLimit} mobiliers");
+            this._userInstance.Client.SendHugeNotif(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("inventory.limit.pet", this._userInstance.Client.Langue), this._petLimit));
         }
 
         var dBots = BotUserDao.GetAllByUserId(dbClient, this._userInstance.Id, this._botLimit);
@@ -405,7 +405,7 @@ public class InventoryComponent : IDisposable
 
         if (this._botItems.Count >= this._botLimit)
         {
-            this._userInstance.Client.SendHugeNotif($"Attention votre inventaire de bot n'a pas été charger complètement car il contient plus de {this._botLimit} mobiliers");
+            this._userInstance.Client.SendHugeNotif(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("inventory.limit.bot", this._userInstance.Client.Langue), this._botLimit));
         }
     }
 

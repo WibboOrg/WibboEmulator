@@ -308,7 +308,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
         {
             case "rpsendtimeuser":
             {
-                user.SendWhisperChat("Il est " + this.RoomInstance.RoomRoleplay.Hour + " heures et " + this.RoomInstance.RoomRoleplay.Minute + " minutes");
+                user.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.useitem.showtime", user.Client.Langue), this.RoomInstance.RoomRoleplay.Hour, this.RoomInstance.RoomRoleplay.Minute));
                 break;
             }
             case "setenemy":

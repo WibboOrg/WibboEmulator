@@ -10,8 +10,10 @@ internal sealed class SuperPull : IChatCommand
         {
             return;
         }
+        
+        var targetName = parameters[1];
 
-        var targetUser = room.RoomUserManager.GetRoomUserByName(parameters[1]);
+        var targetUser = room.RoomUserManager.GetRoomUserByName(targetName);
         if (targetUser == null)
         {
             return;
@@ -33,7 +35,7 @@ internal sealed class SuperPull : IChatCommand
             return;
         }
 
-        userRoom.OnChat("*Tire " + parameters[1] + "*", 0, false);
+        userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.pull.chat.success", session.Langue), targetName), 0, false);
         if (userRoom.RotBody % 2 != 0)
         {
             userRoom.RotBody--;

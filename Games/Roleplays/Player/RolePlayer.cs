@@ -371,7 +371,10 @@ public class RolePlayer
                 _ = room.RoomItemHandling.AddTempItem(user.VirtualId, 5461, user.SetX, user.SetY, user.Z, "1", monaiePerdu, InteractionTypeTemp.Money);
             }
 
-            user.OnChat("A été mis K.O. ! [" + this.Health + "/" + this.HealthMax + "]", 0, true);
+            if (user.Client != null)
+            {
+                user.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.ko", user.Client.Langue), this.Health, this.HealthMax), 0, true);
+            }
         }
         else
         {
@@ -465,12 +468,12 @@ public class RolePlayer
                 user.RotHead = 2;
                 user.Freeze = true;
                 user.FreezeEndCounter = 0;
-                user.OnChat("*Tombe d'épuisement*");
+                user.OnChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.energyout", user.Client.Langue));
                 user.SetStatus("sit", "0.5");
                 user.IsSit = true;
                 user.UpdateNeeded = true;
 
-                user.SendWhisperChat("Vous êtes tombé de fatiguer, reposez-vous pendants 30 secondes", true);
+                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.energyout", user.Client.Langue), true);
             }
         }
 
@@ -488,7 +491,7 @@ public class RolePlayer
             if (this.GunLoad == 0)
             {
                 this.GunLoadTimer = 6;
-                user.OnChat("*Recharge mon arme*");
+                user.OnChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.loadgun", user.Client.Langue));
             }
         }
 

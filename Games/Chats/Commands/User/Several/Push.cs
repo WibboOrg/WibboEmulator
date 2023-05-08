@@ -22,11 +22,12 @@ internal sealed class Push : IChatCommand
             return;
         }
 
-        var targetRoomUser = room.RoomUserManager.GetRoomUserByName(Convert.ToString(parameters[1]));
+        var targetName = parameters[1];
+
+        var targetRoomUser = room.RoomUserManager.GetRoomUserByName(targetName);
 
         if (targetRoomUser == null)
         {
-            userRoom.SendWhisperChat(Convert.ToString(parameters[1]) + " n'est plus ici.");
             return;
         }
 
@@ -87,11 +88,11 @@ internal sealed class Push : IChatCommand
                 targetRoomUser.MoveTo(targetRoomUser.X, targetRoomUser.Y + 1);
             }
 
-            userRoom.OnChat("*pousse " + parameters[1] + "*", 0, false);
+            userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.push.chat.success", session.Langue), targetName), 0, false);
         }
         else
         {
-            userRoom.SendWhisperChat(parameters[1] + " est trop loin de vous.");
+            userRoom.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.push.fail", session.Langue), targetName));
         }
     }
 }

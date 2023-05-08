@@ -37,14 +37,14 @@ internal sealed class Nuke : IChatCommand
         var timeSpan = DateTime.Now - session.User.CommandFunTimer;
         if (timeSpan.TotalSeconds < 10)
         {
-            userRoom.SendWhisperChat($"Veuillez patienter pendant {timeSpan.TotalSeconds} secondes avant de pouvoir réutiliser la commande fun.");
+            userRoom.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.fun.timeout", session.Langue), timeSpan.TotalSeconds));
             return;
         }
 
         session.User.CommandFunTimer = DateTime.Now;
 
-        userRoom.OnChat($"*Lance une bombe vers {targetUser.GetUsername()}*", 27);
-        targetUser.OnChat($"*S'est pris une bombe par {userRoom.GetUsername()}*", 18);
+        userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.nuke.chat", session.Langue), targetUser.GetUsername()), 27);
+        targetUser.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.nuke.chat.target", session.Langue), userRoom.GetUsername()), 18);
 
         targetUser.ApplyEffect(108, true);
         targetUser.TimerResetEffect = 6;

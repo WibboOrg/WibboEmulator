@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Roleplays.Enemy;
 using System.Drawing;
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Roleplays.Weapon;
 using WibboEmulator.Games.Rooms;
@@ -82,7 +83,7 @@ public class RoleBot
             if (this.GunCharger == 0)
             {
                 this.GunLoadTimer = 6;
-                bot.OnChat("*Recharge mon arme*");
+                bot.OnChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.loadgun", Language.French));
             }
         }
     }
@@ -196,7 +197,7 @@ public class RoleBot
                 }
             }
 
-            bot.OnChat("A été mis K.O. ! [" + this.Health + "/" + this.Config.Health + "]", bot.IsPet ? 0 : 2, true);
+            bot.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.ko", Language.French), this.Health, this.Config.Health), bot.IsPet ? 0 : 2, true);
         }
         else
         {

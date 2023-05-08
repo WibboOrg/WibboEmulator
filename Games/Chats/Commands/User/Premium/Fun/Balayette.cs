@@ -42,14 +42,14 @@ internal sealed class Balayette : IChatCommand
         var timeSpan = DateTime.Now - session.User.CommandFunTimer;
         if (timeSpan.TotalSeconds < 10)
         {
-            userRoom.SendWhisperChat($"Veuillez patienter pendant {timeSpan.TotalSeconds} secondes avant de pouvoir réutiliser la commande fun.");
+            userRoom.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.fun.timeout", session.Langue), timeSpan.TotalSeconds));
             return;
         }
 
         session.User.CommandFunTimer = DateTime.Now;
 
-        userRoom.OnChat($"*Fait une balayette à {targetUser.GetUsername()}*", 32);
-        targetUser.OnChat($"*S'est fait balayer par {userRoom.GetUsername()}*", 18);
+        userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.balayette.chat", session.Langue), targetUser.GetUsername()), 32);
+        targetUser.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.balayette.chat.target", session.Langue), userRoom.GetUsername()), 18);
 
         if (targetUser.ContainStatus("lay") || targetUser.ContainStatus("sit"))
         {

@@ -42,14 +42,14 @@ internal sealed class Tied : IChatCommand
         var timeSpan = DateTime.Now - session.User.CommandFunTimer;
         if (timeSpan.TotalSeconds < 10)
         {
-            userRoom.SendWhisperChat($"Veuillez patienter pendant {timeSpan.TotalSeconds} secondes avant de pouvoir réutiliser la commande fun.");
+            userRoom.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.fun.timeout", session.Langue), timeSpan.TotalSeconds));
             return;
         }
 
         session.User.CommandFunTimer = DateTime.Now;
 
-        userRoom.OnChat($"*Ligote {targetUser.GetUsername()} avec une corde*", 32);
-        targetUser.OnChat($"*S'est fait ligoter par {userRoom.GetUsername()}*", 18);
+        userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.tied.chat", session.Langue), targetUser.GetUsername()), 32);
+        targetUser.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.tied.chat.target", session.Langue), userRoom.GetUsername()), 18);
 
         targetUser.ApplyEffect(729, true);
         targetUser.TimerResetEffect = 6;

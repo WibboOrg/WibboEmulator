@@ -37,14 +37,14 @@ internal sealed class Tomato : IChatCommand
         var timeSpan = DateTime.Now - session.User.CommandFunTimer;
         if (timeSpan.TotalSeconds < 10)
         {
-            userRoom.SendWhisperChat($"Veuillez patienter pendant {timeSpan.TotalSeconds} secondes avant de pouvoir réutiliser la commande fun.");
+            userRoom.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.fun.timeout", session.Langue), timeSpan.TotalSeconds));
             return;
         }
 
         session.User.CommandFunTimer = DateTime.Now;
 
-        userRoom.OnChat($"*Lance une tomate sur {targetUser.GetUsername()}*", 3);
-        targetUser.OnChat($"*Se prend la tomate de {userRoom.GetUsername()} en pleine tête*", 3);
+        userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.tomato.chat", session.Langue), targetUser.GetUsername()), 3);
+        targetUser.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.tomato.chat.target", session.Langue), userRoom.GetUsername()), 3);
 
         targetUser.CarryItem(98);
     }

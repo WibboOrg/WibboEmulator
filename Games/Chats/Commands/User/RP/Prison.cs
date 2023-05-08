@@ -62,14 +62,14 @@ internal sealed class Prison : IChatCommand
 
         if (Math.Floor((double)(rpTwo.Health / (double)rpTwo.HealthMax) * 100) > 75)
         {
-            userRoom.OnChat("*Tente d'arrêter " + targetRoomUser.GetUsername() + "*");
+            userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.prison.chat.fail", session.Langue), targetRoomUser.GetUsername()));
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("rp.prisonnotallowed", session.Langue));
             return;
         }
 
         if (!(Math.Abs(targetRoomUser.X - userRoom.X) >= 2 || Math.Abs(targetRoomUser.Y - userRoom.Y) >= 2))
         {
-            userRoom.OnChat("*Arrête et envoie en prison " + targetRoomUser.GetUsername() + "*");
+            userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.prison.chat.success", session.Langue), targetRoomUser.GetUsername()));
 
             targetRoomUser.ApplyEffect(729, true);
             targetRoomUser.RotBody = 2;
@@ -83,9 +83,6 @@ internal sealed class Prison : IChatCommand
             rpTwo.SendPrison = true;
             rpTwo.PrisonTimer = 10 * 2;
         }
-
-        //userRoom.ApplyEffect(737, true);
-        //userRoom.TimerResetEffect = 2;
 
         if (userRoom.FreezeEndCounter <= 2)
         {

@@ -37,14 +37,14 @@ internal sealed class Slime : IChatCommand
         var timeSpan = DateTime.Now - session.User.CommandFunTimer;
         if (timeSpan.TotalSeconds < 10)
         {
-            userRoom.SendWhisperChat($"Veuillez patienter pendant {timeSpan.TotalSeconds} secondes avant de pouvoir réutiliser la commande fun.");
+            userRoom.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.fun.timeout", session.Langue), timeSpan.TotalSeconds));
             return;
         }
 
         session.User.CommandFunTimer = DateTime.Now;
 
-        userRoom.OnChat($"*Jette du slime dans la direction de {targetUser.GetUsername()}*");
-        targetUser.OnChat($"*S'est fait recouvrir de slime par {userRoom.GetUsername()}*");
+        userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.slime.chat", session.Langue), targetUser.GetUsername()));
+        targetUser.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.slime.chat.target", session.Langue), userRoom.GetUsername()));
 
         targetUser.ApplyEffect(169, true);
         targetUser.TimerResetEffect = 6;

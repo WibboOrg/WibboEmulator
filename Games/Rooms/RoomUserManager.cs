@@ -1509,7 +1509,10 @@ public class RoomUserManager
                         user.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.pickdollard", user.Client.Langue), itemTmp.Value));
                     }
 
-                    user.OnChat("*Récupère un objet au sol*");
+                    if (user.Client != null)
+                    {
+                        user.OnChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.takeitem", user.Client.Langue));
+                    }
                     this._room.RoomItemHandling.RemoveTempItem(itemTmp.Id);
                 }
                 else if (itemTmp != null && itemTmp.InteractionType == InteractionTypeTemp.RpItem)
@@ -1535,7 +1538,10 @@ public class RoomUserManager
                         }
                     }
 
-                    user.OnChat("*Récupère un objet au sol*");
+                    if (user.Client != null)
+                    {
+                        user.OnChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.takeitem", user.Client.Langue));
+                    }
                     this._room.RoomItemHandling.RemoveTempItem(itemTmp.Id);
                 }
             }

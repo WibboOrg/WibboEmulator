@@ -22,7 +22,9 @@ internal sealed class Pull : IChatCommand
             return;
         }
 
-        var targetUser = room.RoomUserManager.GetRoomUserByName(Convert.ToString(parameters[1]));
+        var targetName = parameters[1];
+
+        var targetUser = room.RoomUserManager.GetRoomUserByName(targetName);
         if (targetUser == null || targetUser.Client == null || targetUser.Client.User == null)
         {
             return;
@@ -41,7 +43,7 @@ internal sealed class Pull : IChatCommand
 
         if (Math.Abs(userRoom.X - targetUser.X) < 3 && Math.Abs(userRoom.Y - targetUser.Y) < 3)
         {
-            userRoom.OnChat("*Tire " + parameters[1] + "*", 0, false);
+            userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.pull.chat.success", session.Langue), targetName), 0, false);
             if (userRoom.RotBody % 2 != 0)
             {
                 userRoom.RotBody--;
@@ -66,7 +68,7 @@ internal sealed class Pull : IChatCommand
         }
         else
         {
-            session.SendWhisper(parameters[1] + " est trop loin de vous.");
+            session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.pull.fail", session.Langue), targetName));
             return;
         }
     }

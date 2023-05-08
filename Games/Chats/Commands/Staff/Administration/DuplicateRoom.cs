@@ -17,8 +17,6 @@ internal sealed class DuplicateRoom : IChatCommand
         var oldRoomId = room.Id;
         int roomId;
 
-        userRoom.SendWhisperChat("Copie de l'appartement " + oldRoomId + " en cours de chargement...");
-
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
             room.RoomItemHandling.SaveFurniture();

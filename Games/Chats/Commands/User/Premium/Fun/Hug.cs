@@ -42,14 +42,14 @@ internal sealed class Hug : IChatCommand
         var timeSpan = DateTime.Now - session.User.CommandFunTimer;
         if (timeSpan.TotalSeconds < 10)
         {
-            userRoom.SendWhisperChat($"Veuillez patienter pendant {timeSpan.TotalSeconds} secondes avant de pouvoir réutiliser la commande fun.");
+            userRoom.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.fun.timeout", session.Langue), timeSpan.TotalSeconds));
             return;
         }
 
         session.User.CommandFunTimer = DateTime.Now;
 
-        userRoom.OnChat($"*Serre {targetUser.GetUsername()} dans ses bras*", 16);
-        targetUser.OnChat($"*Se fait câliner chaleureusement par {userRoom.GetUsername()}*", 16);
+        userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.hug.chat", session.Langue), targetUser.GetUsername()), 16);
+        targetUser.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.hug.chat.target", session.Langue), userRoom.GetUsername()), 16);
 
         userRoom.ApplyEffect(9, true);
         userRoom.TimerResetEffect = 6;
