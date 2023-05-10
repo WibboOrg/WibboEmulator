@@ -10,7 +10,7 @@ internal sealed class SuperPull : IChatCommand
         {
             return;
         }
-        
+
         var targetName = parameters[1];
 
         var targetUser = room.RoomUserManager.GetRoomUserByName(targetName);

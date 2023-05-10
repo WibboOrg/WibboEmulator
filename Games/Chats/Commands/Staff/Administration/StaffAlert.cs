@@ -19,7 +19,7 @@ internal sealed class StaffAlert : IChatCommand
             return;
         }
 
-        foreach (var staff in WibboEnvironment.GetGame().GetGameClientManager().GetClients)
+        foreach (var staff in WibboEnvironment.GetGame().GetGameClientManager().GetClients.ToList())
         {
             if (staff == null)
             {

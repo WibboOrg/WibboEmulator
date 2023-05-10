@@ -44,6 +44,12 @@ internal sealed class Update : IChatCommand
                 session.SendWhisper("Vue et promotion mises à jour");
                 break;
             }
+            case "hof":
+            {
+                WibboEnvironment.GetGame().GetHallOFFame().Init(dbClient);
+                session.SendWhisper("Hof mises à jour");
+                break;
+            }
             case "text":
             case "texte":
             case "locale":

@@ -48,6 +48,7 @@ public class User : IDisposable
     public int WibboPoints { get; set; }
     public int LimitCoins { get; set; }
     public int AccountCreated { get; set; }
+    public int GamePointsMonth { get; set; }
     public int AchievementPoints { get; set; }
     public int Duckets { get; set; }
     public int Respect { get; set; }
@@ -146,7 +147,8 @@ public class User : IDisposable
         int dailyPetRespectPoints, bool hasFriendRequestsDisabled, int currentQuestID, int achievementPoints,
         int lastOnline, int favoriteGroup, int accountCreated, bool accepttrading, string ip, bool hideInroom,
         bool hideOnline, int mazoHighScore, int mazo, string clientVolume, bool nuxenable, string machineId,
-        bool isFirstConnexionToday, Language langue, double ignoreAllExpire, bool ignoreRoomInvite, bool cameraFollowDisabled)
+        bool isFirstConnexionToday, Language langue, double ignoreAllExpire, bool ignoreRoomInvite, bool cameraFollowDisabled,
+        int gamePointsMonth)
     {
         this.Id = id;
         this.Username = username;
@@ -159,6 +161,7 @@ public class User : IDisposable
         this.WibboPoints = wpoint;
         this.LimitCoins = limitCoins;
         this.Duckets = activityPoints;
+        this.GamePointsMonth = gamePointsMonth;
         this.AchievementPoints = achievementPoints;
         this.CurrentRoomId = 0;
         this.LoadingRoomId = 0;

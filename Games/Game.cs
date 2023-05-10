@@ -38,6 +38,7 @@ public class Game : IDisposable
     private readonly QuestManager _questManager;
     private readonly GroupManager _groupManager;
     private readonly LandingViewManager _landingViewManager;
+    private readonly HallOfFameManager _hallOfFameManager;
     private readonly HelpManager _helpManager;
     private readonly PacketManager _packetManager;
     private readonly ChatManager _chatManager;
@@ -56,67 +57,54 @@ public class Game : IDisposable
 
     public Game()
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-
         this._gameClientManager = new GameClientManager();
-
         this._permissionManager = new PermissionManager();
-        this._permissionManager.Init(dbClient);
-
         this._itemDataManager = new ItemDataManager();
-        this._itemDataManager.Init(dbClient);
-
         this._catalogManager = new CatalogManager();
-        this._catalogManager.Init(dbClient, this._itemDataManager);
-
         this._navigatorManager = new NavigatorManager();
-        this._navigatorManager.Init(dbClient);
-
         this._roleplayManager = new RoleplayManager();
-        this._roleplayManager.Init(dbClient);
-
         this._roomManager = new RoomManager();
-        this._roomManager.Init(dbClient);
-
         this._groupManager = new GroupManager();
-        this._groupManager.Init(dbClient);
-
         this._moderationManager = new ModerationManager();
-        this._moderationManager.Init(dbClient);
-
         this._questManager = new QuestManager();
-        this._questManager.Init(dbClient);
-
         this._landingViewManager = new LandingViewManager();
-        this._landingViewManager.Init(dbClient);
-
+        this._hallOfFameManager = new HallOfFameManager();
         this._helpManager = new HelpManager();
-
-        this._packetManager = new PacketManager();
-        this._packetManager.Init();
-
         this._chatManager = new ChatManager();
-        this._chatManager.Init(dbClient);
-
         this._effectManager = new EffectManager();
-        this._effectManager.Init(dbClient);
-
         this._badgeManager = new BadgeManager();
-        this._badgeManager.Init();
-
         this._achievementManager = new AchievementManager();
-        this._achievementManager.Init(dbClient);
-
         this._animationManager = new AnimationManager();
-        this._animationManager.Init(dbClient);
-
         this._lootManager = new LootManager();
-        this._lootManager.Init(dbClient);
-
-        DatabaseCleanup(dbClient);
-        ServerStatusUpdater.Init(dbClient);
+        this._packetManager = new PacketManager();
 
         this._moduleWatch = new Stopwatch();
+    }
+
+    public void Init(IQueryAdapter dbClient)
+    {
+        DatabaseCleanup(dbClient);
+
+        this._permissionManager.Init(dbClient);
+        this._itemDataManager.Init(dbClient);
+        this._catalogManager.Init(dbClient, this._itemDataManager);
+        this._navigatorManager.Init(dbClient);
+        this._roleplayManager.Init(dbClient);
+        this._roomManager.Init(dbClient);
+        this._groupManager.Init(dbClient);
+        this._moderationManager.Init(dbClient);
+        this._questManager.Init(dbClient);
+        this._landingViewManager.Init(dbClient);
+        this._hallOfFameManager.Init(dbClient);
+        this._chatManager.Init(dbClient);
+        this._effectManager.Init(dbClient);
+        this._badgeManager.Init();
+        this._achievementManager.Init(dbClient);
+        this._animationManager.Init(dbClient);
+        this._lootManager.Init(dbClient);
+        this._packetManager.Init();
+
+        ServerStatusUpdater.Init(dbClient);
     }
 
     public LootManager GetLootManager() => this._lootManager;
@@ -156,6 +144,8 @@ public class Game : IDisposable
     public GroupManager GetGroupManager() => this._groupManager;
 
     public LandingViewManager GetHotelView() => this._landingViewManager;
+
+    public HallOfFameManager GetHallOFFame() => this._hallOfFameManager;
 
     public void StartGameLoop()
     {
@@ -203,6 +193,15 @@ public class Game : IDisposable
                 if (this._moduleWatch.ElapsedMilliseconds > 500)
                 {
                     Console.WriteLine("High latency in GameClientManager ({0} ms)", this._moduleWatch.ElapsedMilliseconds);
+                }
+
+                this._moduleWatch.Restart();
+
+                this._hallOfFameManager.OnCycle();
+
+                if (this._moduleWatch.ElapsedMilliseconds > 500)
+                {
+                    Console.WriteLine("High latency in HallOfFame ({0} ms)", this._moduleWatch.ElapsedMilliseconds);
                 }
 
                 this._moduleWatch.Restart();

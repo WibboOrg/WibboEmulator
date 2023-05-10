@@ -72,7 +72,16 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             return;
         }
 
-        var user = WibboEnvironment.GetUserByUsername(giftUser);
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+        var id = UserDao.GetIdByName(dbClient, giftUser);
+        if (id == 0)
+        {
+            session.SendPacket(new GiftReceiverNotFoundComposer());
+            return;
+        }
+
+        var user = WibboEnvironment.GetUserById(id);
         if (user == null)
         {
             session.SendPacket(new GiftReceiverNotFoundComposer());
@@ -98,7 +107,6 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
         }
 
         var ed = session.User.Id + ";" + giftMessage + Convert.ToChar(5) + ribbon + Convert.ToChar(5) + colour;
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
         var newItemId = ItemDao.Insert(dbClient, presentData.Id, user.Id, ed);
 

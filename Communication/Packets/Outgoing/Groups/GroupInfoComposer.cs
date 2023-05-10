@@ -9,6 +9,8 @@ internal sealed class GroupInfoComposer : ServerPacket
     {
         var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(group.CreateTime);
 
+        var userCreator = WibboEnvironment.GetUserById(group.CreatorId);
+
         this.WriteInteger(group.Id);
         this.WriteBoolean(true);
         this.WriteInteger(group.GroupType == GroupType.Open ? 0 : group.GroupType == GroupType.Locked ? 1 : 2);
@@ -23,7 +25,7 @@ internal sealed class GroupInfoComposer : ServerPacket
         this.WriteString(origin.Day + "-" + origin.Month + "-" + origin.Year);
         this.WriteBoolean(group.CreatorId == session.User.Id);
         this.WriteBoolean(group.IsAdmin(session.User.Id)); // admin
-        this.WriteString(WibboEnvironment.GetUsernameById(group.CreatorId));
+        this.WriteString(userCreator != null ? userCreator.Username : "");
         this.WriteBoolean(newWindow); // Show group info
         this.WriteBoolean(group.AdminOnlyDeco == 0); // Any user can place furni in home room
         this.WriteInteger(group.CreatorId == session.User.Id ? group.RequestCount : group.IsAdmin(session.User.Id) ? group.RequestCount : group.IsMember(session.User.Id) ? 0 : 0); // Pending users

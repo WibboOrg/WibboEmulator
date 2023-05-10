@@ -214,6 +214,7 @@ public sealed class PacketManager
     {
         this._incomingPackets.Add(ClientPacketHeader.GET_CURRENT_TIMING_CODE, new RefreshCampaignEvent());
         this._incomingPackets.Add(ClientPacketHeader.DESKTOP_NEWS, new GetPromoArticlesEvent());
+        this._incomingPackets.Add(ClientPacketHeader.GET_COMMUNITY_GOAL_HALL_OF_FAME, new GetCommunityGoalHallOfFameEvent());
     }
 
     private void RegisterNux() => this._incomingPackets.Add(ClientPacketHeader.USER_NUX_EVENT, new RoomNuxAlertEvent());

@@ -20,12 +20,12 @@ internal sealed class GiveLot : IChatCommand
             userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
             return;
         }
-        if (targetRoomUser.GetUsername() == session.User.Username || targetRoomUser.Client.User.IP == session.User.IP)
-        {
-            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.error", session.Langue));
-            ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + targetRoomUser.GetUsername());
-            return;
-        }
+        // if (targetRoomUser.GetUsername() == session.User.Username || targetRoomUser.Client.User.IP == session.User.IP)
+        // {
+        //     userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.error", session.Langue));
+        //     ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + targetRoomUser.GetUsername());
+        //     return;
+        // }
 
         int lotCount;
 
@@ -65,6 +65,8 @@ internal sealed class GiveLot : IChatCommand
         targetRoomUser.Client.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", targetRoomUser.Client.Langue), lotCount));
         session.SendWhisper(targetRoomUser.GetUsername() + " à reçu " + lotCount + " RareBox!");
 
+        targetRoomUser.Client.User.GamePointsMonth += 1;
+        WibboEnvironment.GetGame().GetHallOFFame().UpdateRakings(targetRoomUser.Client.User);
         UserDao.UpdateAddGamePoints(dbClient, targetRoomUser.Client.User.Id);
 
         _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(targetRoomUser.Client, "ACH_Extrabox", 1);

@@ -164,6 +164,7 @@ public static class WibboEnvironment
             _figureManager.Init();
 
             _game = new Game();
+            _game.Init(dbClient);
             _game.StartGameLoop();
 
             var webSocketOrigins = _settingsManager.GetData<string>("game.ws.origins").Split(',').ToList();
@@ -260,44 +261,13 @@ public static class WibboEnvironment
         return true;
     }
 
-    public static string GetUsernameById(int userId)
-    {
-        var client = GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (client != null && client.User != null)
-        {
-            return client.User.Username;
-        }
-
-        if (UsersCached.TryGetValue(userId, out var value))
-        {
-            return value.Username;
-        }
-
-        using var dbClient = GetDatabaseManager().GetQueryReactor();
-
-        var name = UserDao.GetNameById(dbClient, userId);
-        if (string.IsNullOrEmpty(name))
-        {
-            name = "Unknown User";
-        }
-
-        return name;
-    }
-
-    public static User GetUserByUsername(string username)
-    {
-        using var dbClient = GetDatabaseManager().GetQueryReactor();
-        var id = UserDao.GetIdByName(dbClient, username);
-        if (id > 0)
-        {
-            return GetUserById(Convert.ToInt32(id));
-        }
-
-        return null;
-    }
-
     public static User GetUserById(int userId)
     {
+        if (userId == 0)
+        {
+            return null;
+        }
+
         try
         {
             var client = GetGame().GetGameClientManager().GetClientByUserID(userId);
@@ -316,26 +286,18 @@ public static class WibboEnvironment
             }
             else
             {
-                try
+                if (UsersCached.TryGetValue(userId, out var value))
                 {
-                    if (UsersCached.TryGetValue(userId, out var value))
-                    {
-                        return value;
-                    }
-                    else
-                    {
-                        var user = UserFactory.GetUserData(userId);
-                        if (user != null)
-                        {
-                            _ = UsersCached.TryAdd(userId, user);
-                            return user;
-                        }
-                    }
+                    return value;
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine(ex);
-                    return null;
+                    var user = UserFactory.GetUserData(userId);
+                    if (user != null)
+                    {
+                        _ = UsersCached.TryAdd(userId, user);
+                        return user;
+                    }
                 }
             }
             return null;

@@ -115,7 +115,7 @@ public class UserFactory
         var gender = (string)dRow["gender"];
         var lastOnline = Convert.ToInt32(dRow["last_online"]);
         var credits = Convert.ToInt32(dRow["credits"]);
-        var diamonds = Convert.ToInt32(dRow["vip_points"]);
+        var wibboPoints = Convert.ToInt32(dRow["vip_points"]);
         var limitCoins = Convert.ToInt32(dRow["limit_coins"]);
         var activityPoints = Convert.ToInt32(dRow["activity_points"]);
         var homeRoom = Convert.ToInt32(dRow["home_room"]);
@@ -126,6 +126,7 @@ public class UserFactory
         var hideOnline = WibboEnvironment.EnumToBool(dRow["hide_online"].ToString());
         var mazoHighScore = Convert.ToInt32(dRow["mazoscore"]);
         var mazo = Convert.ToInt32(dRow["mazo"]);
+        var gamePointsMonth = Convert.ToInt32(dRow["game_points_month"]);
         var clientVolume = (string)dRow["volume"];
         var nuxEnable = WibboEnvironment.EnumToBool(dRow["nux_enable"].ToString());
         var ignoreRoomInvite = WibboEnvironment.EnumToBool(dRow["ignore_room_invite"].ToString());
@@ -141,6 +142,6 @@ public class UserFactory
         var achievementPoints = Convert.ToInt32(dRow2["achievement_score"]);
         var favoriteGroup = Convert.ToInt32(dRow2["group_id"]);
 
-        return new User(id, username, rank, motto, look, gender, credits, diamonds, limitCoins, activityPoints, homeRoom, respect, dailyRespectPoints, dailyPetRespectPoints, hasFriendRequestsDisabled, currentQuestID, achievementPoints, lastOnline, favoriteGroup, accountCreated, acceptTrading, ip, hideInroom, hideOnline, mazoHighScore, mazo, clientVolume, nuxEnable, machineId, isFirstConnexionToday, langue, ignoreAllExpire, ignoreRoomInvite, cameraFollowDisabled);
+        return new User(id, username, rank, motto, look, gender, credits, wibboPoints, limitCoins, activityPoints, homeRoom, respect, dailyRespectPoints, dailyPetRespectPoints, hasFriendRequestsDisabled, currentQuestID, achievementPoints, lastOnline, favoriteGroup, accountCreated, acceptTrading, ip, hideInroom, hideOnline, mazoHighScore, mazo, clientVolume, nuxEnable, machineId, isFirstConnexionToday, langue, ignoreAllExpire, ignoreRoomInvite, cameraFollowDisabled, gamePointsMonth);
     }
 }

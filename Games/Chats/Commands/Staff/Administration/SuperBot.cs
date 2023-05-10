@@ -51,7 +51,7 @@ internal sealed class SuperBot : IChatCommand
         }
         else
         {
-            var users = WibboEnvironment.GetGame().GetGameClientManager().GetClients;
+            var users = WibboEnvironment.GetGame().GetGameClientManager().GetClients.ToList();
 
             if (users == null)
             {
