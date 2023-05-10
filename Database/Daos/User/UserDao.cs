@@ -58,7 +58,7 @@ internal sealed class UserDao
 
     internal static DataTable GetTop10ByGamePointMonth(IQueryAdapter dbClient)
     {
-        dbClient.SetQuery("SELECT id FROM `user` WHERE game_points_month > '0' ORDER BY game_points_month ASC  LIMIT 10");
+        dbClient.SetQuery("SELECT id FROM `user` WHERE game_points_month > '0' ORDER BY game_points_month DESC LIMIT 10");
         return dbClient.GetTable();
     }
 

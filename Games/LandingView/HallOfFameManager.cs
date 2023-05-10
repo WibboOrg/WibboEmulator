@@ -79,6 +79,6 @@ public class HallOfFameManager
 
         this.UserRanking.Add(user);
 
-        this.UserRanking = this.UserRanking.OrderBy(x => x.GamePointsMonth).Take(MAX_USERS).ToList();
+        this.UserRanking = this.UserRanking.OrderByDescending(x => x.GamePointsMonth).Take(MAX_USERS).ToList();
     }
 }

@@ -20,12 +20,13 @@ internal sealed class GiveLot : IChatCommand
             userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
             return;
         }
-        // if (targetRoomUser.GetUsername() == session.User.Username || targetRoomUser.Client.User.IP == session.User.IP)
-        // {
-        //     userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.error", session.Langue));
-        //     ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + targetRoomUser.GetUsername());
-        //     return;
-        // }
+
+        if (targetRoomUser.GetUsername() == session.User.Username || targetRoomUser.Client.User.IP == session.User.IP)
+        {
+            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.error", session.Langue));
+            ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + targetRoomUser.GetUsername());
+            return;
+        }
 
         int lotCount;
 

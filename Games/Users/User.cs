@@ -23,7 +23,7 @@ using WibboEmulator.Games.Users.Premium;
 using WibboEmulator.Utilities;
 using WibboEmulator.Database.Interfaces;
 
-public class User : IDisposable
+public class User : IDisposable, IEquatable<User>
 {
     public GameClient Client { get; private set; }
     public MessengerComponent Messenger { get; private set; }
@@ -449,4 +449,17 @@ public class User : IDisposable
         _ = this.Quests.TryGetValue(p, out var num);
         return num;
     }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is not User)
+        {
+            return false;
+        }
+
+        return ((User)obj).Id == this.Id;
+    }
+
+    public override int GetHashCode() => this.Id;
+    public bool Equals(User other) => other.Id == this.Id;
 }
