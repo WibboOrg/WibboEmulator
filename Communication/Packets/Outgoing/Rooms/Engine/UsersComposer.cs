@@ -75,12 +75,6 @@ internal sealed class UsersComposer : ServerPacket
         {
             var user = roomUser.Client.User;
 
-            Group group = null;
-            if (user.FavouriteGroupId > 0)
-            {
-                _ = WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.FavouriteGroupId, out group);
-            }
-
             if (roomUser.TransfBot)
             {
                 this.WriteInteger(user.Id);
@@ -136,12 +130,15 @@ internal sealed class UsersComposer : ServerPacket
                 this.WriteInteger(1);
                 this.WriteString(user.Gender.ToLower());
 
-                if (group != null)
+                Group group = null;
+                if (user.FavouriteGroupId > 0)
                 {
-                    this.WriteInteger(group == null ? 0 : group.Id);
-                    this.WriteInteger(0);
-                    this.WriteString(group == null ? "" : group.Name);
+                    _ = WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.FavouriteGroupId, out group);
                 }
+                
+                this.WriteInteger(group == null ? 0 : group.Id);
+                this.WriteInteger(0);
+                this.WriteString(group == null ? "" : group.Name);
 
                 this.WriteString(""); // swimFigure
                 this.WriteInteger(user.AchievementPoints);
