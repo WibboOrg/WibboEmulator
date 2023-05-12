@@ -69,7 +69,7 @@ public class BannerComponent : IDisposable
         }
     }
 
-    public void DeleteBanner(IQueryAdapter dbClient, int id)
+    public void RemoveBanner(IQueryAdapter dbClient, int id)
     {
         if (this._bannerList.Contains(id))
         {

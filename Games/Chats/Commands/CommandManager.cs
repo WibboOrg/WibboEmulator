@@ -395,6 +395,8 @@ public class CommandManager
         this.Register(154, new SummonAll());
         this.Register(155, new LootboxInfo());
         this.Register(156, new UnloadEmptyRooms());
+        this.Register(166, new GiveBanner());
+        this.Register(167, new RemoveBanner());
     }
 
     public void RegisterCommand() => this._commands.Clear();
