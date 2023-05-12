@@ -4,7 +4,7 @@ using WibboEmulator.Database.Interfaces;
 
 internal sealed class UserDao
 {
-    internal static string BuildUpdateQuery(int userId, int duckets, int credits) => "UPDATE `user` SET `user`.online = '0', `user`.last_online = '" + WibboEnvironment.GetUnixTimestamp() + "', activity_points = '" + duckets + "', credits = '" + credits + "' WHERE id = '" + userId + "';";
+    internal static string BuildUpdateQuery(int userId, int duckets, int credits, int bannerId) => "UPDATE `user` SET `user`.online = '0', `user`.last_online = '" + WibboEnvironment.GetUnixTimestamp() + "', activity_points = '" + duckets + "', credits = '" + credits + "', banner_id = '" + bannerId + "' WHERE id = '" + userId + "';";
 
     internal static int GetIdByName(IQueryAdapter dbClient, string name)
     {
@@ -64,7 +64,7 @@ internal sealed class UserDao
 
     internal static DataRow GetOneByTicket(IQueryAdapter dbClient, string sessionTicket)
     {
-        dbClient.SetQuery("SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `machine_id`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned` FROM `user` WHERE auth_ticket = @sso LIMIT 1");
+        dbClient.SetQuery("SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `machine_id`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned`, `banner_id` FROM `user` WHERE auth_ticket = @sso LIMIT 1");
         dbClient.AddParameter("sso", sessionTicket);
         return dbClient.GetRow();
     }
@@ -83,7 +83,7 @@ internal sealed class UserDao
 
     internal static DataRow GetOne(IQueryAdapter dbClient, int userId)
     {
-        dbClient.SetQuery("SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `machine_id`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned` FROM `user` WHERE id = @id LIMIT 1");
+        dbClient.SetQuery("SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `machine_id`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned`, `banner_id` FROM `user` WHERE id = @id LIMIT 1");
         dbClient.AddParameter("id", userId);
         return dbClient.GetRow();
     }
@@ -169,7 +169,7 @@ internal sealed class UserDao
 
     internal static void UpdateAddRunPoints(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("UPDATE `user` SET `run_points` = `run_points` + 1, `run_points_month` = `run_points_month` + 1 WHERE `id` = '" + userId + "'");
 
-    internal static void UpdateOffline(IQueryAdapter dbClient, int userId, int duckets, int credits) => dbClient.RunQuery("UPDATE `user` SET `online` = '0', `last_online` = '" + WibboEnvironment.GetUnixTimestamp() + "', `activity_points` = '" + duckets + "', `credits` = '" + credits + "' WHERE `id` = '" + userId + "'");
+    internal static void UpdateOffline(IQueryAdapter dbClient, int userId, int duckets, int credits, int bannerId) => dbClient.RunQuery("UPDATE `user` SET `online` = '0', `last_online` = '" + WibboEnvironment.GetUnixTimestamp() + "', `activity_points` = '" + duckets + "', `credits` = '" + credits + "', `banner_id` = '" + bannerId + "' WHERE `id` = '" + userId + "'");
 
     internal static void UpdateLastDailyCredits(IQueryAdapter dbClient, int userId, string lastDailyCredits) => dbClient.RunQuery("UPDATE `user` SET `lastdailycredits` = '" + lastDailyCredits + "' WHERE `id` = '" + userId + "'");
 

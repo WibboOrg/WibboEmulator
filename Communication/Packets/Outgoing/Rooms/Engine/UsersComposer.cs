@@ -73,109 +73,79 @@ internal sealed class UsersComposer : ServerPacket
         }
         else
         {
-            if (roomUser.Client == null || roomUser.Client.User == null)
+            var user = roomUser.Client.User;
+
+            Group group = null;
+            if (user.FavouriteGroupId > 0)
             {
-                this.WriteInteger(0);
-                this.WriteString("");
-                this.WriteString("");
-                this.WriteString("");
+                _ = WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.FavouriteGroupId, out group);
+            }
+
+            if (roomUser.TransfBot)
+            {
+                this.WriteInteger(user.Id);
+                this.WriteString(user.Username);
+                this.WriteString("Beep beep.");
+                this.WriteString(user.Look);
                 this.WriteInteger(roomUser.VirtualId);
                 this.WriteInteger(roomUser.X);
                 this.WriteInteger(roomUser.Y);
                 this.WriteString(roomUser.Z.ToString());
                 this.WriteInteger(0);
+                this.WriteInteger(4);
+
+                this.WriteString(user.Gender);
+                this.WriteInteger(user.Id);
+                this.WriteString(user.Username);
+                this.WriteInteger(0);
+            }
+            else if (roomUser.IsTransf)
+            {
+                this.WriteInteger(user.Id);
+                this.WriteString(user.Username);
+                this.WriteString(user.Motto);
+                this.WriteString(roomUser.TransfRace + " 2 2 -1 0 3 4 -1 0");
+
+                this.WriteInteger(roomUser.VirtualId);
+                this.WriteInteger(roomUser.X);
+                this.WriteInteger(roomUser.Y);
+                this.WriteString(roomUser.Z.ToString());
+                this.WriteInteger(4);
+                this.WriteInteger(2);
+                this.WriteInteger(0);
+                this.WriteInteger(user.Id);
+                this.WriteString(user.Username);
                 this.WriteInteger(1);
-                this.WriteString("M");
+                this.WriteBoolean(false);
+                this.WriteBoolean(false);
                 this.WriteInteger(0);
                 this.WriteInteger(0);
                 this.WriteString("");
-
-                this.WriteString("");//Whats this?
-                this.WriteInteger(0);
-                this.WriteBoolean(false);
             }
             else
             {
-                var user = roomUser.Client.User;
+                this.WriteInteger(user.Id);
+                this.WriteString(user.Username);
+                this.WriteString(user.Motto);
+                this.WriteString(user.Look);
+                this.WriteInteger(roomUser.VirtualId);
+                this.WriteInteger(roomUser.X);
+                this.WriteInteger(roomUser.Y);
+                this.WriteString(roomUser.Z.ToString());
+                this.WriteInteger(roomUser.RotBody);
+                this.WriteInteger(1);
+                this.WriteString(user.Gender.ToLower());
 
-                Group group = null;
-                if (user.FavouriteGroupId > 0)
+                if (group != null)
                 {
-                    _ = WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.FavouriteGroupId, out group);
+                    this.WriteInteger(group == null ? 0 : group.Id);
+                    this.WriteInteger(0);
+                    this.WriteString(group == null ? "" : group.Name);
                 }
 
-                if (roomUser.TransfBot)
-                {
-                    this.WriteInteger(user.Id);
-                    this.WriteString(user.Username);
-                    this.WriteString("Beep beep.");
-                    this.WriteString(user.Look);
-                    this.WriteInteger(roomUser.VirtualId);
-                    this.WriteInteger(roomUser.X);
-                    this.WriteInteger(roomUser.Y);
-                    this.WriteString(roomUser.Z.ToString());
-                    this.WriteInteger(0);
-                    this.WriteInteger(4);
-
-                    this.WriteString(user.Gender);
-                    this.WriteInteger(user.Id);
-                    this.WriteString(user.Username);
-                    this.WriteInteger(0);
-                }
-                else if (roomUser.IsTransf)
-                {
-                    this.WriteInteger(user.Id);
-                    this.WriteString(user.Username);
-                    this.WriteString(user.Motto);
-                    this.WriteString(roomUser.TransfRace + " 2 2 -1 0 3 4 -1 0");
-
-                    this.WriteInteger(roomUser.VirtualId);
-                    this.WriteInteger(roomUser.X);
-                    this.WriteInteger(roomUser.Y);
-                    this.WriteString(roomUser.Z.ToString());
-                    this.WriteInteger(4);
-                    this.WriteInteger(2);
-                    this.WriteInteger(0);
-                    this.WriteInteger(user.Id);
-                    this.WriteString(user.Username);
-                    this.WriteInteger(1);
-                    this.WriteBoolean(false);
-                    this.WriteBoolean(false);
-                    this.WriteInteger(0);
-                    this.WriteInteger(0);
-                    this.WriteString("");
-                }
-                else
-                {
-                    this.WriteInteger(user.Id);
-                    this.WriteString(user.Username);
-                    this.WriteString(user.Motto);
-                    this.WriteString(user.Look);
-                    this.WriteInteger(roomUser.VirtualId);
-                    this.WriteInteger(roomUser.X);
-                    this.WriteInteger(roomUser.Y);
-                    this.WriteString(roomUser.Z.ToString());
-                    this.WriteInteger(0);
-                    this.WriteInteger(1);
-                    this.WriteString(user.Gender.ToLower());
-
-                    if (group != null)
-                    {
-                        this.WriteInteger(group.Id);
-                        this.WriteInteger(0);
-                        this.WriteString(group.Name);
-                    }
-                    else
-                    {
-                        this.WriteInteger(0);
-                        this.WriteInteger(0);
-                        this.WriteString("");
-                    }
-
-                    this.WriteString("");//Whats this?
-                    this.WriteInteger(user.AchievementPoints);
-                    this.WriteBoolean(false);
-                }
+                this.WriteString(""); // swimFigure
+                this.WriteInteger(user.AchievementPoints);
+                this.WriteBoolean(user.Rank > 5); //isModerator
             }
         }
     }

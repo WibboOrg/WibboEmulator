@@ -14,7 +14,7 @@ internal sealed class ChangeNameEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.User == null || session == null)
+        if (session == null || session.User == null)
         {
             return;
         }

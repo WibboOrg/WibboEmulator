@@ -34,6 +34,7 @@ public class User : IDisposable, IEquatable<User>
     public ChatlogManager ChatMessageManager { get; private set; }
     public PermissionComponent Permissions { get; private set; }
     public PremiumComponent Premium { get; private set; }
+    public BannerComponent Banner { get; private set; }
 
     public int Id { get; set; }
     public string Username { get; set; }
@@ -91,6 +92,7 @@ public class User : IDisposable, IEquatable<User>
     public int CurrentQuestId { get; set; }
     public int LastCompleted { get; set; }
     public int LastQuestId { get; set; }
+    public int BannerId { get; set; }
     public bool InfoSaved { get; set; }
     public bool AcceptTrading { get; set; }
     public bool HideInRoom { get; set; }
@@ -148,7 +150,7 @@ public class User : IDisposable, IEquatable<User>
         int lastOnline, int favoriteGroup, int accountCreated, bool accepttrading, string ip, bool hideInroom,
         bool hideOnline, int mazoHighScore, int mazo, string clientVolume, bool nuxenable, string machineId,
         bool isFirstConnexionToday, Language langue, double ignoreAllExpire, bool ignoreRoomInvite, bool cameraFollowDisabled,
-        int gamePointsMonth)
+        int gamePointsMonth, int bannerId)
     {
         this.Id = id;
         this.Username = username;
@@ -182,6 +184,7 @@ public class User : IDisposable, IEquatable<User>
         this.IsFirstConnexionToday = isFirstConnexionToday;
         this.Langue = langue;
         this.IgnoreAllExpireTime = ignoreAllExpire;
+        this.BannerId = bannerId;
 
         if (clientVolume.Contains(','))
         {
@@ -242,6 +245,7 @@ public class User : IDisposable, IEquatable<User>
         this.ChatMessageManager = new ChatlogManager();
         this.Permissions = new PermissionComponent();
         this.Premium = new PremiumComponent(this);
+        this.Banner = new BannerComponent(this);
 
         this.BadgeComponent.Init(dbClient);
         this.WardrobeComponent.Init(dbClient);
@@ -249,6 +253,7 @@ public class User : IDisposable, IEquatable<User>
         this.Messenger.Init(dbClient, this.HideOnline);
         this.ChatMessageManager.LoadUserChatlogs(dbClient, this.Id);
         this.Premium.Init(dbClient);
+        this.Banner.Init(dbClient);
 
         var dUserRooms = RoomDao.GetAllIdByOwner(dbClient, this.Username);
         foreach (DataRow dRow in dUserRooms.Rows)
@@ -364,7 +369,7 @@ public class User : IDisposable, IEquatable<User>
             var timeOnline = DateTime.Now - this.OnlineTime;
             var timeOnlineSec = (int)timeOnline.TotalSeconds;
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            UserDao.UpdateOffline(dbClient, this.Id, this.Duckets, this.Credits);
+            UserDao.UpdateOffline(dbClient, this.Id, this.Duckets, this.Credits, this.BannerId);
             UserStatsDao.UpdateAll(dbClient, this.Id, this.FavouriteGroupId, timeOnlineSec, this.CurrentQuestId, this.Respect, this.DailyRespectPoints, this.DailyPetRespectPoints);
         }
 
@@ -431,6 +436,18 @@ public class User : IDisposable, IEquatable<User>
         {
             this.AchievementComponent.Dispose();
             this.AchievementComponent = null;
+        }
+
+        if (this.Premium != null)
+        {
+            this.Premium.Dispose();
+            this.Premium = null;
+        }
+
+        if (this.Banner != null)
+        {
+            this.Banner.Dispose();
+            this.Banner = null;
         }
 
         this.UsersRooms?.Clear();

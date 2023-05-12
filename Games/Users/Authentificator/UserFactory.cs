@@ -133,6 +133,7 @@ public class UserFactory
         var cameraFollowDisabled = WibboEnvironment.EnumToBool(dRow["camera_follow_disabled"].ToString());
         var machineId = (string)dRow["machine_id"];
         var langue = LanguageManager.ParseLanguage((string)dRow["langue"]);
+        var bannerId = Convert.ToInt32(dRow["banner_id"]);
 
         var respect = Convert.ToInt32(dRow2["respect"]);
         var dailyRespectPoints = Convert.ToInt32(dRow2["daily_respect_points"]);
@@ -142,6 +143,6 @@ public class UserFactory
         var achievementPoints = Convert.ToInt32(dRow2["achievement_score"]);
         var favoriteGroup = Convert.ToInt32(dRow2["group_id"]);
 
-        return new User(id, username, rank, motto, look, gender, credits, wibboPoints, limitCoins, activityPoints, homeRoom, respect, dailyRespectPoints, dailyPetRespectPoints, hasFriendRequestsDisabled, currentQuestID, achievementPoints, lastOnline, favoriteGroup, accountCreated, acceptTrading, ip, hideInroom, hideOnline, mazoHighScore, mazo, clientVolume, nuxEnable, machineId, isFirstConnexionToday, langue, ignoreAllExpire, ignoreRoomInvite, cameraFollowDisabled, gamePointsMonth);
+        return new User(id, username, rank, motto, look, gender, credits, wibboPoints, limitCoins, activityPoints, homeRoom, respect, dailyRespectPoints, dailyPetRespectPoints, hasFriendRequestsDisabled, currentQuestID, achievementPoints, lastOnline, favoriteGroup, accountCreated, acceptTrading, ip, hideInroom, hideOnline, mazoHighScore, mazo, clientVolume, nuxEnable, machineId, isFirstConnexionToday, langue, ignoreAllExpire, ignoreRoomInvite, cameraFollowDisabled, gamePointsMonth, bannerId);
     }
 }

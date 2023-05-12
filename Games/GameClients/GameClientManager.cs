@@ -415,7 +415,7 @@ public class GameClientManager
                     var timeOnline = DateTime.Now - client.User.OnlineTime;
                     var timeOnlineSec = (int)timeOnline.TotalSeconds;
 
-                    _ = stringBuilder.Append(UserDao.BuildUpdateQuery(client.User.Id, client.User.Duckets, client.User.Credits));
+                    _ = stringBuilder.Append(UserDao.BuildUpdateQuery(client.User.Id, client.User.Duckets, client.User.Credits, client.User.BannerId));
                     _ = stringBuilder.Append(UserStatsDao.BuildUpdateQuery(client.User.Id, client.User.FavouriteGroupId, timeOnlineSec, client.User.CurrentQuestId, client.User.Respect, client.User.DailyRespectPoints, client.User.DailyPetRespectPoints));
                 }
                 catch

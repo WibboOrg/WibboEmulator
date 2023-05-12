@@ -475,6 +475,8 @@ public sealed class PacketManager
         this._incomingPackets.Add(ClientPacketHeader.CHECK_USERNAME, new CheckValidNameEvent());
         this._incomingPackets.Add(ClientPacketHeader.CHANGE_USERNAME, new ChangeNameEvent());
         this._incomingPackets.Add(ClientPacketHeader.GROUP_BADGES, new GetUserGroupBadgesEvent());
+        this._incomingPackets.Add(ClientPacketHeader.USER_BANNER, new UserBannerEvent());
+        this._incomingPackets.Add(ClientPacketHeader.USER_BANNER_SELECT, new UserBannerSelectEvent());
     }
 
     private void RegisterSettings()
