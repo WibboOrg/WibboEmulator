@@ -34,25 +34,22 @@ public class BannerComponent : IDisposable
 
     public void LoadDefaultBanner()
     {
-        if (this._userInstance.Premium != null)
+        if (this._userInstance.HasPermission("premium_legend"))
         {
-            if (this._userInstance.Premium.IsPremiumLegend)
-            {
-                this.BannerList.Add(5);
-                this.BannerList.Add(6);
-                this.BannerList.Add(7);
-            }
+            this.BannerList.Add(5);
+            this.BannerList.Add(6);
+            this.BannerList.Add(7);
+        }
 
-            if (this._userInstance.Premium.IsPremiumEpic)
-            {
-                this.BannerList.Add(4);
-                this.BannerList.Add(3);
-            }
+        if (this._userInstance.HasPermission("premium_epic"))
+        {
+            this.BannerList.Add(4);
+            this.BannerList.Add(3);
+        }
 
-            if (this._userInstance.Premium.IsPremiumClassic)
-            {
-                this.BannerList.Add(2);
-            }
+        if (this._userInstance.HasPermission("premium_classic"))
+        {
+            this.BannerList.Add(2);
         }
 
         this.BannerList.Add(1);
