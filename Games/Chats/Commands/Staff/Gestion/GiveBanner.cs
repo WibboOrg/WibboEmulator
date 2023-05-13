@@ -18,7 +18,7 @@ internal sealed class GiveBanner : IChatCommand
             return;
         }
 
-        if (!int.TryParse(parameters[2], out int bannerId))
+        if (!int.TryParse(parameters[2], out var bannerId))
         {
             return;
         }

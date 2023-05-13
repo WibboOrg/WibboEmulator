@@ -7,12 +7,12 @@ using WibboEmulator.Games.Users;
 public class BannerComponent : IDisposable
 {
     private readonly User _userInstance;
-    private readonly List<int> _bannerList;
+    public List<int> BannerList { get; }
 
     public BannerComponent(User user)
     {
         this._userInstance = user;
-        this._bannerList = new();
+        this.BannerList = new();
     }
 
     public void Init(IQueryAdapter dbClient)
@@ -25,9 +25,9 @@ public class BannerComponent : IDisposable
         {
             var id = Convert.ToInt32(dataRow["banner_id"]);
 
-            if (!this._bannerList.Contains(id))
+            if (!this.BannerList.Contains(id))
             {
-                this._bannerList.Add(id);
+                this.BannerList.Add(id);
             }
         }
     }
@@ -38,32 +38,32 @@ public class BannerComponent : IDisposable
         {
             if (this._userInstance.Premium.IsPremiumLegend)
             {
-                this._bannerList.Add(5);
-                this._bannerList.Add(6);
-                this._bannerList.Add(7);
+                this.BannerList.Add(5);
+                this.BannerList.Add(6);
+                this.BannerList.Add(7);
             }
 
             if (this._userInstance.Premium.IsPremiumEpic)
             {
-                this._bannerList.Add(4);
-                this._bannerList.Add(3);
+                this.BannerList.Add(4);
+                this.BannerList.Add(3);
             }
 
             if (this._userInstance.Premium.IsPremiumClassic)
             {
-                this._bannerList.Add(2);
+                this.BannerList.Add(2);
             }
         }
 
-        this._bannerList.Add(1);
-        this._bannerList.Add(0);
+        this.BannerList.Add(1);
+        this.BannerList.Add(0);
     }
 
     public void AddBanner(IQueryAdapter dbClient, int id)
     {
-        if (!this._bannerList.Contains(id))
+        if (!this.BannerList.Contains(id))
         {
-            this._bannerList.Add(id);
+            this.BannerList.Add(id);
 
             UserBannerDao.Insert(dbClient, this._userInstance.Id, id);
         }
@@ -71,19 +71,17 @@ public class BannerComponent : IDisposable
 
     public void RemoveBanner(IQueryAdapter dbClient, int id)
     {
-        if (this._bannerList.Contains(id))
+        if (this.BannerList.Contains(id))
         {
-            this._bannerList.Remove(id);
+            this.BannerList.Remove(id);
 
             UserBannerDao.Delete(dbClient, this._userInstance.Id, id);
         }
     }
 
-    public List<int> BannerList => this._bannerList;
-
     public void Dispose()
     {
-        this._bannerList.Clear();
+        this.BannerList.Clear();
         GC.SuppressFinalize(this);
     }
 }

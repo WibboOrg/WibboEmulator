@@ -397,6 +397,7 @@ public class CommandManager
         this.Register(156, new UnloadEmptyRooms());
         this.Register(166, new GiveBanner());
         this.Register(167, new RemoveBanner());
+        this.Register(168, new RoomBanner());
     }
 
     public void RegisterCommand() => this._commands.Clear();
