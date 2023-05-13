@@ -130,6 +130,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             case "achievement":
             case "givelot":
             case "winmovierun":
+            case "givebanner":
                 if (this.IsGod)
                 {
                     return;
@@ -2175,6 +2176,24 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
                 UserDao.UpdateAddRunPoints(dbClient, roomUser.Client.User.Id);
+
+                break;
+            }
+            case "givebanner":
+            {
+                if (roomUser.IsBot || roomUser.Client == null || roomUser.Client.User == null || roomUser.Client.User.Banner == null)
+                {
+                    break;
+                }
+
+                if (!int.TryParse(value, out var valueInt))
+                {
+                    break;
+                }
+
+                using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+                roomUser.Client.User.Banner.AddBanner(dbClient, valueInt);
 
                 break;
             }
