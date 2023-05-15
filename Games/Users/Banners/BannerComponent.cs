@@ -1,5 +1,7 @@
 namespace WibboEmulator.Games.Users.Badges;
 using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
+using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Users;
@@ -63,6 +65,9 @@ public class BannerComponent : IDisposable
             this.BannerList.Add(id);
 
             UserBannerDao.Insert(dbClient, this._userInstance.Id, id);
+
+            this._userInstance.Client?.SendPacket(new UnseenItemsComposer(id, UnseenItemsType.Banner));
+            this._userInstance.Client?.SendPacket(new UserBannerListComposer(this.BannerList));
         }
     }
 
@@ -73,6 +78,13 @@ public class BannerComponent : IDisposable
             this.BannerList.Remove(id);
 
             UserBannerDao.Delete(dbClient, this._userInstance.Id, id);
+
+            if (this._userInstance.BannerId == id)
+            {
+                this._userInstance.BannerId = -1;
+            }
+
+            this._userInstance.Client?.SendPacket(new UserBannerListComposer(this.BannerList));
         }
     }
 

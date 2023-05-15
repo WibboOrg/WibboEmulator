@@ -6,7 +6,7 @@ internal sealed class StaffsOnline : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var output = "Les staffs en ligne: \n\n";
+        var output = "Les Staffs en ligne: \n\n";
 
         var staffs = WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers();
 
@@ -22,7 +22,7 @@ internal sealed class StaffsOnline : IChatCommand
         }
         else
         {
-            output += "Aucun staffs en ligne!";
+            output += "Aucun Staff n'est disponible pour le moment";
         }
 
         session.SendNotification(output);

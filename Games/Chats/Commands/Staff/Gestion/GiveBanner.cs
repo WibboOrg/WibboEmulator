@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Gestion;
+
+using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -29,7 +31,6 @@ internal sealed class GiveBanner : IChatCommand
         }
 
         var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-
         targetUser.User.Banner.AddBanner(dbClient, bannerId);
     }
 }

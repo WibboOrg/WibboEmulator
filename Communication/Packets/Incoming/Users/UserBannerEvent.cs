@@ -27,9 +27,7 @@ internal sealed class UserBannerEvent : IPacketEvent
         {
             session.SendPacket(new UserBannerListComposer(user.Banner.BannerList));
         }
-        else
-        {
-            session.SendPacket(new UserBannerComposer(user.Id, user.BannerId));
-        }
+
+        session.SendPacket(new UserBannerComposer(user.Id, user.BannerId));
     }
 }

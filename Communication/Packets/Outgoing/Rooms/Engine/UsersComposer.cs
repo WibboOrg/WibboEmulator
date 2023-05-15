@@ -135,7 +135,7 @@ internal sealed class UsersComposer : ServerPacket
                 {
                     _ = WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.FavouriteGroupId, out group);
                 }
-                
+
                 this.WriteInteger(group == null ? 0 : group.Id);
                 this.WriteInteger(0);
                 this.WriteString(group == null ? "" : group.Name);

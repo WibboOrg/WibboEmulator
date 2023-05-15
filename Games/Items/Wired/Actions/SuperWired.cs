@@ -6,6 +6,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Communication.Packets.Outgoing.Sound;
+using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.Roleplay;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
@@ -2192,9 +2193,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 }
 
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-
                 roomUser.Client.User.Banner.AddBanner(dbClient, valueInt);
-
                 break;
             }
             case "givelot":

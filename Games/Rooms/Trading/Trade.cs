@@ -257,8 +257,8 @@ public class Trade
             tradeUserOne.GetClient().User.InventoryComponent.AddItem(userItem);
         }
 
-        tradeUserTwo.GetClient().SendPacket(new UnseenItemsComposer(userOneItems, 1));
-        tradeUserOne.GetClient().SendPacket(new UnseenItemsComposer(userTwoItems, 1));
+        tradeUserTwo.GetClient().SendPacket(new UnseenItemsComposer(userOneItems, UnseenItemsType.Furni));
+        tradeUserOne.GetClient().SendPacket(new UnseenItemsComposer(userTwoItems, UnseenItemsType.Furni));
 
         tradeUserOne.GetClient().SendPacket(new FurniListUpdateComposer());
         tradeUserTwo.GetClient().SendPacket(new FurniListUpdateComposer());

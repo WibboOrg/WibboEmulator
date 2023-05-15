@@ -114,7 +114,7 @@ public class BadgeComponent : IDisposable
 
         this._virutalBadgeId++;
 
-        this._userInstance.Client?.SendPacket(new UnseenItemsComposer(this._virutalBadgeId, 4));
+        this._userInstance.Client?.SendPacket(new UnseenItemsComposer(this._virutalBadgeId, UnseenItemsType.Badge));
         this._userInstance.Client?.SendPacket(new ReceiveBadgeComposer(this._virutalBadgeId, badge));
     }
 

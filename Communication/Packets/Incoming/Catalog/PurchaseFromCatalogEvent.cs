@@ -369,7 +369,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                         break;
                     }
 
-                    session.SendPacket(new UnseenItemsComposer(bot.Id, 5));
+                    session.SendPacket(new UnseenItemsComposer(bot.Id, UnseenItemsType.Bot));
                     session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.GetBots()));
                 }
                 break;
@@ -390,7 +390,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                         break;
                     }
 
-                    session.SendPacket(new UnseenItemsComposer(generatedPet.PetId, 3));
+                    session.SendPacket(new UnseenItemsComposer(generatedPet.PetId, UnseenItemsType.Pet));
                     session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.GetPets()));
                 }
                 break;

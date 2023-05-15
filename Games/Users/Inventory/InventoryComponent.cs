@@ -340,7 +340,7 @@ public class InventoryComponent : IDisposable
     {
         if (this._userItems.TryAdd(item.Id, item))
         {
-            this._userInstance.Client.SendPacket(new UnseenItemsComposer(item.Id, 1));
+            this._userInstance.Client.SendPacket(new UnseenItemsComposer(item.Id, UnseenItemsType.Furni));
             this._userInstance.Client.SendPacket(new FurniListAddComposer(item));
         }
     }

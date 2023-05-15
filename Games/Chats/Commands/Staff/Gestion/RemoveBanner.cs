@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Gestion;
+
+using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -18,7 +20,7 @@ internal sealed class RemoveBanner : IChatCommand
             return;
         }
 
-        if (!int.TryParse(parameters[2], out int bannerId))
+        if (!int.TryParse(parameters[2], out var bannerId))
         {
             return;
         }
