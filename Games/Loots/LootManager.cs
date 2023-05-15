@@ -25,10 +25,10 @@ public class LootManager
 
         var timestampStartMounth = (int)startMounth.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
 
-        var basicCounter = LogLootBoxDao.GetCount(dbClient, "LOOTBOX2022", timestampStartMounth, 1);
-        var commmCounter = LogLootBoxDao.GetCount(dbClient, "LOOTBOX2022", timestampStartMounth, 2);
-        var epicCounter = LogLootBoxDao.GetCount(dbClient, "LOOTBOX2022", timestampStartMounth, 3);
-        var legendaryCounter = LogLootBoxDao.GetCount(dbClient, "LOOTBOX2022", timestampStartMounth, 4);
+        var basicCounter = LogLootBoxDao.GetCount(dbClient, "LOOTBOX_2022", timestampStartMounth, 1);
+        var commmCounter = LogLootBoxDao.GetCount(dbClient, "LOOTBOX_2022", timestampStartMounth, 2);
+        var epicCounter = LogLootBoxDao.GetCount(dbClient, "LOOTBOX_2022", timestampStartMounth, 3);
+        var legendaryCounter = LogLootBoxDao.GetCount(dbClient, "LOOTBOX_2022", timestampStartMounth, 4);
 
         this._rarityCounter.Add(1, basicCounter);
         this._rarityCounter.Add(2, commmCounter);
