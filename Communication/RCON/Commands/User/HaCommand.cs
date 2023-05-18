@@ -35,10 +35,7 @@ internal sealed class HaCommand : IRCONCommand
             return false;
         }
 
-        WibboEnvironment
-            .GetGame()
-            .GetGameClientManager()
-            .SendMessage(new BroadcastMessageAlertComposer(WibboEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", client.Langue) + "\r\n" + message + "\r\n- " + client.User.Username));
+        WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new BroadcastMessageAlertComposer(WibboEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", client.Langue) + "\r\n" + message + "\r\n- " + client.User.Username));
         return true;
     }
 }

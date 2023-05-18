@@ -335,6 +335,7 @@ public class CommandManager
         this.Register(104, new DisableWhispers());
         this.Register(105, new ForceFlagUser());
         this.Register(106, new KickBan());
+        this.Register(169, new ShowInventory());
     }
 
     public void RegisterAnimation()

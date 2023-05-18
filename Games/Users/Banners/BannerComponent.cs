@@ -22,7 +22,7 @@ public class BannerComponent : IDisposable
     public void Init(IQueryAdapter dbClient)
     {
         this._bannerAmount = WibboEnvironment.GetSettings().GetData<int>("banner.amount");
-        
+
         this.LoadDefaultBanner();
 
         var table = UserBannerDao.GetAll(dbClient, this._userInstance.Id);
