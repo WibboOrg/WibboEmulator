@@ -9,16 +9,20 @@ using WibboEmulator.Games.Users;
 public class BannerComponent : IDisposable
 {
     private readonly User _userInstance;
+    private int _bannerAmount;
     public List<int> BannerList { get; }
 
     public BannerComponent(User user)
     {
         this._userInstance = user;
+        this._bannerAmount = 0;
         this.BannerList = new();
     }
 
     public void Init(IQueryAdapter dbClient)
     {
+        this._bannerAmount = WibboEnvironment.GetSettings().GetData<int>("banner.amount");
+        
         this.LoadDefaultBanner();
 
         var table = UserBannerDao.GetAll(dbClient, this._userInstance.Id);
@@ -56,6 +60,17 @@ public class BannerComponent : IDisposable
 
         this.BannerList.Add(1);
         this.BannerList.Add(0);
+
+        if (this._userInstance.HasPermission("banner_all"))
+        {
+            for (var id = 0; id < this._bannerAmount; id++)
+            {
+                if (!this.BannerList.Contains(id))
+                {
+                    this.BannerList.Add(id);
+                }
+            }
+        }
     }
 
     public void AddBanner(IQueryAdapter dbClient, int id)

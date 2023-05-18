@@ -17,7 +17,7 @@ public static class ItemUtility
             return false;
         }
 
-        if (item.Data.IsRare || item.Data.RarityLevel > 0)
+        if (item.Data.IsRare || item.Data.RarityLevel > RaretyLevelType.None)
         {
             return false;
         }
@@ -58,7 +58,7 @@ public static class ItemUtility
             return true;
         }
 
-        if (item.Data.IsRare || item.Data.RarityLevel > 0)
+        if (item.Data.IsRare || item.Data.RarityLevel > RaretyLevelType.None)
         {
             return true;
         }

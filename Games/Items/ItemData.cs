@@ -23,7 +23,7 @@ public class ItemData
     public List<double> AdjustableHeights { get; set; }
     public int EffectId { get; set; }
     public bool IsRare { get; set; }
-    public int RarityLevel { get; set; }
+    public RaretyLevelType RarityLevel { get; set; }
     public int Amount { get; set; }
 
     public ItemData(int id, int sprite, string name, string type, int width, int length, double height, bool stackable, bool walkable, bool isSeat,
@@ -85,7 +85,16 @@ public class ItemData
 
         this.EffectId = effectId;
         this.IsRare = isRare;
-        this.RarityLevel = rarityLevel;
+        this.RarityLevel = (RaretyLevelType)rarityLevel;
         this.Amount = amount;
     }
+}
+
+public enum RaretyLevelType
+{
+    None = 0,
+    Basic = 1,
+    Commun = 2,
+    Epic = 3,
+    Legendary = 4
 }

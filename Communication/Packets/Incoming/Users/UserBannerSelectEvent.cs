@@ -17,7 +17,7 @@ internal sealed class UserBannerSelectEvent : IPacketEvent
             return;
         }
 
-        if (!session.User.Banner.BannerList.Contains(bannerId))
+        if (!session.User.Banner.BannerList.Contains(bannerId) && bannerId != -1)
         {
             return;
         }

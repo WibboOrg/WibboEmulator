@@ -11,6 +11,47 @@ using WibboEmulator.Games.Rooms;
 
 internal static class ItemLootBox
 {
+    public static void OpenLootBox2022(GameClient session, Item present, Room room)
+    {
+        int pageId;
+        var forceItem = 0;
+
+        var probab = WibboEnvironment.GetRandomNumber(1, 20001);
+
+        _ = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(1);
+        var communCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(2);
+        var epicCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(3);
+        var legendaryCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(4);
+
+        if (probab <= 3 && legendaryCount <= 3)
+        {
+            pageId = 1635463734; // Legendaires
+            WibboEnvironment.GetGame().GetLootManager().IncrementeRarityCounter(4);
+        }
+        else if (probab <= 33 && epicCount <= 30)
+        {
+            pageId = 1635463733; // Epic
+            WibboEnvironment.GetGame().GetLootManager().IncrementeRarityCounter(3);
+        }
+        else if (probab <= 333 && communCount <= 300)
+        {
+            pageId = 1635463732; // Commun
+            WibboEnvironment.GetGame().GetLootManager().IncrementeRarityCounter(2);
+        }
+        else if (probab <= 10933)
+        {
+            pageId = 15987; // 1wp
+            forceItem = 23584;
+        }
+        else
+        {
+            pageId = 1635463731; // Basique
+            WibboEnvironment.GetGame().GetLootManager().IncrementeRarityCounter(1);
+        }
+
+        EndOpenBox(session, present, room, pageId, forceItem);
+    }
+
     public static void OpenLootBox(GameClient session, Item present, Room room)
     {
         var loots = WibboEnvironment.GetGame().GetLootManager().GetLoots(present.GetBaseItem().InteractionType);
@@ -61,47 +102,6 @@ internal static class ItemLootBox
         else //Basic
         {
             pageId = 894948;
-        }
-
-        EndOpenBox(session, present, room, pageId, forceItem);
-    }
-
-    public static void OpenLootBox2022(GameClient session, Item present, Room room)
-    {
-        int pageId;
-        var forceItem = 0;
-
-        var probab = WibboEnvironment.GetRandomNumber(1, 20001);
-
-        _ = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(1);
-        var communCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(2);
-        var epicCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(3);
-        var legendaryCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(4);
-
-        if (probab <= 3 && legendaryCount <= 3)
-        {
-            pageId = 1635463734; // Legendaires
-            WibboEnvironment.GetGame().GetLootManager().IncrementeRarityCounter(4);
-        }
-        else if (probab <= 33 && epicCount <= 30)
-        {
-            pageId = 1635463733; // Epic
-            WibboEnvironment.GetGame().GetLootManager().IncrementeRarityCounter(3);
-        }
-        else if (probab <= 333 && communCount <= 300)
-        {
-            pageId = 1635463732; // Commun
-            WibboEnvironment.GetGame().GetLootManager().IncrementeRarityCounter(2);
-        }
-        else if (probab <= 933)
-        {
-            pageId = 15987; // 1wp
-            forceItem = 23584;
-        }
-        else
-        {
-            pageId = 1635463731; // Basique
-            WibboEnvironment.GetGame().GetLootManager().IncrementeRarityCounter(1);
         }
 
         EndOpenBox(session, present, room, pageId, forceItem);

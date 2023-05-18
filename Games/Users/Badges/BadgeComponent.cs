@@ -162,9 +162,9 @@ public class BadgeComponent : IDisposable
             { "ZEERSWS", 552 },
             { "WBASSO", 576 },
             { "WIBBOCOM", 581 },
-            { "WC_CLASSIC", 591 },
-            { "WC_EPIC", 592 },
             { "WC_LEGEND", 593 },
+            { "WC_EPIC", 592 },
+            { "WC_CLASSIC", 591 },
         };
 
         var enableId = 0;

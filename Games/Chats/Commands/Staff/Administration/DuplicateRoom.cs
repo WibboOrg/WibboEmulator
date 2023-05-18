@@ -53,7 +53,7 @@ internal sealed class DuplicateRoom : IChatCommand
                 }
 
                 _ = WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out var data);
-                if (data == null || data.IsRare || data.RarityLevel > 0)
+                if (data == null || data.IsRare || data.RarityLevel > RaretyLevelType.None)
                 {
                     continue;
                 }

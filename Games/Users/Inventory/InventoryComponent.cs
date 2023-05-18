@@ -8,6 +8,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.AI;
@@ -94,18 +95,20 @@ public class InventoryComponent : IDisposable
             }
         }
 
-        this.GetClient().SendPacket(new FurniListUpdateComposer());
+        this._userInstance.Client.SendPacket(new FurniListUpdateComposer());
     }
 
-    public void DeleteItemByType(int baseItem)
+    public List<Item> GetItemsByType(int baseItem, int amount = 10000) => this.GetWallAndFloor.Where(x => x.BaseItem == baseItem).Take(amount).ToList();
+
+    public void DeleteItems(IQueryAdapter dbClient, List<Item> items, int baseItem = 0)
     {
         var listMessage = new ServerPacketList();
         var deleteItem = new List<Item>();
         var rareAmounts = new Dictionary<int, int>();
 
-        foreach (var roomItem in this.GetWallAndFloor)
+        foreach (var roomItem in items)
         {
-            if (roomItem == null || roomItem.BaseItem != baseItem)
+            if (roomItem == null || roomItem.GetBaseItem() == null)
             {
                 continue;
             }
@@ -134,8 +137,15 @@ public class InventoryComponent : IDisposable
             this.RemoveItem(roomItem.Id, false);
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        ItemDao.DeleteAllByRooIdAndBaseItem(dbClient, 0, this._userInstance.Id, baseItem);
+        if (baseItem > 0)
+        {
+            ItemDao.DeleteAllByRoomIdAndBaseItem(dbClient, 0, this._userInstance.Id, baseItem);
+        }
+        else
+        {
+            ItemDao.DeleteItems(dbClient, deleteItem);
+        }
+
         ItemStatDao.UpdateRemove(dbClient, rareAmounts);
 
         this._userInstance.Client.SendPacket(listMessage);
@@ -147,9 +157,7 @@ public class InventoryComponent : IDisposable
         var creditCount = 0;
         var winwinCount = 0;
 
-        var listMessage = new ServerPacketList();
         var deleteItem = new List<Item>();
-        var rareAmounts = new Dictionary<int, int>();
 
         foreach (var roomItem in this.GetWallAndFloor)
         {
@@ -176,33 +184,12 @@ public class InventoryComponent : IDisposable
                 }
             }
 
-            if (roomItem.GetBaseItem().Amount > 0)
-            {
-                roomItem.Data.Amount -= 1;
-
-                if (!rareAmounts.TryGetValue(roomItem.BaseItem, out var value))
-                {
-                    rareAmounts.Add(roomItem.BaseItem, 1);
-                }
-                else
-                {
-                    _ = rareAmounts.Remove(roomItem.BaseItem);
-                    rareAmounts.Add(roomItem.BaseItem, value + 1);
-                }
-            }
-
-            listMessage.Add(new FurniListRemoveComposer(roomItem.Id));
             deleteItem.Add(roomItem);
         }
 
-        foreach (var roomItem in deleteItem)
-        {
-            this.RemoveItem(roomItem.Id, false);
-        }
-
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        ItemDao.DeleteItems(dbClient, deleteItem);
-        ItemStatDao.UpdateRemove(dbClient, rareAmounts);
+
+        this.DeleteItems(dbClient, deleteItem);
 
         if (creditCount > 0)
         {
@@ -237,8 +224,6 @@ public class InventoryComponent : IDisposable
                 }
             }
         }
-
-        this._userInstance.Client.SendPacket(listMessage);
     }
 
     public void ClearPets()
@@ -452,13 +437,11 @@ public class InventoryComponent : IDisposable
 
         if (sendComposed)
         {
-            this.GetClient().SendPacket(new FurniListRemoveComposer(id));
+            this._userInstance.Client.SendPacket(new FurniListRemoveComposer(id));
         }
     }
 
     public IEnumerable<Item> GetWallAndFloor => this._userItems.Values;
-
-    private GameClient GetClient() => WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this._userInstance.Id);
 
     public void AddItemArray(List<Item> roomItemList)
     {

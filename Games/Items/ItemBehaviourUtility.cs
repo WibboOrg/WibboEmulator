@@ -16,7 +16,7 @@ internal static class ItemBehaviourUtility
                 message.WriteInteger(item.Limited > 0 ? 256 + 1 : 1);
 
                 var totalSets = 1;
-                if (itemData.RarityLevel > 0)
+                if (itemData.RarityLevel > RaretyLevelType.None)
                 {
                     totalSets++;
                 }
@@ -28,10 +28,10 @@ internal static class ItemBehaviourUtility
 
                 message.WriteInteger(totalSets);
 
-                if (itemData.RarityLevel > 0)
+                if (itemData.RarityLevel > RaretyLevelType.None)
                 {
                     message.WriteString("rarity");
-                    message.WriteString(itemData.RarityLevel.ToString());
+                    message.WriteString(((int)itemData.RarityLevel).ToString());
                 }
 
                 if (itemData.Amount >= 0)
