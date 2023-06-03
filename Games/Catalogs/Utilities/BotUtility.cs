@@ -25,9 +25,9 @@ public static class BotUtility
     {
         "pet" => BotAIType.Pet,
         "generic" => BotAIType.Generic,
-        "copybot" => BotAIType.CopyBot,
         "roleplaybot" => BotAIType.RoleplayBot,
         "roleplaypet" => BotAIType.RoleplayPet,
+        "openia" => BotAIType.OpenIA,
         _ => BotAIType.Generic,
     };
 }

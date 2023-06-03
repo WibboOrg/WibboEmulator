@@ -348,7 +348,7 @@ public class ModerationManager
             if (inappropriateRoom)
             {
                 room.RoomData.Name = "Inapproprié pour l'hôtel";
-                room.RoomData.Description = "Malheureusement, cet appartement ne peut figurer dans le navigateur, car il ne respecte pas notre Wibbo Attitude ainsi que nos conditions générales d'utilisations.";
+                room.RoomData.Description = "Malheureusement, cet appartement ne peut figurer dans le navigateur, car il ne respecte pas nos conditions générales d'utilisations.";
                 room.ClearTags();
                 room.RoomData.Tags.Clear();
 

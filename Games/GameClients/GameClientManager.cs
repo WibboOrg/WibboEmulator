@@ -457,7 +457,7 @@ public class GameClientManager
     {
         if (string.IsNullOrEmpty(reason))
         {
-            reason = "Non respect des règles de conditions générales d'utilisations ainsi que la Wibbo Attitude";
+            reason = "Non respect des règles de conditions générales d'utilisations";
         }
 
         var variable = client.User.Username.ToLower();

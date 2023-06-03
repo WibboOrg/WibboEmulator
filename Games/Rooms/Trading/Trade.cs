@@ -245,16 +245,18 @@ public class Trade
             }
         }
 
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
         foreach (var userItem in userOneItems)
         {
             tradeUserOne.GetClient().User.InventoryComponent.RemoveItem(userItem.Id);
-            tradeUserTwo.GetClient().User.InventoryComponent.AddItem(userItem);
+            tradeUserTwo.GetClient().User.InventoryComponent.AddItem(dbClient, userItem);
         }
 
         foreach (var userItem in userTwoItems)
         {
             tradeUserTwo.GetClient().User.InventoryComponent.RemoveItem(userItem.Id);
-            tradeUserOne.GetClient().User.InventoryComponent.AddItem(userItem);
+            tradeUserOne.GetClient().User.InventoryComponent.AddItem(dbClient, userItem);
         }
 
         tradeUserTwo.GetClient().SendPacket(new UnseenItemsComposer(userOneItems, UnseenItemsType.Furni));

@@ -21,7 +21,7 @@ public struct AuthorizationCommands
         this.DescriptionBr = descriptionBr;
     }
 
-    public bool UserGotAuthorization(GameClient session, Room room)
+    public readonly bool UserGotAuthorization(GameClient session, Room room)
     {
         if (this.MinRank == 0)
         {
@@ -53,7 +53,7 @@ public struct AuthorizationCommands
         return false;
     }
 
-    public bool UserGotAuthorizationStaffLog()
+    public readonly bool UserGotAuthorizationStaffLog()
     {
         if (this.MinRank >= 3)
         {
@@ -63,7 +63,7 @@ public struct AuthorizationCommands
         return false;
     }
 
-    public int UserGotAuthorizationType(GameClient session, Room room)
+    public readonly int UserGotAuthorizationType(GameClient session, Room room)
     {
         if (this.MinRank == 0)
         {

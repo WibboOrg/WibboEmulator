@@ -180,7 +180,7 @@ public class User : IDisposable, IEquatable<User>
         this.TeleporterId = 0;
         this.HasFriendRequestsDisabled = hasFriendRequestsDisabled;
         this.ClientVolume = new List<int>(3);
-        this.CanChangeName = isFirstConnexionToday;
+        this.CanChangeName = this.HasPermission("change_name") && isFirstConnexionToday;
         this.IsFirstConnexionToday = isFirstConnexionToday;
         this.Langue = langue;
         this.IgnoreAllExpireTime = ignoreAllExpire;

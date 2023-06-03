@@ -41,6 +41,8 @@ public class RoleplayManager
 
     public void Init(IQueryAdapter dbClient)
     {
+        this._rolePlay.Clear();
+
         this.ItemManager.Init(dbClient);
         this.WeaponManager.Init(dbClient);
         this.EnemyManager.Init(dbClient);
@@ -53,10 +55,6 @@ public class RoleplayManager
                 if (!this._rolePlay.ContainsKey(Convert.ToInt32(dataRow["owner_id"])))
                 {
                     _ = this._rolePlay.TryAdd(Convert.ToInt32(dataRow["owner_id"]), new RolePlayerManager(Convert.ToInt32(dataRow["owner_id"]), Convert.ToInt32(dataRow["hopital_id"]), Convert.ToInt32(dataRow["prison_id"])));
-                }
-                else
-                {
-                    this.GetRolePlay(Convert.ToInt32(dataRow["owner_id"])).Update(Convert.ToInt32(dataRow["hopital_id"]), Convert.ToInt32(dataRow["prison_id"]));
                 }
             }
         }

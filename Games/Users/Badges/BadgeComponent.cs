@@ -145,15 +145,16 @@ public class BadgeComponent : IDisposable
     {
         var emblems = new Dictionary<string, int>
         {
+            { "STAFF_GESTION", 587 },
             { "STAFF_ADMIN", 583 },
             { "STAFF_ANIMATEUR", 584 },
+            { "STAFF_EVENT", 594 },
+            { "STAFF_MODO", 589 },
             { "STAFF_ARCHITECTE", 585 },
             { "STAFF_CASINO", 586 },
-            { "STAFF_GESTION", 587 },
             { "STAFF_GRAPH", 588 },
-            { "STAFF_MODO", 589 },
             { "STAFF_PROWIRED", 590 },
-            { "ADM", 540 },
+            { "ADM", 102 },
             { "PRWRD1", 580 },
             { "GPHWIB", 557 },
             { "wibbo.helpeur", 544 },
@@ -185,17 +186,19 @@ public class BadgeComponent : IDisposable
     {
         var bubbles = new Dictionary<string, int>
         {
+            { "ADM", 23 },
+            { "STAFF_GESTION", 45 },
             { "STAFF_ADMIN", 41 },
             { "STAFF_ANIMATEUR", 42 },
+            { "STAFF_EVENT", 52 },
+            { "STAFF_MODO", 47 },
             { "STAFF_ARCHITECTE", 43 },
             { "STAFF_CASINO", 44 },
-            { "STAFF_GESTION", 45 },
             { "STAFF_GRAPH", 46 },
-            { "STAFF_MODO", 47 },
             { "STAFF_PROWIRED", 48 },
         };
 
-        var bubbleId = 0;
+        var bubbleId = 23;
 
         foreach (var bubble in bubbles)
         {

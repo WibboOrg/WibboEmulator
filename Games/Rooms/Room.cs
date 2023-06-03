@@ -277,6 +277,18 @@ public class Room : IDisposable
                 roomUser.BotAI.OnUserSay(user, message);
             }
         }
+
+        foreach (var roomUser in this.RoomUserManager.GetBots().ToList())
+        {
+            if (shout)
+            {
+                roomUser.BotAI.OnUserShout(user, message);
+            }
+            else
+            {
+                roomUser.BotAI.OnUserSay(user, message);
+            }
+        }
     }
 
     public void LoadRights()

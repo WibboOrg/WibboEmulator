@@ -9,7 +9,6 @@ using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Users.Inventory.Bots;
@@ -24,6 +23,7 @@ public class InventoryComponent : IDisposable
     private readonly int _petLimit;
     private readonly int _botLimit;
     private readonly User _userInstance;
+    private int _inventoryPoints;
     private bool _inventoryDefined;
 
     public InventoryComponent(User user)
@@ -71,6 +71,7 @@ public class InventoryComponent : IDisposable
             ItemStatDao.UpdateRemove(dbClient, rareAmounts);
 
             this._userItems.Clear();
+            this._inventoryPoints = 0;
         }
         else
         {
@@ -99,6 +100,8 @@ public class InventoryComponent : IDisposable
     }
 
     public List<Item> GetItemsByType(int baseItem, int amount = 10000) => this.GetWallAndFloor.Where(x => x.BaseItem == baseItem).Take(amount).ToList();
+
+    public int GetInventoryPoints() => this._inventoryPoints;
 
     public void DeleteItems(IQueryAdapter dbClient, List<Item> items, int baseItem = 0)
     {
@@ -199,6 +202,7 @@ public class InventoryComponent : IDisposable
 
         if (wibboPointsCount > 0)
         {
+            this._inventoryPoints = 0;
             this._userInstance.WibboPoints += wibboPointsCount;
             this._userInstance.Client.SendPacket(new ActivityPointNotificationComposer(this._userInstance.WibboPoints, 0, 105));
 
@@ -325,6 +329,8 @@ public class InventoryComponent : IDisposable
     {
         if (this._userItems.TryAdd(item.Id, item))
         {
+            this.AddInventoryPoint(item);
+
             this._userInstance.Client.SendPacket(new UnseenItemsComposer(item.Id, UnseenItemsType.Furni));
             this._userInstance.Client.SendPacket(new FurniListAddComposer(item));
         }
@@ -356,6 +362,8 @@ public class InventoryComponent : IDisposable
 
             var userItem = new Item(id, 0, baseItem, extraData, limited, limitedTo, 0, 0, 0.0, 0, "", null);
             _ = this._userItems.TryAdd(id, userItem);
+
+            this.AddInventoryPoint(userItem);
         }
 
         if (this._userItems.Count >= this._furniLimit)
@@ -394,6 +402,40 @@ public class InventoryComponent : IDisposable
         }
     }
 
+    public void AddInventoryPoint(Item roomItem)
+    {
+        if (roomItem == null || roomItem.GetBaseItem() == null || roomItem.GetBaseItem().InteractionType != InteractionType.EXCHANGE)
+        {
+            return;
+        }
+
+        if (roomItem.GetBaseItem().ItemName.StartsWith("PntEx_") == false)
+        {
+            return;
+        }
+
+        var magotCount = int.Parse(roomItem.GetBaseItem().ItemName.Split(new char[1] { '_' })[1]);
+
+        this._inventoryPoints += magotCount;
+    }
+
+    public void RemoveInventoryPoint(Item roomItem)
+    {
+        if (roomItem == null || roomItem.GetBaseItem() == null || roomItem.GetBaseItem().InteractionType != InteractionType.EXCHANGE)
+        {
+            return;
+        }
+
+        if (roomItem.GetBaseItem().ItemName.StartsWith("PntEx_") == false)
+        {
+            return;
+        }
+
+        var magotCount = int.Parse(roomItem.GetBaseItem().ItemName.Split(new char[1] { '_' })[1]);
+
+        this._inventoryPoints -= magotCount;
+    }
+
     public Item GetItem(int id)
     {
         if (this._userItems.TryGetValue(id, out var value))
@@ -406,32 +448,14 @@ public class InventoryComponent : IDisposable
         }
     }
 
-    public Item AddNewItem(int id, int baseItem, string extraData, int limited = 0, int limitedStack = 0)
-    {
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            ItemDao.UpdateRoomIdAndUserId(dbClient, id, 0, this._userInstance.Id);
-        }
-
-        var userItem = new Item(id, 0, baseItem, extraData, limited, limitedStack, 0, 0, 0.0, 0, "", null);
-        if (this.UserHoldsItem(id))
-        {
-            this.RemoveItem(id);
-        }
-
-        _ = this._userItems.TryAdd(userItem.Id, userItem);
-
-        this._userInstance.Client.SendPacket(new FurniListAddComposer(userItem));
-
-        return userItem;
-    }
-
     private bool UserHoldsItem(int itemID) => this._userItems.ContainsKey(itemID);
 
     public void RemoveItem(int id, bool sendComposed = true)
     {
-        if (this._userItems.ContainsKey(id))
+        if (this._userItems.TryGetValue(id, out var item))
         {
+            this.RemoveInventoryPoint(item);
+
             _ = this._userItems.TryRemove(id, out _);
         }
 
@@ -445,18 +469,16 @@ public class InventoryComponent : IDisposable
 
     public void AddItemArray(List<Item> roomItemList)
     {
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         foreach (var roomItem in roomItemList)
         {
-            this.AddItem(roomItem);
+            this.AddItem(dbClient, roomItem);
         }
     }
 
-    public void AddItem(Item item)
+    public void AddItem(IQueryAdapter dbClient, Item item)
     {
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            ItemDao.UpdateRoomIdAndUserId(dbClient, item.Id, 0, this._userInstance.Id);
-        }
+        ItemDao.UpdateRoomIdAndUserId(dbClient, item.Id, 0, this._userInstance.Id);
 
         var userItem = new Item(item.Id, 0, item.BaseItem, item.ExtraData, item.Limited, item.LimitedStack, 0, 0, 0.0, 0, "", null);
         if (this.UserHoldsItem(item.Id))
@@ -465,6 +487,8 @@ public class InventoryComponent : IDisposable
         }
 
         _ = this._userItems.TryAdd(userItem.Id, userItem);
+
+        this.AddInventoryPoint(userItem);
 
         this._userInstance.Client.SendPacket(new FurniListAddComposer(userItem));
     }

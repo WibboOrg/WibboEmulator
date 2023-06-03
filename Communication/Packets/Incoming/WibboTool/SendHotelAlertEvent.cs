@@ -40,10 +40,10 @@ internal sealed class SendHotelAlertEvent : IPacketEvent
         {
             ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "hal", string.Format("WibbbTool HaL: {0} : {1}", url, message));
 
-            if (!url.StartsWith("https://wibbo.org") && !url.StartsWith("https://www.facebook.com/WibboHotelFR") && !url.StartsWith("https://twitter.com/WibboOrg") && !url.StartsWith("https://instagram.com/wibboorg"))
-            {
-                return;
-            }
+            // if (!url.StartsWith("https://wibbo.org") && !url.StartsWith("https://www.facebook.com/WibboHotelFR") && !url.StartsWith("https://twitter.com/WibboOrg") && !url.StartsWith("https://instagram.com/wibboorg"))
+            // {
+            //     return;
+            // }
 
             WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer("annonce", "Message de communication", message, "Allez voir !", 0, url));
             return;

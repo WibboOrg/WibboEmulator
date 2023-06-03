@@ -399,6 +399,7 @@ public class CommandManager
         this.Register(166, new GiveBanner());
         this.Register(167, new RemoveBanner());
         this.Register(168, new RoomBanner());
+        this.Register(170, new ChatGTP());
     }
 
     public void RegisterCommand() => this._commands.Clear();

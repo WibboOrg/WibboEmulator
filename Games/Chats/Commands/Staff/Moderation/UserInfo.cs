@@ -29,11 +29,13 @@ internal sealed class UserInfo : IChatCommand
         var user = clientByUsername.User;
         var stringBuilder = new StringBuilder();
 
+        var totalPoints = user.WibboPoints + user.InventoryComponent.GetInventoryPoints();
+
         _ = stringBuilder.Append("- Information sur l'utilisateur [" + user.Username + "] -\r");
         _ = stringBuilder.Append("Nom: " + user.Username + "\r");
         _ = stringBuilder.Append("Id: " + user.Id + "\r");
         _ = stringBuilder.Append("Mission: " + user.Motto + "\r");
-        _ = stringBuilder.Append("WibboPoints: " + user.WibboPoints + "\r");
+        _ = stringBuilder.Append("WibboPoints: " + totalPoints + "\r");
         _ = stringBuilder.Append("LimitCoins: " + user.LimitCoins + "\r");
         _ = stringBuilder.Append("Crédits: " + user.Credits + "\r");
         _ = stringBuilder.Append("Win-Win: " + user.AchievementPoints + "\r");

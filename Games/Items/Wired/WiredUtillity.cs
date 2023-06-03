@@ -99,9 +99,12 @@ public class WiredUtillity
             textMessage = textMessage.Replace("#username#", user.GetUsername());
             textMessage = textMessage.Replace("#point#", user.WiredPoints.ToString());
 
-            if (user.Client != null)
+            if (user.Client != null && user.Client.User != null && user.Client.User.InventoryComponent != null)
             {
-                textMessage = textMessage.Replace("#wpcount#", user.Client.User != null ? user.Client.User.WibboPoints.ToString() : "0");
+                var totalPoints = user.Client.User.WibboPoints + user.Client.User.InventoryComponent.GetInventoryPoints();
+
+                textMessage = textMessage.Replace("#wpcount#", totalPoints.ToString());
+                textMessage = textMessage.Replace("#ltccount#", user.Client.User.LimitCoins.ToString());
             }
 
             if (user.Roleplayer != null)

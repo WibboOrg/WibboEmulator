@@ -30,10 +30,6 @@ internal sealed partial class EventHaCommand : IRCONCommand
         var message = parameters[2];
 
         ModerationManager.LogStaffEntry(client.User.Id, client.User.Username, 0, string.Empty, "eventha", string.Format("WbTool eventha: {0}", message));
-        if (client.Antipub(message, "<eventalert>", client.User.CurrentRoom.Id))
-        {
-            return false;
-        }
 
         if (!WibboEnvironment.GetGame().GetAnimationManager().AllowAnimation())
         {

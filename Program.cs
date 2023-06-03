@@ -1,4 +1,5 @@
 namespace WibboEmulator;
+
 using WibboEmulator.Core;
 
 public static class Program

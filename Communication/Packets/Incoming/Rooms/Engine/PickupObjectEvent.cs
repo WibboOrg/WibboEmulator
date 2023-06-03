@@ -33,8 +33,10 @@ internal sealed class PickupObjectEvent : IPacketEvent
             return;
         }
 
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
         room.RoomItemHandling.RemoveFurniture(session, item.Id);
-        session.User.InventoryComponent.AddItem(item);
+        session.User.InventoryComponent.AddItem(dbClient, item);
         WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FurniPick, 0);
     }
 }

@@ -217,7 +217,7 @@ internal static class ItemBehaviourUtility
                 message.WriteString("MESSAGE");
                 message.WriteString($"Bravo tu as reçu une {lotName} ! Ouvre-là pour y découvrir ton lot");
                 message.WriteString("PURCHASER_NAME");
-                message.WriteString("Wibbo");
+                message.WriteString("");
                 message.WriteString("PURCHASER_FIGURE");
                 message.WriteString("");
             }

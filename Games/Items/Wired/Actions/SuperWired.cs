@@ -630,14 +630,16 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.RemoveEnemyBot(botOrPet.BotData.Id);
                     botOrPet.BotData.RoleBot = null;
                     botOrPet.BotData.AiType = BotAIType.Generic;
-                    _ = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
+                    botOrPet.BotAI = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
+                    botOrPet.BotAI.Init(botOrPet.BotData.Id, botOrPet, botOrPet.Room);
                 }
                 else
                 {
                     WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.RemoveEnemyPet(botOrPet.BotData.Id);
                     botOrPet.BotData.RoleBot = null;
                     botOrPet.BotData.AiType = BotAIType.Pet;
-                    _ = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
+                    botOrPet.BotAI = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
+                    botOrPet.BotAI.Init(botOrPet.BotData.Id, botOrPet, botOrPet.Room);
                 }
                 break;
             }
@@ -656,7 +658,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     {
                         botOrPet.BotData.RoleBot = new RoleBot(rpEnemyConfig);
                         botOrPet.BotData.AiType = BotAIType.RoleplayBot;
-                        _ = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
+                        botOrPet.BotAI = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
+                        botOrPet.BotAI.Init(botOrPet.BotData.Id, botOrPet, botOrPet.Room);
                     }
                 }
                 else
@@ -666,7 +669,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     {
                         botOrPet.BotData.RoleBot = new RoleBot(rpEnemyConfig);
                         botOrPet.BotData.AiType = BotAIType.RoleplayPet;
-                        _ = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
+                        botOrPet.BotAI = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
+                        botOrPet.BotAI.Init(botOrPet.BotData.Id, botOrPet, botOrPet.Room);
                     }
                 }
                 break;

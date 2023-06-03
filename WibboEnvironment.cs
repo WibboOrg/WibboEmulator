@@ -10,6 +10,7 @@ using WibboEmulator.Communication.WebSocket;
 using WibboEmulator.Core;
 using WibboEmulator.Core.FigureData;
 using WibboEmulator.Core.Language;
+using WibboEmulator.Core.OpenIA;
 using WibboEmulator.Core.Settings;
 using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
@@ -26,6 +27,7 @@ public static class WibboEnvironment
     private static FigureDataManager _figureManager;
     private static LanguageManager _languageManager;
     private static SettingsManager _settingsManager;
+    private static OpenAIProxy _chatOpenAI;
 
     private static Random _random = new();
 
@@ -51,82 +53,7 @@ public static class WibboEnvironment
 
         PatchDir = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) + "/";
 
-        Console.Title = "Wibbo Emulator";
-
-        Console.ForegroundColor = ConsoleColor.DarkRed;
-        Console.Write(@" __        __  ");
-        Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.Write(@"_   ");
-        Console.ForegroundColor = ConsoleColor.DarkBlue;
-        Console.Write(@"_       ");
-        Console.ForegroundColor = ConsoleColor.DarkGreen;
-        Console.Write(@"_             ");
-        Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.Write(@"");
-
-        Console.WriteLine(@"");
-
-        Console.ForegroundColor = ConsoleColor.DarkRed;
-        Console.Write(@" \ \      / / ");
-        Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.Write(@"(_) ");
-        Console.ForegroundColor = ConsoleColor.DarkBlue;
-        Console.Write(@"| |__   ");
-        Console.ForegroundColor = ConsoleColor.DarkGreen;
-        Console.Write(@"| |__     ");
-        Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.Write(@"___  ");
-
-        Console.WriteLine(@"");
-
-        Console.ForegroundColor = ConsoleColor.DarkRed;
-        Console.Write(@"  \ \ /\ / /  ");
-        Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.Write(@"| | ");
-        Console.ForegroundColor = ConsoleColor.DarkBlue;
-        Console.Write(@"| '_ \  ");
-        Console.ForegroundColor = ConsoleColor.DarkGreen;
-        Console.Write(@"| '_ \   ");
-        Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.Write(@"/ _ \ ");
-
-        Console.WriteLine("");
-
-        Console.ForegroundColor = ConsoleColor.DarkRed;
-        Console.Write(@"   \ V  V /   ");
-        Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.Write(@"| | ");
-        Console.ForegroundColor = ConsoleColor.DarkBlue;
-        Console.Write(@"| |_) | ");
-        Console.ForegroundColor = ConsoleColor.DarkGreen;
-        Console.Write(@"| |_) | ");
-        Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.Write(@"| (_) |");
-
-        Console.WriteLine(@"");
-
-        Console.ForegroundColor = ConsoleColor.DarkRed;
-        Console.Write(@"    \_/\_/    ");
-        Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.Write("|_| ");
-        Console.ForegroundColor = ConsoleColor.DarkBlue;
-        Console.Write("|_.__/  ");
-        Console.ForegroundColor = ConsoleColor.DarkGreen;
-        Console.Write("|_.__/   ");
-        Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.Write(@"\___/ ");
-
-        Console.WriteLine("");
-        Console.WriteLine("");
-
-        Console.ForegroundColor = ConsoleColor.Blue;
-
-        Console.WriteLine("https://wibbo.org/");
-        Console.WriteLine("Credits : Butterfly and Plus Emulator.");
-        Console.WriteLine("-Wibbo Dev");
-        Console.WriteLine("");
-
-        Console.ForegroundColor = ConsoleColor.White;
+        ConsoleWelcome.Write();
 
         try
         {
@@ -162,6 +89,9 @@ public static class WibboEnvironment
 
             _figureManager = new FigureDataManager();
             _figureManager.Init();
+
+            _chatOpenAI = new OpenAIProxy(_settingsManager.GetData<string>("openia.api.key"));
+            _chatOpenAI.Init();
 
             _game = new Game();
             _game.Init(dbClient);
@@ -323,6 +253,8 @@ public static class WibboEnvironment
     public static DatabaseManager GetDatabaseManager() => _datebaseManager;
 
     public static HttpClient GetHttpClient() => HttpClient;
+
+    public static OpenAIProxy GetChatOpenAI() => _chatOpenAI;
 
     public static void PreformShutDown()
     {
