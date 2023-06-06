@@ -58,11 +58,16 @@ internal sealed class Update : IChatCommand
                 session.SendWhisper("Local mis à jour");
                 break;
             }
-
             case "autogame":
             {
                 WibboEnvironment.GetGame().GetAnimationManager().Init(dbClient);
                 session.SendWhisper("Jeux automatique mis à jour");
+                break;
+            }
+            case "lootbox":
+            {
+                WibboEnvironment.GetGame().GetLootManager().Init(dbClient);
+                session.SendWhisper("Lootbox mis à jour");
                 break;
             }
             case "rpitems":
