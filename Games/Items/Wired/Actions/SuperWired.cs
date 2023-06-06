@@ -6,7 +6,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Communication.Packets.Outgoing.Sound;
-using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.Roleplay;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
@@ -707,7 +706,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     var roomDataTarget = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
                     if (roomDataTarget != null && roomDataTarget.OwnerId == this.RoomInstance.RoomData.OwnerId)
                     {
-                        this.RoomInstance.RoomUserManager.RemoveUserFromRoom(roomUser.Client, true, false);
+                        this.RoomInstance.RoomUserManager.RemoveUserFromRoom(user.Client, true, false);
 
                         user.Client.User.IsTeleporting = true;
                         user.Client.User.TeleportingRoomID = roomId;

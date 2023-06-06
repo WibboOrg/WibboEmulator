@@ -533,6 +533,7 @@ public class RolePlayer
             else
             {
                 this.Dead = false;
+
                 if (user.Client != null && user.Client.User != null)
                 {
                     user.Room.RoomUserManager.RemoveUserFromRoom(user.Client, true, false);
