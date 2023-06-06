@@ -85,6 +85,7 @@ public class User : IDisposable, IEquatable<User>
     public bool SpamEnable { get; set; }
     public int SpamProtectionTime { get; set; }
     public DateTime SpamFloodTime { get; set; }
+    public DateTime HereTimer { get; set; }
     public DateTime EveryoneTimer { get; set; }
     public DateTime CommandFunTimer { get; set; }
     public DateTime LastGiftPurchaseTime { get; set; }

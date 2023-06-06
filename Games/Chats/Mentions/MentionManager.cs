@@ -43,6 +43,14 @@ public class MentionManager
                 }
             }
 
+            if (targetUsername == "here")
+            {
+                if (!HereRoom(session, message))
+                {
+                    break;
+                }
+            }
+
             else if (!SendNotif(session, targetUsername, message))
             {
                 continue;
@@ -119,6 +127,52 @@ public class MentionManager
                 {
                     targetClient.SendPacket(new MentionComposer(session.User.Id, session.User.Username, session.User.Look, message));
                 }
+            }
+        }
+
+        return true;
+    }
+
+    public static bool HereRoom(GameClient session, string message)
+    {
+        if (session == null || session.User == null || !session.User.InRoom)
+        {
+            return false;
+        }
+
+        var room = session.User.CurrentRoom;
+        if (room == null)
+        {
+            return false;
+        }
+
+        if (!room.CheckRights(session) && !session.User.HasPermission("mention_here"))
+        {
+            session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous devez être le propriétaire de l'appart pour @here"));
+            return false;
+        }
+
+        var timeSpan = DateTime.Now - session.User.HereTimer;
+        if (timeSpan.TotalSeconds < 120)
+        {
+            session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Veuillez patienter pendant 2 minutes avant de pouvoir réutiliser @here."));
+            return false;
+        }
+
+        session.User.HereTimer = DateTime.Now;
+
+        var onlineUsers = room.RoomUserManager.GetUserList();
+
+        if (onlineUsers == null)
+        {
+            return false;
+        }
+
+        foreach (var targetClient in onlineUsers)
+        {
+            if (targetClient != null && targetClient.Client != null)
+            {
+                targetClient.Client.SendPacket(new MentionComposer(session.User.Id, session.User.Username, session.User.Look, message));
             }
         }
 
