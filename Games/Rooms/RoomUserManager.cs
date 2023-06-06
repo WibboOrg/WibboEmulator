@@ -571,6 +571,7 @@ public class RoomUserManager
             {
                 session.SendPacket(new GenericErrorComposer(4008));
             }
+
             session.SendPacket(new CloseConnectionComposer());
         }
 

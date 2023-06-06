@@ -16,8 +16,7 @@ internal sealed class SummonAll : IChatCommand
                     return;
                 }
 
-                client.
-                User.IsTeleporting = true;
+                client.User.IsTeleporting = true;
                 client.User.TeleportingRoomID = room.RoomData.Id;
                 client.User.TeleporterId = 0;
 

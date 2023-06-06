@@ -129,6 +129,8 @@ public class InteractorTeleport : FurniInteractor
                         }
                         else if (!roomUserTarget.IsBot && roomUserTarget != null && roomUserTarget.Client != null && roomUserTarget.Client.User != null)
                         {
+                            roomUserTarget.Room.RoomUserManager.RemoveUserFromRoom(roomUserTarget.Client, true, false);
+
                             roomUserTarget.Client.User.IsTeleporting = true;
                             roomUserTarget.Client.User.TeleportingRoomID = teleRoomId;
                             roomUserTarget.Client.User.TeleporterId = linkedTele;

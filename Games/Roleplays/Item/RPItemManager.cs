@@ -23,6 +23,7 @@ public class RPItemManager
     public void Init(IQueryAdapter dbClient)
     {
         this._items.Clear();
+
         var table = RoleplayItemDao.GetAll(dbClient);
         if (table != null)
         {
