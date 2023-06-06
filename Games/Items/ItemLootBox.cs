@@ -28,12 +28,12 @@ internal static class ItemLootBox
             pageId = 1635463734; // Legendaires
             WibboEnvironment.GetGame().GetLootManager().IncrementeRarityCounter(4);
         }
-        else if (probab <= 33 && epicCount <= 30)
+        else if (probab <= 33 && epicCount <= 35)
         {
             pageId = 1635463733; // Epic
             WibboEnvironment.GetGame().GetLootManager().IncrementeRarityCounter(3);
         }
-        else if (probab <= 333 && communCount <= 300)
+        else if (probab <= 333 && communCount <= 350)
         {
             pageId = 1635463732; // Commun
             WibboEnvironment.GetGame().GetLootManager().IncrementeRarityCounter(2);
