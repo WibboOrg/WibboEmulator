@@ -57,10 +57,10 @@ internal sealed class SendHotelAlertEvent : IPacketEvent
             }
 
             ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, session.User.CurrentRoom.Id, string.Empty, "eventha", string.Format("WibbobTool EventHa: {0}", message));
-            if (session.Antipub(message, "<eventalert>", session.User.CurrentRoom.Id))
-            {
-                return;
-            }
+            //if (session.Antipub(message, "<eventalert>", session.User.CurrentRoom.Id))
+            //{
+            //return;
+            //}
 
             if (!WibboEnvironment.GetGame().GetAnimationManager().AllowAnimation())
             {
