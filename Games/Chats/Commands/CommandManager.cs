@@ -41,15 +41,6 @@ public class CommandManager
         this.InitInvokeableRegister(dbClient);
 
         this.RegisterCommand();
-        this.RegisterPlayer();
-        this.RegisterOwner();
-        this.RegisterUserRight();
-        this.RegisterPremium();
-        this.RegisterAsStaffs();
-        this.RegisterModeration();
-        this.RegisterAnimation();
-        this.RegisterAdministrator();
-        this.RegisterGestion();
     }
 
     public bool Parse(GameClient session, RoomUser user, Room room, string message)
@@ -202,8 +193,10 @@ public class CommandManager
         return merged.ToString();
     }
 
-    public void RegisterOwner()
+    public void RegisterCommand()
     {
+        this._commands.Clear();
+
         this.Register(1, new Pickall());
         this.Register(2, new Unload());
         this.Register(3, new KickAll());
@@ -211,10 +204,6 @@ public class CommandManager
         this.Register(5, new MaxFloor());
         this.Register(6, new AutoFloor());
         this.Register(157, new WiredLimit());
-    }
-
-    public void RegisterUserRight()
-    {
         this.Register(7, new SetSpeed());
         this.Register(8, new DisableDiagonal());
         this.Register(9, new SetMax());
@@ -242,10 +231,6 @@ public class CommandManager
         this.Register(32, new StopQuestion());
         this.Register(33, new RoomYouTube());
         this.Register(34, new Kick());
-    }
-
-    public void RegisterPlayer()
-    {
         this.Register(35, new Coords());
         this.Register(36, new HandItem());
         this.Register(37, new Enable());
@@ -288,10 +273,6 @@ public class CommandManager
         this.Register(77, new DND());
         this.Register(78, new Dance());
         this.Register(158, new ConvertMagot());
-    }
-
-    public void RegisterPremium()
-    {
         this.Register(79, new UserInfo());
         this.Register(80, new Info());
         this.Register(81, new FaceWalk());
@@ -307,16 +288,8 @@ public class CommandManager
         this.Register(163, new Slime());
         this.Register(164, new Tomato());
         this.Register(165, new Tied());
-    }
-
-    public void RegisterAsStaffs()
-    {
         this.Register(87, new StaffAlert());
         this.Register(88, new StaffsOnline());
-    }
-
-    public void RegisterModeration()
-    {
         this.Register(89, new RoomAlert());
         this.Register(90, new Invisible());
         this.Register(91, new Ban());
@@ -335,17 +308,9 @@ public class CommandManager
         this.Register(104, new DisableWhispers());
         this.Register(105, new ForceFlagUser());
         this.Register(106, new KickBan());
-        this.Register(169, new ShowInventory());
-    }
-
-    public void RegisterAnimation()
-    {
         this.Register(107, new GiveLot());
         this.Register(108, new NotifTop());
-    }
-
-    public void RegisterAdministrator()
-    {
+        this.Register(169, new ShowInventory());
         this.Register(109, new DisabledAutoGame());
         this.Register(110, new RoomBadge());
         this.Register(111, new GiveBadge());
@@ -361,10 +326,6 @@ public class CommandManager
         this.Register(122, new RoomEffect());
         this.Register(123, new ForceSit());
         this.Register(124, new Give());
-    }
-
-    public void RegisterGestion()
-    {
         this.Register(125, new HotelAlert());
         this.Register(126, new MassBadge());
         this.Register(128, new AddFilter());
@@ -400,7 +361,7 @@ public class CommandManager
         this.Register(167, new RemoveBanner());
         this.Register(168, new RoomBanner());
         this.Register(170, new ChatGTP());
+        this.Register(171, new TransfertRoom());
     }
 
-    public void RegisterCommand() => this._commands.Clear();
 }

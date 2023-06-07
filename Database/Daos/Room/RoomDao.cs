@@ -54,6 +54,13 @@ internal sealed class RoomDao
         dbClient.RunQuery();
     }
 
+    internal static void UpdateOwnerByRoomId(IQueryAdapter dbClient, string newUsername, int roomId)
+    {
+        dbClient.SetQuery("UPDATE `room` SET owner = @newname WHERE id = '" + roomId + "'");
+        dbClient.AddParameter("newname", newUsername);
+        dbClient.RunQuery();
+    }
+
     internal static DataTable GetAllIdByOwner(IQueryAdapter dbClient, string username)
     {
         dbClient.SetQuery("SELECT id FROM `room` WHERE owner = @name");
