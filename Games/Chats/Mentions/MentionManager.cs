@@ -170,7 +170,7 @@ public class MentionManager
 
         foreach (var targetClient in onlineUsers)
         {
-            if (targetClient != null && targetClient.Client != null)
+            if (targetClient != null && targetClient.Client != null && targetClient.UserId != session.User.Id)
             {
                 targetClient.Client.SendPacket(new MentionComposer(session.User.Id, session.User.Username, session.User.Look, message));
             }
