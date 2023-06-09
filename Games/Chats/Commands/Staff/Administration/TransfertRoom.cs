@@ -30,9 +30,11 @@ internal sealed class TransfertRoom : IChatCommand
             return;
         }
 
-        RoomDao.UpdateOwnerByRoomId(dbClient, username, room.Id);
+        var userTarget = WibboEnvironment.GetUserById(userId);
 
-        room.RoomData.OwnerName = username;
+        RoomDao.UpdateOwnerByRoomId(dbClient, userTarget.Username, room.Id);
+
+        room.RoomData.OwnerName = userTarget.Username;
         room.SendPacket(new RoomInfoUpdatedComposer(room.Id));
 
         var usersToReturn = room.RoomUserManager.GetRoomUsers().ToList();
