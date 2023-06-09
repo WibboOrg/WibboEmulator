@@ -63,7 +63,7 @@ internal sealed class ObjectsComposer : ServerPacket
             this.WriteString("state");
             this.WriteString("0");
             this.WriteString("imageUrl");
-            this.WriteString("https://cdn.wibbo.org/items/" + item.ExtraData + ".png");
+            this.WriteString("https://" + WibboEnvironment.GetSettings().GetData<string>("cdn.url") + "/items/" + item.ExtraData + ".png");
             this.WriteString("offsetX");
             this.WriteString("-20");
             this.WriteString("offsetY");

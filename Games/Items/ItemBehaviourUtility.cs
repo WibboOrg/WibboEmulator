@@ -323,7 +323,7 @@ internal static class ItemBehaviourUtility
                 message.WriteInteger(1);
                 message.WriteInteger(2);
                 message.WriteString("THUMBNAIL_URL");
-                message.WriteString(string.IsNullOrEmpty(item.ExtraData) ? "" : "https://cdn.wibbo.org/youtubethumbnail.php?videoid=" + item.ExtraData);
+                message.WriteString(string.IsNullOrEmpty(item.ExtraData) ? "" : "https://" + WibboEnvironment.GetSettings().GetData<string>("cdn.url") + "/youtubethumbnail.php?videoid=" + item.ExtraData);
                 message.WriteString("VideoId");
                 message.WriteString(item.ExtraData);
                 break;

@@ -38,7 +38,7 @@ internal sealed class SendHotelAlertEvent : IPacketEvent
 
         if (!string.IsNullOrWhiteSpace(url))
         {
-            ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "hal", string.Format("WibbbTool HaL: {0} : {1}", url, message));
+            ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "hal", string.Format("Tool HaL: {0} : {1}", url, message));
 
             // if (!url.StartsWith("https://wibbo.org") && !url.StartsWith("https://www.facebook.com/WibboHotelFR") && !url.StartsWith("https://twitter.com/WibboOrg") && !url.StartsWith("https://instagram.com/wibboorg"))
             // {
