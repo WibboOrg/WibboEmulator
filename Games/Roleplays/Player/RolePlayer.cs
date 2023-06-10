@@ -514,7 +514,7 @@ public class RolePlayer
                 {
                     user.Room.RoomUserManager.RemoveUserFromRoom(user.Client, true, false);
 
-                    if (rpManager.PrisonId > 0)
+                    if (rpManager.PrisonId > 0 && !user.Client.User.IsTeleporting)
                     {
                         user.Client.User.IsTeleporting = true;
                         user.Client.User.TeleportingRoomID = rpManager.PrisonId;
@@ -538,7 +538,7 @@ public class RolePlayer
                 {
                     user.Room.RoomUserManager.RemoveUserFromRoom(user.Client, true, false);
 
-                    if (rpManager.HopitalId > 0)
+                    if (rpManager.HopitalId > 0 && !user.Client.User.IsTeleporting)
                     {
                         user.Client.User.IsTeleporting = true;
                         user.Client.User.TeleportingRoomID = rpManager.HopitalId;

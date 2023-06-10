@@ -2,6 +2,7 @@ namespace WibboEmulator.Games.Chats.Commands.Staff.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 
 internal sealed class Summon : IChatCommand
 {
@@ -23,10 +24,13 @@ internal sealed class Summon : IChatCommand
             return;
         }
 
-        targetUser.User.IsTeleporting = true;
-        targetUser.User.TeleportingRoomID = room.RoomData.Id;
-        targetUser.User.TeleporterId = 0;
+        if (!targetUser.User.IsTeleporting)
+        {
+            targetUser.User.IsTeleporting = true;
+            targetUser.User.TeleportingRoomID = room.RoomData.Id;
+            targetUser.User.TeleporterId = 0;
 
-        targetUser.SendPacket(new GetGuestRoomResultComposer(targetUser, room.RoomData, false, true));
+            targetUser.SendPacket(new GetGuestRoomResultComposer(targetUser, room.RoomData, false, true));
+        }
     }
 }

@@ -704,7 +704,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 if (int.TryParse(value, out var roomId))
                 {
                     var roomDataTarget = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
-                    if (roomDataTarget != null && roomDataTarget.OwnerId == this.RoomInstance.RoomData.OwnerId)
+                    if (roomDataTarget != null && roomDataTarget.OwnerId == this.RoomInstance.RoomData.OwnerId && !user.Client.User.IsTeleporting)
                     {
                         this.RoomInstance.RoomUserManager.RemoveUserFromRoom(user.Client, true, false);
 
@@ -2149,7 +2149,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
             case "send":
             {
-                if (int.TryParse(value, out var roomId))
+                if (int.TryParse(value, out var roomId) && !roomUser.Client.User.IsTeleporting)
                 {
                     this.RoomInstance.RoomUserManager.RemoveUserFromRoom(roomUser.Client, true, false);
 

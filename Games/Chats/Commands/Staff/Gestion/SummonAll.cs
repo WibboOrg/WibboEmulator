@@ -13,7 +13,12 @@ internal sealed class SummonAll : IChatCommand
             {
                 if (client.User.CurrentRoom != null && client.User.CurrentRoom.Id == session.User.CurrentRoom.Id)
                 {
-                    return;
+                    continue;
+                }
+
+                if (client.User.IsTeleporting)
+                {
+                    continue;
                 }
 
                 client.User.IsTeleporting = true;
