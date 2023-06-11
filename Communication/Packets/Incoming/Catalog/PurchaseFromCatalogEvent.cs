@@ -66,6 +66,19 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
             amount = 1;
         }
 
+        if (item.IsLimited)
+        {
+            var leftTimeLTD = DateTime.Now - session.User.LastLTDPurchaseTime;
+            if (leftTimeLTD.TotalSeconds <= 10)
+            {
+                session.SendNotification($"Vous devez attendre encore {10 - (int)leftTimeLTD.TotalSeconds} secondes avant de pouvoir racheter un LTD");
+                session.SendPacket(new PurchaseErrorComposer());
+                return;
+            }
+
+            session.User.LastLTDPurchaseTime = DateTime.Now;
+        }
+
         var amountPurchase = item.Amount > 1 ? item.Amount : amount;
 
         var totalCreditsCost = amount > 1 ? (item.CostCredits * amount) - ((int)Math.Floor((double)amount / 6) * item.CostCredits) : item.CostCredits;

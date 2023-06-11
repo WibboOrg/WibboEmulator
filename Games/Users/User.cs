@@ -80,6 +80,7 @@ public class User : IDisposable, IEquatable<User>
     public bool IsDisposed { get; set; }
     public bool HasFriendRequestsDisabled { get; set; }
     public int FavouriteGroupId { get; set; }
+
     public int FloodCount { get; set; }
     public DateTime FloodTime { get; set; }
     public bool SpamEnable { get; set; }
@@ -89,7 +90,9 @@ public class User : IDisposable, IEquatable<User>
     public DateTime EveryoneTimer { get; set; }
     public DateTime CommandFunTimer { get; set; }
     public DateTime LastGiftPurchaseTime { get; set; }
+    public DateTime LastLTDPurchaseTime { get; set; }
     public SpamDetect LastLoadedRoomTime { get; } = new(TimeSpan.FromSeconds(2), TimeSpan.FromMinutes(1), 5);
+
     public int CurrentQuestId { get; set; }
     public int LastCompleted { get; set; }
     public int LastQuestId { get; set; }
