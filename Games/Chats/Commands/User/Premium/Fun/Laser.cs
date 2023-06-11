@@ -42,7 +42,7 @@ internal sealed class Laser : IChatCommand
         var timeSpan = DateTime.Now - session.User.CommandFunTimer;
         if (timeSpan.TotalSeconds < 10)
         {
-            userRoom.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.fun.timeout", session.Langue), timeSpan.TotalSeconds));
+            userRoom.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.fun.timeout", session.Langue), 10 - (int)timeSpan.TotalSeconds));
             return;
         }
 
