@@ -1,5 +1,8 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
+
+using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
+using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Games.Chats.Logs;
 using WibboEmulator.Games.GameClients;
 
@@ -20,6 +23,19 @@ internal sealed class GetModeratorUserChatlogEvent : IPacketEvent
         if (clientByUserId == null || clientByUserId.User == null)
         {
             var sortedMessages = new List<ChatlogEntry>();
+
+            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            var table = LogChatDao.GetAllByUserId(dbClient, userId);
+            if (table != null)
+            {
+                foreach (DataRow row in table.Rows)
+                {
+                    sortedMessages.Add(new ChatlogEntry(Convert.ToInt32(row["user_id"]), row["user_name"].ToString(), Convert.ToInt32(row["room_id"]), row["type"].ToString() + row["message"].ToString(), (double)row["timestamp"]));
+                }
+            }
+
+            sortedMessages.Reverse();
+
             session.SendPacket(new ModeratorUserChatlogComposer(userId, "User not online", session.User.CurrentRoomId, sortedMessages));
         }
         else
