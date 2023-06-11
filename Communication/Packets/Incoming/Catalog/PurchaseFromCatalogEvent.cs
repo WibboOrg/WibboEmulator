@@ -81,10 +81,10 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 
         var amountPurchase = item.Amount > 1 ? item.Amount : amount;
 
-        var totalCreditsCost = amount > 1 ? (item.CostCredits * amount) - ((int)Math.Floor((double)amount / 6) * item.CostCredits) : item.CostCredits;
-        var totalPixelCost = amount > 1 ? (item.CostDuckets * amount) - ((int)Math.Floor((double)amount / 6) * item.CostDuckets) : item.CostDuckets;
-        var totalWibboPointCost = amount > 1 ? (item.CostWibboPoints * amount) - ((int)Math.Floor((double)amount / 6) * item.CostWibboPoints) : item.CostWibboPoints;
-        var totalLimitCoinCost = amount > 1 ? (item.CostLimitCoins * amount) - ((int)Math.Floor((double)amount / 6) * item.CostLimitCoins) : item.CostLimitCoins;
+        var totalCreditsCost = amount > 1 ? item.CostCredits * amount : item.CostCredits;
+        var totalPixelCost = amount > 1 ? item.CostDuckets * amount : item.CostDuckets;
+        var totalWibboPointCost = amount > 1 ? item.CostWibboPoints * amount : item.CostWibboPoints;
+        var totalLimitCoinCost = amount > 1 ? item.CostLimitCoins * amount : item.CostLimitCoins;
 
         if (session.User.Credits < totalCreditsCost ||
             session.User.Duckets < totalPixelCost ||
