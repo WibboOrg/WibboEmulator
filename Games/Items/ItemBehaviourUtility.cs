@@ -48,20 +48,20 @@ internal static class ItemBehaviourUtility
             case InteractionType.EXCHANGE_TREE_CLASSIC:
             case InteractionType.EXCHANGE_TREE_EPIC:
             case InteractionType.EXCHANGE_TREE_LEGEND:
-                var days = 16;
+                var days = 8;
                 switch (itemData.InteractionType)
                 {
                     case InteractionType.EXCHANGE_TREE:
-                        days = 2;
+                        days = 1;
                         break;
                     case InteractionType.EXCHANGE_TREE_CLASSIC:
-                        days = 4;
+                        days = 2;
                         break;
                     case InteractionType.EXCHANGE_TREE_EPIC:
-                        days = 8;
+                        days = 4;
                         break;
                     case InteractionType.EXCHANGE_TREE_LEGEND:
-                        days = 16;
+                        days = 8;
                         break;
                 }
 
