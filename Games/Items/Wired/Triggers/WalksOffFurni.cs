@@ -9,7 +9,6 @@ public class WalksOffFurni : WiredTriggerBase, IWired
 {
     public WalksOffFurni(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_WALKS_OFF_FURNI) { }
 
-
     private void OnUserWalksOffFurni(object obj, ItemTriggeredEventArgs args) => this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, args.User, args.Item);
 
     public override void LoadItems(bool inDatabase = false)

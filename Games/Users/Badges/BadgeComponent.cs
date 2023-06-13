@@ -146,6 +146,7 @@ public class BadgeComponent : IDisposable
         var emblems = new Dictionary<string, int>
         {
             { "STAFF_GESTION", 587 },
+            { "STAFF_FURNI", 595 },
             { "STAFF_ADMIN", 583 },
             { "STAFF_ANIMATEUR", 584 },
             { "STAFF_EVENT", 594 },
@@ -189,6 +190,7 @@ public class BadgeComponent : IDisposable
             { "ADM", 23 },
             { "STAFF_GESTION", 45 },
             { "STAFF_ADMIN", 41 },
+            { "STAFF_FURNI", 41 },
             { "STAFF_ANIMATEUR", 42 },
             { "STAFF_EVENT", 52 },
             { "STAFF_MODO", 47 },
