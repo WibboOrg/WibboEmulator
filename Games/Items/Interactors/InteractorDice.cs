@@ -6,6 +6,8 @@ public class InteractorDice : FurniInteractor
 {
     public override void OnPlace(GameClient session, Item item)
     {
+        item.ExtraData = "0";
+        item.UpdateState();
     }
 
     public override void OnRemove(GameClient session, Item item)
@@ -42,7 +44,7 @@ public class InteractorDice : FurniInteractor
                 {
                     roomUser.DiceCounterAmount = 0;
                     roomUser.DiceCounter = 0;
-                    roomUser.OnChat($"Dée: remise à 0 ({roomUser.GetUsername()})", 34); // déplacer
+                    roomUser.OnChat($"Dée: remise à 0 ({roomUser.GetUsername()})", 33);
                 }
             }
             else
@@ -74,7 +76,7 @@ public class InteractorDice : FurniInteractor
             {
                 user.DiceCounterAmount += numberDice;
                 user.DiceCounter++;
-                user.OnChat($"Dée {user.DiceCounter}: +{numberDice} = {user.DiceCounterAmount} ({user.GetUsername()})", 34);
+                user.OnChat($"Dée {user.DiceCounter}: +{numberDice} = {user.DiceCounterAmount} ({user.GetUsername()})", 33);
             }
         }
     }
