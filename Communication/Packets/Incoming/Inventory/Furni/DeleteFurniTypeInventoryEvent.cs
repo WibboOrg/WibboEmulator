@@ -26,6 +26,11 @@ internal sealed class DeleteFurniTypeInventoryEvent : IPacketEvent
             return;
         }
 
+        if (item.GetBaseItem().IsRare && !session.User.HasPermission("empty_items_all"))
+        {
+            return;
+        }
+
         var items = session.User.InventoryComponent.GetItemsByType(item.BaseItem);
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
