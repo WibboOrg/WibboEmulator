@@ -36,20 +36,20 @@ public class InteractorExchangeTree : FurniInteractor
             return;
         }
 
-        var days = 31;
+        var days = 16;
         switch (item.Data.InteractionType)
         {
             case InteractionType.EXCHANGE_TREE:
-                days = 3;
+                days = 2;
                 break;
             case InteractionType.EXCHANGE_TREE_CLASSIC:
-                days = 7;
+                days = 4;
                 break;
             case InteractionType.EXCHANGE_TREE_EPIC:
-                days = 14;
+                days = 8;
                 break;
             case InteractionType.EXCHANGE_TREE_LEGEND:
-                days = 31;
+                days = 16;
                 break;
         }
 
