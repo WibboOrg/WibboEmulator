@@ -16,6 +16,7 @@ using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Users.Premium;
 
 internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 {
@@ -418,15 +419,15 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
             {
                 if (item.Name == "premium_club_3") //Legend
                 {
-                    session.User.Premium.AddPremiumDays(dbClient, 31, 3);
+                    session.User.Premium.AddPremiumDays(dbClient, 31, PremiumClubLevel.LEGEND);
                 }
                 else if (item.Name == "premium_club_2") //Epic
                 {
-                    session.User.Premium.AddPremiumDays(dbClient, 31, 2);
+                    session.User.Premium.AddPremiumDays(dbClient, 31, PremiumClubLevel.EPIC);
                 }
                 else if (item.Name == "premium_club_1") //Classic
                 {
-                    session.User.Premium.AddPremiumDays(dbClient, 31, 1);
+                    session.User.Premium.AddPremiumDays(dbClient, 31, PremiumClubLevel.CLASSIC);
                 }
                 else
                 {

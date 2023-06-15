@@ -91,7 +91,7 @@ public class PremiumComponent : IDisposable
         }
     }
 
-    public void AddPremiumDays(IQueryAdapter dbClient, int days, int clubLevel)
+    public void AddPremiumDays(IQueryAdapter dbClient, int days, PremiumClubLevel clubLevel)
     {
         var now = WibboEnvironment.GetUnixTimestamp();
 
@@ -117,15 +117,15 @@ public class PremiumComponent : IDisposable
             this._expireClassic = DateTime.UtcNow;
         }
 
-        if (clubLevel is 3)
+        if (clubLevel is PremiumClubLevel.LEGEND)
         {
             this._expireLegend += TimeSpan.FromDays(days);
         }
-        if (clubLevel is 3 or 2)
+        if (clubLevel is PremiumClubLevel.LEGEND or PremiumClubLevel.EPIC)
         {
             this._expireEpic += TimeSpan.FromDays(days);
         }
-        if (clubLevel is 3 or 2 or 1)
+        if (clubLevel is PremiumClubLevel.LEGEND or PremiumClubLevel.EPIC or PremiumClubLevel.CLASSIC)
         {
             this._expireClassic += TimeSpan.FromDays(days);
         }
@@ -179,4 +179,11 @@ public class PremiumComponent : IDisposable
     }
 
     public void Dispose() => GC.SuppressFinalize(this);
+}
+
+public enum PremiumClubLevel
+{
+    CLASSIC,
+    EPIC,
+    LEGEND
 }
