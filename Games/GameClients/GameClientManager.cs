@@ -231,7 +231,7 @@ public class GameClientManager
             return;
         }
 
-        if (this._disconnectCycleStopwatch.ElapsedMilliseconds >= 5000)
+        if (this._disconnectCycleStopwatch.ElapsedMilliseconds >= 2000)
         {
             this._disconnectCycleStopwatch.Restart();
 
@@ -240,7 +240,7 @@ public class GameClientManager
             {
                 var timeExecution = DateTime.Now - pending.Value;
 
-                if (timeExecution <= TimeSpan.FromSeconds(5))
+                if (timeExecution <= TimeSpan.FromSeconds(2))
                 {
                     continue;
                 }
