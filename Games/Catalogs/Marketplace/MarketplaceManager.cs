@@ -79,6 +79,4 @@ public class MarketplaceManager
         }
         return 0;
     }
-
-    public static int CalculateComissionPrice(float sellingPrice) => Convert.ToInt32(Math.Ceiling(sellingPrice / 100 * 1));
 }

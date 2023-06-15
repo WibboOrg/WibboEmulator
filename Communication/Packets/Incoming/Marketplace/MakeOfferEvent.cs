@@ -34,8 +34,7 @@ internal sealed class MakeOfferEvent : IPacketEvent
             return;
         }
 
-        var comission = MarketplaceManager.CalculateComissionPrice(sellingPrice);
-        var totalPrice = sellingPrice + comission;
+        var totalPrice = sellingPrice;
         var itemType = 1;
         if (item.GetBaseItem().Type == 'i')
         {
