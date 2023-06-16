@@ -567,6 +567,16 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
 
                 break;
             }
+            case "userpvp":
+            case "notuserpvp":
+            {
+                if (rp.PvpEnable)
+                {
+                    result = true;
+                }
+
+                break;
+            }
             case "winusermoney":
             case "notwinusermoney":
             {
