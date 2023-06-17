@@ -17,9 +17,10 @@ internal sealed class RegenLTD : IChatCommand
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         foreach (var item in page.Items.Values)
         {
+            var limitedSells = item.LimitedEditionSells;
             var limitedStack = item.LimitedEditionStack;
 
-            for (var limitedNumber = 1; limitedNumber < limitedStack + 1; limitedNumber++)
+            for (var limitedNumber = 1; limitedNumber < limitedSells + 1; limitedNumber++)
             {
                 var row = ItemDao.GetOneLimitedId(dbClient, limitedNumber, item.ItemId);
 
