@@ -15,7 +15,7 @@ internal sealed class TransfertRoom : IChatCommand
             return;
         }
 
-        if (!room.CheckRights(session) && !session.User.HasPermission("transfert_all_room"))
+        if (!room.CheckRights(session, true) && !session.User.HasPermission("transfert_all_room"))
         {
             return;
         }
