@@ -23,7 +23,6 @@ public class GameClient
     public Language Langue { get; set; }
     public string ConnectionID { get; set; }
     public bool IsDisconnected { get; set; }
-    public bool ShowGameAlert { get; set; }
     public GameWebSocket Connection { get; private set; }
     public User User { get; set; }
 

@@ -263,7 +263,6 @@ public class CommandManager
         this.Register(67, new Cac());
         this.Register(68, new Pan());
         this.Register(69, new Prison());
-        this.Register(70, new GameAlert());
         this.Register(71, new Emblem());
         this.Register(72, new GiveMoney());
         this.Register(73, new TransfBig());
