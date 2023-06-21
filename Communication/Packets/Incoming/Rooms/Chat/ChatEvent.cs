@@ -108,7 +108,7 @@ internal sealed partial class ChatEvent : IPacketEvent
             user.Client?.SendPacket(new FloodControlComposer(i));
             return;
         }
-        else if (timeSpan.TotalSeconds < 4.0 && session.User.FloodCount > 5 && !session.User.HasPermission("mod"))
+        else if (timeSpan.TotalSeconds < 4.0 && session.User.FloodCount > 5 && !session.User.HasPermission("flood_chat"))
         {
             session.User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("flood_premium") ? 5 : 15;
             session.User.SpamEnable = true;

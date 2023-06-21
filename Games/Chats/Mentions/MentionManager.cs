@@ -42,15 +42,13 @@ public class MentionManager
                     break;
                 }
             }
-
-            if (targetUsername == "here")
+            else if (targetUsername == "here")
             {
                 if (!HereRoom(session, message))
                 {
                     break;
                 }
             }
-
             else if (!SendNotif(session, targetUsername, message))
             {
                 continue;
