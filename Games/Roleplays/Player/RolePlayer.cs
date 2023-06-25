@@ -61,7 +61,6 @@ public class RolePlayer
         var level = 1;
         for (var i = 1; i < 100; i++)
         {
-
             var expmax = (i * 50) + (i * 10 * i);
 
             if (this.Exp >= expmax && i < 99)

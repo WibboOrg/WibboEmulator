@@ -32,16 +32,6 @@ public class PermissionManager
         }
     }
 
-    public bool RankExactRight(int rankId, string fuse)
-    {
-        if (!this._rights.ContainsKey(fuse))
-        {
-            return false;
-        }
-
-        return rankId == this._rights[fuse];
-    }
-
     public bool RankHasRight(int rankId, string fuse)
     {
         if (!this._rights.ContainsKey(fuse))

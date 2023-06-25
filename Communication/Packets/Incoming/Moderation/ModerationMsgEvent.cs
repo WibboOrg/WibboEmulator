@@ -32,7 +32,7 @@ internal sealed class ModerationMsgEvent : IPacketEvent
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("moderation.caution.missingrank", session.Langue));
         }
 
-        if (session.Antipub(message, "<MT>"))
+        if (session.User.Antipub(message, "<MT>"))
         {
             return;
         }

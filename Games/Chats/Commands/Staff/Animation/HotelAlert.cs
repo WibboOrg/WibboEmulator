@@ -8,7 +8,7 @@ internal sealed class HotelAlert : IChatCommand
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var message = CommandManager.MergeParams(parameters, 1);
-        if (session.Antipub(message, "<CMD>", room.Id))
+        if (session.User.Antipub(message, "<CMD>", room.Id))
         {
             return;
         }

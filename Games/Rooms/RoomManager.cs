@@ -207,7 +207,7 @@ public class RoomManager
         watch.Restart();
     }
 
-    public List<RoomData> SearchGroupRooms(string query)
+    public List<RoomData> SearchGroupRooms(string query, int amount = 20)
     {
         var instanceMatches =
             (from RoomInstance in this._rooms.ToList()
@@ -218,7 +218,7 @@ public class RoomManager
              RoomInstance.Value.RoomData.Tags.Contains(query) ||
              RoomInstance.Value.RoomData.Name.Contains(query))
              orderby RoomInstance.Value.RoomData.UsersNow descending
-             select RoomInstance.Value.RoomData).Take(50);
+             select RoomInstance.Value.RoomData).Take(amount);
         return instanceMatches.ToList();
     }
 
@@ -234,7 +234,7 @@ public class RoomManager
         return instanceMatches.ToList();
     }
 
-    public List<RoomData> GetPopularRooms(int category, int amount = 50, Language langue = Language.French)
+    public List<RoomData> GetPopularRooms(int category, int amount = 20, Language langue = Language.French)
     {
         var rooms =
             (from RoomInstance in this._rooms.ToList()
@@ -248,7 +248,7 @@ public class RoomManager
         return rooms.ToList();
     }
 
-    public List<RoomData> GetRecommendedRooms(int amount = 50, int currentRoomId = 0)
+    public List<RoomData> GetRecommendedRooms(int amount = 20, int currentRoomId = 0)
     {
         var rooms =
             (from RoomInstance in this._rooms.ToList()
@@ -262,7 +262,7 @@ public class RoomManager
         return rooms.ToList();
     }
 
-    public List<RoomData> GetPopularRatedRooms(int amount = 50)
+    public List<RoomData> GetPopularRatedRooms(int amount = 20)
     {
         var rooms =
             (from RoomInstance in this._rooms.ToList()
@@ -272,7 +272,7 @@ public class RoomManager
         return rooms.ToList();
     }
 
-    public List<RoomData> GetRoomsByCategory(int category, int amount = 50)
+    public List<RoomData> GetRoomsByCategory(int category, int amount = 20)
     {
         var rooms =
             (from RoomInstance in this._rooms.ToList()
@@ -284,7 +284,7 @@ public class RoomManager
         return rooms.ToList();
     }
 
-    public List<KeyValuePair<string, int>> GetPopularRoomTags()
+    public List<KeyValuePair<string, int>> GetPopularRoomTags(int amount = 20)
     {
         var tags =
             (from RoomInstance in this._rooms.ToList()
@@ -292,7 +292,7 @@ public class RoomManager
              RoomInstance.Value.RoomData.Access != RoomAccess.Invisible
              orderby RoomInstance.Value.RoomData.UsersNow descending
              orderby RoomInstance.Value.RoomData.Score descending
-             select RoomInstance.Value.RoomData.Tags).Take(50);
+             select RoomInstance.Value.RoomData.Tags).Take(amount);
 
         var tagValues = new Dictionary<string, int>();
 
@@ -318,7 +318,7 @@ public class RoomManager
         return sortedTags;
     }
 
-    public List<RoomData> GetGroupRooms(int amount = 50)
+    public List<RoomData> GetGroupRooms(int amount = 20)
     {
         var rooms =
             (from RoomInstance in this._rooms.ToList()

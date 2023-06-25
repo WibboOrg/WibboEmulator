@@ -143,7 +143,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
                     WibboEnvironment.GetGame().GetModerationManager().Tickets()));
             }
 
-            if (session.User.HasExactPermission("helptool"))
+            if (session.User.HasPermission("helptool"))
             {
                 var guideManager = WibboEnvironment.GetGame().GetHelpManager();
                 guideManager.AddGuide(session.User.Id);

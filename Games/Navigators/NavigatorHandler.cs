@@ -155,7 +155,7 @@ internal static class NavigatorHandler
             {
                 var popularRooms = new List<RoomData>();
 
-                popularRooms.AddRange(WibboEnvironment.GetGame().GetRoomManager().GetPopularRooms(-1, 50, session.Langue)); //FetchLimit
+                popularRooms.AddRange(WibboEnvironment.GetGame().GetRoomManager().GetPopularRooms(-1, 20, session.Langue)); //FetchLimit
 
                 message.WriteInteger(popularRooms.Count);
                 foreach (var data in popularRooms.ToList())

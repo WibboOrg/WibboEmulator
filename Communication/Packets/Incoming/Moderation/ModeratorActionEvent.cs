@@ -19,7 +19,7 @@ internal sealed class ModeratorActionEvent : IPacketEvent
 
         _ = alertMode != 3;
 
-        if (session.Antipub(alertMessage, "<MT>"))
+        if (session.User.Antipub(alertMessage, "<MT>"))
         {
             return;
         }

@@ -31,7 +31,7 @@ internal sealed class StaffKick : IChatCommand
             if (parameters.Length > 2)
             {
                 var message = CommandManager.MergeParams(parameters, 2);
-                if (session.Antipub(message, "<CMD>", room.Id))
+                if (session.User.Antipub(message, "<CMD>", room.Id))
                 {
                     return;
                 }

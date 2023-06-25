@@ -32,7 +32,7 @@ internal sealed class ChangeMottoEvent : IPacketEvent
             return;
         }
 
-        if (session.Antipub(newMotto, "<MOTTO>"))
+        if (session.User.Antipub(newMotto, "<MOTTO>"))
         {
             return;
         }

@@ -46,7 +46,7 @@ internal sealed class SendRoomInviteEvent : IPacketEvent
             textMessage = textMessage[..121];
         }
 
-        if (session.Antipub(textMessage, "<RM>"))
+        if (session.User.Antipub(textMessage, "<RM>"))
         {
             return;
         }

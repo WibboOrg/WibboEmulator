@@ -177,7 +177,7 @@ internal sealed partial class ShoutEvent : IPacketEvent
 
             if (!user.IsBot)
             {
-                if (session.Antipub(message, "<TCHAT>", room.Id))
+                if (session.User.Antipub(message, "<TCHAT>", room.Id))
                 {
                     return;
                 }

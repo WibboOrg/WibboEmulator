@@ -22,6 +22,9 @@ using WibboEmulator.Games.Users.Wardrobes;
 using WibboEmulator.Games.Users.Premium;
 using WibboEmulator.Utilities;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Database.Daos.Log;
+using WibboEmulator.Communication.Packets.Outgoing.WibboTool;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 
 public class User : IDisposable, IEquatable<User>
 {
@@ -294,6 +297,79 @@ public class User : IDisposable, IEquatable<User>
         }
     }
 
+    public bool Antipub(string message, string type, int roomId = 0)
+    {
+        if (this.HasPermission("god"))
+        {
+            return false;
+        }
+
+        if (message.Length <= 3)
+        {
+            return false;
+        }
+
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+        LogChatDao.Insert(dbClient, this.Id, roomId, message, type, this.Username);
+
+        if (!WibboEnvironment.GetGame().GetChatManager().GetFilter().Ispub(message))
+        {
+            if (WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessageWord(message))
+            {
+                LogChatPubDao.Insert(dbClient, this.Id, "A vérifié: " + type + message, this.Username);
+
+                foreach (var client in WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers())
+                {
+                    if (client == null || client.User == null)
+                    {
+                        continue;
+                    }
+
+                    client.SendPacket(new AddChatlogsComposer(this.Id, this.Username, type + message));
+                }
+
+                return false;
+            }
+
+            return false;
+        }
+
+        var pubCount = this.PubDetectCount++;
+
+        if (type == "<CMD>")
+        {
+            pubCount = 4;
+        }
+
+        LogChatPubDao.Insert(dbClient, this.Id, "Pub numero " + pubCount + ": " + type + message, this.Username);
+
+        if (pubCount is < 3 and > 0)
+        {
+            this.Client.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.antipub.warn.1", this.Langue), pubCount));
+        }
+        else if (pubCount == 3)
+        {
+            this.Client.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.antipub.warn.2", this.Langue));
+        }
+        else if (pubCount == 4)
+        {
+            WibboEnvironment.GetGame().GetGameClientManager().BanUser(this.Client, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.Username, true, false);
+        }
+
+        foreach (var client in WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers())
+        {
+            if (client == null || client.User == null)
+            {
+                continue;
+            }
+
+            client.SendPacket(RoomNotificationComposer.SendBubble("mention", "Detection d'un message suspect sur le compte " + this.Username));
+            client.SendPacket(new AddChatlogsComposer(this.Id, this.Username, type + message));
+        }
+        return true;
+    }
+
     public bool EnterRoom(Room room)
     {
         if (this.Client == null)
@@ -320,16 +396,6 @@ public class User : IDisposable, IEquatable<User>
         this.Client.SendPacket(room.GameMap.Model.GetHeightmap());
 
         return true;
-    }
-
-    public bool HasExactPermission(string fuse)
-    {
-        if (WibboEnvironment.GetGame().GetPermissionManager().RankExactRight(this.Rank, fuse))
-        {
-            return true;
-        }
-
-        return false;
     }
 
     public bool HasPermission(string fuse)

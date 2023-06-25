@@ -57,7 +57,7 @@ internal sealed class SendHotelAlertEvent : IPacketEvent
             }
 
             ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, session.User.CurrentRoom.Id, string.Empty, "eventha", string.Format("WibbobTool EventHa: {0}", message));
-            //if (session.Antipub(message, "<eventalert>", session.User.CurrentRoom.Id))
+            //if (session.User.Antipub(message, "<eventalert>", session.User.CurrentRoom.Id))
             //{
             //return;
             //}
@@ -75,7 +75,7 @@ internal sealed class SendHotelAlertEvent : IPacketEvent
         else
         {
             ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", message));
-            if (session.Antipub(message, "<alert>"))
+            if (session.User.Antipub(message, "<alert>"))
             {
                 return;
             }
