@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Text;
 using WibboEmulator.Communication.Interfaces;
+using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.WebSocket;
 using WibboEmulator.Database.Daos;
@@ -35,10 +36,10 @@ public class GameClientManager
         this._pendingDisconnect = new ConcurrentDictionary<string, DateTime>();
         this._userStaff = new List<int>();
 
-        this._premiumCycleStopwatch = new();
+        this._gameClientCycleStopwatch = new();
         this._disconnectCycleStopwatch = new();
 
-        this._premiumCycleStopwatch.Start();
+        this._gameClientCycleStopwatch.Start();
         this._disconnectCycleStopwatch.Start();
     }
 
@@ -201,24 +202,29 @@ public class GameClientManager
     public void OnCycle()
     {
         this.PendingDisconnectCycle();
-        this.CheckPremiumCycle();
+        this.GameClientCycle();
     }
 
-    private readonly Stopwatch _premiumCycleStopwatch;
-    private void CheckPremiumCycle()
+    private readonly Stopwatch _gameClientCycleStopwatch;
+    private void GameClientCycle()
     {
-        if (this._premiumCycleStopwatch.ElapsedMilliseconds >= 60000)
+        if (this._gameClientCycleStopwatch.ElapsedMilliseconds >= 60000)
         {
-            this._premiumCycleStopwatch.Restart();
+            this._gameClientCycleStopwatch.Restart();
 
             foreach (var client in this._clients.Values.ToList())
             {
-                if (client == null || client.User == null || client.User.Premium == null || client.User.Rank != 2)
+                if (client == null || client.User == null)
                 {
                     continue;
                 }
 
-                client.User.Premium.CheckPremiumTimeout();
+                client.SendPacket(new PingComposer());
+
+                if (client.User.Premium != null && client.User.Rank >= 2)
+                {
+                    client.User.Premium.CheckPremiumTimeout();
+                }
             }
         }
     }
