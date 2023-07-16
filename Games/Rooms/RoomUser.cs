@@ -61,6 +61,11 @@ public class RoomUser : IEquatable<RoomUser>
     public int DanceId { get; set; }
     public bool IsSpectator { get; set; }
 
+    public int SlotAmount { get; set; }
+    public bool IsSlot { get; set; }
+    public bool IsSlotSpin { get; set; }
+    public bool IsSlotWinner { get; set; }
+
     public int DiceCounterAmount { get; set; }
     public int DiceCounter { get; set; }
 

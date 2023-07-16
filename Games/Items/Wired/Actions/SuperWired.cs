@@ -1,5 +1,7 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
+
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
@@ -131,6 +133,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             case "givelot":
             case "winmovierun":
             case "givebanner":
+            case "startslot":
+            case "endslot":
                 if (this.IsGod)
                 {
                     return;
@@ -198,7 +202,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
         if (this.StringParam.Contains(':'))
         {
             command = this.StringParam.Split(':')[0].ToLower();
-            value = this.StringParam.Split(':')[1];
+            value = string.Join(':', this.StringParam.Split(':').Skip(1));
         }
         else
         {
@@ -750,14 +754,19 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "userpvp":
             {
-                if (value == "true")
-                {
-                    rp.PvpEnable = true;
-                }
-                else
-                {
-                    rp.PvpEnable = false;
-                }
+                rp.PvpEnable = value == "true";
+
+                break;
+            }
+            case "userfar":
+            {
+                rp.FarEnable = value == "true";
+
+                break;
+            }
+            case "usercac":
+            {
+                rp.FarEnable = value == "true";
 
                 break;
             }
@@ -1691,6 +1700,47 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 break;
             }
+            case "startslot":
+            {
+                _ = int.TryParse(value, out var valueInt);
+
+                if (valueInt is <= 0 or > 100)
+                {
+                    break;
+                }
+
+                if (roomUser.Client.User.WibboPoints < valueInt)
+                {
+                    break;
+                }
+
+                roomUser.IsSlot = true;
+                roomUser.SlotAmount = valueInt;
+
+                var chooseList = new List<string[]>
+                {
+                    new string[] { "", "play_slot", string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("startslot.botchoose", roomUser.Client.Langue), roomUser.SlotAmount), "" },
+                };
+
+                roomUser.Client.SendPacket(new BotChooseComposer(chooseList));
+                break;
+            }
+            case "endslot":
+            {
+                roomUser.IsSlotSpin = false;
+
+                if (roomUser.IsSlotWinner)
+                {
+                    roomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("endslot.winner", roomUser.Client.Langue), roomUser.SlotAmount), true);
+                }
+                else
+                {
+                    roomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("endslot.looser", roomUser.Client.Langue), roomUser.SlotAmount), true);
+                }
+
+                roomUser.Client.SendPacket(new ActivityPointNotificationComposer(roomUser.Client.User.WibboPoints, 0, 105));
+                break;
+            }
             case "botchoose":
             {
                 var chooseList = new List<string[]>();
@@ -1745,6 +1795,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 break;
             }
             case "stopsounduser":
+            case "stopmusicuser":
             {
                 roomUser.Client.SendPacket(new StopSoundComposer(value)); //Type = Trax
 

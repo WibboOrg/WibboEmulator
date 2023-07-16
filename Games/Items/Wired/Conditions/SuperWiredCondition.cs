@@ -80,6 +80,12 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "rankplus":
             case "rankmoin":
             case "rank":
+            case "slotwinner":
+            case "notslotwinner":
+            case "slotspin":
+            case "notslotspin":
+            case "slot":
+            case "notslot":
                 if (this.IsStaff)
                 {
                     return;
@@ -396,12 +402,23 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "inventoryitem":
             case "inventorynotitem":
             {
-                if (!int.TryParse(value, out var valueInt))
+                var itemId = 0;
+                var quantity = 1;
+
+                if (value.Contains(';'))
+                {
+                    if (!int.TryParse(value.Split(';')[0], out itemId) || !int.TryParse(value.Split(';')[1], out quantity))
+                    {
+                        break;
+                    }
+                }
+                else if (!int.TryParse(value, out itemId))
                 {
                     break;
                 }
 
-                if (rp.GetInventoryItem(valueInt) != null)
+                var itemRp = rp.GetInventoryItem(itemId);
+                if (itemRp != null && itemRp.Count >= quantity)
                 {
                     result = true;
                 }
@@ -1227,6 +1244,43 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "notenable":
             {
                 if (user.CurrentEffect.ToString() == value)
+                {
+                    result = true;
+                }
+
+                break;
+            }
+            case "slotwinner":
+            case "notslotwinner":
+            {
+                if (user.IsSlotWinner)
+                {
+                    result = true;
+                }
+
+                break;
+            }
+            case "slotspin":
+            case "notslotspin":
+            {
+                if (user.IsSlotSpin)
+                {
+                    result = true;
+                }
+
+                break;
+            }
+            case "slot":
+            case "notslot":
+            {
+                _ = int.TryParse(value, out var valueInt);
+
+                if (valueInt is <= 0 or > 100)
+                {
+                    break;
+                }
+
+                if (user.Client.User.WibboPoints >= valueInt)
                 {
                     result = true;
                 }
