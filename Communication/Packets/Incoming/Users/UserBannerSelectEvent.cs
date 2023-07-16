@@ -17,13 +17,20 @@ internal sealed class UserBannerSelectEvent : IPacketEvent
             return;
         }
 
-        if (!session.User.Banner.BannerList.Contains(bannerId) && bannerId != -1)
+        var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(bannerId);
+
+        if (banner == null && bannerId != -1)
         {
             return;
         }
 
-        session.User.BannerId = bannerId;
+        if (!session.User.Banner.BannerList.Contains(banner) && bannerId != -1)
+        {
+            return;
+        }
 
-        session.SendPacket(new UserBannerComposer(session.User.Id, session.User.BannerId));
+        session.User.BannerSelected = bannerId != -1 ? banner : null;
+
+        session.SendPacket(new UserBannerComposer(session.User.Id, session.User.BannerSelected));
     }
 }

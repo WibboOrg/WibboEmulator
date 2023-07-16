@@ -4,25 +4,22 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Banners;
 using WibboEmulator.Games.Users;
 
 public class BannerComponent : IDisposable
 {
     private readonly User _userInstance;
-    private int _bannerAmount;
-    public List<int> BannerList { get; }
+    public List<Banner> BannerList { get; }
 
     public BannerComponent(User user)
     {
         this._userInstance = user;
-        this._bannerAmount = 0;
         this.BannerList = new();
     }
 
     public void Init(IQueryAdapter dbClient)
     {
-        this._bannerAmount = WibboEnvironment.GetSettings().GetData<int>("banner.amount");
-
         this.LoadDefaultBanner();
 
         var table = UserBannerDao.GetAll(dbClient, this._userInstance.Id);
@@ -31,9 +28,11 @@ public class BannerComponent : IDisposable
         {
             var id = Convert.ToInt32(dataRow["banner_id"]);
 
-            if (!this.BannerList.Contains(id))
+            var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(id);
+
+            if (!this.BannerList.Contains(banner))
             {
-                this.BannerList.Add(id);
+                this.BannerList.Add(banner);
             }
         }
     }
@@ -42,42 +41,54 @@ public class BannerComponent : IDisposable
     {
         if (this._userInstance.HasPermission("premium_legend"))
         {
-            this.BannerList.Add(5);
-            this.BannerList.Add(6);
-            this.BannerList.Add(7);
+            this.LoadBanner(5);
+            this.LoadBanner(6);
+            this.LoadBanner(7);
         }
 
         if (this._userInstance.HasPermission("premium_epic"))
         {
-            this.BannerList.Add(4);
-            this.BannerList.Add(3);
+            this.LoadBanner(4);
+            this.LoadBanner(3);
         }
 
         if (this._userInstance.HasPermission("premium_classic"))
         {
-            this.BannerList.Add(2);
+            this.LoadBanner(2);
         }
 
-        this.BannerList.Add(1);
-        this.BannerList.Add(0);
+        this.LoadBanner(1);
+        this.LoadBanner(73);
 
         if (this._userInstance.HasPermission("banner_all"))
         {
-            for (var id = 0; id < this._bannerAmount; id++)
+            foreach (var banner in WibboEnvironment.GetGame().GetBannerManager().GetBanners())
             {
-                if (!this.BannerList.Contains(id))
+                if (!this.BannerList.Contains(banner))
                 {
-                    this.BannerList.Add(id);
+                    this.BannerList.Add(banner);
                 }
             }
         }
     }
 
+    private void LoadBanner(int id)
+    {
+        var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(id);
+
+        if (banner != null && !this.BannerList.Contains(banner))
+        {
+            this.BannerList.Add(banner);
+        }
+    }
+
     public void AddBanner(IQueryAdapter dbClient, int id)
     {
-        if (!this.BannerList.Contains(id))
+        var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(id);
+
+        if (banner != null && !this.BannerList.Contains(banner))
         {
-            this.BannerList.Add(id);
+            this.BannerList.Add(banner);
 
             UserBannerDao.Insert(dbClient, this._userInstance.Id, id);
 
@@ -88,15 +99,17 @@ public class BannerComponent : IDisposable
 
     public void RemoveBanner(IQueryAdapter dbClient, int id)
     {
-        if (this.BannerList.Contains(id))
+        var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(id);
+
+        if (this.BannerList.Contains(banner))
         {
-            this.BannerList.Remove(id);
+            this.BannerList.Remove(banner);
 
             UserBannerDao.Delete(dbClient, this._userInstance.Id, id);
 
-            if (this._userInstance.BannerId == id)
+            if (this._userInstance.BannerSelected == banner)
             {
-                this._userInstance.BannerId = -1;
+                this._userInstance.BannerSelected = null;
             }
 
             this._userInstance.Client?.SendPacket(new UserBannerListComposer(this.BannerList));

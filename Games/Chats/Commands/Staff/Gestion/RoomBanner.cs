@@ -18,12 +18,18 @@ internal sealed class RoomBanner : IChatCommand
             return;
         }
 
+        var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(bannerId);
+
+        if (banner == null)
+        {
+            return;
+        }
+
         var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
         foreach (var targetUser in room.RoomUserManager.GetUserList().ToList())
         {
-            if (targetUser == null || targetUser.IsBot || targetUser.Client == null || targetUser.Client.User.Banner == null
-                || targetUser.Client.User.Banner.BannerList.Contains(bannerId))
+            if (targetUser == null || targetUser.IsBot || targetUser.Client == null || targetUser.Client.User.Banner == null)
             {
                 return;
             }

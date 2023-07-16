@@ -25,7 +25,14 @@ internal sealed class RemoveBanner : IChatCommand
             return;
         }
 
-        if (!targetUser.User.Banner.BannerList.Contains(bannerId))
+        var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(bannerId);
+
+        if (banner == null)
+        {
+            return;
+        }
+
+        if (!targetUser.User.Banner.BannerList.Contains(banner))
         {
             return;
         }

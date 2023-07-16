@@ -25,6 +25,7 @@ using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Communication.Packets.Outgoing.WibboTool;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
+using WibboEmulator.Games.Banners;
 
 public class User : IDisposable, IEquatable<User>
 {
@@ -94,12 +95,13 @@ public class User : IDisposable, IEquatable<User>
     public DateTime CommandFunTimer { get; set; }
     public DateTime LastGiftPurchaseTime { get; set; }
     public DateTime LastLTDPurchaseTime { get; set; }
+    public DateTime LastCreditsTime { get; set; } = DateTime.Now;
     public SpamDetect LastLoadedRoomTime { get; } = new(TimeSpan.FromSeconds(2), TimeSpan.FromMinutes(1), 5);
 
+    public Banner BannerSelected { get; set; }
     public int CurrentQuestId { get; set; }
     public int LastCompleted { get; set; }
     public int LastQuestId { get; set; }
-    public int BannerId { get; set; }
     public bool InfoSaved { get; set; }
     public bool AcceptTrading { get; set; }
     public bool HideInRoom { get; set; }
@@ -191,7 +193,7 @@ public class User : IDisposable, IEquatable<User>
         this.IsFirstConnexionToday = isFirstConnexionToday;
         this.Langue = langue;
         this.IgnoreAllExpireTime = ignoreAllExpire;
-        this.BannerId = bannerId;
+        this.BannerSelected = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(bannerId);
 
         if (clientVolume.Contains(','))
         {
@@ -439,7 +441,7 @@ public class User : IDisposable, IEquatable<User>
             var timeOnline = DateTime.Now - this.OnlineTime;
             var timeOnlineSec = (int)timeOnline.TotalSeconds;
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            UserDao.UpdateOffline(dbClient, this.Id, this.Duckets, this.Credits, this.BannerId);
+            UserDao.UpdateOffline(dbClient, this.Id, this.Duckets, this.Credits, this.BannerSelected != null ? this.BannerSelected.Id : -1);
             UserStatsDao.UpdateAll(dbClient, this.Id, this.FavouriteGroupId, timeOnlineSec, this.CurrentQuestId, this.Respect, this.DailyRespectPoints, this.DailyPetRespectPoints);
         }
 

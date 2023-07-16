@@ -9,6 +9,7 @@ using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Achievements;
 using WibboEmulator.Games.Animations;
 using WibboEmulator.Games.Badges;
+using WibboEmulator.Games.Banners;
 using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.Chats;
 using WibboEmulator.Games.Effects;
@@ -47,6 +48,7 @@ public class Game : IDisposable
     private readonly RoleplayManager _roleplayManager;
     private readonly AnimationManager _animationManager;
     private readonly LootManager _lootManager;
+    private readonly BannerManager _bannerManager;
 
     private Thread _gameLoop;
     private readonly int _cycleSleepTime = 25;
@@ -76,6 +78,7 @@ public class Game : IDisposable
         this._achievementManager = new AchievementManager();
         this._animationManager = new AnimationManager();
         this._lootManager = new LootManager();
+        this._bannerManager = new BannerManager();
         this._packetManager = new PacketManager();
 
         this._moduleWatch = new Stopwatch();
@@ -102,6 +105,7 @@ public class Game : IDisposable
         this._achievementManager.Init(dbClient);
         this._animationManager.Init(dbClient);
         this._lootManager.Init(dbClient);
+        this._bannerManager.Init(dbClient);
         this._packetManager.Init();
 
         ServerStatusUpdater.Init(dbClient);
@@ -142,6 +146,8 @@ public class Game : IDisposable
     public QuestManager GetQuestManager() => this._questManager;
 
     public GroupManager GetGroupManager() => this._groupManager;
+
+    public BannerManager GetBannerManager() => this._bannerManager;
 
     public LandingViewManager GetHotelView() => this._landingViewManager;
 
