@@ -1,6 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.BuildersClub;
-using WibboEmulator.Communication.Packets.Outgoing.Campaign;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
@@ -253,10 +252,14 @@ internal sealed class SSOTicketEvent : IPacketEvent
 
         session.User.NewUser = false;
 
-        var roomId = 0;
-        roomId = RoomDao.InsertDuplicate(dbClient, session.User.Username, WibboEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", session.Langue));
+        var homeId = WibboEnvironment.GetSettings().GetData<int>("default.home.id");
 
-        UserDao.UpdateNuxEnable(dbClient, session.User.Id, roomId);
+        var roomId = RoomDao.InsertDuplicate(dbClient, session.User.Username, WibboEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", session.Langue));
+
+        UserDao.UpdateNuxEnable(dbClient, session.User.Id, homeId > 0 ? homeId : roomId);
+
+        session.User.HomeRoom = homeId > 0 ? homeId : roomId;
+
         if (roomId == 0)
         {
             return false;
@@ -268,8 +271,6 @@ internal sealed class SSOTicketEvent : IPacketEvent
         {
             session.User.UsersRooms.Add(roomId);
         }
-
-        session.User.HomeRoom = roomId;
 
         return true;
     }
