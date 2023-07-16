@@ -75,7 +75,6 @@ internal sealed class BuyOfferEvent : IPacketEvent
             }
 
             CatalogMarketplaceOfferDao.UpdateState(dbClient, offerId);
-
             CatalogMarketplaceDataDao.Replace(dbClient, item.SpriteId, Convert.ToInt32(row["total_price"]));
 
             if (WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.TryGetValue(item.SpriteId, out var value) && WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.ContainsKey(item.SpriteId))

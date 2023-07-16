@@ -30,7 +30,7 @@ internal sealed class HaCommand : IRCONCommand
         var message = parameters[2];
 
         ModerationManager.LogStaffEntry(client.User.Id, client.User.Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", message));
-        if (client.Antipub(message, "<alert>"))
+        if (client.User.Antipub(message, "<alert>"))
         {
             return false;
         }

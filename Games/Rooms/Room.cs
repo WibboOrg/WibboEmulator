@@ -504,7 +504,7 @@ public class Room : IDisposable
                 continue;
             }
 
-            if (user.Client == null || user.Client.Connection == null || user.Client.User == null)
+            if (user.Client == null || user.Client.User == null)
             {
                 continue;
             }
@@ -558,7 +558,7 @@ public class Room : IDisposable
                 continue;
             }
 
-            if (user.Client == null || user.Client.Connection == null)
+            if (user.Client == null)
             {
                 continue;
             }
@@ -591,7 +591,7 @@ public class Room : IDisposable
                 continue;
             }
 
-            if (user.Client == null || user.Client.Connection == null)
+            if (user.Client == null)
             {
                 continue;
             }
