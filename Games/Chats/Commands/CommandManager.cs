@@ -361,6 +361,6 @@ public class CommandManager
         this.Register(168, new RoomBanner());
         this.Register(170, new ChatGTP());
         this.Register(171, new TransfertRoom());
+        this.Register(172, new DeleteGroup());
     }
-
 }
