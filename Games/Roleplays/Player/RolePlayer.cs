@@ -36,6 +36,8 @@ public class RolePlayer
     public int SlowTimer { get; set; }
     public int AggroTimer { get; set; }
     public int PlayerOutTimer { get; set; }
+    public bool CacEnable { get; set; }
+    public bool FarEnable { get; set; }
     public bool PvpEnable { get; set; }
 
     public int TradeId { get; set; }

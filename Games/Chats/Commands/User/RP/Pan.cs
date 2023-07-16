@@ -23,7 +23,7 @@ internal sealed class Pan : IChatCommand
             return;
         }
 
-        if (rp.Dead || !rp.PvpEnable || rp.SendPrison)
+        if (rp.Dead || !rp.PvpEnable || rp.SendPrison || !rp.FarEnable)
         {
             return;
         }

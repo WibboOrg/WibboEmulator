@@ -27,7 +27,7 @@ internal sealed class Cac : IChatCommand
             return;
         }
 
-        if (rp.Dead || !rp.PvpEnable || rp.SendPrison || userRoom.Freeze)
+        if (rp.Dead || !rp.PvpEnable || rp.SendPrison || userRoom.Freeze || !rp.CacEnable)
         {
             return;
         }

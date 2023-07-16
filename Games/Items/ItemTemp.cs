@@ -16,7 +16,7 @@ public class ItemTemp : IEquatable<ItemTemp>
     public int Distance { get; set; }
     public InteractionTypeTemp InteractionType { get; set; }
 
-    public ItemTemp(int id, int userId, int spriteId, int x, int y, double z, string extraData, MovementDirection movement, int value, InteractionTypeTemp pInteraction, int pDistance = 0, int pTeamId = 0)
+    public ItemTemp(int id, int userId, int spriteId, int x, int y, double z, string extraData, MovementDirection movement, int value, InteractionTypeTemp interaction, int distance = 0, int teamId = 0)
     {
         this.Id = id;
         this.VirtualUserId = userId;
@@ -27,9 +27,9 @@ public class ItemTemp : IEquatable<ItemTemp>
         this.ExtraData = extraData;
         this.Movement = movement;
         this.Value = value;
-        this.TeamId = pTeamId;
-        this.Distance = pDistance;
-        this.InteractionType = pInteraction;
+        this.TeamId = teamId;
+        this.Distance = distance;
+        this.InteractionType = interaction;
     }
 
     public bool Equals(ItemTemp other) => other.Id == this.Id;
