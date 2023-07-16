@@ -2,8 +2,12 @@ namespace WibboEmulator.Games.GameClients;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Text;
+using MySqlX.XDevAPI;
 using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.WebSocket;
 using WibboEmulator.Database.Daos;
@@ -225,6 +229,21 @@ public class GameClientManager
                 {
                     client.User.Premium.CheckPremiumTimeout();
                 }
+
+                var creditsTime = DateTime.Now - client.User.LastCreditsTime;
+
+                if (creditsTime > TimeSpan.FromMinutes(20))
+                {
+                    client.User.LastCreditsTime = DateTime.Now;
+
+                    var amountCredits = WibboEnvironment.GetSettings().GetData<int>("user.amount.credits.hours");
+
+                    if (amountCredits > 0)
+                    {
+                        client.User.Credits += amountCredits;
+                        client.SendPacket(new CreditBalanceComposer(client.User.Credits));
+                    }
+                }
             }
         }
     }
@@ -421,7 +440,7 @@ public class GameClientManager
                     var timeOnline = DateTime.Now - client.User.OnlineTime;
                     var timeOnlineSec = (int)timeOnline.TotalSeconds;
 
-                    _ = stringBuilder.Append(UserDao.BuildUpdateQuery(client.User.Id, client.User.Duckets, client.User.Credits, client.User.BannerId));
+                    _ = stringBuilder.Append(UserDao.BuildUpdateQuery(client.User.Id, client.User.Duckets, client.User.Credits, client.User.BannerSelected != null ? client.User.BannerSelected.Id : -1));
                     _ = stringBuilder.Append(UserStatsDao.BuildUpdateQuery(client.User.Id, client.User.FavouriteGroupId, timeOnlineSec, client.User.CurrentQuestId, client.User.Respect, client.User.DailyRespectPoints, client.User.DailyPetRespectPoints));
                 }
                 catch

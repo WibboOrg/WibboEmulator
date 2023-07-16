@@ -4,11 +4,8 @@ using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
-using WibboEmulator.Communication.Packets.Outgoing.WibboTool;
 using WibboEmulator.Communication.WebSocket;
 using WibboEmulator.Core.Language;
-using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Games.Users;
 using WibboEmulator.Utilities;
 
@@ -133,7 +130,7 @@ public class GameClient
 
     public void SendPacket(ServerPacketList packets)
     {
-        if (packets == null)
+        if (packets == null || this.Connection == null)
         {
             return;
         }
