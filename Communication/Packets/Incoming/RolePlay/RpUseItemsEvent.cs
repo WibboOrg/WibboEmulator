@@ -82,7 +82,7 @@ internal sealed class RpUseItemsEvent : IPacketEvent
         {
             case "openpage":
             {
-                user.Client?.SendPacket(new InClientLinkComposer("habbopages/roleplay/" + rpItem.Value));
+                user.Client?.SendPacket(new InClientLinkComposer("habbopages/" + rpItem.Value));
                 break;
             }
             case "openguide":
