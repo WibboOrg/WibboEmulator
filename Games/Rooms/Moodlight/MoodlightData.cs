@@ -72,7 +72,7 @@ public class MoodlightData
             bits[0] = "#000000";
         }
 
-        return new MoodlightPreset(bits[0], int.Parse(bits[1]), WibboEnvironment.EnumToBool(bits[2]));
+        return new MoodlightPreset(bits[0], int.Parse(bits[1]), bits[2] == "1");
     }
 
     public MoodlightPreset GetPreset(int i)

@@ -108,7 +108,7 @@ public class CatalogManager
                     data, Convert.ToString(row["catalog_name"]), Convert.ToInt32(row["page_id"]), Convert.ToInt32(row["cost_credits"]),
                     Convert.ToInt32(row["cost_pixels"]), Convert.ToInt32(row["cost_diamonds"]), Convert.ToInt32(row["cost_limitcoins"]),
                     Convert.ToInt32(row["amount"]), DBNull.Value.Equals(row["limited_sells"]) ? 0 : Convert.ToInt32(row["limited_sells"]),
-                    DBNull.Value.Equals(row["limited_stack"]) ? 0 : Convert.ToInt32(row["limited_stack"]), Convert.ToInt32(row["offer_active"]) == 1,
+                    DBNull.Value.Equals(row["limited_stack"]) ? 0 : Convert.ToInt32(row["limited_stack"]), Convert.ToBoolean(row["offer_active"]),
                     Convert.ToString(row["badge"])));
 
                 this._itemsPage.Add(Convert.ToInt32(row["id"]), pageId);
@@ -120,10 +120,10 @@ public class CatalogManager
             {
                 foreach (DataRow row in catalogPages.Rows)
                 {
-                    this._pages.Add(Convert.ToInt32(row["id"]), new CatalogPage(Convert.ToInt32(row["id"]), Convert.ToInt32(row["parent_id"]), row["enabled"].ToString(), Convert.ToString(row["caption"]),
+                    this._pages.Add(Convert.ToInt32(row["id"]), new CatalogPage(Convert.ToInt32(row["id"]), Convert.ToInt32(row["parent_id"]), Convert.ToBoolean(row["enabled"]), Convert.ToString(row["caption"]),
                         Convert.ToString(row["page_link"]), Convert.ToInt32(row["icon_image"]), Convert.ToString(row["required_right"]), Convert.ToString(row["page_layout"]),
                         Convert.ToString(row["page_strings_1"]), Convert.ToString(row["page_strings_2"]), Convert.ToString(row["caption_en"]),
-                        Convert.ToString(row["caption_br"]), Convert.ToString(row["page_strings_2_en"]), Convert.ToString(row["page_strings_2_br"]), row["is_premium"].ToString(),
+                        Convert.ToString(row["caption_br"]), Convert.ToString(row["page_strings_2_en"]), Convert.ToString(row["page_strings_2_br"]), Convert.ToBoolean(row["is_premium"]),
                         this._items.TryGetValue(Convert.ToInt32(row["id"]), out var value) ? value : new Dictionary<int, CatalogItem>()));
                 }
             }

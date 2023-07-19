@@ -37,9 +37,9 @@ internal sealed class RoleplayEnemyDao
 
     internal static void UpdateZoneDistance(IQueryAdapter dbClient, int rpId, int zoneDistance) => dbClient.RunQuery("UPDATE `roleplay_enemy` SET zone_distance = '" + zoneDistance + "' WHERE id = '" + rpId + "'");
 
-    internal static void UpdateResetPosition(IQueryAdapter dbClient, int rpId, bool resetPosition) => dbClient.RunQuery("UPDATE `roleplay_enemy` SET reset_position = '" + WibboEnvironment.BoolToEnum(resetPosition) + "' WHERE id = '" + rpId + "'");
+    internal static void UpdateResetPosition(IQueryAdapter dbClient, int rpId, bool resetPosition) => dbClient.RunQuery("UPDATE `roleplay_enemy` SET reset_position = '" + (resetPosition ? "1" : "0") + "' WHERE id = '" + rpId + "'");
 
     internal static void UpdateLostAggroDistance(IQueryAdapter dbClient, int rpId, int lostAggroDistance) => dbClient.RunQuery("UPDATE `roleplay_enemy` SET lost_aggro_distance = '" + lostAggroDistance + "' WHERE id = '" + rpId + "'");
 
-    internal static void UpdateZombieMode(IQueryAdapter dbClient, int rpId, bool zombieMode) => dbClient.RunQuery("UPDATE `roleplay_enemy` SET zombie_mode = '" + WibboEnvironment.BoolToEnum(zombieMode) + "' WHERE id = '" + rpId + "'");
+    internal static void UpdateZombieMode(IQueryAdapter dbClient, int rpId, bool zombieMode) => dbClient.RunQuery("UPDATE `roleplay_enemy` SET zombie_mode = '" + (zombieMode ? "1" : "0") + "' WHERE id = '" + rpId + "'");
 }

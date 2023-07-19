@@ -49,16 +49,16 @@ internal sealed class BotUserDao
     {
         dbClient.SetQuery("UPDATE `bot_user` SET chat_enabled = @AutomaticChat, chat_seconds = @SpeakingInterval, is_mixchat = @MixChat, chat_text = @ChatText WHERE id = @id LIMIT 1");
         dbClient.AddParameter("id", botId);
-        dbClient.AddParameter("AutomaticChat", WibboEnvironment.BoolToEnum(automaticChat));
+        dbClient.AddParameter("AutomaticChat", automaticChat ? "1" : "0");
         dbClient.AddParameter("SpeakingInterval", speakingInterval);
-        dbClient.AddParameter("MixChat", WibboEnvironment.BoolToEnum(mixChat));
+        dbClient.AddParameter("MixChat", mixChat ? "1" : "0");
         dbClient.AddParameter("ChatText", chatText);
         dbClient.RunQuery();
     }
 
-    internal static void UpdateWalkEnabled(IQueryAdapter dbClient, int botId, bool balkingEnabled) => dbClient.RunQuery("UPDATE `bot_user` SET walk_enabled = '" + WibboEnvironment.BoolToEnum(balkingEnabled) + "' WHERE id = '" + botId + "'");
+    internal static void UpdateWalkEnabled(IQueryAdapter dbClient, int botId, bool balkingEnabled) => dbClient.RunQuery("UPDATE `bot_user` SET walk_enabled = '" + (balkingEnabled ? "1" : "0") + "' WHERE id = '" + botId + "'");
 
-    internal static void UpdateIsDancing(IQueryAdapter dbClient, int botId, bool isDancing) => dbClient.RunQuery("UPDATE `bot_user` SET is_dancing = '" + WibboEnvironment.BoolToEnum(isDancing) + "' WHERE id = '" + botId + "'");
+    internal static void UpdateIsDancing(IQueryAdapter dbClient, int botId, bool isDancing) => dbClient.RunQuery("UPDATE `bot_user` SET is_dancing = '" + (isDancing ? "1" : "0") + "' WHERE id = '" + botId + "'");
 
     internal static void UpdateName(IQueryAdapter dbClient, int botId, string name)
     {

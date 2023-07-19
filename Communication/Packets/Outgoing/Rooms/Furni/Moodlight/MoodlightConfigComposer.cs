@@ -14,7 +14,7 @@ internal sealed class MoodlightConfigComposer : ServerPacket
         {
             i++;
             this.WriteInteger(i);
-            this.WriteInteger(int.Parse(WibboEnvironment.BoolToEnum(moodlightPreset.BackgroundOnly)) + 1);
+            this.WriteInteger((moodlightPreset.BackgroundOnly ? 1 : 0) + 1);
             this.WriteString(moodlightPreset.ColorCode);
             this.WriteInteger(moodlightPreset.ColorIntensity);
         }

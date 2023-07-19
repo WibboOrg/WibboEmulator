@@ -6,7 +6,7 @@ internal sealed class NavigatorPublicDao
 {
     internal static DataTable GetAll(IQueryAdapter dbClient)
     {
-        dbClient.SetQuery("SELECT room_id, image_url, enabled, langue, category_type FROM `navigator_public` ORDER BY order_num ASC");
+        dbClient.SetQuery("SELECT room_id, image_url, langue, category_type FROM `navigator_public` WHERE enabled = '1' ORDER BY order_num ASC");
         return dbClient.GetTable();
     }
 }

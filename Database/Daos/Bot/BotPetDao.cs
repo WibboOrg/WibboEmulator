@@ -50,7 +50,7 @@ internal sealed class BotPetDao
         dbClient.RunQuery();
     }
 
-    internal static void UpdateAnyoneRide(IQueryAdapter dbClient, int petId, bool anyoneCanRide) => dbClient.RunQuery("UPDATE `bot_pet` SET anyone_ride = '" + WibboEnvironment.BoolToEnum(anyoneCanRide) + "' WHERE id = '" + petId + "' LIMIT 1");
+    internal static void UpdateAnyoneRide(IQueryAdapter dbClient, int petId, bool anyoneCanRide) => dbClient.RunQuery("UPDATE `bot_pet` SET anyone_ride = '" + (anyoneCanRide ? "1" : "0") + "' WHERE id = '" + petId + "' LIMIT 1");
 
     internal static void UpdateRoomId(IQueryAdapter dbClient, int petId, int roomId) => dbClient.RunQuery("UPDATE `bot_pet` SET room_id = '" + roomId + "' WHERE id = '" + petId + "' LIMIT 1");
 

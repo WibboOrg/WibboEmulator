@@ -38,7 +38,7 @@ public class RPItemManager
                         Convert.ToInt32(dataRow["price"]),
                         (string)dataRow["type"],
                         Convert.ToInt32(dataRow["value"]),
-                        (string)dataRow["allowstack"] == "1",
+                        Convert.ToBoolean(dataRow["allowstack"]),
                         RPItemCategorys.GetTypeFromString((string)dataRow["category"])));
                 }
             }

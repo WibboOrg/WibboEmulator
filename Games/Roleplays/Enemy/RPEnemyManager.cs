@@ -53,7 +53,7 @@ public class RPEnemyManager
 
                 var config = new RPEnemy(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["health"]), Convert.ToInt32(dataRow["weapon_far_id"]), Convert.ToInt32(dataRow["weapon_cac_id"]), Convert.ToInt32(dataRow["dead_timer"]),
                     Convert.ToInt32(dataRow["loot_item_id"]), Convert.ToInt32(dataRow["money_drop"]), Convert.ToInt32(dataRow["drop_script_id"]), Convert.ToInt32(dataRow["team_id"]), Convert.ToInt32(dataRow["aggro_distance"]),
-                    Convert.ToInt32(dataRow["zone_distance"]), Convert.ToInt32(dataRow["reset_position"]) == 1, Convert.ToInt32(dataRow["lost_aggro_distance"]), Convert.ToInt32(dataRow["zombie_mode"]) == 1);
+                    Convert.ToInt32(dataRow["zone_distance"]), Convert.ToBoolean(dataRow["reset_position"]), Convert.ToInt32(dataRow["lost_aggro_distance"]), Convert.ToBoolean(dataRow["zombie_mode"]));
 
                 if ((string)dataRow["type"] == "bot")
                 {

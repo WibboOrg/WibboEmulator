@@ -30,7 +30,7 @@ public class EffectManager
         {
             var effectId = Convert.ToInt32(dataRow["id"]);
 
-            if (WibboEnvironment.EnumToBool((string)dataRow["only_staff"]))
+            if ((Boolean)dataRow["only_staff"])
             {
                 if (!this._effectsStaff.Contains(effectId))
                 {

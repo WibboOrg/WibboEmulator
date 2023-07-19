@@ -14,7 +14,7 @@ internal sealed class PromoArticlesComposer : ServerPacket
             this.WriteString(promo.Header);
             this.WriteString(promo.Body);
             this.WriteString(promo.Button);
-            this.WriteInteger(promo.InGamePromo);
+            this.WriteInteger(promo.InGamePromo ? 1 : 0);
             this.WriteString(promo.SpecialAction);
             this.WriteString(promo.Image);
         }

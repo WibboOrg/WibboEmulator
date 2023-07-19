@@ -125,11 +125,11 @@ public class RoomData
         this.ModelName = (string)row["model_name"];
         this.Score = Convert.ToInt32(row["score"]);
         this.Tags = new List<string>();
-        this.AllowPets = WibboEnvironment.EnumToBool(row["allow_pets"].ToString());
-        this.AllowPetsEating = WibboEnvironment.EnumToBool(row["allow_pets_eat"].ToString());
-        this.AllowWalkthrough = WibboEnvironment.EnumToBool(row["allow_walkthrough"].ToString());
-        this.AllowRightsOverride = WibboEnvironment.EnumToBool(row["allow_rightsoverride"].ToString());
-        this.HideWall = WibboEnvironment.EnumToBool(row["allow_hidewall"].ToString());
+        this.AllowPets = Convert.ToBoolean(row["allow_pets"]);
+        this.AllowPetsEating = Convert.ToBoolean(row["allow_pets_eat"]);
+        this.AllowWalkthrough = Convert.ToBoolean(row["allow_walkthrough"]);
+        this.AllowRightsOverride = Convert.ToBoolean(row["allow_rightsoverride"]);
+        this.HideWall = Convert.ToBoolean(row["allow_hidewall"]);
         this.Password = (string)row["password"];
         this.Wallpaper = (string)row["wallpaper"];
         this.Floor = (string)row["floor"];
@@ -143,16 +143,16 @@ public class RoomData
         this.ChatMaxDistance = Convert.ToInt32(row["chat_max_distance"]);
         this.ChatFloodProtection = Convert.ToInt32(row["chat_flood_protection"]);
 
-        this.MuteFuse = Convert.ToInt32((string)row["moderation_mute_fuse"]);
-        this.WhoCanKick = Convert.ToInt32((string)row["moderation_kick_fuse"]);
-        this.BanFuse = Convert.ToInt32((string)row["moderation_ban_fuse"]);
+        this.MuteFuse = Convert.ToInt32(row["moderation_mute_fuse"]);
+        this.WhoCanKick = Convert.ToInt32(row["moderation_kick_fuse"]);
+        this.BanFuse = Convert.ToInt32(row["moderation_ban_fuse"]);
         this.GroupId = Convert.ToInt32(row["group_id"]);
         if (WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(this.GroupId, out var group))
         {
             this.Group = group;
         }
-        this.HideWireds = WibboEnvironment.EnumToBool(row["allow_hidewireds"].ToString());
-        this.TrocStatus = Convert.ToInt32((string)row["troc_status"]);
+        this.HideWireds = Convert.ToBoolean(row["allow_hidewireds"]);
+        this.TrocStatus = Convert.ToInt32(row["troc_status"]);
 
         var tags = row["tags"].ToString();
 
@@ -165,7 +165,7 @@ public class RoomData
         }
 
         this.SellPrice = Convert.ToInt32(row["price"]);
-        this.WiredSecurity = WibboEnvironment.EnumToBool(row["wired_security"].ToString());
+        this.WiredSecurity = Convert.ToBoolean(row["wired_security"]);
         this.Model = WibboEnvironment.GetGame().GetRoomManager().GetModel(this.ModelName, this.Id);
     }
 }

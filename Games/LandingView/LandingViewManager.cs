@@ -18,7 +18,7 @@ public class LandingViewManager
         foreach (DataRow dRow in dTable.Rows)
         {
             this.HotelViewPromosIndexers.Add(
-                new Promotion(Convert.ToInt32(dRow["index"]), (string)dRow["header"], (string)dRow["body"], (string)dRow["button"], Convert.ToInt32(dRow["in_game_promo"]), (string)dRow["special_action"], (string)dRow["image"])
+                new Promotion(Convert.ToInt32(dRow["index"]), (string)dRow["header"], (string)dRow["body"], (string)dRow["button"], Convert.ToBoolean(dRow["in_game_promo"]), (string)dRow["special_action"], (string)dRow["image"])
                 );
         }
     }

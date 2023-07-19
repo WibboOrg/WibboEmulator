@@ -200,7 +200,7 @@ public class RoomItemHandling
 
                 if (roomItem.GetBaseItem().InteractionType == InteractionType.MOODLIGHT)
                 {
-                    moodlightEnabled = !DBNull.Value.Equals(dataRow["enabled"]) && Convert.ToInt32(dataRow["enabled"]) == 1;
+                    moodlightEnabled = !DBNull.Value.Equals(dataRow["enabled"]) && Convert.ToBoolean(dataRow["enabled"]);
                     moodlightCurrentPreset = !DBNull.Value.Equals(dataRow["current_preset"]) ? Convert.ToInt32(dataRow["current_preset"]) : 1;
                     moodlightPresetOne = !DBNull.Value.Equals(dataRow["preset_one"]) ? (string)dataRow["preset_one"] : "#000000,255,0";
                     moodlightPresetTwo = !DBNull.Value.Equals(dataRow["preset_two"]) ? (string)dataRow["preset_two"] : "#000000,255,0";
@@ -223,7 +223,7 @@ public class RoomItemHandling
                     wiredTriggerData = !DBNull.Value.Equals(dataRow["trigger_data"]) ? (string)dataRow["trigger_data"] : string.Empty;
                     wiredTriggerData2 = !DBNull.Value.Equals(dataRow["trigger_data_2"]) ? (string)dataRow["trigger_data_2"] : string.Empty;
                     wiredTriggersItem = !DBNull.Value.Equals(dataRow["triggers_item"]) ? (string)dataRow["triggers_item"] : string.Empty;
-                    wiredAllUserTriggerable = !DBNull.Value.Equals(dataRow["all_user_triggerable"]) && Convert.ToInt32(dataRow["all_user_triggerable"]) == 1;
+                    wiredAllUserTriggerable = !DBNull.Value.Equals(dataRow["all_user_triggerable"]) && Convert.ToBoolean(dataRow["all_user_triggerable"]);
                     wiredDelay = !DBNull.Value.Equals(dataRow["delay"]) ? Convert.ToInt32(dataRow["delay"]) : 0;
 
                     WiredRegister.HandleRegister(roomItem, this._roomInstance, wiredTriggerData, wiredTriggerData2, wiredTriggersItem, wiredAllUserTriggerable, wiredDelay);
@@ -748,7 +748,7 @@ public class RoomItemHandling
 
                 var moodlightRow = ItemMoodlightDao.GetOne(dbClient, item.Id);
 
-                var moodlightEnabled = moodlightRow != null && Convert.ToInt32(moodlightRow["enabled"]) == 1;
+                var moodlightEnabled = moodlightRow != null && Convert.ToBoolean(moodlightRow["enabled"]);
                 var moodlightCurrentPreset = moodlightRow != null ? Convert.ToInt32(moodlightRow["current_preset"]) : 1;
                 var moodlightPresetOne = moodlightRow != null ? (string)moodlightRow["preset_one"] : "#000000,255,0";
                 var moodlightPresetTwo = moodlightRow != null ? (string)moodlightRow["preset_two"] : "#000000,255,0";

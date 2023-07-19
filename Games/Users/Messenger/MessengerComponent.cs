@@ -293,7 +293,7 @@ public class MessengerComponent : IDisposable
             }
 
             sender = Convert.ToInt32(dataRow["id"]);
-            flag = WibboEnvironment.EnumToBool(dataRow["block_newfriends"].ToString());
+            flag = Convert.ToBoolean(dataRow["block_newfriends"]);
         }
         else
         {

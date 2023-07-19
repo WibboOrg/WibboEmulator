@@ -41,12 +41,9 @@ public sealed class NavigatorManager
         {
             foreach (DataRow row in table.Rows)
             {
-                if (Convert.ToInt32(row["enabled"]) == 1)
+                if (!this._searchResultLists.ContainsKey(Convert.ToInt32(row["id"])))
                 {
-                    if (!this._searchResultLists.ContainsKey(Convert.ToInt32(row["id"])))
-                    {
-                        this._searchResultLists.Add(Convert.ToInt32(row["id"]), new SearchResultList(Convert.ToInt32(row["id"]), Convert.ToString(row["category"]), Convert.ToString(row["category_identifier"]), Convert.ToString(row["public_name"]), true, -1, Convert.ToInt32(row["required_rank"]), Convert.ToInt32(row["minimized"]) == 1, NavigatorViewModeUtility.GetViewModeByString(Convert.ToString(row["view_mode"])), Convert.ToString(row["category_type"]), Convert.ToString(row["search_allowance"]), Convert.ToInt32(row["order_id"])));
-                    }
+                    this._searchResultLists.Add(Convert.ToInt32(row["id"]), new SearchResultList(Convert.ToInt32(row["id"]), Convert.ToString(row["category"]), Convert.ToString(row["category_identifier"]), Convert.ToString(row["public_name"]), true, -1, Convert.ToInt32(row["required_rank"]), Convert.ToBoolean(row["minimized"]), NavigatorViewModeUtility.GetViewModeByString(Convert.ToString(row["view_mode"])), Convert.ToString(row["category_type"]), Convert.ToString(row["search_allowance"]), Convert.ToInt32(row["order_id"])));
                 }
             }
         }
@@ -57,12 +54,9 @@ public sealed class NavigatorManager
         {
             foreach (DataRow row in getPublics.Rows)
             {
-                if (Convert.ToInt32(row["enabled"]) == 1)
+                if (!this._featuredRooms.ContainsKey(Convert.ToInt32(row["room_id"])))
                 {
-                    if (!this._featuredRooms.ContainsKey(Convert.ToInt32(row["room_id"])))
-                    {
-                        this._featuredRooms.Add(Convert.ToInt32(row["room_id"]), new FeaturedRoom(Convert.ToInt32(row["room_id"]), Convert.ToString(row["image_url"]), LanguageManager.ParseLanguage(Convert.ToString(row["langue"])), (string)row["category_type"]));
-                    }
+                    this._featuredRooms.Add(Convert.ToInt32(row["room_id"]), new FeaturedRoom(Convert.ToInt32(row["room_id"]), Convert.ToString(row["image_url"]), LanguageManager.ParseLanguage(Convert.ToString(row["langue"])), (string)row["category_type"]));
                 }
             }
         }

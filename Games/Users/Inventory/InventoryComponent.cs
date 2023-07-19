@@ -376,7 +376,7 @@ public class InventoryComponent : IDisposable
         {
             foreach (DataRow row in dPets.Rows)
             {
-                var pet = new Pet(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), Convert.ToInt32(row["room_id"]), (string)row["name"], Convert.ToInt32(row["type"]), (string)row["race"], (string)row["color"], Convert.ToInt32(row["experience"]), Convert.ToInt32(row["energy"]), Convert.ToInt32(row["nutrition"]), Convert.ToInt32(row["respect"]), (double)row["createstamp"], Convert.ToInt32(row["x"]), Convert.ToInt32(row["y"]), (double)row["z"], Convert.ToInt32(row["have_saddle"]), Convert.ToInt32(row["hairdye"]), Convert.ToInt32(row["pethair"]), (string)row["anyone_ride"] == "1");
+                var pet = new Pet(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), Convert.ToInt32(row["room_id"]), (string)row["name"], Convert.ToInt32(row["type"]), (string)row["race"], (string)row["color"], Convert.ToInt32(row["experience"]), Convert.ToInt32(row["energy"]), Convert.ToInt32(row["nutrition"]), Convert.ToInt32(row["respect"]), (double)row["createstamp"], Convert.ToInt32(row["x"]), Convert.ToInt32(row["y"]), (double)row["z"], Convert.ToInt32(row["have_saddle"]), Convert.ToInt32(row["hairdye"]), Convert.ToInt32(row["pethair"]), Convert.ToBoolean(row["anyone_ride"]));
                 _ = this._petItems.TryAdd(pet.PetId, pet);
             }
         }
@@ -391,7 +391,7 @@ public class InventoryComponent : IDisposable
         {
             foreach (DataRow row in dBots.Rows)
             {
-                var bot = new Bot(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), (string)row["name"], (string)row["motto"], (string)row["look"], (string)row["gender"], (string)row["walk_enabled"] == "1", (string)row["chat_enabled"] == "1", (string)row["chat_text"], Convert.ToInt32(row["chat_seconds"]), (string)row["is_dancing"] == "1", Convert.ToInt32(row["enable"]), Convert.ToInt32(row["handitem"]), Convert.ToInt32((string)row["status"]));
+                var bot = new Bot(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), (string)row["name"], (string)row["motto"], (string)row["look"], (string)row["gender"], Convert.ToBoolean(row["walk_enabled"]), Convert.ToBoolean(row["chat_enabled"]), (string)row["chat_text"], Convert.ToInt32(row["chat_seconds"]), Convert.ToBoolean(row["is_dancing"]), Convert.ToInt32(row["enable"]), Convert.ToInt32(row["handitem"]), Convert.ToInt32(row["status"]));
                 _ = this._botItems.TryAdd(Convert.ToInt32(row["id"]), bot);
             }
         }

@@ -24,14 +24,14 @@ public class CatalogPage
     private readonly List<string> _pageStrings2En;
     private readonly List<string> _pageStrings2Br;
 
-    public CatalogPage(int id, int parentId, string enabled, string caption, string pageLink, int icon, string requiredRight,
+    public CatalogPage(int id, int parentId, bool enabled, string caption, string pageLink, int icon, string requiredRight,
         string template, string pageStrings1, string pageStrings2, string captionEn, string captionBr, string pageStrings2En,
-        string pageStrings2Br, string isPremium, Dictionary<int, CatalogItem> items)
+        string pageStrings2Br, bool isPremium, Dictionary<int, CatalogItem> items)
     {
         this.Id = id;
         this.ParentId = parentId;
-        this.Enabled = enabled.ToLower() == "1";
-        this.IsPremium = isPremium.ToLower() == "1";
+        this.Enabled = enabled;
+        this.IsPremium = isPremium;
 
         this.Caption = caption;
         this.CaptionEn = captionEn;

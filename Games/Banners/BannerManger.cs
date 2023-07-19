@@ -18,7 +18,7 @@ public class BannerManager
         foreach (DataRow dataRow in table.Rows)
         {
             var id = Convert.ToInt32(dataRow["id"]);
-            var haveLayer = Convert.ToInt32(dataRow["have_layer"]) == 1;
+            var haveLayer = Convert.ToBoolean(dataRow["have_layer"]);
 
             this._banners.Add(id, new Banner(id, haveLayer));
         }

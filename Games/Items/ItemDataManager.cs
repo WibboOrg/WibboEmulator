@@ -41,19 +41,19 @@ public class ItemDataManager
                     var width = Convert.ToInt32(row["width"]);
                     var length = Convert.ToInt32(row["length"]);
                     var height = Convert.ToDouble(row["stack_height"]);
-                    var allowStack = WibboEnvironment.EnumToBool(row["can_stack"].ToString());
-                    var allowWalk = WibboEnvironment.EnumToBool(row["is_walkable"].ToString());
-                    var allowSit = WibboEnvironment.EnumToBool(row["can_sit"].ToString());
-                    var allowRecycle = WibboEnvironment.EnumToBool(row["allow_recycle"].ToString());
-                    var allowTrade = WibboEnvironment.EnumToBool(row["allow_trade"].ToString());
-                    var allowGift = Convert.ToInt32(row["allow_gift"]) == 1;
-                    var allowInventoryStack = WibboEnvironment.EnumToBool(row["allow_inventory_stack"].ToString());
+                    var allowStack = Convert.ToBoolean(row["can_stack"]);
+                    var allowWalk = Convert.ToBoolean(row["is_walkable"]);
+                    var allowSit = Convert.ToBoolean(row["can_sit"]);
+                    var allowRecycle = Convert.ToBoolean(row["allow_recycle"]);
+                    var allowTrade = Convert.ToBoolean(row["allow_trade"]);
+                    var allowGift = Convert.ToBoolean(row["allow_gift"]);
+                    var allowInventoryStack = Convert.ToBoolean(row["allow_inventory_stack"]);
                     var interactionType = InteractionTypes.GetTypeFromString(Convert.ToString(row["interaction_type"]));
                     var cycleCount = Convert.ToInt32(row["interaction_modes_count"]);
                     var vendingIDS = Convert.ToString(row["vending_ids"]);
                     var heightAdjustable = Convert.ToString(row["height_adjustable"]);
                     var effectId = Convert.ToInt32(row["effect_id"]);
-                    var isRare = WibboEnvironment.EnumToBool(row["is_rare"].ToString());
+                    var isRare = Convert.ToBoolean(row["is_rare"]);
                     var rarityLevel = Convert.ToInt32(row["rarity_level"].ToString());
                     var amount = !DBNull.Value.Equals(row["amount"]) ? Convert.ToInt32(Convert.ToString(row["amount"])) : -1;
 

@@ -29,7 +29,7 @@ public static class WibboEnvironment
     private static SettingsManager _settingsManager;
     private static OpenAIProxy _chatOpenAI;
 
-    private static Random _random = new();
+    private static readonly Random RandomNumber = new();
 
     private static readonly HttpClient HttpClient = new();
     private static readonly ConcurrentDictionary<int, User> UsersCached = new();
@@ -144,17 +144,11 @@ public static class WibboEnvironment
         }
     }
 
-    public static void RegenRandom() => _random = new Random();
-
-    public static bool EnumToBool(string value) => value == "1";
-
-    public static string BoolToEnum(bool value) => value ? "1" : "0";
-
     public static int GetRandomNumber(int min, int max)
     {
-        lock (_random) // synchronize
+        lock (RandomNumber) // synchronize
         {
-            return _random.Next(min, max + 1);
+            return RandomNumber.Next(min, max + 1);
         }
     }
 

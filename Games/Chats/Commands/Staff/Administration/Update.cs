@@ -29,12 +29,6 @@ internal sealed class Update : IChatCommand
                 session.SendWhisper("Emulateur banni reset");
                 break;
             }
-            case "random":
-            {
-                WibboEnvironment.RegenRandom();
-                session.SendWhisper("Random mis à jour");
-                break;
-            }
             case "landingview":
             case "view":
             case "lv":

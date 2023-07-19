@@ -121,9 +121,9 @@ internal sealed class UserDao
 
     internal static void UpdateRank(IQueryAdapter dbClient, int userId, int rank) => dbClient.RunQuery("UPDATE `user` SET `rank` = '" + rank + "' WHERE `id` = '" + userId + "' LIMIT 1");
 
-    internal static void UpdateIgnoreRoomInvites(IQueryAdapter dbClient, int userId, bool flag) => dbClient.RunQuery("UPDATE `user` SET `ignore_room_invite` = '" + WibboEnvironment.BoolToEnum(flag) + "' WHERE `id` = '" + userId + "' LIMIT 1");
+    internal static void UpdateIgnoreRoomInvites(IQueryAdapter dbClient, int userId, bool flag) => dbClient.RunQuery("UPDATE `user` SET `ignore_room_invite` = '" + (flag ? "1" : "0") + "' WHERE `id` = '" + userId + "' LIMIT 1");
 
-    internal static void UpdateCameraFollowDisabled(IQueryAdapter dbClient, int userId, bool flag) => dbClient.RunQuery("UPDATE `user` SET `camera_follow_disabled` = '" + WibboEnvironment.BoolToEnum(flag) + "' WHERE `id` = '" + userId + "' LIMIT 1");
+    internal static void UpdateCameraFollowDisabled(IQueryAdapter dbClient, int userId, bool flag) => dbClient.RunQuery("UPDATE `user` SET `camera_follow_disabled` = '" + (flag ? "1" : "0") + "' WHERE `id` = '" + userId + "' LIMIT 1");
 
     internal static void UpdateVolume(IQueryAdapter dbClient, int userId, int volume1, int volume2, int volume3) => dbClient.RunQuery("UPDATE `user` SET `volume` = '" + volume1 + "," + volume2 + "," + volume3 + "' WHERE `id` = '" + userId + "' LIMIT 1");
 
