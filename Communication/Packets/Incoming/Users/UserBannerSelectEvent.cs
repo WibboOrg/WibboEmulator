@@ -1,7 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Users;
 
 using WibboEmulator.Communication.Packets.Outgoing.Users;
-using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class UserBannerSelectEvent : IPacketEvent

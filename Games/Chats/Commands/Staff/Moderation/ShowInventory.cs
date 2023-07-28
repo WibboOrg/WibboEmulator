@@ -1,6 +1,5 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Moderation;
 
-using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 

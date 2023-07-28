@@ -1,7 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.LandingView;
 using WibboEmulator.Communication.Packets.Outgoing.LandingView;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Users;
 
 internal sealed class GetCommunityGoalHallOfFameEvent : IPacketEvent
 {

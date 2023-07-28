@@ -2,7 +2,6 @@ namespace WibboEmulator.Database.Daos.User;
 
 using System.Data;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator;
 
 internal sealed class UserPremiumDao
 {
