@@ -54,6 +54,8 @@ public class RolePlayer
         this.Munition = munition;
         this.Exp = pxp;
         this.PvpEnable = true;
+        this.CacEnable = true;
+        this.FarEnable = true;
         this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponCac(weaponCac);
         this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponGun(weaponGun);
 

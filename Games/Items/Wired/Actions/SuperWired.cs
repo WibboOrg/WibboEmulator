@@ -766,7 +766,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "usercac":
             {
-                rp.FarEnable = value == "true";
+                rp.CacEnable = value == "true";
 
                 break;
             }
