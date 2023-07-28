@@ -44,9 +44,9 @@ internal sealed class ShowInventory : IChatCommand
 
         var output = "Inventaire rare de " + targetUser.User.Username + ":<br><br>";
         output += "<div class=\"overflow-auto grid gap-2\" style=\"--bs-columns: 5; --nitro-grid-column-min-height: 40px; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));\">";
-        foreach (var item in itemRareCount)
+        foreach (var item in itemRareCount.Take(50))
         {
-            output += $"<div class=\"d-flex overflow-hidden position-relative cursor-pointer flex-column gap-2 align-items-center justify-content-center layout-grid-item border border-2 border-muted rounded\"><img src=\"//{assetsUrl}/icons/{item.Key}_icon.png\"><div class=\"position-absolute badge border border-black bg-danger px-1 nitro-item-count\">{item.Value}</div></div>";
+            output += $"<div class=\"d-flex overflow-hidden position-relative flex-column gap-2 align-items-center justify-content-center layout-grid-item border border-2 border-muted rounded\"><img src=\"//{assetsUrl}/icons/{item.Key}_icon.png\"><div class=\"position-absolute badge border border-black bg-danger px-1 nitro-item-count\">{item.Value}</div></div>";
         }
         output += "</div>";
 
