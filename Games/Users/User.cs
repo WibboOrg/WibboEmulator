@@ -126,7 +126,7 @@ public class User : IDisposable, IEquatable<User>
     public int GiftPurchasingWarnings { get; set; }
     public bool SessionGiftBlocked { get; set; }
     public int RolePlayId { get; set; }
-    public double IgnoreAllExpireTime { get; set; }
+    public int IgnoreAllExpireTime { get; set; }
     public bool IgnoreRoomInvites { get; set; }
     public bool CameraFollowDisabled { get; set; }
     public bool OldChat { get; set; }
@@ -158,7 +158,7 @@ public class User : IDisposable, IEquatable<User>
         int dailyPetRespectPoints, bool hasFriendRequestsDisabled, int currentQuestID, int achievementPoints,
         int lastOnline, int favoriteGroup, int accountCreated, bool accepttrading, string ip, bool hideInroom,
         bool hideOnline, int mazoHighScore, int mazo, string clientVolume, bool nuxenable, string machineId,
-        bool isFirstConnexionToday, Language langue, double ignoreAllExpire, bool ignoreRoomInvite, bool cameraFollowDisabled,
+        bool isFirstConnexionToday, Language langue, int ignoreAllExpire, bool ignoreRoomInvite, bool cameraFollowDisabled,
         int gamePointsMonth, int bannerId)
     {
         this.Id = id;

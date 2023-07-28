@@ -2,12 +2,9 @@ namespace WibboEmulator.Games.GameClients;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Text;
-using MySqlX.XDevAPI;
 using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.WebSocket;
 using WibboEmulator.Database.Daos;
@@ -487,7 +484,7 @@ public class GameClientManager
 
         var variable = client.User.Username.ToLower();
         var str = "user";
-        var expire = WibboEnvironment.GetUnixTimestamp() + lengthSeconds;
+        var expire = Convert.ToInt32(WibboEnvironment.GetUnixTimestamp() + lengthSeconds);
         if (ipBan)
         {
             //Variable = Client.GetConnection().getIp();

@@ -56,7 +56,7 @@ internal sealed class BotPetDao
 
     internal static void UpdateRoomIdByRoomId(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("UPDATE `bot_pet` SET room_id = '0' WHERE room_id = '" + roomId + "'");
 
-    internal static int InsertGetId(IQueryAdapter dbClient, int petId, string petName, string petRace, string petColor, int ownerId, int petType, double petCreationStamp)
+    internal static int InsertGetId(IQueryAdapter dbClient, int petId, string petName, string petRace, string petColor, int ownerId, int petType, int petCreationStamp)
     {
         dbClient.SetQuery("INSERT INTO `bot_pet` (user_id, name,type, race,color, experience, energy, createstamp) VALUES (" + ownerId + ",@" + petId + "name," + petType + ",@" + petId + "race,@" + petId + "color,0,100,'" + petCreationStamp + "')");
         dbClient.AddParameter(petId + "name", petName);

@@ -18,7 +18,7 @@ internal sealed class MarketPlaceOwnOffersComposer : ServerPacket
             this.WriteInteger(table.Rows.Count);
             foreach (DataRow row in table.Rows)
             {
-                var num2 = Convert.ToInt32(Math.Floor((double)((((double)row["timestamp"]) + 172800.0 - WibboEnvironment.GetUnixTimestamp()) / 60.0)));
+                var num2 = Convert.ToInt32(Math.Floor((double)((((int)row["timestamp"]) + 172800 - WibboEnvironment.GetUnixTimestamp()) / 60)));
                 var num3 = Convert.ToInt32(row["state"].ToString());
                 if ((num2 <= 0) && (num3 != 2))
                 {

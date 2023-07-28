@@ -17,7 +17,7 @@ public class ChatlogManager
 
         foreach (DataRow row in table.Rows)
         {
-            this.AddMessage(Convert.ToInt32(row["user_id"]), row["user_name"].ToString(), Convert.ToInt32(row["room_id"]), row["type"].ToString() + row["message"].ToString(), (double)row["timestamp"]);
+            this.AddMessage(Convert.ToInt32(row["user_id"]), row["user_name"].ToString(), Convert.ToInt32(row["room_id"]), row["type"].ToString() + row["message"].ToString(), (int)row["timestamp"]);
         }
     }
 
@@ -33,7 +33,7 @@ public class ChatlogManager
 
         foreach (DataRow row in table.Rows)
         {
-            this.AddMessage(Convert.ToInt32(row["user_id"]), row["user_name"].ToString(), Convert.ToInt32(row["room_id"]), row["type"].ToString() + row["message"].ToString(), (double)row["timestamp"]);
+            this.AddMessage(Convert.ToInt32(row["user_id"]), row["user_name"].ToString(), Convert.ToInt32(row["room_id"]), row["type"].ToString() + row["message"].ToString(), (int)row["timestamp"]);
         }
     }
 

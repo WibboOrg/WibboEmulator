@@ -42,7 +42,7 @@ public class Pet
     public int Y { get; set; }
     public double Z { get; set; }
     public int Respect { get; set; }
-    public double CreationStamp { get; set; }
+    public int CreationStamp { get; set; }
     public bool PlacedInRoom { get; set; }
     public DatabaseUpdateState DBState { get; set; }
     public int Saddle { get; set; }
@@ -112,7 +112,7 @@ public class Pet
 
     public string OwnerName => WibboEnvironment.GetGame().GetGameClientManager().GetNameById(this.OwnerId);
 
-    public Pet(int petId, int ownerId, int roomId, string name, int type, string race, string color, int expirience, int energy, int nutrition, int respect, double creationStamp, int x, int y, double z, int havesaddle, int hairdye, int petHair, bool canMountAllPeople)
+    public Pet(int petId, int ownerId, int roomId, string name, int type, string race, string color, int expirience, int energy, int nutrition, int respect, int creationStamp, int x, int y, double z, int havesaddle, int hairdye, int petHair, bool canMountAllPeople)
     {
         this.PetId = petId;
         this.OwnerId = ownerId;

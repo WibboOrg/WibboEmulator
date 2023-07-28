@@ -15,7 +15,7 @@ public class UserFactory
             int userId;
             DataRow dUserInfo;
             DataRow dUserStats;
-            double ignoreAllExpire = 0;
+            var ignoreAllExpire = 0;
             var isFirstConnexionToday = false;
 
             dUserInfo = UserDao.GetOneByTicket(dbClient, sessionTicket);
@@ -105,7 +105,7 @@ public class UserFactory
         return GenerateUser(dUserInfo, dUserStats, false, 0);
     }
 
-    public static User GenerateUser(DataRow dRow, DataRow dRow2, bool isFirstConnexionToday, double ignoreAllExpire)
+    public static User GenerateUser(DataRow dRow, DataRow dRow2, bool isFirstConnexionToday, int ignoreAllExpire)
     {
         var id = Convert.ToInt32(dRow["id"]);
         var username = (string)dRow["username"];

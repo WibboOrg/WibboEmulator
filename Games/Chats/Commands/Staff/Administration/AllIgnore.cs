@@ -36,7 +36,7 @@ internal sealed class AllIgnore : IChatCommand
             return;
         }
 
-        var expireTime = WibboEnvironment.GetUnixTimestamp() + lengthSeconds;
+        var expireTime = (int)(WibboEnvironment.GetUnixTimestamp() + lengthSeconds);
         var reason = CommandManager.MergeParams(parameters, 3);
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();

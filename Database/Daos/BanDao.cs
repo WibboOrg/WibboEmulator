@@ -15,7 +15,7 @@ internal sealed class BanDao
         return dbClient.FindsResult();
     }
 
-    internal static double GetOneIgnoreAll(IQueryAdapter dbClient, int userId)
+    internal static int GetOneIgnoreAll(IQueryAdapter dbClient, int userId)
     {
         dbClient.SetQuery("SELECT `expire` FROM `ban` WHERE `bantype` = 'ignoreall' AND `value` = @userId LIMIT 1");
         dbClient.AddParameter("userId", userId);
@@ -27,12 +27,12 @@ internal sealed class BanDao
             return 0;
         }
 
-        _ = double.TryParse(row["expire"].ToString(), out var expire);
+        _ = int.TryParse(row["expire"].ToString(), out var expire);
 
         return expire;
     }
 
-    internal static void InsertBan(IQueryAdapter dbClient, double expireTime, string banType, string userIdOrUsername, string reason, string modName)
+    internal static void InsertBan(IQueryAdapter dbClient, int expireTime, string banType, string userIdOrUsername, string reason, string modName)
     {
         dbClient.SetQuery("INSERT INTO `ban` (`bantype`,`value`,`reason`,`expire`,`added_by`,`added_date`) VALUES (@rawvar, @var, @reason, '" + expireTime + "', @mod, UNIX_TIMESTAMP())");
         dbClient.AddParameter("rawvar", banType);
