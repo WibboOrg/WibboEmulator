@@ -79,6 +79,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
 
             case "rankplus":
             case "rankmoin":
+            case "rankmoins":
             case "rank":
             case "slotwinner":
             case "notslotwinner":
@@ -1308,13 +1309,16 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (user.Client.User.Rank > Convert.ToInt32(value))
+                _ = int.TryParse(value, out var valueInt);
+
+                if (user.Client.User.Rank > valueInt)
                 {
                     result = true;
                 }
 
                 break;
             }
+            case "rankmoins":
             case "rankmoin":
             {
                 if (user.IsBot)
@@ -1322,7 +1326,9 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (user.Client.User.Rank < Convert.ToInt32(value))
+                _ = int.TryParse(value, out var valueInt);
+
+                if (user.Client.User.Rank < valueInt)
                 {
                     result = true;
                 }
