@@ -23,6 +23,6 @@ internal sealed class ChatGTP : IChatCommand
         bot.BotAI = bot.BotData.GenerateBotAI(bot.VirtualId);
         bot.BotAI.Init(bot.BotData.Id, bot, room);
 
-        userRoom.SendWhisperChat("ChatGPT activer!");
+        userRoom.SendWhisperChat("ChatGPT vient d'être activé !");
     }
 }

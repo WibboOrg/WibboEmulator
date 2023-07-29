@@ -13,7 +13,7 @@ internal sealed class LootboxInfo : IChatCommand
         var legendaryCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(4);
 
         var stringBuilder = new StringBuilder()
-        .Append("- Information sur le nombre de rare distribuer ce mois-ci -\r")
+        .Append("- Information sur le nombre de rare distribué ce mois-ci -\r")
         .Append("Basique: " + basicCount + "\r")
         .Append("Commun: " + communCount + "\r")
         .Append("Epique: " + epicCount + "\r")
