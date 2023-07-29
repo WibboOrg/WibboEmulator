@@ -253,16 +253,16 @@ public static class WibboEnvironment
     public static void PreformShutDown()
     {
         Console.Clear();
-        Console.WriteLine("Extinction du serveur...");
+        Console.WriteLine("Extinction de l'émulateur.");
 
-        GetGame().GetGameClientManager().SendMessage(new BroadcastMessageAlertComposer("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes."));
+        GetGame().GetGameClientManager().SendMessage(new BroadcastMessageAlertComposer("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 3 minutes."));
         Thread.Sleep(20 * 1000); // 20 secondes
         //GetGame().StopGameLoop();
         GetWebSocketManager().Destroy(); // Eteindre le websocket server
         GetGame().GetPacketManager().UnregisterAll(); // Dé-enregistrer les packets
         GetGame().GetGameClientManager().CloseAll(); // Fermeture et enregistrement de toutes les utilisteurs
         GetGame().GetRoomManager().RemoveAllRooms(); // Fermerture et enregistrer des apparts
-        GetGame().Dispose();
+        GetGame().Dispose(); // E+N+D+T+I+M+E
 
         Console.WriteLine("Wibbo Emulateur s'est parfaitement éteint...");
         Environment.Exit(0);
