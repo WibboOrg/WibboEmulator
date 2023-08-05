@@ -141,6 +141,10 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "notallowshoot":
             case "isbot":
             case "notisbot":
+            case "speedwalk":
+            case "notspeedwalk":
+            case "breakwalk":
+            case "notbreakwalk":
 
             case "roomopen":
             case "roomnotopen":
@@ -165,6 +169,8 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "itemdistancemoins":
             case "winuserpoint":
             case "notwinuserpoint":
+            case "winclassement":
+            case "notwinclassement":
             case "classement":
             case "notclassement":
             case "ptsclassementplus":
@@ -926,6 +932,24 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
 
                 break;
             }
+            case "winclassement":
+            case "notwinclassement":
+            {
+                var itemHighScore = room.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                if (itemHighScore == null)
+                {
+                    break;
+                }
+
+                var firstScore = itemHighScore.Scores.Keys.FirstOrDefault(x => x == user.GetUsername());
+
+                if (firstScore == null)
+                {
+                    break;
+                }
+
+                break;
+            }
             case "winuserpoint":
             case "notwinuserpoint":
             {
@@ -1200,6 +1224,26 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "nottransf":
             {
                 if (user.IsTransf)
+                {
+                    result = true;
+                }
+
+                break;
+            }
+            case "speedwalk":
+            case "notspeedwalk":
+            {
+                if (user.WalkSpeed)
+                {
+                    result = true;
+                }
+
+                break;
+            }
+            case "breakwalk":
+            case "notbreakwalk":
+            {
+                if (user.BreakWalkEnable)
                 {
                     result = true;
                 }
