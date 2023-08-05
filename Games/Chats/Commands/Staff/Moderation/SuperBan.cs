@@ -21,17 +21,17 @@ internal sealed class SuperBan : IChatCommand
         if (targetUser.User.Rank >= session.User.Rank)
         {
             userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
-            WibboEnvironment.GetGame().GetGameClientManager().BanUser(session, "Robot", 788922000, "Votre compte a été banni par sécurité !", false, false);
+            WibboEnvironment.GetGame().GetGameClientManager().BanUser(session, "Robot", -1, "Votre compte a été banni par sécurité !", false, false);
         }
         else
         {
-            var num = 788922000;
+            var num = -1;
             if (parameters.Length >= 3)
             {
                 _ = int.TryParse(parameters[2], out num);
             }
 
-            if (num <= 600)
+            if (num is <= 600 and not (-1))
             {
                 userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("ban.toolesstime", session.Langue));
             }

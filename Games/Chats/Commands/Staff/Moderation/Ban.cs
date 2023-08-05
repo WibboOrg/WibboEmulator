@@ -24,8 +24,8 @@ internal sealed class Ban : IChatCommand
             return;
         }
 
-        _ = int.TryParse(parameters.Length >= 3 ? parameters[2] : "0", out var num);
-        if (num <= 600)
+        _ = int.TryParse(parameters.Length >= 3 ? parameters[2] : "0", out var expire);
+        if (expire <= 600)
         {
             userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("ban.toolesstime", session.Langue));
         }
@@ -34,7 +34,7 @@ internal sealed class Ban : IChatCommand
             var raison = CommandManager.MergeParams(parameters, 3);
             session.SendWhisper("Tu as bannit " + targetUser.User.Username + " pour " + raison + "!");
 
-            WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.User.Username, num, raison, false, false);
+            WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.User.Username, expire, raison, false, false);
             _ = session.User.Antipub(raison, "<CMD>", room.Id);
         }
     }

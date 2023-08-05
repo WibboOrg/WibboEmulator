@@ -475,7 +475,7 @@ public class GameClientManager
         Console.WriteLine("Connections closed!");
     }
 
-    public void BanUser(GameClient client, string moderator, double lengthSeconds, string reason, bool ipBan, bool machineBan)
+    public void BanUser(GameClient client, string moderator, int lengthSeconds, string reason, bool ipBan, bool machineBan)
     {
         if (string.IsNullOrEmpty(reason))
         {
@@ -484,7 +484,7 @@ public class GameClientManager
 
         var variable = client.User.Username.ToLower();
         var str = "user";
-        var expire = Convert.ToInt32(WibboEnvironment.GetUnixTimestamp() + lengthSeconds);
+        var expire = lengthSeconds == -1 ? int.MaxValue : WibboEnvironment.GetUnixTimestamp() + lengthSeconds;
         if (ipBan)
         {
             //Variable = Client.GetConnection().getIp();

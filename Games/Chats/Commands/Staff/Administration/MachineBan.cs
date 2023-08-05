@@ -23,7 +23,7 @@ internal sealed class MachineBan : IChatCommand
         else if (clientByUsername.User.Rank >= session.User.Rank)
         {
             userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
-            WibboEnvironment.GetGame().GetGameClientManager().BanUser(session, "Robot", 788922000, "Votre compte a été banni par sécurité", false, false);
+            WibboEnvironment.GetGame().GetGameClientManager().BanUser(session, "Robot", -1, "Votre compte a été banni par sécurité", false, false);
         }
         else
         {
@@ -33,7 +33,7 @@ internal sealed class MachineBan : IChatCommand
                 raison = CommandManager.MergeParams(parameters, 2);
             }
 
-            WibboEnvironment.GetGame().GetGameClientManager().BanUser(clientByUsername, session.User.Username, 788922000, raison, true, true);
+            WibboEnvironment.GetGame().GetGameClientManager().BanUser(clientByUsername, session.User.Username, -1, raison, true, true);
             session.SendWhisper("Tu viens de bannir " + clientByUsername.User.Username + " pour la raison : " + raison + " !");
             _ = session.User.Antipub(raison, "<CMD>", room.Id);
             return;

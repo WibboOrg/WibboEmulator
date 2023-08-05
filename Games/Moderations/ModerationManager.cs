@@ -407,7 +407,7 @@ public class ModerationManager
         }
     }
 
-    public static void BanUser(GameClient modSession, int userId, int length, string message)
+    public static void BanUser(GameClient modSession, int userId, int lengthSeconds, string message)
     {
         var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
         if (clientByUserId == null || clientByUserId.User.Id == modSession.User.Id)
@@ -421,7 +421,6 @@ public class ModerationManager
         }
         else
         {
-            double lengthSeconds = length;
             WibboEnvironment.GetGame().GetGameClientManager().BanUser(clientByUserId, modSession.User.Username, lengthSeconds, message, false, false);
         }
     }
