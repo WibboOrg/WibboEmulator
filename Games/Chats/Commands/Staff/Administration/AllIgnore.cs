@@ -24,19 +24,19 @@ internal sealed class AllIgnore : IChatCommand
             return;
         }
 
-        double lengthSeconds = 788922000;
+        double lengthSeconds = -1;
         if (parameters.Length == 3)
         {
             _ = double.TryParse(parameters[2], out lengthSeconds);
         }
 
-        if (lengthSeconds <= 600)
+        if (lengthSeconds is <= 600 and > 0)
         {
             userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("ban.toolesstime", session.Langue));
             return;
         }
 
-        var expireTime = (int)(WibboEnvironment.GetUnixTimestamp() + lengthSeconds);
+        var expireTime = lengthSeconds == -1 ? int.MaxValue : (int)(WibboEnvironment.GetUnixTimestamp() + lengthSeconds);
         var reason = CommandManager.MergeParams(parameters, 3);
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
