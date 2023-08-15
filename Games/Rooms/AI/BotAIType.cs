@@ -4,8 +4,8 @@ public enum BotAIType
 {
     Pet,
     Generic,
+    ChatGPT,
     SuperBot,
     RoleplayBot,
     RoleplayPet,
-    OpenIA,
 }

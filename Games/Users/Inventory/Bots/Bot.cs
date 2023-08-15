@@ -1,5 +1,7 @@
 namespace WibboEmulator.Games.Users.Inventory.Bots;
 
+using WibboEmulator.Games.Rooms.AI;
+
 public class Bot
 {
     public int Id { get; set; }
@@ -16,8 +18,9 @@ public class Bot
     public int Enable { get; set; }
     public int Handitem { get; set; }
     public int Status { get; set; }
+    public BotAIType AIType { get; set; }
 
-    public Bot(int id, int ownerId, string name, string motto, string figure, string gender, bool walkingEnabled, bool chatEnabled, string chatText, int chatSeconds, bool isDancing, int enable, int handitem, int status)
+    public Bot(int id, int ownerId, string name, string motto, string figure, string gender, bool walkingEnabled, bool chatEnabled, string chatText, int chatSeconds, bool isDancing, int enable, int handitem, int status, BotAIType aiType)
     {
         this.Id = id;
         this.OwnerId = ownerId;
@@ -33,5 +36,6 @@ public class Bot
         this.Enable = enable;
         this.Handitem = handitem;
         this.Status = status;
+        this.AIType = aiType;
     }
 }

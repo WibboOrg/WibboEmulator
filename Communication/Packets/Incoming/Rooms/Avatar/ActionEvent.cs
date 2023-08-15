@@ -23,7 +23,6 @@ internal sealed class ActionEvent : IPacketEvent
 
         roomUserByUserId.Unidle();
         var actionId = packet.PopInt();
-        roomUserByUserId.DanceId = 0;
 
         room.SendPacket(new ActionComposer(roomUserByUserId.VirtualId, actionId));
 

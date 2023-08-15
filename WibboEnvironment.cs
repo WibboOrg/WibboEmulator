@@ -91,7 +91,6 @@ public static class WibboEnvironment
             _figureManager.Init();
 
             _chatOpenAI = new OpenAIProxy(_settingsManager.GetData<string>("openia.api.key"));
-            _chatOpenAI.Init();
 
             _game = new Game();
             _game.Init(dbClient);

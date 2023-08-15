@@ -103,8 +103,8 @@ public class RoomBot
                 return new SuperBot(virtualId);
             case BotAIType.Pet:
                 return new PetBot(virtualId);
-            case BotAIType.OpenIA:
-                return new OpenAIBot(virtualId);
+            case BotAIType.ChatGPT:
+                return new ChatGPTBot(virtualId);
             case BotAIType.Generic:
                 break;
         }

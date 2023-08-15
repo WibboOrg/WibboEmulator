@@ -12,7 +12,7 @@ public abstract class BotAI
     {
     }
 
-    public void Init(int baseId, RoomUser user, Room room)
+    public virtual void Init(int baseId, RoomUser user, Room room)
     {
         this.Id = baseId;
         this._roomUser = user;

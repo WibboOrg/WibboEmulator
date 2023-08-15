@@ -8,6 +8,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Database.Daos.Room;
+using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.Chats.Logs;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.AI;
@@ -239,12 +240,8 @@ public class Room : IDisposable
 
         foreach (DataRow row in table.Rows)
         {
-            var roomBot = new RoomBot(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), Convert.ToInt32(row["room_id"]), this.IsRoleplay ? BotAIType.RoleplayBot : BotAIType.Generic, Convert.ToBoolean(row["walk_enabled"]), (string)row["name"], (string)row["motto"], (string)row["gender"], (string)row["look"], Convert.ToInt32(row["x"]), Convert.ToInt32(row["y"]), Convert.ToInt32(row["z"]), Convert.ToInt32(row["rotation"]), Convert.ToBoolean(row["chat_enabled"]), (string)row["chat_text"], Convert.ToInt32(row["chat_seconds"]), Convert.ToBoolean(row["is_dancing"]), Convert.ToInt32(row["enable"]), Convert.ToInt32(row["handitem"]), Convert.ToInt32(row["status"]));
-            var roomUser = this.RoomUserManager.DeployBot(roomBot, null);
-            if (roomBot.IsDancing)
-            {
-                roomUser.DanceId = 3;
-            }
+            var roomBot = new RoomBot(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), Convert.ToInt32(row["room_id"]), BotUtility.GetAIFromString((string)row["ai_type"]), Convert.ToBoolean(row["walk_enabled"]), (string)row["name"], (string)row["motto"], (string)row["gender"], (string)row["look"], Convert.ToInt32(row["x"]), Convert.ToInt32(row["y"]), Convert.ToInt32(row["z"]), Convert.ToInt32(row["rotation"]), Convert.ToBoolean(row["chat_enabled"]), (string)row["chat_text"], Convert.ToInt32(row["chat_seconds"]), Convert.ToBoolean(row["is_dancing"]), Convert.ToInt32(row["enable"]), Convert.ToInt32(row["handitem"]), Convert.ToInt32(row["status"]));
+            _ = this.RoomUserManager.DeployBot(roomBot, null);
         }
     }
 

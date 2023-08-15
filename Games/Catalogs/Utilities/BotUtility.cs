@@ -16,9 +16,7 @@ public static class BotUtility
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         var id = BotUserDao.InsertAndGetId(dbClient, ownerId, cataBot.Name, cataBot.Motto, cataBot.Figure, cataBot.Gender);
 
-        var botData = BotUserDao.GetOne(dbClient, ownerId, id);
-
-        return new Bot(Convert.ToInt32(botData["id"]), Convert.ToInt32(botData["user_id"]), Convert.ToString(botData["name"]), Convert.ToString(botData["motto"]), Convert.ToString(botData["look"]), Convert.ToString(botData["gender"]), false, true, "", 0, false, 0, 0, 0);
+        return new Bot(id, ownerId, cataBot.Name, cataBot.Motto, cataBot.Figure, cataBot.Gender, false, true, "", 0, false, 0, 0, 0, BotAIType.Generic);
     }
 
     public static BotAIType GetAIFromString(string type) => type switch
@@ -27,7 +25,7 @@ public static class BotUtility
         "generic" => BotAIType.Generic,
         "roleplaybot" => BotAIType.RoleplayBot,
         "roleplaypet" => BotAIType.RoleplayPet,
-        "openia" => BotAIType.OpenIA,
+        "chatgpt" => BotAIType.ChatGPT,
         _ => BotAIType.Generic,
     };
 }

@@ -50,7 +50,7 @@ internal sealed class PlaceBotEvent : IPacketEvent
             BotUserDao.UpdatePosition(dbClient, bot.Id, room.Id, x, y);
         }
 
-        _ = room.RoomUserManager.DeployBot(new RoomBot(bot.Id, bot.OwnerId, room.Id, room.IsRoleplay ? BotAIType.RoleplayBot : BotAIType.Generic, bot.WalkingEnabled, bot.Name, bot.Motto, bot.Gender, bot.Figure, x, y, 0, 2, bot.ChatEnabled, bot.ChatText, bot.ChatSeconds, bot.IsDancing, bot.Enable, bot.Handitem, bot.Status), null);
+        _ = room.RoomUserManager.DeployBot(new RoomBot(bot.Id, bot.OwnerId, room.Id, bot.AIType, bot.WalkingEnabled, bot.Name, bot.Motto, bot.Gender, bot.Figure, x, y, 0, 2, bot.ChatEnabled, bot.ChatText, bot.ChatSeconds, bot.IsDancing, bot.Enable, bot.Handitem, bot.Status), null);
 
         if (!session.User.InventoryComponent.TryRemoveBot(botId, out _))
         {

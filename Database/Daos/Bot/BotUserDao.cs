@@ -56,6 +56,14 @@ internal sealed class BotUserDao
         dbClient.RunQuery();
     }
 
+    internal static void UpdateChatGPT(IQueryAdapter dbClient, int botId, string chatText)
+    {
+        dbClient.SetQuery("UPDATE `bot_user` SET chat_text = @ChatText, ai_type = 'chatgpt' WHERE id = @id LIMIT 1");
+        dbClient.AddParameter("id", botId);
+        dbClient.AddParameter("ChatText", chatText);
+        dbClient.RunQuery();
+    }
+
     internal static void UpdateWalkEnabled(IQueryAdapter dbClient, int botId, bool balkingEnabled) => dbClient.RunQuery("UPDATE `bot_user` SET walk_enabled = '" + (balkingEnabled ? "1" : "0") + "' WHERE id = '" + botId + "'");
 
     internal static void UpdateIsDancing(IQueryAdapter dbClient, int botId, bool isDancing) => dbClient.RunQuery("UPDATE `bot_user` SET is_dancing = '" + (isDancing ? "1" : "0") + "' WHERE id = '" + botId + "'");
@@ -100,7 +108,7 @@ internal sealed class BotUserDao
 
     internal static DataTable GetOneByRoomId(IQueryAdapter dbClient, int roomId)
     {
-        dbClient.SetQuery("SELECT `id`, `user_id`, `name`, `motto`, `gender`, `look`, `room_id`, `walk_enabled`, `x`, `y`, `z`, `rotation`, `chat_enabled`, `chat_text`, `chat_seconds`, `is_dancing`, `is_mixchat`, `status`, `enable`, `handitem` FROM `bot_user` WHERE room_id = '" + roomId + "'");
+        dbClient.SetQuery("SELECT `id`, `user_id`, `name`, `motto`, `gender`, `look`, `room_id`, `walk_enabled`, `x`, `y`, `z`, `rotation`, `chat_enabled`, `chat_text`, `chat_seconds`, `is_dancing`, `is_mixchat`, `status`, `enable`, `handitem`, `ai_type` FROM `bot_user` WHERE room_id = '" + roomId + "'");
 
         return dbClient.GetTable();
     }
@@ -109,7 +117,7 @@ internal sealed class BotUserDao
 
     internal static DataTable GetAllByUserId(IQueryAdapter dbClient, int userId, int limit)
     {
-        dbClient.SetQuery("SELECT `id`, `user_id`, `name`, `motto`, `gender`, `look`, `room_id`, `walk_enabled`, `x`, `y`, `z`, `rotation`, `chat_enabled`, `chat_text`, `chat_seconds`, `is_dancing`, `is_mixchat`, `status`, `enable`, `handitem` FROM `bot_user` WHERE user_id = '" + userId + "' AND room_id = '0' LIMIT " + limit);
+        dbClient.SetQuery("SELECT `id`, `user_id`, `name`, `motto`, `gender`, `look`, `room_id`, `walk_enabled`, `x`, `y`, `z`, `rotation`, `chat_enabled`, `chat_text`, `chat_seconds`, `is_dancing`, `is_mixchat`, `status`, `enable`, `handitem`, `ai_type` FROM `bot_user` WHERE user_id = '" + userId + "' AND room_id = '0' LIMIT " + limit);
 
         return dbClient.GetTable();
     }

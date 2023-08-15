@@ -9,6 +9,7 @@ using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Users.Inventory.Bots;
@@ -391,7 +392,7 @@ public class InventoryComponent : IDisposable
         {
             foreach (DataRow row in dBots.Rows)
             {
-                var bot = new Bot(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), (string)row["name"], (string)row["motto"], (string)row["look"], (string)row["gender"], Convert.ToBoolean(row["walk_enabled"]), Convert.ToBoolean(row["chat_enabled"]), (string)row["chat_text"], Convert.ToInt32(row["chat_seconds"]), Convert.ToBoolean(row["is_dancing"]), Convert.ToInt32(row["enable"]), Convert.ToInt32(row["handitem"]), Convert.ToInt32(row["status"]));
+                var bot = new Bot(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), (string)row["name"], (string)row["motto"], (string)row["look"], (string)row["gender"], Convert.ToBoolean(row["walk_enabled"]), Convert.ToBoolean(row["chat_enabled"]), (string)row["chat_text"], Convert.ToInt32(row["chat_seconds"]), Convert.ToBoolean(row["is_dancing"]), Convert.ToInt32(row["enable"]), Convert.ToInt32(row["handitem"]), Convert.ToInt32(row["status"]), BotUtility.GetAIFromString((string)row["ai_type"]));
                 _ = this._botItems.TryAdd(Convert.ToInt32(row["id"]), bot);
             }
         }
