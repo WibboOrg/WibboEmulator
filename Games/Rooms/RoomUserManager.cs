@@ -705,7 +705,7 @@ public class RoomUserManager
         }
     }
 
-    public RoomUser GetUserByTracker(string webIP, string machineId)
+    public RoomUser GetUserByTracker(string webIP)
     {
         foreach (var user in this.GetUserList())
         {
@@ -725,11 +725,6 @@ public class RoomUserManager
             }
 
             if (user.Client.Connection == null)
-            {
-                continue;
-            }
-
-            if (user.Client.MachineId != machineId)
             {
                 continue;
             }
@@ -1101,7 +1096,7 @@ public class RoomUserManager
                     else
                     {
                         // mini Fix
-                        var gateLook = (user.Client.User.Gender.ToUpper() == "M") ? roomItem.ExtraData.Split(',')[0] : roomItem.ExtraData.Split(',')[1];
+                        var gateLook = (user.Client.User.Gender == "M") ? roomItem.ExtraData.Split(',')[0] : roomItem.ExtraData.Split(',')[1];
                         if (gateLook == "")
                         {
                             break;
@@ -1232,7 +1227,7 @@ public class RoomUserManager
                 {
                     if (user.IsBot)
                     {
-                        user.BotData.RoleBot?.OnCycle(user, this._room);
+                        user.BotData?.RoleBot?.OnCycle(user, this._room);
                     }
                     else
                     {

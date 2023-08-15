@@ -116,9 +116,9 @@ internal sealed class OpenFlatConnectionEvent : IPacketEvent
             }
         }
 
-        if (room.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
+        if (room.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner") || room.CloseFullRoom)
         {
-            if (room.RoomUserManager.GetUserByTracker(session.User.IP, session.MachineId) != null)
+            if (room.RoomUserManager.GetUserByTracker(session.User.IP) != null)
             {
                 session.SendPacket(new CloseConnectionComposer());
                 return;
