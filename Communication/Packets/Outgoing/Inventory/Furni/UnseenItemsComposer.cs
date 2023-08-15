@@ -34,5 +34,4 @@ public enum UnseenItemsType
     Bot = 5,
     Games = 6,
     Banner = 7
-
 }

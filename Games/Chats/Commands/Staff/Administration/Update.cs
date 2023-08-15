@@ -170,12 +170,6 @@ internal sealed class Update : IChatCommand
                 session.SendWhisper("Paramètre mises à jour");
                 break;
             }
-            case "openia":
-            {
-                WibboEnvironment.GetChatOpenAI().Init();
-                session.SendWhisper("OpenIA mises à jour");
-                break;
-            }
             default:
             {
                 session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.notfound", session.Langue));
