@@ -64,7 +64,7 @@ internal sealed class GiveLot : IChatCommand
         }
 
         targetRoomUser.Client.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", targetRoomUser.Client.Langue), lotCount));
-        session.SendWhisper(targetRoomUser.GetUsername() + " à reçu " + lotCount + " RareBox!");
+        session.SendWhisper(targetRoomUser.GetUsername() + " à reçu " + lotCount + " LootBox!");
 
         targetRoomUser.Client.User.GamePointsMonth += 1;
         WibboEnvironment.GetGame().GetHallOFFame().UpdateRakings(targetRoomUser.Client.User);

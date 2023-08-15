@@ -239,7 +239,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
 
         if (winwinCount > 0 || wibboPointCount > 0 || nbLot > 0)
         {
-            packetList.Add(RoomNotificationComposer.SendBubble(notifImage, $"Vous avez reçu {wibboPointCount} WibboPoints, {winwinCount} Win-wins ainsi que {nbLot} Rarebox!"));
+            packetList.Add(RoomNotificationComposer.SendBubble(notifImage, $"Vous avez reçu {wibboPointCount} WibboPoints, {winwinCount} Win-wins ainsi que {nbLot} LootBox!"));
         }
     }
 

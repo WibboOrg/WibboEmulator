@@ -198,14 +198,14 @@ internal static class ItemBehaviourUtility
             case InteractionType.LOOTBOX_2022:
             case InteractionType.BADGE_BOX:
             {
-                var lotName = "RareBox";
+                var lotName = "LootBox";
                 switch (itemData.InteractionType)
                 {
                     case InteractionType.LEGEND_BOX:
                         lotName = "LegendBox";
                         break;
                     case InteractionType.DELUXE_BOX:
-                        lotName = "RareBox Deluxe";
+                        lotName = "LootBox Deluxe";
                         break;
                     case InteractionType.BADGE_BOX:
                         lotName = "BadgeBox";
