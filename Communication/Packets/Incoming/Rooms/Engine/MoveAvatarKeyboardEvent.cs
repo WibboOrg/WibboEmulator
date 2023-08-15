@@ -33,12 +33,7 @@ internal sealed class MoveAvatarKeyboardEvent : IPacketEvent
 
         var user = currentRoom.RoomUserManager.GetRoomUserByUserId(session.User.Id);
 
-        if (user == null || (!user.CanWalk && !user.TeleportEnabled))
-        {
-            return;
-        }
-
-        if (!user.AllowMoveTo)
+        if (user == null || (!user.CanWalk && !user.TeleportEnabled) || !user.AllowArrowMove || !user.AllowMoveTo)
         {
             return;
         }

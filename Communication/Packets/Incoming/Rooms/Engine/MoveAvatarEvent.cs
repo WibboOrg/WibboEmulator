@@ -14,7 +14,7 @@ internal sealed class MoveAvatarEvent : IPacketEvent
         }
 
         var user = room.RoomUserManager.GetRoomUserByUserId(session.User.ControlUserId == 0 ? session.User.Id : session.User.ControlUserId);
-        if (user == null || (!user.CanWalk && !user.TeleportEnabled))
+        if (user == null || (!user.CanWalk && !user.TeleportEnabled) || !user.AllowMouseMove)
         {
             return;
         }

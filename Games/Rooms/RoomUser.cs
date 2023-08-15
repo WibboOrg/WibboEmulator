@@ -104,6 +104,8 @@ public class RoomUser : IEquatable<RoomUser>
     public bool ReverseWalk { get; set; }
     public bool WalkSpeed { get; set; }
     public bool AllowMoveTo { get; set; }
+    public bool AllowArrowMove { get; set; }
+    public bool AllowMouseMove { get; set; }
 
     public int LLPartner { get; set; }
 
@@ -183,6 +185,8 @@ public class RoomUser : IEquatable<RoomUser>
         this.AllowBuyItems = new List<int>();
         this.IsDispose = false;
         this.AllowMoveTo = true;
+        this.AllowArrowMove = true;
+        this.AllowMouseMove = true;
         this.WhiperGroupUsers = new List<string>();
 
         if (!this.IsBot)

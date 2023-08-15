@@ -149,6 +149,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             case "roomfreeze":
             case "roomkick":
             case "moveto":
+            case "arrowmove":
+            case "mousemove":
             case "reversewalk":
             case "speedwalk":
             case "configbot":
@@ -865,14 +867,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "pvp":
             {
-                if (value == "true")
-                {
-                    this.RoomInstance.RoomRoleplay.Pvp = true;
-                }
-                else
-                {
-                    this.RoomInstance.RoomRoleplay.Pvp = false;
-                }
+                this.RoomInstance.RoomRoleplay.Pvp = value == "true";
 
                 break;
             }
@@ -1134,14 +1129,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
             case "breakwalk":
             {
-                if (value == "true")
-                {
-                    user.BreakWalkEnable = true;
-                }
-                else
-                {
-                    user.BreakWalkEnable = false;
-                }
+                user.BreakWalkEnable = value == "true";
 
                 break;
             }
@@ -1400,14 +1388,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                if (value == "true")
-                {
-                    this.RoomInstance.RoomRoleplay.TimeSpeed = true;
-                }
-                else
-                {
-                    this.RoomInstance.RoomRoleplay.TimeSpeed = false;
-                }
+                this.RoomInstance.RoomRoleplay.TimeSpeed = value == "true";
 
                 break;
             }
@@ -1418,14 +1399,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                if (value == "true")
-                {
-                    this.RoomInstance.RoomRoleplay.CycleHourEffect = true;
-                }
-                else
-                {
-                    this.RoomInstance.RoomRoleplay.CycleHourEffect = false;
-                }
+                this.RoomInstance.RoomRoleplay.CycleHourEffect = value == "true";
 
                 break;
             }
@@ -1537,14 +1511,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "roomingamechat":
             {
-                if (value == "true")
-                {
-                    this.RoomInstance.IngameChat = true;
-                }
-                else
-                {
-                    this.RoomInstance.IngameChat = false;
-                }
+                this.RoomInstance.IngameChat = value == "true";
 
                 break;
             }
@@ -1563,14 +1530,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "roommute":
             {
-                if (value == "true")
-                {
-                    this.RoomInstance.RoomMuted = true;
-                }
-                else
-                {
-                    this.RoomInstance.RoomMuted = false;
-                }
+                this.RoomInstance.RoomMuted = value == "true";
 
                 break;
             }
@@ -1586,53 +1546,25 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "roomdiagonal":
             {
-                if (value == "true")
-                {
-                    this.RoomInstance.GameMap.DiagonalEnabled = true;
-                }
-                else
-                {
-                    this.RoomInstance.GameMap.DiagonalEnabled = false;
-                }
+                this.RoomInstance.GameMap.DiagonalEnabled = value == "true";
 
                 break;
             }
             case "roomoblique":
             {
-                if (value == "true")
-                {
-                    this.RoomInstance.GameMap.ObliqueDisable = true;
-                }
-                else
-                {
-                    this.RoomInstance.GameMap.ObliqueDisable = false;
-                }
+                this.RoomInstance.GameMap.ObliqueDisable = value == "true";
 
                 break;
             }
             case "pushpull":
             {
-                if (value == "true")
-                {
-                    this.RoomInstance.PushPullAllowed = true;
-                }
-                else
-                {
-                    this.RoomInstance.PushPullAllowed = false;
-                }
+                this.RoomInstance.PushPullAllowed = value == "true";
 
                 break;
             }
             case "roomgame":
             {
-                if (value == "true")
-                {
-                    this.RoomInstance.IsGameMode = true;
-                }
-                else
-                {
-                    this.RoomInstance.IsGameMode = false;
-                }
+                this.RoomInstance.IsGameMode = value == "true";
 
                 break;
             }
@@ -1815,40 +1747,31 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "moveto":
             {
-                if (value == "true")
-                {
-                    roomUser.AllowMoveTo = true;
-                }
-                else
-                {
-                    roomUser.AllowMoveTo = false;
-                }
+                roomUser.AllowMoveTo = value == "true";
+
+                break;
+            }
+            case "arrowmove":
+            {
+                roomUser.AllowArrowMove = value == "true";
+
+                break;
+            }
+            case "mousemove":
+            {
+                roomUser.AllowMouseMove = value == "true";
 
                 break;
             }
             case "reversewalk":
             {
-                if (value == "true")
-                {
-                    roomUser.ReverseWalk = true;
-                }
-                else
-                {
-                    roomUser.ReverseWalk = false;
-                }
+                roomUser.ReverseWalk = value == "true";
 
                 break;
             }
             case "speedwalk":
             {
-                if (value == "true")
-                {
-                    roomUser.WalkSpeed = true;
-                }
-                else
-                {
-                    roomUser.WalkSpeed = false;
-                }
+                roomUser.WalkSpeed = value == "true";
 
                 break;
             }
@@ -1899,14 +1822,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "allowshoot":
             {
-                if (value == "true")
-                {
-                    roomUser.AllowShoot = true;
-                }
-                else
-                {
-                    roomUser.AllowShoot = false;
-                }
+                roomUser.AllowShoot = value == "true";
 
                 break;
             }
@@ -1929,14 +1845,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "ingame":
             {
-                if (value == "true")
-                {
-                    roomUser.InGame = true;
-                }
-                else
-                {
-                    roomUser.InGame = false;
-                }
+                roomUser.InGame = value == "true";
 
                 break;
             }
@@ -2040,14 +1949,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "breakwalk":
             {
-                if (value == "true")
-                {
-                    roomUser.BreakWalkEnable = true;
-                }
-                else
-                {
-                    roomUser.BreakWalkEnable = false;
-                }
+                roomUser.BreakWalkEnable = value == "true";
 
                 break;
             }
