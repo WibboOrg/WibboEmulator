@@ -171,6 +171,8 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "notwinuserpoint":
             case "winclassement":
             case "notwinclassement":
+            case "posclassement":
+            case "notposclassement":
             case "classement":
             case "notclassement":
             case "ptsclassementplus":
@@ -409,7 +411,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "inventoryitem":
             case "inventorynotitem":
             {
-                var itemId = 0;
+                int itemId;
                 var quantity = 1;
 
                 if (value.Contains(';'))
@@ -881,6 +883,26 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
 
                 break;
             }
+            case "posclassement":
+            case "notposclassement":
+            {
+                _ = int.TryParse(value, out var valueInt);
+
+                var itemHighScore = room.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                if (itemHighScore == null)
+                {
+                    break;
+                }
+
+                var postClassement = itemHighScore.Scores.Keys.ToList().IndexOf(user.GetUsername()) + 1;
+
+                if (postClassement == valueInt)
+                {
+                    result = true;
+                }
+
+                break;
+            }
             case "ptsclassementplus":
             {
                 var itemHighScore = room.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
@@ -1013,7 +1035,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "usergirl":
             case "notusergirl":
             {
-                if (!user.IsBot && user.Client.User.Gender.ToUpper() == "F")
+                if (!user.IsBot && user.Client.User.Gender == "F")
                 {
                     result = true;
                 }
@@ -1023,7 +1045,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "userboy":
             case "notuserboy":
             {
-                if (!user.IsBot && user.Client.User.Gender.ToUpper() == "M")
+                if (!user.IsBot && user.Client.User.Gender == "M")
                 {
                     result = true;
                 }
