@@ -128,7 +128,7 @@ internal sealed class UsersComposer : ServerPacket
                 this.WriteString(roomUser.Z.ToString());
                 this.WriteInteger(roomUser.RotBody);
                 this.WriteInteger(1);
-                this.WriteString(user.Gender.ToLower());
+                this.WriteString(user.Gender);
 
                 Group group = null;
                 if (user.FavouriteGroupId > 0)

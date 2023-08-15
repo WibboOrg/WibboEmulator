@@ -1,6 +1,5 @@
 namespace WibboEmulator.Games.Users;
 using System.Data;
-using System.Globalization;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
@@ -167,7 +166,7 @@ public class User : IDisposable, IEquatable<User>
         this.Motto = motto;
         this.MachineId = machineId;
         this.Look = WibboEnvironment.GetFigureManager().ProcessFigure(look, gender, true);
-        this.Gender = gender.ToLower(CultureInfo.CurrentCulture);
+        this.Gender = gender.ToUpper();
         this.Credits = credits;
         this.WibboPoints = wpoint;
         this.LimitCoins = limitCoins;

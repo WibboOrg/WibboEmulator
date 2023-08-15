@@ -49,7 +49,7 @@ internal sealed class SetMannequinFigureEvent : IPacketEvent
             name = stuff[2];
         }
 
-        roomItem.ExtraData = session.User.Gender.ToUpper() + ";" + look + ";" + name;
+        roomItem.ExtraData = session.User.Gender + ";" + look + ";" + name;
         roomItem.UpdateState();
     }
 }

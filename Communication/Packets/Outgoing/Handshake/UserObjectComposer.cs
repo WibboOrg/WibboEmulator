@@ -9,7 +9,7 @@ internal sealed class UserObjectComposer : ServerPacket
         this.WriteInteger(user.Id);
         this.WriteString(user.Username);
         this.WriteString(user.Look);
-        this.WriteString(user.Gender.ToUpper());
+        this.WriteString(user.Gender);
         this.WriteString(user.Motto);
         this.WriteString("");
         this.WriteBoolean(false);
