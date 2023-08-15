@@ -13,7 +13,7 @@ internal sealed class HidePyramide : IChatCommand
                 continue;
             }
 
-            if (item.GetBaseItem().ItemName is not "wf_pyramid" or "pyra_rose" or "pyra_rouge" or "pyra_violette" or "pyra_exit" or "bb_pyramid")
+            if (item.GetBaseItem().ItemName is not "wf_pyramid" and not "pyra_rose" and not "pyra_rouge" and not "pyra_violette" and not "pyra_exit" and not "bb_pyramid" and not "pyramide_exit")
             {
                 continue;
             }
