@@ -10,11 +10,7 @@ internal sealed class MaxFloor : IChatCommand
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var map = "";
-        var maxSize = 50;
-        if (session.User.Rank > 1)
-        {
-            maxSize = 75;
-        }
+        var maxSize = 75;
 
         for (var y = 0; y < (room.GameMap.Model.MapSizeY > maxSize ? room.GameMap.Model.MapSizeY : maxSize); y++)
         {
