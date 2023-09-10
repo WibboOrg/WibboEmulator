@@ -11,11 +11,11 @@ internal sealed class SellablePetBreedsComposer : ServerPacket
         this.WriteInteger(races.Count);
         foreach (var race in races.ToList())
         {
-            this.WriteInteger(petId);
-            this.WriteInteger(race.PrimaryColour);
-            this.WriteInteger(race.SecondaryColour);
-            this.WriteBoolean(race.HasPrimaryColour);
-            this.WriteBoolean(race.HasSecondaryColour);
+            this.WriteInteger(petId); //type
+            this.WriteInteger(race.PrimaryColour); //breedId
+            this.WriteInteger(race.SecondaryColour); //paletteId
+            this.WriteBoolean(true); //sellable
+            this.WriteBoolean(false); //rare
         }
     }
 }
