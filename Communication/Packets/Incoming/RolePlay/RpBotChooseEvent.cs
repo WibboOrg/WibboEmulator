@@ -37,7 +37,7 @@ internal sealed class RpBotChooseEvent : IPacketEvent
             user.IsSlot = false;
             user.IsSlotWinner = false;
 
-            var isWin = WibboEnvironment.GetRandomNumber(0, 100) < 48;
+            var isWin = WibboEnvironment.GetRandomNumber(0, 100) <= 48;
             if (isWin)
             {
                 user.IsSlotWinner = true;
