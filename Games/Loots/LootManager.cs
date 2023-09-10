@@ -19,6 +19,7 @@ public class LootManager
     public void Init(IQueryAdapter dbClient)
     {
         this._lootItem.Clear();
+        this._rarityCounter.Clear();
 
         var timeNow = DateTime.Now;
         var startMounth = new DateTime(timeNow.Year, timeNow.Month, 1);
