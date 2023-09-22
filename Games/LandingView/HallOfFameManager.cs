@@ -72,6 +72,11 @@ public class HallOfFameManager
 
     public void UpdateRakings(User user)
     {
+        if (user == null || user.Rank >= 6)
+        {
+            return;
+        }
+
         if (this.UserRanking.Contains(user))
         {
             this.UserRanking.Remove(user);
