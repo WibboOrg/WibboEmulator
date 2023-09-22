@@ -25,7 +25,6 @@ public class OpenAIProxy : IDisposable
         this._lastRequest = DateTime.Now;
     }
 
-    //Where business happens
     public async Task<ChatCompletionMessage> SendChatMessage(List<ChatCompletionMessage> messagesSend)
     {
         if (this.IsReadyToSend() == false || this._waitedAPI)
@@ -36,6 +35,11 @@ public class OpenAIProxy : IDisposable
         this._waitedAPI = true;
 
         var url = WibboEnvironment.GetSettings().GetData<string>("openia.url");
+
+        if (string.IsNullOrWhiteSpace(url))
+        {
+            return null;
+        }
 
         var request = new
         {
