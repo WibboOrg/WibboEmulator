@@ -38,7 +38,7 @@ internal sealed class RoomKick : IChatCommand
 
             foreach (var user in userKick)
             {
-                if (user == null || user.Client == null)
+                if (user == null || user.Client == null || user.RoomId != room.Id)
                 {
                     continue;
                 }
