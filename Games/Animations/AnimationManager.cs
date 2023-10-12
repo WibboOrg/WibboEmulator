@@ -25,6 +25,20 @@ public class AnimationManager
     private bool _forceDisabled;
     private int _roomIdIndex;
 
+    public AnimationManager()
+    {
+        this._roomId = new List<int>();
+        this._started = false;
+        this._roomIdGame = 0;
+        this._isActivate = true;
+        this._notif = false;
+        this._forceDisabled = false;
+        this._animationTime = DateTime.Now;
+
+        this._animationCycleStopwatch = new();
+        this._animationCycleStopwatch.Start();
+    }
+
     public void OnUpdateUsersOnline(int usersOnline)
     {
         var minUsers = WibboEnvironment.GetSettings().GetData<int>("autogame.min.users");
@@ -60,20 +74,6 @@ public class AnimationManager
         {
             this._animationTime = DateTime.Now;
         }
-    }
-
-    public AnimationManager()
-    {
-        this._roomId = new List<int>();
-        this._started = false;
-        this._roomIdGame = 0;
-        this._isActivate = true;
-        this._notif = false;
-        this._forceDisabled = false;
-        this._animationTime = DateTime.Now;
-
-        this._animationCycleStopwatch = new();
-        this._animationCycleStopwatch.Start();
     }
 
     public bool IsActivate() => !this._forceDisabled && this._isActivate;

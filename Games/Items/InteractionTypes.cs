@@ -84,8 +84,6 @@ public class InteractionTypes
         "wf_trg_furnistate" => InteractionType.TRIGGER_STATE_CHANGED,
         "wf_trg_onfurni" => InteractionType.TRIGGER_WALK_ON_FURNI,
         "wf_trg_offfurni" => InteractionType.TRIGGER_WALK_OFF_FURNI,
-        "wf_trg_says_sycommand" => InteractionType.TRIGGER_SAYS_COMMAND_TRANSFERT,
-        "wf_trg_says_sycommanr" => InteractionType.TRIGGER_SAYS_COMMAND_RECOVER,
         "wf_trg_exit_room" => InteractionType.TRIGGER_AVATAR_EXIT,
         "wf_act_givepoints" => InteractionType.ACTION_GIVE_SCORE,
         "wf_act_matchfurni" => InteractionType.ACTION_POS_RESET,
