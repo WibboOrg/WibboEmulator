@@ -132,6 +132,7 @@ internal sealed class Update : IChatCommand
             }
             case "navigateur":
             case "navi":
+            case "navigator":
             {
                 WibboEnvironment.GetGame().GetNavigator().Init(dbClient);
                 session.SendWhisper("Navigateur mis à jour");
@@ -165,9 +166,16 @@ internal sealed class Update : IChatCommand
                 break;
             }
             case "setting":
+            case "settings":
             {
                 WibboEnvironment.GetSettings().Init(dbClient);
                 session.SendWhisper("Paramètre mises à jour");
+                break;
+            }
+            case "banner":
+            {
+                WibboEnvironment.GetGame().GetBannerManager().Init(dbClient);
+                session.SendWhisper("Bannière mises à jour");
                 break;
             }
             default:
