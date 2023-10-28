@@ -253,7 +253,7 @@ public class GameClientManager
             return;
         }
 
-        if (this._disconnectCycleStopwatch.ElapsedMilliseconds >= 2000)
+        if (this._disconnectCycleStopwatch.ElapsedMilliseconds >= 1000)
         {
             this._disconnectCycleStopwatch.Restart();
 
@@ -262,7 +262,7 @@ public class GameClientManager
             {
                 var timeExecution = DateTime.Now - pending.Value;
 
-                if (timeExecution <= TimeSpan.FromSeconds(2))
+                if (timeExecution <= TimeSpan.FromSeconds(5))
                 {
                     continue;
                 }
@@ -302,11 +302,11 @@ public class GameClientManager
             return false;
         }
 
-        if (oldClient.Connection.GetIp() != newClient.Connection.GetIp())
+        /*if (oldClient.Connection.GetIp() != newClient.Connection.GetIp())
         {
             newClient.IsDisconnected = true;
             return false;
-        }
+        }*/
 
         _ = this._pendingDisconnect.TryRemove(oldClient.ConnectionID, out _);
 
