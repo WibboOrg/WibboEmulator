@@ -104,7 +104,7 @@ public class RoomBot
             case BotAIType.Pet:
                 return new PetBot(virtualId);
             case BotAIType.ChatGPT:
-                 return new ChatGPTBot(virtualId);
+                return new ChatGPTBot(virtualId);
             case BotAIType.Generic:
                 break;
         }

@@ -13,9 +13,9 @@ public sealed class DatabaseManager
     {
         var connectionString = new MySqlConnectionStringBuilder
         {
-            ConnectionTimeout = 10,
+            ConnectionTimeout = 300,
             Database = databaseConfiguration.Name,
-            DefaultCommandTimeout = 30,
+            DefaultCommandTimeout = 300,
             Logging = false,
             MaximumPoolSize = databaseConfiguration.MaximumPoolSize,
             MinimumPoolSize = databaseConfiguration.MinimumPoolSize,
