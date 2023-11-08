@@ -26,7 +26,7 @@ internal sealed class Update : IChatCommand
             case "emuban":
             {
                 WibboEnvironment.GetWebSocketManager().ResetBan();
-                session.SendWhisper("Emulateur banni reset");
+                session.SendWhisper("Réinitialisation des bannissements de l'émulateur");
                 break;
             }
             case "landingview":
@@ -102,6 +102,7 @@ internal sealed class Update : IChatCommand
                 break;
             }
             case "effet":
+            case "enable":
             {
                 WibboEnvironment.GetGame().GetEffectManager().Init(dbClient);
                 session.SendWhisper("Effet mis à jour");
