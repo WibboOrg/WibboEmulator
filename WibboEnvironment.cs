@@ -264,7 +264,7 @@ public static class WibboEnvironment
         GetGame().GetRoomManager().RemoveAllRooms(); // Fermerture et enregistrer des apparts
         GetGame().Dispose(); // E+N+D+T+I+M+E
 
-        Console.WriteLine("Wibbo Emulateur s'est parfaitement éteint...");
+        Console.WriteLine("L'émulation s'est parfaitement éteinte.");
         Environment.Exit(0);
     }
 }

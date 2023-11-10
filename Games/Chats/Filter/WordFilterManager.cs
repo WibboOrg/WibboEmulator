@@ -60,7 +60,7 @@ public sealed partial class WordFilterManager
         }
     }
 
-    public string CheckMessage(string message)
+    public string CheckMessage(string message) // INJUURE & INSULTE
     {
         foreach (var filter in this._filteredWords.ToList())
         {

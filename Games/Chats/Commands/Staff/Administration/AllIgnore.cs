@@ -48,6 +48,6 @@ internal sealed class AllIgnore : IChatCommand
 
         targetUser.User.IgnoreAllExpireTime = expireTime;
 
-        session.SendWhisper("Le joueur  " + targetUser.User.Username + " est ignorer de la part de l'ensemble des joueurs pour " + reason + "!");
+        session.SendWhisper("Le joueur  " + targetUser.User.Username + " est ignoré de la part de l'ensemble des joueurs pour " + reason + "!");
     }
 }
