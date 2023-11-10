@@ -13,6 +13,7 @@ using WibboEmulator.Games.Chats.Commands.User.Casino;
 using WibboEmulator.Games.Chats.Commands.User.Info;
 using WibboEmulator.Games.Chats.Commands.User.Inventory;
 using WibboEmulator.Games.Chats.Commands.User.Premium;
+using WibboEmulator.Games.Chats.Commands.User.Premium.Fun;
 using WibboEmulator.Games.Chats.Commands.User.Room;
 using WibboEmulator.Games.Chats.Commands.User.RP;
 using WibboEmulator.Games.Chats.Commands.User.Several;
@@ -362,5 +363,8 @@ public class CommandManager
         this.Register(170, new ChatGTP());
         this.Register(171, new TransfertRoom());
         this.Register(172, new DeleteGroup());
+        this.Register(173, new Turn());
+        this.Register(174, new TransfBigMe());
+        this.Register(175, new SuperPush());
     }
 }
