@@ -364,7 +364,6 @@ public class CommandManager
         this.Register(171, new TransfertRoom());
         this.Register(172, new DeleteGroup());
         this.Register(173, new Turn());
-        this.Register(174, new TransfBigMe());
         this.Register(175, new SuperPush());
     }
 }
