@@ -528,7 +528,7 @@ public class GameClientManager
     }
 
     public void SendSuperNotif(string title, string notice, string picture, string link, string linkTitle) => this.SendMessage(new RoomNotificationComposer(title, notice, picture, linkTitle, link));
-    internal object GetOnlineStaffClients() => throw new NotImplementedException();
+
 
     public ICollection<GameClient> GetClients => this._clients.Values;
 }

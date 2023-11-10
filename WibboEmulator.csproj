@@ -58,4 +58,10 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Configuration\database.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>      
+    </None>
+  </ItemGroup>
+  
 </Project>
