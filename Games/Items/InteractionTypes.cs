@@ -126,6 +126,7 @@ public class InteractionTypes
         "wf_xtra_random" => InteractionType.SPECIAL_RANDOM,
         "wf_xtra_unseen" => InteractionType.SPECIAL_UNSEEN,
         "wf_xtra_animate" => InteractionType.SPECIAL_ANIMATE,
+        "wf_xtra_or_eval" => InteractionType.SPECIAL_OR_EVAL,
         "puzzlebox" => InteractionType.PUZZLE_BOX,
         "gift" => InteractionType.GIFT,
         "extrabox" => InteractionType.EXTRA_BOX,

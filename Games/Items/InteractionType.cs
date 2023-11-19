@@ -90,6 +90,7 @@ public enum InteractionType
     SPECIAL_RANDOM,
     SPECIAL_UNSEEN,
     SPECIAL_ANIMATE,
+    SPECIAL_OR_EVAL,
     WIRED_ITEM,
 
     // Banzai

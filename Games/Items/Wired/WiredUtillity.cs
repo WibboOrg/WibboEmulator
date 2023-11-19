@@ -23,6 +23,12 @@ public class WiredUtillity
         _ => false,
     };
 
+    public static bool TypeIsWiredSpecial(InteractionType type) => type switch
+    {
+        InteractionType.SPECIAL_RANDOM or InteractionType.SPECIAL_UNSEEN or InteractionType.SPECIAL_ANIMATE or InteractionType.SPECIAL_OR_EVAL => true,
+        _ => false,
+    };
+
     public static bool TypeIsWired(InteractionType type)
     {
         if (TypeIsWiredTrigger(type))
@@ -37,15 +43,7 @@ public class WiredUtillity
         {
             return true;
         }
-        else if (type == InteractionType.SPECIAL_RANDOM)
-        {
-            return true;
-        }
-        else if (type == InteractionType.SPECIAL_UNSEEN)
-        {
-            return true;
-        }
-        else if (type == InteractionType.SPECIAL_ANIMATE)
+        else if (TypeIsWiredSpecial(type))
         {
             return true;
         }

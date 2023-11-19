@@ -19,6 +19,7 @@ public class WiredHandler
 
     private readonly List<Point> _specialRandom;
     private readonly List<Point> _specialAnimate;
+    private readonly List<Point> _specialOrEval;
     private readonly Dictionary<Point, int> _specialUnseen;
 
     private readonly ConcurrentQueue<WiredCycle> _requestingUpdates;
@@ -43,6 +44,7 @@ public class WiredHandler
 
         this._specialRandom = new List<Point>();
         this._specialAnimate = new List<Point>();
+        this._specialOrEval = new List<Point>();
         this._specialUnseen = new Dictionary<Point, int>();
         this._tickCounter = 0;
 
@@ -95,6 +97,13 @@ public class WiredHandler
                 this._specialAnimate.Add(itemCoord);
             }
         }
+        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_OR_EVAL)
+        {
+            if (!this._specialOrEval.Contains(itemCoord))
+            {
+                this._specialOrEval.Add(itemCoord);
+            }
+        }
     }
 
     public void RemoveFurniture(Item item)
@@ -144,6 +153,13 @@ public class WiredHandler
             if (this._specialAnimate.Contains(itemCoord))
             {
                 _ = this._specialAnimate.Remove(itemCoord);
+            }
+        }
+        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_OR_EVAL)
+        {
+            if (this._specialOrEval.Contains(itemCoord))
+            {
+                _ = this._specialOrEval.Remove(itemCoord);
             }
         }
     }
@@ -278,9 +294,11 @@ public class WiredHandler
 
         this._tickCounter++;
 
-        if (this._conditionStacks.TryGetValue(coordinate, out var value) && !ignoreCondition)
+        if (this._conditionStacks.TryGetValue(coordinate, out var conditionStack) && !ignoreCondition)
         {
-            var conditionStack = value;
+            var isOrVal = this._specialOrEval.Contains(coordinate);
+            var hasValidCondition = false;
+
             foreach (var roomItem in conditionStack.Take(this.SecurityEnabled ? 20 : 1024).ToArray())
             {
                 if (roomItem == null || roomItem.WiredHandler == null)
@@ -288,10 +306,24 @@ public class WiredHandler
                     continue;
                 }
 
-                if (!((IWiredCondition)roomItem.WiredHandler).AllowsExecution(user, item))
+                var isValidCondition = ((IWiredCondition)roomItem.WiredHandler).AllowsExecution(user, item);
+
+                if (isValidCondition && isOrVal)
                 {
-                    return;
+                    hasValidCondition = true;
+                    break;
                 }
+
+                if (!isValidCondition && !isOrVal)
+                {
+                    hasValidCondition = false;
+                    break;
+                }
+            }
+
+            if (!hasValidCondition)
+            {
+                return;
             }
         }
 
