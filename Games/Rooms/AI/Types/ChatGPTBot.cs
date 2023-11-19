@@ -38,7 +38,6 @@ public partial class ChatGPTBot : BotAI
             { 9, "Kiss or embrace" },
             { 10, "Danse" }
         };
-
     }
 
     public override void OnSelfEnterRoom()

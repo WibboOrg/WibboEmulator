@@ -46,24 +46,24 @@ internal sealed class SuperPush : IChatCommand
 
         if (Math.Abs(targetRoomUser.X - userRoom.X) <= 1 && Math.Abs(targetRoomUser.Y - userRoom.Y) <= 1)
         {
-            int pushX = targetRoomUser.X - userRoom.X;
-            int pushY = targetRoomUser.Y - userRoom.Y;
+            var pushX = targetRoomUser.X - userRoom.X;
+            var pushY = targetRoomUser.Y - userRoom.Y;
 
             if (pushX == 0 && pushY == 1)
             {
-                targetRoomUser.MoveTo(targetRoomUser.X, targetRoomUser.Y + 4);
+                targetRoomUser.MoveTo(targetRoomUser.X, targetRoomUser.Y + 4, true);
             }
             else if (pushX == 0 && pushY == -1)
             {
-                targetRoomUser.MoveTo(targetRoomUser.X, targetRoomUser.Y - 4);
+                targetRoomUser.MoveTo(targetRoomUser.X, targetRoomUser.Y - 4, true);
             }
             else if (pushX == 1 && pushY == 0)
             {
-                targetRoomUser.MoveTo(targetRoomUser.X + 4, targetRoomUser.Y);
+                targetRoomUser.MoveTo(targetRoomUser.X + 4, targetRoomUser.Y, true);
             }
             else if (pushX == -1 && pushY == 0)
             {
-                targetRoomUser.MoveTo(targetRoomUser.X - 4, targetRoomUser.Y);
+                targetRoomUser.MoveTo(targetRoomUser.X - 4, targetRoomUser.Y, true);
             }
 
             userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.superpush.chat.success", session.Langue), targetName), 0, false);

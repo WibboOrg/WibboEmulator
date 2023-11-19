@@ -18,22 +18,14 @@ public class TeleportFurniToUser : WiredActionBase, IWired, IWiredCycleable, IWi
 
         var disableAnimation = this.RoomInstance.WiredHandler.DisableAnimate(this.ItemInstance.Coordinate);
 
-        if (this.Items.Count > 1)
+        foreach (var roomItem in this.Items.ToList())
         {
-            var roomItem = this.Items[WibboEnvironment.GetRandomNumber(0, this.Items.Count - 1)];
-            if (roomItem == null)
+            if (roomItem == null || roomItem.Coordinate == user.Coordinate)
             {
-                return false;
+                continue;
             }
 
-            if (roomItem.Coordinate != user.Coordinate)
-            {
-                this.RoomInstance.RoomItemHandling.PositionReset(roomItem, user.SetX, user.SetY, user.SetZ, disableAnimation);
-            }
-        }
-        else if (this.Items.Count == 1)
-        {
-            this.RoomInstance.RoomItemHandling.PositionReset(Enumerable.FirstOrDefault(this.Items), user.SetX, user.SetY, user.SetZ, disableAnimation);
+            this.RoomInstance.RoomItemHandling.PositionReset(roomItem, user.SetX, user.SetY, user.SetZ, disableAnimation);
         }
 
         return false;
