@@ -59,8 +59,9 @@ public class UserSays : WiredTriggerBase, IWired
     public void SaveToDatabase(IQueryAdapter dbClient)
     {
         var isOwnerOnly = this.GetIntParam(0) == 1;
+        var isContains = this.GetIntParam(1) == 1;
 
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, isOwnerOnly, null);
+        WiredUtillity.SaveTriggerItem(dbClient, this.Id, isContains ? "1" : "0", this.StringParam, isOwnerOnly, null);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
@@ -68,5 +69,6 @@ public class UserSays : WiredTriggerBase, IWired
         this.StringParam = wiredTriggerData;
 
         this.SetIntParam(0, wiredAllUserTriggerable ? 1 : 0);
+        this.SetIntParam(1, wiredTriggerData2 == "1" ? 1 : 0);
     }
 }
