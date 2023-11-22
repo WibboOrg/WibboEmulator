@@ -297,7 +297,7 @@ public class WiredHandler
         if (this._conditionStacks.TryGetValue(coordinate, out var conditionStack) && !ignoreCondition)
         {
             var isOrVal = this._specialOrEval.Contains(coordinate);
-            var hasValidCondition = false;
+            var hasValidCondition = true;
 
             foreach (var roomItem in conditionStack.Take(this.SecurityEnabled ? 20 : 1024).ToArray())
             {
@@ -308,15 +308,15 @@ public class WiredHandler
 
                 var isValidCondition = ((IWiredCondition)roomItem.WiredHandler).AllowsExecution(user, item);
 
-                if (isValidCondition && isOrVal)
-                {
-                    hasValidCondition = true;
-                    break;
-                }
-
                 if (!isValidCondition && !isOrVal)
                 {
                     hasValidCondition = false;
+                    break;
+                }
+
+                if (isValidCondition && isOrVal)
+                {
+                    hasValidCondition = true;
                     break;
                 }
             }
