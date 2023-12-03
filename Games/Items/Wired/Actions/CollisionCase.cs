@@ -19,24 +19,16 @@ public class CollisionCase : WiredActionBase, IWiredEffect, IWired
                 continue;
             }
 
-            if (isAllUser)
+            var usersToTrigger = new List<RoomUser>();
+
+            foreach (var coord in roomItem.GetAffectedTiles)
             {
-                var roomUsers = this.RoomInstance.RoomUserManager.GetUsersForSquare(roomItem.X, roomItem.Y);
-                if (roomUsers.Count != 0)
-                {
-                    foreach (var roomUser in roomUsers)
-                    {
-                        this.RoomInstance.WiredHandler.TriggerCollision(roomUser, roomItem);
-                    }
-                }
+                usersToTrigger.AddRange(this.RoomInstance.RoomUserManager.GetUsersForSquare(coord.X, coord.Y));
             }
-            else
+
+            foreach (var roomUser in usersToTrigger.Where(u => u != null).Take(isAllUser ? usersToTrigger.Count : 1))
             {
-                var roomUser = this.RoomInstance.RoomUserManager.GetUserForSquare(roomItem.X, roomItem.Y);
-                if (roomUser != null)
-                {
-                    this.RoomInstance.WiredHandler.TriggerCollision(roomUser, roomItem);
-                }
+                this.RoomInstance.WiredHandler.TriggerCollision(roomUser, roomItem);
             }
         }
 
