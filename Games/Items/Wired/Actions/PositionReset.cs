@@ -69,6 +69,14 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
                 continue;
             }
 
+            if (position)
+            {
+                if (itemPosReset.X != roomItem.X || itemPosReset.Y != roomItem.Y || itemPosReset.Z != roomItem.Z)
+                {
+                    this.RoomInstance.RoomItemHandling.PositionReset(roomItem, itemPosReset.X, itemPosReset.Y, itemPosReset.Z, disableAnimation);
+                }
+            }
+
             if (state)
             {
                 if (itemPosReset.ExtraData != "Null")
@@ -89,14 +97,6 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
                     roomItem.Rotation = itemPosReset.Rot;
 
                     roomItem.UpdateState(false);
-                }
-            }
-
-            if (position)
-            {
-                if (itemPosReset.X != roomItem.X || itemPosReset.Y != roomItem.Y || itemPosReset.Z != roomItem.Z)
-                {
-                    this.RoomInstance.RoomItemHandling.PositionReset(roomItem, itemPosReset.X, itemPosReset.Y, itemPosReset.Z, disableAnimation);
                 }
             }
         }
