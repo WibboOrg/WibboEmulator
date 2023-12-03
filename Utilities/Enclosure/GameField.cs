@@ -84,7 +84,7 @@ public class GameField : IPathNode
         var list1 = new List<Point>();
         var list2 = new List<Point>
         {
-            new Point(this._currentlyChecking.X, this._currentlyChecking.Y)
+            new(this._currentlyChecking.X, this._currentlyChecking.Y)
         };
         list1.Add(new Point(x1, y1));
         while (list1.Count > 0)

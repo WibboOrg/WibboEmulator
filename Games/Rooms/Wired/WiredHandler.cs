@@ -255,7 +255,7 @@ public class WiredHandler
             return;
         }
 
-        if (!this._actionStacks.ContainsKey(coordinate))
+        if (!this._actionStacks.TryGetValue(coordinate, out var actionStacks))
         {
             return;
         }
@@ -327,7 +327,7 @@ public class WiredHandler
             }
         }
 
-        var actionStack = this._actionStacks[coordinate].OrderBy(p => p.Z).ToList();
+        var actionStack = actionStacks.OrderBy(p => p.Z).ToList();
 
         if (this._specialRandom.Contains(coordinate))
         {

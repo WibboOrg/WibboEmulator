@@ -1154,6 +1154,12 @@ public class RoomUserManager
                     break;
             }
         }
+
+        if (user == null)
+        {
+            return;
+        }
+
         if (cycleGameItems)
         {
             this._room.BattleBanzai.HandleBanzaiTiles(user.Coordinate, user.Team, user);

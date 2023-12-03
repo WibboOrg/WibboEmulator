@@ -113,14 +113,14 @@ internal sealed class EndPointManager
 
         var path = pref.Path;
 
-        if (path.IndexOf('%') != -1)
+        if (path.Contains('%'))
         {
             var msg = "The URI prefix includes an invalid path.";
 
             throw new HttpListenerException(87, msg);
         }
 
-        if (path.IndexOf("//", StringComparison.Ordinal) != -1)
+        if (path.Contains("//"))
         {
             var msg = "The URI prefix includes an invalid path.";
 
@@ -199,12 +199,12 @@ internal sealed class EndPointManager
 
         var path = pref.Path;
 
-        if (path.IndexOf('%') != -1)
+        if (path.Contains('%'))
         {
             return;
         }
 
-        if (path.IndexOf("//", StringComparison.Ordinal) != -1)
+        if (path.Contains("//"))
         {
             return;
         }
