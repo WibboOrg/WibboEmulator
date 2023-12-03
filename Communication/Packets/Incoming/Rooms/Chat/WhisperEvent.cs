@@ -128,41 +128,6 @@ internal sealed class WhisperEvent : IPacketEvent
             session.User.SpamFloodTime = DateTime.Now;
             session.User.FloodCount++;
 
-            if (message.StartsWith("@red@"))
-            {
-                user.ChatTextColor = "@red@";
-            }
-
-            if (message.StartsWith("@cyan@"))
-            {
-                user.ChatTextColor = "@cyan@";
-            }
-
-            if (message.StartsWith("@blue@"))
-            {
-                user.ChatTextColor = "@blue@";
-            }
-
-            if (message.StartsWith("@green@"))
-            {
-                user.ChatTextColor = "@green@";
-            }
-
-            if (message.StartsWith("@purple@"))
-            {
-                user.ChatTextColor = "@purple@";
-            }
-
-            if (message.StartsWith("@black@"))
-            {
-                user.ChatTextColor = "";
-            }
-
-            if (!string.IsNullOrEmpty(user.ChatTextColor))
-            {
-                message = user.ChatTextColor + " " + message;
-            }
-
             user.Unidle();
 
             if (toUser == "groupe")

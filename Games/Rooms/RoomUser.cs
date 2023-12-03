@@ -86,8 +86,6 @@ public class RoomUser : IEquatable<RoomUser>
     public bool SetMoveWithBall { get; set; }
     public bool AllowShoot { get; set; }
 
-    public string ChatTextColor { get; set; }
-
     public string LastMessage { get; set; }
     public int LastMessageCount { get; set; }
 

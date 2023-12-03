@@ -138,31 +138,6 @@ internal sealed partial class ChatEvent : IPacketEvent
         session.User.SpamFloodTime = DateTime.Now;
         session.User.FloodCount++;
 
-        if (message.StartsWith("@red@") || message.StartsWith("@rouge@"))
-        {
-            user.ChatTextColor = "@red@";
-        }
-        else if (message.StartsWith("@cyan@"))
-        {
-            user.ChatTextColor = "@cyan@";
-        }
-        else if (message.StartsWith("@blue@") || message.StartsWith("@bleu@"))
-        {
-            user.ChatTextColor = "@blue@";
-        }
-        else if (message.StartsWith("@green@") || message.StartsWith("@vert@"))
-        {
-            user.ChatTextColor = "@green@";
-        }
-        else if (message.StartsWith("@purple@") || message.StartsWith("@violet@"))
-        {
-            user.ChatTextColor = "@purple@";
-        }
-        else if (message.StartsWith("@black@") || message.StartsWith("@noir@"))
-        {
-            user.ChatTextColor = "";
-        }
-
         if (message.StartsWith(":", StringComparison.CurrentCulture) && WibboEnvironment.GetGame().GetChatManager().GetCommands().Parse(session, user, room, message))
         {
             room.ChatlogManager.AddMessage(session.User.Id, session.User.Username, room.Id, string.Format("{0} a utilisé la commande {1}", session.User.Username, message), UnixTimestamp.GetNow());
@@ -211,11 +186,6 @@ internal sealed partial class ChatEvent : IPacketEvent
         if (!session.User.IgnoreAll)
         {
             message = WibboEnvironment.GetGame().GetChatManager().GetMention().Parse(session, message);
-        }
-
-        if (!string.IsNullOrEmpty(user.ChatTextColor))
-        {
-            message = user.ChatTextColor + " " + message;
         }
 
         user.OnChat(message, color, false);
