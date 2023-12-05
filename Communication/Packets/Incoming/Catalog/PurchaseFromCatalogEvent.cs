@@ -1,7 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
@@ -202,8 +201,6 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                     session.User.BadgeComponent.RemoveBadge(extraData);
                 }
 
-                session.SendPacket(new BadgesComposer(session.User.BadgeComponent.BadgeList));
-
                 break;
             }
 
@@ -285,7 +282,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
             session.User.LimitCoins -= totalLimitCoinCost;
             session.SendPacket(new ActivityPointNotificationComposer(session.User.LimitCoins, 0, 55));
 
-            PurchaseFromCatalogEvent.LimitCoinsPrime(dbClient, session, totalLimitCoinCost);
+            LimitCoinsPrime(dbClient, session, totalLimitCoinCost);
 
             UserDao.UpdateRemoveLimitCoins(dbClient, session.User.Id, totalLimitCoinCost);
             LogShopDao.Insert(dbClient, session.User.Id, totalLimitCoinCost, $"Achat de {item.Name} (x{item.Amount})", item.Id);

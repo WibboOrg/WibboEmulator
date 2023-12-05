@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Moderation;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -11,7 +10,6 @@ internal sealed class RemoveBadge : IChatCommand
         if (targetUser != null && targetUser.User != null)
         {
             targetUser.User.BadgeComponent.RemoveBadge(parameters[2]);
-            targetUser.SendPacket(new BadgesComposer(targetUser.User.BadgeComponent.BadgeList));
         }
         else
         {

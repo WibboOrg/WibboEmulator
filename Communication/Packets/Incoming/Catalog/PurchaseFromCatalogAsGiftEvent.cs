@@ -1,6 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
@@ -204,8 +203,6 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
                 {
                     session.User.BadgeComponent.RemoveBadge(extraData);
                 }
-
-                session.SendPacket(new BadgesComposer(session.User.BadgeComponent.BadgeList));
 
                 break;
             }

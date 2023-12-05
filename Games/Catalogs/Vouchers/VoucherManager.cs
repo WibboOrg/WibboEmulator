@@ -24,7 +24,11 @@ public class VoucherManager
             {
                 if (row != null)
                 {
-                    this._vouchers.Add(Convert.ToString(row["voucher"]), new Voucher(Convert.ToString(row["voucher"]), Convert.ToString(row["type"]), Convert.ToInt32(row["value"]), Convert.ToInt32(row["current_uses"]), Convert.ToInt32(row["max_uses"])));
+                    var keyVoucher = Convert.ToString(row["voucher"]);
+                    if (keyVoucher != null)
+                    {
+                        this._vouchers.Add(keyVoucher, new Voucher(Convert.ToString(row["voucher"]), Convert.ToString(row["type"]), Convert.ToInt32(row["value"]), Convert.ToInt32(row["current_uses"]), Convert.ToInt32(row["max_uses"])));
+                    }
                 }
             }
         }

@@ -1,6 +1,5 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
 
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
@@ -2096,7 +2095,6 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             case "removebadge":
             {
                 roomUser.Client.User.BadgeComponent.RemoveBadge(value);
-                roomUser.Client.SendPacket(new BadgesComposer(roomUser.Client.User.BadgeComponent.BadgeList));
                 break;
             }
 

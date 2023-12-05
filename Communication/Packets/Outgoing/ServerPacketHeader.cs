@@ -28,6 +28,7 @@ public static class ServerPacketHeader
     public const int MENTION = 10024;
     public const int USER_BANNER = 10025;
     public const int USER_BANNER_LIST = 10026;
+    public const int USER_BADGE_REMOVE = 10027;
 
     public const int ACHIEVEMENT_LIST = 305;
     public const int AUTHENTICATED = 2491;

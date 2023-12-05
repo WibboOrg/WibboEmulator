@@ -1,6 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Badges;
 
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class DeleteBadgeInventoryEvent : IPacketEvent
@@ -18,11 +17,10 @@ internal sealed class DeleteBadgeInventoryEvent : IPacketEvent
 
         if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(badgeCode))
         {
+            session.SendHugeNotif("This badge is not allowed to be deleted.");
             return;
         }
 
         session.User.BadgeComponent.RemoveBadge(badgeCode);
-
-        session.SendPacket(new BadgesComposer(session.User.BadgeComponent.BadgeList));
     }
 }

@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Badges;
-using WibboEmulator.Communication.Packets.Outgoing.Users;
+
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
@@ -27,10 +28,9 @@ internal sealed class SetActivatedBadgesEvent : IPacketEvent
 
         session.User.BadgeComponent.ResetSlots();
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            UserBadgeDao.UpdateResetSlot(dbClient, session.User.Id);
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+        UserBadgeDao.UpdateResetSlot(dbClient, session.User.Id);
 
         var maxBadgeCount = session.User.BadgeComponent.BadgeMaxCount();
 
@@ -51,7 +51,6 @@ internal sealed class SetActivatedBadgesEvent : IPacketEvent
 
             session.User.BadgeComponent.GetBadge(badge).Slot = slot;
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             UserBadgeDao.UpdateSlot(dbClient, session.User.Id, slot, badge);
         }
 

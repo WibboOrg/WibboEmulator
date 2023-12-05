@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Users;
-using WibboEmulator.Communication.Packets.Outgoing.Users;
+
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class GetSelectedBadgesEvent : IPacketEvent

@@ -18,7 +18,7 @@ internal sealed class GetGuestRoomResultComposer : ServerPacket
         this.WriteString(data.Description);
         this.WriteInteger(data.TrocStatus);
         this.WriteInteger(data.Score);
-        this.WriteInteger(0);//Top rated room rank.
+        this.WriteInteger(0);
         this.WriteInteger(data.Category);
 
         this.WriteInteger(data.Tags.Count);
@@ -27,17 +27,16 @@ internal sealed class GetGuestRoomResultComposer : ServerPacket
             this.WriteString(tag);
         }
 
-
         if (data.Group != null)
         {
-            this.WriteInteger(58);//What?
+            this.WriteInteger(58); //bitMask
             this.WriteInteger(data.Group == null ? 0 : data.Group.Id);
             this.WriteString(data.Group == null ? "" : data.Group.Name);
             this.WriteString(data.Group == null ? "" : data.Group.Badge);
         }
         else
         {
-            this.WriteInteger(56);//What?
+            this.WriteInteger(56); //bitMask
         }
 
 
@@ -46,12 +45,12 @@ internal sealed class GetGuestRoomResultComposer : ServerPacket
         this.WriteBoolean(false);
         this.WriteBoolean(false);
 
-        this.WriteInteger(data.MuteFuse); // who can mute
-        this.WriteInteger(data.WhoCanKick); // who can kick
-        this.WriteInteger(data.BanFuse); // who can ban
+        this.WriteInteger(data.MuteFuse);
+        this.WriteInteger(data.WhoCanKick);
+        this.WriteInteger(data.BanFuse);
 
         this.WriteBoolean((session != null) && data.OwnerName.ToLower() != session.User.Username.ToLower());
-        this.WriteInteger(data.ChatType);  //ChatMode, ChatSize, ChatSpeed, HearingDistance, ExtraFlood is the order.
+        this.WriteInteger(data.ChatType);
         this.WriteInteger(data.ChatBalloon);
         this.WriteInteger(data.ChatSpeed);
         this.WriteInteger(data.ChatMaxDistance);

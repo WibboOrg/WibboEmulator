@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Users;
+namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 
 internal sealed class ReceiveBadgeComposer : ServerPacket
 {
