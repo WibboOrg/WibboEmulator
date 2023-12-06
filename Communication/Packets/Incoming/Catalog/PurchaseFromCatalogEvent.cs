@@ -98,6 +98,11 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
         var limitedEditionSells = 0;
         var limitedEditionStack = 0;
 
+        if (extraData.Length > 255)
+        {
+            extraData = extraData[..255];
+        }
+
         switch (item.Data.InteractionType)
         {
             case InteractionType.WIRED_ITEM:

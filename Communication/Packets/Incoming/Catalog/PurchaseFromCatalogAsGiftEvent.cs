@@ -109,6 +109,11 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 
         var newItemId = ItemDao.Insert(dbClient, presentData.Id, user.Id, ed);
 
+        if (extraData.Length > 255)
+        {
+            extraData = extraData[..255];
+        }
+
         switch (item.Data.InteractionType)
         {
             case InteractionType.WIRED_ITEM:
