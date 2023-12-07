@@ -1,21 +1,31 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Games.Users;
+using WibboEmulator.Games.Users.Badges;
 
 internal sealed class UserBadgesComposer : ServerPacket
 {
     public UserBadgesComposer(User user)
         : base(ServerPacketHeader.USER_BADGES_CURRENT)
     {
-        this.WriteInteger(user.Id);
-        this.WriteInteger(user.BadgeComponent.EquippedCount);
 
+        var badgeList = new List<Badge>();
         foreach (var badge in user.BadgeComponent.GetBadges().ToList())
         {
-            if (badge.Slot > 0)
+            if (badge.Slot == 0)
             {
-                this.WriteInteger(badge.Slot);
-                this.WriteString(badge.Code);
+                continue;
             }
+
+            badgeList.Add(badge);
+        }
+
+        this.WriteInteger(user.Id);
+        this.WriteInteger(badgeList.Count);
+
+        foreach (var badge in badgeList.OrderBy(x => x.Slot))
+        {
+            this.WriteInteger(badge.Slot);
+            this.WriteString(badge.Code);
         }
     }
 }

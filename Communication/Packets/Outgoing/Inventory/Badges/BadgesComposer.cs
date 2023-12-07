@@ -21,7 +21,7 @@ internal sealed class BadgesComposer : ServerPacket
         }
 
         this.WriteInteger(list.Count);
-        foreach (var badge in list)
+        foreach (var badge in list.OrderBy(x => x.Slot))
         {
             this.WriteInteger(badge.Slot);
             this.WriteString(badge.Code);

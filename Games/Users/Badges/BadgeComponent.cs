@@ -1,8 +1,8 @@
 namespace WibboEmulator.Games.Users.Badges;
 using System.Collections;
 using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
-using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Users;
@@ -12,13 +12,13 @@ public class BadgeComponent : IDisposable
     private readonly User _userInstance;
     private readonly int _maxBadgeCount;
 
-    private int _virutalBadgeId;
+    private int _virtualBadgeId;
 
     public BadgeComponent(User user)
     {
         this._userInstance = user;
         this._maxBadgeCount = WibboEnvironment.GetSettings().GetData<int>("badge.max.count");
-        this._virutalBadgeId = 0;
+        this._virtualBadgeId = 0;
         this.BadgeList = new Dictionary<string, Badge>();
     }
 
@@ -35,25 +35,6 @@ public class BadgeComponent : IDisposable
             {
                 this.BadgeList.Add(code, new Badge(code, slot));
             }
-        }
-    }
-
-    public int EquippedCount
-    {
-        get
-        {
-            var count = 0;
-            foreach (var badge in this.BadgeList.Values)
-            {
-                if (badge.Slot == 0)
-                {
-                    continue;
-                }
-
-                count++;
-            }
-
-            return (count > this._maxBadgeCount) ? this._maxBadgeCount : count;
         }
     }
 
@@ -112,10 +93,10 @@ public class BadgeComponent : IDisposable
 
         this.BadgeList.Add(badge, new Badge(badge, slot));
 
-        this._virutalBadgeId++;
+        this._virtualBadgeId++;
 
-        this._userInstance.Client?.SendPacket(new UnseenItemsComposer(this._virutalBadgeId, UnseenItemsType.Badge));
-        this._userInstance.Client?.SendPacket(new ReceiveBadgeComposer(this._virutalBadgeId, badge));
+        this._userInstance.Client?.SendPacket(new UnseenItemsComposer(this._virtualBadgeId, UnseenItemsType.Badge));
+        this._userInstance.Client?.SendPacket(new ReceiveBadgeComposer(this._virtualBadgeId, badge));
     }
 
     public void ResetSlots()
@@ -138,7 +119,8 @@ public class BadgeComponent : IDisposable
             UserBadgeDao.Delete(dbClient, this._userInstance.Id, badge);
         }
 
-        _ = this.BadgeList.Remove(this.GetBadge(badge).Code);
+        _ = this.BadgeList.Remove(badge);
+        this._userInstance.Client?.SendPacket(new RemovedBadgeComposer(badge));
     }
 
     public int GetEmblemId()
@@ -149,22 +131,15 @@ public class BadgeComponent : IDisposable
             { "STAFF_DEV", 606 },
             { "STAFF_FURNI", 595 },
             { "STAFF_ADMIN", 583 },
+            { "STAFF_COMM", 781 },
             { "STAFF_ANIMATEUR", 584 },
             { "STAFF_EVENT", 594 },
             { "STAFF_MODO", 589 },
+            { "STAFF_HELPER", 684 },
             { "STAFF_ARCHITECTE", 585 },
             { "STAFF_CASINO", 586 },
             { "STAFF_GRAPH", 588 },
             { "STAFF_PROWIRED", 590 },
-            { "ADM", 102 },
-            { "PRWRD1", 580 },
-            { "GPHWIB", 557 },
-            { "wibbo.helpeur", 544 },
-            { "WIBARC", 546 },
-            { "CRPOFFI", 570 },
-            { "ZEERSWS", 552 },
-            { "WBASSO", 576 },
-            { "WIBBOCOM", 581 },
             { "WC_LEGEND", 593 },
             { "WC_EPIC", 592 },
             { "WC_CLASSIC", 591 },
@@ -188,14 +163,15 @@ public class BadgeComponent : IDisposable
     {
         var bubbles = new Dictionary<string, int>
         {
-            { "ADM", 23 },
-            { "STAFF_GESTION", 53 },
+            { "STAFF_GESTION", 41 },
             { "STAFF_DEV", 41 },
             { "STAFF_ADMIN", 41 },
             { "STAFF_FURNI", 41 },
+            { "STAFF_COMM", 41 },
             { "STAFF_ANIMATEUR", 42 },
             { "STAFF_EVENT", 52 },
             { "STAFF_MODO", 47 },
+            { "STAFF_HELPER", 47 },
             { "STAFF_ARCHITECTE", 43 },
             { "STAFF_CASINO", 44 },
             { "STAFF_GRAPH", 46 },
