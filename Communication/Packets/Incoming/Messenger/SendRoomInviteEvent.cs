@@ -40,11 +40,7 @@ internal sealed class SendRoomInviteEvent : IPacketEvent
             }
         }
 
-        var textMessage = StringCharFilter.Escape(packet.PopString());
-        if (textMessage.Length > 121)
-        {
-            textMessage = textMessage[..121];
-        }
+        var textMessage = packet.PopString(121);
 
         if (session.User.Antipub(textMessage, "<RM>"))
         {

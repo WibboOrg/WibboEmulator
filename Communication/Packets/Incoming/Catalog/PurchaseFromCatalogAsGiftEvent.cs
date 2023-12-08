@@ -19,7 +19,7 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
         var itemId = packet.PopInt();
 
         var extraData = packet.PopString();
-        var giftUser = StringCharFilter.Escape(packet.PopString());
+        var giftUser = StringCharFilter.Escape(packet.PopString(16));
         var giftMessage = StringCharFilter.Escape(packet.PopString().Replace(Convert.ToChar(5), ' '));
         var spriteId = packet.PopInt();
         var ribbon = packet.PopInt();
@@ -108,11 +108,6 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
         var ed = session.User.Id + ";" + giftMessage + Convert.ToChar(5) + ribbon + Convert.ToChar(5) + colour;
 
         var newItemId = ItemDao.Insert(dbClient, presentData.Id, user.Id, ed);
-
-        if (extraData.Length > 255)
-        {
-            extraData = extraData[..255];
-        }
 
         switch (item.Data.InteractionType)
         {

@@ -17,7 +17,7 @@ internal sealed class DeleteBadgeInventoryEvent : IPacketEvent
 
         if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(badgeCode))
         {
-            session.SendHugeNotif("This badge is not allowed to be deleted.");
+            session.SendHugeNotif(WibboEnvironment.GetLanguageManager().TryGetValue("notif.badge.removed.error", session.Langue));
             return;
         }
 

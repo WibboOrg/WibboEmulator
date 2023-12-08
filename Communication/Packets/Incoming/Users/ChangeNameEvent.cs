@@ -30,7 +30,7 @@ internal sealed class ChangeNameEvent : IPacketEvent
             return;
         }
 
-        var newUsername = packet.PopString();
+        var newUsername = packet.PopString(16);
 
         if (!session.User.CanChangeName && session.User.Rank == 1)
         {

@@ -18,7 +18,7 @@ internal sealed class GetGroupMembersEvent : IPacketEvent
 
         var groupId = packet.PopInt();
         var page = packet.PopInt();
-        var searchVal = packet.PopString();
+        var searchVal = packet.PopString(16);
         var requestType = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))

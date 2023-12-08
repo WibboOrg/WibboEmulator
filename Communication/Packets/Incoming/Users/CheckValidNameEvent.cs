@@ -13,7 +13,7 @@ internal sealed class CheckValidNameEvent : IPacketEvent
             return;
         }
 
-        var name = packet.PopString();
+        var name = packet.PopString(16);
 
         session.SendPacket(new NameChangeUpdateComposer(name));
     }

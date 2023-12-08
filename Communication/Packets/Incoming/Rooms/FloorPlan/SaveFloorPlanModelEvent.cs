@@ -11,7 +11,7 @@ internal sealed partial class SaveFloorPlanModelEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var map = packet.PopString().ToLower().TrimEnd('\r');
+        var map = packet.PopString(5776).ToLower().TrimEnd('\r');
         var doorX = packet.PopInt();
         var doorY = packet.PopInt();
         var doorDirection = packet.PopInt();

@@ -18,7 +18,7 @@ internal sealed class IgnoreUserEvent : IPacketEvent
             return;
         }
 
-        var userName = packet.PopString();
+        var userName = packet.PopString(16);
 
         var gameclient = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(userName);
         if (gameclient == null)

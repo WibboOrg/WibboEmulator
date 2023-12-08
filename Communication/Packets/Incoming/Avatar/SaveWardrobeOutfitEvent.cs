@@ -9,7 +9,7 @@ internal sealed class SaveWardrobeOutfitEvent : IPacketEvent
     {
         var slotId = packet.PopInt();
         var look = packet.PopString();
-        var gender = packet.PopString();
+        var gender = packet.PopString(1);
 
         session.User.WardrobeComponent.AddWardrobe(look, gender, slotId);
     }

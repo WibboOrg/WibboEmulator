@@ -20,7 +20,7 @@ internal sealed class WhisperEvent : IPacketEvent
             return;
         }
 
-        var parameters = StringCharFilter.Escape(packet.PopString());
+        var parameters = packet.PopString(100);
         if (string.IsNullOrEmpty(parameters) || parameters.Length > 100 || !parameters.Contains(' '))
         {
             return;

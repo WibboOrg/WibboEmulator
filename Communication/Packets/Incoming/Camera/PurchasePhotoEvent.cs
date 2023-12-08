@@ -9,7 +9,7 @@ internal sealed class PurchasePhotoEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var photoId = packet.PopString();
+        var photoId = packet.PopString(32);
 
         if (string.IsNullOrEmpty(photoId))
         {

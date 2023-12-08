@@ -17,7 +17,7 @@ internal sealed class UpdateFigureDataEvent : IPacketEvent
             return;
         }
 
-        var gender = packet.PopString().ToUpper();
+        var gender = packet.PopString(1).ToUpper();
         var look = packet.PopString();
 
         if (gender is not "M" and not "F")

@@ -13,6 +13,9 @@ internal sealed class ModerationMuteEvent : IPacketEvent
             return;
         }
 
-        ModerationManager.KickUser(session, packet.PopInt(), packet.PopString(), false);
+        var userId = packet.PopInt();
+        var messageText = packet.PopString();
+
+        ModerationManager.KickUser(session, userId, messageText, false);
     }
 }

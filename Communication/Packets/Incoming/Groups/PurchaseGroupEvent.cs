@@ -12,7 +12,7 @@ internal sealed class PurchaseGroupEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var name = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+        var name = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString(16));
         var description = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
         var roomId = packet.PopInt();
         var colour1 = packet.PopInt();

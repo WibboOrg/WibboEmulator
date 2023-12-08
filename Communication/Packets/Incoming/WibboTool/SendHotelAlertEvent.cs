@@ -21,7 +21,7 @@ internal sealed class SendHotelAlertEvent : IPacketEvent
         }
 
         var eventAlert = packet.PopBoolean();
-        var message = packet.PopString();
+        var message = packet.PopString(2000);
         var url = packet.PopString();
         var preview = packet.PopBoolean();
 

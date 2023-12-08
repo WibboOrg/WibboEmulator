@@ -20,7 +20,7 @@ internal sealed class SubmitNewTicketEvent : IPacketEvent
             return;
         }
 
-        var message = StringCharFilter.Escape(packet.PopString());
+        var message = packet.PopString();
         var ticketType = packet.PopInt();
         var reporterId = packet.PopInt();
 

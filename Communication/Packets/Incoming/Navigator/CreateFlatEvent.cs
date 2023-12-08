@@ -63,12 +63,12 @@ internal sealed class CreateFlatEvent : IPacketEvent
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", session.Langue));
             return;
         }
-        else if (name.Length > 200)
+        else if (name.Length > 20)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", session.Langue));
             return;
         }
-        else if (desc.Length > 200)
+        else if (desc.Length > 255)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", session.Langue));
             return;

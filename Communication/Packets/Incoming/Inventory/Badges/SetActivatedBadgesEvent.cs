@@ -11,26 +11,16 @@ internal sealed class SetActivatedBadgesEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null)
+        if (session == null || session.User == null || session.User.BadgeComponent == null)
         {
             return;
         }
-
-        if (session.User == null)
-        {
-            return;
-        }
-
-        if (session.User.BadgeComponent == null)
-        {
-            return;
-        }
-
-        session.User.BadgeComponent.ResetSlots();
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
         UserBadgeDao.UpdateResetSlot(dbClient, session.User.Id);
+
+        session.User.BadgeComponent.ResetSlots();
 
         var maxBadgeCount = session.User.BadgeComponent.BadgeMaxCount();
 

@@ -24,7 +24,7 @@ internal sealed class LetUserInEvent : IPacketEvent
             return;
         }
 
-        var username = packet.PopString();
+        var username = packet.PopString(16);
         var allowUserToEnter = packet.PopBoolean();
 
         var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);

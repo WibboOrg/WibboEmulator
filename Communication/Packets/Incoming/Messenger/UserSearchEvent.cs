@@ -2,7 +2,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Messenger;
 using WibboEmulator.Communication.Packets.Outgoing.Messenger;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Messenger;
-using WibboEmulator.Utilities;
 
 internal sealed class UserSearchEvent : IPacketEvent
 {
@@ -15,8 +14,8 @@ internal sealed class UserSearchEvent : IPacketEvent
             return;
         }
 
-        var searchPseudo = StringCharFilter.Escape(packet.PopString());
-        if (searchPseudo.Length is < 1 or > 100)
+        var searchPseudo = packet.PopString(16);
+        if (searchPseudo.Length is < 1 or > 16)
         {
             return;
         }

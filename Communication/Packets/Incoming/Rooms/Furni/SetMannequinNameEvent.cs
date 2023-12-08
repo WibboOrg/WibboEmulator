@@ -9,7 +9,7 @@ internal sealed class SetMannequinNameEvent : IPacketEvent
     public void Parse(GameClient session, ClientPacket packet)
     {
         var itemId = packet.PopInt();
-        var name = packet.PopString();
+        var name = packet.PopString(100);
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
         {
@@ -37,15 +37,6 @@ internal sealed class SetMannequinNameEvent : IPacketEvent
         }
 
         look = look[..^1];
-        if (look.Length > 200)
-        {
-            look = look[..200];
-        }
-
-        if (name.Length > 100)
-        {
-            name = name[..100];
-        }
 
         name = name.Replace(";", ":");
 

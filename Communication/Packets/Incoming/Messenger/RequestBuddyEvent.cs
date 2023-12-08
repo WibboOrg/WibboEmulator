@@ -8,7 +8,7 @@ internal sealed class RequestBuddyEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var userName = packet.PopString();
+        var userName = packet.PopString(16);
 
         if (session.User.Messenger == null || !session.User.Messenger.RequestBuddy(userName))
         {

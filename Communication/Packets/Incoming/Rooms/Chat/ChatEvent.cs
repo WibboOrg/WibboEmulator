@@ -37,12 +37,7 @@ internal sealed partial class ChatEvent : IPacketEvent
             }
         }
 
-        var message = packet.PopString();
-
-        if (message.Length > 100)
-        {
-            message = message[..100];
-        }
+        var message = packet.PopString(100);
 
         var color = packet.PopInt();
 

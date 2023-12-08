@@ -9,7 +9,7 @@ internal sealed class CheckPetNameEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var petName = packet.PopString();
+        var petName = packet.PopString(16);
 
         session.SendPacket(new CheckPetNameComposer(petName));
     }

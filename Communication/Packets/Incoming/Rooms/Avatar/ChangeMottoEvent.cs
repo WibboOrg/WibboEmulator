@@ -3,7 +3,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
-using WibboEmulator.Utilities;
 
 internal sealed class ChangeMottoEvent : IPacketEvent
 {
@@ -11,15 +10,10 @@ internal sealed class ChangeMottoEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var newMotto = StringCharFilter.Escape(packet.PopString());
+        var newMotto = packet.PopString(38);
         if (newMotto == session.User.Motto)
         {
             return;
-        }
-
-        if (newMotto.Length > 38)
-        {
-            newMotto = newMotto[..38];
         }
 
         if (!session.User.HasPermission("word_filter_override"))

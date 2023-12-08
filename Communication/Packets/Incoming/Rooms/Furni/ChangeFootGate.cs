@@ -9,7 +9,7 @@ internal sealed class ChangeFootGate : IPacketEvent
     public void Parse(GameClient session, ClientPacket packet)
     {
         var id = packet.PopInt();
-        var gender = packet.PopString();
+        var gender = packet.PopString(1);
         var look = packet.PopString();
 
         var room = session.User.CurrentRoom;
