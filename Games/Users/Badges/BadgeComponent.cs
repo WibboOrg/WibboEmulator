@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Users.Badges;
-using System.Collections;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
@@ -101,7 +100,7 @@ public class BadgeComponent : IDisposable
 
     public void ResetSlots()
     {
-        foreach (Badge badge in (IEnumerable)this.BadgeList.Values)
+        foreach (var badge in this.BadgeList.Values)
         {
             badge.Slot = 0;
         }
@@ -131,11 +130,11 @@ public class BadgeComponent : IDisposable
             { "STAFF_DEV", 606 },
             { "STAFF_FURNI", 595 },
             { "STAFF_ADMIN", 583 },
-            { "STAFF_COMM", 781 },
+            { "STAFF_COM", 781 },
             { "STAFF_ANIMATEUR", 584 },
             { "STAFF_EVENT", 594 },
             { "STAFF_MODO", 589 },
-            { "STAFF_HELPER", 684 },
+            { "STAFF_HELPER", 648 },
             { "STAFF_ARCHITECTE", 585 },
             { "STAFF_CASINO", 586 },
             { "STAFF_GRAPH", 588 },
@@ -171,7 +170,7 @@ public class BadgeComponent : IDisposable
             { "STAFF_ANIMATEUR", 42 },
             { "STAFF_EVENT", 52 },
             { "STAFF_MODO", 47 },
-            { "STAFF_HELPER", 47 },
+            { "STAFF_HELPER", 53 },
             { "STAFF_ARCHITECTE", 43 },
             { "STAFF_CASINO", 44 },
             { "STAFF_GRAPH", 46 },
