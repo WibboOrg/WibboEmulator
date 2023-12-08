@@ -44,7 +44,7 @@ public class OpenAIProxy : IDisposable
         var request = new
         {
             messages = messagesSend.ToArray(),
-            model = "gpt-3.5-turbo-16k",
+            model = "gpt-3.5-turbo-1106",
             max_tokens = 150,
             temperature = 0.6
         };
