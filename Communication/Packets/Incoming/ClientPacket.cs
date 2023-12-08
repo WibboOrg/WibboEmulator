@@ -52,7 +52,7 @@ public class ClientPacket
     {
         var stringValue = this._encoding.GetString(this.ReadFixedValue());
 
-        return maxLength > 0 && stringValue.Length >= maxLength ? stringValue[..maxLength] : this._encoding.GetString(this.ReadFixedValue());
+        return maxLength > 0 && stringValue.Length >= maxLength ? stringValue[..maxLength] : stringValue;
     }
 
     public bool PopBoolean()
