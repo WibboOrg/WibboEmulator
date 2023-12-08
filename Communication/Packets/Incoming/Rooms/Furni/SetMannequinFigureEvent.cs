@@ -36,10 +36,6 @@ internal sealed class SetMannequinFigureEvent : IPacketEvent
         }
 
         look = look[..^1];
-        if (look.Length > 200)
-        {
-            look = look[..200];
-        }
 
         var stuff = roomItem.ExtraData.Split(new char[1] { ';' });
         var name = "";

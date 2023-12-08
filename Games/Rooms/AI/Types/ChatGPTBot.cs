@@ -322,7 +322,7 @@ public partial class ChatGPTBot : BotAI
                     {
                         if (string.IsNullOrWhiteSpace(chatText) == false)
                         {
-                            this.GetRoomUser().OnChat(chatText.Length > 200 ? chatText[..200] + "..." : chatText);
+                            this.GetRoomUser().OnChat(chatText.Length > 150 ? chatText[..150] + "..." : chatText);
                         }
                     }
 

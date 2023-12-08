@@ -23,7 +23,7 @@ internal sealed class SaveBotActionEvent : IPacketEvent
 
         var botId = packet.PopInt();
         var actionId = packet.PopInt();
-        var dataString = packet.PopString();
+        var dataString = packet.PopString(2000);
 
         if (botId <= 0)
         {
