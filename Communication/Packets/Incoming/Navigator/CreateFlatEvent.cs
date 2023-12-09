@@ -14,37 +14,35 @@ internal sealed class CreateFlatEvent : IPacketEvent
             return;
         }
 
-        var maxRoom = 200;
+        var maxRoomCapacity = 200;
 
         if (session.User.HasPermission("premium_legend"))
         {
-            maxRoom = 400;
+            maxRoomCapacity = 400;
+        }
+        else if (session.User.HasPermission("premium_epic"))
+        {
+            maxRoomCapacity = 300;
+        }
+        else if (session.User.HasPermission("premium_classic"))
+        {
+            maxRoomCapacity = 250;
         }
 
-        if (session.User.HasPermission("premium_epic"))
+        if (session.User.UsersRooms.Count >= maxRoomCapacity)
         {
-            maxRoom = 300;
-        }
-
-        if (session.User.HasPermission("premium_classic"))
-        {
-            maxRoom = 250;
-        }
-
-        if (session.User.UsersRooms.Count >= maxRoom)
-        {
-            session.SendPacket(new CanCreateRoomComposer(true, maxRoom));
+            session.SendPacket(new CanCreateRoomComposer(true, maxRoomCapacity));
             return;
         }
 
-        var name = packet.PopString();
-        var desc = packet.PopString();
+        var name = packet.PopString(100);
+        var description = packet.PopString();
         var model = packet.PopString();
         var category = packet.PopInt();
         var maxVisitors = packet.PopInt();
         var tradeSettings = packet.PopInt();
 
-        if (maxVisitors is > 50 or < 1)
+        if (maxVisitors is < 1 or > 50)
         {
             maxVisitors = 10;
         }
@@ -63,21 +61,11 @@ internal sealed class CreateFlatEvent : IPacketEvent
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", session.Langue));
             return;
         }
-        else if (name.Length > 20)
-        {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", session.Langue));
-            return;
-        }
-        else if (desc.Length > 255)
-        {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", session.Langue));
-            return;
-        }
 
         var roomId = 0;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            roomId = RoomDao.Insert(dbClient, name, desc, session.User.Username, model, category, maxVisitors, tradeSettings);
+            roomId = RoomDao.Insert(dbClient, name, description, session.User.Username, model, category, maxVisitors, tradeSettings);
         }
         session.User.UsersRooms.Add(roomId);
 
