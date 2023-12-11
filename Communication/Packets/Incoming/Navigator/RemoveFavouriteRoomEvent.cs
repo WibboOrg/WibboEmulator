@@ -16,8 +16,7 @@ internal sealed class RemoveFavouriteRoomEvent : IPacketEvent
 
         var roomId = packet.PopInt();
 
-        var roomdata = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
-        if (roomdata == null)
+        if (!session.User.FavoriteRooms.Contains(roomId))
         {
             return;
         }
