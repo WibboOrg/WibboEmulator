@@ -34,11 +34,11 @@ public class PermissionManager
 
     public bool RankHasRight(int rankId, string fuse)
     {
-        if (!this._rights.ContainsKey(fuse))
+        if (!this._rights.TryGetValue(fuse, out var minRank))
         {
             return false;
         }
 
-        return rankId >= this._rights[fuse];
+        return rankId >= minRank;
     }
 }

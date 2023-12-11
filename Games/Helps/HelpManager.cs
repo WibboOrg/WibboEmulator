@@ -13,24 +13,17 @@ public class HelpManager
             return 0;
         }
 
-        var list = new List<int>();
+        var availableGuideIds = this.GuidesOnDuty
+            .Where(guide => !guide.Value)
+            .Select(guide => guide.Key)
+            .ToList();
 
-        foreach (var entry in this.GuidesOnDuty)
-        {
-            if (entry.Value)
-            {
-                continue;
-            }
-
-            list.Add(entry.Key);
-        }
-
-        if (list.Count == 0)
+        if (availableGuideIds.Count == 0)
         {
             return 0;
         }
 
-        var randomId = list[WibboEnvironment.GetRandomNumber(0, list.Count - 1)];
+        var randomId = availableGuideIds[WibboEnvironment.GetRandomNumber(0, availableGuideIds.Count - 1)];
         this.GuidesOnDuty[randomId] = true;
 
         return randomId;
@@ -38,31 +31,19 @@ public class HelpManager
 
     public void EndService(int id)
     {
-        if (!this.GuidesOnDuty.ContainsKey(id))
+        if (this.GuidesOnDuty.ContainsKey(id))
         {
-            return;
+            this.GuidesOnDuty[id] = false;
         }
-
-        this.GuidesOnDuty[id] = false;
     }
 
     public void AddGuide(int guide)
     {
-        if (this.GuidesOnDuty.ContainsKey(guide))
-        {
-            return;
-        }
-
-        this.GuidesOnDuty.Add(guide, false);
-    }
-
-    public void RemoveGuide(int guide)
-    {
         if (!this.GuidesOnDuty.ContainsKey(guide))
         {
-            return;
+            this.GuidesOnDuty.Add(guide, false);
         }
-
-        _ = this.GuidesOnDuty.Remove(guide);
     }
+
+    public void RemoveGuide(int guide) => _ = this.GuidesOnDuty.Remove(guide);
 }

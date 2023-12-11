@@ -43,15 +43,7 @@ public class AnimationManager
     {
         var minUsers = WibboEnvironment.GetSettings().GetData<int>("autogame.min.users");
 
-        if (this._isActivate && usersOnline < minUsers)
-        {
-            this._isActivate = false;
-        }
-        else if (!this._isActivate && usersOnline >= minUsers)
-        {
-            this._animationTime = DateTime.Now;
-            this._isActivate = true;
-        }
+        this._isActivate = usersOnline >= minUsers;
     }
 
     public bool ToggleForceDisabled()
@@ -106,7 +98,7 @@ public class AnimationManager
     {
         var time = this._animationTime - DateTime.Now + this._startTime;
 
-        return time.Minutes + " minutes et " + time.Seconds + " secondes";
+        return $"{time.Minutes} minutes et {time.Seconds} secondes";
     }
 
     public void Init(IQueryAdapter dbClient)
@@ -191,16 +183,7 @@ public class AnimationManager
             this._roomId = this._roomId.OrderBy(a => Guid.NewGuid()).ToList();
         }
 
-        var roomId = this._roomId[this._roomIdIndex];
-
-        if (forceRoomId != 0)
-        {
-            roomId = forceRoomId;
-        }
-        else
-        {
-            this._roomIdIndex++;
-        }
+        var roomId = forceRoomId != 0 ? forceRoomId : this._roomId[this._roomIdIndex++];
 
         var room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(roomId);
         if (room == null)
@@ -254,5 +237,4 @@ public class AnimationManager
         }
         watch.Restart();
     }
-
 }

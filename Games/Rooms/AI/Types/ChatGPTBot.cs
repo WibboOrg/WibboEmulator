@@ -326,7 +326,6 @@ public partial class ChatGPTBot : BotAI
                         }
                     }
 
-                    //stack the response as well - everything is context to Open AI
                     this.StackMessages(userId, messagesGtp);
                 }
             }
@@ -343,8 +342,8 @@ public partial class ChatGPTBot : BotAI
 
     private static List<string> SplitSentence(string sentence, int chunkSize)
     {
-        var words = sentence.Split(' '); // Divise la phrase en mots individuels
-        var chunks = new List<string>(); // Liste pour stocker les morceaux de la phrase
+        var words = sentence.Split(' ');
+        var chunks = new List<string>();
 
         var startIndex = 0;
         while (startIndex < words.Length)
