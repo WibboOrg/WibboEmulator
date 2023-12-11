@@ -100,7 +100,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
             session.SendPacket(new AuthenticationOKComposer());
 
             packetList.Add(new NavigatorHomeRoomComposer(session.User.HomeRoom, session.User.HomeRoom));
-            //packetList.Add(new FavouritesComposer(session.User.FavoriteRooms));
+            packetList.Add(new FavouritesComposer(session.User.FavoriteRooms));
             packetList.Add(new FigureSetIdsComposer());
             packetList.Add(new UserRightsComposer(session.User.Rank < 2 ? 2 : session.User.Rank, session.User.Rank > 1));
             packetList.Add(new AvailabilityStatusComposer());
