@@ -96,18 +96,8 @@ public class RoomData
         this.Name = (string)row["caption"];
         this.Description = (string)row["description"];
         this.OwnerName = (string)row["owner"];
-        this.OwnerId = 0;
-        this.Langue = Language.French;
-
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            var userRow = UserDao.GetIdAndLangue(dbClient, this.OwnerName);
-            if (userRow != null)
-            {
-                this.OwnerId = Convert.ToInt32(userRow["id"]);
-                this.Langue = LanguageManager.ParseLanguage(userRow["langue"].ToString());
-            }
-        }
+        this.OwnerId = (int)row["owner_id"];
+        this.Langue = LanguageManager.ParseLanguage(row["langue"].ToString());
 
         var state = row["state"].ToString();
 
