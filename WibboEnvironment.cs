@@ -154,23 +154,25 @@ public static class WibboEnvironment
 
     public static int GetUnixTimestamp() => (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-    private static bool IsValid(char character) => Allowedchars.Contains(character);
-
-    public static bool IsValidAlphaNumeric(string inputStr)
+    public static bool IsValidAlphaNumeric(string input)
     {
-        if (string.IsNullOrEmpty(inputStr))
+        if (string.IsNullOrEmpty(input))
         {
             return false;
         }
 
-        for (var index = 0; index < inputStr.Length; ++index)
+        return input.All(Allowedchars.Contains);
+    }
+
+    public static int NameAvailable(string username)
+    {
+        if (username.Length is < 3 or > 15 || !IsValidAlphaNumeric(username))
         {
-            if (!IsValid(inputStr[index]))
-            {
-                return false;
-            }
+            return -1;
         }
-        return true;
+
+        using var dbClient = GetDatabaseManager().GetQueryReactor();
+        return UserDao.GetIdByName(dbClient, username) <= 0 ? 1 : 0;
     }
 
     public static bool UsernameExists(string username)

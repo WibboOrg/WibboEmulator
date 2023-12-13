@@ -44,7 +44,7 @@ internal sealed class ChangeNameEvent : IPacketEvent
             return;
         }
 
-        if (NameAvailable(newUsername) != 1)
+        if (WibboEnvironment.NameAvailable(newUsername) != 1)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.changename.error.2", session.Langue));
             return;
@@ -84,27 +84,5 @@ internal sealed class ChangeNameEvent : IPacketEvent
             room.RoomData.OwnerName = newUsername;
             room.SendPacket(new RoomInfoUpdatedComposer(room.Id));
         }
-    }
-
-    private static int NameAvailable(string username)
-    {
-        username = username.ToLower();
-
-        if (username.Length > 15)
-        {
-            return -2;
-        }
-
-        if (username.Length < 3)
-        {
-            return -2;
-        }
-
-        if (!WibboEnvironment.IsValidAlphaNumeric(username))
-        {
-            return -1;
-        }
-
-        return WibboEnvironment.UsernameExists(username) ? 0 : 1;
     }
 }
