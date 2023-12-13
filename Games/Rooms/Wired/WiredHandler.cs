@@ -56,25 +56,19 @@ public class WiredHandler
         var itemCoord = item.Coordinate;
         if (WiredUtillity.TypeIsWiredAction(item.GetBaseItem().InteractionType))
         {
-            if (this._actionStacks.TryGetValue(itemCoord, out var value))
+            this._actionStacks.AddOrUpdate(itemCoord, _ => new List<Item> { item }, (_, existingValue) =>
             {
-                value.Add(item);
-            }
-            else
-            {
-                _ = this._actionStacks.TryAdd(itemCoord, new List<Item>() { item });
-            }
+                existingValue.Add(item);
+                return existingValue;
+            });
         }
         else if (WiredUtillity.TypeIsWiredCondition(item.GetBaseItem().InteractionType))
         {
-            if (this._conditionStacks.TryGetValue(itemCoord, out var value))
+            this._conditionStacks.AddOrUpdate(itemCoord, _ => new List<Item> { item }, (_, existingValue) =>
             {
-                value.Add(item);
-            }
-            else
-            {
-                _ = this._conditionStacks.TryAdd(itemCoord, new List<Item>() { item });
-            }
+                existingValue.Add(item);
+                return existingValue;
+            });
         }
         else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_RANDOM)
         {
@@ -109,57 +103,47 @@ public class WiredHandler
     public void RemoveFurniture(Item item)
     {
         var itemCoord = item.Coordinate;
+
         if (WiredUtillity.TypeIsWiredAction(item.GetBaseItem().InteractionType))
         {
-            var coordinate = item.Coordinate;
-            if (!this._actionStacks.ContainsKey(coordinate))
-            {
-                return;
-            }
-            _ = this._actionStacks[coordinate].Remove(item);
-            if (this._actionStacks[coordinate].Count == 0)
-            {
-                _ = this._actionStacks.TryRemove(coordinate, out _);
-            }
+            RemoveFromStack(this._actionStacks, itemCoord, item);
         }
         else if (WiredUtillity.TypeIsWiredCondition(item.GetBaseItem().InteractionType))
         {
-            if (!this._conditionStacks.ContainsKey(itemCoord))
-            {
-                return;
-            }
-            _ = this._conditionStacks[itemCoord].Remove(item);
-            if (this._conditionStacks[itemCoord].Count == 0)
-            {
-                _ = this._conditionStacks.TryRemove(itemCoord, out _);
-            }
+            RemoveFromStack(this._conditionStacks, itemCoord, item);
         }
-        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_RANDOM)
+        else
         {
-            if (this._specialRandom.Contains(itemCoord))
+            var interactionType = item.GetBaseItem().InteractionType;
+
+            if (interactionType == InteractionType.SPECIAL_RANDOM && this._specialRandom.Contains(itemCoord))
             {
                 _ = this._specialRandom.Remove(itemCoord);
             }
-        }
-        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_UNSEEN)
-        {
-            if (this._specialUnseen.ContainsKey(itemCoord))
+            else if (interactionType == InteractionType.SPECIAL_UNSEEN && this._specialUnseen.ContainsKey(itemCoord))
             {
                 _ = this._specialUnseen.Remove(itemCoord);
             }
-        }
-        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_ANIMATE)
-        {
-            if (this._specialAnimate.Contains(itemCoord))
+            else if (interactionType == InteractionType.SPECIAL_ANIMATE && this._specialAnimate.Contains(itemCoord))
             {
                 _ = this._specialAnimate.Remove(itemCoord);
             }
-        }
-        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_OR_EVAL)
-        {
-            if (this._specialOrEval.Contains(itemCoord))
+            else if (interactionType == InteractionType.SPECIAL_OR_EVAL && this._specialOrEval.Contains(itemCoord))
             {
                 _ = this._specialOrEval.Remove(itemCoord);
+            }
+        }
+    }
+
+    private static void RemoveFromStack(ConcurrentDictionary<Point, List<Item>> stack, Point coordinate, Item item)
+    {
+        if (stack.ContainsKey(coordinate))
+        {
+            _ = stack[coordinate].Remove(item);
+
+            if (stack[coordinate].Count == 0)
+            {
+                _ = stack.TryRemove(coordinate, out _);
             }
         }
     }
@@ -170,80 +154,62 @@ public class WiredHandler
         {
             this.ClearWired();
         }
-        else
+        else if (this._blockWired)
         {
-            if (this._blockWired)
+            var wiredDateTime = DateTime.Now - this._blockWiredDateTime;
+            if (wiredDateTime > TimeSpan.FromSeconds(5))
             {
-                var wiredDateTime = DateTime.Now - this._blockWiredDateTime;
-                if (wiredDateTime > TimeSpan.FromSeconds(5))
-                {
-                    this._blockWired = false;
-                }
-                return;
+                this._blockWired = false;
             }
-
-            if (!this._requestingUpdates.IsEmpty)
-            {
-                var toAdd = new List<WiredCycle>();
-                while (!this._requestingUpdates.IsEmpty)
-                {
-                    if (!this._requestingUpdates.TryDequeue(out var handler))
-                    {
-                        continue;
-                    }
-
-                    if (handler.WiredCycleable.Disposed())
-                    {
-                        continue;
-                    }
-
-                    if (handler.OnCycle())
-                    {
-                        toAdd.Add(handler);
-                    }
-                }
-
-                foreach (var cycle in toAdd)
-                {
-                    this._requestingUpdates.Enqueue(cycle);
-                }
-            }
-
-            this._tickCounter = 0;
-            this._wiredUsed.Clear();
         }
+        else if (!this._requestingUpdates.IsEmpty)
+        {
+            var toAdd = new List<WiredCycle>();
+            while (this._requestingUpdates.TryDequeue(out var handler))
+            {
+                if (handler.WiredCycleable.Disposed())
+                {
+                    continue;
+                }
+
+                if (handler.OnCycle())
+                {
+                    toAdd.Add(handler);
+                }
+            }
+
+            foreach (var cycle in toAdd)
+            {
+                this._requestingUpdates.Enqueue(cycle);
+            }
+        }
+
+        this._tickCounter = 0;
+        this._wiredUsed?.Clear();
     }
 
     private void ClearWired()
     {
-        foreach (var list in this._actionStacks.Values)
-        {
-            foreach (var roomItem in list)
-            {
-                if (roomItem.WiredHandler != null)
-                {
-                    roomItem.WiredHandler.Dispose();
-                    roomItem.WiredHandler = null;
-                }
-            }
-        }
-
-        foreach (var list in this._conditionStacks.Values)
-        {
-            foreach (var roomItem in list)
-            {
-                if (roomItem.WiredHandler != null)
-                {
-                    roomItem.WiredHandler.Dispose();
-                    roomItem.WiredHandler = null;
-                }
-            }
-        }
+        ClearWiredHandlers(this._actionStacks);
+        ClearWiredHandlers(this._conditionStacks);
 
         this._conditionStacks.Clear();
         this._actionStacks.Clear();
         this._wiredUsed.Clear();
         this._doCleanup = false;
+    }
+
+    private static void ClearWiredHandlers(ConcurrentDictionary<Point, List<Item>> stacks)
+    {
+        foreach (var list in stacks.Values)
+        {
+            list.Where(roomItem => roomItem != null && roomItem.WiredHandler != null).ToList()
+                .ForEach(roomItem =>
+                {
+                    roomItem.WiredHandler.Dispose();
+                    roomItem.WiredHandler = null;
+                });
+        }
     }
 
     public void OnPickall() => this._doCleanup = true;
@@ -260,16 +226,16 @@ public class WiredHandler
             return;
         }
 
-        if (user != null && user.IsSpectator)
+        if (user?.IsSpectator == true)
         {
             return;
         }
 
         if (this.SecurityEnabled)
         {
-            if (this._wiredUsed.ContainsKey(coordinate))
+            if (this._wiredUsed.TryGetValue(coordinate, out var usedList))
             {
-                if (this._wiredUsed[coordinate].Contains(user?.VirtualId ?? 0))
+                if (usedList.Contains(user?.VirtualId ?? 0))
                 {
                     return;
                 }
@@ -297,15 +263,10 @@ public class WiredHandler
         if (this._conditionStacks.TryGetValue(coordinate, out var conditionStack) && !ignoreCondition)
         {
             var isOrVal = this._specialOrEval.Contains(coordinate);
-            var hasValidCondition = true;
+            var hasValidCondition = !isOrVal;
 
-            foreach (var roomItem in conditionStack.Take(this.SecurityEnabled ? 20 : 1024).ToArray())
+            foreach (var roomItem in conditionStack.Take(this.SecurityEnabled ? 20 : 1024).Where(roomItem => roomItem != null && roomItem.WiredHandler != null).ToList())
             {
-                if (roomItem == null || roomItem.WiredHandler == null)
-                {
-                    continue;
-                }
-
                 var isValidCondition = ((IWiredCondition)roomItem.WiredHandler).AllowsExecution(user, item);
 
                 if (!isValidCondition && !isOrVal)
@@ -338,13 +299,7 @@ public class WiredHandler
         else if (this._specialUnseen.TryGetValue(coordinate, out var nextWiredIndex))
         {
             var countAct = actionStack.Count - 1;
-
-            var nextWired = nextWiredIndex;
-            if (nextWired > countAct)
-            {
-                nextWired = 0;
-            }
-
+            var nextWired = nextWiredIndex > countAct ? 0 : nextWiredIndex;
             this._specialUnseen[coordinate] = nextWired + 1;
 
             var actNext = actionStack[nextWired];
@@ -355,13 +310,10 @@ public class WiredHandler
         }
         else
         {
-            foreach (var roomItem in actionStack.Take(this.SecurityEnabled ? 20 : 1024).ToArray())
-            {
-                if (roomItem != null && roomItem.WiredHandler != null)
-                {
-                    ((IWiredEffect)roomItem.WiredHandler).Handle(user, item);
-                }
-            }
+            actionStack.Take(this.SecurityEnabled ? 20 : 1024)
+                .Where(roomItem => roomItem != null && roomItem.WiredHandler != null)
+                .ToList()
+                .ForEach(roomItem => ((IWiredEffect)roomItem.WiredHandler).Handle(user, item));
         }
     }
 
@@ -370,9 +322,7 @@ public class WiredHandler
     public void Destroy()
     {
         this._actionStacks?.Clear();
-
         this._conditionStacks?.Clear();
-
         this._requestingUpdates?.Clear();
 
         this.TrgCollision = null;
