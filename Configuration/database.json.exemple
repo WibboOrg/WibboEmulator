@@ -1,0 +1,9 @@
+{
+	"Hostname": "127.0.0.1",
+	"Port": 3306,
+	"Username": "root",
+	"Password": "",
+	"Name": "test",
+	"MinimumPoolSize": 5,
+	"MaximumPoolSize": 50
+}
