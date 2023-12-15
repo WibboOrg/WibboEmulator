@@ -48,7 +48,7 @@ public class ClientPacket
         return this.ReadBytes(len);
     }
 
-    public string PopString(int maxLength = 255)
+    public string PopString(int maxLength = 191)
     {
         var stringValue = this._encoding.GetString(this.ReadFixedValue());
 
