@@ -39,7 +39,7 @@ internal sealed class SendMsgEvent : IPacketEvent
         session.User.FloodTime = DateTime.Now;
         session.User.FloodCount++;
 
-        if (session.User.Antipub("<" + userId + "> " + message, "<MP>"))
+        if (session.User.CheckChatMessage("<" + userId + "> " + message, "<MP>"))
         {
             return;
         }

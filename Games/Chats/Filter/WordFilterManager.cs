@@ -60,14 +60,17 @@ public sealed partial class WordFilterManager
         }
     }
 
-    public string CheckMessage(string message) // INJUURE & INSULTE
+    public string CheckMessage(string message)
     {
+        var patternEmail = @"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b";
+        message = Regex.Replace(message, patternEmail, "*****");
+
+        var patternIP = @"\b(?:\d{1,3}\.){3}\d{1,3}\b";
+        message = Regex.Replace(message, patternIP, "*****");
+
         foreach (var filter in this._filteredWords.ToList())
         {
-            if (message.ToLower().Contains(filter))
-            {
-                message = Regex.Replace(message, filter, "*****", RegexOptions.IgnoreCase);
-            }
+            message = Regex.Replace(message, filter, "*****", RegexOptions.IgnoreCase);
         }
 
         return message;
@@ -140,75 +143,74 @@ public sealed partial class WordFilterManager
 
     public bool CheckMessageWord(string message)
     {
-        var oldLength = message.Replace(" ", "").Length;
-
-        ClearMessage(ref message, false);
-
-        var letterDelCount = oldLength - message.Length;
-
-        var wordPub = new List<string>() { "go",
-                                                    ".fr",
-                                                    ".com",
-                                                    ".me",
-                                                    ".org",
-                                                    ".be",
-                                                    ".eu",
-                                                    ".net",
-                                                    "mobi",
-                                                    "nouveau",
-                                                    "nouvo",
-                                                    "connect",
-                                                    "invite",
-                                                    "recru",
-                                                    "staff",
-                                                    "ouvr",
-                                                    "rejoign",
-                                                    "retro",
-                                                    "meilleur",
-                                                    "direction",
-                                                    "rejoin",
-                                                    "gratuit",
-                                                    "open",
-                                                    "http",
-                                                    "recrutement",
-                                                    "animation",
-                                                    "habb",
-                                                    "bbo",
-                                                    "sansle",
-                                                    "city",
-                                                    "alpha",
-                                                    "gosur",
-                                                    "=bb",
-                                                    "catalogue",
-                                                    "recru",
-                                                    };
-
-        var detectCount = 0;
-        foreach (var pattern in wordPub)
-        {
-            if (message.Contains(pattern))
-            {
-                detectCount++;
-                continue;
-            }
-        }
-
-        if (detectCount >= 4 || (letterDelCount > 5 && detectCount >= 4))
+        if (ContainsIPAddress(message))
         {
             return true;
         }
 
-        foreach (var filter in this._filteredWords.ToList())
+        var originalLength = message.Replace(" ", "").Length;
+
+        ClearMessage(ref message, false);
+
+        var letterDeletionCount = originalLength - message.Length;
+
+        var forbiddenWords = new List<string>() {
+            "go",
+            ".fr",
+            ".com",
+            ".me",
+            ".org",
+            ".be",
+            ".eu",
+            ".net",
+            "mobi",
+            "nouveau",
+            "nouvo",
+            "connect",
+            "invite",
+            "recru",
+            "staff",
+            "ouvr",
+            "rejoign",
+            "retro",
+            "meilleur",
+            "direction",
+            "rejoin",
+            "gratuit",
+            "open",
+            "http",
+            "recrutement",
+            "animation",
+            "habb",
+            "bbo",
+            "sansle",
+            "city",
+            "alpha",
+            "gosur",
+            "=bb",
+            "catalogue",
+            "recru"
+        };
+
+        var detectedCount = forbiddenWords.Count(word => message.Contains(word));
+
+        if (detectedCount >= 4 || (letterDeletionCount > 5 && detectedCount >= 4))
         {
-            if (message.Contains(filter))
-            {
-                return true;
-            }
+            return true;
         }
 
-        return false;
+        return this._filteredWords.Any(filter => message.Contains(filter));
+    }
+
+    private static bool ContainsIPAddress(string message)
+    {
+        var regex = RegexIp();
+        return regex.IsMatch(message);
     }
 
     [GeneratedRegex("[^a-z]", RegexOptions.IgnoreCase, "fr-BE")]
     private static partial Regex MyRegex();
+
+    [GeneratedRegex("\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b")]
+    private static partial Regex RegexIp();
 }

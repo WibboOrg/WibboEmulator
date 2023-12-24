@@ -16,7 +16,7 @@ internal sealed class GuideToolMessageNewEvent : IPacketEvent
             return;
         }
 
-        if (session.User.Antipub(message, "<GUIDEMESSAGE>"))
+        if (session.User.CheckChatMessage(message, "<GUIDEMESSAGE>"))
         {
             return;
         }

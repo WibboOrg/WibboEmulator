@@ -298,7 +298,7 @@ public class User : IDisposable, IEquatable<User>
         }
     }
 
-    public bool Antipub(string message, string type, int roomId = 0)
+    public bool CheckChatMessage(string message, string type, int roomId = 0)
     {
         if (this.HasPermission("god"))
         {
@@ -320,15 +320,11 @@ public class User : IDisposable, IEquatable<User>
             {
                 LogChatPubDao.Insert(dbClient, this.Id, "A vérifié: " + type + message, this.Username);
 
-                foreach (var client in WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers())
-                {
-                    if (client == null || client.User == null)
-                    {
-                        continue;
-                    }
+                WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers()
+                    .Where(s => s != null && s.User != null)
+                    .ToList()
+                    .ForEach(s => s.SendPacket(new AddChatlogsComposer(this.Id, this.Username, type + message)));
 
-                    client.SendPacket(new AddChatlogsComposer(this.Id, this.Username, type + message));
-                }
 
                 return false;
             }
@@ -358,16 +354,14 @@ public class User : IDisposable, IEquatable<User>
             WibboEnvironment.GetGame().GetGameClientManager().BanUser(this.Client, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.Username, true, false);
         }
 
-        foreach (var client in WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers())
-        {
-            if (client == null || client.User == null)
+        WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers()
+            .Where(s => s != null && s.User != null)
+            .ToList()
+            .ForEach(s =>
             {
-                continue;
-            }
-
-            client.SendPacket(RoomNotificationComposer.SendBubble("mention", "Detection d'un message suspect sur le compte " + this.Username));
-            client.SendPacket(new AddChatlogsComposer(this.Id, this.Username, type + message));
-        }
+                s.SendPacket(RoomNotificationComposer.SendBubble("mention", "Detection d'un message suspect sur le compte " + this.Username));
+                s.SendPacket(new AddChatlogsComposer(this.Id, this.Username, type + message));
+            });
         return true;
     }
 

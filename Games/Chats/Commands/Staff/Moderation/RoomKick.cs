@@ -9,7 +9,7 @@ internal sealed class RoomKick : IChatCommand
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var messageAlert = CommandManager.MergeParams(parameters, 1);
-        if (session.User.Antipub(messageAlert, "<CMD>", room.Id))
+        if (session.User.CheckChatMessage(messageAlert, "<CMD>", room.Id))
         {
             return;
         }

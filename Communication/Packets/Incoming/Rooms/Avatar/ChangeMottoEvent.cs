@@ -26,7 +26,7 @@ internal sealed class ChangeMottoEvent : IPacketEvent
             return;
         }
 
-        if (session.User.Antipub(newMotto, "<MOTTO>"))
+        if (session.User.CheckChatMessage(newMotto, "<MOTTO>"))
         {
             return;
         }

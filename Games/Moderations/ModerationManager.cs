@@ -396,7 +396,7 @@ public class ModerationManager
                 return;
             }
 
-            if (modSession.User.Antipub(message, "<MT>", room.Id))
+            if (modSession.User.CheckChatMessage(message, "<MT>", room.Id))
             {
                 return;
             }

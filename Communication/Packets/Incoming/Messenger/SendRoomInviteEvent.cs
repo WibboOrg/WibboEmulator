@@ -41,7 +41,7 @@ internal sealed class SendRoomInviteEvent : IPacketEvent
 
         var textMessage = packet.PopString(121);
 
-        if (session.User.Antipub(textMessage, "<RM>"))
+        if (session.User.CheckChatMessage(textMessage, "<RM>"))
         {
             return;
         }

@@ -75,7 +75,7 @@ internal sealed class SendHotelAlertEvent : IPacketEvent
         else
         {
             ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", message));
-            if (session.User.Antipub(message, "<alert>"))
+            if (session.User.CheckChatMessage(message, "<alert>"))
             {
                 return;
             }

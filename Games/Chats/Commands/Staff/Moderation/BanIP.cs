@@ -35,7 +35,7 @@ internal sealed class BanIP : IChatCommand
         session.SendWhisper("Tu as banIP " + targetUser.User.Username + " pour " + reason + "!");
 
         WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.User.Username, -1, reason, true, false);
-        _ = session.User.Antipub(reason, "<CMD>", room.Id);
+        _ = session.User.CheckChatMessage(reason, "<CMD>", room.Id);
 
         if (securityBan)
         {

@@ -35,7 +35,7 @@ internal sealed class MachineBan : IChatCommand
 
             WibboEnvironment.GetGame().GetGameClientManager().BanUser(clientByUsername, session.User.Username, -1, raison, true, true);
             session.SendWhisper("Tu viens de bannir " + clientByUsername.User.Username + " pour la raison : " + raison + " !");
-            _ = session.User.Antipub(raison, "<CMD>", room.Id);
+            _ = session.User.CheckChatMessage(raison, "<CMD>", room.Id);
             return;
         }
     }
