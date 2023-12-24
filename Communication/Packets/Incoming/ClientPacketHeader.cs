@@ -24,6 +24,7 @@ public static class ClientPacketHeader
     public const int USER_BANNER = 10020;
     public const int USER_BANNER_SELECT = 10021;
     public const int UNIT_CHAT_WHISPER_GROUP = 1118;
+    public const int UNIT_CHAT_AUDIO = 10022;
 
     public const int ACHIEVEMENT_LIST = 219;
     public const int AUTHENTICATION = -1;

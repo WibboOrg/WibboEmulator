@@ -270,6 +270,8 @@ public class RoomUser : IEquatable<RoomUser>
         }
     }
 
+    public void OnChatAudio(string audioId) => this.Room.SendPacketOnChat(new ChatAudioComposer(this.VirtualId, audioId, 0), this, true, this.Team == TeamType.None && !this.IsBot);
+
     public void MoveTo(Point c, bool isOverride = false) => this.MoveTo(c.X, c.Y, isOverride);
 
     public void MoveTo(int x, int y, bool isOverride = false)
