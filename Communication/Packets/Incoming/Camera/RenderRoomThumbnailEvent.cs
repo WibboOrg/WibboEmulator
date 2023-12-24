@@ -10,7 +10,7 @@ internal sealed class RenderRoomThumbnailEvent : IPacketEvent
     {
         var photoLength = packet.PopInt();
 
-        if (photoLength > 40000)
+        if (photoLength > 40_000)
         {
             return;
         }

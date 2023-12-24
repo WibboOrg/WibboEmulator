@@ -9,19 +9,19 @@ internal sealed class RenderRoomEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
+        if (session == null || session.User == null)
+        {
+            return;
+        }
+
         var photoLength = packet.PopInt();
 
-        if (photoLength > 250000)
+        if (photoLength > 250_000)
         {
             return;
         }
 
         var photoBinary = packet.ReadBytes(photoLength);
-
-        if (session.User == null)
-        {
-            return;
-        }
 
         var room = session.User.CurrentRoom;
         if (room == null)
@@ -30,7 +30,7 @@ internal sealed class RenderRoomEvent : IPacketEvent
         }
 
         var time = WibboEnvironment.GetUnixTimestamp();
-        var pictureName = $"{session.User.Id}_{room.Id}_{time}";
+        var pictureName = $"{session.User.Id}_{room.Id}_{Guid.NewGuid()}.png";
 
         var content = new MultipartFormDataContent("Upload")
         {
@@ -41,7 +41,7 @@ internal sealed class RenderRoomEvent : IPacketEvent
 
         if (!response.IsSuccessStatusCode)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue));
+            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
             return;
         }
 
@@ -49,7 +49,7 @@ internal sealed class RenderRoomEvent : IPacketEvent
 
         if (string.IsNullOrEmpty(photoId) || pictureName != photoId)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue));
+            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
             return;
         }
 

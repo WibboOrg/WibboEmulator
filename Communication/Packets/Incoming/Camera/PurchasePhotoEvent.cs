@@ -9,21 +9,11 @@ internal sealed class PurchasePhotoEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var photoId = packet.PopString(32);
+        var photoId = session.User.LastPhotoId;
 
         if (string.IsNullOrEmpty(photoId))
         {
-            photoId = session.User.LastPhotoId;
-        }
-        else if (!WibboEnvironment.IsValidAlphaNumeric(photoId) || photoId.Length != 32)
-        {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue) + " ( " + photoId + " ) ");
-            return;
-        }
-
-        if (string.IsNullOrEmpty(photoId))
-        {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue) + " ( " + photoId + " ) ");
+            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
             return;
         }
 

@@ -1,6 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
-using WibboEmulator.Core;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class UniqueIDEvent : IPacketEvent
@@ -13,7 +12,7 @@ internal sealed class UniqueIDEvent : IPacketEvent
         var mcId = packet.PopString();
         var junk = packet.PopString();
 
-        var head = string.IsNullOrWhiteSpace(cookieId) || cookieId.Length != 13 ? IDGenerator.Next : cookieId;
+        var head = string.IsNullOrWhiteSpace(cookieId) ? Guid.NewGuid().ToString("N") : cookieId;
 
         session.MachineId = head + mcId + junk;
 
