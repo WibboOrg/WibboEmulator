@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Users.Premium;
 
+using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
@@ -141,6 +142,8 @@ public class PremiumComponent : IDisposable
         {
             this._userInstance.Rank = 2;
             UserDao.UpdateRank(dbClient, this._userInstance.Id, 2);
+
+            this._userInstance.Client.SendPacket(new UserRightsComposer(this._userInstance.Rank < 2 ? 2 : this._userInstance.Rank, this._userInstance.Rank > 1));
         }
     }
 
