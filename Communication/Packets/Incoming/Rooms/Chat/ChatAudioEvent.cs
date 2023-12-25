@@ -94,7 +94,9 @@ internal sealed partial class ChatAudioEvent : IPacketEvent
             { new StreamContent(new MemoryStream(audioBinary)), "audio", audioName }
         };
 
-        var response = WibboEnvironment.GetHttpClient().PostAsync(WibboEnvironment.GetSettings().GetData<string>("audio.upload.url"), content).GetAwaiter().GetResult();
+        var audioUploadUrl = WibboEnvironment.GetSettings().GetData<string>("audio.upload.url");
+
+        var response = WibboEnvironment.GetHttpClient().PostAsync(audioUploadUrl, content).GetAwaiter().GetResult();
 
         if (!response.IsSuccessStatusCode)
         {
@@ -112,8 +114,12 @@ internal sealed partial class ChatAudioEvent : IPacketEvent
 
         var audioPath = $"/chat-audio/{audioName}.webm";
 
-        session.User.ChatMessageManager.AddMessage(session.User.Id, session.User.Username, room.Id, audioName, UnixTimestamp.GetNow());
-        room.ChatlogManager.AddMessage(session.User.Id, session.User.Username, room.Id, audioName, UnixTimestamp.GetNow());
+        var basePath = new Uri(audioUploadUrl).GetLeftPart(UriPartial.Authority);
+
+        var audioUrl = $"{basePath}{audioPath}";
+
+        session.User.ChatMessageManager.AddMessage(session.User.Id, session.User.Username, room.Id, audioUrl, UnixTimestamp.GetNow());
+        room.ChatlogManager.AddMessage(session.User.Id, session.User.Username, room.Id, audioUrl, UnixTimestamp.GetNow());
 
         user.OnChatAudio(audioPath);
     }
