@@ -258,8 +258,13 @@ public class RoomUser : IEquatable<RoomUser>
         }
     }
 
-    public void OnChat(string messageText, int color = 0, bool shout = false)
+    public void OnChat(string messageText, int color = 0, bool shout = false, string chatColour = "")
     {
+        if (chatColour != "")
+        {
+            messageText = $"@{chatColour}@{messageText}";
+        }
+
         if (shout)
         {
             this.Room.SendPacketOnChat(new ShoutComposer(this.VirtualId, messageText, color), this, true, this.Team == TeamType.None && !this.IsBot);

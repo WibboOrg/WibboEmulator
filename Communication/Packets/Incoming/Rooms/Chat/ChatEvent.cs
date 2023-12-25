@@ -38,8 +38,8 @@ internal sealed partial class ChatEvent : IPacketEvent
         }
 
         var message = packet.PopString(100);
-
         var color = packet.PopInt();
+        var chatColour = packet.PopString(10);
 
         if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(color, out var style) || (style.RequiredRight.Length > 0 && !session.User.HasPermission(style.RequiredRight)))
         {
@@ -183,7 +183,7 @@ internal sealed partial class ChatEvent : IPacketEvent
             message = WibboEnvironment.GetGame().GetChatManager().GetMention().Parse(session, message);
         }
 
-        user.OnChat(message, color, false);
+        user.OnChat(message, color, false, chatColour);
     }
 
     [GeneratedRegex("\\[tag\\](.*?)\\[\\/tag\\]")]
