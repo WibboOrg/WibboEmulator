@@ -366,5 +366,6 @@ public class CommandManager
         this.Register(173, new Turn());
         this.Register(175, new SuperPush());
         this.Register(176, new ChatAudio());
+        this.Register(177, new ChatToSpeech());
     }
 }

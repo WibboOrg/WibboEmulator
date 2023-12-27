@@ -300,12 +300,7 @@ public class User : IDisposable, IEquatable<User>
 
     public bool CheckChatMessage(string message, string type, int roomId = 0)
     {
-        if (this.HasPermission("god"))
-        {
-            return false;
-        }
-
-        if (message.Length <= 3)
+        if (message.Length <= 3 || this.HasPermission("god"))
         {
             return false;
         }

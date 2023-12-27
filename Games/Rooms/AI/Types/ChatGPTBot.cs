@@ -115,7 +115,7 @@ public partial class ChatGPTBot : BotAI
     private void ParseActionId(string messageText, int userId)
     {
         var match = MyRegex().Match(messageText);
-        if (!match.Success || int.TryParse(match.Groups[1].Value, out var actionId) == false)
+        if (!match.Success || int.TryParse(match.Groups?[1]?.Value, out var actionId) == false)
         {
             return;
         }
@@ -252,7 +252,7 @@ public partial class ChatGPTBot : BotAI
             }
         }
 
-        if (!WibboEnvironment.GetChatOpenAI().IsReadyToSend() || this._lastMessageUser == null)
+        if (!WibboEnvironment.GetChatOpenAI().IsReadyToSendChat() || this._lastMessageUser == null)
         {
             return;
         }
@@ -276,7 +276,7 @@ public partial class ChatGPTBot : BotAI
         {
             try
             {
-                if (!WibboEnvironment.GetChatOpenAI().IsReadyToSend())
+                if (!WibboEnvironment.GetChatOpenAI().IsReadyToSendChat())
                 {
                     return;
                 }

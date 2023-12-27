@@ -2,15 +2,17 @@ namespace WibboEmulator.Core.OpenIA;
 
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 public class OpenAIProxy : IDisposable
 {
+    private const string BASE_URL = "https://api.openai.com/v1/";
     private readonly HttpClient _openAIClient;
-    private DateTime _lastRequest;
-    private bool _waitedAPI;
+    private DateTime _lastRequestChat;
+    private DateTime _lastRequestAudio;
+    private bool _waitedChatAPI;
+    private bool _waitedAudioAPI;
 
     public OpenAIProxy(string apiKey)
     {
@@ -18,45 +20,74 @@ public class OpenAIProxy : IDisposable
         {
             Timeout = TimeSpan.FromSeconds(10)
         };
-        this._openAIClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Wibbo", "1.0"));
-        this._openAIClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("(+http://wibbo.org)"));
         this._openAIClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
 
-        this._lastRequest = DateTime.Now;
+        this._lastRequestChat = DateTime.Now;
+        this._lastRequestAudio = DateTime.Now;
+    }
+
+    public async Task<byte[]> TextToSpeech(string nameVoice, string text)
+    {
+        if (this.IsReadyToSendAudio() == false)
+        {
+            return null;
+        }
+
+        try
+        {
+            var request = new
+            {
+                model = "tts-1",
+                input = text,
+                voice = nameVoice
+            };
+            var requestJson = JsonConvert.SerializeObject(request);
+            var requestContent = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
+            var httpResponseMessage = await this._openAIClient.PostAsync(BASE_URL + "audio/speech", requestContent);
+
+            this._lastRequestAudio = DateTime.Now;
+            this._waitedAudioAPI = false;
+
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                return null;
+            }
+
+            var audioBytes = await httpResponseMessage.Content.ReadAsByteArrayAsync();
+
+            return audioBytes;
+        }
+        catch { }
+
+        this._waitedAudioAPI = false;
+        return null;
     }
 
     public async Task<ChatCompletionMessage> SendChatMessage(List<ChatCompletionMessage> messagesSend)
     {
-        if (this.IsReadyToSend() == false || this._waitedAPI)
-        {
-            return null;
-        }
-
-        this._waitedAPI = true;
-
-        var url = WibboEnvironment.GetSettings().GetData<string>("openia.url");
-
-        if (string.IsNullOrWhiteSpace(url))
-        {
-            return null;
-        }
-
-        var request = new
-        {
-            messages = messagesSend.ToArray(),
-            model = "gpt-3.5-turbo-1106",
-            max_tokens = 150,
-            temperature = 0.6
-        };
-
         try
         {
+            if (this.IsReadyToSendChat() == false)
+            {
+                return null;
+            }
+
+            this._waitedChatAPI = true;
+
+            var request = new
+            {
+                messages = messagesSend.ToArray(),
+                model = "gpt-3.5-turbo-1106",
+                max_tokens = 150,
+                temperature = 0.6
+            };
+
             var requestJson = JsonConvert.SerializeObject(request);
             var requestContent = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
-            var httpResponseMessage = await this._openAIClient.PostAsync(url, requestContent);
+            var httpResponseMessage = await this._openAIClient.PostAsync(BASE_URL + "chat/completions", requestContent);
 
-            this._lastRequest = DateTime.Now;
-            this._waitedAPI = false;
+            this._lastRequestChat = DateTime.Now;
+            this._waitedChatAPI = false;
 
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
@@ -87,16 +118,22 @@ public class OpenAIProxy : IDisposable
         }
         catch
         {
-            this._waitedAPI = false;
+            this._waitedChatAPI = false;
         }
 
         return null;
     }
 
-    public bool IsReadyToSend()
+    public bool IsReadyToSendChat()
     {
-        var timespan = DateTime.Now - this._lastRequest;
-        return timespan.TotalSeconds > 3 && !this._waitedAPI;
+        var timespan = DateTime.Now - this._lastRequestChat;
+        return timespan.TotalSeconds > 3 && !this._waitedChatAPI;
+    }
+
+    public bool IsReadyToSendAudio()
+    {
+        var timespan = DateTime.Now - this._lastRequestAudio;
+        return timespan.TotalSeconds > 3 && !this._waitedAudioAPI;
     }
 
     public void Dispose()
