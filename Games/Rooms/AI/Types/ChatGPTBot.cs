@@ -36,7 +36,8 @@ public partial class ChatGPTBot : BotAI
             { 7, "Sad or bad or angry" },
             { 8, "Laugther" },
             { 9, "Kiss or embrace" },
-            { 10, "Danse" }
+            { 10, "Danse" },
+            { 11, "Send audio message" }
         };
     }
 
@@ -200,6 +201,19 @@ public partial class ChatGPTBot : BotAI
                 break;
             }
             case 10: //Danse
+            {
+                var danceId = WibboEnvironment.GetRandomNumber(1, 4);
+                if (danceId > 0 && this.GetRoomUser().CarryItemID > 0)
+                {
+                    this.GetRoomUser().CarryItem(0);
+                }
+
+                this.GetRoomUser().DanceId = danceId;
+                this.GetRoom().SendPacket(new DanceComposer(this.GetRoomUser().VirtualId, danceId));
+                this._resetDanseTimer = 12;
+                break;
+            }
+            case 11: //Danse
             {
                 var danceId = WibboEnvironment.GetRandomNumber(1, 4);
                 if (danceId > 0 && this.GetRoomUser().CarryItemID > 0)

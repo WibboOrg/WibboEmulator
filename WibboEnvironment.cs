@@ -12,6 +12,7 @@ using WibboEmulator.Core;
 using WibboEmulator.Core.FigureData;
 using WibboEmulator.Core.Language;
 using WibboEmulator.Core.OpenIA;
+using WibboEmulator.Core.ElevenLabs;
 using WibboEmulator.Core.Settings;
 using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
@@ -29,6 +30,7 @@ public static class WibboEnvironment
     private static LanguageManager _languageManager;
     private static SettingsManager _settingsManager;
     private static OpenAIProxy _chatOpenAI;
+    private static ElevenLabsProxy _elevenLabs;
 
     private static readonly Random RandomNumber = new();
 
@@ -92,6 +94,7 @@ public static class WibboEnvironment
             _figureManager.Init();
 
             _chatOpenAI = new OpenAIProxy(_settingsManager.GetData<string>("openia.api.key"));
+            _elevenLabs = new ElevenLabsProxy(_settingsManager.GetData<string>("elevenlabs.api.key"));
 
             _game = new Game();
             _game.Init(dbClient);
@@ -251,6 +254,8 @@ public static class WibboEnvironment
     public static HttpClient GetHttpClient() => HttpClient;
 
     public static OpenAIProxy GetChatOpenAI() => _chatOpenAI;
+
+    public static ElevenLabsProxy GetElevenLabs() => _elevenLabs;
 
     public static void PreformShutDown()
     {
