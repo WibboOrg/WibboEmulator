@@ -213,17 +213,9 @@ public partial class ChatGPTBot : BotAI
                 this._resetDanseTimer = 12;
                 break;
             }
-            case 11: //Danse
+            case 11: //Chat audio
             {
-                var danceId = WibboEnvironment.GetRandomNumber(1, 4);
-                if (danceId > 0 && this.GetRoomUser().CarryItemID > 0)
-                {
-                    this.GetRoomUser().CarryItem(0);
-                }
 
-                this.GetRoomUser().DanceId = danceId;
-                this.GetRoom().SendPacket(new DanceComposer(this.GetRoomUser().VirtualId, danceId));
-                this._resetDanseTimer = 12;
                 break;
             }
         }

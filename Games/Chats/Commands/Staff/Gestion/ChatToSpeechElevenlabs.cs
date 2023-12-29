@@ -24,7 +24,8 @@ internal sealed class ChatToSpeechElevenlabs : IChatCommand
 
         var voiceActors = new Dictionary<string, string>
         {
-            { "callum", "N2lVS1w4EtoT3dr4eOWO" }
+            { "callum", "N2lVS1w4EtoT3dr4eOWO" },
+            { "nicole", "piTKgcLEGmPE4e6mEKli" }
         };
 
         if (!voiceActors.TryGetValue(nameVoice, out var modelId))
