@@ -339,7 +339,7 @@ public sealed class PacketManager
     private void RegisterRoomChat()
     {
         this._incomingPackets.Add(ClientPacketHeader.UNIT_CHAT, new ChatEvent());
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_CHAT_SHOUT, new ShoutEvent());
+        this._incomingPackets.Add(ClientPacketHeader.UNIT_CHAT_SHOUT, new ChatEvent(true));
         this._incomingPackets.Add(ClientPacketHeader.UNIT_CHAT_WHISPER, new WhisperEvent());
         this._incomingPackets.Add(ClientPacketHeader.UNIT_CHAT_AUDIO, new ChatAudioEvent());
         this._incomingPackets.Add(ClientPacketHeader.UNIT_TYPING, new StartTypingEvent());

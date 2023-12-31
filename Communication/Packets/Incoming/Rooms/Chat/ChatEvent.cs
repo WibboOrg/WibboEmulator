@@ -8,6 +8,9 @@ using WibboEmulator.Utilities;
 internal sealed partial class ChatEvent : IPacketEvent
 {
     public double Delay => 100;
+    private bool _isShout;
+
+    public ChatEvent(bool isShout = false) => this._isShout = isShout;
 
     public void Parse(GameClient session, ClientPacket packet)
     {
@@ -171,7 +174,7 @@ internal sealed partial class ChatEvent : IPacketEvent
             return;
         }
 
-        room.OnUserSay(user, message, false);
+        room.OnUserSay(user, message, this._isShout);
 
         if (user.IsSpectator)
         {
@@ -183,7 +186,7 @@ internal sealed partial class ChatEvent : IPacketEvent
             message = WibboEnvironment.GetGame().GetChatManager().GetMention().Parse(session, message);
         }
 
-        user.OnChat(message, color, false, chatColour);
+        user.OnChat(message, color, this._isShout, chatColour);
     }
 
     [GeneratedRegex("\\[tag\\](.*?)\\[\\/tag\\]")]
