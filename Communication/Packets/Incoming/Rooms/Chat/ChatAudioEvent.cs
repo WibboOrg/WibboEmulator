@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Chat;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
+using WibboEmulator.Core;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
 
@@ -89,22 +90,7 @@ internal sealed partial class ChatAudioEvent : IPacketEvent
 
         var audioName = $"{session.User.Id}_{room.Id}_{Guid.NewGuid()}";
 
-        var content = new MultipartFormDataContent("Upload")
-        {
-            { new StreamContent(new MemoryStream(audioBinary)), "audio", audioName }
-        };
-
-        var audioUploadUrl = WibboEnvironment.GetSettings().GetData<string>("audio.upload.url");
-
-        var response = WibboEnvironment.GetHttpClient().PostAsync(audioUploadUrl, content).GetAwaiter().GetResult();
-
-        if (!response.IsSuccessStatusCode)
-        {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
-            return;
-        }
-
-        var audioId = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        var audioId = UploadApi.ChatAudio(audioBinary, audioName);
 
         if (string.IsNullOrEmpty(audioId) || audioName != audioId)
         {
@@ -114,6 +100,7 @@ internal sealed partial class ChatAudioEvent : IPacketEvent
 
         var audioPath = $"/chat-audio/{audioName}.webm";
 
+        var audioUploadUrl = WibboEnvironment.GetSettings().GetData<string>("audio.upload.url");
         var basePath = new Uri(audioUploadUrl).GetLeftPart(UriPartial.Authority);
 
         var audioUrl = $"{basePath}{audioPath}";

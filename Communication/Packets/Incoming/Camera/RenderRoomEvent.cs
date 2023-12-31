@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Camera;
 using WibboEmulator.Communication.Packets.Outgoing.Camera;
+using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
@@ -32,20 +33,7 @@ internal sealed class RenderRoomEvent : IPacketEvent
         var time = WibboEnvironment.GetUnixTimestamp();
         var pictureName = $"{session.User.Id}_{room.Id}_{Guid.NewGuid()}.png";
 
-        var content = new MultipartFormDataContent("Upload")
-        {
-            { new StreamContent(new MemoryStream(photoBinary)), "photo", pictureName }
-        };
-
-        var response = WibboEnvironment.GetHttpClient().PostAsync(WibboEnvironment.GetSettings().GetData<string>("camera.upload.url"), content).GetAwaiter().GetResult();
-
-        if (!response.IsSuccessStatusCode)
-        {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
-            return;
-        }
-
-        var photoId = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        var photoId = UploadApi.CameraPhoto(photoBinary, pictureName);
 
         if (string.IsNullOrEmpty(photoId) || pictureName != photoId)
         {

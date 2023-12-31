@@ -34,7 +34,9 @@ public class FigureDataManager
             this._setTypes.Clear();
         }
 
-        var response = WibboEnvironment.GetHttpClient().GetAsync(WibboEnvironment.GetSettings().GetData<string>("figuredata.url") + "?cache=" + WibboEnvironment.GetUnixTimestamp()).GetAwaiter().GetResult();
+        var figureUrl = WibboEnvironment.GetSettings().GetData<string>("figuredata.url") + "?cache=" + WibboEnvironment.GetUnixTimestamp();
+
+        var response = WibboEnvironment.GetHttpClient().GetAsync(figureUrl).GetAwaiter().GetResult();
 
         if (!response.IsSuccessStatusCode)
         {

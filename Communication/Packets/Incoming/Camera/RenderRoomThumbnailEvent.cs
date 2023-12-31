@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Camera;
 using WibboEmulator.Communication.Packets.Outgoing.Camera;
+using WibboEmulator.Core;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class RenderRoomThumbnailEvent : IPacketEvent
@@ -30,19 +31,7 @@ internal sealed class RenderRoomThumbnailEvent : IPacketEvent
 
         var pictureName = $"thumbnail_{room.Id}";
 
-        var content = new MultipartFormDataContent("Upload")
-        {
-            { new StreamContent(new MemoryStream(photoBinary)), "photo", pictureName }
-        };
-
-        var response = WibboEnvironment.GetHttpClient().PostAsync(WibboEnvironment.GetSettings().GetData<string>("camera.thubmail.upload.url"), content).GetAwaiter().GetResult();
-
-        if (!response.IsSuccessStatusCode)
-        {
-            return;
-        }
-
-        var photoId = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        var photoId = UploadApi.CameraThubmail(photoBinary, pictureName);
 
         if (string.IsNullOrEmpty(photoId) || pictureName != photoId)
         {
