@@ -7,12 +7,12 @@ internal sealed class RoomBanner : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (parameters.Length < 3)
+        if (parameters.Length < 2)
         {
             return;
         }
 
-        if (!int.TryParse(parameters[2], out var bannerId))
+        if (!int.TryParse(parameters[1], out var bannerId))
         {
             return;
         }
