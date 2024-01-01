@@ -8,7 +8,7 @@ using WibboEmulator.Utilities;
 internal sealed partial class ChatEvent : IPacketEvent
 {
     public double Delay => 100;
-    private bool _isShout;
+    private readonly bool _isShout;
 
     public ChatEvent(bool isShout = false) => this._isShout = isShout;
 
