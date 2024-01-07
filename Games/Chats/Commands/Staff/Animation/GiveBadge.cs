@@ -6,15 +6,21 @@ internal sealed class GiveBadge : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (clientByUsername != null)
+        if (parameters.Length != 3)
         {
-            var badgeCode = parameters[2];
-            clientByUsername.User.BadgeComponent.GiveBadge(badgeCode, true);
+            return;
         }
-        else
+
+        var targetName = parameters[1];
+        var badgeCode = parameters[2];
+
+        var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(targetName);
+        if (clientByUsername == null)
         {
             userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
+            return;
         }
+
+        clientByUsername.User.BadgeComponent.GiveBadge(badgeCode);
     }
 }

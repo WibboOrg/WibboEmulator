@@ -97,7 +97,7 @@ public class AchievementManager
             _ = newProgress - targetLevelData.Requirement;
             newProgress = 0;
 
-            session.User.BadgeComponent.GiveBadge(achievementGroup + targetLevel, true);
+            session.User.BadgeComponent.GiveBadge(achievementGroup + targetLevel);
 
             if (newTarget > totalLevels)
             {

@@ -2089,7 +2089,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "badge":
             {
-                roomUser.Client.User.BadgeComponent.GiveBadge(value, true);
+                roomUser.Client.User.BadgeComponent.GiveBadge(value);
                 break;
             }
             case "removebadge":
@@ -2244,6 +2244,5 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
         }
 
         this.StringParam = wiredTriggerData;
-
     }
 }

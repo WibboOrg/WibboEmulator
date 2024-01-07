@@ -438,7 +438,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 
         if (!string.IsNullOrEmpty(item.Badge) && !session.User.BadgeComponent.HasBadge(item.Badge))
         {
-            session.User.BadgeComponent.GiveBadge(item.Badge, true);
+            session.User.BadgeComponent.GiveBadge(item.Badge);
         }
 
         session.SendPacket(new PurchaseOKComposer(item, item.Data));

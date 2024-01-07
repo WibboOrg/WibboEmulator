@@ -49,7 +49,7 @@ public class PremiumComponent : IDisposable
         }
         else if (this.IsPremiumLegend && this._userInstance.BadgeComponent.HasBadge("WC_LEGEND") == false)
         {
-            this._userInstance.BadgeComponent.GiveBadge("WC_LEGEND", true);
+            this._userInstance.BadgeComponent.GiveBadge("WC_LEGEND");
         }
 
         if (this.IsPremiumEpic == false && this._userInstance.BadgeComponent.HasBadge("WC_EPIC"))
@@ -58,7 +58,7 @@ public class PremiumComponent : IDisposable
         }
         else if (this.IsPremiumEpic && this._userInstance.BadgeComponent.HasBadge("WC_EPIC") == false)
         {
-            this._userInstance.BadgeComponent.GiveBadge("WC_EPIC", true);
+            this._userInstance.BadgeComponent.GiveBadge("WC_EPIC");
         }
 
         if (this.IsPremiumClassic == false && this._userInstance.BadgeComponent.HasBadge("WC_CLASSIC"))
@@ -67,7 +67,7 @@ public class PremiumComponent : IDisposable
         }
         else if (this.IsPremiumClassic && this._userInstance.BadgeComponent.HasBadge("WC_CLASSIC") == false)
         {
-            this._userInstance.BadgeComponent.GiveBadge("WC_CLASSIC", true);
+            this._userInstance.BadgeComponent.GiveBadge("WC_CLASSIC");
         }
 
         if (this.IsPremiumLegend == false && this.IsPremiumEpic == false && this.IsPremiumClassic == false)

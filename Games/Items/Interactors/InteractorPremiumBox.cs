@@ -73,7 +73,7 @@ public class InteractorPremiumBox : FurniInteractor
             roomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("premiumbox.classic.convert", session.Langue)));
         }
 
-        session.User.BadgeComponent.GiveBadge(badgeCode, true);
+        session.User.BadgeComponent.GiveBadge(badgeCode);
 
         session.User.Premium.SendPackets();
     }

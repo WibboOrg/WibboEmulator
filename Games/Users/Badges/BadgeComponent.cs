@@ -75,9 +75,7 @@ public class BadgeComponent : IDisposable
         return this.BadgeList.ContainsKey(badge);
     }
 
-    public void GiveBadge(string badge, bool inDatabase) => this.GiveBadge(badge, 0, inDatabase);
-
-    public void GiveBadge(string badge, int slot, bool inDatabase)
+    public void GiveBadge(string badge, bool inDatabase = true)
     {
         if (this.HasBadge(badge))
         {
@@ -87,10 +85,10 @@ public class BadgeComponent : IDisposable
         if (inDatabase)
         {
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            UserBadgeDao.Insert(dbClient, this._userInstance.Id, slot, badge);
+            UserBadgeDao.Insert(dbClient, this._userInstance.Id, 0, badge);
         }
 
-        this.BadgeList.Add(badge, new Badge(badge, slot));
+        this.BadgeList.Add(badge, new Badge(badge, 0));
 
         this._virtualBadgeId++;
 

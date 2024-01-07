@@ -144,7 +144,7 @@ internal static class ItemLootBox
 
         if (!string.IsNullOrEmpty(badgeCode) && !session.User.BadgeComponent.HasBadge(badgeCode))
         {
-            session.User.BadgeComponent.GiveBadge(badgeCode, true);
+            session.User.BadgeComponent.GiveBadge(badgeCode);
 
             var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
             roomUserByUserId?.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("give.badge", roomUserByUserId.Client.Langue), badgeCode));
@@ -238,7 +238,7 @@ internal static class ItemLootBox
 
         if (!string.IsNullOrEmpty(badgeCode))
         {
-            session.User.BadgeComponent.GiveBadge(badgeCode, true);
+            session.User.BadgeComponent.GiveBadge(badgeCode);
         }
 
         EndOpenBox(session, present, room, pageId, forceItem);
