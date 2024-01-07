@@ -28,7 +28,7 @@ public partial class ChatGPTBot : BotAI
         {
             { 0, "Do nothing" },
             { 1, "Greet" },
-            { 2, "Give the user a drink" },
+            { 2, "Stand up" },
             { 3, "Give the user an ice cream" },
             { 4, "Sit down" },
             { 5, "Move to user" },
@@ -37,7 +37,6 @@ public partial class ChatGPTBot : BotAI
             { 8, "Laugther" },
             { 9, "Kiss or embrace" },
             { 10, "Danse" },
-            { 11, "Send audio message" }
         };
     }
 
@@ -115,8 +114,9 @@ public partial class ChatGPTBot : BotAI
 
     private void ParseActionId(string messageText, int userId)
     {
-        var match = MyRegex().Match(messageText);
-        if (!match.Success || int.TryParse(match.Groups?[1]?.Value, out var actionId) == false)
+        var regexMatch = MyRegex().Match(messageText);
+        if (!regexMatch.Success || !regexMatch.Groups[1].Success ||
+        int.TryParse(regexMatch.Groups[1].Value, out var actionId) == false)
         {
             return;
         }
@@ -134,12 +134,13 @@ public partial class ChatGPTBot : BotAI
                 this.GetRoom().SendPacket(new ActionComposer(this.GetRoomUser().VirtualId, 1));
                 break;
             }
-            case 2: //Give the user a drink
+            case 2: //Sand up
             {
-                const int drinkId = 6;
-                if (targetUser.CarryItemID != drinkId)
+                if (this.GetRoomUser().ContainStatus("sit"))
                 {
-                    targetUser.CarryItem(drinkId, true);
+                    this.GetRoomUser().RemoveStatus("sit");
+                    this.GetRoomUser().IsSit = false;
+                    this.GetRoomUser().UpdateNeeded = true;
                 }
                 break;
             }
@@ -148,7 +149,7 @@ public partial class ChatGPTBot : BotAI
                 const int iceCreamId = 4;
                 if (targetUser.CarryItemID != iceCreamId)
                 {
-                    targetUser.CarryItem(iceCreamId, true);
+                    targetUser.CarryItem(iceCreamId);
                 }
                 break;
             }
@@ -211,11 +212,6 @@ public partial class ChatGPTBot : BotAI
                 this.GetRoomUser().DanceId = danceId;
                 this.GetRoom().SendPacket(new DanceComposer(this.GetRoomUser().VirtualId, danceId));
                 this._resetDanseTimer = 12;
-                break;
-            }
-            case 11: //Chat audio
-            {
-
                 break;
             }
         }
