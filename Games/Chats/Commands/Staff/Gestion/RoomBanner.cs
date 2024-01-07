@@ -30,7 +30,7 @@ internal sealed class RoomBanner : IChatCommand
         {
             if (targetUser == null || targetUser.IsBot || targetUser.Client == null || targetUser.Client.User.Banner == null)
             {
-                return;
+                continue;
             }
 
             targetUser.Client.User.Banner.AddBanner(dbClient, bannerId);

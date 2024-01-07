@@ -1,6 +1,7 @@
 namespace WibboEmulator.Database;
 using System.Data;
 using MySql.Data.MySqlClient;
+using WibboEmulator.Core;
 using WibboEmulator.Database.Adapter;
 using WibboEmulator.Database.Interfaces;
 
@@ -20,10 +21,7 @@ public class DatabaseConnection : IDatabaseClient, IDisposable
 
     public void Dispose()
     {
-        if (this._con.State == ConnectionState.Open)
-        {
-            this._con.Close();
-        }
+        this.Close();
 
         this._con.Dispose();
         GC.SuppressFinalize(this);
@@ -33,7 +31,7 @@ public class DatabaseConnection : IDatabaseClient, IDisposable
 
     public void Disconnect() => this.Close();
 
-    public IQueryAdapter GetQueryreactor() => this._adapter;
+    public IQueryAdapter GetQueryReactor() => this._adapter;
 
     public void ReportDone() => this.Dispose();
 
@@ -49,7 +47,7 @@ public class DatabaseConnection : IDatabaseClient, IDisposable
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                ExceptionLogger.LogException($"Database connection Open error: {e.Message}");
             }
         }
     }

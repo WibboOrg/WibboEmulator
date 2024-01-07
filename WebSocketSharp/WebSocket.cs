@@ -1167,26 +1167,39 @@ public class WebSocket : IDisposable
             this.Error("An exception has occurred during an OnMessage event.", ex);
         }
 
-        lock (this._forMessageEventQueue)
+        try
         {
-            if (this._messageEventQueue.Count == 0)
+            lock (this._forMessageEventQueue)
             {
-                this._inMessage = false;
+                if (this._messageEventQueue.Count == 0)
+                {
+                    this._inMessage = false;
+                    return;
+                }
 
-                return;
+                if (this._readyState != WebSocketState.Open)
+                {
+                    this._inMessage = false;
+                    return;
+                }
+
+                e = this._messageEventQueue.Dequeue();
             }
-
-            if (this._readyState != WebSocketState.Open)
-            {
-                this._inMessage = false;
-
-                return;
-            }
-
-            e = this._messageEventQueue.Dequeue();
+        }
+        catch (Exception ex)
+        {
+            this.Error("An exception occurred while processing the message event queue.", ex);
+            return;
         }
 
-        _ = Task.Run(() => this.Messages(e));
+        try
+        {
+            _ = Task.Run(() => this.Messages(e));
+        }
+        catch (Exception ex)
+        {
+            this.Error("An exception has occurred during the Messages event.", ex);
+        }
     }
 
     private void OpenWS()

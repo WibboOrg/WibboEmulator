@@ -19,10 +19,10 @@ internal sealed class CloseDice : IChatCommand
         userRoom.DiceCounterAmount = 0;
         userRoom.DiceCounter = 0;
 
-        userBooth.ForEach(x =>
+        foreach (var x in userBooth)
         {
             x.ExtraData = "0";
             x.UpdateState();
-        });
+        }
     }
 }

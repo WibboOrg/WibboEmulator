@@ -43,6 +43,11 @@ internal sealed class StaffAlert : IChatCommand
 
             var user = staff.User.CurrentRoom.RoomUserManager.GetRoomUserByUserId(staff.User.Id);
 
+            if (user == null)
+            {
+                continue;
+            }
+
             user.Client?.SendPacket(new WhisperComposer(user.VirtualId, "[STAFF ALERT] " + messageTxt + " - " + roomUser.GetUsername(), 23));
         }
     }

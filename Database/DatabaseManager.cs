@@ -1,6 +1,5 @@
 namespace WibboEmulator.Database;
 
-using System.Data;
 using MySql.Data.MySqlClient;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Interfaces;
@@ -11,7 +10,7 @@ public sealed class DatabaseManager
 
     public DatabaseManager(DatabaseConfiguration databaseConfiguration)
     {
-        var connectionString = new MySqlConnectionStringBuilder
+        var connectionStringBuilder = new MySqlConnectionStringBuilder
         {
             ConnectionTimeout = 300,
             Database = databaseConfiguration.Name,
@@ -28,16 +27,16 @@ public sealed class DatabaseManager
             CharacterSet = "utf8mb4"
         };
 
-        this._connectionStr = connectionString.ToString();
+        this._connectionStr = connectionStringBuilder.ToString();
     }
 
     public bool IsConnected()
     {
         try
         {
-            var con = new MySqlConnection(this._connectionStr);
+            using var con = new MySqlConnection(this._connectionStr);
             con.Open();
-            var cmd = con.CreateCommand();
+            using var cmd = con.CreateCommand();
             cmd.CommandText = "SELECT 1+1";
             _ = cmd.ExecuteNonQuery();
             cmd.Dispose();
@@ -59,14 +58,17 @@ public sealed class DatabaseManager
 
             dbConnection.Connect();
 
-            return dbConnection.GetQueryreactor();
+            return dbConnection.GetQueryReactor();
+        }
+        catch (MySqlException e)
+        {
+            ExceptionLogger.LogException($"Database connection error: {e.Message}");
+            return null;
         }
         catch (Exception e)
         {
-            ExceptionLogger.LogException(e.ToString());
+            ExceptionLogger.LogException($"Unexpected error: {e.Message}");
             return null;
         }
     }
-
-    public IDbConnection Connection() => new MySqlConnection(this._connectionStr);
 }

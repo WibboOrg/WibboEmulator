@@ -203,12 +203,15 @@ public class WiredHandler
     {
         foreach (var list in stacks.Values)
         {
-            list.Where(roomItem => roomItem != null && roomItem.WiredHandler != null).ToList()
-                .ForEach(roomItem =>
-                {
-                    roomItem.WiredHandler.Dispose();
-                    roomItem.WiredHandler = null;
-                });
+            var filteredItems = list
+                .Where(roomItem => roomItem != null && roomItem.WiredHandler != null)
+                .ToList();
+
+            foreach (var roomItem in filteredItems)
+            {
+                roomItem.WiredHandler?.Dispose();
+                roomItem.WiredHandler = null;
+            }
         }
     }
 
@@ -310,10 +313,17 @@ public class WiredHandler
         }
         else
         {
-            actionStack.Take(this.SecurityEnabled ? 20 : 1024)
+            var filteredItems = actionStack.Take(this.SecurityEnabled ? 20 : 1024)
                 .Where(roomItem => roomItem != null && roomItem.WiredHandler != null)
-                .ToList()
-                .ForEach(roomItem => ((IWiredEffect)roomItem.WiredHandler).Handle(user, item));
+                .ToList();
+
+            foreach (var roomItem in filteredItems)
+            {
+                if (roomItem.WiredHandler is IWiredEffect wiredHandler)
+                {
+                    wiredHandler.Handle(user, item);
+                }
+            }
         }
     }
 

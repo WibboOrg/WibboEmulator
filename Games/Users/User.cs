@@ -305,6 +305,10 @@ public class User : IDisposable, IEquatable<User>
             return false;
         }
 
+        var staffUsers = WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers()
+            .Where(s => s != null && s.User != null)
+            .ToList();
+
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
         LogChatDao.Insert(dbClient, this.Id, roomId, message, type, this.Username);
@@ -315,11 +319,10 @@ public class User : IDisposable, IEquatable<User>
             {
                 LogChatPubDao.Insert(dbClient, this.Id, "A vérifié: " + type + message, this.Username);
 
-                WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers()
-                    .Where(s => s != null && s.User != null)
-                    .ToList()
-                    .ForEach(s => s.SendPacket(new AddChatlogsComposer(this.Id, this.Username, type + message)));
-
+                foreach (var staffUser in staffUsers)
+                {
+                    staffUser.SendPacket(new AddChatlogsComposer(this.Id, this.Username, type + message));
+                }
 
                 return false;
             }
@@ -349,14 +352,11 @@ public class User : IDisposable, IEquatable<User>
             WibboEnvironment.GetGame().GetGameClientManager().BanUser(this.Client, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.Username, true, false);
         }
 
-        WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers()
-            .Where(s => s != null && s.User != null)
-            .ToList()
-            .ForEach(s =>
-            {
-                s.SendPacket(RoomNotificationComposer.SendBubble("mention", "Detection d'un message suspect sur le compte " + this.Username));
-                s.SendPacket(new AddChatlogsComposer(this.Id, this.Username, type + message));
-            });
+        foreach (var staffUser in staffUsers)
+        {
+            staffUser.SendPacket(RoomNotificationComposer.SendBubble("mention", "Détection d'un message suspect sur le compte " + this.Username));
+            staffUser.SendPacket(new AddChatlogsComposer(this.Id, this.Username, type + message));
+        }
         return true;
     }
 

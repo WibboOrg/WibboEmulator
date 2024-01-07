@@ -17,14 +17,12 @@ public class GameClientManager
     private readonly ConcurrentDictionary<string, string> _usernameRegister;
     private readonly ConcurrentDictionary<int, string> _userIDRegister;
     private readonly ConcurrentDictionary<string, string> _ssoTicketRegister;
-
     private readonly ConcurrentDictionary<string, DateTime> _pendingDisconnect;
+    private readonly List<int> _userStaff;
 
     public int OnlineUsersFr { get; set; }
     public int OnlineUsersEn { get; set; }
     public int OnlineUsersBr { get; set; }
-
-    private readonly List<int> _userStaff;
 
     public int Count => this._userIDRegister.Count;
 
@@ -528,7 +526,6 @@ public class GameClientManager
     }
 
     public void SendSuperNotif(string title, string notice, string picture, string link, string linkTitle) => this.SendMessage(new RoomNotificationComposer(title, notice, picture, linkTitle, link));
-
 
     public ICollection<GameClient> GetClients => this._clients.Values;
 }

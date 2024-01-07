@@ -137,12 +137,10 @@ public class MessengerComponent : IDisposable
 
     public void UpdateFriend(int userId, bool notification)
     {
-        if (!this.Friends.ContainsKey(userId))
+        if (!this.Friends.TryGetValue(userId, out var friend))
         {
             return;
         }
-
-        var friend = this.Friends[userId];
 
         friend.UpdateUser();
 
@@ -377,9 +375,9 @@ public class MessengerComponent : IDisposable
 
     public void ProcessOfflineMessages()
     {
-        DataTable getMessages = null;
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        getMessages = MessengerOfflineMessageDao.GetAll(dbClient, this._userInstance.Id);
+
+        var getMessages = MessengerOfflineMessageDao.GetAll(dbClient, this._userInstance.Id);
 
         if (getMessages != null)
         {

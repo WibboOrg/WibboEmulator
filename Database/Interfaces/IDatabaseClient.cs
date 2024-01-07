@@ -5,7 +5,7 @@ public interface IDatabaseClient : IDisposable
 {
     void Connect();
     void Disconnect();
-    IQueryAdapter GetQueryreactor();
+    IQueryAdapter GetQueryReactor();
     MySqlCommand CreateNewCommand();
     void ReportDone();
 }

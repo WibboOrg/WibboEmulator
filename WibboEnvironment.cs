@@ -174,8 +174,7 @@ public static class WibboEnvironment
             return -1;
         }
 
-        using var dbClient = GetDatabaseManager().GetQueryReactor();
-        return UserDao.GetIdByName(dbClient, username) <= 0 ? 1 : 0;
+        return UsernameExists(username) ? 0 : 1;
     }
 
     public static bool UsernameExists(string username)
@@ -205,23 +204,20 @@ public static class WibboEnvironment
                 var user = client.User;
                 if (user != null && user.Id > 0)
                 {
-                    if (UsersCached.ContainsKey(userId))
-                    {
-                        _ = UsersCached.TryRemove(userId, out _);
-                    }
-
+                    _ = UsersCached.TryRemove(userId, out _);
                     return user;
                 }
             }
             else
             {
-                if (UsersCached.TryGetValue(userId, out var value))
+                if (UsersCached.TryGetValue(userId, out var cachedUser))
                 {
-                    return value;
+                    return cachedUser;
                 }
                 else
                 {
                     var user = UserFactory.GetUserData(userId);
+
                     if (user != null)
                     {
                         _ = UsersCached.TryAdd(userId, user);
@@ -229,6 +225,7 @@ public static class WibboEnvironment
                     }
                 }
             }
+
             return null;
         }
         catch
@@ -263,15 +260,14 @@ public static class WibboEnvironment
         Console.WriteLine("Extinction de l'émulateur.");
 
         GetGame().GetGameClientManager().SendMessage(new BroadcastMessageAlertComposer("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 3 minutes."));
-        Thread.Sleep(20 * 1000); // 20 secondes
-        //GetGame().StopGameLoop();
-        GetWebSocketManager().Destroy(); // Eteindre le websocket server
-        GetGame().GetPacketManager().UnregisterAll(); // Dé-enregistrer les packets
-        GetGame().GetGameClientManager().CloseAll(); // Fermeture et enregistrement de toutes les utilisteurs
-        GetGame().GetRoomManager().RemoveAllRooms(); // Fermerture et enregistrer des apparts
-        GetGame().Dispose(); // E+N+D+T+I+M+E
+        Thread.Sleep(20 * 1000);
+        GetWebSocketManager().Destroy();
+        GetGame().GetPacketManager().UnregisterAll();
+        GetGame().GetGameClientManager().CloseAll();
+        GetGame().GetRoomManager().RemoveAllRooms();
+        GetGame().Dispose();
 
-        Console.WriteLine("L'émulation s'est parfaitement éteinte.");
+        Console.WriteLine("L'émulateur s'est parfaitement éteinte.");
         Environment.Exit(0);
     }
 }
