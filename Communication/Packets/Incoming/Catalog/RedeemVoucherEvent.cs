@@ -24,11 +24,9 @@ internal sealed class RedeemVoucherEvent : IPacketEvent
             return;
         }
 
-        var haveVoucher = false;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            haveVoucher = UserVoucherDao.HaveVoucher(dbClient, session.User.Id, voucherCode);
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+        var haveVoucher = UserVoucherDao.HaveVoucher(dbClient, session.User.Id, voucherCode);
 
         if (!haveVoucher)
         {
@@ -36,7 +34,6 @@ internal sealed class RedeemVoucherEvent : IPacketEvent
         }
         else
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             UserVoucherDao.Insert(dbClient, session.User.Id, voucherCode);
         }
 

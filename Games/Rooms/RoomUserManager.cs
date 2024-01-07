@@ -675,11 +675,6 @@ public class RoomUserManager
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            RoomDao.UpdateUsersNow(dbClient, this._room.Id, count);
-        }
-
         this._room.RoomData.UsersNow = count;
     }
 

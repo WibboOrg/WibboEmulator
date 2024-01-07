@@ -15,23 +15,16 @@ internal sealed class GetModeratorUserInfoEvent : IPacketEvent
         }
 
         var userId = packet.PopInt();
-        if (WibboEnvironment.GetGame().GetGameClientManager().GetNameById(userId) != "")
-        {
-            _ = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            var user = UserDao.GetOneInfo(dbClient, userId);
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        var user = UserDao.GetOneInfo(dbClient, userId);
 
-            if (user == null)
-            {
-                return;
-            }
-
-            session.SendPacket(new ModeratorUserInfoComposer(user));
-        }
-        else
+        if (user == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.loadusererror", session.Langue));
+            return;
         }
+
+        session.SendPacket(new ModeratorUserInfoComposer(user));
     }
 }

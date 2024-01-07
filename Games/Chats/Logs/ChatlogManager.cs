@@ -21,17 +21,15 @@ public class ChatlogManager
         }
     }
 
-    public void LoadRoomChatlogs(int roomId)
+    public void LoadRoomChatlogs(int roomId, IQueryAdapter dbClient)
     {
-        DataTable table;
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        table = LogChatDao.GetAllByRoomId(dbClient, roomId);
-        if (table == null)
+        var logs = LogChatDao.GetAllByRoomId(dbClient, roomId);
+        if (logs == null)
         {
             return;
         }
 
-        foreach (DataRow row in table.Rows)
+        foreach (DataRow row in logs.Rows)
         {
             this.AddMessage(Convert.ToInt32(row["user_id"]), row["user_name"].ToString(), Convert.ToInt32(row["room_id"]), row["type"].ToString() + row["message"].ToString(), (int)row["timestamp"]);
         }

@@ -28,6 +28,11 @@ internal sealed class ItemDao
             {
                 standardQueries.AddQuery("UPDATE `item` SET wall_pos = @wallpost" + roomItem.Id + " WHERE id = " + roomItem.Id);
                 standardQueries.AddParameter("wallpost" + roomItem.Id, roomItem.WallCoord);
+
+                if (roomItem.GetBaseItem().InteractionType == InteractionType.MOODLIGHT)
+                {
+                    standardQueries.AddQuery(ItemMoodlightDao.UpdateEnableString(roomItem.Id, roomItem.GetRoom().MoodlightData.Enabled ? 1 : 0));
+                }
             }
             else
             {

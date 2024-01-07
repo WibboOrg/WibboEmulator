@@ -8,6 +8,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Database.Daos.Room;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.Chats.Logs;
 using WibboEmulator.Games.GameClients;
@@ -31,8 +32,8 @@ public class Room : IDisposable
     private readonly CancellationTokenSource _cancellationTokenSource = new();
     private readonly TimeSpan _maximumRunTimeInSec = TimeSpan.FromSeconds(1);
 
-    private readonly TimeSpan _saveFurnitureTimer = TimeSpan.FromMinutes(2);
-    private DateTime _saveFurnitureTimerLast = DateTime.Now;
+    private readonly TimeSpan _saveRoomTimer = TimeSpan.FromMinutes(2);
+    private DateTime _saveRoomTimerLast = DateTime.Now;
 
     private readonly Dictionary<int, double> _bans;
     private readonly Dictionary<int, double> _mutes;
@@ -118,18 +119,20 @@ public class Room : IDisposable
         this.TeamManager = new TeamManager();
         this.Soccer = new Soccer(this);
 
-        this.ChatlogManager.LoadRoomChatlogs(this.Id);
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
-        this.RoomItemHandling.LoadFurniture();
+        this.ChatlogManager.LoadRoomChatlogs(this.Id, dbClient);
+
+        this.RoomItemHandling.LoadFurniture(dbClient);
         if (this.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
         {
-            this.RoomItemHandling.LoadFurniture(WibboEnvironment.GetSettings().GetData<int>("autogame.deco.room.id"));
+            this.RoomItemHandling.LoadFurniture(dbClient, WibboEnvironment.GetSettings().GetData<int>("autogame.deco.room.id"));
         }
 
         this.GameMap.GenerateMaps(true);
-        this.LoadRights();
-        this.LoadBots();
-        this.LoadPets();
+        this.LoadRights(dbClient);
+        this.LoadBots(dbClient);
+        this.LoadPets(dbClient);
 
         this.WiredHandler.SecurityEnabled = data.WiredSecurity;
 
@@ -229,9 +232,8 @@ public class Room : IDisposable
 
     public void AddTagRange(List<string> tags) => this.RoomData.Tags.AddRange(tags);
 
-    private void LoadBots()
+    private void LoadBots(IQueryAdapter dbClient)
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         var table = BotUserDao.GetOneByRoomId(dbClient, this.Id);
         if (table == null)
         {
@@ -245,9 +247,8 @@ public class Room : IDisposable
         }
     }
 
-    public void LoadPets()
+    public void LoadPets(IQueryAdapter dbClient)
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         var table = BotPetDao.GetAllByRoomId(dbClient, this.Id);
         if (table == null)
         {
@@ -288,14 +289,11 @@ public class Room : IDisposable
         }
     }
 
-    public void LoadRights()
+    public void LoadRights(IQueryAdapter dbClient)
     {
         this.UsersWithRights = new List<int>();
-        var dataTable = new DataTable();
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            dataTable = RoomRightDao.GetAllByRoomId(dbClient, this.RoomData.Id);
-        }
+
+        var dataTable = RoomRightDao.GetAllByRoomId(dbClient, this.RoomData.Id);
 
         if (dataTable == null)
         {
@@ -452,11 +450,16 @@ public class Room : IDisposable
                 this.RoomUserManager.SerializeStatusUpdates();
             }
 
-            if (timeStarted > this._saveFurnitureTimerLast + this._saveFurnitureTimer)
+            if (timeStarted > this._saveRoomTimerLast + this._saveRoomTimer)
             {
-                this._saveFurnitureTimerLast = timeStarted;
+                this._saveRoomTimerLast = timeStarted;
 
-                this.RoomItemHandling.SaveFurniture();
+                using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+                {
+                    RoomDao.UpdateUsersNow(dbClient, this.Id, this.UserCount);
+
+                    this.RoomItemHandling.SaveFurniture(dbClient);
+                }
             }
 
             var timeEnded = DateTime.Now;
@@ -619,7 +622,12 @@ public class Room : IDisposable
 
         this._cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(1));
 
-        this.RoomItemHandling.SaveFurniture();
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        {
+            RoomDao.UpdateUsersNow(dbClient, this.Id, 0);
+
+            this.RoomItemHandling.SaveFurniture(dbClient);
+        }
 
         this.RoomData.Tags.Clear();
         this.UsersWithRights.Clear();

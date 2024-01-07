@@ -10,9 +10,9 @@ internal sealed class MarketPlaceOwnOffersComposer : ServerPacket
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         var table = CatalogMarketplaceOfferDao.GetOneByUserId(dbClient, userId);
 
-        var i = CatalogMarketplaceOfferDao.GetSunPrice(dbClient, userId);
+        var sunPrice = CatalogMarketplaceOfferDao.GetSunPrice(dbClient, userId);
 
-        this.WriteInteger(i);
+        this.WriteInteger(sunPrice);
         if (table != null)
         {
             this.WriteInteger(table.Rows.Count);

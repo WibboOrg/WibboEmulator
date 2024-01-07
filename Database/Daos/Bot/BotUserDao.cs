@@ -100,11 +100,7 @@ internal sealed class BotUserDao
 
     internal static void UpdateRotation(IQueryAdapter dbClient, int botId, int rotBody) => dbClient.RunQuery("UPDATE `bot_user` SET rotation = '" + rotBody + "' WHERE id = '" + botId + "'");
 
-    internal static void UpdateStatus1(IQueryAdapter dbClient, int botId) => dbClient.RunQuery("UPDATE `bot_user` SET status = '1' WHERE id = '" + botId + "'");
-
-    internal static void UpdateStatus0(IQueryAdapter dbClient, int botId) => dbClient.RunQuery("UPDATE `bot_user` SET status = '0' WHERE id = '" + botId + "'");
-
-    internal static void UpdateStatus2(IQueryAdapter dbClient, int botId) => dbClient.RunQuery("UPDATE `bot_user` SET status = '2' WHERE id = '" + botId + "'");
+    internal static void UpdateStatus(IQueryAdapter dbClient, int botId, int status) => dbClient.RunQuery("UPDATE `bot_user` SET status = '" + status + "' WHERE id = '" + botId + "'");
 
     internal static DataTable GetOneByRoomId(IQueryAdapter dbClient, int roomId)
     {

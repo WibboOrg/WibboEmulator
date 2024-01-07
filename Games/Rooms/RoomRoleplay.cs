@@ -180,7 +180,7 @@ public class RoomRoleplay
 
         this._roomInstance.MoodlightData.Enabled = true;
         this._roomInstance.MoodlightData.CurrentPreset = 1;
-        this._roomInstance.MoodlightData.UpdatePreset(1, "#000000", this.Intensity, false);
+        this._roomInstance.MoodlightData.UpdatePreset(1, "#000000", this.Intensity, false, false);
         roomItem.ExtraData = this._roomInstance.MoodlightData.GenerateExtraData();
         roomItem.UpdateState();
     }

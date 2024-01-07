@@ -24,25 +24,13 @@ public class MoodlightData
         };
     }
 
-    public void Enable()
+    public void Enable() => this.Enabled = true;
+
+    public void Disable() => this.Enabled = false;
+
+    public void UpdatePreset(int preset, string color, int intensity, bool bgOnly, bool inDb = true)
     {
-        this.Enabled = true;
-
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        ItemMoodlightDao.UpdateEnable(dbClient, this.ItemId, 1);
-    }
-
-    public void Disable()
-    {
-        this.Enabled = false;
-
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        ItemMoodlightDao.UpdateEnable(dbClient, this.ItemId, 0);
-    }
-
-    public void UpdatePreset(int preset, string color, int intensity, bool bgOnly, bool hax = false)
-    {
-        if (!IsValidColor(color) || (!IsValidIntensity(intensity) && !hax))
+        if (!IsValidColor(color) || !IsValidIntensity(intensity))
         {
             return;
         }
@@ -53,8 +41,10 @@ public class MoodlightData
             2 => "two",
             _ => "one",
         };
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+
+        if (inDb)
         {
+            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             ItemMoodlightDao.Update(dbClient, this.ItemId, color, pr, intensity, bgOnly);
         }
 

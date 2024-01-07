@@ -59,7 +59,6 @@ internal sealed class ModifyWhoCanRideHorseEvent : IPacketEvent
             }
         }
 
-
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
             BotPetDao.UpdateAnyoneRide(dbClient, petId, pet.PetData.AnyoneCanRide);

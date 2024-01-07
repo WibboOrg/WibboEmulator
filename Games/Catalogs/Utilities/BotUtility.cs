@@ -1,19 +1,19 @@
 namespace WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Database.Daos.Bot;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Users.Inventory.Bots;
 
 public static class BotUtility
 {
-    public static Bot CreateBot(ItemData data, int ownerId)
+    public static Bot CreateBot(IQueryAdapter dbClient, ItemData data, int ownerId)
     {
         if (!WibboEnvironment.GetGame().GetCatalog().TryGetBot(data.Id, out var cataBot))
         {
             return null;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         var id = BotUserDao.InsertAndGetId(dbClient, ownerId, cataBot.Name, cataBot.Motto, cataBot.Figure, cataBot.Gender);
 
         return new Bot(id, ownerId, cataBot.Name, cataBot.Motto, cataBot.Figure, cataBot.Gender, false, true, "", 0, false, 0, 0, 0, BotAIType.Generic);

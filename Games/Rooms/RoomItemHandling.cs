@@ -6,6 +6,7 @@ using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
@@ -126,7 +127,7 @@ public class RoomItemHandling
 
     public void SetSpeed(int p) => this._rollerSpeed = p;
 
-    public void LoadFurniture(int roomId = 0)
+    public void LoadFurniture(IQueryAdapter dbClient, int roomId = 0)
     {
         if (roomId == 0)
         {
@@ -134,7 +135,6 @@ public class RoomItemHandling
             this._wallItems.Clear();
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         int itemID;
         int userId;
         int baseID;
@@ -486,7 +486,7 @@ public class RoomItemHandling
         return new SlideObjectBundleComposer(x, y, z, nextCoord.X, nextCoord.Y, nextZ, user.VirtualId, rollerID, false);
     }
 
-    public void SaveFurniture()
+    public void SaveFurniture(IQueryAdapter dbClient)
     {
         try
         {
@@ -494,8 +494,6 @@ public class RoomItemHandling
             {
                 return;
             }
-
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
             if (!this._updateItems.IsEmpty)
             {

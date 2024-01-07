@@ -29,7 +29,7 @@ internal sealed class RoomRightDao
         return dbClient.GetTable();
     }
 
-    internal static void DeleteList(IQueryAdapter dbClient, int roomId, List<int> userIds)
+    internal static void DeleteAll(IQueryAdapter dbClient, int roomId, List<int> userIds)
     {
         var deleteParams = new StringBuilder();
 

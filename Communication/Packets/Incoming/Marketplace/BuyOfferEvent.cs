@@ -5,6 +5,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalogs.Marketplace;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
@@ -23,28 +24,28 @@ internal sealed class BuyOfferEvent : IPacketEvent
 
         if (row == null)
         {
-            ReloadOffers(session);
+            ReloadOffers(session, dbClient);
             return;
         }
 
         if (Convert.ToString(row["state"]) == "2")
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.1", session.Langue));
-            ReloadOffers(session);
+            ReloadOffers(session, dbClient);
             return;
         }
 
         if (MarketplaceManager.FormatTimestamp() > Convert.ToDouble(row["timestamp"]))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.2", session.Langue));
-            ReloadOffers(session);
+            ReloadOffers(session, dbClient);
             return;
         }
 
         if (!WibboEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(row["item_id"]), out var item))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.3", session.Langue));
-            ReloadOffers(session);
+            ReloadOffers(session, dbClient);
             return;
         }
         else
@@ -101,17 +102,15 @@ internal sealed class BuyOfferEvent : IPacketEvent
             }
         }
 
-        ReloadOffers(session);
+        ReloadOffers(session, dbClient);
     }
 
-    private static void ReloadOffers(GameClient session)
+    private static void ReloadOffers(GameClient session, IQueryAdapter dbClient)
     {
         var minCost = -1;
         var maxCost = -1;
         var searchQuery = "";
         var filterMode = 1;
-
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
         var table = CatalogMarketplaceOfferDao.GetAll(dbClient, searchQuery, minCost, maxCost, filterMode);
 

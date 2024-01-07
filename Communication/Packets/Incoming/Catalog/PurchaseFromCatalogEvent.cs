@@ -372,7 +372,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                 break;
 
             case "r":
-                var bot = BotUtility.CreateBot(item.Data, session.User.Id);
+                var bot = BotUtility.CreateBot(dbClient, item.Data, session.User.Id);
                 if (bot != null)
                 {
                     if (!session.User.InventoryComponent.TryAddBot(bot))

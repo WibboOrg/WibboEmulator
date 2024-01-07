@@ -10,7 +10,7 @@ internal sealed class ItemMoodlightDao
         return dbClient.GetRow();
     }
 
-    internal static void UpdateEnable(IQueryAdapter dbClient, int itemId, int enabled) => dbClient.RunQuery("UPDATE `item_moodlight` SET enabled = '" + enabled + "' WHERE item_id = '" + itemId + "' LIMIT 1");
+    internal static string UpdateEnableString(int itemId, int enabled) => "UPDATE `item_moodlight` SET enabled = '" + enabled + "' WHERE item_id = '" + itemId + "' LIMIT 1";
 
     internal static void Update(IQueryAdapter dbClient, int itemId, string color, string pr, int intensity, bool bgOnly)
     {
