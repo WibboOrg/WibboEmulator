@@ -22,7 +22,9 @@ internal sealed class LoadRoomItems : IChatCommand
             return;
         }
 
-        room.RoomItemHandling.LoadFurniture(roomId);
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+        room.RoomItemHandling.LoadFurniture(dbClient, roomId);
         room.GameMap.GenerateMaps(true);
         session.SendWhisper("Mobi de l'appart n° " + roomId + " chargé!");
         session.SendPacket(new GetGuestRoomResultComposer(session, room.RoomData, false, true));
