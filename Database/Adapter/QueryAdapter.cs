@@ -1,6 +1,6 @@
 namespace WibboEmulator.Database.Adapter;
 using System.Data;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Interfaces;
 
@@ -8,8 +8,6 @@ public class QueryAdapter : IRegularQueryAdapter
 {
     public IDatabaseClient Client { get; set; }
     public MySqlCommand Command { get; set; }
-
-    private readonly bool _dbEnabled = true;
 
     public QueryAdapter(IDatabaseClient client) => this.Client = client;
 
@@ -97,10 +95,6 @@ public class QueryAdapter : IRegularQueryAdapter
     public DataTable GetTable()
     {
         var dataTable = new DataTable();
-        if (!this._dbEnabled)
-        {
-            return dataTable;
-        }
 
         try
         {
@@ -117,11 +111,6 @@ public class QueryAdapter : IRegularQueryAdapter
 
     public void RunQuery(string query)
     {
-        if (!this._dbEnabled)
-        {
-            return;
-        }
-
         this.SetQuery(query);
         this.RunQuery();
     }
@@ -134,11 +123,6 @@ public class QueryAdapter : IRegularQueryAdapter
 
     public long InsertQuery()
     {
-        if (!this._dbEnabled)
-        {
-            return 0;
-        }
-
         var lastInsertedId = 0L;
         try
         {
@@ -154,11 +138,6 @@ public class QueryAdapter : IRegularQueryAdapter
 
     public void RunQuery()
     {
-        if (!this._dbEnabled)
-        {
-            return;
-        }
-
         try
         {
             _ = this.Command.ExecuteNonQuery();

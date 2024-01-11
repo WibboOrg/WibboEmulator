@@ -9,7 +9,7 @@ public class NormaldbClient : QueryAdapter, IQueryAdapter, IRegularQueryAdapter,
     public void Dispose()
     {
         this.Command.Dispose();
-        this.Client.ReportDone();
+        this.Client.Dispose();
         GC.SuppressFinalize(this);
     }
 }

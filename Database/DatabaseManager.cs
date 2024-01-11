@@ -1,6 +1,7 @@
 namespace WibboEmulator.Database;
 
-using MySql.Data.MySqlClient;
+using System.Data;
+using MySqlConnector;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Interfaces;
 
@@ -15,7 +16,6 @@ public sealed class DatabaseManager
             ConnectionTimeout = 300,
             Database = databaseConfiguration.Name,
             DefaultCommandTimeout = 300,
-            Logging = false,
             MaximumPoolSize = databaseConfiguration.MaximumPoolSize,
             MinimumPoolSize = databaseConfiguration.MinimumPoolSize,
             Password = databaseConfiguration.Password,
@@ -23,8 +23,7 @@ public sealed class DatabaseManager
             Port = databaseConfiguration.Port,
             Server = databaseConfiguration.Hostname,
             UserID = databaseConfiguration.Username,
-            AllowZeroDateTime = true,
-            CharacterSet = "utf8mb4"
+            AllowZeroDateTime = true
         };
 
         this._connectionStr = connectionStringBuilder.ToString();
@@ -34,7 +33,7 @@ public sealed class DatabaseManager
     {
         try
         {
-            using var con = new MySqlConnection(this._connectionStr);
+            using var con = this.Connection();
             con.Open();
             using var cmd = con.CreateCommand();
             cmd.CommandText = "SELECT 1+1";
@@ -56,7 +55,7 @@ public sealed class DatabaseManager
         {
             IDatabaseClient dbConnection = new DatabaseConnection(this._connectionStr);
 
-            dbConnection.Connect();
+            dbConnection.Open();
 
             return dbConnection.GetQueryReactor();
         }
@@ -71,4 +70,6 @@ public sealed class DatabaseManager
             return null;
         }
     }
+
+    public IDbConnection Connection() => new MySqlConnection(this._connectionStr);
 }

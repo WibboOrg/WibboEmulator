@@ -1,6 +1,6 @@
 namespace WibboEmulator.Database;
 using System.Data;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Adapter;
 using WibboEmulator.Database.Interfaces;
@@ -27,13 +27,7 @@ public class DatabaseConnection : IDatabaseClient, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public void Connect() => this.Open();
-
-    public void Disconnect() => this.Close();
-
     public IQueryAdapter GetQueryReactor() => this._adapter;
-
-    public void ReportDone() => this.Dispose();
 
     public MySqlCommand CreateNewCommand() => this._con.CreateCommand();
 
