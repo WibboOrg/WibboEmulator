@@ -53,7 +53,7 @@ internal sealed class OpenGiftEvent : IPacketEvent
                 return;
             }
 
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(itemPresent.BaseId), out _))
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(itemPresent.BaseId, out _))
             {
                 room.RoomItemHandling.RemoveFurniture(null, present.Id);
 

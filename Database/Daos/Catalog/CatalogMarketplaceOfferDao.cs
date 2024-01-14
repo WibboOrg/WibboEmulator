@@ -16,7 +16,7 @@ internal sealed class CatalogMarketplaceOfferDao
     internal static void UpdateState(IDbConnection dbClient, int offerId) => dbClient.Execute(
         "UPDATE `catalog_marketplace_offer` SET state = '2' WHERE offer_id = '" + offerId + "' LIMIT 1");
 
-    internal static List<CatalogMarketplaceOfferEntity> GetAll(IDbConnection dbConnection, string searchQuery, int minCost, int maxCost, int filterMode)
+    internal static List<CatalogMarketplaceOfferEntity> GetAll(IDbConnection dbClient, string searchQuery, int minCost, int maxCost, int filterMode)
     {
         var builder = new StringBuilder();
         _ = builder.Append("WHERE state = '1' AND timestamp >= " + MarketplaceManager.FormatTimestamp());
@@ -42,7 +42,7 @@ internal sealed class CatalogMarketplaceOfferDao
             _ = builder.Append(" AND public_name LIKE @SearchQuery");
         }
 
-        return dbConnection.Query<CatalogMarketplaceOfferEntity>(
+        return dbClient.Query<CatalogMarketplaceOfferEntity>(
             @"SELECT offer_id, item_type, sprite_id, total_price, limited_number, limited_stack 
             FROM catalog_marketplace_offer 
             " + builder + " " + str + " LIMIT 500",
@@ -50,7 +50,7 @@ internal sealed class CatalogMarketplaceOfferDao
         ).ToList();
     }
 
-    internal static void DeleteUserOffer(IDbConnection dbConnection, int offerId, int userId) => dbConnection.Execute(
+    internal static void DeleteUserOffer(IDbConnection dbClient, int offerId, int userId) => dbClient.Execute(
         "DELETE FROM catalog_marketplace_offer WHERE offer_id = @OfferId AND user_id = @UserId LIMIT 1",
         new { OfferId = offerId, UserId = userId });
 
@@ -61,7 +61,7 @@ internal sealed class CatalogMarketplaceOfferDao
         LIMIT 1",
         new { OfferId = offerId });
 
-    internal static void Insert(IDbConnection dbConnection, string itemName, string extraData, int itemId, int baseItem, int userId, int sellingPrice, int totalPrice, int spriteId, int itemType, int limited, int limitedStack) => dbConnection.Execute(
+    internal static void Insert(IDbConnection dbClient, string itemName, string extraData, int itemId, int baseItem, int userId, int sellingPrice, int totalPrice, int spriteId, int itemType, int limited, int limitedStack) => dbClient.Execute(
         @"INSERT INTO catalog_marketplace_offer 
         (furni_id, item_id, user_id, asking_price, total_price, public_name, sprite_id, item_type, timestamp, extra_data, limited_number, limited_stack) 
         VALUES (@ItemId, @BaseItem, @UserId, @SellingPrice, @TotalPrice, @PublicName, @SpriteId, @ItemType, @Timestamp, @ExtraData, @Limited, @LimitedStack)",

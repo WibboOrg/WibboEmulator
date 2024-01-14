@@ -85,7 +85,7 @@ internal sealed class RoomDao
         SELECT LAST_INSERT_ID();",
         new { Caption = username, Desc = desc, Username = username });
 
-    internal static List<RoomEntity> GetAllSearchByUsername(IDbConnection dbConnection, string searchData) => dbConnection.Query<RoomEntity>(
+    internal static List<RoomEntity> GetAllSearchByUsername(IDbConnection dbClient, string searchData) => dbClient.Query<RoomEntity>(
         @"SELECT room.id, room.caption, room.owner, room.description, room.category, room.state, room.users_max, room.model_name, room.score, room.tags, 
         room.password, room.wallpaper, room.floor, room.landscape, room.allow_pets, room.allow_pets_eat, room.allow_walkthrough, room.allow_hidewall, 
         room.wallthick, room.floorthick, room.moderation_mute_fuse, room.allow_rightsoverride, room.moderation_kick_fuse, room.moderation_ban_fuse, 
@@ -113,7 +113,7 @@ internal sealed class RoomDao
         new { Query = searchData.Replace("%", "\\%").Replace("_", "\\_") + "%" }
     ).ToList();
 
-    internal static int InsertDuplicate(IDbConnection dbConnection, int roomId, string username) => dbConnection.ExecuteScalar<int>(
+    internal static int InsertDuplicate(IDbConnection dbClient, int roomId, string username) => dbClient.ExecuteScalar<int>(
         @"INSERT INTO room (caption, owner, description, model_name, wallpaper, floor, landscape, allow_hidewall, wallthick, floorthick, allow_rightsoverride, allow_hidewireds)
         SELECT 'Appart @RoomId copie', @Username, description, model_name, wallpaper, floor, landscape, allow_hidewall, wallthick, floorthick, allow_rightsoverride, allow_hidewireds 
         FROM room 

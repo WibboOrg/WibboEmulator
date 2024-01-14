@@ -8,12 +8,12 @@ internal sealed class GuildRequestDao
         "DELETE FROM `guild_request` WHERE group_id = @GroupId",
         new { GroupId = groupId });
 
-    internal static List<int> GetAll(IDbConnection dbConnection, int groupId) => dbConnection.Query<int>(
+    internal static List<int> GetAll(IDbConnection dbClient, int groupId) => dbClient.Query<int>(
         "SELECT user_id FROM guild_request WHERE group_id = @GroupId",
         new { GroupId = groupId }
     ).ToList();
 
-    internal static List<int> GetAllBySearch(IDbConnection dbConnection, int groupId, string searchVal) => dbConnection.Query<int>(
+    internal static List<int> GetAllBySearch(IDbConnection dbClient, int groupId, string searchVal) => dbClient.Query<int>(
         @"SELECT user.id 
         FROM guild_request 
         INNER JOIN user ON guild_request.user_id = user.id 
@@ -23,11 +23,11 @@ internal sealed class GuildRequestDao
         new { GroupId = groupId, Username = searchVal.Replace("%", "\\%").Replace("_", "\\_") + "%" }
     ).ToList();
 
-    internal static void Insert(IDbConnection dbConnection, int groupId, int userId) => dbConnection.Execute(
+    internal static void Insert(IDbConnection dbClient, int groupId, int userId) => dbClient.Execute(
         "INSERT INTO guild_request (user_id, group_id) VALUES (@UserId, @GroupId)",
         new { UserId = userId, GroupId = groupId });
 
-    internal static void Delete(IDbConnection dbConnection, int groupId, int userId) => dbConnection.Execute(
+    internal static void Delete(IDbConnection dbClient, int groupId, int userId) => dbClient.Execute(
         "DELETE FROM guild_request WHERE user_id = @UserId AND group_id = @GroupId LIMIT 1",
         new { UserId = userId, GroupId = groupId });
 }

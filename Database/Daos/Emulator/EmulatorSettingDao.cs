@@ -8,7 +8,7 @@ internal sealed class EmulatorSettingDao
         "SELECT `key`, `value` FROM `emulator_setting`"
     ).ToList();
 
-    internal static void Update(IDbConnection dbConnection, string key, string value) => dbConnection.Execute(
+    internal static void Update(IDbConnection dbClient, string key, string value) => dbClient.Execute(
         "UPDATE emulator_setting SET value = @Value WHERE key = @Key",
         new { Value = value, Key = key });
 

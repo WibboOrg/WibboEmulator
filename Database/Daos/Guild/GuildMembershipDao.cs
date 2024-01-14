@@ -8,7 +8,7 @@ internal sealed class GuildMembershipDao
         "DELETE FROM `guild_membership` WHERE group_id = @GroupId",
         new { GroupId = groupId });
 
-    internal static List<int> GetAllUserIdBySearchAndStaff(IDbConnection dbConnection, int groupId, string searchVal) => dbConnection.Query<int>(
+    internal static List<int> GetAllUserIdBySearchAndStaff(IDbConnection dbClient, int groupId, string searchVal) => dbClient.Query<int>(
         @"SELECT user.id 
         FROM guild_membership 
         INNER JOIN user ON guild_membership.user_id = user.id 
@@ -19,7 +19,7 @@ internal sealed class GuildMembershipDao
         new { GroupId = groupId, Username = searchVal.Replace("%", "\\%").Replace("_", "\\_") + "%" }
     ).ToList();
 
-    internal static List<int> GetAllUserIdBySearch(IDbConnection dbConnection, int groupId, string searchVal) => dbConnection.Query<int>(
+    internal static List<int> GetAllUserIdBySearch(IDbConnection dbClient, int groupId, string searchVal) => dbClient.Query<int>(
         @"SELECT user.id 
         FROM guild_membership 
         INNER JOIN user ON guild_membership.user_id = user.id 
@@ -34,15 +34,15 @@ internal sealed class GuildMembershipDao
         new { Id = id }
     ).ToList();
 
-    internal static void UpdateRank(IDbConnection dbConnection, int groupId, int userId, int rank) => dbConnection.Execute(
+    internal static void UpdateRank(IDbConnection dbClient, int groupId, int userId, int rank) => dbClient.Execute(
         "UPDATE guild_membership SET rank = @Rank WHERE user_id = @UserId AND group_id = @GroupId LIMIT 1",
         new { Rank = rank, UserId = userId, GroupId = groupId });
 
-    internal static void Delete(IDbConnection dbConnection, int groupId, int userId) => dbConnection.Execute(
+    internal static void Delete(IDbConnection dbClient, int groupId, int userId) => dbClient.Execute(
         "DELETE FROM guild_membership WHERE user_id = @UserId AND group_id = @GroupId LIMIT 1",
         new { UserId = userId, GroupId = groupId });
 
-    internal static void Insert(IDbConnection dbConnection, int groupId, int userId) => dbConnection.Execute(
+    internal static void Insert(IDbConnection dbClient, int groupId, int userId) => dbClient.Execute(
         "INSERT INTO guild_membership (user_id, group_id) VALUES (@UserId, @GroupId)",
         new { GroupId = groupId, UserId = userId });
 
