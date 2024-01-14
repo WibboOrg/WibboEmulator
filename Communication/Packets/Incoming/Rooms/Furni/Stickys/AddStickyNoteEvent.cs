@@ -40,7 +40,7 @@ internal sealed class AddStickyNoteEvent : IPacketEvent
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             ItemDao.UpdateRoomIdAndUserId(dbClient, id, room.Id, room.RoomData.OwnerId);
         }

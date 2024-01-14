@@ -2,8 +2,6 @@ namespace WibboEmulator.Database;
 
 using System.Data;
 using MySqlConnector;
-using WibboEmulator.Core;
-using WibboEmulator.Database.Interfaces;
 
 public sealed class DatabaseManager
 {
@@ -27,6 +25,8 @@ public sealed class DatabaseManager
         };
 
         this._connectionStr = connectionStringBuilder.ToString();
+
+        Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
     }
 
     public bool IsConnected()
@@ -47,28 +47,6 @@ public sealed class DatabaseManager
         }
 
         return true;
-    }
-
-    public IQueryAdapter GetQueryReactor()
-    {
-        try
-        {
-            IDatabaseClient dbConnection = new DatabaseConnection(this._connectionStr);
-
-            dbConnection.Open();
-
-            return dbConnection.GetQueryReactor();
-        }
-        catch (MySqlException e)
-        {
-            ExceptionLogger.LogException($"Database connection error: {e.Message}");
-            return null;
-        }
-        catch (Exception e)
-        {
-            ExceptionLogger.LogException($"Unexpected error: {e.Message}");
-            return null;
-        }
     }
 
     public IDbConnection Connection() => new MySqlConnection(this._connectionStr);

@@ -6,7 +6,6 @@ using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.Item;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
@@ -84,7 +83,7 @@ public class RoomItemHandling
         this._itemsTemp.Clear();
         this._updateItems.Clear();
         this._rollers.Clear();
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             ItemDao.UpdateRoomIdAndUserId(dbClient, this._roomInstance.RoomData.OwnerId, this._roomInstance.Id);
         }
@@ -117,7 +116,7 @@ public class RoomItemHandling
             listMessage.Add(item.IsWallItem ? new ItemRemoveComposer(item.Id, this._roomInstance.RoomData.OwnerId) : new ObjectRemoveComposer(item.Id, this._roomInstance.RoomData.OwnerId));
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         ItemDao.UpdateItems(dbClient, items, session.User.Id);
 
         this._roomInstance.SendMessage(listMessage);
@@ -127,7 +126,7 @@ public class RoomItemHandling
 
     public void SetSpeed(int p) => this._rollerSpeed = p;
 
-    public void LoadFurniture(IQueryAdapter dbClient, int roomId = 0)
+    public void LoadFurniture(IDbConnection dbClient, int roomId = 0)
     {
         if (roomId == 0)
         {
@@ -142,7 +141,7 @@ public class RoomItemHandling
         int x;
         int y;
         double z;
-        sbyte rot;
+        int rot;
         string wallposs;
         int limited;
         int limitedTo;
@@ -160,28 +159,33 @@ public class RoomItemHandling
         string moodlightPresetTwo;
         string moodlightPresetThree;
 
-        var itemTable = ItemDao.GetAll(dbClient, (roomId == 0) ? this._roomInstance.Id : roomId);
+        var itemList = ItemDao.GetAll(dbClient, (roomId == 0) ? this._roomInstance.Id : roomId);
 
-        foreach (DataRow dataRow in itemTable.Rows)
+        if (itemList.Count == 0)
         {
-            itemID = Convert.ToInt32(dataRow["id"]);
-            userId = Convert.ToInt32(dataRow["user_id"]);
-            baseID = Convert.ToInt32(dataRow["base_item"]);
-            extraData = !DBNull.Value.Equals(dataRow["extra_data"]) ? (string)dataRow["extra_data"] : string.Empty;
-            x = Convert.ToInt32(dataRow["x"]);
-            y = Convert.ToInt32(dataRow["y"]);
-            z = Convert.ToDouble(dataRow["z"]);
-            rot = Convert.ToSByte(dataRow["rot"]);
-            wallposs = !DBNull.Value.Equals(dataRow["wall_pos"]) ? (string)dataRow["wall_pos"] : string.Empty;
-            limited = !DBNull.Value.Equals(dataRow["limited_number"]) ? Convert.ToInt32(dataRow["limited_number"]) : 0;
-            limitedTo = !DBNull.Value.Equals(dataRow["limited_stack"]) ? Convert.ToInt32(dataRow["limited_stack"]) : 0;
+            return;
+        }
+
+        foreach (var item in itemList)
+        {
+            itemID = item.Id;
+            userId = item.UserId;
+            baseID = item.BaseItem;
+            extraData = item.ExtraData;
+            x = item.X;
+            y = item.Y;
+            z = item.Z;
+            rot = item.Rot;
+            wallposs = item.WallPos;
+            limited = item.LimitedNumber ?? 0;
+            limitedTo = item.LimitedStack ?? 0;
 
             if (!WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out var data))
             {
                 continue;
             }
 
-            if (data.Type.ToString() == "i")
+            if (data.Type == ItemType.I)
             {
                 if (string.IsNullOrEmpty(wallposs))
                 {
@@ -200,11 +204,11 @@ public class RoomItemHandling
 
                 if (roomItem.GetBaseItem().InteractionType == InteractionType.MOODLIGHT)
                 {
-                    moodlightEnabled = !DBNull.Value.Equals(dataRow["enabled"]) && Convert.ToBoolean(dataRow["enabled"]);
-                    moodlightCurrentPreset = !DBNull.Value.Equals(dataRow["current_preset"]) ? Convert.ToInt32(dataRow["current_preset"]) : 1;
-                    moodlightPresetOne = !DBNull.Value.Equals(dataRow["preset_one"]) ? (string)dataRow["preset_one"] : "#000000,255,0";
-                    moodlightPresetTwo = !DBNull.Value.Equals(dataRow["preset_two"]) ? (string)dataRow["preset_two"] : "#000000,255,0";
-                    moodlightPresetThree = !DBNull.Value.Equals(dataRow["preset_three"]) ? (string)dataRow["preset_three"] : "#000000,255,0";
+                    moodlightEnabled = item.Enabled;
+                    moodlightCurrentPreset = item.CurrentPreset;
+                    moodlightPresetOne = item.PresetOne;
+                    moodlightPresetTwo = item.PresetTwo;
+                    moodlightPresetThree = item.PresetThree;
 
                     this._roomInstance.MoodlightData ??= new MoodlightData(roomItem.Id, moodlightEnabled, moodlightCurrentPreset, moodlightPresetOne, moodlightPresetTwo, moodlightPresetThree);
                 }
@@ -220,11 +224,11 @@ public class RoomItemHandling
 
                 if (WiredUtillity.TypeIsWired(data.InteractionType))
                 {
-                    wiredTriggerData = !DBNull.Value.Equals(dataRow["trigger_data"]) ? (string)dataRow["trigger_data"] : string.Empty;
-                    wiredTriggerData2 = !DBNull.Value.Equals(dataRow["trigger_data_2"]) ? (string)dataRow["trigger_data_2"] : string.Empty;
-                    wiredTriggersItem = !DBNull.Value.Equals(dataRow["triggers_item"]) ? (string)dataRow["triggers_item"] : string.Empty;
-                    wiredAllUserTriggerable = !DBNull.Value.Equals(dataRow["all_user_triggerable"]) && Convert.ToBoolean(dataRow["all_user_triggerable"]);
-                    wiredDelay = !DBNull.Value.Equals(dataRow["delay"]) ? Convert.ToInt32(dataRow["delay"]) : 0;
+                    wiredTriggerData = item.TriggerData;
+                    wiredTriggerData2 = item.TriggerData2;
+                    wiredTriggersItem = item.TriggersItem;
+                    wiredAllUserTriggerable = item.AllUserTriggerable;
+                    wiredDelay = item.Delay;
 
                     WiredRegister.HandleRegister(roomItem, this._roomInstance, wiredTriggerData, wiredTriggerData2, wiredTriggersItem, wiredAllUserTriggerable, wiredDelay);
                 }
@@ -486,7 +490,7 @@ public class RoomItemHandling
         return new SlideObjectBundleComposer(x, y, z, nextCoord.X, nextCoord.Y, nextZ, user.VirtualId, rollerID, false);
     }
 
-    public void SaveFurniture(IQueryAdapter dbClient)
+    public void SaveFurniture(IDbConnection dbClient)
     {
         try
         {
@@ -742,15 +746,15 @@ public class RoomItemHandling
             item.Interactor.OnPlace(session, item);
             if (item.GetBaseItem().InteractionType == InteractionType.MOODLIGHT && this._roomInstance.MoodlightData == null)
             {
-                using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
                 var moodlightRow = ItemMoodlightDao.GetOne(dbClient, item.Id);
 
-                var moodlightEnabled = moodlightRow != null && Convert.ToBoolean(moodlightRow["enabled"]);
-                var moodlightCurrentPreset = moodlightRow != null ? Convert.ToInt32(moodlightRow["current_preset"]) : 1;
-                var moodlightPresetOne = moodlightRow != null ? (string)moodlightRow["preset_one"] : "#000000,255,0";
-                var moodlightPresetTwo = moodlightRow != null ? (string)moodlightRow["preset_two"] : "#000000,255,0";
-                var moodlightPresetThree = moodlightRow != null ? (string)moodlightRow["preset_three"] : "#000000,255,0";
+                var moodlightEnabled = moodlightRow != null && moodlightRow.Enabled;
+                var moodlightCurrentPreset = moodlightRow != null ? moodlightRow.CurrentPreset : 1;
+                var moodlightPresetOne = moodlightRow != null ? moodlightRow.PresetOne : "#000000,255,0";
+                var moodlightPresetTwo = moodlightRow != null ? moodlightRow.PresetTwo : "#000000,255,0";
+                var moodlightPresetThree = moodlightRow != null ? moodlightRow.PresetThree : "#000000,255,0";
 
                 this._roomInstance.MoodlightData = new MoodlightData(item.Id, moodlightEnabled, moodlightCurrentPreset, moodlightPresetOne, moodlightPresetTwo, moodlightPresetThree);
                 item.ExtraData = this._roomInstance.MoodlightData.GenerateExtraData();

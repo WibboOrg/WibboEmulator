@@ -1,13 +1,10 @@
 namespace WibboEmulator.Database.Daos.Catalog;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
+using Dapper;
 
 internal sealed class CatalogItemLimitedDao
 {
-    internal static void Update(IQueryAdapter dbClient, int itemId, int limitedEditionSells)
-    {
-        dbClient.SetQuery("UPDATE `catalog_item_limited` SET `limited_sells` = @limitSells WHERE `catalog_item_id` = @itemId LIMIT 1");
-        dbClient.AddParameter("limitSells", limitedEditionSells);
-        dbClient.AddParameter("itemId", itemId);
-        dbClient.RunQuery();
-    }
+    internal static void Update(IDbConnection dbClient, int itemId, int limitSells) => dbClient.Execute(
+        "UPDATE `catalog_item_limited` SET `limited_sells` = @LimitSells WHERE `catalog_item_id` = @ItemId LIMIT 1",
+        new { LimitSells = limitSells, ItemId = itemId });
 }

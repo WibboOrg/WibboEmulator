@@ -32,7 +32,7 @@ internal sealed class DeleteRoomEvent : IPacketEvent
 
         WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoomDao.Delete(dbClient, roomId);
             UserFavoriteDao.Delete(dbClient, roomId);

@@ -3,7 +3,6 @@ using System.Data;
 using System.Text.RegularExpressions;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Daos.Room;
-using WibboEmulator.Database.Interfaces;
 
 public sealed partial class WordFilterManager
 {
@@ -16,7 +15,7 @@ public sealed partial class WordFilterManager
         this._pubWords = new List<string>();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         if (this._filteredWords.Count > 0)
         {
@@ -28,24 +27,21 @@ public sealed partial class WordFilterManager
             this._pubWords.Clear();
         }
 
-        var data = RoomSwearwordFilterDao.GetAll(dbClient);
+        var worlds = RoomSwearwordFilterDao.GetAll(dbClient);
 
-        if (data != null)
+        if (worlds.Count != 0)
         {
-            foreach (DataRow row in data.Rows)
+            foreach (var world in worlds)
             {
-                this._filteredWords.Add(Convert.ToString(row["word"]));
+                this._filteredWords.Add(world);
             }
         }
 
-        var dataTwo = WordFilterRetroDao.GetAll(dbClient);
+        var worldFilterRetros = WordFilterRetroDao.GetAll(dbClient);
 
-        if (dataTwo != null)
+        if (worldFilterRetros.Count != 0)
         {
-            foreach (DataRow row in dataTwo.Rows)
-            {
-                this._pubWords.Add(Convert.ToString(row["word"]));
-            }
+            this._pubWords.AddRange(worldFilterRetros);
         }
     }
 
@@ -55,7 +51,7 @@ public sealed partial class WordFilterManager
         {
             this._pubWords.Add(word);
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
             WordFilterRetroDao.Insert(dbClient, word);
         }
     }

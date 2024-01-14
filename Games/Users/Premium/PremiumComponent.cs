@@ -3,7 +3,7 @@ namespace WibboEmulator.Games.Users.Premium;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 
 public class PremiumComponent : IDisposable
 {
@@ -24,16 +24,16 @@ public class PremiumComponent : IDisposable
         this._expireLegend = DateTime.UtcNow;
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
-        var premiumData = UserPremiumDao.GetOne(dbClient, this._userInstance.Id);
+        var userPremium = UserPremiumDao.GetOne(dbClient, this._userInstance.Id);
 
-        if (premiumData != null)
+        if (userPremium != null)
         {
-            this._activated = DateTime.UnixEpoch.AddSeconds(Convert.ToInt32(premiumData["timestamp_activated"]));
-            this._expireClassic = DateTime.UnixEpoch.AddSeconds(Convert.ToInt32(premiumData["timestamp_expire_classic"]));
-            this._expireEpic = DateTime.UnixEpoch.AddSeconds(Convert.ToInt32(premiumData["timestamp_expire_epic"]));
-            this._expireLegend = DateTime.UnixEpoch.AddSeconds(Convert.ToInt32(premiumData["timestamp_expire_legend"]));
+            this._activated = DateTime.UnixEpoch.AddSeconds(userPremium.TimestampActivated);
+            this._expireClassic = DateTime.UnixEpoch.AddSeconds(userPremium.TimestampExpireClassic);
+            this._expireEpic = DateTime.UnixEpoch.AddSeconds(userPremium.TimestampExpireEpic);
+            this._expireLegend = DateTime.UnixEpoch.AddSeconds(userPremium.TimestampExpireLegend);
 
             this._hasEverBeenMember = true;
         }
@@ -41,7 +41,7 @@ public class PremiumComponent : IDisposable
         this.CheckPremiumTimeout(dbClient);
     }
 
-    public void CheckPremiumTimeout(IQueryAdapter dbClient = null)
+    public void CheckPremiumTimeout(IDbConnection dbClient = null)
     {
         if (this.IsPremiumLegend == false && this._userInstance.BadgeComponent.HasBadge("WC_LEGEND"))
         {
@@ -76,7 +76,7 @@ public class PremiumComponent : IDisposable
             {
                 this._userInstance.Rank = 1;
 
-                dbClient ??= WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                dbClient ??= WibboEnvironment.GetDatabaseManager().Connection();
                 UserDao.UpdateRank(dbClient, this._userInstance.Id, 1);
             }
         }
@@ -86,13 +86,13 @@ public class PremiumComponent : IDisposable
             {
                 this._userInstance.Rank = 2;
 
-                dbClient ??= WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                dbClient ??= WibboEnvironment.GetDatabaseManager().Connection();
                 UserDao.UpdateRank(dbClient, this._userInstance.Id, 2);
             }
         }
     }
 
-    public void AddPremiumDays(IQueryAdapter dbClient, int days, PremiumClubLevel clubLevel)
+    public void AddPremiumDays(IDbConnection dbClient, int days, PremiumClubLevel clubLevel)
     {
         var now = WibboEnvironment.GetUnixTimestamp();
 

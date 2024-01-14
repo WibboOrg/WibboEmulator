@@ -2,6 +2,7 @@ namespace WibboEmulator.Games.GameClients;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Text;
+using Dapper;
 using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
@@ -139,7 +140,7 @@ public class GameClientManager
         }
 
         var username = "";
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             username = UserDao.GetNameById(dbClient, id);
         }
@@ -419,7 +420,7 @@ public class GameClientManager
 
     public void CloseAll()
     {
-        var stringBuilder = new StringBuilder();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         foreach (var client in this.GetClients.ToList())
         {
@@ -428,15 +429,13 @@ public class GameClientManager
                 continue;
             }
 
-            if (client.User != null)
+            var user = client.User;
+
+            if (user != null)
             {
                 try
                 {
-                    var timeOnline = DateTime.Now - client.User.OnlineTime;
-                    var timeOnlineSec = (int)timeOnline.TotalSeconds;
-
-                    _ = stringBuilder.Append(UserDao.BuildUpdateQuery(client.User.Id, client.User.Duckets, client.User.Credits, client.User.BannerSelected != null ? client.User.BannerSelected.Id : -1));
-                    _ = stringBuilder.Append(UserStatsDao.BuildUpdateQuery(client.User.Id, client.User.FavouriteGroupId, timeOnlineSec, client.User.CurrentQuestId, client.User.Respect, client.User.DailyRespectPoints, client.User.DailyPetRespectPoints));
+                    user.SaveInfo(dbClient);
                 }
                 catch
                 {
@@ -444,18 +443,11 @@ public class GameClientManager
             }
         }
 
-        if (stringBuilder.Length > 0)
-        {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            dbClient.RunQuery(stringBuilder.ToString());
-        }
-
         Console.WriteLine("Done saving users inventory!");
         Console.WriteLine("Closing server connections...");
 
         foreach (var client in this.GetClients.ToList())
         {
-
             if (client == null || client.Connection == null)
             {
                 continue;
@@ -473,7 +465,7 @@ public class GameClientManager
         Console.WriteLine("Connections closed!");
     }
 
-    public void BanUser(GameClient client, string moderator, int lengthSeconds, string reason, bool ipBan, bool machineBan)
+    public void BanUser(GameClient client, string moderator, int lengthSeconds, string reason, bool ipBan)
     {
         if (string.IsNullOrEmpty(reason))
         {
@@ -490,18 +482,12 @@ public class GameClientManager
             str = "ip";
         }
 
-        if (machineBan)
-        {
-            variable = client.MachineId;
-            str = "machine";
-        }
-
         if (variable == "")
         {
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             if (str == "user")
             {
@@ -511,13 +497,9 @@ public class GameClientManager
             BanDao.InsertBan(dbClient, expire, str, variable, reason, moderator);
         }
 
-        if (machineBan)
+        if (ipBan)
         {
-            this.BanUser(client, moderator, lengthSeconds, reason, true, false);
-        }
-        else if (ipBan)
-        {
-            this.BanUser(client, moderator, lengthSeconds, reason, false, false);
+            this.BanUser(client, moderator, lengthSeconds, reason, false);
         }
         else
         {

@@ -1,6 +1,6 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -36,7 +36,7 @@ public class TeamJoin : WiredActionBase, IWired, IWiredEffect
         return false;
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient)
+    public void SaveToDatabase(IDbConnection dbClient)
     {
         var team = this.GetIntParam(0);
 

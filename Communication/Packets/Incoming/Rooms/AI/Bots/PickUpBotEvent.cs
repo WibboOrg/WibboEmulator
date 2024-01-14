@@ -50,7 +50,7 @@ internal sealed class PickUpBotEvent : IPacketEvent
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             BotUserDao.UpdateRoomId(dbClient, botId);
         }

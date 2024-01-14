@@ -15,7 +15,7 @@ internal sealed class UserSettingsCameraFollowEvent : IPacketEvent
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserDao.UpdateCameraFollowDisabled(dbClient, session.User.Id, flag);
         }

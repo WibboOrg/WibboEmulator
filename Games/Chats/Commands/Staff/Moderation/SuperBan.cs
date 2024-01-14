@@ -21,7 +21,7 @@ internal sealed class SuperBan : IChatCommand
         if (targetUser.User.Rank >= session.User.Rank)
         {
             userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
-            WibboEnvironment.GetGame().GetGameClientManager().BanUser(session, "Robot", -1, "Votre compte a été banni par sécurité !", false, false);
+            WibboEnvironment.GetGame().GetGameClientManager().BanUser(session, "Robot", -1, "Votre compte a été banni par sécurité !", false);
         }
         else
         {
@@ -40,7 +40,7 @@ internal sealed class SuperBan : IChatCommand
                 var raison = CommandManager.MergeParams(parameters, 3);
                 session.SendWhisper("Tu as SuperBan " + targetUser.User.Username + " pour" + raison + "!");
 
-                WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.User.Username, num, raison, false, false);
+                WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.User.Username, num, raison, false);
                 _ = session.User.CheckChatMessage(raison, "<CMD>", room.Id);
             }
         }

@@ -54,7 +54,7 @@ internal sealed class GiveLot : IChatCommand
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         var items = ItemFactory.CreateMultipleItems(dbClient, itemData, targetRoomUser.Client.User, "", lotCount);
 

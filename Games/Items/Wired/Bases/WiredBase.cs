@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Items.Wired.Bases;
+
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -143,7 +145,7 @@ public class WiredBase
         foreach (var itemId in this.StuffIds)
         {
             var item = this.RoomInstance.RoomItemHandling.GetItem(itemId);
-            if (item != null && item.GetBaseItem().Type == 's')
+            if (item != null && item.GetBaseItem().Type == ItemType.S)
             {
                 listItem.Add(item);
             }

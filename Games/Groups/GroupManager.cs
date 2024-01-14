@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Data;
 using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Database.Daos.Room;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Users;
 
 public class GroupManager
@@ -31,7 +30,7 @@ public class GroupManager
         this._backgroundColours = new Dictionary<int, GroupColours>();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this._bases.Clear();
         this._symbols.Clear();
@@ -39,30 +38,35 @@ public class GroupManager
         this._symbolColours.Clear();
         this._backgroundColours.Clear();
 
-        var dItems = GuildItemDao.GetAll(dbClient);
+        var guildItemList = GuildItemDao.GetAll(dbClient);
 
-        foreach (DataRow dRow in dItems.Rows)
+        if (guildItemList.Count == 0)
         {
-            switch (dRow["type"].ToString())
+            return;
+        }
+
+        foreach (var guildItem in guildItemList)
+        {
+            switch (guildItem.Type)
             {
-                case "base":
-                    this._bases.Add(new GroupBadgeParts(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
+                case GuildItemType.Base:
+                    this._bases.Add(new GroupBadgeParts(guildItem.Id, guildItem.FirstValue, guildItem.SecondValue));
                     break;
 
-                case "symbol":
-                    this._symbols.Add(new GroupBadgeParts(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
+                case GuildItemType.Symbol:
+                    this._symbols.Add(new GroupBadgeParts(guildItem.Id, guildItem.FirstValue, guildItem.SecondValue));
                     break;
 
-                case "color":
-                    this._baseColours.Add(new GroupColours(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
+                case GuildItemType.Color:
+                    this._baseColours.Add(new GroupColours(guildItem.Id, guildItem.FirstValue));
                     break;
 
-                case "color2":
-                    this._symbolColours.Add(Convert.ToInt32(dRow["id"]), new GroupColours(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
+                case GuildItemType.Color2:
+                    this._symbolColours.Add(guildItem.Id, new GroupColours(guildItem.Id, guildItem.FirstValue));
                     break;
 
-                case "color3":
-                    this._backgroundColours.Add(Convert.ToInt32(dRow["id"]), new GroupColours(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
+                case GuildItemType.Color3:
+                    this._backgroundColours.Add(guildItem.Id, new GroupColours(guildItem.Id, guildItem.FirstValue));
                     break;
             }
         }
@@ -70,6 +74,12 @@ public class GroupManager
 
     public bool TryGetGroup(int id, out Group group)
     {
+        if (id == 0)
+        {
+            group = null;
+            return false;
+        }
+
         if (this._groups.ContainsKey(id))
         {
             return this._groups.TryGetValue(id, out group);
@@ -77,22 +87,21 @@ public class GroupManager
 
         lock (this._groupLoadingSync)
         {
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+
+            var guild = GuildDao.GetOne(dbClient, id);
+
+            if (guild == null)
             {
-                var row = GuildDao.GetOne(dbClient, id);
-
-                if (row == null)
-                {
-                    group = null;
-                    return false;
-                }
-
-                group = new Group(
-                        Convert.ToInt32(row["id"]), Convert.ToString(row["name"]), Convert.ToString(row["desc"]), Convert.ToString(row["badge"]), Convert.ToInt32(row["room_id"]), Convert.ToInt32(row["owner_id"]),
-                        Convert.ToInt32(row["created"]), Convert.ToInt32(row["state"]), Convert.ToInt32(row["colour1"]), Convert.ToInt32(row["colour2"]), Convert.ToInt32(row["admindeco"]), Convert.ToBoolean(row["has_forum"]));
-
-                _ = this._groups.TryAdd(group.Id, group);
+                group = null;
+                return false;
             }
+
+            group = new Group(
+                    guild.Id, guild.Name, guild.Desc, guild.Badge, guild.RoomId, guild.OwnerId,
+                    guild.Created, guild.State, guild.Colour1, guild.Colour2, guild.AdminDeco, guild.HasForum);
+
+            _ = this._groups.TryAdd(group.Id, group);
 
             return true;
         }
@@ -100,13 +109,13 @@ public class GroupManager
 
     public bool TryCreateGroup(User user, string name, string description, int roomId, string badge, int colour1, int colour2, out Group group)
     {
-        group = new Group(0, name, description, badge, roomId, user.Id, WibboEnvironment.GetUnixTimestamp(), 0, colour1, colour2, 0, false);
+        group = new Group(0, name, description, badge, roomId, user.Id, WibboEnvironment.GetUnixTimestamp(), 0, colour1, colour2, false, false);
         if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(badge))
         {
             return false;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             group.Id = GuildDao.Insert(dbClient, group.Name, group.Description, group.CreatorId, group.Badge, group.RoomId, group.Colour1, group.Colour2);
 

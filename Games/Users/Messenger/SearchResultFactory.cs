@@ -1,5 +1,5 @@
 namespace WibboEmulator.Games.Users.Messenger;
-using System.Data;
+
 using WibboEmulator.Database.Daos.User;
 
 public class SearchResultFactory
@@ -8,13 +8,13 @@ public class SearchResultFactory
     {
         var list = new List<SearchResult>();
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
-            var table = UserDao.GetAllSearchUsers(dbClient, query);
+            var userList = UserDao.GetAllSearchUsers(dbClient, query);
 
-            foreach (DataRow dataRow in table.Rows)
+            foreach (var user in userList)
             {
-                list.Add(new SearchResult(Convert.ToInt32(dataRow["id"]), (string)dataRow["username"], (string)dataRow["motto"], Convert.ToInt32(dataRow["last_online"]), (string)dataRow["look"]));
+                list.Add(new SearchResult(user.Id, user.Username, user.Motto, user.LastOnline, user.Look));
             }
         }
 

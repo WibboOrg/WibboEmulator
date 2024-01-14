@@ -1,7 +1,6 @@
 namespace WibboEmulator.Games.Effects;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
-using WibboEmulator.Database.Interfaces;
 
 public class EffectManager
 {
@@ -15,22 +14,22 @@ public class EffectManager
         this._effectsStaff = new List<int>();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this.Effects.Clear();
         this._effectsStaff.Clear();
 
-        var table = EmulatorEffectDao.GetAll(dbClient);
-        if (table == null)
+        var emulatorEffectList = EmulatorEffectDao.GetAll(dbClient);
+        if (emulatorEffectList.Count == 0)
         {
             return;
         }
 
-        foreach (DataRow dataRow in table.Rows)
+        foreach (var emulatorEffect in emulatorEffectList)
         {
-            var effectId = Convert.ToInt32(dataRow["id"]);
+            var effectId = emulatorEffect.Id;
 
-            if ((Boolean)dataRow["only_staff"])
+            if (emulatorEffect.OnlyStaff)
             {
                 if (!this._effectsStaff.Contains(effectId))
                 {

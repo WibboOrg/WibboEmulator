@@ -21,7 +21,7 @@ internal sealed class WiredLimit : IChatCommand
 
         room.RoomData.WiredSecurity = room.WiredHandler.SecurityEnabled;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoomDao.UpdateWiredSecurity(dbClient, room.Id, room.RoomData.WiredSecurity);
         }

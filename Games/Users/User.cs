@@ -20,7 +20,6 @@ using WibboEmulator.Games.Users.Permissions;
 using WibboEmulator.Games.Users.Wardrobes;
 using WibboEmulator.Games.Users.Premium;
 using WibboEmulator.Utilities;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Communication.Packets.Outgoing.WibboTool;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
@@ -66,7 +65,6 @@ public class User : IDisposable, IEquatable<User>
     public int TeleportingRoomID { get; set; }
     public int TeleporterId { get; set; }
     public List<int> ClientVolume { get; set; }
-    public string MachineId { get; set; }
     public Language Langue { get; set; }
     public bool ForceOpenGift { get; set; }
     public int ForceUse { get; set; } = -1;
@@ -156,15 +154,13 @@ public class User : IDisposable, IEquatable<User>
         int wpoint, int limitCoins, int activityPoints, int homeRoom, int respect, int dailyRespectPoints,
         int dailyPetRespectPoints, bool hasFriendRequestsDisabled, int currentQuestID, int achievementPoints,
         int lastOnline, int favoriteGroup, int accountCreated, bool accepttrading, string ip, bool hideInroom,
-        bool hideOnline, int mazoHighScore, int mazo, string clientVolume, bool nuxenable, string machineId,
-        bool isFirstConnexionToday, Language langue, int ignoreAllExpire, bool ignoreRoomInvite, bool cameraFollowDisabled,
-        int gamePointsMonth, int bannerId)
+        bool hideOnline, int mazoHighScore, int mazo, string clientVolume, bool nuxenable, bool isFirstConnexionToday,
+        Language langue, int ignoreAllExpire, bool ignoreRoomInvite, bool cameraFollowDisabled, int gamePointsMonth, int bannerId)
     {
         this.Id = id;
         this.Username = username;
         this.Rank = rank;
         this.Motto = motto;
-        this.MachineId = machineId;
         this.Look = WibboEnvironment.GetFigureManager().ProcessFigure(look, gender, true);
         this.Gender = gender.ToUpper();
         this.Credits = credits;
@@ -241,60 +237,58 @@ public class User : IDisposable, IEquatable<User>
         this.OldChat = false;
     }
 
-    public void Init(IQueryAdapter dbClient, GameClient client)
+    public void Init(IDbConnection dbClient, GameClient client)
     {
         this.Client = client;
 
+        this.InventoryComponent = new InventoryComponent(this);
+        this.Permissions = new PermissionComponent();
         this.BadgeComponent = new BadgeComponent(this);
         this.AchievementComponent = new AchievementComponent(this);
-        this.InventoryComponent = new InventoryComponent(this);
         this.WardrobeComponent = new WardrobeComponent(this);
         this.Messenger = new MessengerComponent(this);
         this.ChatMessageManager = new ChatlogManager();
-        this.Permissions = new PermissionComponent();
         this.Premium = new PremiumComponent(this);
         this.Banner = new BannerComponent(this);
 
         this.BadgeComponent.Init(dbClient);
-        this.WardrobeComponent.Init(dbClient);
         this.AchievementComponent.Init(dbClient);
+        this.WardrobeComponent.Init(dbClient);
         this.Messenger.Init(dbClient, this.HideOnline);
         this.ChatMessageManager.LoadUserChatlogs(dbClient, this.Id);
         this.Premium.Init(dbClient);
         this.Banner.Init(dbClient);
 
-        var dUserRooms = RoomDao.GetAllIdByOwner(dbClient, this.Username);
-        foreach (DataRow dRow in dUserRooms.Rows)
+        var userRoomIdList = RoomDao.GetAllIdByOwner(dbClient, this.Username);
+        foreach (var userRoomId in userRoomIdList)
         {
-            this.UsersRooms.Add(Convert.ToInt32(dRow["id"]));
+            this.UsersRooms.Add(userRoomId);
         }
 
-        var dGroupMemberships = GuildMembershipDao.GetOneByUserId(dbClient, this.Id);
-        foreach (DataRow dRow in dGroupMemberships.Rows)
+        var guildMembershipList = GuildMembershipDao.GetAllByUserId(dbClient, this.Id);
+        foreach (var guildMembership in guildMembershipList)
         {
-            this.MyGroups.Add(Convert.ToInt32(dRow["group_id"]));
+            this.MyGroups.Add(guildMembership);
         }
 
-        var dQuests = UserQuestDao.GetAll(dbClient, this.Id);
-        foreach (DataRow dataRow in dQuests.Rows)
+        var userQuestList = UserQuestDao.GetAll(dbClient, this.Id);
+        foreach (var userQuest in userQuestList)
         {
-            var questId = Convert.ToInt32(dataRow["quest_id"]);
-            var progress = Convert.ToInt32(dataRow["progress"]);
+            var questId = userQuest.QuestId;
+            var progress = userQuest.Progress;
             this.Quests.Add(questId, progress);
         }
 
-        var dFavorites = UserFavoriteDao.GetAll(dbClient, this.Id);
-        foreach (DataRow dataRow in dFavorites.Rows)
+        var userFavoriteList = UserFavoriteDao.GetAll(dbClient, this.Id);
+        foreach (var userFavorite in userFavoriteList)
         {
-            var roomId = Convert.ToInt32(dataRow["room_id"]);
-            this.FavoriteRooms.Add(roomId);
+            this.FavoriteRooms.Add(userFavorite);
         }
 
-        var dRoomRights = RoomRightDao.GetAllByUserId(dbClient, this.Id);
-        foreach (DataRow dataRow in dRoomRights.Rows)
+        var roomRightList = RoomRightDao.GetAllByUserId(dbClient, this.Id);
+        foreach (var roomRight in roomRightList)
         {
-            var roomId = Convert.ToInt32(dataRow["room_id"]);
-            this.RoomRightsList.Add(roomId);
+            this.RoomRightsList.Add(roomRight);
         }
     }
 
@@ -309,7 +303,7 @@ public class User : IDisposable, IEquatable<User>
             .Where(s => s != null && s.User != null)
             .ToList();
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         LogChatDao.Insert(dbClient, this.Id, roomId, message, type, this.Username);
 
@@ -349,7 +343,7 @@ public class User : IDisposable, IEquatable<User>
         }
         else if (pubCount == 4)
         {
-            WibboEnvironment.GetGame().GetGameClientManager().BanUser(this.Client, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.Username, true, false);
+            WibboEnvironment.GetGame().GetGameClientManager().BanUser(this.Client, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.Username, true);
         }
 
         foreach (var staffUser in staffUsers)
@@ -423,15 +417,7 @@ public class User : IDisposable, IEquatable<User>
 
         ExceptionLogger.WriteLine(this.Username + " has logged out.");
 
-        if (!this.InfoSaved)
-        {
-            this.InfoSaved = true;
-            var timeOnline = DateTime.Now - this.OnlineTime;
-            var timeOnlineSec = (int)timeOnline.TotalSeconds;
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            UserDao.UpdateOffline(dbClient, this.Id, this.Duckets, this.Credits, this.BannerSelected != null ? this.BannerSelected.Id : -1);
-            UserStatsDao.UpdateAll(dbClient, this.Id, this.FavouriteGroupId, timeOnlineSec, this.CurrentQuestId, this.Respect, this.DailyRespectPoints, this.DailyPetRespectPoints);
-        }
+        this.SaveInfo();
 
         if (this.InRoom && this.CurrentRoom != null)
         {
@@ -474,51 +460,35 @@ public class User : IDisposable, IEquatable<User>
             this.Messenger.Dispose();
         }
 
-        if (this.InventoryComponent != null)
-        {
-            this.InventoryComponent.Dispose();
-            this.InventoryComponent = null;
-        }
-
-        if (this.BadgeComponent != null)
-        {
-            this.BadgeComponent.Dispose();
-            this.BadgeComponent = null;
-        }
-
-        if (this.WardrobeComponent != null)
-        {
-            this.WardrobeComponent.Dispose();
-            this.WardrobeComponent = null;
-        }
-
-        if (this.AchievementComponent != null)
-        {
-            this.AchievementComponent.Dispose();
-            this.AchievementComponent = null;
-        }
-
-        if (this.Premium != null)
-        {
-            this.Premium.Dispose();
-            this.Premium = null;
-        }
-
-        if (this.Banner != null)
-        {
-            this.Banner.Dispose();
-            this.Banner = null;
-        }
-
+        this.InventoryComponent?.Dispose();
+        this.BadgeComponent?.Dispose();
+        this.WardrobeComponent?.Dispose();
+        this.AchievementComponent?.Dispose();
+        this.Premium?.Dispose();
+        this.Banner?.Dispose();
         this.UsersRooms?.Clear();
-
         this.RoomRightsList?.Clear();
-
         this.FavoriteRooms?.Clear();
-
         this.Client = null;
 
         GC.SuppressFinalize(this);
+    }
+
+    public void SaveInfo(IDbConnection dbClient = null)
+    {
+        if (this.InfoSaved)
+        {
+            return;
+        }
+
+        dbClient ??= WibboEnvironment.GetDatabaseManager().Connection();
+
+        this.InfoSaved = true;
+        var timeOnline = DateTime.Now - this.OnlineTime;
+        var timeOnlineSec = (int)timeOnline.TotalSeconds;
+
+        UserDao.UpdateOffline(dbClient, this.Id, this.Duckets, this.Credits, this.BannerSelected != null ? this.BannerSelected.Id : -1);
+        UserStatsDao.UpdateAll(dbClient, this.Id, this.FavouriteGroupId, timeOnlineSec, this.CurrentQuestId, this.Respect, this.DailyRespectPoints, this.DailyPetRespectPoints);
     }
 
     public int GetQuestProgress(int p)

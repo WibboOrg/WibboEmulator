@@ -1,17 +1,10 @@
 namespace WibboEmulator.Database.Daos.Log;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
+using Dapper;
 
 internal sealed class LogCommandDao
 {
-    internal static void Insert(IQueryAdapter dbClient, int userId, string modName, int roomId, string target, string type, string description)
-    {
-        dbClient.SetQuery("INSERT INTO `log_command` (user_id, user_name, roomid, command, extra_data, timestamp) VALUES (@userid,@username,@roomid,@type,@desc, UNIX_TIMESTAMP())");
-        dbClient.AddParameter("userid", userId);
-        dbClient.AddParameter("username", modName);
-        dbClient.AddParameter("roomid", roomId);
-        dbClient.AddParameter("target", target);
-        dbClient.AddParameter("type", type);
-        dbClient.AddParameter("desc", description + " " + target);
-        dbClient.RunQuery();
-    }
+    internal static void Insert(IDbConnection dbClient, int userId, string modName, int roomId, string target, string type, string description) => dbClient.Execute(
+        "INSERT INTO log_command (user_id, user_name, roomid, command, extra_data, timestamp) VALUES (@UserId, @Username, @RoomId, @Type, @Description, UNIX_TIMESTAMP())",
+        new { UserId = userId, Username = modName, RoomId = roomId, Type = type, Description = description + " " + target });
 }

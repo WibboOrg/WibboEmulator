@@ -1,5 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
-using System.Data;
+
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Games.Catalogs.Marketplace;
@@ -16,20 +16,20 @@ internal sealed class GetOffersEvent : IPacketEvent
         var searchQuery = packet.PopString();
         var filterMode = packet.PopInt();
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
-        var table = CatalogMarketplaceOfferDao.GetAll(dbClient, searchQuery, minCost, maxCost, filterMode);
+        var offerList = CatalogMarketplaceOfferDao.GetAll(dbClient, searchQuery, minCost, maxCost, filterMode);
 
         WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Clear();
         WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Clear();
-        if (table != null)
+        if (offerList.Count != 0)
         {
-            foreach (DataRow row in table.Rows)
+            foreach (var offer in offerList)
             {
-                if (!WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Contains(Convert.ToInt32(row["offer_id"])))
+                if (!WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Contains(offer.OfferId))
                 {
-                    WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Add(Convert.ToInt32(row["offer_id"]));
-                    WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Add(new MarketOffer(Convert.ToInt32(row["offer_id"]), Convert.ToInt32(row["sprite_id"]), Convert.ToInt32(row["total_price"]), Convert.ToInt32(row["item_type"].ToString()), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"])));
+                    WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Add(offer.OfferId);
+                    WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Add(new MarketOffer(offer.OfferId, offer.SpriteId, offer.TotalPrice, offer.ItemType, offer.LimitedNumber, offer.LimitedStack));
                 }
             }
         }

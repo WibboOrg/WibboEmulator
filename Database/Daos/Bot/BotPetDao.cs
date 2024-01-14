@@ -1,85 +1,123 @@
 namespace WibboEmulator.Database.Daos.Bot;
 using System.Data;
-using WibboEmulator.Database.Interfaces;
+using Dapper;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
-using WibboEmulator.Utilities;
 
 internal sealed class BotPetDao
 {
-    internal static void SavePet(IQueryAdapter dbClient, List<RoomUser> petList)
+    internal static void SavePet(IDbConnection dbClient, List<RoomUser> petList)
     {
-        var queryChunk = new QueryChunk();
-
+        var updatePetList = new List<BotPetEntity>();
         foreach (var petData in petList)
         {
+            if (petData.BotData.AiType == BotAIType.RoleplayPet)
+            {
+                continue;
+            }
+
             var pet = petData.PetData;
-            if (pet.DBState == DatabaseUpdateState.NeedsUpdate)
+
+            if (pet != null)
             {
-                queryChunk.AddParameter(pet.PetId + "name", pet.Name);
-                queryChunk.AddParameter(pet.PetId + "race", pet.Race);
-                queryChunk.AddParameter(pet.PetId + "color", pet.Color);
-                queryChunk.AddQuery("UPDATE `bot_pet` SET room_id = " + pet.RoomId + ", name = @" + pet.PetId + "name, race = @" + pet.PetId + "race, color = @" + pet.PetId + "color, type = " + pet.Type + ", experience = " + pet.Expirience + ", energy = " + pet.Energy + ", nutrition = " + pet.Nutrition + ", respect = " + pet.Respect + ", createstamp = '" + pet.CreationStamp + "', x = " + petData.X + ", Y = " + petData.Y + ", Z = " + petData.Z + " WHERE id = " + pet.PetId);
-            }
-            else
-            {
-                if (petData.BotData.AiType == BotAIType.RoleplayPet)
+                updatePetList.Add(new BotPetEntity
                 {
-                    continue;
-                }
-
-                queryChunk.AddQuery("UPDATE `bot_pet` SET x = " + petData.X + ", Y = " + petData.Y + ", Z = " + petData.Z + " WHERE id = " + pet.PetId);
+                    Experience = pet.Expirience,
+                    Energy = pet.Energy,
+                    Nutrition = pet.Nutrition,
+                    Respect = pet.Respect,
+                    X = pet.X,
+                    Y = pet.Y,
+                    Z = pet.Z,
+                    Id = pet.PetId
+                });
             }
-
-            pet.DBState = DatabaseUpdateState.Updated;
         }
-        queryChunk.Execute(dbClient);
-        queryChunk.Dispose();
+
+        if (updatePetList.Count != 0)
+        {
+            _ = dbClient.Execute(
+                @"UPDATE `bot_pet` 
+                SET experience = @Experience, 
+                    energy = @Energy,
+                    nutrition = @Nutrition,
+                    respect = @Respect,
+                    x = @X,
+                    y = @Y,
+                    z = @Z
+                WHERE id = @Id",
+                updatePetList);
+        }
     }
 
-    internal static void UpdateHaveSaddle(IQueryAdapter dbClient, int petId, int statut) => dbClient.RunQuery("UPDATE `bot_pet` SET have_saddle = '" + statut + "' WHERE id = '" + petId + "' LIMIT 1");
+    internal static void UpdateHaveSaddle(IDbConnection dbClient, int petId, int statut) => dbClient.Execute(
+        "UPDATE `bot_pet` SET have_saddle = '" + statut + "' WHERE id = '" + petId + "' LIMIT 1");
 
-    internal static void UpdatePethair(IQueryAdapter dbClient, int petId, int petHair) => dbClient.RunQuery("UPDATE `bot_pet` SET pethair = '" + petHair + "' WHERE id = '" + petId + "' LIMIT 1");
+    internal static void UpdatePethair(IDbConnection dbClient, int petId, int petHair) => dbClient.Execute(
+        "UPDATE `bot_pet` SET pethair = '" + petHair + "' WHERE id = '" + petId + "' LIMIT 1");
 
-    internal static void UpdateHairdye(IQueryAdapter dbClient, int petId, int hairDye) => dbClient.RunQuery("UPDATE `bot_pet` SET hairdye = '" + hairDye + "' WHERE id = '" + petId + "' LIMIT 1");
+    internal static void UpdateHairdye(IDbConnection dbClient, int petId, int hairDye) => dbClient.Execute(
+        "UPDATE `bot_pet` SET hairdye = '" + hairDye + "' WHERE id = '" + petId + "' LIMIT 1");
 
-    internal static void UpdateRace(IQueryAdapter dbClient, int petId, string race)
-    {
-        dbClient.SetQuery("UPDATE `bot_pet` SET race = @race WHERE id = '" + petId + "' LIMIT 1");
-        dbClient.AddParameter("race", race);
-        dbClient.RunQuery();
-    }
+    internal static void UpdateRace(IDbConnection dbClient, int petId, string race) => dbClient.Execute(
+        "UPDATE `bot_pet` SET race = @race WHERE id = '" + petId + "' LIMIT 1", new { race });
 
-    internal static void UpdateAnyoneRide(IQueryAdapter dbClient, int petId, bool anyoneCanRide) => dbClient.RunQuery("UPDATE `bot_pet` SET anyone_ride = '" + (anyoneCanRide ? "1" : "0") + "' WHERE id = '" + petId + "' LIMIT 1");
+    internal static void UpdateAnyoneRide(IDbConnection dbClient, int petId, bool anyoneCanRide) => dbClient.Execute(
+        "UPDATE `bot_pet` SET anyone_ride = '" + (anyoneCanRide ? "1" : "0") + "' WHERE id = '" + petId + "' LIMIT 1");
 
-    internal static void UpdateRoomId(IQueryAdapter dbClient, int petId, int roomId) => dbClient.RunQuery("UPDATE `bot_pet` SET room_id = '" + roomId + "' WHERE id = '" + petId + "' LIMIT 1");
+    internal static void UpdateRoomId(IDbConnection dbClient, int petId, int roomId) => dbClient.Execute(
+        "UPDATE `bot_pet` SET room_id = '" + roomId + "' WHERE id = '" + petId + "' LIMIT 1");
 
-    internal static void UpdateRoomIdByRoomId(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("UPDATE `bot_pet` SET room_id = '0' WHERE room_id = '" + roomId + "'");
+    internal static void UpdateRoomIdByRoomId(IDbConnection dbClient, int roomId) => dbClient.Execute(
+        "UPDATE `bot_pet` SET room_id = '0' WHERE room_id = '" + roomId + "'");
 
-    internal static int InsertGetId(IQueryAdapter dbClient, int petId, string petName, string petRace, string petColor, int ownerId, int petType, int petCreationStamp)
-    {
-        dbClient.SetQuery("INSERT INTO `bot_pet` (user_id, name,type, race,color, experience, energy, createstamp) VALUES (" + ownerId + ",@" + petId + "name," + petType + ",@" + petId + "race,@" + petId + "color,0,100,'" + petCreationStamp + "')");
-        dbClient.AddParameter(petId + "name", petName);
-        dbClient.AddParameter(petId + "race", petRace);
-        dbClient.AddParameter(petId + "color", petColor);
-        return Convert.ToInt32(dbClient.InsertQuery());
-    }
+    internal static int InsertGetId(IDbConnection dbClient, string petName, string petRace, string petColor, int ownerId, int petType, int petCreationStamp) => dbClient.ExecuteScalar<int>(
+        @"INSERT INTO bot_pet (user_id, name, type, race, color, experience, energy, createstamp)
+        VALUES (@ownerId, @petName, @petType, @petRace, @petColor, 0, 100, @petCreationStamp);
+        SELECT LAST_INSERT_ID();",
+        new { ownerId, petName, petType, petRace, petColor, petCreationStamp });
 
-    internal static void InsertDuplicate(IQueryAdapter dbClient, int userId, int roomId, int oldRoomId) => dbClient.RunQuery("INSERT INTO `bot_pet` (user_id, room_id, name, race, color, type, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride) " +
-            "SELECT '" + userId + "', '" + roomId + "', name, race, color, type, experience, energy, nutrition, respect, '" + WibboEnvironment.GetUnixTimestamp() + "', x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM `bot_pet` WHERE room_id = '" + oldRoomId + "'");
+    internal static void InsertDuplicate(IDbConnection dbClient, int userId, int roomId, int oldRoomId) => dbClient.Execute(
+        "INSERT INTO `bot_pet` (user_id, room_id, name, race, color, type, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride) " +
+        "SELECT '" + userId + "', '" + roomId + "', name, race, color, type, experience, energy, nutrition, respect, '" + WibboEnvironment.GetUnixTimestamp() + "', x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM `bot_pet` WHERE room_id = '" + oldRoomId + "'");
 
+    internal static void Delete(IDbConnection dbClient, int userId) => dbClient.Execute(
+        "DELETE FROM `bot_pet` WHERE room_id = '0' AND user_id = '" + userId + "'");
 
-    internal static void Delete(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("DELETE FROM `bot_pet` WHERE room_id = '0' AND user_id = '" + userId + "'");
+    internal static List<BotPetEntity> GetAllByUserId(IDbConnection dbClient, int userId, int limit) => dbClient.Query<BotPetEntity>(
+        @"SELECT id, user_id, room_id, name, type, race, color, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride 
+        FROM `bot_pet`
+        WHERE user_id = @UserId AND room_id = 0 
+        LIMIT @Limit;", new { UserId = userId, Limit = limit }
+    ).ToList();
 
-    internal static DataTable GetAllByUserId(IQueryAdapter dbClient, int userId, int limit)
-    {
-        dbClient.SetQuery("SELECT id, user_id, room_id, name, type, race, color, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM `bot_pet` WHERE user_id = '" + userId + "' AND room_id = 0 LIMIT " + limit);
-        return dbClient.GetTable();
-    }
+    internal static List<BotPetEntity> GetAllByRoomId(IDbConnection dbClient, int roomId) => dbClient.Query<BotPetEntity>(
+        @"SELECT id, user_id, room_id, name, type, race, color, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride 
+        FROM `bot_pet`
+        WHERE room_id = @RoomId;",
+        new { RoomId = roomId }
+    ).ToList();
+}
 
-    internal static DataTable GetAllByRoomId(IQueryAdapter dbClient, int roomId)
-    {
-        dbClient.SetQuery("SELECT id, user_id, room_id, name, type, race, color, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM `bot_pet` WHERE room_id = '" + roomId + "'");
-        return dbClient.GetTable();
-    }
+public class BotPetEntity
+{
+    public int Id { get; set; }
+    public int UserId { get; set; }
+    public int RoomId { get; set; }
+    public string Name { get; set; }
+    public string Race { get; set; }
+    public string Color { get; set; }
+    public int Type { get; set; }
+    public int Experience { get; set; }
+    public int Energy { get; set; }
+    public int Nutrition { get; set; }
+    public int Respect { get; set; }
+    public int CreateStamp { get; set; }
+    public int X { get; set; }
+    public int Y { get; set; }
+    public double Z { get; set; }
+    public int HaveSaddle { get; set; }
+    public int HairDye { get; set; }
+    public int PetHair { get; set; }
+    public bool AnyoneRide { get; set; }
 }

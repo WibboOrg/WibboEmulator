@@ -1,7 +1,6 @@
 namespace WibboEmulator.Games.Permissions;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
-using WibboEmulator.Database.Interfaces;
 
 public class PermissionManager
 {
@@ -14,21 +13,21 @@ public class PermissionManager
         this._commands = new Dictionary<string, PermissionCommand>();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this._rights.Clear();
         this._commands.Clear();
 
-        var table = EmulatorPermissionDao.GetAll(dbClient);
+        var emulatorPermissionList = EmulatorPermissionDao.GetAll(dbClient);
 
-        if (table == null)
+        if (emulatorPermissionList.Count == 0)
         {
             return;
         }
 
-        foreach (DataRow dataRow in table.Rows)
+        foreach (var emulatorPermission in emulatorPermissionList)
         {
-            this._rights.Add((string)dataRow["permission"], Convert.ToInt32(dataRow["rank"]));
+            this._rights.Add(emulatorPermission.Permission, emulatorPermission.Rank);
         }
     }
 

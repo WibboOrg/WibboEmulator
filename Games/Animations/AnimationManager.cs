@@ -5,7 +5,6 @@ using System.Diagnostics;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 using WibboEmulator.Core.Language;
 using WibboEmulator.Database.Daos.Room;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Moderations;
 using WibboEmulator.Games.Rooms;
 
@@ -101,25 +100,26 @@ public class AnimationManager
         return $"{time.Minutes} minutes et {time.Seconds} secondes";
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this._roomId.Clear();
 
         var gameOwner = WibboEnvironment.GetSettings().GetData<string>("autogame.owner");
-        var table = RoomDao.GetAllIdByOwner(dbClient, gameOwner);
-        if (table == null)
+
+        var roomIdList = RoomDao.GetAllIdByOwner(dbClient, gameOwner);
+        if (roomIdList.Count == 0)
         {
             return;
         }
 
-        foreach (DataRow dataRow in table.Rows)
+        foreach (var id in roomIdList)
         {
-            if (this._roomId.Contains(Convert.ToInt32(dataRow["id"])))
+            if (this._roomId.Contains(id))
             {
                 continue;
             }
 
-            this._roomId.Add(Convert.ToInt32(dataRow["id"]));
+            this._roomId.Add(id);
         }
 
         if (this._roomId.Count == 0)

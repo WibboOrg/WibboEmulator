@@ -1,5 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
-using System.Data;
+
 using WibboEmulator.Database.Daos.Catalog;
 
 internal sealed class MarketPlaceOwnOffersComposer : ServerPacket
@@ -7,37 +7,37 @@ internal sealed class MarketPlaceOwnOffersComposer : ServerPacket
     public MarketPlaceOwnOffersComposer(int userId)
        : base(ServerPacketHeader.MARKETPLACE_OWN_ITEMS)
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        var table = CatalogMarketplaceOfferDao.GetOneByUserId(dbClient, userId);
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
+        var offerList = CatalogMarketplaceOfferDao.GetAllByUserId(dbClient, userId);
         var sunPrice = CatalogMarketplaceOfferDao.GetSunPrice(dbClient, userId);
 
         this.WriteInteger(sunPrice);
-        if (table != null)
+        if (offerList.Count != 0)
         {
-            this.WriteInteger(table.Rows.Count);
-            foreach (DataRow row in table.Rows)
+            this.WriteInteger(offerList.Count);
+            foreach (var offer in offerList)
             {
-                var num2 = Convert.ToInt32(Math.Floor((double)((((int)row["timestamp"]) + 172800 - WibboEnvironment.GetUnixTimestamp()) / 60)));
-                var num3 = Convert.ToInt32(row["state"].ToString());
+                var num2 = Convert.ToInt32(Math.Floor((double)((offer.Timestamp + 172800 - WibboEnvironment.GetUnixTimestamp()) / 60)));
+                var num3 = offer.State;
                 if ((num2 <= 0) && (num3 != 2))
                 {
                     num3 = 3;
                     num2 = 0;
                 }
-                this.WriteInteger(Convert.ToInt32(row["offer_id"]));
+                this.WriteInteger(offer.OfferId);
                 this.WriteInteger(num3);
                 this.WriteInteger(1);
-                this.WriteInteger(Convert.ToInt32(row["sprite_id"]));
+                this.WriteInteger(offer.SpriteId);
 
                 this.WriteInteger(256);
                 this.WriteString("");
-                this.WriteInteger(Convert.ToInt32(row["limited_number"]));
-                this.WriteInteger(Convert.ToInt32(row["limited_stack"]));
+                this.WriteInteger(offer.LimitedNumber);
+                this.WriteInteger(offer.LimitedStack);
 
-                this.WriteInteger(Convert.ToInt32(row["total_price"]));
+                this.WriteInteger(offer.TotalPrice);
                 this.WriteInteger(num2);
-                this.WriteInteger(Convert.ToInt32(row["sprite_id"]));
+                this.WriteInteger(offer.SpriteId);
             }
         }
         else

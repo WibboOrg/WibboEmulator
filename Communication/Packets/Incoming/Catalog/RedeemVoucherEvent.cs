@@ -24,7 +24,7 @@ internal sealed class RedeemVoucherEvent : IPacketEvent
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         var haveVoucher = UserVoucherDao.HaveVoucher(dbClient, session.User.Id, voucherCode);
 

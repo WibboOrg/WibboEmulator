@@ -33,7 +33,7 @@ internal sealed class PickupObjectEvent : IPacketEvent
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         room.RoomItemHandling.RemoveFurniture(session, item.Id);
         session.User.InventoryComponent.AddItem(dbClient, item);

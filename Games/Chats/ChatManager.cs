@@ -1,5 +1,5 @@
 namespace WibboEmulator.Games.Chats;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Chats.Commands;
 using WibboEmulator.Games.Chats.Emotions;
 using WibboEmulator.Games.Chats.Filter;
@@ -52,7 +52,7 @@ public sealed class ChatManager
         this._filter = new WordFilterManager();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this._petCommands.Init(dbClient);
         this._commands.Init(dbClient);

@@ -27,7 +27,7 @@ internal sealed class DeleteStickyNoteEvent : IPacketEvent
         }
 
         room.RoomItemHandling.RemoveFurniture(session, roomItem.Id);
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         ItemDao.DeleteById(dbClient, roomItem.Id);
     }
 }

@@ -1,7 +1,6 @@
 namespace WibboEmulator.Core.Language;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
-using WibboEmulator.Database.Interfaces;
 
 public enum Language
 {
@@ -24,29 +23,26 @@ public class LanguageManager
         this._valuesBr = new Dictionary<string, string>();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this._valuesFr.Clear();
         this._valuesEn.Clear();
         this._valuesBr.Clear();
 
-        var table = EmulatorTextDao.GetAll(dbClient);
+        var emulatorTextList = EmulatorTextDao.GetAll(dbClient);
 
-        if (table == null)
+        if (emulatorTextList.Count == 0)
         {
             return;
         }
 
-        foreach (DataRow dataRow in table.Rows)
+        foreach (var emulatorText in emulatorTextList)
         {
-            var key = (string)dataRow["identifiant"];
-            var value_fr = DBNull.Value.Equals(dataRow["value_fr"]) ? "" : (string)dataRow["value_fr"];
-            var value_en = DBNull.Value.Equals(dataRow["value_en"]) ? "" : (string)dataRow["value_en"];
-            var value_br = DBNull.Value.Equals(dataRow["value_br"]) ? "" : (string)dataRow["value_br"];
+            var key = emulatorText.Identifiant;
 
-            this._valuesFr.Add(key, value_fr);
-            this._valuesEn.Add(key, value_en);
-            this._valuesBr.Add(key, value_br);
+            this._valuesFr.Add(key, emulatorText.ValueFr);
+            this._valuesEn.Add(key, emulatorText.ValueEn);
+            this._valuesBr.Add(key, emulatorText.ValueBr);
         }
     }
 

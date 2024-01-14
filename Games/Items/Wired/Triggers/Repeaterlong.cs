@@ -1,5 +1,5 @@
 namespace WibboEmulator.Games.Items.Wired.Triggers;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -23,7 +23,7 @@ public class Repeaterlong : WiredTriggerBase, IWired, IWiredCycleable
         return true;
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, null, this.DelayCycle / 10);
+    public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, null, this.DelayCycle / 10);
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {

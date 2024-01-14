@@ -3,7 +3,7 @@ internal sealed class UpdateNavigatorCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
     {
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             WibboEnvironment.GetGame().GetNavigator().Init(dbClient);
         }

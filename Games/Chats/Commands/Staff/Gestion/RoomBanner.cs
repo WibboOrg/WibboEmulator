@@ -24,7 +24,7 @@ internal sealed class RoomBanner : IChatCommand
             return;
         }
 
-        var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         foreach (var targetUser in room.RoomUserManager.GetUserList().ToList())
         {

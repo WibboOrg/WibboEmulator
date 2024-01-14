@@ -81,9 +81,7 @@ internal sealed class PickUpPetEvent : IPacketEvent
         pet.RoomId = 0;
         petData.PlacedInRoom = false;
 
-        petData.DBState = DatabaseUpdateState.NeedsUpdate;
-
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             BotPetDao.UpdateRoomId(dbClient, petData.PetId, 0);
         }

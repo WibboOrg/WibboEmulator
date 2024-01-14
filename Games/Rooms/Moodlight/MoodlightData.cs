@@ -44,7 +44,7 @@ public class MoodlightData
 
         if (inDb)
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
             ItemMoodlightDao.Update(dbClient, this.ItemId, color, pr, intensity, bgOnly);
         }
 

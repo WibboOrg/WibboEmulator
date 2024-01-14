@@ -60,7 +60,7 @@ public class ModerationTicket
     public static string GetNameById(int id)
     {
         var username = "";
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             username = UserDao.GetNameById(dbClient, id);
         }
@@ -79,7 +79,7 @@ public class ModerationTicket
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         ModerationTicketDao.UpdateStatusPicked(dbClient, moderatorId, this.Id);
     }
 
@@ -97,7 +97,7 @@ public class ModerationTicket
             TicketStatusType.Invalid => "invalid",
             _ => "resolved",
         };
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         ModerationTicketDao.UpdateStatus(dbClient, str, this.Id);
     }
 
@@ -110,7 +110,7 @@ public class ModerationTicket
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         ModerationTicketDao.UpdateStatusOpen(dbClient, this.Id);
     }
 
@@ -123,7 +123,7 @@ public class ModerationTicket
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         ModerationTicketDao.UpdateStatusDeleted(dbClient, this.Id);
     }
 }

@@ -1,12 +1,12 @@
 namespace WibboEmulator.Games.Items.Wired.Interfaces;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.GameClients;
 
 public interface IWired
 {
     void Dispose();
 
-    void SaveToDatabase(IQueryAdapter dbClient);
+    void SaveToDatabase(IDbConnection dbClient);
 
     void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay);
 

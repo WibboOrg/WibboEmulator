@@ -22,7 +22,7 @@ internal sealed class LoadRoomItems : IChatCommand
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         room.RoomItemHandling.LoadFurniture(dbClient, roomId);
         room.GameMap.GenerateMaps(true);

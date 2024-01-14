@@ -16,7 +16,7 @@ internal sealed class SetActivatedBadgesEvent : IPacketEvent
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         UserBadgeDao.UpdateResetSlot(dbClient, session.User.Id);
 

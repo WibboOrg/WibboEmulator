@@ -37,7 +37,7 @@ internal sealed class RemoveSaddleFromHorseEvent : IPacketEvent
 
         petUser.PetData.Saddle = 0;
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         BotPetDao.UpdateHaveSaddle(dbClient, petUser.PetData.PetId, 0);
 

@@ -1,7 +1,6 @@
 namespace WibboEmulator.Games.Users.Achievements;
 using System.Data;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Interfaces;
 
 public class AchievementComponent : IDisposable
 {
@@ -14,15 +13,15 @@ public class AchievementComponent : IDisposable
         this._achievements = new Dictionary<string, UserAchievement>();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
-        var dAchievement = UserAchievementDao.GetAll(dbClient, this._userInstance.Id);
+        var achievementList = UserAchievementDao.GetAll(dbClient, this._userInstance.Id);
 
-        foreach (DataRow dataRow in dAchievement.Rows)
+        foreach (var achievement in achievementList)
         {
-            var group = (string)dataRow["group"];
-            var level = Convert.ToInt32(dataRow["level"]);
-            var progress = Convert.ToInt32(dataRow["progress"]);
+            var group = achievement.Group;
+            var level = achievement.Level;
+            var progress = achievement.Progress;
 
             var userAchievement = new UserAchievement(group, level, progress);
 

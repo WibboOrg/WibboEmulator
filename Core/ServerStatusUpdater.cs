@@ -1,14 +1,14 @@
 namespace WibboEmulator.Core;
 using System.Diagnostics;
 using WibboEmulator.Database.Daos.Emulator;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 
 public class ServerStatusUpdater
 {
     private static int _userPeak;
     private static bool _isExecuted;
 
-    public static void Init(IQueryAdapter dbClient)
+    public static void Init(IDbConnection dbClient)
     {
         _userPeak = EmulatorStatusDao.GetUserpeak(dbClient);
 
@@ -41,7 +41,7 @@ public class ServerStatusUpdater
 
                 var uptime = DateTime.Now - WibboEnvironment.ServerStarted;
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                 EmulatorStatsDao.Insert(dbClient, usersOnline, roomsLoaded);
                 EmulatorStatusDao.UpdateScore(dbClient, usersOnline, roomsLoaded, _userPeak);
             }

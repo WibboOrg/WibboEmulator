@@ -15,7 +15,7 @@ internal sealed class PurchaseOKComposer : ServerPacket
         this.WriteInteger(0);
         this.WriteBoolean(true);
         this.WriteInteger(1);
-        this.WriteString(baseItem.Type.ToString().ToLower());
+        this.WriteString(baseItem.Type.ToString());
         this.WriteInteger(baseItem.SpriteId);
         this.WriteString("");
         this.WriteInteger(1);

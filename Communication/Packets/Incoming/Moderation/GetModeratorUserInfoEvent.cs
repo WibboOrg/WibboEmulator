@@ -1,6 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
-using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class GetModeratorUserInfoEvent : IPacketEvent
@@ -16,8 +15,7 @@ internal sealed class GetModeratorUserInfoEvent : IPacketEvent
 
         var userId = packet.PopInt();
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        var user = UserDao.GetOneInfo(dbClient, userId);
+        var user = WibboEnvironment.GetUserById(userId);
 
         if (user == null)
         {

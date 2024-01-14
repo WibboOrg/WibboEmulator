@@ -1,11 +1,13 @@
 namespace WibboEmulator.Games.Items;
 
+using WibboEmulator.Database.Daos.Item;
+
 public class ItemData
 {
     public int Id { get; set; }
     public int SpriteId { get; set; }
     public string ItemName { get; set; }
-    public char Type { get; set; }
+    public ItemType Type { get; set; }
     public int Width { get; set; }
     public int Length { get; set; }
     public double Height { get; set; }
@@ -26,14 +28,14 @@ public class ItemData
     public RaretyLevelType RarityLevel { get; set; }
     public int Amount { get; set; }
 
-    public ItemData(int id, int sprite, string name, string type, int width, int length, double height, bool stackable, bool walkable, bool isSeat,
+    public ItemData(int id, int sprite, string name, ItemType type, int width, int length, double height, bool stackable, bool walkable, bool isSeat,
         bool allowRecycle, bool allowTrade, bool allowGift, bool allowInventoryStack, InteractionType interactionType, int modes,
         string vendingIds, string adjustableHeights, int effectId, bool isRare, int rarityLevel, int amount)
     {
         this.Id = id;
         this.SpriteId = sprite;
         this.ItemName = name;
-        this.Type = char.Parse(type);
+        this.Type = type;
         this.Width = width;
         this.Length = length;
         this.Height = height;

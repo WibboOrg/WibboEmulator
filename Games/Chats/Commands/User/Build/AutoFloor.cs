@@ -37,7 +37,7 @@ internal sealed class AutoFloor : IChatCommand
 
         map = map.TrimEnd(Convert.ToChar(13));
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoomModelCustomDao.Replace(dbClient, room.Id, room.GameMap.Model.DoorX, room.GameMap.Model.DoorY, room.GameMap.Model.DoorZ, room.GameMap.Model.DoorOrientation, map, room.GameMap.Model.WallHeight);
             RoomDao.UpdateModel(dbClient, room.Id);

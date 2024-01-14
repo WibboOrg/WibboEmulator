@@ -44,7 +44,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
         if (item.Data.InteractionType == InteractionType.HORSE_SADDLE_1)
         {
             petUser.PetData.Saddle = 9;
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
             {
                 BotPetDao.UpdateHaveSaddle(dbClient, petUser.PetData.PetId, 1);
                 ItemDao.DeleteById(dbClient, item.Id);
@@ -55,7 +55,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
         else if (item.Data.InteractionType == InteractionType.HORSE_SADDLE_2)
         {
             petUser.PetData.Saddle = 10;
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
             {
                 BotPetDao.UpdateHaveSaddle(dbClient, petUser.PetData.PetId, 2);
                 ItemDao.DeleteById(dbClient, item.Id);
@@ -71,7 +71,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
             parse += int.Parse(hairType);
 
             petUser.PetData.PetHair = parse;
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
             {
                 BotPetDao.UpdatePethair(dbClient, petUser.PetData.PetId, petUser.PetData.PetHair);
                 ItemDao.DeleteById(dbClient, item.Id);
@@ -87,7 +87,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
             hairDye += int.Parse(hairType);
             petUser.PetData.HairDye = hairDye;
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
             {
                 BotPetDao.UpdateHairdye(dbClient, petUser.PetData.PetId, petUser.PetData.HairDye);
                 ItemDao.DeleteById(dbClient, item.Id);
@@ -119,7 +119,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
 
             petUser.PetData.Race = raceLast.ToString();
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
             {
                 BotPetDao.UpdateRace(dbClient, petUser.PetData.PetId, petUser.PetData.Race);
                 ItemDao.DeleteById(dbClient, item.Id);

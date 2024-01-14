@@ -1,5 +1,5 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -28,7 +28,7 @@ public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
         return false;
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient)
+    public void SaveToDatabase(IDbConnection dbClient)
     {
         var ignoreCondition = this.GetIntParam(0);
 

@@ -32,7 +32,7 @@ internal sealed class UpdateGroupBadgeEvent : IPacketEvent
 
         group.Badge = string.IsNullOrWhiteSpace(badge) ? "b05114s06114" : badge;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             GuildDao.UpdateBadge(dbClient, group.Id, group.Badge);
         }

@@ -10,7 +10,7 @@ using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
@@ -40,9 +40,9 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 
         if (!page.Items.TryGetValue(itemId, out var item))
         {
-            if (page.ItemOffers.ContainsKey(itemId))
+            if (page.ItemOffers.TryGetValue(itemId, out var value))
             {
-                item = page.ItemOffers[itemId];
+                item = value;
                 if (item == null)
                 {
                     return;
@@ -231,14 +231,14 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
         }
 
 
-        if (session.User.InventoryComponent.IsOverlowLimit(amountPurchase, item.Data.Type.ToString().ToLower()))
+        if (session.User.InventoryComponent.IsOverlowLimit(amountPurchase, item.Data.Type.ToString()))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("catalog.purchase.limit", session.Langue));
             session.SendPacket(new PurchaseErrorComposer());
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         if (item.IsLimited)
         {
@@ -288,7 +288,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
             LogShopDao.Insert(dbClient, session.User.Id, totalLimitCoinCost, $"Achat de {item.Name} (x{item.Amount})", item.Id);
         }
 
-        switch (item.Data.Type.ToString().ToLower())
+        switch (item.Data.Type.ToString())
         {
             default:
                 var generatedGenericItems = new List<Item>();
@@ -444,7 +444,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
         session.SendPacket(new PurchaseOKComposer(item, item.Data));
     }
 
-    private static void LimitCoinsPrime(IQueryAdapter dbClient, GameClient session, int totalLimitCoinCost)
+    private static void LimitCoinsPrime(IDbConnection dbClient, GameClient session, int totalLimitCoinCost)
     {
         var notifImage = "";
         var wibboPointCount = 0;

@@ -27,7 +27,7 @@ internal sealed class AddFavouriteRoomEvent : IPacketEvent
 
             session.User.FavoriteRooms.Add(roomId);
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
             UserFavoriteDao.Insert(dbClient, session.User.Id, roomId);
         }
     }

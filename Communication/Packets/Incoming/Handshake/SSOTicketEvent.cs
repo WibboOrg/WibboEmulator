@@ -16,7 +16,7 @@ using WibboEmulator.Core.Language;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Users.Authentificator;
@@ -55,10 +55,10 @@ internal sealed class SSOTicketEvent : IPacketEvent
 
         try
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
             var ip = session.Connection.GetIp();
-            var user = UserFactory.GetUserData(dbClient, ssoTicket, ip, session.MachineId);
+            var user = UserFactory.GetUserData(dbClient, ssoTicket, ip);
 
             if (user == null)
             {
@@ -86,11 +86,6 @@ internal sealed class SSOTicketEvent : IPacketEvent
             else if (session.Langue == Language.Portuguese)
             {
                 WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersBr++;
-            }
-
-            if (session.User.MachineId != session.MachineId && session.MachineId != null)
-            {
-                UserDao.UpdateMachineId(dbClient, session.User.Id, session.MachineId);
             }
 
             session.User.Init(dbClient, session);
@@ -159,7 +154,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
         }
     }
 
-    private static void IsFirstConnexionToday(GameClient session, IQueryAdapter dbClient, ServerPacketList packetList)
+    private static void IsFirstConnexionToday(GameClient session, IDbConnection dbClient, ServerPacketList packetList)
     {
         if (!session.User.IsFirstConnexionToday)
         {
@@ -243,7 +238,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
         }
     }
 
-    private static bool IsNewUser(GameClient session, IQueryAdapter dbClient)
+    private static bool IsNewUser(GameClient session, IDbConnection dbClient)
     {
         if (!session.User.NewUser)
         {

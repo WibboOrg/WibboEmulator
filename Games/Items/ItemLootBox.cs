@@ -220,7 +220,7 @@ internal static class ItemLootBox
         var winwin = WibboEnvironment.GetRandomNumber(100, 1000);
         session.User.AchievementPoints += winwin;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, winwin);
         }
@@ -271,7 +271,7 @@ internal static class ItemLootBox
 
         room.RoomItemHandling.RemoveFurniture(session, present.Id);
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         if (lotData.IsRare)
         {
@@ -301,7 +301,7 @@ internal static class ItemLootBox
 
         var itemIsInRoom = true;
 
-        if (present.Data.Type == 's')
+        if (present.Data.Type == ItemType.S)
         {
             if (!room.RoomItemHandling.SetFloorItem(session, present, present.X, present.Y, present.Rotation, true, false, true))
             {

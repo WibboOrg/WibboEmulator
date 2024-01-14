@@ -3,7 +3,6 @@ using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Users;
 
 public class BadgeComponent : IDisposable
@@ -21,14 +20,14 @@ public class BadgeComponent : IDisposable
         this.BadgeList = new Dictionary<string, Badge>();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
-        var table = UserBadgeDao.GetAll(dbClient, this._userInstance.Id);
+        var userBadgeList = UserBadgeDao.GetAll(dbClient, this._userInstance.Id);
 
-        foreach (DataRow dataRow in table.Rows)
+        foreach (var userBadge in userBadgeList)
         {
-            var code = (string)dataRow["badge_id"];
-            var slot = Convert.ToInt32(dataRow["badge_slot"]);
+            var code = userBadge.BadgeId;
+            var slot = userBadge.BadgeSlot;
 
             if (!this.BadgeList.ContainsKey(code))
             {
@@ -84,7 +83,7 @@ public class BadgeComponent : IDisposable
 
         if (inDatabase)
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
             UserBadgeDao.Insert(dbClient, this._userInstance.Id, 0, badge);
         }
 
@@ -111,7 +110,7 @@ public class BadgeComponent : IDisposable
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserBadgeDao.Delete(dbClient, this._userInstance.Id, badge);
         }

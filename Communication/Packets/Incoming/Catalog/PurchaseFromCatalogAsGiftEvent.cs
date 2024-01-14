@@ -71,7 +71,7 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         var id = UserDao.GetIdByName(dbClient, giftUser);
         if (id == 0)
@@ -233,7 +233,7 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
                 break;
         }
 
-        UserPresentDao.Insert(dbClient, newItemId, item.Data.Id, extraData);
+        ItemPresentDao.Insert(dbClient, newItemId, item.Data.Id, extraData);
 
         ItemDao.Delete(dbClient, newItemId);
 

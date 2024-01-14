@@ -48,7 +48,6 @@ public class PetBot : BotAI
     public override void OnUserSay(RoomUser user, string message)
     {
         var roomUser = this.GetRoomUser();
-        roomUser.PetData.DBState = DatabaseUpdateState.NeedsUpdate;
 
         if (roomUser.PetData.OwnerId != user.Client.User.Id)
         {

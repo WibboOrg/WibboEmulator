@@ -38,7 +38,7 @@ internal sealed class AddPhotoCommand : IRCONCommand
         var time = WibboEnvironment.GetUnixTimestamp();
         var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + client.User.Username + "\", \"s\":\"" + client.User.Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         var item = ItemFactory.CreateSingleItemNullable(dbClient, itemData, client.User, extraData);
         client.User.InventoryComponent.TryAddItem(item);

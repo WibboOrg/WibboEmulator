@@ -9,7 +9,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Communication.Packets.Outgoing.Sound;
 using WibboEmulator.Database.Daos.Roleplay;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Moderations;
@@ -368,7 +368,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.Health = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                         RoleplayEnemyDao.UpdateHealth(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -393,7 +393,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.WeaponGunId = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                         RoleplayEnemyDao.UpdateWeaponFarId(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -418,7 +418,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.WeaponCacId = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                         RoleplayEnemyDao.UpdateWeaponCacId(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -443,7 +443,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.DeadTimer = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                         RoleplayEnemyDao.UpdateDeadTimer(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -468,7 +468,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.LootItemId = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                         RoleplayEnemyDao.UpdateLootItemId(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -493,7 +493,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.MoneyDrop = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                         RoleplayEnemyDao.UpdateMoneyDrop(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -518,7 +518,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.TeamId = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                         RoleplayEnemyDao.UpdateTeamId(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -543,7 +543,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.AggroDistance = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                         RoleplayEnemyDao.UpdateAggroDistance(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -568,7 +568,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.ZoneDistance = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                         RoleplayEnemyDao.UpdateZoneDistance(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -578,7 +578,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.ResetPosition = parameters[2] == "true";
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                         RoleplayEnemyDao.UpdateResetPosition(dbClient, rpEnemyConfig.Id, rpEnemyConfig.ResetPosition);
 
                         break;
@@ -603,7 +603,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.LostAggroDistance = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                         RoleplayEnemyDao.UpdateLostAggroDistance(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -613,7 +613,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.ZombieMode = parameters[2] == "true";
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                         RoleplayEnemyDao.UpdateZombieMode(dbClient, rpEnemyConfig.Id, rpEnemyConfig.ZombieMode);
 
                         break;
@@ -2133,7 +2133,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                 UserDao.UpdateAddRunPoints(dbClient, roomUser.Client.User.Id);
 
                 break;
@@ -2150,7 +2150,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                 roomUser.Client.User.Banner.AddBanner(dbClient, valueInt);
                 break;
             }
@@ -2206,7 +2206,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     nbLot = WibboEnvironment.GetRandomNumber(1, 2);
                 }
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
                 var items = ItemFactory.CreateMultipleItems(dbClient, itemData, roomUser.Client.User, "", nbLot);
 
@@ -2232,7 +2232,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
         }
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null, this.Delay);
+    public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null, this.Delay);
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {

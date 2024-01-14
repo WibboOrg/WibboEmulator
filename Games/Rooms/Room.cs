@@ -8,7 +8,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Database.Daos.Room;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.Chats.Logs;
 using WibboEmulator.Games.GameClients;
@@ -119,7 +118,7 @@ public class Room : IDisposable
         this.TeamManager = new TeamManager();
         this.Soccer = new Soccer(this);
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         this.ChatlogManager.LoadRoomChatlogs(this.Id, dbClient);
 
@@ -232,32 +231,34 @@ public class Room : IDisposable
 
     public void AddTagRange(List<string> tags) => this.RoomData.Tags.AddRange(tags);
 
-    private void LoadBots(IQueryAdapter dbClient)
+    private void LoadBots(IDbConnection dbClient)
     {
-        var table = BotUserDao.GetOneByRoomId(dbClient, this.Id);
-        if (table == null)
+        var botUserList = BotUserDao.GetAllByRoomId(dbClient, this.Id);
+        if (botUserList.Count == 0)
         {
             return;
         }
 
-        foreach (DataRow row in table.Rows)
+        foreach (var botUser in botUserList)
         {
-            var roomBot = new RoomBot(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), Convert.ToInt32(row["room_id"]), BotUtility.GetAIFromString((string)row["ai_type"]), Convert.ToBoolean(row["walk_enabled"]), (string)row["name"], (string)row["motto"], (string)row["gender"], (string)row["look"], Convert.ToInt32(row["x"]), Convert.ToInt32(row["y"]), Convert.ToInt32(row["z"]), Convert.ToInt32(row["rotation"]), Convert.ToBoolean(row["chat_enabled"]), (string)row["chat_text"], Convert.ToInt32(row["chat_seconds"]), Convert.ToBoolean(row["is_dancing"]), Convert.ToInt32(row["enable"]), Convert.ToInt32(row["handitem"]), Convert.ToInt32(row["status"]));
+            var roomBot = new RoomBot(botUser.Id, botUser.UserId, botUser.RoomId, BotUtility.GetAIFromString(botUser.AiType), botUser.WalkEnabled,
+            botUser.Name, botUser.Motto, botUser.Gender, botUser.Look, botUser.X, botUser.Y, botUser.Z, botUser.Rotation, botUser.ChatEnabled,
+            botUser.ChatText, botUser.ChatSeconds, botUser.IsDancing, botUser.Enable, botUser.HandItem, botUser.Status);
             _ = this.RoomUserManager.DeployBot(roomBot, null);
         }
     }
 
-    public void LoadPets(IQueryAdapter dbClient)
+    public void LoadPets(IDbConnection dbClient)
     {
-        var table = BotPetDao.GetAllByRoomId(dbClient, this.Id);
-        if (table == null)
+        var botPetList = BotPetDao.GetAllByRoomId(dbClient, this.Id);
+        if (botPetList.Count == 0)
         {
             return;
         }
 
-        foreach (DataRow row in table.Rows)
+        foreach (var botPet in botPetList)
         {
-            var petData = new Pet(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), Convert.ToInt32(row["room_id"]), (string)row["name"], Convert.ToInt32(row["type"]), (string)row["race"], (string)row["color"], Convert.ToInt32(row["experience"]), Convert.ToInt32(row["energy"]), Convert.ToInt32(row["nutrition"]), Convert.ToInt32(row["respect"]), (int)row["createstamp"], Convert.ToInt32(row["x"]), Convert.ToInt32(row["y"]), (double)row["z"], Convert.ToInt32(row["have_saddle"]), Convert.ToInt32(row["hairdye"]), Convert.ToInt32(row["pethair"]), Convert.ToBoolean(row["anyone_ride"]));
+            var petData = new Pet(botPet.Id, botPet.UserId, botPet.RoomId, botPet.Name, botPet.Type, botPet.Race, botPet.Color, botPet.Experience, botPet.Energy, botPet.Nutrition, botPet.Respect, botPet.CreateStamp, botPet.X, botPet.Y, botPet.Z, botPet.HaveSaddle, botPet.HairDye, botPet.PetHair, botPet.AnyoneRide);
             _ = this.RoomUserManager.DeployBot(new RoomBot(petData.PetId, petData.OwnerId, this.Id, BotAIType.Pet, true, petData.Name, "", "", petData.Look, petData.X, petData.Y, petData.Z, 0, false, "", 0, false, 0, 0, 0), petData);
         }
     }
@@ -289,20 +290,20 @@ public class Room : IDisposable
         }
     }
 
-    public void LoadRights(IQueryAdapter dbClient)
+    public void LoadRights(IDbConnection dbClient)
     {
         this.UsersWithRights = new List<int>();
 
-        var dataTable = RoomRightDao.GetAllByRoomId(dbClient, this.RoomData.Id);
+        var roomRightIdList = RoomRightDao.GetAllByRoomId(dbClient, this.RoomData.Id);
 
-        if (dataTable == null)
+        if (roomRightIdList.Count == 0)
         {
             return;
         }
 
-        foreach (DataRow dataRow in dataTable.Rows)
+        foreach (var roomRightId in roomRightIdList)
         {
-            this.UsersWithRights.Add(Convert.ToInt32(dataRow["user_id"]));
+            this.UsersWithRights.Add(roomRightId);
         }
     }
 
@@ -340,7 +341,7 @@ public class Room : IDisposable
                 return true;
             }
 
-            if (this.RoomData.Group.AdminOnlyDeco == 0)
+            if (this.RoomData.Group.AdminOnlyDeco == false)
             {
                 if (this.RoomData.Group.IsMember(session.User.Id))
                 {
@@ -454,7 +455,7 @@ public class Room : IDisposable
             {
                 this._saveRoomTimerLast = timeStarted;
 
-                using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
                 {
                     RoomDao.UpdateUsersNow(dbClient, this.Id, this.UserCount);
 
@@ -622,7 +623,7 @@ public class Room : IDisposable
 
         this._cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(1));
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoomDao.UpdateUsersNow(dbClient, this.Id, 0);
 

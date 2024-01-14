@@ -3,7 +3,6 @@ using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
@@ -39,33 +38,33 @@ internal sealed class OpenGiftEvent : IPacketEvent
 
         if (present.GetBaseItem().InteractionType == InteractionType.GIFT)
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
-            var data = UserPresentDao.GetOne(dbClient, present.Id);
+            var itemPresent = ItemPresentDao.GetOne(dbClient, present.Id);
 
-            if (data == null)
+            if (itemPresent == null)
             {
                 room.RoomItemHandling.RemoveFurniture(null, present.Id);
 
                 ItemDao.DeleteById(dbClient, present.Id);
-                UserPresentDao.Delete(dbClient, present.Id);
+                ItemPresentDao.Delete(dbClient, present.Id);
 
                 session.User.InventoryComponent.RemoveItem(present.Id);
                 return;
             }
 
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(data["base_id"]), out _))
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(itemPresent.BaseId), out _))
             {
                 room.RoomItemHandling.RemoveFurniture(null, present.Id);
 
                 ItemDao.DeleteById(dbClient, present.Id);
-                UserPresentDao.Delete(dbClient, present.Id);
+                ItemPresentDao.Delete(dbClient, present.Id);
 
                 session.User.InventoryComponent.RemoveItem(present.Id);
                 return;
             }
 
-            FinishOpenGift(dbClient, session, present, room, data);
+            FinishOpenGift(dbClient, session, present, room, itemPresent);
         }
         else if (present.GetBaseItem().InteractionType == InteractionType.EXTRA_BOX)
         {
@@ -89,21 +88,21 @@ internal sealed class OpenGiftEvent : IPacketEvent
         }
     }
 
-    private static void FinishOpenGift(IQueryAdapter dbClient, GameClient session, Item present, Room room, DataRow row)
+    private static void FinishOpenGift(IDbConnection dbClient, GameClient session, Item present, Room room, ItemPresentEntity itemPresent)
     {
         var itemIsInRoom = true;
 
         room.RoomItemHandling.RemoveFurniture(session, present.Id);
 
-        ItemDao.UpdateBaseItemAndExtraData(dbClient, present.Id, Convert.ToInt32(row["base_id"]), row["extra_data"].ToString());
+        ItemDao.UpdateBaseItemAndExtraData(dbClient, present.Id, itemPresent.BaseId, itemPresent.ExtraData);
 
-        UserPresentDao.Delete(dbClient, present.Id);
+        ItemPresentDao.Delete(dbClient, present.Id);
 
-        present.BaseItem = Convert.ToInt32(row["base_id"]);
+        present.BaseItem = itemPresent.BaseId;
         present.ResetBaseItem();
-        present.ExtraData = !string.IsNullOrEmpty(Convert.ToString(row["extra_data"])) ? Convert.ToString(row["extra_data"]) : "";
+        present.ExtraData = !string.IsNullOrEmpty(itemPresent.ExtraData) ? itemPresent.ExtraData : "";
 
-        if (present.Data.Type == 's')
+        if (present.Data.Type == ItemType.S)
         {
             if (!room.RoomItemHandling.SetFloorItem(session, present, present.X, present.Y, present.Rotation, true, false, true))
             {

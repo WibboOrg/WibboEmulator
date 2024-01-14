@@ -25,7 +25,7 @@ internal sealed class RemoveFavouriteRoomEvent : IPacketEvent
 
         session.SendPacket(new UpdateFavouriteRoomComposer(roomId, false));
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         UserFavoriteDao.Delete(dbClient, session.User.Id, roomId);
     }
 }

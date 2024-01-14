@@ -1,5 +1,5 @@
 namespace WibboEmulator.Games.Items.Wired.Conditions;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -41,7 +41,7 @@ public class HasFurniOnFurniNegative : WiredConditionBase, IWiredCondition, IWir
         return requireAll;
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient)
+    public void SaveToDatabase(IDbConnection dbClient)
     {
         var requireAll = this.GetIntParam(0);
         WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, requireAll.ToString(), false, this.Items);

@@ -9,7 +9,7 @@ internal sealed class HideWireds : IChatCommand
     {
         room.RoomData.HideWireds = !room.RoomData.HideWireds;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoomDao.UpdateHideWireds(dbClient, room.Id, room.RoomData.HideWireds);
         }

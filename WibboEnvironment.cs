@@ -82,7 +82,7 @@ public static class WibboEnvironment
                 return;
             }
 
-            using var dbClient = GetDatabaseManager().GetQueryReactor();
+            using var dbClient = GetDatabaseManager().Connection();
 
             _settingsManager = new SettingsManager();
             _settingsManager.Init(dbClient);
@@ -179,7 +179,7 @@ public static class WibboEnvironment
 
     public static bool UsernameExists(string username)
     {
-        using var dbClient = GetDatabaseManager().GetQueryReactor();
+        using var dbClient = GetDatabaseManager().Connection();
         var integer = UserDao.GetIdByName(dbClient, username);
         if (integer <= 0)
         {

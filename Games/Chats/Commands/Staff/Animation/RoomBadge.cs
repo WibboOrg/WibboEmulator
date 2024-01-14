@@ -27,7 +27,7 @@ internal sealed class RoomBadge : IChatCommand
             }
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         UserBadgeDao.InsertAll(dbClient, userIds, badgeId);
     }
 }

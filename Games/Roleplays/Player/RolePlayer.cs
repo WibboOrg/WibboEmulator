@@ -1,6 +1,6 @@
 namespace WibboEmulator.Games.Roleplays.Player;
+
 using System.Collections.Concurrent;
-using System.Data;
 using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
@@ -106,7 +106,7 @@ public class RolePlayer
 
         this._inventory.Clear();
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserRoleplayItemDao.Delete(dbClient, this._id, this._rpId);
             UserRoleplayDao.Delete(dbClient, this._id, this._rpId);
@@ -119,20 +119,20 @@ public class RolePlayer
 
     public void LoadInventory()
     {
-        DataTable table;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            table = UserRoleplayItemDao.GetAll(dbClient, this._id, this._rpId);
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
-        foreach (DataRow dataRow in table.Rows)
+        var rpItemList = UserRoleplayItemDao.GetAll(dbClient, this._id, this._rpId);
+
+        if (rpItemList.Count != 0)
         {
-            if (!this._inventory.ContainsKey(Convert.ToInt32(dataRow["item_id"])))
+            foreach (var rpItem in rpItemList)
             {
-                _ = this._inventory.TryAdd(Convert.ToInt32(dataRow["item_id"]), new RolePlayInventoryItem(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["item_id"]), Convert.ToInt32(dataRow["count"])));
+                if (!this._inventory.ContainsKey(rpItem.ItemId))
+                {
+                    _ = this._inventory.TryAdd(rpItem.ItemId, new RolePlayInventoryItem(rpItem.Id, rpItem.ItemId, rpItem.Count));
+                }
             }
         }
-
 
         this.SendPacket(new LoadInventoryRpComposer(this._inventory));
     }
@@ -157,7 +157,7 @@ public class RolePlayer
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         var item = this.GetInventoryItem(itemId);
         if (item == null)
@@ -186,14 +186,14 @@ public class RolePlayer
         {
             item.Count -= count;
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
             UserRoleplayItemDao.UpdateRemoveCount(dbClient, item.Id, count);
         }
         else
         {
             _ = this._inventory.TryRemove(itemId, out _);
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
             UserRoleplayItemDao.Delete(dbClient, this._id);
         }
 
@@ -566,7 +566,7 @@ public class RolePlayer
         }
 
         this.Dispose = true;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserRoleplayDao.Update(dbClient, this._id, this._rpId, this.Health, this.Energy, this.Money, this.Munition, this.Exp, this.WeaponGun.Id, this.WeaponCac.Id);
         }

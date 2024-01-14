@@ -39,7 +39,7 @@ internal sealed class AllIgnore : IChatCommand
         var expireTime = lengthSeconds == -1 ? int.MaxValue : (int)(WibboEnvironment.GetUnixTimestamp() + lengthSeconds);
         var reason = CommandManager.MergeParams(parameters, 3);
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         var isIgnoreall = BanDao.GetOneIgnoreAll(dbClient, targetUser.User.Id);
         if (isIgnoreall == 0)
         {

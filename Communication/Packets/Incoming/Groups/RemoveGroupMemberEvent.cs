@@ -51,7 +51,7 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
                 }
             }
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
             GuildMembershipDao.Delete(dbClient, groupId, userId);
 
@@ -61,7 +61,7 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
                 session.User.FavouriteGroupId = 0;
                 UserStatsDao.UpdateRemoveGroupId(dbClient, userId);
 
-                if (group.AdminOnlyDeco == 0)
+                if (group.AdminOnlyDeco == false)
                 {
                     if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var roomGroup))
                     {

@@ -27,7 +27,7 @@ internal sealed class GroupInfoComposer : ServerPacket
         this.WriteBoolean(group.IsAdmin(session.User.Id)); // admin
         this.WriteString(userCreator != null ? userCreator.Username : "");
         this.WriteBoolean(newWindow); // Show group info
-        this.WriteBoolean(group.AdminOnlyDeco == 0); // Any user can place furni in home room
+        this.WriteBoolean(group.AdminOnlyDeco == false); // Any user can place furni in home room
         this.WriteInteger(group.CreatorId == session.User.Id ? group.RequestCount : group.IsAdmin(session.User.Id) ? group.RequestCount : group.IsMember(session.User.Id) ? 0 : 0); // Pending users
         //base.WriteInteger(0);//what the fuck
         this.WriteBoolean(group == null || group.ForumEnabled);

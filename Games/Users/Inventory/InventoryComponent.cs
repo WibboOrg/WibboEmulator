@@ -8,7 +8,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.AI;
@@ -44,7 +43,7 @@ public class InventoryComponent : IDisposable
     {
         if (all)
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
             ItemDao.DeleteAll(dbClient, this._userInstance.Id);
 
@@ -76,21 +75,21 @@ public class InventoryComponent : IDisposable
         }
         else
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
             ItemDao.DeleteAllWithoutRare(dbClient, this._userInstance.Id);
 
             this._userItems.Clear();
 
-            var table = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id, this._furniLimit);
+            var itemList = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id, this._furniLimit);
 
-            foreach (DataRow dataRow in table.Rows)
+            foreach (var item in itemList)
             {
-                var id = Convert.ToInt32(dataRow["id"]);
-                var baseItem = Convert.ToInt32(dataRow["base_item"]);
-                var extraData = DBNull.Value.Equals(dataRow["extra_data"]) ? string.Empty : (string)dataRow["extra_data"];
-                var limited = DBNull.Value.Equals(dataRow["limited_number"]) ? 0 : Convert.ToInt32(dataRow["limited_number"]);
-                var limitedTo = DBNull.Value.Equals(dataRow["limited_stack"]) ? 0 : Convert.ToInt32(dataRow["limited_stack"]);
+                var id = item.Id;
+                var baseItem = item.BaseItem;
+                var extraData = item.ExtraData;
+                var limited = item.LimitedNumber ?? 0;
+                var limitedTo = item.LimitedStack ?? 0;
 
                 var userItem = new Item(id, 0, baseItem, extraData, limited, limitedTo, 0, 0, 0.0, 0, "", null);
                 _ = this._userItems.TryAdd(id, userItem);
@@ -104,7 +103,7 @@ public class InventoryComponent : IDisposable
 
     public int GetInventoryPoints() => this._inventoryPoints;
 
-    public void DeleteItems(IQueryAdapter dbClient, List<Item> items, int baseItem = 0)
+    public void DeleteItems(IDbConnection dbClient, List<Item> items, int baseItem = 0)
     {
         var listMessage = new ServerPacketList();
         var deleteItem = new List<Item>();
@@ -191,7 +190,7 @@ public class InventoryComponent : IDisposable
             deleteItem.Add(roomItem);
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         this.DeleteItems(dbClient, deleteItem);
 
@@ -233,7 +232,7 @@ public class InventoryComponent : IDisposable
 
     public void ClearPets()
     {
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             BotPetDao.Delete(dbClient, this._userInstance.Id);
         }
@@ -243,7 +242,7 @@ public class InventoryComponent : IDisposable
 
     public void ClearBots()
     {
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             BotUserDao.Delete(dbClient, this._userInstance.Id);
         }
@@ -350,16 +349,16 @@ public class InventoryComponent : IDisposable
         this._botItems.Clear();
         this._petItems.Clear();
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        var dItems = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id, this._furniLimit);
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        var itemList = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id, this._furniLimit);
 
-        foreach (DataRow dataRow in dItems.Rows)
+        foreach (var item in itemList)
         {
-            var id = Convert.ToInt32(dataRow["id"]);
-            var baseItem = Convert.ToInt32(dataRow["base_item"]);
-            var extraData = DBNull.Value.Equals(dataRow["extra_data"]) ? string.Empty : (string)dataRow["extra_data"];
-            var limited = DBNull.Value.Equals(dataRow["limited_number"]) ? 0 : Convert.ToInt32(dataRow["limited_number"]);
-            var limitedTo = DBNull.Value.Equals(dataRow["limited_stack"]) ? 0 : Convert.ToInt32(dataRow["limited_stack"]);
+            var id = item.Id;
+            var baseItem = item.BaseItem;
+            var extraData = item.ExtraData;
+            var limited = item.LimitedNumber ?? 0;
+            var limitedTo = item.LimitedStack ?? 0;
 
             var userItem = new Item(id, 0, baseItem, extraData, limited, limitedTo, 0, 0, 0.0, 0, "", null);
             _ = this._userItems.TryAdd(id, userItem);
@@ -372,12 +371,14 @@ public class InventoryComponent : IDisposable
             this._userInstance.Client.SendHugeNotif(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("inventory.limit.furni", this._userInstance.Client.Langue), this._furniLimit));
         }
 
-        var dPets = BotPetDao.GetAllByUserId(dbClient, this._userInstance.Id, this._petLimit);
-        if (dPets != null)
+        var botPetList = BotPetDao.GetAllByUserId(dbClient, this._userInstance.Id, this._petLimit);
+        if (botPetList.Count != 0)
         {
-            foreach (DataRow row in dPets.Rows)
+            foreach (var botPet in botPetList)
             {
-                var pet = new Pet(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), Convert.ToInt32(row["room_id"]), (string)row["name"], Convert.ToInt32(row["type"]), (string)row["race"], (string)row["color"], Convert.ToInt32(row["experience"]), Convert.ToInt32(row["energy"]), Convert.ToInt32(row["nutrition"]), Convert.ToInt32(row["respect"]), (int)row["createstamp"], Convert.ToInt32(row["x"]), Convert.ToInt32(row["y"]), (double)row["z"], Convert.ToInt32(row["have_saddle"]), Convert.ToInt32(row["hairdye"]), Convert.ToInt32(row["pethair"]), Convert.ToBoolean(row["anyone_ride"]));
+                var pet = new Pet(botPet.Id, botPet.UserId, botPet.RoomId, botPet.Name, botPet.Type, botPet.Race, botPet.Color, botPet.Experience,
+                botPet.Energy, botPet.Nutrition, botPet.Respect, botPet.CreateStamp, botPet.X, botPet.Y, botPet.Z, botPet.HaveSaddle, botPet.HairDye,
+                botPet.PetHair, botPet.AnyoneRide);
                 _ = this._petItems.TryAdd(pet.PetId, pet);
             }
         }
@@ -387,13 +388,15 @@ public class InventoryComponent : IDisposable
             this._userInstance.Client.SendHugeNotif(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("inventory.limit.pet", this._userInstance.Client.Langue), this._petLimit));
         }
 
-        var dBots = BotUserDao.GetAllByUserId(dbClient, this._userInstance.Id, this._botLimit);
-        if (dBots != null)
+        var botUserList = BotUserDao.GetAllByUserId(dbClient, this._userInstance.Id, this._botLimit);
+        if (botUserList.Count != 0)
         {
-            foreach (DataRow row in dBots.Rows)
+            foreach (var botUser in botUserList)
             {
-                var bot = new Bot(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), (string)row["name"], (string)row["motto"], (string)row["look"], (string)row["gender"], Convert.ToBoolean(row["walk_enabled"]), Convert.ToBoolean(row["chat_enabled"]), (string)row["chat_text"], Convert.ToInt32(row["chat_seconds"]), Convert.ToBoolean(row["is_dancing"]), Convert.ToInt32(row["enable"]), Convert.ToInt32(row["handitem"]), Convert.ToInt32(row["status"]), BotUtility.GetAIFromString((string)row["ai_type"]));
-                _ = this._botItems.TryAdd(Convert.ToInt32(row["id"]), bot);
+                var bot = new Bot(botUser.Id, botUser.UserId, botUser.Name, botUser.Motto, botUser.Look, botUser.Gender, botUser.WalkEnabled,
+                botUser.ChatEnabled, botUser.ChatText, botUser.ChatSeconds, botUser.IsDancing, botUser.Enable, botUser.HandItem, botUser.Status,
+                BotUtility.GetAIFromString(botUser.AiType));
+                _ = this._botItems.TryAdd(botUser.Id, bot);
             }
         }
 
@@ -470,14 +473,14 @@ public class InventoryComponent : IDisposable
 
     public void AddItemArray(List<Item> roomItemList)
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         foreach (var roomItem in roomItemList)
         {
             this.AddItem(dbClient, roomItem);
         }
     }
 
-    public void AddItem(IQueryAdapter dbClient, Item item)
+    public void AddItem(IDbConnection dbClient, Item item)
     {
         ItemDao.UpdateRoomIdAndUserId(dbClient, item.Id, 0, this._userInstance.Id);
 

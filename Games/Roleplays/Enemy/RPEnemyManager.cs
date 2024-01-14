@@ -1,7 +1,6 @@
 namespace WibboEmulator.Games.Roleplays.Enemy;
 using System.Data;
 using WibboEmulator.Database.Daos.Roleplay;
-using WibboEmulator.Database.Interfaces;
 
 public class RPEnemyManager
 {
@@ -36,32 +35,32 @@ public class RPEnemyManager
         return enemy;
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this._enemyBot.Clear();
         this._enemyPet.Clear();
 
-        var table = RoleplayEnemyDao.GetAll(dbClient);
-        if (table != null)
+        var enemyList = RoleplayEnemyDao.GetAll(dbClient);
+        if (enemyList.Count != 0)
         {
-            foreach (DataRow dataRow in table.Rows)
+            foreach (var enemy in enemyList)
             {
-                if ((this._enemyBot.ContainsKey(Convert.ToInt32(dataRow["id"])) && (string)dataRow["type"] == "bot") || (this._enemyPet.ContainsKey(Convert.ToInt32(dataRow["id"])) && (string)dataRow["type"] == "pet"))
+                if ((this._enemyBot.ContainsKey(enemy.Id) && enemy.Type == "bot") || (this._enemyPet.ContainsKey(enemy.Id) && enemy.Type == "pet"))
                 {
                     continue;
                 }
 
-                var config = new RPEnemy(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["health"]), Convert.ToInt32(dataRow["weapon_far_id"]), Convert.ToInt32(dataRow["weapon_cac_id"]), Convert.ToInt32(dataRow["dead_timer"]),
-                    Convert.ToInt32(dataRow["loot_item_id"]), Convert.ToInt32(dataRow["money_drop"]), Convert.ToInt32(dataRow["drop_script_id"]), Convert.ToInt32(dataRow["team_id"]), Convert.ToInt32(dataRow["aggro_distance"]),
-                    Convert.ToInt32(dataRow["zone_distance"]), Convert.ToBoolean(dataRow["reset_position"]), Convert.ToInt32(dataRow["lost_aggro_distance"]), Convert.ToBoolean(dataRow["zombie_mode"]));
+                var config = new RPEnemy(enemy.Id, enemy.Health, enemy.WeaponFarId, enemy.WeaponCacId, enemy.DeadTimer,
+                    enemy.LootItemId, enemy.MoneyDrop, enemy.DropScriptId, enemy.TeamId, enemy.AggroDistance,
+                    enemy.ZoneDistance, enemy.ResetPosition, enemy.LostAggroDistance, enemy.ZombieMode);
 
-                if ((string)dataRow["type"] == "bot")
+                if (enemy.Type == "bot")
                 {
-                    this._enemyBot.Add(Convert.ToInt32(dataRow["id"]), config);
+                    this._enemyBot.Add(enemy.Id, config);
                 }
                 else
                 {
-                    this._enemyPet.Add(Convert.ToInt32(dataRow["id"]), config);
+                    this._enemyPet.Add(enemy.Id, config);
                 }
             }
         }
@@ -74,7 +73,7 @@ public class RPEnemyManager
             return this.GetEnemyBot(botId);
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoleplayEnemyDao.Insert(dbClient, botId, "bot");
         }
@@ -91,7 +90,7 @@ public class RPEnemyManager
             return this.GetEnemyPet(petId);
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoleplayEnemyDao.Insert(dbClient, petId, "pet");
         }
@@ -108,7 +107,7 @@ public class RPEnemyManager
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoleplayEnemyDao.Delete(dbClient, botId);
         }
@@ -123,7 +122,7 @@ public class RPEnemyManager
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoleplayEnemyDao.Delete(dbClient, petId);
         }

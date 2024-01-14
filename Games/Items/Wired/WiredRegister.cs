@@ -254,7 +254,7 @@ public class WiredRegister
             handler.Init(intParams, stringParam, stuffIds, selectionCode, delay, isStaff, isGod);
             handler.LoadItems();
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
             {
                 handler.SaveToDatabase(dbClient);
             }

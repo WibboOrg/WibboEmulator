@@ -20,7 +20,7 @@ internal sealed class Update : IChatCommand
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         switch (cmd.ToLower())
         {
             case "emuban":

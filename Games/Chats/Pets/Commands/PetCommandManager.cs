@@ -1,7 +1,6 @@
 ﻿namespace WibboEmulator.Games.Chats.Pets.Commands;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
-using WibboEmulator.Database.Interfaces;
 
 public class PetCommandManager
 {
@@ -9,23 +8,23 @@ public class PetCommandManager
 
     public PetCommandManager() => this._petCommands = new Dictionary<string, PetCommand>();
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this._petCommands.Clear();
 
-        var table = EmulatorCommandPetDao.GetAll(dbClient);
+        var emulatorCommandList = EmulatorCommandPetDao.GetAll(dbClient);
 
-        if (table == null)
+        if (emulatorCommandList.Count == 0)
         {
             return;
         }
 
-        foreach (DataRow dataRow in table.Rows)
+        foreach (var emulatorCommand in emulatorCommandList)
         {
-            var key = Convert.ToInt32(dataRow["id"]);
-            var str1 = (string)dataRow["command"];
+            var key = emulatorCommand.Id;
+            var command = emulatorCommand.Command;
 
-            this._petCommands.Add(str1, new PetCommand(key, str1));
+            this._petCommands.Add(command, new PetCommand(key, command));
         }
     }
 

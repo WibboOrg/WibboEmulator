@@ -81,7 +81,7 @@ internal sealed class UpgradeFurniRareInventoryEvent : IPacketEvent
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         session.User.InventoryComponent.DeleteItems(dbClient, items);
 

@@ -21,14 +21,11 @@ public static class PetUtility
 
     public static Pet CreatePet(int userId, string name, int type, string race, string color)
     {
-        var pet = new Pet(0, userId, 0, name, type, race, color, 0, 100, 100, 0, WibboEnvironment.GetUnixTimestamp(), 0, 0, 0.0, 0, 1, -1, false)
-        {
-            DBState = DatabaseUpdateState.NeedsUpdate
-        };
+        var pet = new Pet(0, userId, 0, name, type, race, color, 0, 100, 100, 0, WibboEnvironment.GetUnixTimestamp(), 0, 0, 0.0, 0, 1, -1, false);
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
-            pet.PetId = BotPetDao.InsertGetId(dbClient, pet.PetId, pet.Name, pet.Race, pet.Color, pet.OwnerId, pet.Type, pet.CreationStamp);
+            pet.PetId = BotPetDao.InsertGetId(dbClient, pet.Name, pet.Race, pet.Color, pet.OwnerId, pet.Type, pet.CreationStamp);
         }
 
         return pet;

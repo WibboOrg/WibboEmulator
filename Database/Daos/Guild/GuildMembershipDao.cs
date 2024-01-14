@@ -1,63 +1,60 @@
 namespace WibboEmulator.Database.Daos.Guild;
 using System.Data;
-using WibboEmulator.Database.Interfaces;
+using Dapper;
 
 internal sealed class GuildMembershipDao
 {
-    internal static void Delete(IQueryAdapter dbClient, int groupId) => dbClient.RunQuery("DELETE FROM `guild_membership` WHERE group_id = '" + groupId + "'");
+    internal static void Delete(IDbConnection dbClient, int groupId) => dbClient.Execute(
+        "DELETE FROM `guild_membership` WHERE group_id = @GroupId",
+        new { GroupId = groupId });
 
-    internal static DataTable GetAllUserIdBySearchAndStaff(IQueryAdapter dbClient, int groupeId, string searchVal)
-    {
-        dbClient.SetQuery("SELECT `user`.id FROM `guild_membership` INNER JOIN `user` ON `guild_membership`.user_id = `user`.id WHERE `guild_membership`.group_id = @gid AND `guild_membership`.rank > '0' AND `user`.username LIKE @username LIMIT 14");
-        dbClient.AddParameter("gid", groupeId);
-        dbClient.AddParameter("username", searchVal.Replace("%", "\\%").Replace("_", "\\_") + "%");
+    internal static List<int> GetAllUserIdBySearchAndStaff(IDbConnection dbConnection, int groupId, string searchVal) => dbConnection.Query<int>(
+        @"SELECT user.id 
+        FROM guild_membership 
+        INNER JOIN user ON guild_membership.user_id = user.id 
+        WHERE guild_membership.group_id = @GroupId 
+        AND guild_membership.rank > '0' 
+        AND user.username LIKE @Username 
+        LIMIT 14",
+        new { GroupId = groupId, Username = searchVal.Replace("%", "\\%").Replace("_", "\\_") + "%" }
+    ).ToList();
 
-        return dbClient.GetTable();
-    }
+    internal static List<int> GetAllUserIdBySearch(IDbConnection dbConnection, int groupId, string searchVal) => dbConnection.Query<int>(
+        @"SELECT user.id 
+        FROM guild_membership 
+        INNER JOIN user ON guild_membership.user_id = user.id 
+        WHERE guild_membership.group_id = @GroupId 
+        AND user.username LIKE @Username 
+        LIMIT 14",
+        new { GroupId = groupId, Username = searchVal.Replace("%", "\\%").Replace("_", "\\_") + "%" }
+    ).ToList();
 
-    internal static DataTable GetAllUserIdBySearch(IQueryAdapter dbClient, int groupeId, string searchVal)
-    {
-        dbClient.SetQuery("SELECT `user`.id AS id FROM `guild_membership` INNER JOIN `user` ON `guild_membership`.user_id = `user`.id WHERE `guild_membership`.group_id = @gid AND `user`.username LIKE @username LIMIT 14");
-        dbClient.AddParameter("gid", groupeId);
-        dbClient.AddParameter("username", searchVal.Replace("%", "\\%").Replace("_", "\\_") + "%");
-        return dbClient.GetTable();
-    }
+    internal static List<GuildMembershipEntity> GetAll(IDbConnection dbClient, int id) => dbClient.Query<GuildMembershipEntity>(
+        "SELECT user_id, rank FROM `guild_membership` WHERE group_id = @Id",
+        new { Id = id }
+    ).ToList();
 
-    internal static DataTable GetAll(IQueryAdapter dbClient, int id)
-    {
-        dbClient.SetQuery("SELECT user_id, rank FROM `guild_membership` WHERE group_id = @id");
-        dbClient.AddParameter("id", id);
-        return dbClient.GetTable();
-    }
+    internal static void UpdateRank(IDbConnection dbConnection, int groupId, int userId, int rank) => dbConnection.Execute(
+        "UPDATE guild_membership SET rank = @Rank WHERE user_id = @UserId AND group_id = @GroupId LIMIT 1",
+        new { Rank = rank, UserId = userId, GroupId = groupId });
 
-    internal static void UpdateRank(IQueryAdapter dbClient, int groupId, int userId, int rank)
-    {
-        dbClient.SetQuery("UPDATE `guild_membership` SET rank = @rank WHERE user_id = @uid AND group_id = @gid LIMIT 1");
-        dbClient.AddParameter("gid", groupId);
-        dbClient.AddParameter("uid", userId);
-        dbClient.AddParameter("rank", rank);
-        dbClient.RunQuery();
-    }
+    internal static void Delete(IDbConnection dbConnection, int groupId, int userId) => dbConnection.Execute(
+        "DELETE FROM guild_membership WHERE user_id = @UserId AND group_id = @GroupId LIMIT 1",
+        new { UserId = userId, GroupId = groupId });
 
-    internal static void Delete(IQueryAdapter dbClient, int groupId, int userId)
-    {
-        dbClient.SetQuery("DELETE FROM `guild_membership` WHERE user_id=@uid AND group_id=@gid LIMIT 1");
-        dbClient.AddParameter("gid", groupId);
-        dbClient.AddParameter("uid", userId);
-        dbClient.RunQuery();
-    }
+    internal static void Insert(IDbConnection dbConnection, int groupId, int userId) => dbConnection.Execute(
+        "INSERT INTO guild_membership (user_id, group_id) VALUES (@UserId, @GroupId)",
+        new { GroupId = groupId, UserId = userId });
 
-    internal static void Insert(IQueryAdapter dbClient, int groupId, int userId)
-    {
-        dbClient.SetQuery("INSERT INTO `guild_membership` (user_id, group_id) VALUES (@uid, @gid)");
-        dbClient.AddParameter("gid", groupId);
-        dbClient.AddParameter("uid", userId);
-        dbClient.RunQuery();
-    }
+    internal static List<int> GetAllByUserId(IDbConnection dbClient, int userId) => dbClient.Query<int>(
+        "SELECT group_id FROM `guild_membership` WHERE user_id = @UserId",
+        new { UserId = userId }
+    ).ToList();
+}
 
-    internal static DataTable GetOneByUserId(IQueryAdapter dbClient, int userId)
-    {
-        dbClient.SetQuery("SELECT group_id FROM `guild_membership` WHERE user_id = '" + userId + "'");
-        return dbClient.GetTable();
-    }
+public class GuildMembershipEntity
+{
+    public int GroupId { get; set; }
+    public int UserId { get; set; }
+    public int Rank { get; set; }
 }

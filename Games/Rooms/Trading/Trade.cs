@@ -245,7 +245,7 @@ public class Trade
             }
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         foreach (var userItem in userOneItems)
         {
@@ -313,7 +313,7 @@ public class Trade
 
         logsTwoString = logsTwoString.TrimEnd(',');
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         LogTradeDao.Insert(dbClient, this._oneId, this._twoId, logsOneString, logsTwoString, this._roomId);
     }
 

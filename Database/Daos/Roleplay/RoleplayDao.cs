@@ -1,13 +1,19 @@
 namespace WibboEmulator.Database.Daos.Roleplay;
 
 using System.Data;
-using WibboEmulator.Database.Interfaces;
+using Dapper;
 
 internal sealed class RoleplayDao
 {
-    internal static DataTable GetAll(IQueryAdapter dbClient)
-    {
-        dbClient.SetQuery("SELECT owner_id, hopital_id, prison_id FROM `roleplay`");
-        return dbClient.GetTable();
-    }
+    internal static List<RoleplayEntity> GetAll(IDbConnection dbClient) => dbClient.Query<RoleplayEntity>(
+        "SELECT owner_id, hopital_id, prison_id FROM `roleplay`"
+    ).ToList();
+}
+
+public class RoleplayEntity
+{
+    public int Id { get; set; }
+    public int OwnerId { get; set; }
+    public int HopitalId { get; set; }
+    public int PrisonId { get; set; }
 }

@@ -39,7 +39,7 @@ internal sealed class GiveRoomScoreEvent : IPacketEvent
                 return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoomDao.UpdateScore(dbClient, room.Id, room.RoomData.Score);
         }

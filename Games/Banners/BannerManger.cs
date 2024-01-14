@@ -2,7 +2,6 @@ namespace WibboEmulator.Games.Banners;
 
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
-using WibboEmulator.Database.Interfaces;
 
 public class BannerManager
 {
@@ -10,17 +9,20 @@ public class BannerManager
 
     public BannerManager() => this._banners = new Dictionary<int, Banner>();
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this._banners.Clear();
 
-        var table = EmulatorBannerDao.GetAll(dbClient);
-        foreach (DataRow dataRow in table.Rows)
-        {
-            var id = Convert.ToInt32(dataRow["id"]);
-            var haveLayer = Convert.ToBoolean(dataRow["have_layer"]);
+        var emulatorBannerList = EmulatorBannerDao.GetAll(dbClient);
 
-            this._banners.Add(id, new Banner(id, haveLayer));
+        if (emulatorBannerList.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var emulatorBanner in emulatorBannerList)
+        {
+            this._banners.Add(emulatorBanner.Id, new Banner(emulatorBanner.Id, emulatorBanner.HaveLayer));
         }
     }
 

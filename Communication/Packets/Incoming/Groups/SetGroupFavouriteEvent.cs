@@ -27,7 +27,7 @@ internal sealed class SetGroupFavouriteEvent : IPacketEvent
         }
 
         session.User.FavouriteGroupId = group.Id;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserStatsDao.UpdateGroupId(dbClient, session.User.FavouriteGroupId, session.User.Id);
         }

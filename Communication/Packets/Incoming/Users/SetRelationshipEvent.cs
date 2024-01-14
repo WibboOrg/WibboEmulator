@@ -46,7 +46,7 @@ internal sealed class SetRelationshipEvent : IPacketEvent
             }
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             MessengerFriendshipDao.UpdateRelation(dbClient, type, session.User.Id, user);
         }

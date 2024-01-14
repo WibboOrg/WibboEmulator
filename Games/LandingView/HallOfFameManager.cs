@@ -3,7 +3,6 @@ using System.Data;
 using System.Diagnostics;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Users;
 
 public class HallOfFameManager
@@ -21,15 +20,14 @@ public class HallOfFameManager
         this._hofStopwatch.Start();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this.UserRanking.Clear();
 
-        var dTable = UserDao.GetTop10ByGamePointMonth(dbClient);
+        var userIds = UserDao.GetTop10ByGamePointMonth(dbClient);
 
-        foreach (DataRow dRow in dTable.Rows)
+        foreach (var userId in userIds)
         {
-            var userId = Convert.ToInt32(dRow["id"]);
             var user = WibboEnvironment.GetUserById(userId);
 
             if (user != null)
@@ -65,7 +63,7 @@ public class HallOfFameManager
 
             this.UserRanking.Clear();
 
-            var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
             EmulatorSettingDao.Update(dbClient, "hof.lastupdate", WibboEnvironment.GetUnixTimestamp().ToString());
         }
     }

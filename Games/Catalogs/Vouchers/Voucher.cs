@@ -16,7 +16,7 @@ public class Voucher
     {
         this.CurrentUses += 1;
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         CatalogVoucherDao.Update(dbClient, this.Code);
     }
 

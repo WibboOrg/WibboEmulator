@@ -1,12 +1,17 @@
 namespace WibboEmulator.Database.Daos.Emulator;
 using System.Data;
-using WibboEmulator.Database.Interfaces;
+using Dapper;
 
 internal sealed class EmulatorPermissionDao
 {
-    internal static DataTable GetAll(IQueryAdapter dbClient)
-    {
-        dbClient.SetQuery("SELECT `rank`, `permission` FROM `emulator_permission`");
-        return dbClient.GetTable();
-    }
+    internal static List<EmulatorPermissionEntity> GetAll(IDbConnection dbClient) => dbClient.Query<EmulatorPermissionEntity>(
+        "SELECT `rank`, `permission` FROM `emulator_permission`"
+    ).ToList();
+}
+
+public class EmulatorPermissionEntity
+{
+    public int Id { get; set; }
+    public int Rank { get; set; }
+    public string Permission { get; set; }
 }

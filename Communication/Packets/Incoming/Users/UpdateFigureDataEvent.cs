@@ -32,7 +32,7 @@ internal sealed class UpdateFigureDataEvent : IPacketEvent
         session.User.Look = look;
         session.User.Gender = gender;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserDao.UpdateLookAndGender(dbClient, session.User.Id, look, gender);
         }

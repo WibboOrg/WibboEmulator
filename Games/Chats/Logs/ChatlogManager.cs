@@ -1,37 +1,36 @@
 namespace WibboEmulator.Games.Chats.Logs;
 using System.Data;
 using WibboEmulator.Database.Daos.Log;
-using WibboEmulator.Database.Interfaces;
 
 public class ChatlogManager
 {
     public ChatlogManager() => this.ListOfMessages = new List<ChatlogEntry>();
 
-    public void LoadUserChatlogs(IQueryAdapter dbClient, int userId)
+    public void LoadUserChatlogs(IDbConnection dbClient, int userId)
     {
-        var table = LogChatDao.GetAllByUserId(dbClient, userId);
-        if (table == null)
+        var logChatList = LogChatDao.GetAllByUserId(dbClient, userId);
+        if (logChatList.Count == 0)
         {
             return;
         }
 
-        foreach (DataRow row in table.Rows)
+        foreach (var logChat in logChatList)
         {
-            this.AddMessage(Convert.ToInt32(row["user_id"]), row["user_name"].ToString(), Convert.ToInt32(row["room_id"]), row["type"].ToString() + row["message"].ToString(), (int)row["timestamp"]);
+            this.AddMessage(logChat.UserId, logChat.UserName, logChat.RoomId, logChat.Type + logChat.Message, logChat.Timestamp);
         }
     }
 
-    public void LoadRoomChatlogs(int roomId, IQueryAdapter dbClient)
+    public void LoadRoomChatlogs(int roomId, IDbConnection dbClient)
     {
-        var logs = LogChatDao.GetAllByRoomId(dbClient, roomId);
-        if (logs == null)
+        var logChatList = LogChatDao.GetAllByRoomId(dbClient, roomId);
+        if (logChatList.Count == 0)
         {
             return;
         }
 
-        foreach (DataRow row in logs.Rows)
+        foreach (var logChat in logChatList)
         {
-            this.AddMessage(Convert.ToInt32(row["user_id"]), row["user_name"].ToString(), Convert.ToInt32(row["room_id"]), row["type"].ToString() + row["message"].ToString(), (int)row["timestamp"]);
+            this.AddMessage(logChat.UserId, logChat.UserName, logChat.RoomId, logChat.Type + logChat.Message, logChat.Timestamp);
         }
     }
 

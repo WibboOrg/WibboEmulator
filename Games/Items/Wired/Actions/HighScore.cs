@@ -1,6 +1,5 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -39,11 +38,11 @@ public class HighScore : WiredActionBase, IWired, IWiredEffect
     {
         base.Dispose();
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         this.SaveToDatabase(dbClient);
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient)
+    public void SaveToDatabase(IDbConnection dbClient)
     {
         var triggerItems = "";
 

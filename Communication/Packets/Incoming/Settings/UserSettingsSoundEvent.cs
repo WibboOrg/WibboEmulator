@@ -23,7 +23,7 @@ internal sealed class UserSettingsSoundEvent : IPacketEvent
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserDao.UpdateVolume(dbClient, session.User.Id, volume1, +volume2, +volume3);
         }

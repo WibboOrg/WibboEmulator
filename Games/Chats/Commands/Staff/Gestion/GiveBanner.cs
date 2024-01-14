@@ -36,7 +36,7 @@ internal sealed class GiveBanner : IChatCommand
             return;
         }
 
-        var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         targetUser.User.Banner.AddBanner(dbClient, bannerId);
     }
 }

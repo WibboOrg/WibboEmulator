@@ -1,6 +1,7 @@
 namespace WibboEmulator.Games.Rooms.Map;
 using System.Collections.Concurrent;
 using System.Drawing;
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Rooms.Games.Teams;
@@ -606,7 +607,7 @@ public class GameMap
                 break;
         }
 
-        if (item.GetBaseItem().Type != 's')
+        if (item.GetBaseItem().Type != ItemType.S)
         {
             return true;
         }

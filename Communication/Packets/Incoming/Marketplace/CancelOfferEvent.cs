@@ -17,29 +17,29 @@ internal sealed class CancelOfferEvent : IPacketEvent
 
         var offerId = packet.PopInt();
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
-        var row = CatalogMarketplaceOfferDao.GetByOfferId(dbClient, offerId);
+        var offer = CatalogMarketplaceOfferDao.GetByOfferId(dbClient, offerId);
 
-        if (row == null)
+        if (offer == null)
         {
             session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
             return;
         }
 
-        if (Convert.ToString(row["state"]) == "2")
+        if (offer.State == 2)
         {
             session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
             return;
         }
 
-        if (Convert.ToInt32(row["user_id"]) != session.User.Id)
+        if (offer.UserId != session.User.Id)
         {
             session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(row["item_id"]), out var item))
+        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(offer.ItemId, out var item))
         {
             session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
             return;
@@ -47,7 +47,7 @@ internal sealed class CancelOfferEvent : IPacketEvent
 
         CatalogMarketplaceOfferDao.DeleteUserOffer(dbClient, offerId, session.User.Id);
 
-        var giveItem = ItemFactory.CreateSingleItem(dbClient, item, session.User, Convert.ToString(row["extra_data"]), Convert.ToInt32(row["furni_id"]), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"]));
+        var giveItem = ItemFactory.CreateSingleItem(dbClient, item, session.User, offer.ExtraData, offer.FurniId, offer.LimitedNumber, offer.LimitedStack);
 
         if (giveItem != null)
         {

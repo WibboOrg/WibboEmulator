@@ -63,7 +63,7 @@ internal sealed class CreateFlatEvent : IPacketEvent
         }
 
         var roomId = 0;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             roomId = RoomDao.Insert(dbClient, name, description, session.User.Username, model, category, maxVisitors, tradeSettings);
         }

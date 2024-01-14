@@ -1,12 +1,12 @@
 namespace WibboEmulator.Games.Items;
 using WibboEmulator.Database.Daos.Item;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.Users;
 
 public class ItemFactory
 {
-    public static Item CreateSingleItemNullable(IQueryAdapter dbClient, ItemData data, User user, string extraData, int limitedNumber = 0, int limitedStack = 0)
+    public static Item CreateSingleItemNullable(IDbConnection dbClient, ItemData data, User user, string extraData, int limitedNumber = 0, int limitedStack = 0)
     {
         if (data == null)
         {
@@ -26,7 +26,7 @@ public class ItemFactory
         return item;
     }
 
-    public static Item CreateSingleItem(IQueryAdapter dbClient, ItemData data, User user, string extraData, int itemId, int limitedNumber = 0, int limitedStack = 0)
+    public static Item CreateSingleItem(IDbConnection dbClient, ItemData data, User user, string extraData, int itemId, int limitedNumber = 0, int limitedStack = 0)
     {
         if (data == null)
         {
@@ -51,7 +51,7 @@ public class ItemFactory
         return item;
     }
 
-    public static List<Item> CreateMultipleItems(IQueryAdapter dbClient, ItemData data, User user, string extraData, int amount)
+    public static List<Item> CreateMultipleItems(IDbConnection dbClient, ItemData data, User user, string extraData, int amount)
     {
         if (data == null)
         {
@@ -70,7 +70,7 @@ public class ItemFactory
         return items;
     }
 
-    public static List<Item> CreateTeleporterItems(IQueryAdapter dbClient, ItemData data, User user)
+    public static List<Item> CreateTeleporterItems(IDbConnection dbClient, ItemData data, User user)
     {
         var items = new List<Item>();
 

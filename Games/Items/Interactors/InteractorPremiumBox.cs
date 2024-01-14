@@ -39,7 +39,7 @@ public class InteractorPremiumBox : FurniInteractor
 
         this._haveReward = true;
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         ItemDao.DeleteById(dbClient, item.Id);
 
         room.RoomItemHandling.RemoveFurniture(null, item.Id);

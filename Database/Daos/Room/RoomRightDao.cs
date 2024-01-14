@@ -1,50 +1,28 @@
 namespace WibboEmulator.Database.Daos.Room;
 using System.Data;
-using System.Text;
-using WibboEmulator.Database.Interfaces;
+using Dapper;
 
 internal sealed class RoomRightDao
 {
-    internal static void Insert(IQueryAdapter dbClient, int roomId, int userId) => dbClient.RunQuery("INSERT INTO `room_right` (room_id, user_id) VALUES ('" + roomId + "', '" + userId + "')");
+    internal static void Insert(IDbConnection dbClient, int roomId, int userId) => dbClient.Execute(
+        "INSERT INTO `room_right` (room_id, user_id) VALUES ('" + roomId + "', '" + userId + "')");
 
-    internal static void Delete(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("DELETE FROM `room_right` WHERE room_id = '" + roomId + "'");
+    internal static void Delete(IDbConnection dbClient, int roomId) => dbClient.Execute(
+        "DELETE FROM `room_right` WHERE room_id = '" + roomId + "'");
 
-    internal static void Delete(IQueryAdapter dbClient, int roomId, int userId)
-    {
-        dbClient.SetQuery("DELETE FROM `room_right` WHERE user_id = @uid AND room_id = @rid LIMIT 1");
-        dbClient.AddParameter("uid", userId);
-        dbClient.AddParameter("rid", roomId);
-        dbClient.RunQuery();
-    }
+    internal static void Delete(IDbConnection dbClient, int roomId, int userId) => dbClient.Execute(
+        "DELETE FROM room_right WHERE user_id = @UserId AND room_id = @RoomId LIMIT 1",
+        new { UserId = userId, RoomId = roomId });
 
-    internal static DataTable GetAllByRoomId(IQueryAdapter dbClient, int roomId)
-    {
-        dbClient.SetQuery("SELECT user_id FROM `room_right` WHERE room_id = '" + roomId + "'");
-        return dbClient.GetTable();
-    }
+    internal static List<int> GetAllByRoomId(IDbConnection dbClient, int roomId) => dbClient.Query<int>(
+        "SELECT user_id FROM `room_right` WHERE room_id = '" + roomId + "'"
+    ).ToList();
 
-    internal static DataTable GetAllByUserId(IQueryAdapter dbClient, int userId)
-    {
-        dbClient.SetQuery("SELECT room_id FROM `room_right` WHERE user_id = '" + userId + "'");
-        return dbClient.GetTable();
-    }
+    internal static List<int> GetAllByUserId(IDbConnection dbClient, int userId) => dbClient.Query<int>(
+        "SELECT room_id FROM `room_right` WHERE user_id = '" + userId + "'"
+    ).ToList();
 
-    internal static void DeleteAll(IQueryAdapter dbClient, int roomId, List<int> userIds)
-    {
-        var deleteParams = new StringBuilder();
-
-        var index = 0;
-        foreach (var userId in userIds)
-        {
-            if (index > 0)
-            {
-                _ = deleteParams.Append(" OR ");
-            }
-
-            _ = deleteParams.Append("room_id = '" + roomId + "' AND user_id = '" + userId + "'");
-            index++;
-        }
-
-        dbClient.RunQuery("DELETE FROM `room_right` WHERE " + deleteParams);
-    }
+    internal static void DeleteAll(IDbConnection dbClient, int roomId, List<int> userIds) => dbClient.Execute(
+        "DELETE FROM `room_right` WHERE room_id = '" + roomId + "' AND user_id = @UserId",
+        new { UserId = userIds });
 }

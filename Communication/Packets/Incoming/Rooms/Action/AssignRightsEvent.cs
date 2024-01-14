@@ -41,7 +41,7 @@ internal sealed class AssignRightsEvent : IPacketEvent
 
             room.UsersWithRights.Add(userId);
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
             {
                 RoomRightDao.Insert(dbClient, room.Id, userId);
             }

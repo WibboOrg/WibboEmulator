@@ -67,7 +67,7 @@ internal sealed class PlaceObjectEvent : IPacketEvent
                 return;
             }
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
             {
                 ItemDao.DeleteById(dbClient, itemId);
             }
@@ -110,7 +110,7 @@ internal sealed class PlaceObjectEvent : IPacketEvent
             var item = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, x, y, 0.0, rotation, "", room);
             if (room.RoomItemHandling.SetFloorItem(session, item, x, y, rotation, true, false, true))
             {
-                using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
                 {
                     ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                 }
@@ -175,7 +175,7 @@ internal sealed class PlaceObjectEvent : IPacketEvent
                 var roomItem = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, wallPos, room);
                 if (room.RoomItemHandling.SetWallItem(session, roomItem))
                 {
-                    using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
                     {
                         ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                     }

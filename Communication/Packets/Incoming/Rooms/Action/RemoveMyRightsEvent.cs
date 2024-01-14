@@ -40,7 +40,7 @@ internal sealed class RemoveMyRightsEvent : IPacketEvent
                 user.Client.SendPacket(new YouAreNotControllerComposer());
             }
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
             {
                 RoomRightDao.Delete(dbClient, room.Id, session.User.Id);
             }

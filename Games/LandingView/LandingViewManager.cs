@@ -1,7 +1,6 @@
 namespace WibboEmulator.Games.LandingView;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
-using WibboEmulator.Database.Interfaces;
 
 public class LandingViewManager
 {
@@ -9,17 +8,23 @@ public class LandingViewManager
 
     public LandingViewManager() => this.HotelViewPromosIndexers = new List<Promotion>();
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this.HotelViewPromosIndexers.Clear();
 
-        var dTable = EmulatorHotelviewPromoDao.GetAll(dbClient);
+        var emulatorLandingViewList = EmulatorHotelviewPromoDao.GetAll(dbClient);
 
-        foreach (DataRow dRow in dTable.Rows)
+        if (emulatorLandingViewList.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var emulatorLandingView in emulatorLandingViewList)
         {
             this.HotelViewPromosIndexers.Add(
-                new Promotion(Convert.ToInt32(dRow["index"]), (string)dRow["header"], (string)dRow["body"], (string)dRow["button"], Convert.ToBoolean(dRow["in_game_promo"]), (string)dRow["special_action"], (string)dRow["image"])
-                );
+                new Promotion(emulatorLandingView.Index, emulatorLandingView.Header, emulatorLandingView.Body, emulatorLandingView.Button,
+                emulatorLandingView.InGamePromo, emulatorLandingView.SpecialAction, emulatorLandingView.Image)
+            );
         }
     }
 

@@ -84,7 +84,7 @@ public class InteractorExchangeTree : FurniInteractor
                     break;
             }
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
             ItemDao.DeleteById(dbClient, item.Id);
 
             room.RoomItemHandling.RemoveFurniture(null, item.Id);

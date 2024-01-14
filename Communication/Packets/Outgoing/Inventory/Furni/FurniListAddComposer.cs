@@ -8,7 +8,7 @@ internal sealed class FurniListAddComposer : ServerPacket
         : base(ServerPacketHeader.USER_FURNITURE_ADD)
     {
         this.WriteInteger(item.Id);
-        this.WriteString(item.GetBaseItem().Type.ToString().ToUpper());
+        this.WriteString(item.GetBaseItem().Type.ToString());
         this.WriteInteger(item.Id);
         this.WriteInteger(item.GetBaseItem().SpriteId);
 

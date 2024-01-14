@@ -34,7 +34,7 @@ internal sealed class UpdateGroupColoursEvent : IPacketEvent
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             GuildDao.UpdateColors(dbClient, colour1, colour2, group.Id);
         }

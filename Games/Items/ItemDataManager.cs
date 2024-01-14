@@ -1,7 +1,6 @@
 namespace WibboEmulator.Games.Items;
 using System.Data;
 using WibboEmulator.Database.Daos.Item;
-using WibboEmulator.Database.Interfaces;
 
 public class ItemDataManager
 {
@@ -14,7 +13,7 @@ public class ItemDataManager
         this._gifts = new Dictionary<int, ItemData>();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         if (this._items.Count > 0)
         {
@@ -26,36 +25,36 @@ public class ItemDataManager
             this._gifts.Clear();
         }
 
-        var itemDataTable = ItemBaseDao.GetAll(dbClient);
+        var itemBaseList = ItemBaseDao.GetAll(dbClient);
 
-        if (itemDataTable != null)
+        if (itemBaseList.Count != 0)
         {
-            foreach (DataRow row in itemDataTable.Rows)
+            foreach (var itemBase in itemBaseList)
             {
                 try
                 {
-                    var id = Convert.ToInt32(row["id"]);
-                    var spriteID = Convert.ToInt32(row["sprite_id"]);
-                    var itemName = Convert.ToString(row["item_name"]);
-                    var type = row["type"].ToString();
-                    var width = Convert.ToInt32(row["width"]);
-                    var length = Convert.ToInt32(row["length"]);
-                    var height = Convert.ToDouble(row["stack_height"]);
-                    var allowStack = Convert.ToBoolean(row["can_stack"]);
-                    var allowWalk = Convert.ToBoolean(row["is_walkable"]);
-                    var allowSit = Convert.ToBoolean(row["can_sit"]);
-                    var allowRecycle = Convert.ToBoolean(row["allow_recycle"]);
-                    var allowTrade = Convert.ToBoolean(row["allow_trade"]);
-                    var allowGift = Convert.ToBoolean(row["allow_gift"]);
-                    var allowInventoryStack = Convert.ToBoolean(row["allow_inventory_stack"]);
-                    var interactionType = InteractionTypes.GetTypeFromString(Convert.ToString(row["interaction_type"]));
-                    var cycleCount = Convert.ToInt32(row["interaction_modes_count"]);
-                    var vendingIDS = Convert.ToString(row["vending_ids"]);
-                    var heightAdjustable = Convert.ToString(row["height_adjustable"]);
-                    var effectId = Convert.ToInt32(row["effect_id"]);
-                    var isRare = Convert.ToBoolean(row["is_rare"]);
-                    var rarityLevel = Convert.ToInt32(row["rarity_level"].ToString());
-                    var amount = !DBNull.Value.Equals(row["amount"]) ? Convert.ToInt32(Convert.ToString(row["amount"])) : -1;
+                    var id = itemBase.Id;
+                    var spriteID = itemBase.SpriteId;
+                    var itemName = itemBase.ItemName;
+                    var type = itemBase.Type;
+                    var width = itemBase.Width;
+                    var length = itemBase.Length;
+                    var height = itemBase.StackHeight;
+                    var allowStack = itemBase.CanStack;
+                    var allowWalk = itemBase.IsWalkable;
+                    var allowSit = itemBase.CanSit;
+                    var allowRecycle = itemBase.AllowRecycle;
+                    var allowTrade = itemBase.AllowTrade;
+                    var allowGift = itemBase.AllowGift;
+                    var allowInventoryStack = itemBase.AllowInventoryStack;
+                    var interactionType = InteractionTypes.GetTypeFromString(itemBase.InteractionType);
+                    var cycleCount = itemBase.InteractionModesCount;
+                    var vendingIDS = itemBase.VendingIds;
+                    var heightAdjustable = itemBase.HeightAdjustable;
+                    var effectId = itemBase.EffectId;
+                    var isRare = itemBase.IsRare;
+                    var rarityLevel = itemBase.RarityLevel;
+                    var amount = itemBase.Amount ?? -1;
 
                     var itemData = new ItemData(id, spriteID, itemName, type, width, length, height, allowStack, allowWalk, allowSit, allowRecycle, allowTrade, allowGift, allowInventoryStack, interactionType, cycleCount, vendingIDS, heightAdjustable, effectId, isRare, rarityLevel, amount);
 

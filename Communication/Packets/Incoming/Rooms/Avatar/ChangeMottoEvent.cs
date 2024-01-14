@@ -33,7 +33,7 @@ internal sealed class ChangeMottoEvent : IPacketEvent
 
         session.User.Motto = newMotto;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserDao.UpdateMotto(dbClient, session.User.Id, newMotto);
         }

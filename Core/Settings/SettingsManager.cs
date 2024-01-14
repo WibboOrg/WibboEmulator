@@ -1,30 +1,26 @@
 namespace WibboEmulator.Core.Settings;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Utilities;
 
 public class SettingsManager
 {
     private readonly Dictionary<string, string> _settings = new();
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this._settings.Clear();
 
-        var table = EmulatorSettingDao.GetAll(dbClient);
+        var emulatorSettingsList = EmulatorSettingDao.GetAll(dbClient);
 
-        if (table == null)
+        if (emulatorSettingsList.Count == 0)
         {
             return;
         }
 
-        foreach (DataRow dataRow in table.Rows)
+        foreach (var emulatorSettings in emulatorSettingsList)
         {
-            var key = (string)dataRow["key"];
-            var value = (string)dataRow["value"];
-
-            this._settings.Add(key, value);
+            this._settings.Add(emulatorSettings.Key, emulatorSettings.Value);
         }
     }
 

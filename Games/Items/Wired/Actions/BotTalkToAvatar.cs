@@ -2,7 +2,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions;
 
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -78,7 +78,7 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
         user.Client.SendPacket(new BotChooseComposer(chooseList));
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient)
+    public void SaveToDatabase(IDbConnection dbClient)
     {
         var isWhisper = this.GetIntParam(0) == 1;
 

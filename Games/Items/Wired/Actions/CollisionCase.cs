@@ -1,5 +1,5 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -35,7 +35,7 @@ public class CollisionCase : WiredActionBase, IWiredEffect, IWired
         return false;
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient)
+    public void SaveToDatabase(IDbConnection dbClient)
     {
         var isAllUser = this.GetIntParam(0);
 

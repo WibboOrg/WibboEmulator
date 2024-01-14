@@ -29,7 +29,7 @@ internal sealed class OpenPlayerProfileEvent : IPacketEvent
         }
         else
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
             friendCount = MessengerFriendshipDao.GetCount(dbClient, userId);
         }
 

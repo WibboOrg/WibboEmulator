@@ -63,7 +63,7 @@ internal sealed class RemoveRightsEvent : IPacketEvent
             }
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         RoomRightDao.DeleteAll(dbClient, room.Id, userIds);
     }
 }

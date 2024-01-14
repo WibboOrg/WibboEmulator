@@ -5,7 +5,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Achievements;
 
@@ -15,23 +14,29 @@ public class AchievementManager
 
     public AchievementManager() => this._achievements = new Dictionary<string, AchievementData>();
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this._achievements.Clear();
 
-        var table = EmulatorAchievementDao.GetAll(dbClient);
-        foreach (DataRow dataRow in table.Rows)
+        var emulatorAchievementList = EmulatorAchievementDao.GetAll(dbClient);
+
+        if (emulatorAchievementList.Count == 0)
         {
-            var id = Convert.ToInt32(dataRow["id"]);
-            var category = (string)dataRow["category"];
-            var groupName = (string)dataRow["group_name"];
+            return;
+        }
+
+        foreach (var emulatorAchievement in emulatorAchievementList)
+        {
+            var id = emulatorAchievement.Id;
+            var category = emulatorAchievement.Category;
+            var groupName = emulatorAchievement.GroupName;
 
             if (!groupName.StartsWith("ACH_"))
             {
                 groupName = "ACH_" + groupName;
             }
 
-            var level = new AchievementLevel(Convert.ToInt32(dataRow["level"]), Convert.ToInt32(dataRow["reward_pixels"]), Convert.ToInt32(dataRow["reward_points"]), Convert.ToInt32(dataRow["progress_needed"]));
+            var level = new AchievementLevel(emulatorAchievement.Level, emulatorAchievement.RewardPixels, emulatorAchievement.RewardPoints, emulatorAchievement.ProgressNeeded);
             if (!this._achievements.ContainsKey(groupName))
             {
                 var achievement = new AchievementData(id, groupName, category);
@@ -109,7 +114,7 @@ public class AchievementManager
 
             session.SendPacket(new AchievementUnlockedComposer(achievementData, targetLevel, targetLevelData.RewardPoints, targetLevelData.RewardPixels));
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
             {
                 UserAchievementDao.Replace(dbClient, session.User.Id, newLevel, newProgress, achievementGroup);
                 UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, targetLevelData.RewardPoints);
@@ -151,7 +156,7 @@ public class AchievementManager
                 userData.Progress = newProgress;
             }
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
             {
                 UserAchievementDao.Replace(dbClient, session.User.Id, newLevel, newProgress, achievementGroup);
             }

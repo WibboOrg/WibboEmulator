@@ -18,7 +18,7 @@ internal sealed class NavigatorHomeRoomEvent : IPacketEvent
         }
 
         session.User.HomeRoom = roomId;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserDao.UpdateHomeRoom(dbClient, session.User.Id, roomId);
         }

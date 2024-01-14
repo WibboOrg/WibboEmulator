@@ -1,6 +1,6 @@
 namespace WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Database.Daos.Item;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Rooms;
 
 public class WiredUtillity
@@ -73,7 +73,7 @@ public class WiredUtillity
         return false;
     }
 
-    public static void SaveTriggerItem(IQueryAdapter dbClient, int triggerId, string triggerData2, string triggerData, bool allUsertriggerable, List<Item> itemslist, int delay = 0)
+    public static void SaveTriggerItem(IDbConnection dbClient, int triggerId, string triggerData2, string triggerData, bool allUsertriggerable, List<Item> itemslist, int delay = 0)
     {
         var triggerItems = "";
 

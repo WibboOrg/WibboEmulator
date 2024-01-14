@@ -1,7 +1,6 @@
 namespace WibboEmulator.Games.Roleplays.Item;
 using System.Data;
 using WibboEmulator.Database.Daos.Roleplay;
-using WibboEmulator.Database.Interfaces;
 
 public class RPItemManager
 {
@@ -20,26 +19,26 @@ public class RPItemManager
         return item;
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this._items.Clear();
 
-        var table = RoleplayItemDao.GetAll(dbClient);
-        if (table != null)
+        var rpItemList = RoleplayItemDao.GetAll(dbClient);
+        if (rpItemList.Count != 0)
         {
-            foreach (DataRow dataRow in table.Rows)
+            foreach (var rpItem in rpItemList)
             {
-                if (!this._items.ContainsKey(Convert.ToInt32(dataRow["id"])))
+                if (!this._items.ContainsKey(rpItem.Id))
                 {
-                    this._items.Add(Convert.ToInt32(dataRow["id"]),
-                        new RPItem(Convert.ToInt32(dataRow["id"]),
-                        (string)dataRow["name"],
-                        (string)dataRow["desc"],
-                        Convert.ToInt32(dataRow["price"]),
-                        (string)dataRow["type"],
-                        Convert.ToInt32(dataRow["value"]),
-                        Convert.ToBoolean(dataRow["allowstack"]),
-                        RPItemCategorys.GetTypeFromString((string)dataRow["category"])));
+                    this._items.Add(rpItem.Id,
+                        new RPItem(rpItem.Id,
+                        rpItem.Name,
+                        rpItem.Desc,
+                        rpItem.Price,
+                        rpItem.Type,
+                        rpItem.Value,
+                        rpItem.AllowStack,
+                        RPItemCategorys.GetTypeFromString(rpItem.Category)));
                 }
             }
         }

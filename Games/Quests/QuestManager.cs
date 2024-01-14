@@ -4,7 +4,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Quests;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 
 public class QuestManager
@@ -18,22 +17,27 @@ public class QuestManager
         this._questCount = new Dictionary<string, int>();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this._quests.Clear();
         this._questCount.Clear();
 
-        var table = EmulatorQuestDao.GetAll(dbClient);
-        foreach (DataRow dataRow in table.Rows)
+        var emulatorQuestList = EmulatorQuestDao.GetAll(dbClient);
+        if (emulatorQuestList.Count == 0)
         {
-            var id = Convert.ToInt32(dataRow["id"]);
-            var category = (string)dataRow["category"];
-            var seriesNumber = Convert.ToInt32(dataRow["series_number"]);
-            var goalType = Convert.ToInt32(dataRow["goal_type"]);
-            var goalData = Convert.ToInt32(dataRow["goal_data"]);
-            var name = (string)dataRow["name"];
-            var reward = Convert.ToInt32(dataRow["reward"]);
-            var dataBit = (string)dataRow["data_bit"];
+            return;
+        }
+
+        foreach (var emulatorQuest in emulatorQuestList)
+        {
+            var id = emulatorQuest.Id;
+            var category = emulatorQuest.Category;
+            var seriesNumber = emulatorQuest.SeriesNumber;
+            var goalType = emulatorQuest.GoalType;
+            var goalData = emulatorQuest.GoalData;
+            var name = emulatorQuest.Name;
+            var reward = emulatorQuest.Reward;
+            var dataBit = emulatorQuest.DataBit;
 
             this._quests.Add(id, new Quest(id, category, seriesNumber, (QuestType)goalType, goalData, name, reward, dataBit));
 
@@ -106,7 +110,7 @@ public class QuestManager
             progress = quest.GoalData;
             flag = true;
         }
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserQuestDao.Update(dbClient, session.User.Id, quest.Id, progress);
         }
@@ -185,7 +189,7 @@ public class QuestManager
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserQuestDao.Replace(dbClient, session.User.Id, quest.Id);
         }
@@ -209,7 +213,7 @@ public class QuestManager
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserQuestDao.Replace(dbClient, session.User.Id, nextQuestInSeries.Id);
         }
@@ -228,7 +232,7 @@ public class QuestManager
         }
 
         session.User.CurrentQuestId = 0;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserQuestDao.Delete(dbClient, session.User.Id, quest.Id);
         }

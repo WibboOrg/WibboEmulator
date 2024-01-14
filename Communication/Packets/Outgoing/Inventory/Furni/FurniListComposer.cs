@@ -20,7 +20,7 @@ internal sealed class FurniListComposer : ServerPacket
     private void WriteItem(Item item)
     {
         this.WriteInteger(item.Id);
-        this.WriteString(item.GetBaseItem().Type.ToString().ToUpper());
+        this.WriteString(item.GetBaseItem().Type.ToString());
         this.WriteInteger(item.Id);
         this.WriteInteger(item.GetBaseItem().SpriteId);
 

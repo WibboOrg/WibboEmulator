@@ -64,7 +64,7 @@ internal sealed class ApplyDecorationEvent : IPacketEvent
                 break;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoomDao.UpdateDecoration(dbClient, room.Id, decorationKey, userItem.ExtraData);
             ItemDao.DeleteById(dbClient, userItem.Id);

@@ -2,6 +2,7 @@ namespace WibboEmulator.Games.Items;
 using System.Drawing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Core;
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -246,8 +247,8 @@ public class Item : IEquatable<Item>
                     }
                     break;
             }
-            this.IsWallItem = this.GetBaseItem().Type.ToString().ToLower() == "i";
-            this.IsFloorItem = this.GetBaseItem().Type.ToString().ToLower() == "s";
+            this.IsWallItem = this.GetBaseItem().Type == ItemType.I;
+            this.IsFloorItem = this.GetBaseItem().Type == ItemType.S;
 
             if (room == null)
             {

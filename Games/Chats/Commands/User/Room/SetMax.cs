@@ -27,7 +27,7 @@ internal sealed class SetMax : IChatCommand
             room.RoomData.UsersMax = maxUsers;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         RoomDao.UpdateUsersMax(dbClient, room.Id, maxUsers);
     }
 }

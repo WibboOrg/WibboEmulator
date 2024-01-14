@@ -1,4 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Trading;
+
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.Items;
 
 internal sealed class TradingUpdateComposer : ServerPacket
@@ -28,7 +30,7 @@ internal sealed class TradingUpdateComposer : ServerPacket
     private void WriteItem(Item userItem)
     {
         this.WriteInteger(userItem.Id);
-        this.WriteString(userItem.GetBaseItem().Type.ToString().ToLower());
+        this.WriteString(userItem.GetBaseItem().Type.ToString());
         this.WriteInteger(userItem.Id);
         this.WriteInteger(userItem.GetBaseItem().SpriteId);
         this.WriteInteger(0);
@@ -72,7 +74,7 @@ internal sealed class TradingUpdateComposer : ServerPacket
         this.WriteInteger(0);
         this.WriteInteger(0);
         this.WriteInteger(0);
-        if (userItem.GetBaseItem().Type == 's')
+        if (userItem.GetBaseItem().Type == ItemType.S)
         {
             this.WriteInteger(0);
         }

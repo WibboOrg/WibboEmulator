@@ -1,14 +1,13 @@
 namespace WibboEmulator.Database.Daos.Item;
 using System.Data;
-using WibboEmulator.Database.Interfaces;
+using Dapper;
 
 internal sealed class ItemTeleportDao
 {
-    internal static DataRow GetOne(IQueryAdapter dbClient, int teleId)
-    {
-        dbClient.SetQuery("SELECT tele_two_id FROM `item_teleport` WHERE tele_one_id = '" + teleId + "'");
-        return dbClient.GetRow();
-    }
+    internal static int GetOne(IDbConnection dbClient, int teleId) => dbClient.QuerySingleOrDefault<int>(
+        "SELECT tele_two_id FROM `item_teleport` WHERE tele_one_id = @TeleId",
+        new { TeleId = teleId });
 
-    internal static void Insert(IQueryAdapter dbClient, int newId, int newIdTwo) => dbClient.RunQuery("INSERT INTO `item_teleport` (tele_one_id, tele_two_id) VALUES ('" + newId + "', '" + newIdTwo + "')");
+    internal static void Insert(IDbConnection dbClient, int newId, int newIdTwo) => dbClient.Execute(
+        "INSERT INTO `item_teleport` (tele_one_id, tele_two_id) VALUES ('" + newId + "', '" + newIdTwo + "')");
 }

@@ -6,7 +6,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Action;
 using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Database.Daos.Moderation;
 using WibboEmulator.Database.Daos.Room;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -34,7 +33,7 @@ public class ModerationManager
         this._moderationCFHTopicActions = new Dictionary<int, List<ModerationPresetActions>>();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this.LoadMessageTopics(dbClient);
         this.LoadMessagePresets(dbClient);
@@ -63,58 +62,59 @@ public class ModerationManager
         }
     }
 
-    public void LoadMessageTopics(IQueryAdapter dbClient)
+    public void LoadMessageTopics(IDbConnection dbClient)
     {
-        var moderationTopics = ModerationTopicDao.GetAll(dbClient);
+        var topicList = ModerationTopicDao.GetAll(dbClient);
 
-        if (moderationTopics != null)
+        if (topicList.Count != 0)
         {
-            foreach (DataRow row in moderationTopics.Rows)
+            foreach (var topic in topicList)
             {
-                if (!this._moderationCFHTopics.ContainsKey(Convert.ToInt32(row["id"])))
+                if (!this._moderationCFHTopics.ContainsKey(topic.Id))
                 {
-                    this._moderationCFHTopics.Add(Convert.ToInt32(row["id"]), Convert.ToString(row["caption"]));
+                    this._moderationCFHTopics.Add(topic.Id, topic.Caption);
                 }
             }
         }
 
-        var moderationTopicsActions = ModerationTopicActionDao.GetAll(dbClient);
+        var topicActionList = ModerationTopicActionDao.GetAll(dbClient);
 
-        if (moderationTopicsActions != null)
+        if (topicActionList.Count != 0)
         {
-            foreach (DataRow row in moderationTopicsActions.Rows)
+            foreach (var topicAction in topicActionList)
             {
-                var parentId = Convert.ToInt32(row["parent_id"]);
-
-                if (!this._moderationCFHTopicActions.ContainsKey(parentId))
+                if (!this._moderationCFHTopicActions.ContainsKey(topicAction.ParentId))
                 {
-                    this._moderationCFHTopicActions.Add(parentId, new List<ModerationPresetActions>());
+                    this._moderationCFHTopicActions.Add(topicAction.ParentId, new List<ModerationPresetActions>());
                 }
 
-                this._moderationCFHTopicActions[parentId].Add(new ModerationPresetActions(Convert.ToInt32(row["id"]), Convert.ToInt32(row["parent_id"]), Convert.ToString(row["type"]), Convert.ToString(row["caption"]), Convert.ToString(row["message_text"]),
-                    Convert.ToInt32(row["mute_time"]), Convert.ToInt32(row["ban_time"]), Convert.ToInt32(row["ip_time"]), Convert.ToInt32(row["trade_lock_time"]), Convert.ToString(row["default_sanction"])));
+                this._moderationCFHTopicActions[topicAction.ParentId].Add(new ModerationPresetActions(topicAction.Id, topicAction.ParentId, topicAction.Type, topicAction.Caption, topicAction.MessageText,
+                    topicAction.MuteTime, topicAction.BanTime, topicAction.IpTime, topicAction.TradeLockTime, topicAction.DefaultSanction));
             }
         }
     }
 
-    public void LoadMessagePresets(IQueryAdapter dbClient)
+    public void LoadMessagePresets(IDbConnection dbClient)
     {
         this._userMessagePresets.Clear();
         this._roomMessagePresets.Clear();
 
-        var table = ModerationPresetDao.GetAll(dbClient);
-        foreach (DataRow dataRow in table.Rows)
-        {
-            var message = dataRow["message"].ToString();
-            var type = dataRow["type"].ToString();
+        var presentList = ModerationPresetDao.GetAll(dbClient);
 
-            switch (type?.ToLower())
+        if (presentList.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var present in presentList)
+        {
+            switch (present.Type.ToLower())
             {
                 case "message":
-                    this._userMessagePresets.Add(message);
+                    this._userMessagePresets.Add(present.Message);
                     continue;
                 case "roommessage":
-                    this._roomMessagePresets.Add(message);
+                    this._roomMessagePresets.Add(present.Message);
                     continue;
                 default:
                     continue;
@@ -122,16 +122,21 @@ public class ModerationManager
         }
     }
 
-    public void LoadTicketResolution(IQueryAdapter dbClient)
+    public void LoadTicketResolution(IDbConnection dbClient)
     {
         this._ticketResolution1.Clear();
         this._ticketResolution2.Clear();
 
-        var table = ModerationResolutionDao.GetAll(dbClient);
-        foreach (DataRow dataRow in table.Rows)
+        var resolutionList = ModerationResolutionDao.GetAll(dbClient);
+        if (resolutionList.Count == 0)
         {
-            var str = new ModerationPresetActionMessages((string)dataRow["title"], (string)dataRow["subtitle"], Convert.ToInt32(dataRow["ban_hours"]), Convert.ToInt32(dataRow["enable_mute"]), Convert.ToInt32(dataRow["mute_hours"]), Convert.ToInt32(dataRow["reminder"]), (string)dataRow["message"]);
-            switch (dataRow["type"].ToString())
+            return;
+        }
+
+        foreach (var resolution in resolutionList)
+        {
+            var str = new ModerationPresetActionMessages(resolution.Title, resolution.Subtitle, resolution.BanHours, resolution.EnableMute, resolution.MuteHours, resolution.Reminder, resolution.Message);
+            switch (resolution.Type)
             {
                 case "Sexual":
                     this._ticketResolution1.Add(str);
@@ -145,22 +150,21 @@ public class ModerationManager
         }
     }
 
-    public void LoadPendingTickets(IQueryAdapter dbClient)
+    public void LoadPendingTickets(IDbConnection dbClient)
     {
-        var table = ModerationTicketDao.GetAll(dbClient);
-        if (table == null)
+        var ticketList = ModerationTicketDao.GetAll(dbClient);
+        if (ticketList.Count == 0)
         {
             return;
         }
 
-        foreach (DataRow dataRow in table.Rows)
+        foreach (var ticket in ticketList)
         {
-            var moderationTicket = new ModerationTicket(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["score"]), Convert.ToInt32(dataRow["type"]), Convert.ToInt32(dataRow["sender_id"]), Convert.ToInt32(dataRow["reported_id"]), (string)dataRow["message"], Convert.ToInt32(dataRow["room_id"]), (string)dataRow["room_name"], (int)dataRow["timestamp"]);
+            var moderationTicket = new ModerationTicket(ticket.Id, ticket.Score, ticket.Type, ticket.SenderId, ticket.ReportedId, ticket.Message, ticket.RoomId, ticket.RoomName, ticket.Timestamp);
 
-            var status = dataRow["status"].ToString();
-            if (status?.ToLower() == "picked")
+            if (ticket.Status.ToLower() == "picked")
             {
-                moderationTicket.Pick(Convert.ToInt32(dataRow["moderator_id"]), false);
+                moderationTicket.Pick(ticket.ModeratorId, false);
             }
 
             this._tickets.Add(moderationTicket);
@@ -174,7 +178,7 @@ public class ModerationManager
         var roomname = (roomData != null) ? roomData.Name : "Aucun appart";
         var roomId = (roomData != null) ? roomData.Id : 0;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             id = ModerationTicketDao.Insert(dbClient, message, roomname, category, session.User.Id, reportedUser, roomId);
         }
@@ -324,7 +328,7 @@ public class ModerationManager
 
     public static void LogStaffEntry(int userId, string modName, int roomId, string target, string type, string description)
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         LogCommandDao.Insert(dbClient, userId, modName, roomId, target, type, description + " " + target);
     }
 
@@ -337,7 +341,7 @@ public class ModerationManager
 
         if (lockRoom || inappropriateRoom)
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
             if (lockRoom)
             {
@@ -421,7 +425,7 @@ public class ModerationManager
         }
         else
         {
-            WibboEnvironment.GetGame().GetGameClientManager().BanUser(clientByUserId, modSession.User.Username, lengthSeconds, message, false, false);
+            WibboEnvironment.GetGame().GetGameClientManager().BanUser(clientByUserId, modSession.User.Username, lengthSeconds, message, false);
         }
     }
 }

@@ -1,13 +1,10 @@
 namespace WibboEmulator.Database.Daos.Log;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
+using Dapper;
 
 internal sealed class LogStaffDao
 {
-    internal static void Insert(IQueryAdapter dbClient, string name, string action)
-    {
-        dbClient.SetQuery("INSERT INTO `log_staff` (`pseudo`, `action`, `date`) VALUES (@name, @action, UNIX_TIMESTAMP())");
-        dbClient.AddParameter("name", name);
-        dbClient.AddParameter("action", action);
-        dbClient.RunQuery();
-    }
+    internal static void Insert(IDbConnection dbClient, string name, string action) => dbClient.Execute(
+        "INSERT INTO log_staff (pseudo, action, date) VALUES (@Name, @Action, UNIX_TIMESTAMP())",
+        new { Name = name, Action = action });
 }

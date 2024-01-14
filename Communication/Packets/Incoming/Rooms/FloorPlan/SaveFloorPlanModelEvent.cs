@@ -129,7 +129,7 @@ internal sealed partial class SaveFloorPlanModelEvent : IPacketEvent
             wallHeight = 15;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoomModelCustomDao.Replace(dbClient, room.Id, doorX, doorY, doorZ, doorDirection, map, wallHeight);
             RoomDao.UpdateModelWallThickFloorThick(dbClient, room.Id, wallThick, floorThick);

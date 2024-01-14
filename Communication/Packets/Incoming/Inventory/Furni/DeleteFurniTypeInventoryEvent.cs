@@ -33,7 +33,7 @@ internal sealed class DeleteFurniTypeInventoryEvent : IPacketEvent
 
         var items = session.User.InventoryComponent.GetItemsByType(item.BaseItem);
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         session.User.InventoryComponent.DeleteItems(dbClient, items, item.BaseItem);
     }
 }

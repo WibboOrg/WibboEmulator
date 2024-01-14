@@ -1,4 +1,3 @@
-using System;
 using WibboEmulator.Games.Chats.Commands;
 using WibboEmulator;
 using WibboEmulator.Games.GameClients;

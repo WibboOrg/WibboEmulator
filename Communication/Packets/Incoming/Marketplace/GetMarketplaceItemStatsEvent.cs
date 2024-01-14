@@ -13,7 +13,7 @@ internal sealed class GetMarketplaceItemStatsEvent : IPacketEvent
         var spriteId = packet.PopInt();
 
         var avgprice = 0;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             avgprice = CatalogMarketplaceDataDao.GetPriceBySprite(dbClient, spriteId);
         }

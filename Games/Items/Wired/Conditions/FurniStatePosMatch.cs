@@ -2,7 +2,7 @@ namespace WibboEmulator.Games.Items.Wired.Conditions;
 
 using System;
 using WibboEmulator.Database.Daos.Item;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -116,7 +116,7 @@ public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
         }
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient)
+    public void SaveToDatabase(IDbConnection dbClient)
     {
         var triggerItems = "";
 

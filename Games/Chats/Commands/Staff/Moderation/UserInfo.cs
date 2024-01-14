@@ -56,7 +56,6 @@ internal sealed class UserInfo : IChatCommand
         if (session.User.HasPermission("god"))
         {
             _ = stringBuilder.Append("\r - Autre information - \r");
-            _ = stringBuilder.Append("MachineId: " + clientByUsername.MachineId + "\r");
             _ = stringBuilder.Append("IP Web: " + clientByUsername.User.IP + "\r");
             _ = stringBuilder.Append("IP Emu: " + clientByUsername.Connection.GetIp() + "\r");
             _ = stringBuilder.Append("Langue: " + clientByUsername.Langue.ToString() + "\r");

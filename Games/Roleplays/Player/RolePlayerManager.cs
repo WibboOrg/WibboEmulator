@@ -32,17 +32,17 @@ public class RolePlayerManager
 
         RolePlayer player = null;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
-            var dRow = UserRoleplayDao.GetOne(dbClient, userId, this._id);
-            if (dRow == null)
+            var rpUser = UserRoleplayDao.GetOne(dbClient, userId, this._id);
+            if (rpUser == null)
             {
                 UserRoleplayDao.Insert(dbClient, userId, this._id);
                 player = new RolePlayer(this._id, userId, 100, 0, 0, 0, 100, 0, 0);
             }
             else
             {
-                player = new RolePlayer(this._id, userId, Convert.ToInt32(dRow["health"]), Convert.ToInt32(dRow["money"]), Convert.ToInt32(dRow["munition"]), Convert.ToInt32(dRow["exp"]), Convert.ToInt32(dRow["energy"]), Convert.ToInt32(dRow["weapon_far"]), Convert.ToInt32(dRow["weapon_cac"]));
+                player = new RolePlayer(this._id, userId, rpUser.Health, rpUser.Money, rpUser.Munition, rpUser.Exp, rpUser.Energy, rpUser.WeaponFar, rpUser.WeaponCac);
             }
         }
 

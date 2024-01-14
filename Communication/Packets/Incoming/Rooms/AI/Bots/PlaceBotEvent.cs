@@ -45,7 +45,7 @@ internal sealed class PlaceBotEvent : IPacketEvent
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             BotUserDao.UpdatePosition(dbClient, bot.Id, room.Id, x, y);
         }

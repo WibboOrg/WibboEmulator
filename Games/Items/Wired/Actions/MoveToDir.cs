@@ -1,6 +1,6 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -1210,7 +1210,7 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
         return;
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient)
+    public void SaveToDatabase(IDbConnection dbClient)
     {
         var startDirection = (MovementDirection)this.GetIntParam(0);
         var whenMoveIsBlocked = (WhenMovementBlock)this.GetIntParam(1);

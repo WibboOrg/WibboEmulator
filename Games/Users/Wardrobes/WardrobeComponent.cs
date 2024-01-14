@@ -1,7 +1,6 @@
 namespace WibboEmulator.Games.Users.Wardrobes;
 using System.Data;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Interfaces;
 
 public class WardrobeComponent : IDisposable
 {
@@ -15,15 +14,15 @@ public class WardrobeComponent : IDisposable
         this._wardrobes = new Dictionary<int, Wardrobe>();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this._wardrobes.Clear();
 
-        var wardrobeData = UserWardrobeDao.GetAll(dbClient, this._userInstance.Id);
+        var userWardrobeList = UserWardrobeDao.GetAll(dbClient, this._userInstance.Id);
 
-        foreach (DataRow row in wardrobeData.Rows)
+        foreach (var userWardrobe in userWardrobeList)
         {
-            var slotId = Convert.ToInt32(row["slot_id"]);
+            var slotId = userWardrobe.SlotId;
 
             if (this._wardrobes.ContainsKey(slotId))
             {
@@ -35,7 +34,7 @@ public class WardrobeComponent : IDisposable
                 continue;
             }
 
-            var wardrobe = new Wardrobe(slotId, row["look"].ToString(), row["gender"].ToString()!.ToUpper());
+            var wardrobe = new Wardrobe(slotId, userWardrobe.Look, userWardrobe.Gender!.ToUpper());
             this._wardrobes.Add(slotId, wardrobe);
         }
     }
@@ -64,7 +63,7 @@ public class WardrobeComponent : IDisposable
         var wardrobe = new Wardrobe(slotId, look, gender);
         this._wardrobes.Add(slotId, wardrobe);
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         UserWardrobeDao.Insert(dbClient, this._userInstance.Id, slotId, look, gender.ToUpper());
     }
 

@@ -206,8 +206,6 @@ public sealed class PacketManager
         this._incomingPackets.Add(ClientPacketHeader.SECURITY_TICKET, new SSOTicketEvent());
         this._incomingPackets.Add(ClientPacketHeader.USER_INFO, new InfoRetrieveEvent());
         this._incomingPackets.Add(ClientPacketHeader.CLIENT_PONG, new PingEvent());
-
-        this._incomingPackets.Add(ClientPacketHeader.SECURITY_MACHINE, new UniqueIDEvent());
     }
 
     private void RegisterLandingView()

@@ -1,12 +1,16 @@
 namespace WibboEmulator.Database.Daos.Moderation;
 using System.Data;
-using WibboEmulator.Database.Interfaces;
+using Dapper;
 
 internal sealed class ModerationTopicDao
 {
-    internal static DataTable GetAll(IQueryAdapter dbClient)
-    {
-        dbClient.SetQuery("SELECT `id`, `caption` FROM `moderation_topic`");
-        return dbClient.GetTable();
-    }
+    internal static List<ModerationTopicEntity> GetAll(IDbConnection dbClient) => dbClient.Query<ModerationTopicEntity>(
+        "SELECT `id`, `caption` FROM `moderation_topic`"
+    ).ToList();
+}
+
+public class ModerationTopicEntity
+{
+    public int Id { get; set; }
+    public string Caption { get; set; }
 }

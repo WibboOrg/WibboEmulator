@@ -41,7 +41,7 @@ internal sealed class CreditFurniRedeemEvent : IPacketEvent
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         ItemDao.DeleteById(dbClient, exchange.Id);
 
         room.RoomItemHandling.RemoveFurniture(null, exchange.Id);

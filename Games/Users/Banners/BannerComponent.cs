@@ -3,7 +3,6 @@ using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Banners;
 using WibboEmulator.Games.Users;
 
@@ -18,16 +17,14 @@ public class BannerComponent : IDisposable
         this.BannerList = new();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this.LoadDefaultBanner();
 
-        var table = UserBannerDao.GetAll(dbClient, this._userInstance.Id);
+        var emulatorBannerIdList = UserBannerDao.GetAll(dbClient, this._userInstance.Id);
 
-        foreach (DataRow dataRow in table.Rows)
+        foreach (var id in emulatorBannerIdList)
         {
-            var id = Convert.ToInt32(dataRow["banner_id"]);
-
             var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(id);
 
             if (!this.BannerList.Contains(banner))
@@ -82,7 +79,7 @@ public class BannerComponent : IDisposable
         }
     }
 
-    public void AddBanner(IQueryAdapter dbClient, int id)
+    public void AddBanner(IDbConnection dbClient, int id)
     {
         var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(id);
 
@@ -97,7 +94,7 @@ public class BannerComponent : IDisposable
         }
     }
 
-    public void RemoveBanner(IQueryAdapter dbClient, int id)
+    public void RemoveBanner(IDbConnection dbClient, int id)
     {
         var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(id);
 

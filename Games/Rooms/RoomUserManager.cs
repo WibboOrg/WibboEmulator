@@ -8,8 +8,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Database.Daos.Bot;
-using WibboEmulator.Database.Daos.Room;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Quests;
@@ -776,7 +775,7 @@ public class RoomUserManager
         }
     }
 
-    public void SaveBots(IQueryAdapter dbClient)
+    public void SaveBots(IDbConnection dbClient)
     {
         var botList = this.GetBots();
         if (botList.Count <= 0)
@@ -787,7 +786,7 @@ public class RoomUserManager
         BotUserDao.SaveBots(dbClient, botList);
     }
 
-    public void SavePets(IQueryAdapter dbClient)
+    public void SavePets(IDbConnection dbClient)
     {
         var petlist = this.GetPets();
         if (petlist.Count <= 0)

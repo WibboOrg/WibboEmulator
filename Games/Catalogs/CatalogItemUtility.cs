@@ -1,6 +1,7 @@
 namespace WibboEmulator.Games.Catalogs;
 
 using WibboEmulator.Communication.Packets.Outgoing;
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.Items;
 
@@ -31,9 +32,9 @@ internal static class CatalogItemUtility
 
         message.WriteBoolean(ItemUtility.CanGiftItem(item));
 
-        message.WriteInteger(string.IsNullOrEmpty(item.Badge) || item.Data.Type.ToString() == "b" ? 1 : 2);
+        message.WriteInteger(string.IsNullOrEmpty(item.Badge) || item.Data.Type == ItemType.B ? 1 : 2);
 
-        if (item.Data.Type.ToString().ToLower() != "b")
+        if (item.Data.Type != ItemType.B)
         {
             message.WriteString(item.Data.Type.ToString());
             message.WriteInteger(item.Data.SpriteId);

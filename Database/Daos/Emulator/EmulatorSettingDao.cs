@@ -1,20 +1,22 @@
 ﻿namespace WibboEmulator.Database.Daos.Emulator;
 using System.Data;
-using WibboEmulator.Database.Interfaces;
+using Dapper;
 
 internal sealed class EmulatorSettingDao
 {
-    internal static DataTable GetAll(IQueryAdapter dbClient)
-    {
-        dbClient.SetQuery("SELECT `key`, `value` FROM `emulator_setting`");
-        return dbClient.GetTable();
-    }
+    internal static List<EmulatorSettingEntity> GetAll(IDbConnection dbClient) => dbClient.Query<EmulatorSettingEntity>(
+        "SELECT `key`, `value` FROM `emulator_setting`"
+    ).ToList();
 
-    internal static void Update(IQueryAdapter dbClient, string key, string value)
-    {
-        dbClient.SetQuery("UPDATE `emulator_setting` SET `value` = @value WHERE `key` = @key");
-        dbClient.AddParameter("value", value);
-        dbClient.AddParameter("key", key);
-        dbClient.RunQuery();
-    }
+    internal static void Update(IDbConnection dbConnection, string key, string value) => dbConnection.Execute(
+        "UPDATE emulator_setting SET value = @Value WHERE key = @Key",
+        new { Value = value, Key = key });
+
+}
+
+public class EmulatorSettingEntity
+{
+    public int Id { get; set; }
+    public string Key { get; set; }
+    public string Value { get; set; }
 }

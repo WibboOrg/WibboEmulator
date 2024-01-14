@@ -35,12 +35,12 @@ internal sealed class MakeOfferEvent : IPacketEvent
 
         var totalPrice = sellingPrice;
         var itemType = 1;
-        if (item.GetBaseItem().Type == 'i')
+        if (item.GetBaseItem().Type == ItemType.I)
         {
             itemType++;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             ItemDao.Delete(dbClient, itemId);
 

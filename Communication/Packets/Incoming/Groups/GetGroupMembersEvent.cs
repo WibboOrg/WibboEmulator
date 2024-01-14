@@ -1,5 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Groups;
-using System.Data;
+
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Games.GameClients;
@@ -117,56 +117,24 @@ internal sealed class GetGroupMembersEvent : IPacketEvent
 
     private static List<int> GetSearchRequests(int groupeId, string searchVal)
     {
-        var membersId = new List<int>();
-
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        var membresTable = GuildRequestDao.GetAllBySearch(dbClient, groupeId, searchVal);
-
-        foreach (DataRow row in membresTable.Rows)
-        {
-            if (!membersId.Contains(Convert.ToInt32(row["id"])))
-            {
-                membersId.Add(Convert.ToInt32(row["id"]));
-            }
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        var membersId = GuildRequestDao.GetAllBySearch(dbClient, groupeId, searchVal);
 
         return membersId;
     }
 
     private static List<int> GetSearchAdmins(int groupeId, string searchVal)
     {
-        var membersId = new List<int>();
-
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-
-        var membresTable = GuildMembershipDao.GetAllUserIdBySearchAndStaff(dbClient, groupeId, searchVal);
-
-        foreach (DataRow row in membresTable.Rows)
-        {
-            if (!membersId.Contains(Convert.ToInt32(row["id"])))
-            {
-                membersId.Add(Convert.ToInt32(row["id"]));
-            }
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        var membersId = GuildMembershipDao.GetAllUserIdBySearchAndStaff(dbClient, groupeId, searchVal);
 
         return membersId;
     }
 
     private static List<int> GetSearchMembres(int groupeId, string searchVal)
     {
-        var membersId = new List<int>();
-
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-
-        var membresTable = GuildMembershipDao.GetAllUserIdBySearch(dbClient, groupeId, searchVal);
-
-        foreach (DataRow row in membresTable.Rows)
-        {
-            if (!membersId.Contains(Convert.ToInt32(row["id"])))
-            {
-                membersId.Add(Convert.ToInt32(row["id"]));
-            }
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        var membersId = GuildMembershipDao.GetAllUserIdBySearch(dbClient, groupeId, searchVal);
 
         return membersId;
     }

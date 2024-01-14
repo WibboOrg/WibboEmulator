@@ -115,7 +115,7 @@ internal sealed class ConfirmLoveLockEvent : IPacketEvent
                 userOne.Client.SendPacket(new LoveLockDialogueCloseComposer(id));
                 userTwo.Client.SendPacket(new LoveLockDialogueCloseComposer(id));
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                 ItemDao.UpdateExtradata(dbClient, item.Id, item.ExtraData);
             }
         }

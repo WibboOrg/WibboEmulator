@@ -1,5 +1,5 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -40,7 +40,7 @@ public class BotFollowAvatar : WiredActionBase, IWired, IWiredEffect
         return false;
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient)
+    public void SaveToDatabase(IDbConnection dbClient)
     {
         var isFollow = this.GetIntParam(0) == 1;
 

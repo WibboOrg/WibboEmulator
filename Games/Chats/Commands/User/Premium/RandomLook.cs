@@ -25,7 +25,7 @@ internal sealed class RandomLook : IChatCommand
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             session.User.Look = UserWardrobeDao.GetOneRandomLook(dbClient);
         }

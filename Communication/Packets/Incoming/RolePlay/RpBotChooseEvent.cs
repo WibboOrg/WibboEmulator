@@ -31,7 +31,7 @@ internal sealed class RpBotChooseEvent : IPacketEvent
 
         if (message == "play_slot" && user.IsSlot && !user.IsSlotSpin && session.User.WibboPoints >= user.SlotAmount)
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
             user.IsSlotSpin = true;
             user.IsSlot = false;

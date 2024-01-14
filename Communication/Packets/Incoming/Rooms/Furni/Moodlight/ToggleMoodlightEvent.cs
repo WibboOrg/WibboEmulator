@@ -1,4 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.Moodlight;
+
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
@@ -32,6 +34,9 @@ internal sealed class ToggleMoodlightEvent : IPacketEvent
         {
             room.MoodlightData.Enable();
         }
+
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        ItemMoodlightDao.UpdateEnabled(dbClient, room.MoodlightData.ItemId, room.MoodlightData.Enabled);
 
         roomItem.ExtraData = room.MoodlightData.GenerateExtraData();
         roomItem.UpdateState();

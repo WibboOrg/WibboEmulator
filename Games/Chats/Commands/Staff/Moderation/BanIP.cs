@@ -34,12 +34,12 @@ internal sealed class BanIP : IChatCommand
 
         session.SendWhisper("Tu as banIP " + targetUser.User.Username + " pour " + reason + "!");
 
-        WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.User.Username, -1, reason, true, false);
+        WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.User.Username, -1, reason, true);
         _ = session.User.CheckChatMessage(reason, "<CMD>", room.Id);
 
         if (securityBan)
         {
-            WibboEnvironment.GetGame().GetGameClientManager().BanUser(session, "Robot", -1, "Votre compte à été banni par sécurité", false, false);
+            WibboEnvironment.GetGame().GetGameClientManager().BanUser(session, "Robot", -1, "Votre compte à été banni par sécurité", false);
         }
     }
 }

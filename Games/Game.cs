@@ -5,7 +5,7 @@ using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Achievements;
 using WibboEmulator.Games.Animations;
 using WibboEmulator.Games.Badges;
@@ -84,7 +84,7 @@ public class Game : IDisposable
         this._moduleWatch = new Stopwatch();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         DatabaseCleanup(dbClient);
 
@@ -238,7 +238,7 @@ public class Game : IDisposable
         Console.WriteLine("MainGameLoop end");
     }
 
-    public static void DatabaseCleanup(IQueryAdapter dbClient)
+    public static void DatabaseCleanup(IDbConnection dbClient)
     {
         if (!Debugger.IsAttached)
         {

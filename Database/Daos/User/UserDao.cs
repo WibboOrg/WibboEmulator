@@ -1,179 +1,159 @@
 namespace WibboEmulator.Database.Daos.User;
 using System.Data;
-using WibboEmulator.Database.Interfaces;
+using Dapper;
 
 internal sealed class UserDao
 {
-    internal static string BuildUpdateQuery(int userId, int duckets, int credits, int bannerId) => "UPDATE `user` SET `user`.online = '0', `user`.last_online = '" + WibboEnvironment.GetUnixTimestamp() + "', activity_points = '" + duckets + "', credits = '" + credits + "', banner_id = '" + bannerId + "' WHERE id = '" + userId + "';";
+    internal static int GetIdByName(IDbConnection dbClient, string name) => dbClient.ExecuteScalar<int>(
+        "SELECT id FROM `user` WHERE username = @Username LIMIT 1",
+        new { Username = name });
 
-    internal static int GetIdByName(IQueryAdapter dbClient, string name)
-    {
-        dbClient.SetQuery("SELECT id FROM `user` WHERE username = @username LIMIT 1");
-        dbClient.AddParameter("username", name);
+    internal static string GetNameById(IDbConnection dbClient, int userId) => dbClient.ExecuteScalar<string>(
+        "SELECT username FROM `user` WHERE id = @userId LIMIT 1",
+        new { userId });
 
-        return dbClient.GetInteger();
-    }
+    internal static int GetCredits(IDbConnection dbClient, int userId) => dbClient.ExecuteScalar<int>(
+        "SELECT credits FROM `user` WHERE id = @UserId",
+        new { UserId = userId });
 
-    internal static string GetNameById(IQueryAdapter dbClient, int userId)
-    {
-        dbClient.SetQuery("SELECT username FROM `user` WHERE id = @id LIMIT 1");
-        dbClient.AddParameter("id", userId);
+    internal static UserEntity GetOneIdAndBlockNewFriend(IDbConnection dbClient, string username) => dbClient.QuerySingleOrDefault<UserEntity>(
+        "SELECT id, block_newfriends FROM `user` WHERE username = @UserName",
+        new { UserName = username });
 
-        return dbClient.GetString();
-    }
+    internal static List<UserEntity> GetAllSearchUsers(IDbConnection dbClient, string search) => dbClient.Query<UserEntity>(
+        "SELECT id, username, look, motto, last_online FROM `user` WHERE username LIKE @Search AND is_banned = '0' LIMIT 50",
+        new { Search = search.Replace("%", "\\%").Replace("_", "\\_") + "%" }
+    ).ToList();
 
-    internal static int GetCredits(IQueryAdapter dbClient, int userId)
-    {
-        dbClient.SetQuery("SELECT credits FROM `user` WHERE id = @userid");
-        dbClient.AddParameter("userid", userId);
-        return dbClient.GetInteger();
-    }
+    internal static List<int> GetTop10ByGamePointMonth(IDbConnection dbClient) => dbClient.Query<int>(
+        "SELECT id FROM `user` WHERE game_points_month > '0' AND is_banned = '0' AND rank < '6' ORDER BY game_points_month DESC LIMIT 10"
+    ).ToList();
 
-    internal static DataRow GetIdAndLangue(IQueryAdapter dbClient, string owner)
-    {
-        dbClient.SetQuery("SELECT id, langue FROM `user` WHERE username = @owner");
-        dbClient.AddParameter("owner", owner);
-        return dbClient.GetRow();
-    }
+    internal static UserEntity GetOneByTicket(IDbConnection dbClient, string ticket) => dbClient.QuerySingleOrDefault<UserEntity>(
+        "SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned`, `banner_id` FROM `user` WHERE auth_ticket = @SsoTicket LIMIT 1",
+        new { SsoTicket = ticket });
 
-    internal static DataRow GetOneInfo(IQueryAdapter dbClient, int userId)
-    {
-        dbClient.SetQuery("SELECT id, username, look, account_created, last_online, mail FROM `user` WHERE id = '" + userId + "'");
-        return dbClient.GetRow();
-    }
+    internal static UserEntity GetOne(IDbConnection dbClient, int userId) => dbClient.QuerySingleOrDefault<UserEntity>(
+        "SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned`, `banner_id` FROM `user` WHERE id = @Id LIMIT 1",
+        new { Id = userId });
 
-    internal static DataRow GetOneIdAndBlockNewFriend(IQueryAdapter dbClient, string username)
-    {
-        dbClient.SetQuery("SELECT id, block_newfriends FROM `user` WHERE username = @username");
-        dbClient.AddParameter("username", username);
-        return dbClient.GetRow();
-    }
+    internal static void UpdateRemoveLimitCoins(IDbConnection dbClient, int userId, int points) => dbClient.Execute(
+        "UPDATE `user` SET `limit_coins` = `limit_coins` - '" + points + "' WHERE `id` = '" + userId + "'");
 
-    internal static DataTable GetAllSearchUsers(IQueryAdapter dbClient, string search)
-    {
-        dbClient.SetQuery("SELECT id, username, look, motto, last_online FROM `user` WHERE username LIKE @search AND is_banned = '0' LIMIT 50");
-        dbClient.AddParameter("search", search.Replace("%", "\\%").Replace("_", "\\_") + "%");
-        return dbClient.GetTable();
-    }
+    internal static void UpdateRemovePoints(IDbConnection dbClient, int userId, int points) => dbClient.Execute(
+        "UPDATE `user` SET `vip_points` = `vip_points` - '" + points + "' WHERE `id` = '" + userId + "'");
 
-    internal static DataTable GetTop10ByGamePointMonth(IQueryAdapter dbClient)
-    {
-        dbClient.SetQuery("SELECT id FROM `user` WHERE game_points_month > '0' AND is_banned = '0' AND rank < '6' ORDER BY game_points_month DESC LIMIT 10");
-        return dbClient.GetTable();
-    }
+    internal static void UpdateAddPoints(IDbConnection dbClient, int userId, int points) => dbClient.Execute(
+        "UPDATE `user` SET `vip_points` = `vip_points` + '" + points + "' WHERE `id` = '" + userId + "'");
 
-    internal static DataRow GetOneByTicket(IQueryAdapter dbClient, string sessionTicket)
-    {
-        dbClient.SetQuery("SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `machine_id`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned`, `banner_id` FROM `user` WHERE auth_ticket = @sso LIMIT 1");
-        dbClient.AddParameter("sso", sessionTicket);
-        return dbClient.GetRow();
-    }
+    internal static void UpdateHomeRoom(IDbConnection dbClient, int userId, int roomId) => dbClient.Execute(
+        "UPDATE `user` SET `home_room` = '" + roomId + "' WHERE `id` = '" + userId + "'");
 
-    internal static DataTable GetAllFriendShips(IQueryAdapter dbClient, int userId)
-    {
-        dbClient.SetQuery("SELECT `user`.id,`user`.username,`messenger_friendship`.relation FROM `user` JOIN `messenger_friendship` ON `user`.id = `messenger_friendship`.user_two_id WHERE `messenger_friendship`.user_one_id = '" + userId + "'");
-        return dbClient.GetTable();
-    }
+    internal static void UpdateNuxEnable(IDbConnection dbClient, int userId, int roomId) => dbClient.Execute(
+        "UPDATE `user` SET `nux_enable` = '0', `home_room` = '" + roomId + "' WHERE `id` = '" + userId + "'");
 
-    internal static DataTable GetAllFriendRequests(IQueryAdapter dbClient, int userId)
-    {
-        dbClient.SetQuery("SELECT `messenger_request`.from_id,`messenger_request`.to_id,`user`.username FROM `user` JOIN `messenger_request` ON `user`.id = `messenger_request`.from_id WHERE `messenger_request`.to_id = '" + userId + "'");
-        return dbClient.GetTable();
-    }
+    internal static void UpdateMotto(IDbConnection dbClient, int userId, string motto) => dbClient.Execute(
+        "UPDATE user SET motto = @Motto WHERE id = @UserId",
+        new { Motto = motto, UserId = userId });
 
-    internal static DataRow GetOne(IQueryAdapter dbClient, int userId)
-    {
-        dbClient.SetQuery("SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `machine_id`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned`, `banner_id` FROM `user` WHERE id = @id LIMIT 1");
-        dbClient.AddParameter("id", userId);
-        return dbClient.GetRow();
-    }
+    internal static void UpdateAddMonthPremium(IDbConnection dbClient, int userId) => dbClient.Execute(
+        "UPDATE `user` SET `mois_vip` = mois_vip + '1' WHERE `id` = '" + userId + "' LIMIT 1");
 
-    internal static DataTable GetAllFriendRelation(IQueryAdapter dbClient, int userId)
-    {
-        dbClient.SetQuery("SELECT `user`.`id`, `messenger_friendship`.`relation` FROM `user` JOIN `messenger_friendship` ON `user`.`id` = `messenger_friendship`.user_two_id WHERE `messenger_friendship`.user_one_id = '" + userId + "' AND `messenger_friendship`.relation != '0'");
-        return dbClient.GetTable();
-    }
+    internal static void UpdateRank(IDbConnection dbClient, int userId, int rank) => dbClient.Execute(
+        "UPDATE `user` SET `rank` = '" + rank + "' WHERE `id` = '" + userId + "' LIMIT 1");
 
-    internal static DataRow GetOneVolume(IQueryAdapter dbClient, int userId)
-    {
-        dbClient.SetQuery("SELECT `volume` FROM `user` WHERE `id` = '" + userId + "'");
-        return dbClient.GetRow();
-    }
+    internal static void UpdateIgnoreRoomInvites(IDbConnection dbClient, int userId, bool flag) => dbClient.Execute(
+        "UPDATE `user` SET `ignore_room_invite` = '" + (flag ? "1" : "0") + "' WHERE `id` = '" + userId + "' LIMIT 1");
 
-    internal static void UpdateRemoveLimitCoins(IQueryAdapter dbClient, int userId, int points) => dbClient.RunQuery("UPDATE `user` SET `limit_coins` = `limit_coins` - '" + points + "' WHERE `id` = '" + userId + "'");
+    internal static void UpdateCameraFollowDisabled(IDbConnection dbClient, int userId, bool flag) => dbClient.Execute(
+        "UPDATE `user` SET `camera_follow_disabled` = '" + (flag ? "1" : "0") + "' WHERE `id` = '" + userId + "' LIMIT 1");
 
-    internal static void UpdateRemovePoints(IQueryAdapter dbClient, int userId, int points) => dbClient.RunQuery("UPDATE `user` SET `vip_points` = `vip_points` - '" + points + "' WHERE `id` = '" + userId + "'");
+    internal static void UpdateVolume(IDbConnection dbClient, int userId, int volume1, int volume2, int volume3) => dbClient.Execute(
+        "UPDATE `user` SET `volume` = '" + volume1 + "," + volume2 + "," + volume3 + "' WHERE `id` = '" + userId + "' LIMIT 1");
 
-    internal static void UpdateAddPoints(IQueryAdapter dbClient, int userId, int points) => dbClient.RunQuery("UPDATE `user` SET `vip_points` = `vip_points` + '" + points + "' WHERE `id` = '" + userId + "'");
+    internal static void UpdateName(IDbConnection dbClient, int userId, string username) => dbClient.Execute(
+        "UPDATE user SET username = @NewName WHERE id = @UserId",
+        new { NewName = username, UserId = userId });
 
-    internal static void UpdateHomeRoom(IQueryAdapter dbClient, int userId, int roomId) => dbClient.RunQuery("UPDATE `user` SET `home_room` = '" + roomId + "' WHERE `id` = '" + userId + "'");
+    internal static void UpdateLookAndGender(IDbConnection dbClient, int userId, string look, string gender) => dbClient.Execute(
+        "UPDATE user SET look = @Look, gender = @Gender WHERE id = @UserId",
+        new { Look = look, Gender = gender, UserId = userId });
 
-    internal static void UpdateNuxEnable(IQueryAdapter dbClient, int userId, int roomId) => dbClient.RunQuery("UPDATE `user` SET `nux_enable` = '0', `home_room` = '" + roomId + "' WHERE `id` = '" + userId + "'");
+    internal static void UpdateLook(IDbConnection dbClient, int userId, string look) => dbClient.Execute(
+        "UPDATE user SET look = @Look WHERE id = @UserId",
+        new { Look = look, UserId = userId });
 
-    internal static void UpdateMotto(IQueryAdapter dbClient, int userId, string motto)
-    {
-        dbClient.SetQuery("UPDATE `user` SET `motto` = @motto WHERE `id` = '" + userId + "'");
-        dbClient.AddParameter("motto", motto);
-        dbClient.RunQuery();
-    }
+    internal static void UpdateAllOnline(IDbConnection dbClient) => dbClient.Execute(
+        "UPDATE `user` SET `online` = '0' WHERE `online` = '1'");
 
-    internal static void UpdateAddMonthPremium(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("UPDATE `user` SET `mois_vip` = mois_vip + '1' WHERE `id` = '" + userId + "' LIMIT 1");
+    internal static void UpdateAllTicket(IDbConnection dbClient) => dbClient.Execute(
+        "UPDATE `user` SET `auth_ticket` = '' WHERE `auth_ticket` != ''");
 
-    internal static void UpdateRank(IQueryAdapter dbClient, int userId, int rank) => dbClient.RunQuery("UPDATE `user` SET `rank` = '" + rank + "' WHERE `id` = '" + userId + "' LIMIT 1");
+    internal static void UpdateAddGamePoints(IDbConnection dbClient, int userId) => dbClient.Execute(
+        "UPDATE `user` SET `game_points` = `game_points` + 1, `game_points_month` = `game_points_month` + 1 WHERE `id` = '" + userId + "'");
 
-    internal static void UpdateIgnoreRoomInvites(IQueryAdapter dbClient, int userId, bool flag) => dbClient.RunQuery("UPDATE `user` SET `ignore_room_invite` = '" + (flag ? "1" : "0") + "' WHERE `id` = '" + userId + "' LIMIT 1");
+    internal static void UpdateMazoScore(IDbConnection dbClient, int userId, int score) => dbClient.Execute(
+        "UPDATE `user` SET `mazoscore` = '" + score + "' WHERE `id` = '" + userId + "'");
 
-    internal static void UpdateCameraFollowDisabled(IQueryAdapter dbClient, int userId, bool flag) => dbClient.RunQuery("UPDATE `user` SET `camera_follow_disabled` = '" + (flag ? "1" : "0") + "' WHERE `id` = '" + userId + "' LIMIT 1");
+    internal static void UpdateMazo(IDbConnection dbClient, int userId, int score) => dbClient.Execute(
+        "UPDATE `user` SET `mazo` = '" + score + "' WHERE `id` = '" + userId + "'");
 
-    internal static void UpdateVolume(IQueryAdapter dbClient, int userId, int volume1, int volume2, int volume3) => dbClient.RunQuery("UPDATE `user` SET `volume` = '" + volume1 + "," + volume2 + "," + volume3 + "' WHERE `id` = '" + userId + "' LIMIT 1");
+    internal static void UpdateAddRunPoints(IDbConnection dbClient, int userId) => dbClient.Execute(
+        "UPDATE `user` SET `run_points` = `run_points` + 1, `run_points_month` = `run_points_month` + 1 WHERE `id` = '" + userId + "'");
 
-    internal static void UpdateName(IQueryAdapter dbClient, int userId, string username)
-    {
-        dbClient.SetQuery("UPDATE `user` SET `username` = @newname WHERE `id` = @userid");
-        dbClient.AddParameter("newname", username);
-        dbClient.AddParameter("userid", userId);
-        dbClient.RunQuery();
-    }
+    internal static void UpdateOffline(IDbConnection dbClient, int userId, int duckets, int credits, int bannerId) => dbClient.Execute(
+        "UPDATE `user` SET `online` = '0', `last_online` = '" + WibboEnvironment.GetUnixTimestamp() + "', `activity_points` = '" + duckets + "', `credits` = '" + credits + "', `banner_id` = '" + bannerId + "' WHERE `id` = '" + userId + "'");
 
-    internal static void UpdateLookAndGender(IQueryAdapter dbClient, int userId, string look, string gender)
-    {
-        dbClient.SetQuery("UPDATE `user` SET `look` = @look, `gender` = @gender WHERE `id` = '" + userId + "'");
-        dbClient.AddParameter("look", look);
-        dbClient.AddParameter("gender", gender);
-        dbClient.RunQuery();
-    }
+    internal static void UpdateLastDailyCredits(IDbConnection dbClient, int userId, string lastDailyCredits) => dbClient.Execute(
+        "UPDATE `user` SET `lastdailycredits` = '" + lastDailyCredits + "' WHERE `id` = '" + userId + "'");
 
-    internal static void UpdateLook(IQueryAdapter dbClient, int userId, string look)
-    {
-        dbClient.SetQuery("UPDATE `user` SET `look` = @look WHERE `id` = '" + userId + "'");
-        dbClient.AddParameter("look", look);
-        dbClient.RunQuery();
-    }
+    internal static void UpdateOnline(IDbConnection dbClient, int userId) => dbClient.Execute(
+        "UPDATE `user` SET `online` = '1', `auth_ticket` = ''  WHERE `id` = '" + userId + "'");
 
-    internal static void UpdateAllOnline(IQueryAdapter dbClient) => dbClient.RunQuery("UPDATE `user` SET `online` = '0' WHERE `online` = '1'");
+    internal static void UpdateIsBanned(IDbConnection dbClient, int userId) => dbClient.Execute(
+        "UPDATE `user` SET `is_banned` = '1' WHERE `id` = '" + userId + "'");
+}
 
-    internal static void UpdateAllTicket(IQueryAdapter dbClient) => dbClient.RunQuery("UPDATE `user` SET `auth_ticket` = '' WHERE `auth_ticket` != ''");
-
-    internal static void UpdateMachineId(IQueryAdapter dbClient, int userId, string machineId)
-    {
-        dbClient.SetQuery("UPDATE `user` SET `machine_id` = @machineid WHERE `id` = '" + userId + "'");
-        dbClient.AddParameter("machineid", machineId);
-        dbClient.RunQuery();
-    }
-
-    internal static void UpdateAddGamePoints(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("UPDATE `user` SET `game_points` = `game_points` + 1, `game_points_month` = `game_points_month` + 1 WHERE `id` = '" + userId + "'");
-
-    internal static void UpdateMazoScore(IQueryAdapter dbClient, int userId, int score) => dbClient.RunQuery("UPDATE `user` SET `mazoscore` = '" + score + "' WHERE `id` = '" + userId + "'");
-
-    internal static void UpdateMazo(IQueryAdapter dbClient, int userId, int score) => dbClient.RunQuery("UPDATE `user` SET `mazo` = '" + score + "' WHERE `id` = '" + userId + "'");
-
-    internal static void UpdateAddRunPoints(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("UPDATE `user` SET `run_points` = `run_points` + 1, `run_points_month` = `run_points_month` + 1 WHERE `id` = '" + userId + "'");
-
-    internal static void UpdateOffline(IQueryAdapter dbClient, int userId, int duckets, int credits, int bannerId) => dbClient.RunQuery("UPDATE `user` SET `online` = '0', `last_online` = '" + WibboEnvironment.GetUnixTimestamp() + "', `activity_points` = '" + duckets + "', `credits` = '" + credits + "', `banner_id` = '" + bannerId + "' WHERE `id` = '" + userId + "'");
-
-    internal static void UpdateLastDailyCredits(IQueryAdapter dbClient, int userId, string lastDailyCredits) => dbClient.RunQuery("UPDATE `user` SET `lastdailycredits` = '" + lastDailyCredits + "' WHERE `id` = '" + userId + "'");
-
-    internal static void UpdateOnline(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("UPDATE `user` SET `online` = '1', `auth_ticket` = ''  WHERE `id` = '" + userId + "'");
-
-    internal static void UpdateIsBanned(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("UPDATE `user` SET `is_banned` = '1' WHERE `id` = '" + userId + "'");
+public class UserEntity
+{
+    public int Id { get; set; }
+    public string Username { get; set; }
+    public string Password { get; set; }
+    public string Mail { get; set; }
+    public string AuthTicket { get; set; }
+    public int Rank { get; set; }
+    public int Credits { get; set; }
+    public int ActivityPoints { get; set; }
+    public string Look { get; set; }
+    public string Gender { get; set; }
+    public string Motto { get; set; }
+    public int AccountCreated { get; set; }
+    public int LastOnline { get; set; }
+    public bool Online { get; set; }
+    public string IpLast { get; set; }
+    public int HomeRoom { get; set; }
+    public bool BlockNewFriends { get; set; }
+    public bool HideOnline { get; set; }
+    public bool HideInRoom { get; set; }
+    public int LastOffline { get; set; }
+    public int MoisVip { get; set; }
+    public string Volume { get; set; }
+    public int VipPoints { get; set; }
+    public int LimitCoins { get; set; }
+    public bool AcceptTrading { get; set; }
+    public bool CameraFollowDisabled { get; set; }
+    public bool IgnoreRoomInvite { get; set; }
+    public string LastDailyCredits { get; set; }
+    public bool HideGameAlert { get; set; }
+    public string IpCountry { get; set; }
+    public int GamePoints { get; set; }
+    public int GamePointsMonth { get; set; }
+    public int MazoScore { get; set; }
+    public int Mazo { get; set; }
+    public bool NuxEnable { get; set; }
+    public string Langue { get; set; }
+    public int RunPoints { get; set; }
+    public int RunPointsMonth { get; set; }
+    public bool IsBanned { get; set; }
+    public int BannerId { get; set; }
 }

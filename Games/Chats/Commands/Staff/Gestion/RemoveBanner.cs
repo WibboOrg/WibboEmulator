@@ -36,7 +36,7 @@ internal sealed class RemoveBanner : IChatCommand
             return;
         }
 
-        var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         targetUser.User.Banner.RemoveBanner(dbClient, bannerId);
     }
 }

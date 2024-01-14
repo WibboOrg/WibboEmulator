@@ -46,7 +46,7 @@ internal sealed class RemoveAllRightsEvent : IPacketEvent
             session.SendPacket(new FlatControllerRemovedMessageComposer(room.Id, num));
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoomRightDao.Delete(dbClient, room.Id);
         }

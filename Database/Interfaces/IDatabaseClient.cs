@@ -1,10 +1,10 @@
-namespace WibboEmulator.Database.Interfaces;
+namespace System.Data;
 using MySqlConnector;
 
 public interface IDatabaseClient : IDisposable
 {
     void Open();
     void Close();
-    IQueryAdapter GetQueryReactor();
+    IDbConnection Connection();
     MySqlCommand CreateNewCommand();
 }

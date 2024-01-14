@@ -45,12 +45,12 @@ internal sealed class UpdateGroupSettingsEvent : IPacketEvent
             }
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             GuildDao.UpdateStateAndDeco(dbClient, group.Id, group.GroupType == GroupType.Open ? 0 : group.GroupType == GroupType.Locked ? 1 : 2, furniOptions);
         }
 
-        group.AdminOnlyDeco = furniOptions;
+        group.AdminOnlyDeco = furniOptions == 1;
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var room))
         {

@@ -15,7 +15,7 @@ internal sealed class UserSettingsRoomInvitesEvent : IPacketEvent
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserDao.UpdateIgnoreRoomInvites(dbClient, session.User.Id, flag);
         }

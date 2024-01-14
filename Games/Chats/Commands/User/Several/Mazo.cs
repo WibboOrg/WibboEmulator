@@ -29,7 +29,7 @@ internal sealed class Mazo : IChatCommand
                 session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.newscore", session.Langue), user.Mazo));
                 user.MazoHighScore = user.Mazo;
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
                 UserDao.UpdateMazoScore(dbClient, user.Id, user.MazoHighScore);
             }
             else
@@ -58,7 +58,7 @@ internal sealed class Mazo : IChatCommand
             userRoom.TimerResetEffect = 4;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserDao.UpdateMazo(dbClient, user.Id, user.Mazo);
         }

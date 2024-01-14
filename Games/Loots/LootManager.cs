@@ -2,7 +2,6 @@ namespace WibboEmulator.Games.Loots;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Daos.Log;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items;
 
 public class LootManager
@@ -16,7 +15,7 @@ public class LootManager
         this._rarityCounter = new Dictionary<int, int>();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this._lootItem.Clear();
         this._rarityCounter.Clear();
@@ -36,12 +35,17 @@ public class LootManager
         this._rarityCounter.Add(3, epicCounter);
         this._rarityCounter.Add(4, legendaryCounter);
 
-        var dTable = EmulatorLootBoxDao.GetAll(dbClient);
+        var emulatorLootBoxList = EmulatorLootBoxDao.GetAll(dbClient);
 
-        foreach (DataRow dRow in dTable.Rows)
+        if (emulatorLootBoxList.Count == 0)
         {
-            var interactionType = InteractionTypes.GetTypeFromString(dRow["interaction_type"].ToString());
-            var loot = new Loot(Convert.ToInt32(dRow["probability"].ToString()), Convert.ToInt32(dRow["page_id"].ToString()), Convert.ToInt32(dRow["item_id"].ToString()), dRow["category"].ToString(), Convert.ToInt32(dRow["amount"].ToString()));
+            return;
+        }
+
+        foreach (var emulatorLootBox in emulatorLootBoxList)
+        {
+            var interactionType = InteractionTypes.GetTypeFromString(emulatorLootBox.InteractionType);
+            var loot = new Loot(emulatorLootBox.Probability, emulatorLootBox.PageId, emulatorLootBox.ItemId, emulatorLootBox.Category.ToString(), emulatorLootBox.Amount);
 
             if (!this._lootItem.ContainsKey(interactionType))
             {

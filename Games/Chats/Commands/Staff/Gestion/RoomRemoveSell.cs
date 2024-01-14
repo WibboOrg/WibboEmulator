@@ -19,7 +19,7 @@ internal sealed class RoomRemoveSell : IChatCommand
 
         room.RoomData.SellPrice = 0;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoomDao.UpdatePrice(dbClient, room.Id, 0);
         }

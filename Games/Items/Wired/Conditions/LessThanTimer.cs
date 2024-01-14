@@ -1,5 +1,5 @@
 namespace WibboEmulator.Games.Items.Wired.Conditions;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -16,7 +16,7 @@ public class LessThanTimer : WiredConditionBase, IWiredCondition, IWired
         return (DateTime.Now - dateTime).TotalSeconds < timeout / 2;
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient)
+    public void SaveToDatabase(IDbConnection dbClient)
     {
         var timeout = this.GetIntParam(0);
 

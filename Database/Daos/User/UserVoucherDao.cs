@@ -1,21 +1,15 @@
 ﻿namespace WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Interfaces;
+
+using System.Data;
+using Dapper;
 
 internal sealed class UserVoucherDao
 {
-    internal static bool HaveVoucher(IQueryAdapter dbClient, int userId, string voucherCode)
-    {
-        dbClient.SetQuery("SELECT null FROM `user_voucher` WHERE `user_id` = @userId AND `voucher` = @Voucher LIMIT 1");
-        dbClient.AddParameter("userId", userId);
-        dbClient.AddParameter("Voucher", voucherCode);
-        return dbClient.FindsResult();
-    }
+    internal static bool HaveVoucher(IDbConnection dbClient, int userId, string voucherCode) => dbClient.QueryFirstOrDefault<int>(
+        "SELECT id FROM user_voucher WHERE user_id = @UserId AND voucher = @Voucher LIMIT 1",
+        new { UserId = userId, Voucher = voucherCode }) > 0;
 
-    internal static void Insert(IQueryAdapter dbClient, int userId, string voucherCode)
-    {
-        dbClient.SetQuery("INSERT INTO `user_voucher` (`user_id`, `voucher`) VALUES (@userId, @Voucher)");
-        dbClient.AddParameter("userId", userId);
-        dbClient.AddParameter("Voucher", voucherCode);
-        dbClient.RunQuery();
-    }
+    internal static void Insert(IDbConnection dbClient, int userId, string voucherCode) => dbClient.Execute(
+        "INSERT INTO user_voucher (user_id, voucher) VALUES (@UserId, @Voucher)",
+        new { UserId = userId, Voucher = voucherCode });
 }

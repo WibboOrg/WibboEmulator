@@ -1,12 +1,12 @@
 namespace WibboEmulator.Games.Groups;
-using System.Data;
+
 using WibboEmulator.Database.Daos.Guild;
 
 public class Group
 {
     public int Id { get; set; }
     public string Name { get; set; }
-    public int AdminOnlyDeco { get; set; }
+    public bool AdminOnlyDeco { get; set; }
     public string Badge { get; set; }
     public int CreateTime { get; set; }
     public int CreatorId { get; set; }
@@ -23,7 +23,7 @@ public class Group
     private readonly List<int> _administrators;
 
     public Group(int id, string name, string description, string badge, int roomId, int owner, int time, int type, int colour1, int colour2,
-        int adminOnlyDeco, bool hasForum)
+        bool adminOnlyDeco, bool hasForum)
     {
         this.Id = id;
         this.Name = name;
@@ -61,15 +61,16 @@ public class Group
 
     public void InitMembers()
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        var getMembers = GuildMembershipDao.GetAll(dbClient, this.Id);
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
-        if (getMembers != null)
+        var guildMembershipList = GuildMembershipDao.GetAll(dbClient, this.Id);
+
+        if (guildMembershipList.Count != 0)
         {
-            foreach (DataRow row in getMembers.Rows)
+            foreach (var guildMembership in guildMembershipList)
             {
-                var userId = Convert.ToInt32(row["user_id"]);
-                var isAdmin = Convert.ToInt32(row["rank"]) != 0;
+                var userId = guildMembership.UserId;
+                var isAdmin = guildMembership.Rank != 0;
 
                 if (isAdmin)
                 {
@@ -88,14 +89,12 @@ public class Group
             }
         }
 
-        var getRequests = GuildRequestDao.GetAll(dbClient, this.Id);
+        var requestIdList = GuildRequestDao.GetAll(dbClient, this.Id);
 
-        if (getRequests != null)
+        if (requestIdList.Count != 0)
         {
-            foreach (DataRow row in getRequests.Rows)
+            foreach (var userId in requestIdList)
             {
-                var userId = Convert.ToInt32(row["user_id"]);
-
                 if (this._members.Contains(userId) || this._administrators.Contains(userId))
                 {
                     GuildRequestDao.Delete(dbClient, this.Id, userId);
@@ -149,7 +148,7 @@ public class Group
 
         this._administrators.Add(userId);
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 1);
     }
 
@@ -167,13 +166,13 @@ public class Group
             this._members.Add(userId);
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 0);
     }
 
     public void AddMember(int userId)
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         if (this.IsAdmin(userId))
         {
             GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 0);
@@ -219,13 +218,13 @@ public class Group
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         GuildMembershipDao.Delete(dbClient, this.Id, userId);
     }
 
     public void HandleRequest(int userId, bool accepted)
     {
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             if (accepted)
             {

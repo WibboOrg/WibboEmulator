@@ -28,7 +28,7 @@ internal sealed class UpdateCreditsCommand : IRCONCommand
         }
 
         int credits;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             credits = UserDao.GetCredits(dbClient, client.User.Id);
         }

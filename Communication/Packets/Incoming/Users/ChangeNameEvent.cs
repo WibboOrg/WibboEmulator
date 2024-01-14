@@ -50,7 +50,7 @@ internal sealed class ChangeNameEvent : IPacketEvent
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoomDao.UpdateOwner(dbClient, newUsername, session.User.Username);
 

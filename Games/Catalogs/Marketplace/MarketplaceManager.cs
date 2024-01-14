@@ -29,7 +29,7 @@ public class MarketplaceManager
             return 0;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             num = CatalogMarketplaceDataDao.GetPriceBySprite(dbClient, spriteID);
 

@@ -1,5 +1,5 @@
 namespace WibboEmulator.Games.Items.Wired.Triggers;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -18,7 +18,7 @@ public class Collision : WiredTriggerBase, IWired
         this.RoomInstance.WiredHandler.TrgCollision -= this.OnFurniCollision;
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient)
+    public void SaveToDatabase(IDbConnection dbClient)
     {
     }
 

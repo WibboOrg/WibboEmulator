@@ -63,9 +63,7 @@ internal sealed class PlacePetEvent : IPacketEvent
 
         _ = room.RoomUserManager.DeployBot(new RoomBot(pet.PetId, pet.OwnerId, pet.RoomId, BotAIType.Pet, true, pet.Name, "", "", pet.Look, x, y, 0, 0, false, "", 0, false, 0, 0, 0), pet);
 
-        pet.DBState = DatabaseUpdateState.NeedsUpdate;
-
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             BotPetDao.UpdateRoomId(dbClient, pet.PetId, pet.RoomId);
         }

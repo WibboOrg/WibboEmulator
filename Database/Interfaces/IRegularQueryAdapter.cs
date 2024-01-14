@@ -1,6 +1,4 @@
-﻿namespace WibboEmulator.Database.Interfaces;
-using System.Data;
-
+﻿namespace System.Data;
 public interface IRegularQueryAdapter
 {
     void AddParameter(string name, string query);
@@ -10,7 +8,7 @@ public interface IRegularQueryAdapter
     DataRow GetRow();
     string GetString();
     DataTable GetTable();
-    void RunQuery(string query);
+    void Execute(string query);
     void SetQuery(string query);
-    void RunQuery();
+    void Execute();
 }

@@ -1,7 +1,7 @@
 namespace WibboEmulator.Games.Rooms;
-using System.Data;
+
 using WibboEmulator.Core.Language;
-using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.Groups;
 
 public class RoomData
@@ -90,61 +90,59 @@ public class RoomData
         this.SellPrice = 0;
     }
 
-    public void Fill(DataRow row)
+    public void Fill(RoomEntity room)
     {
-        this.Id = Convert.ToInt32(row["id"]);
-        this.Name = (string)row["caption"];
-        this.Description = (string)row["description"];
-        this.OwnerName = (string)row["owner"];
-        this.OwnerId = (int)row["owner_id"];
-        this.Langue = LanguageManager.ParseLanguage(row["langue"].ToString());
+        this.Id = room.Id;
+        this.Name = room.Caption;
+        this.Description = room.Description;
+        this.OwnerName = room.Owner;
+        this.OwnerId = room.OwnerId;
+        this.Langue = LanguageManager.ParseLanguage(room.Langue);
 
-        var state = row["state"].ToString();
-
-        this.Access = (state?.ToLower()) switch
+        this.Access = room.State switch
         {
-            "open" => RoomAccess.Open,
-            "password" => RoomAccess.Password,
-            "hide" => RoomAccess.Invisible,
-            "locked" => RoomAccess.Doorbell,
+            RoomState.Open => RoomAccess.Open,
+            RoomState.Password => RoomAccess.Password,
+            RoomState.Hide => RoomAccess.Invisible,
+            RoomState.Locked => RoomAccess.Doorbell,
             _ => RoomAccess.Open
         };
-        this.Category = Convert.ToInt32(row["category"]);
-        this.UsersNow = Convert.ToInt32(row["users_now"]);
-        this.UsersMax = Convert.ToInt32(row["users_max"]);
-        this.ModelName = (string)row["model_name"];
-        this.Score = Convert.ToInt32(row["score"]);
+        this.Category = room.Category;
+        this.UsersNow = room.UsersNow;
+        this.UsersMax = room.UsersMax;
+        this.ModelName = room.ModelName;
+        this.Score = room.Score;
         this.Tags = new List<string>();
-        this.AllowPets = Convert.ToBoolean(row["allow_pets"]);
-        this.AllowPetsEating = Convert.ToBoolean(row["allow_pets_eat"]);
-        this.AllowWalkthrough = Convert.ToBoolean(row["allow_walkthrough"]);
-        this.AllowRightsOverride = Convert.ToBoolean(row["allow_rightsoverride"]);
-        this.HideWall = Convert.ToBoolean(row["allow_hidewall"]);
-        this.Password = (string)row["password"];
-        this.Wallpaper = (string)row["wallpaper"];
-        this.Floor = (string)row["floor"];
-        this.Landscape = (string)row["landscape"];
-        this.FloorThickness = Convert.ToInt32(row["floorthick"]);
-        this.WallThickness = Convert.ToInt32(row["wallthick"]);
+        this.AllowPets = room.AllowPets;
+        this.AllowPetsEating = room.AllowPetsEat;
+        this.AllowWalkthrough = room.AllowWalkthrough;
+        this.AllowRightsOverride = room.AllowRightsOverride;
+        this.HideWall = room.AllowHideWall;
+        this.Password = room.Password;
+        this.Wallpaper = room.Wallpaper;
+        this.Floor = room.Floor;
+        this.Landscape = room.Landscape;
+        this.FloorThickness = room.FloorThick;
+        this.WallThickness = room.WallThick;
 
-        this.ChatType = Convert.ToInt32(row["chat_type"]);
-        this.ChatBalloon = Convert.ToInt32(row["chat_balloon"]);
-        this.ChatSpeed = Convert.ToInt32(row["chat_speed"]);
-        this.ChatMaxDistance = Convert.ToInt32(row["chat_max_distance"]);
-        this.ChatFloodProtection = Convert.ToInt32(row["chat_flood_protection"]);
+        this.ChatType = room.ChatType;
+        this.ChatBalloon = room.ChatBalloon;
+        this.ChatSpeed = room.ChatSpeed;
+        this.ChatMaxDistance = room.ChatMaxDistance;
+        this.ChatFloodProtection = room.ChatFloodProtection;
 
-        this.MuteFuse = Convert.ToInt32(row["moderation_mute_fuse"]);
-        this.WhoCanKick = Convert.ToInt32(row["moderation_kick_fuse"]);
-        this.BanFuse = Convert.ToInt32(row["moderation_ban_fuse"]);
-        this.GroupId = Convert.ToInt32(row["group_id"]);
+        this.MuteFuse = room.ModerationMuteFuse;
+        this.WhoCanKick = room.ModerationKickFuse;
+        this.BanFuse = room.ModerationBanFuse;
+        this.GroupId = room.GroupId;
         if (WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(this.GroupId, out var group))
         {
             this.Group = group;
         }
-        this.HideWireds = Convert.ToBoolean(row["allow_hidewireds"]);
-        this.TrocStatus = Convert.ToInt32(row["troc_status"]);
+        this.HideWireds = room.AllowHideWireds;
+        this.TrocStatus = room.TrocStatus;
 
-        var tags = row["tags"].ToString();
+        var tags = room.Tags;
 
         if (tags != null)
         {
@@ -154,8 +152,8 @@ public class RoomData
             }
         }
 
-        this.SellPrice = Convert.ToInt32(row["price"]);
-        this.WiredSecurity = Convert.ToBoolean(row["wired_security"]);
+        this.SellPrice = room.Price;
+        this.WiredSecurity = room.WiredSecurity;
         this.Model = WibboEnvironment.GetGame().GetRoomManager().GetModel(this.ModelName, this.Id);
     }
 }

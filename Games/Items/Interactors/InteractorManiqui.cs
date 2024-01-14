@@ -39,7 +39,7 @@ public class InteractorManiqui : FurniInteractor
         var look = lookCode + item.ExtraData.Split(new char[1] { ';' })[1];
         session.User.Look = look;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             UserDao.UpdateLook(dbClient, session.User.Id, look);
         }

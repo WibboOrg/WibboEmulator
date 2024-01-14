@@ -1,19 +1,17 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
-using System.Data;
+using WibboEmulator.Games.Users;
 
 internal sealed class ModeratorUserInfoComposer : ServerPacket
 {
-    public ModeratorUserInfoComposer(DataRow user)
+    public ModeratorUserInfoComposer(User user)
         : base(ServerPacketHeader.MODERATION_USER_INFO)
     {
-        //var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(info != null ? Convert.ToDouble(info["trading_locked"]) : 0);
-
-        this.WriteInteger(user != null ? Convert.ToInt32(user["id"]) : 0);
-        this.WriteString(user != null ? Convert.ToString(user["username"]) : "Unknown");
-        this.WriteString(user != null ? Convert.ToString(user["look"]) : "Unknown");
-        this.WriteInteger(user != null ? Convert.ToInt32(Math.Ceiling((WibboEnvironment.GetUnixTimestamp() - Convert.ToDouble(user["account_created"])) / 60)) : 0);
-        this.WriteInteger(user != null ? Convert.ToInt32(Math.Ceiling((WibboEnvironment.GetUnixTimestamp() - Convert.ToDouble(user["last_online"])) / 60)) : 0);
-        this.WriteBoolean(user != null && WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Convert.ToInt32(user["id"])) != null);
+        this.WriteInteger(user.Id);
+        this.WriteString(user.Username);
+        this.WriteString(user.Look);
+        this.WriteInteger(Convert.ToInt32(Math.Ceiling((WibboEnvironment.GetUnixTimestamp() - Convert.ToDouble(user.AccountCreated)) / 60)));
+        this.WriteInteger(Convert.ToInt32(Math.Ceiling((WibboEnvironment.GetUnixTimestamp() - Convert.ToDouble(user.LastOnline)) / 60)));
+        this.WriteBoolean(WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(user.Id) != null);
         this.WriteInteger(/*info != null ? Convert.ToInt32(info["cfhs"]) : */0);
         this.WriteInteger(/*info != null ? Convert.ToInt32(info["cfhs_abusive"]) : */0);
         this.WriteInteger(/*info != null ? Convert.ToInt32(info["cautions"]) : */0);

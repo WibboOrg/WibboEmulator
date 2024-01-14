@@ -22,21 +22,21 @@ internal static class NavigatorHandler
                 {
                     if (searchData.Length > 0)
                     {
-                        DataTable getRooms = null;
-                        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+                        List<RoomEntity> roomList = null;
+                        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
                         {
                             if (searchData.ToLower().StartsWith("owner:"))
                             {
-                                getRooms = RoomDao.GetAllSearchByUsername(dbClient, searchData.Remove(0, 6));
+                                roomList = RoomDao.GetAllSearchByUsername(dbClient, searchData.Remove(0, 6));
                             }
                         }
 
                         var results = new List<RoomData>();
-                        if (getRooms != null)
+                        if (roomList != null && roomList.Count != 0)
                         {
-                            foreach (DataRow row in getRooms.Rows)
+                            foreach (var room in roomList)
                             {
-                                var roomData = WibboEnvironment.GetGame().GetRoomManager().FetchRoomData(Convert.ToInt32(row["id"]), row);
+                                var roomData = WibboEnvironment.GetGame().GetRoomManager().FetchRoomData(room.Id, room);
                                 if (roomData != null && !results.Contains(roomData))
                                 {
                                     results.Add(roomData);
@@ -77,23 +77,23 @@ internal static class NavigatorHandler
                 {
                     if (searchData.Length > 0)
                     {
-                        DataTable table = null;
-                        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+                        List<RoomEntity> roomList = null;
+                        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
                         {
-                            table = RoomDao.GetAllSearch(dbClient, searchData);
+                            roomList = RoomDao.GetAllSearch(dbClient, searchData);
                         }
 
                         var results = new List<RoomData>();
-                        if (table != null)
+                        if (roomList != null && roomList.Count != 0)
                         {
-                            foreach (DataRow row in table.Rows)
+                            foreach (var room in roomList)
                             {
-                                if (Convert.ToString(row["state"]) == "invisible")
+                                if (room.State == RoomState.Hide)
                                 {
                                     continue;
                                 }
 
-                                var rData = WibboEnvironment.GetGame().GetRoomManager().FetchRoomData(Convert.ToInt32(row["id"]), row);
+                                var rData = WibboEnvironment.GetGame().GetRoomManager().FetchRoomData(room.Id, room);
                                 if (rData != null && !results.Contains(rData))
                                 {
                                     results.Add(rData);

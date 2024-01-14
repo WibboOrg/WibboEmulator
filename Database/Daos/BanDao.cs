@@ -1,44 +1,19 @@
 namespace WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
+
+using System.Data;
+using Dapper;
 
 internal sealed class BanDao
 {
-    internal static bool IsBanned(IQueryAdapter dbClient, string username, string ip, string ipTwo, string machineId)
-    {
-        dbClient.SetQuery("SELECT `id` FROM `ban` WHERE `expire` > @nowtime AND ((`bantype` = 'user' AND `value` = @username) OR (`bantype` = 'ip' AND `value` = @IP1) OR (`bantype` = 'ip' AND `value` = @IP2) OR (`bantype` = 'machine' AND `value` = @machineid)) LIMIT 1");
-        dbClient.AddParameter("nowtime", WibboEnvironment.GetUnixTimestamp());
-        dbClient.AddParameter("username", username);
-        dbClient.AddParameter("IP1", ip);
-        dbClient.AddParameter("IP2", ipTwo);
-        dbClient.AddParameter("machineid", machineId);
+    internal static bool IsBanned(IDbConnection dbClient, string username, string ipOne, string ipTwo) => dbClient.QueryFirstOrDefault<int>(
+        "SELECT `id` FROM `ban` WHERE `expire` > UNIX_TIMESTAMP() AND ((`bantype` = 'user' AND `value` = @username) OR (`bantype` = 'ip' AND `value` = @ipOne) OR (`bantype` = 'ip' AND `value` = @ipTwo)) LIMIT 1",
+        new { username, ipOne, ipTwo }) > 0;
 
-        return dbClient.FindsResult();
-    }
+    internal static int GetOneIgnoreAll(IDbConnection dbClient, int userId) => dbClient.QueryFirstOrDefault<int>(
+        "SELECT `expire` FROM `ban` WHERE `bantype` = 'ignoreall' AND `value` = @userId LIMIT 1",
+        new { userId });
 
-    internal static int GetOneIgnoreAll(IQueryAdapter dbClient, int userId)
-    {
-        dbClient.SetQuery("SELECT `expire` FROM `ban` WHERE `bantype` = 'ignoreall' AND `value` = @userId LIMIT 1");
-        dbClient.AddParameter("userId", userId);
-
-        var row = dbClient.GetRow();
-
-        if (row == null)
-        {
-            return 0;
-        }
-
-        _ = int.TryParse(row["expire"].ToString(), out var expire);
-
-        return expire;
-    }
-
-    internal static void InsertBan(IQueryAdapter dbClient, int expireTime, string banType, string userIdOrUsername, string reason, string modName)
-    {
-        dbClient.SetQuery("INSERT INTO `ban` (`bantype`,`value`,`reason`,`expire`,`added_by`,`added_date`) VALUES (@rawvar, @var, @reason, '" + expireTime + "', @mod, UNIX_TIMESTAMP())");
-        dbClient.AddParameter("rawvar", banType);
-        dbClient.AddParameter("var", userIdOrUsername);
-        dbClient.AddParameter("reason", reason);
-        dbClient.AddParameter("mod", modName);
-        dbClient.RunQuery();
-    }
+    internal static void InsertBan(IDbConnection dbClient, int expireTime, string banType, string userIdOrUsername, string reason, string modName) => dbClient.Execute(
+        "INSERT INTO `ban` (`bantype`,`value`,`reason`,`expire`,`added_by`,`added_date`) VALUES (@banType, @userIdOrUsername, @reason, @expireTime, @modName, UNIX_TIMESTAMP())",
+        new { expireTime, banType, userIdOrUsername, reason, modName });
 }

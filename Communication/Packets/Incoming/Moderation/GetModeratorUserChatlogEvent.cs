@@ -1,6 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 
-using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Games.Chats.Logs;
@@ -24,13 +23,13 @@ internal sealed class GetModeratorUserChatlogEvent : IPacketEvent
         {
             var sortedMessages = new List<ChatlogEntry>();
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            var table = LogChatDao.GetAllByUserId(dbClient, userId);
-            if (table != null)
+            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+            var logChatList = LogChatDao.GetAllByUserId(dbClient, userId);
+            if (logChatList.Count != 0)
             {
-                foreach (DataRow row in table.Rows)
+                foreach (var logChat in logChatList)
                 {
-                    sortedMessages.Add(new ChatlogEntry(Convert.ToInt32(row["user_id"]), row["user_name"].ToString(), Convert.ToInt32(row["room_id"]), row["type"].ToString() + row["message"].ToString(), (int)row["timestamp"]));
+                    sortedMessages.Add(new ChatlogEntry(logChat.UserId, logChat.UserName, logChat.RoomId, logChat.Type + logChat.Message, logChat.Timestamp));
                 }
             }
 

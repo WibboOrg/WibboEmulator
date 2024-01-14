@@ -1,33 +1,38 @@
 namespace WibboEmulator.Database.Daos.Item;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Utilities;
+using System.Data;
+using Dapper;
 
 internal sealed class ItemStatDao
 {
-    internal static int GetOne(IQueryAdapter dbClient, int baseId)
-    {
-        dbClient.SetQuery("SELECT amount FROM `item_stat` WHERE base_id = '" + baseId + "' LIMIT 1");
+    internal static int GetOne(IDbConnection dbClient, int baseId) => dbClient.QueryFirstOrDefault<int>(
+        "SELECT amount FROM item_stat WHERE base_id = @BaseId LIMIT 1",
+        new { BaseId = baseId });
 
-        return dbClient.GetInteger();
-    }
-
-    internal static void UpdateRemove(IQueryAdapter dbClient, Dictionary<int, int> rareAmounts)
+    internal static void UpdateRemove(IDbConnection dbClient, Dictionary<int, int> rareAmounts)
     {
         if (rareAmounts.Count == 0)
         {
             return;
         }
 
-        var standardQueries = new QueryChunk();
+        var itemStats = new List<ItemStatEntity>();
 
         foreach (var rare in rareAmounts)
         {
-            standardQueries.AddQuery("UPDATE `item_stat` SET amount = amount - '" + rare.Value + "' WHERE base_id = '" + rare.Key + "'");
+            itemStats.Add(new ItemStatEntity { Amount = rare.Value, BaseId = rare.Key });
         }
 
-        standardQueries.Execute(dbClient);
-        standardQueries.Dispose();
+        _ = dbClient.Execute(
+            "UPDATE item_stat SET amount = amount - @Amount WHERE base_id = @BaseId",
+            itemStats);
     }
 
-    internal static void UpdateAdd(IQueryAdapter dbClient, int baseId, int amount = 1) => dbClient.RunQuery("UPDATE `item_stat` SET amount = amount + '" + amount + "' WHERE base_id = '" + baseId + "'");
+    internal static void UpdateAdd(IDbConnection dbClient, int baseId, int amount = 1) => dbClient.Execute(
+        "UPDATE `item_stat` SET amount = amount + '" + amount + "' WHERE base_id = '" + baseId + "'");
+}
+
+public class ItemStatEntity
+{
+    public int Amount { get; set; }
+    public int BaseId { get; set; }
 }

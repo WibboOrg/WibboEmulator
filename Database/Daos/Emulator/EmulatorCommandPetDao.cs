@@ -1,12 +1,16 @@
 namespace WibboEmulator.Database.Daos.Emulator;
 using System.Data;
-using WibboEmulator.Database.Interfaces;
+using Dapper;
 
 internal sealed class EmulatorCommandPetDao
 {
-    internal static DataTable GetAll(IQueryAdapter dbClient)
-    {
-        dbClient.SetQuery("SELECT `id`, `command` FROM `emulator_command_pet`");
-        return dbClient.GetTable();
-    }
+    internal static List<EmulatorCommandPetEntity> GetAll(IDbConnection dbClient) => dbClient.Query<EmulatorCommandPetEntity>(
+        "SELECT `id`, `command` FROM `emulator_command_pet`"
+    ).ToList();
+}
+
+public class EmulatorCommandPetEntity
+{
+    public int Id { get; set; }
+    public string Command { get; set; }
 }

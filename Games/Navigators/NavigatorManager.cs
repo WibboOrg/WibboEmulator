@@ -1,8 +1,7 @@
 namespace WibboEmulator.Games.Navigators;
 using System.Data;
 using WibboEmulator.Core.Language;
-using WibboEmulator.Database.Daos.Moderation;
-using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Database.Daos.Navigator;
 
 public sealed class NavigatorManager
 {
@@ -23,7 +22,7 @@ public sealed class NavigatorManager
         this._featuredRooms = new Dictionary<int, FeaturedRoom>();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         if (this._searchResultLists.Count > 0)
         {
@@ -35,28 +34,28 @@ public sealed class NavigatorManager
             this._featuredRooms.Clear();
         }
 
-        var table = NavigatorCategoryDao.GetAll(dbClient);
+        var categoryList = NavigatorCategoryDao.GetAll(dbClient);
 
-        if (table != null)
+        if (categoryList.Count != 0)
         {
-            foreach (DataRow row in table.Rows)
+            foreach (var category in categoryList)
             {
-                if (!this._searchResultLists.ContainsKey(Convert.ToInt32(row["id"])))
+                if (!this._searchResultLists.ContainsKey(category.Id))
                 {
-                    this._searchResultLists.Add(Convert.ToInt32(row["id"]), new SearchResultList(Convert.ToInt32(row["id"]), Convert.ToString(row["category"]), Convert.ToString(row["category_identifier"]), Convert.ToString(row["public_name"]), true, -1, Convert.ToInt32(row["required_rank"]), Convert.ToBoolean(row["minimized"]), NavigatorViewModeUtility.GetViewModeByString(Convert.ToString(row["view_mode"])), Convert.ToString(row["category_type"]), Convert.ToString(row["search_allowance"]), Convert.ToInt32(row["order_id"])));
+                    this._searchResultLists.Add(category.Id, new SearchResultList(category.Id, category.Category, category.CategoryIdentifier, category.PublicName, true, -1, category.RequiredRank, category.Minimized, NavigatorViewModeUtility.GetViewModeByString(category.ViewMode), category.CategoryType, category.SearchAllowance, category.OrderId));
                 }
             }
         }
 
-        var getPublics = NavigatorPublicDao.GetAll(dbClient);
+        var navPublicList = NavigatorPublicDao.GetAll(dbClient);
 
-        if (getPublics != null)
+        if (navPublicList.Count != 0)
         {
-            foreach (DataRow row in getPublics.Rows)
+            foreach (var navPublic in navPublicList)
             {
-                if (!this._featuredRooms.ContainsKey(Convert.ToInt32(row["room_id"])))
+                if (!this._featuredRooms.ContainsKey(navPublic.RoomId))
                 {
-                    this._featuredRooms.Add(Convert.ToInt32(row["room_id"]), new FeaturedRoom(Convert.ToInt32(row["room_id"]), Convert.ToString(row["image_url"]), LanguageManager.ParseLanguage(Convert.ToString(row["langue"])), (string)row["category_type"]));
+                    this._featuredRooms.Add(navPublic.RoomId, new FeaturedRoom(navPublic.RoomId, navPublic.ImageUrl, LanguageManager.ParseLanguage(navPublic.Langue), navPublic.CategoryType));
                 }
             }
         }

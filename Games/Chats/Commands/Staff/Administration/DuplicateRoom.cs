@@ -1,5 +1,5 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Administration;
-using System.Data;
+
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Database.Daos.Catalog;
@@ -17,7 +17,7 @@ internal sealed class DuplicateRoom : IChatCommand
         var oldRoomId = room.Id;
         int roomId;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             room.RoomItemHandling.SaveFurniture(dbClient);
 
@@ -27,13 +27,12 @@ internal sealed class DuplicateRoom : IChatCommand
 
             var furniIdAllow = new List<int>();
 
-            var catalogItemTable = CatalogItemDao.GetItemIdByRank(dbClient, "");
-            foreach (DataRow dataRow in catalogItemTable.Rows)
+            var catalogItemList = CatalogItemDao.GetAllItemIdByRank(dbClient, "");
+            foreach (var catalogItem in catalogItemList)
             {
-                _ = int.TryParse(dataRow["item_id"].ToString(), out var itemId);
-                if (!furniIdAllow.Contains(itemId))
+                if (!furniIdAllow.Contains(catalogItem.ItemId))
                 {
-                    furniIdAllow.Add(itemId);
+                    furniIdAllow.Add(catalogItem.ItemId);
                 }
             }
 
@@ -41,11 +40,11 @@ internal sealed class DuplicateRoom : IChatCommand
             var wiredId = new List<int>();
             var teleportId = new List<int>();
 
-            var itemTable = ItemDao.GetAllIdAndBaseItem(dbClient, oldRoomId);
-            foreach (DataRow dataRow in itemTable.Rows)
+            var itemList = ItemDao.GetAllIdAndBaseItem(dbClient, oldRoomId);
+            foreach (var item in itemList)
             {
-                var oldItemId = Convert.ToInt32(dataRow["id"]);
-                var baseID = Convert.ToInt32(dataRow["base_item"]);
+                var oldItemId = item.Id;
+                var baseID = item.UserId;
 
                 if (!furniIdAllow.Contains(baseID))
                 {
@@ -87,13 +86,13 @@ internal sealed class DuplicateRoom : IChatCommand
                     continue;
                 }
 
-                var rowTele = ItemTeleportDao.GetOne(dbClient, oldId);
-                if (rowTele == null)
+                var teleId = ItemTeleportDao.GetOne(dbClient, oldId);
+                if (teleId == 0)
                 {
                     continue;
                 }
 
-                if (!newItemsId.TryGetValue(Convert.ToInt32(rowTele["tele_two_id"]), out var newIdTwo))
+                if (!newItemsId.TryGetValue(teleId, out var newIdTwo))
                 {
                     continue;
                 }
@@ -103,16 +102,16 @@ internal sealed class DuplicateRoom : IChatCommand
 
             foreach (var id in wiredId)
             {
-                var wiredRow = ItemWiredDao.GetOne(dbClient, id);
+                var itemWired = ItemWiredDao.GetOne(dbClient, id);
 
-                if (wiredRow == null)
+                if (itemWired == null)
                 {
                     continue;
                 }
 
                 var triggerItems = "";
 
-                var oldItems = (string)wiredRow["triggers_item"];
+                var oldItems = itemWired.TriggersItem;
 
                 if (oldItems.Length <= 0)
                 {

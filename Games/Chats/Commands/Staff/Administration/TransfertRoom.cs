@@ -22,7 +22,7 @@ internal sealed class TransfertRoom : IChatCommand
 
         var username = parameters[1];
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
 
         var userId = UserDao.GetIdByName(dbClient, username);
         if (userId == 0)

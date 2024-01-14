@@ -1,5 +1,5 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -39,7 +39,7 @@ public class BotTalk : WiredActionBase, IWired, IWiredEffect
         return false;
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient)
+    public void SaveToDatabase(IDbConnection dbClient)
     {
         var isShout = this.GetIntParam(0) == 1;
 

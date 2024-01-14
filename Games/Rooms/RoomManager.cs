@@ -5,7 +5,6 @@ using System.Diagnostics;
 using WibboEmulator.Core;
 using WibboEmulator.Core.Language;
 using WibboEmulator.Database.Daos.Room;
-using WibboEmulator.Database.Interfaces;
 
 public class RoomManager
 {
@@ -31,18 +30,10 @@ public class RoomManager
 
     private static RoomModel GetCustomData(int roomID)
     {
-        DataRow row;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            row = RoomModelCustomDao.GetOne(dbClient, roomID);
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        var modelCustom = RoomModelCustomDao.GetOne(dbClient, roomID) ?? throw new ArgumentNullException("The custom room model for room " + roomID + " was not found");
 
-        if (row == null)
-        {
-            throw new ArgumentNullException("The custom room model for room " + roomID + " was not found");
-        }
-
-        return new RoomModel(roomID.ToString(), Convert.ToInt32(row["door_x"]), Convert.ToInt32(row["door_y"]), (double)row["door_z"], Convert.ToInt32(row["door_dir"]), (string)row["heightmap"], Convert.ToInt32(row["wall_height"]));
+        return new RoomModel(roomID.ToString(), modelCustom.DoorX, modelCustom.DoorY, modelCustom.DoorZ, modelCustom.DoorDir, modelCustom.Heightmap, modelCustom.WallHeight);
     }
 
     public RoomModel GetModel(string model, int roomID)
@@ -86,19 +77,16 @@ public class RoomManager
             return roomData;
         }
 
-        DataRow row = null;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-        {
-            row = RoomDao.GetOne(dbClient, roomId);
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        var roomEntity = RoomDao.GetOne(dbClient, roomId);
 
-        if (row == null)
+        if (roomEntity == null)
         {
             return null;
         }
 
         roomData = new RoomData();
-        roomData.Fill(row);
+        roomData.Fill(roomEntity);
 
         if (!this._roomsData.ContainsKey(roomId))
         {
@@ -153,7 +141,7 @@ public class RoomManager
 
     public bool TryGetRoomData(int roomId, out RoomData roomData) => this._roomsData.TryGetValue(roomId, out roomData);
 
-    public RoomData FetchRoomData(int roomID, DataRow dRow)
+    public RoomData FetchRoomData(int roomID, RoomEntity roomEntity)
     {
         if (this.TryGetRoom(roomID, out var room))
         {
@@ -162,25 +150,25 @@ public class RoomManager
         else
         {
             var data = new RoomData();
-            data.Fill(dRow);
+            data.Fill(roomEntity);
             return data;
         }
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         this._roomModels.Clear();
 
-        var roomMoodelData = RoomModelDao.GetAll(dbClient);
-        if (roomMoodelData == null)
+        var roomMoodelList = RoomModelDao.GetAll(dbClient);
+        if (roomMoodelList.Count == 0)
         {
             return;
         }
 
-        foreach (DataRow dataRow in roomMoodelData.Rows)
+        foreach (var roomMoodel in roomMoodelList)
         {
-            var str = (string)dataRow["id"];
-            this._roomModels.Add(str, new RoomModel(str, Convert.ToInt32(dataRow["door_x"]), Convert.ToInt32(dataRow["door_y"]), (double)dataRow["door_z"], Convert.ToInt32(dataRow["door_dir"]), (string)dataRow["heightmap"], 0));
+            var str = roomMoodel.Id;
+            this._roomModels.Add(str, new RoomModel(str, roomMoodel.DoorX, roomMoodel.DoorY, roomMoodel.DoorZ, roomMoodel.DoorDir, roomMoodel.Heightmap, 0));
         }
     }
 

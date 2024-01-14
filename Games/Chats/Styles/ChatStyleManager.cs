@@ -1,7 +1,6 @@
 namespace WibboEmulator.Games.Chats.Styles;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
-using WibboEmulator.Database.Interfaces;
 
 public sealed class ChatStyleManager
 {
@@ -9,22 +8,22 @@ public sealed class ChatStyleManager
 
     public ChatStyleManager() => this._styles = new Dictionary<int, ChatStyle>();
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
         if (this._styles.Count > 0)
         {
             this._styles.Clear();
         }
 
-        var table = EmulatorChatStyleDao.GetAll(dbClient);
+        var emulatorChatStyleList = EmulatorChatStyleDao.GetAll(dbClient);
 
-        if (table != null)
+        if (emulatorChatStyleList.Count != 0)
         {
-            foreach (DataRow row in table.Rows)
+            foreach (var emulatorChatStyle in emulatorChatStyleList)
             {
-                if (!this._styles.ContainsKey(Convert.ToInt32(row["id"])))
+                if (!this._styles.ContainsKey(emulatorChatStyle.Id))
                 {
-                    this._styles.Add(Convert.ToInt32(row["id"]), new ChatStyle(Convert.ToInt32(row["id"]), Convert.ToString(row["name"]), Convert.ToString(row["required_right"])));
+                    this._styles.Add(emulatorChatStyle.Id, new ChatStyle(emulatorChatStyle.Id, emulatorChatStyle.Name, emulatorChatStyle.RequiredRight));
                 }
             }
         }

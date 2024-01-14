@@ -32,7 +32,7 @@ internal sealed class DeleteGroup : IChatCommand
 
         WibboEnvironment.GetGame().GetGroupManager().DeleteGroup(group.Id);
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             GuildDao.Delete(dbClient, group.Id);
             GuildMembershipDao.Delete(dbClient, group.Id);

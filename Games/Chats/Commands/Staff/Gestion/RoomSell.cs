@@ -41,7 +41,7 @@ internal sealed class RoomSell : IChatCommand
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
         {
             RoomDao.UpdatePrice(dbClient, room.Id, price);
         }

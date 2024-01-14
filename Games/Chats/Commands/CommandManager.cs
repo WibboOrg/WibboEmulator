@@ -3,7 +3,6 @@ using System.Data;
 using System.Text;
 using WibboEmulator.Core.Language;
 using WibboEmulator.Database.Daos.Emulator;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Chats.Commands.Staff.Administration;
 using WibboEmulator.Games.Chats.Commands.Staff.Animation;
 using WibboEmulator.Games.Chats.Commands.Staff.Gestion;
@@ -36,7 +35,7 @@ public class CommandManager
         this._listCommande = new Dictionary<string, string>();
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init(IDbConnection dbClient)
     {
 
         this.InitInvokeableRegister(dbClient);
@@ -105,25 +104,25 @@ public class CommandManager
         return true;
     }
 
-    private void InitInvokeableRegister(IQueryAdapter dbClient)
+    private void InitInvokeableRegister(IDbConnection dbClient)
     {
         this._commandRegisterInvokeable.Clear();
 
-        var table = EmulatorCommandDao.GetAll(dbClient);
+        var emulatorCommandList = EmulatorCommandDao.GetAll(dbClient);
 
-        if (table == null)
+        if (emulatorCommandList.Count == 0)
         {
             return;
         }
 
-        foreach (DataRow dataRow in table.Rows)
+        foreach (var emulatorCommand in emulatorCommandList)
         {
-            var key = Convert.ToInt32(dataRow["id"]);
-            var pRank = Convert.ToInt32(dataRow["minrank"]);
-            var pDescriptionFr = DBNull.Value.Equals(dataRow["description_fr"]) ? "" : (string)dataRow["description_fr"];
-            var pDescriptionEn = DBNull.Value.Equals(dataRow["description_en"]) ? "" : (string)dataRow["description_en"];
-            var pDescriptionBr = DBNull.Value.Equals(dataRow["description_br"]) ? "" : (string)dataRow["description_br"];
-            var input = (string)dataRow["input"];
+            var key = emulatorCommand.Id;
+            var rank = emulatorCommand.MinRank;
+            var descriptionFr = emulatorCommand.DescriptionFr;
+            var descriptionEn = emulatorCommand.DescriptionEn;
+            var descriptionBr = emulatorCommand.DescriptionBr;
+            var input = emulatorCommand.Input;
             var strArray = input.ToLower().Split(new char[1] { ',' });
 
             foreach (var command in strArray)
@@ -133,7 +132,7 @@ public class CommandManager
                     continue;
                 }
 
-                this._commandRegisterInvokeable.Add(command, new AuthorizationCommands(key, strArray[0], pRank, pDescriptionFr, pDescriptionEn, pDescriptionBr));
+                this._commandRegisterInvokeable.Add(command, new AuthorizationCommands(key, strArray[0], rank, descriptionFr, descriptionEn, descriptionBr));
             }
         }
     }
@@ -347,7 +346,6 @@ public class CommandManager
         this.Register(144, new AllFriends());
         this.Register(145, new RegenMap());
         this.Register(146, new ShutDown());
-        this.Register(147, new MachineBan());
         this.Register(148, new ExtraBox());
         this.Register(149, new RoomSell());
         this.Register(150, new RoomBuy());

@@ -6,16 +6,10 @@ public static class ItemTeleporterFinder
 {
     public static int GetLinkedTele(int teleId)
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        var row = ItemTeleportDao.GetOne(dbClient, teleId);
-        if (row == null)
-        {
-            return 0;
-        }
-        else
-        {
-            return Convert.ToInt32(row["tele_two_id"]);
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        var teleportId = ItemTeleportDao.GetOne(dbClient, teleId);
+
+        return teleportId;
     }
 
     public static int GetTeleRoomId(int teleId, Room room)
@@ -35,16 +29,10 @@ public static class ItemTeleporterFinder
             return room.Id;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        var row = ItemDao.GetOneRoomId(dbClient, teleId);
-        if (row == null)
-        {
-            return 0;
-        }
-        else
-        {
-            return Convert.ToInt32(row["room_id"]);
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        var roomId = ItemDao.GetOneRoomId(dbClient, teleId);
+
+        return roomId;
     }
 
     public static bool IsTeleLinked(int teleId, Room room)

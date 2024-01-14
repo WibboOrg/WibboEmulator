@@ -26,7 +26,7 @@ internal sealed class DeleteMission : IChatCommand
         else
         {
             targetUser.User.Motto = WibboEnvironment.GetLanguageManager().TryGetValue("user.unacceptable_motto", targetUser.Langue);
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
             {
                 UserDao.UpdateMotto(dbClient, targetUser.User.Id, targetUser.User.Motto);
             }

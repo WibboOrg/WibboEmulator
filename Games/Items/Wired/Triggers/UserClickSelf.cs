@@ -1,5 +1,5 @@
 namespace WibboEmulator.Games.Items.Wired.Triggers;
-using WibboEmulator.Database.Interfaces;
+using System.Data;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -48,7 +48,7 @@ public class UserClickSelf : WiredTriggerBase, IWired
         this.RoomInstance.OnUserClickSelf -= this.OnUserClick;
     }
 
-    public void SaveToDatabase(IQueryAdapter dbClient)
+    public void SaveToDatabase(IDbConnection dbClient)
     {
         var distance = this.GetIntParam(0);
 

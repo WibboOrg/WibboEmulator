@@ -15,7 +15,6 @@ public class GameClient
     private int _packetCount;
     private double _packetLastTimestamp;
 
-    public string MachineId { get; set; }
     public string SSOTicket { get; set; }
     public Language Langue { get; set; }
     public string ConnectionID { get; set; }

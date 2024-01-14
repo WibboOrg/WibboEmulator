@@ -27,7 +27,7 @@ internal sealed class ChatGTP : IChatCommand
         bot.BotAI = bot.BotData.GenerateBotAI(bot.VirtualId);
         bot.BotAI.Init(bot.BotData.Id, bot, room);
 
-        var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         BotUserDao.UpdateChatGPT(dbClient, bot.BotData.Id, bot.BotData.ChatText);
 
         userRoom.SendWhisperChat("ChatGPT vient d'être activé !");

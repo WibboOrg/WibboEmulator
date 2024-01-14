@@ -44,7 +44,6 @@ public class Pet
     public int Respect { get; set; }
     public int CreationStamp { get; set; }
     public bool PlacedInRoom { get; set; }
-    public DatabaseUpdateState DBState { get; set; }
     public int Saddle { get; set; }
     public int HairDye { get; set; }
     public int PetHair { get; set; }
@@ -130,7 +129,6 @@ public class Pet
         this.Y = y;
         this.Z = z;
         this.PlacedInRoom = false;
-        this.DBState = DatabaseUpdateState.Updated;
         this.Saddle = havesaddle == 1 ? 9 : havesaddle == 2 ? 10 : 0;
         this.HairDye = hairdye;
         this.PetHair = petHair;
@@ -157,7 +155,6 @@ public class Pet
         {
             default:
             {
-
                 output.Add(0, true); // Libre
                 output.Add(1, true); // Assis
                 output.Add(13, true); // Panier
@@ -186,7 +183,7 @@ public class Pet
             }
             break;
 
-            case 8: // Araña
+            case 8:
                 output.Add(1, true); // Assis
                 output.Add(2, true); // Couché
                 output.Add(3, qLevel >= 2); // Viens ici
@@ -220,8 +217,6 @@ public class Pet
     {
         this.Respect++;
 
-        this.DBState = DatabaseUpdateState.NeedsUpdate;
-
         if (this.Expirience > 51900)
         {
             return;
@@ -237,8 +232,6 @@ public class Pet
         {
             return;
         }
-
-        this.DBState = DatabaseUpdateState.NeedsUpdate;
 
         if (this.Room == null)
         {
@@ -280,7 +273,5 @@ public class Pet
         {
             this.Energy = (this.Energy + randomUsage) % 100;
         }
-
-        this.DBState = DatabaseUpdateState.NeedsUpdate;
     }
 }

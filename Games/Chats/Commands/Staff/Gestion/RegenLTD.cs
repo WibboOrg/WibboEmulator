@@ -14,7 +14,7 @@ internal sealed class RegenLTD : IChatCommand
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         foreach (var item in page.Items.Values)
         {
             var limitedSells = item.LimitedEditionSells;
@@ -22,16 +22,16 @@ internal sealed class RegenLTD : IChatCommand
 
             for (var limitedNumber = 1; limitedNumber < limitedSells + 1; limitedNumber++)
             {
-                var row = ItemDao.GetOneLimitedId(dbClient, limitedNumber, item.ItemId);
+                var limitedId = ItemDao.GetOneLimitedId(dbClient, limitedNumber, item.ItemId);
 
-                if (row != null)
+                if (limitedId <= 0)
                 {
                     continue;
                 }
 
-                var rowMarketPlace = CatalogMarketplaceOfferDao.GetOneLTD(dbClient, item.ItemId, limitedNumber);
+                var marketPlaceId = CatalogMarketplaceOfferDao.GetOneLTD(dbClient, item.ItemId, limitedNumber);
 
-                if (rowMarketPlace != null)
+                if (marketPlaceId <= 0)
                 {
                     continue;
                 }
