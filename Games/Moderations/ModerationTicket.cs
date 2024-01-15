@@ -1,6 +1,5 @@
 namespace WibboEmulator.Games.Moderations;
 using WibboEmulator.Database.Daos.Moderation;
-using WibboEmulator.Database.Daos.User;
 
 public class ModerationTicket
 {
@@ -52,20 +51,9 @@ public class ModerationTicket
         this.RoomId = roomId;
         this.RoomName = roomName;
         this.Timestamp = timestamp;
-        this.SenderName = GetNameById(senderId);
-        this.ReportedName = GetNameById(reportedId);
-        this.ModName = GetNameById(this.ModeratorId);
-    }
-
-    public static string GetNameById(int id)
-    {
-        var username = "";
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
-        {
-            username = UserDao.GetNameById(dbClient, id);
-        }
-
-        return username;
+        this.SenderName = WibboEnvironment.GetGame().GetGameClientManager().GetNameById(senderId);
+        this.ReportedName = WibboEnvironment.GetGame().GetGameClientManager().GetNameById(reportedId);
+        this.ModName = WibboEnvironment.GetGame().GetGameClientManager().GetNameById(this.ModeratorId);
     }
 
     public void Pick(int moderatorId, bool updateInDb)

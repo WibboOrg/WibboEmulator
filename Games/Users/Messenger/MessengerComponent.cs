@@ -216,11 +216,7 @@ public class MessengerComponent : IDisposable
         MessengerBuddy friend;
         if (clientByUserId == null || clientByUserId.User == null)
         {
-            string username;
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
-            {
-                username = UserDao.GetNameById(dbClient, friendID);
-            }
+            var username = WibboEnvironment.GetGame().GetGameClientManager().GetNameById(friendID);
 
             if (username == "")
             {
