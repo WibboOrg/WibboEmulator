@@ -210,7 +210,8 @@ public class RoomItemHandling
                     moodlightPresetTwo = item.PresetTwo;
                     moodlightPresetThree = item.PresetThree;
 
-                    this._roomInstance.MoodlightData ??= new MoodlightData(roomItem.Id, moodlightEnabled, moodlightCurrentPreset, moodlightPresetOne, moodlightPresetTwo, moodlightPresetThree);
+                    this._roomInstance.MoodlightData = new MoodlightData(roomItem.Id, moodlightEnabled, moodlightCurrentPreset, moodlightPresetOne, moodlightPresetTwo, moodlightPresetThree);
+                    roomItem.ExtraData = this._roomInstance.MoodlightData.GenerateExtraData();
                 }
             }
             else //Is flooritem
@@ -282,18 +283,18 @@ public class RoomItemHandling
         return null;
     }
 
-    public Item GetItem(int pId)
+    public Item GetItem(int id)
     {
-        if (this._floorItems != null && this._floorItems.ContainsKey(pId))
+        if (this._floorItems != null && this._floorItems.ContainsKey(id))
         {
-            if (this._floorItems.TryGetValue(pId, out var item))
+            if (this._floorItems.TryGetValue(id, out var item))
             {
                 return item;
             }
         }
-        else if (this._wallItems != null && this._wallItems.ContainsKey(pId))
+        else if (this._wallItems != null && this._wallItems.ContainsKey(id))
         {
-            if (this._wallItems.TryGetValue(pId, out var item))
+            if (this._wallItems.TryGetValue(id, out var item))
             {
                 return item;
             }

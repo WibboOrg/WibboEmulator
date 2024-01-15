@@ -11,9 +11,9 @@ internal sealed class ItemMoodlightDao
         "UPDATE `item_moodlight` SET enabled = @Enabled WHERE item_id = @ItemId LIMIT 1",
         new { Enabled = enabled, ItemId = itemId });
 
-    internal static void Update(IDbConnection dbClient, int itemId, string color, string pr, int intensity, bool bgOnly) => dbClient.Execute(
-        "UPDATE item_moodlight SET preset_" + pr + " = @Color, @Intensity, " + (bgOnly ? "1" : "0") + " WHERE item_id = @ItemId LIMIT 1",
-        new { Color = color, Intensity = intensity, ItemId = itemId });
+    internal static void Update(IDbConnection dbClient, int itemId, string color, string pr, int intensity, bool bgOnly, int currentPreset) => dbClient.Execute(
+        "UPDATE item_moodlight SET preset_" + pr + " = @Preset, current_preset = @CurrentPreset WHERE item_id = @ItemId LIMIT 1",
+        new { Preset = color + "," + intensity + "," + (bgOnly ? 1 : 0), CurrentPreset = currentPreset, ItemId = itemId });
 
     internal static void Insert(IDbConnection dbClient, int itemId) => dbClient.Execute(
         "INSERT INTO item_moodlight (item_id, enabled, current_preset, preset_one, preset_two, preset_three) VALUES (@Id, 0, 1, @Preset, @Preset, @Preset)",
