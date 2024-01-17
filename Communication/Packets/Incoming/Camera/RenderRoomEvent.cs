@@ -31,7 +31,7 @@ internal sealed class RenderRoomEvent : IPacketEvent
         }
 
         var time = WibboEnvironment.GetUnixTimestamp();
-        var pictureName = $"{session.User.Id}_{room.Id}_{Guid.NewGuid()}.png";
+        var pictureName = $"{session.User.Id}_{room.Id}_{Guid.NewGuid()}";
 
         var photoId = UploadApi.CameraPhoto(photoBinary, pictureName);
 
@@ -41,7 +41,7 @@ internal sealed class RenderRoomEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new CameraURLComposer(photoId + ".png"));
+        session.SendPacket(new CameraURLComposer(photoId));
 
         if (session.User.LastPhotoId == photoId)
         {

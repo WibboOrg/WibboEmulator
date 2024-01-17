@@ -695,12 +695,11 @@ public class GameMap
     public double SqAbsoluteHeight(int x, int y)
     {
         var point = new Point(x, y);
-        if (!this.CoordinatedItems.ContainsKey(point))
+        if (!this.CoordinatedItems.TryGetValue(point, out var itemsOnSquare))
         {
             return (double)this.GetHeightForSquareFromData(point);
         }
 
-        var itemsOnSquare = this.CoordinatedItems[point];
         return this.SqAbsoluteHeight(x, y, itemsOnSquare);
     }
 

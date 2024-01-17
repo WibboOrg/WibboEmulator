@@ -1,8 +1,7 @@
 namespace WibboEmulator.Games.GameClients;
+
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Text;
-using Dapper;
 using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;

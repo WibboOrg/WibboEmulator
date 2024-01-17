@@ -64,7 +64,7 @@ public class WardrobeComponent : IDisposable
         this._wardrobes.Add(slotId, wardrobe);
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
-        UserWardrobeDao.Insert(dbClient, this._userInstance.Id, slotId, look, gender.ToUpper());
+        UserWardrobeDao.Insert(dbClient, this._userInstance.Id, slotId, look, gender);
     }
 
     public Dictionary<int, Wardrobe> GetWardrobes() => this._wardrobes;
