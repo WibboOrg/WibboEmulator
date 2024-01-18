@@ -1,25 +1,22 @@
 namespace WibboEmulator.Core;
-using WibboEmulator.Utilities.ConsoleWriter;
+
+using WibboEmulator.Utilities;
 
 public static class ExceptionLogger
 {
-    public static void WriteLine(string line) => Writer.WriteLine(line);
+    public static void WriteLine(string line) => LogWriter.WriteLine(line);
 
-    public static void LogException(string logText) => Writer.LogException(DateTime.Now.ToString() + ": " + Environment.NewLine + logText + Environment.NewLine);
+    public static void LogException(string logText) => LogWriter.LogException(logText);
 
-    public static void LogCriticalException(string logText) => Writer.LogCriticalException(DateTime.Now.ToString() + ": " + logText);
+    public static void LogCriticalException(string logText) => LogWriter.LogCriticalException(logText);
 
-    public static void LogDenial(string logText) => Writer.LogDDOS(DateTime.Now.ToString() + ": " + logText);
+    public static void LogDenial(string logText) => LogWriter.LogDDOS(logText);
 
-    public static void LogMessage(string logText) => Writer.LogMessage(DateTime.Now.ToString() + ": " + logText);
+    public static void LogMessage(string logText) => LogWriter.LogMessage(logText);
 
-    public static void LogThreadException(string exception, string threadName) => Writer.LogThreadException(DateTime.Now.ToString() + ": " + exception, threadName);
+    public static void LogThreadException(string exception, string threadName) => LogWriter.LogThreadException(exception, threadName);
 
-    public static void LogQueryError(Exception exception, string query) => Writer.LogQueryError(exception, DateTime.Now.ToString() + ": " + query);
+    public static void LogPacketException(string packet, string exception) => LogWriter.LogPacketException(packet, exception);
 
-    public static void LogPacketException(string packet, string exception) => Writer.LogPacketException(packet, DateTime.Now.ToString() + " : " + exception);
-
-    public static void HandleException(Exception exception, string location) => Writer.HandleException(exception, DateTime.Now.ToString() + ": " + location);
-
-    public static void DisablePrimaryWriting(bool clearConsole) => Writer.DisablePrimaryWriting(clearConsole);
+    public static void DisablePrimaryWriting(bool clearConsole) => LogWriter.DisablePrimaryWriting(clearConsole);
 }

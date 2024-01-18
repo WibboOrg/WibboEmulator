@@ -14,7 +14,6 @@ internal static partial class StringCharFilter
 
     public static bool IsValidAlphaNumeric(string input) => AllowedAlphaNum.IsMatch(input);
 
-
     /// <summary>
     /// Escapes the characters used for injecting special chars from a user input.
     /// </summary>
