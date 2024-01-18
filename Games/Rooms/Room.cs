@@ -455,12 +455,10 @@ public class Room : IDisposable
             {
                 this._saveRoomTimerLast = timeStarted;
 
-                using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
-                {
-                    RoomDao.UpdateUsersNow(dbClient, this.Id, this.UserCount);
+                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                RoomDao.UpdateUsersNow(dbClient, this.Id, this.UserCount);
 
-                    this.RoomItemHandling.SaveFurniture(dbClient);
-                }
+                this.RoomItemHandling.SaveFurniture(dbClient);
             }
 
             var timeEnded = DateTime.Now;

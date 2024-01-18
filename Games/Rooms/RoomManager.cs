@@ -167,8 +167,7 @@ public class RoomManager
 
         foreach (var roomMoodel in roomMoodelList)
         {
-            var str = roomMoodel.Id;
-            this._roomModels.Add(str, new RoomModel(str, roomMoodel.DoorX, roomMoodel.DoorY, roomMoodel.DoorZ, roomMoodel.DoorDir, roomMoodel.Heightmap, 0));
+            this._roomModels.Add(roomMoodel.Id, new RoomModel(roomMoodel.Id, roomMoodel.DoorX, roomMoodel.DoorY, roomMoodel.DoorZ, roomMoodel.DoorDir, roomMoodel.Heightmap, 0));
         }
     }
 
