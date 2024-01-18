@@ -6,9 +6,9 @@ internal sealed class ModeratorSupportTicketComposer : ServerPacket
     public ModeratorSupportTicketComposer(ModerationTicket ticket)
         : base(ServerPacketHeader.ISSUE_INFO)
     {
-        var userReported = WibboEnvironment.GetUserById(ticket.ReportedId);
-        var userSender = WibboEnvironment.GetUserById(ticket.SenderId);
-        var userModerator = WibboEnvironment.GetUserById(ticket.ModeratorId);
+        var userReported = WibboEnvironment.GetNameById(ticket.ReportedId);
+        var userSender = WibboEnvironment.GetNameById(ticket.SenderId);
+        var userModerator = WibboEnvironment.GetNameById(ticket.ModeratorId);
 
         this.WriteInteger(ticket.Id);
         this.WriteInteger(ticket.TabId);
@@ -18,9 +18,9 @@ internal sealed class ModeratorSupportTicketComposer : ServerPacket
         this.WriteInteger(ticket.Score);
         this.WriteInteger(ticket.SenderId);
         this.WriteInteger(ticket.SenderId);
-        if (userSender != null)
+        if (userSender != string.Empty)
         {
-            this.WriteString(ticket.SenderName.Equals("") ? userSender.Username : ticket.SenderName);
+            this.WriteString(ticket.SenderName == string.Empty ? userSender : ticket.SenderName);
         }
         else
         {
@@ -28,9 +28,9 @@ internal sealed class ModeratorSupportTicketComposer : ServerPacket
         }
 
         this.WriteInteger(ticket.ReportedId);
-        if (userReported != null)
+        if (userReported != string.Empty)
         {
-            this.WriteString(ticket.ReportedName.Equals("") ? userReported.Username : ticket.ReportedName);
+            this.WriteString(ticket.ReportedName == string.Empty ? userReported : ticket.ReportedName);
         }
         else
         {
@@ -38,9 +38,9 @@ internal sealed class ModeratorSupportTicketComposer : ServerPacket
         }
 
         this.WriteInteger(ticket.Status == TicketStatusType.Picked ? ticket.ModeratorId : 0);
-        if (userModerator != null)
+        if (userModerator != string.Empty)
         {
-            this.WriteString(ticket.Status == TicketStatusType.Picked ? (ticket.ModName.Equals("") ? userModerator.Username : ticket.ModName) : "");
+            this.WriteString(ticket.Status == TicketStatusType.Picked ? (ticket.ModName == string.Empty ? userModerator : ticket.ModName) : "");
         }
         else
         {

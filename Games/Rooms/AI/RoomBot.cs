@@ -33,7 +33,7 @@ public class RoomBot
 
     public bool IsPet => this.AiType is BotAIType.Pet or BotAIType.RoleplayPet;
 
-    public string OwnerName => WibboEnvironment.GetGame().GetGameClientManager().GetNameById(this.OwnerId);
+    public string OwnerName => WibboEnvironment.GetNameById(this.OwnerId);
 
     public RoomBot(int botId, int ownerId, int roomId, BotAIType aiType, bool walkingEnabled, string name, string motto, string gender, string look, int x, int y, double z, int rot, bool chatEnabled, string chatText, int chatSeconds, bool isDancing, int effectEnable, int handitemId, int status)
     {

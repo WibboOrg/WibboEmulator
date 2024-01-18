@@ -109,7 +109,7 @@ public class Pet
 
     public string Look => this.Type + " " + this.Race + " " + this.Color;
 
-    public string OwnerName => WibboEnvironment.GetGame().GetGameClientManager().GetNameById(this.OwnerId);
+    public string OwnerName => WibboEnvironment.GetNameById(this.OwnerId);
 
     public Pet(int petId, int ownerId, int roomId, string name, int type, string race, string color, int expirience, int energy, int nutrition, int respect, int creationStamp, int x, int y, double z, int havesaddle, int hairdye, int petHair, bool canMountAllPeople)
     {

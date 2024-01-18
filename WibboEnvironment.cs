@@ -189,6 +189,20 @@ public static class WibboEnvironment
         return true;
     }
 
+    public static string GetNameById(int id)
+    {
+        var clientByUserId = GetUserById(id);
+
+        if (clientByUserId != null)
+        {
+            return clientByUserId.Username;
+        }
+
+        using var dbClient = GetDatabaseManager().Connection();
+
+        return UserDao.GetNameById(dbClient, id);
+    }
+
     public static User GetUserById(int userId)
     {
         if (userId == 0)

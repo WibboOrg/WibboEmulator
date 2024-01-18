@@ -129,24 +129,6 @@ public class GameClientManager
 
     public bool TryGetClient(string clientId, out GameClient client) => this._clients.TryGetValue(clientId, out client);
 
-    public string GetNameById(int id)
-    {
-        var clientByUserId = this.GetClientByUserID(id);
-
-        if (clientByUserId != null)
-        {
-            return clientByUserId.User.Username;
-        }
-
-        var username = "";
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
-        {
-            username = UserDao.GetNameById(dbClient, id);
-        }
-
-        return username;
-    }
-
     public List<GameClient> GetClientsById(Dictionary<int, MessengerBuddy>.KeyCollection users)
     {
         var clientOnline = new List<GameClient>();

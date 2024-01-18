@@ -216,7 +216,7 @@ public class MessengerComponent : IDisposable
         MessengerBuddy friend;
         if (clientByUserId == null || clientByUserId.User == null)
         {
-            var username = WibboEnvironment.GetGame().GetGameClientManager().GetNameById(friendID);
+            var username = WibboEnvironment.GetNameById(friendID);
 
             if (username == "")
             {
@@ -231,6 +231,7 @@ public class MessengerComponent : IDisposable
             friend = new MessengerBuddy(friendID, user.Username, user.Look, 0);
             friend.UpdateUser();
         }
+
         if (!this.Friends.ContainsKey(friendID))
         {
             this.Friends.Add(friendID, friend);
@@ -314,7 +315,7 @@ public class MessengerComponent : IDisposable
                 return false;
             }
 
-            var request = new MessengerRequest(sender, this._userInstance.Id, WibboEnvironment.GetGame().GetGameClientManager().GetNameById(this._userInstance.Id));
+            var request = new MessengerRequest(sender, this._userInstance.Id, WibboEnvironment.GetNameById(this._userInstance.Id));
             clientByUserId.User.Messenger.OnNewRequest(this._userInstance.Id);
 
             clientByUserId.SendPacket(new NewBuddyRequestComposer(request));
@@ -335,7 +336,7 @@ public class MessengerComponent : IDisposable
             return;
         }
 
-        this.Requests.Add(friendID, new MessengerRequest(this._userInstance.Id, friendID, WibboEnvironment.GetGame().GetGameClientManager().GetNameById(friendID)));
+        this.Requests.Add(friendID, new MessengerRequest(this._userInstance.Id, friendID, WibboEnvironment.GetNameById(friendID)));
     }
 
     public void SendInstantMessage(int toId, string message)

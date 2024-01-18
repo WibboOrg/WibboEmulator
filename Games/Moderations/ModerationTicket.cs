@@ -51,9 +51,9 @@ public class ModerationTicket
         this.RoomId = roomId;
         this.RoomName = roomName;
         this.Timestamp = timestamp;
-        this.SenderName = WibboEnvironment.GetGame().GetGameClientManager().GetNameById(senderId);
-        this.ReportedName = WibboEnvironment.GetGame().GetGameClientManager().GetNameById(reportedId);
-        this.ModName = WibboEnvironment.GetGame().GetGameClientManager().GetNameById(this.ModeratorId);
+        this.SenderName = WibboEnvironment.GetNameById(senderId);
+        this.ReportedName = WibboEnvironment.GetNameById(reportedId);
+        this.ModName = WibboEnvironment.GetNameById(this.ModeratorId);
     }
 
     public void Pick(int moderatorId, bool updateInDb)
