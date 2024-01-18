@@ -225,9 +225,9 @@ public class RoomItemHandling
 
                 if (WiredUtillity.TypeIsWired(data.InteractionType))
                 {
-                    wiredTriggerData = item.TriggerData;
-                    wiredTriggerData2 = item.TriggerData2;
-                    wiredTriggersItem = item.TriggersItem;
+                    wiredTriggerData = item.TriggerData ?? string.Empty;
+                    wiredTriggerData2 = item.TriggerData2 ?? string.Empty;
+                    wiredTriggersItem = item.TriggersItem ?? string.Empty;
                     wiredAllUserTriggerable = item.AllUserTriggerable;
                     wiredDelay = item.Delay;
 
