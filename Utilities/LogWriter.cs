@@ -27,6 +27,8 @@ public class LogWriter
 
     public static void LogPacketException(string packet, string exception) => WriteToFile("Packet", "Error in packet " + packet + ": " + exception);
 
+    public static void LogWebsocketException(string logText) => WriteToFile("Websocket", logText);
+
     public static void DisablePrimaryWriting(bool clearConsole)
     {
         DisabledState = true;

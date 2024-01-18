@@ -18,5 +18,7 @@ public static class ExceptionLogger
 
     public static void LogPacketException(string packet, string exception) => LogWriter.LogPacketException(packet, exception);
 
+    public static void LogWebSocket(string logText) => LogWriter.LogWebsocketException(logText);
+
     public static void DisablePrimaryWriting(bool clearConsole) => LogWriter.DisablePrimaryWriting(clearConsole);
 }

@@ -48,7 +48,8 @@ public class WebSocketManager
         this._webSocketServer.AddWebSocketService<GameWebSocket>("/", (initializer) => _ = new GameWebSocket() { IgnoreExtensions = true });
         this._webSocketServer.Start();
 
-        this._webSocketServer.Log.File = WibboEnvironment.PatchDir + "/logs/Websocket.log";
+        this._webSocketServer.Log.Output = (LogData data, string path) => ExceptionLogger.LogWebSocket(data.ToString());
+
         if (Debugger.IsAttached)
         {
             this._webSocketServer.Log.Level = LogLevel.Trace;
