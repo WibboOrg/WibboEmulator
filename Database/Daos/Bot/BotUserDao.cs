@@ -28,7 +28,7 @@ internal sealed class BotUserDao
         {
             _ = dbClient.Execute(
                 @"UPDATE bot_user 
-                SET x = @X, y = @Y, z = @Z, rotation = @RotBody 
+                SET x = @X, y = @Y, z = @Z, rotation = @Rotation 
                 WHERE id = @Id",
                 botUpdateList);
         }
