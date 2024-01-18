@@ -27,7 +27,7 @@ public class ServerPacket : IServerPacket
 
     public void WriteString(string s)
     {
-        var message = this._encoding.GetBytes(s);
+        var message = this._encoding.GetBytes(s ?? string.Empty);
         this.WriteShort(message.Length);
         this.WriteByte(message, false);
     }
