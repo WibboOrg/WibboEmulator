@@ -20,12 +20,6 @@ internal sealed class UpdateLimitCoinsCommand : IRCONCommand
             return false;
         }
 
-        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (client == null)
-        {
-            return false;
-        }
-
         if (!int.TryParse(parameters[2], out var amount))
         {
             return false;
@@ -36,8 +30,13 @@ internal sealed class UpdateLimitCoinsCommand : IRCONCommand
             return false;
         }
 
-        client.
-        User.LimitCoins += amount;
+        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        if (client == null)
+        {
+            return true;
+        }
+
+        client.User.LimitCoins += amount;
         client.SendPacket(new ActivityPointNotificationComposer(client.User.LimitCoins, 0, 55));
 
         return true;

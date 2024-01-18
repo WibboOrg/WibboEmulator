@@ -20,12 +20,6 @@ internal sealed class AddWinwinCommand : IRCONCommand
             return false;
         }
 
-        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (client == null)
-        {
-            return false;
-        }
-
         if (!int.TryParse(parameters[2], out var winwin))
         {
             return false;
@@ -36,8 +30,13 @@ internal sealed class AddWinwinCommand : IRCONCommand
             return false;
         }
 
-        client.
-        User.AchievementPoints = client.User.AchievementPoints + winwin;
+        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        if (client == null)
+        {
+            return true;
+        }
+
+        client.User.AchievementPoints += winwin;
         client.SendPacket(new AchievementScoreComposer(client.User.AchievementPoints));
 
         return true;

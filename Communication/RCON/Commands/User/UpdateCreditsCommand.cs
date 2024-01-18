@@ -24,14 +24,11 @@ internal sealed class UpdateCreditsCommand : IRCONCommand
         var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
         if (client == null)
         {
-            return false;
+            return true;
         }
 
-        int credits;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
-        {
-            credits = UserDao.GetCredits(dbClient, client.User.Id);
-        }
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        var credits = UserDao.GetCredits(dbClient, client.User.Id);
 
         client.User.Credits = credits;
         client.SendPacket(new CreditBalanceComposer(client.User.Credits));

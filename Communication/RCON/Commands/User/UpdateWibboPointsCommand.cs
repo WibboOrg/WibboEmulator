@@ -20,24 +20,23 @@ internal sealed class UpdateWibboPointsCommand : IRCONCommand
             return false;
         }
 
+        if (!int.TryParse(parameters[2], out var amount))
+        {
+            return false;
+        }
+
+        if (amount == 0)
+        {
+            return false;
+        }
+
         var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userid);
         if (client == null)
         {
-            return false;
+            return true;
         }
 
-        if (!int.TryParse(parameters[2], out var nbWb))
-        {
-            return false;
-        }
-
-        if (nbWb == 0)
-        {
-            return false;
-        }
-
-        client.
-        User.WibboPoints += nbWb;
+        client.User.WibboPoints += amount;
         client.SendPacket(new ActivityPointNotificationComposer(client.User.WibboPoints, 0, 105));
 
         return true;

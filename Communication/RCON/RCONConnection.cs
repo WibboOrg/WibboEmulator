@@ -8,7 +8,7 @@ public class RCONConnection
     private byte[] _buffer = new byte[1024];
     private Socket _socket;
 
-    private readonly Encoding _encoding = Encoding.GetEncoding("Windows-1252");
+    private readonly Encoding _encoding = Encoding.UTF8;
 
     public RCONConnection(Socket socket)
     {

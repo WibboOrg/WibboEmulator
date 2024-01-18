@@ -20,7 +20,7 @@ internal sealed class UnloadCommand : IRCONCommand
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out var room))
         {
-            return false;
+            return true;
         }
 
         WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);

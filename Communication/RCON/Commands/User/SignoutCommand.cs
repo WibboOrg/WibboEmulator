@@ -21,7 +21,7 @@ internal sealed class SignOutCommand : IRCONCommand
         var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
         if (client == null)
         {
-            return false;
+            return true;
         }
 
         client.Disconnect();

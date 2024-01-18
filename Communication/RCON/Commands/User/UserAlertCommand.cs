@@ -21,10 +21,17 @@ internal sealed class UserAlertCommand : IRCONCommand
         var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userid);
         if (client == null)
         {
+            return true;
+        }
+
+        var message = parameters[2];
+
+        if (message.Length < 3)
+        {
             return false;
         }
 
-        client.SendNotification(parameters[2]);
+        client.SendNotification(message);
         return true;
     }
 }

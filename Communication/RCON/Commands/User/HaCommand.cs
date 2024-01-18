@@ -24,7 +24,7 @@ internal sealed class HaCommand : IRCONCommand
         var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
         if (client == null)
         {
-            return false;
+            return true;
         }
 
         var message = parameters[2];
@@ -32,7 +32,7 @@ internal sealed class HaCommand : IRCONCommand
         ModerationManager.LogStaffEntry(client.User.Id, client.User.Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", message));
         if (client.User.CheckChatMessage(message, "<alert>"))
         {
-            return false;
+            return true;
         }
 
         WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new BroadcastMessageAlertComposer(WibboEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", client.Langue) + "\r\n" + message + "\r\n- " + client.User.Username));

@@ -20,13 +20,6 @@ internal sealed class FollowCommand : IRCONCommand
             return false;
         }
 
-        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (client == null)
-        {
-            return false;
-        }
-
-
         if (!int.TryParse(parameters[2], out var userIdTwo))
         {
             return false;
@@ -37,21 +30,22 @@ internal sealed class FollowCommand : IRCONCommand
             return false;
         }
 
-        var clientTwo = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userIdTwo);
-        if (clientTwo == null)
+        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        if (client == null)
         {
-            return false;
+            return true;
         }
 
-        if (clientTwo.User == null)
+        var clientTwo = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userIdTwo);
+        if (clientTwo == null || clientTwo.User == null)
         {
-            return false;
+            return true;
         }
 
         var room = clientTwo.User.CurrentRoom;
         if (room == null)
         {
-            return false;
+            return true;
         }
 
         client.SendPacket(new GetGuestRoomResultComposer(client, room.RoomData, false, true));

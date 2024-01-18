@@ -24,7 +24,7 @@ internal sealed partial class EventHaCommand : IRCONCommand
         var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
         if (client == null || client.User.CurrentRoom == null)
         {
-            return false;
+            return true;
         }
 
         var message = parameters[2];
@@ -33,7 +33,7 @@ internal sealed partial class EventHaCommand : IRCONCommand
 
         if (!WibboEnvironment.GetGame().GetAnimationManager().AllowAnimation())
         {
-            return false;
+            return true;
         }
 
         message = message.Replace("<", "&lt;").Replace(">", "&gt;");

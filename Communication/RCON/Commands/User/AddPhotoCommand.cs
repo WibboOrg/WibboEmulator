@@ -24,7 +24,7 @@ internal sealed class AddPhotoCommand : IRCONCommand
         var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
         if (client == null)
         {
-            return false;
+            return true;
         }
 
         var photoId = parameters[2];
@@ -32,7 +32,7 @@ internal sealed class AddPhotoCommand : IRCONCommand
         var photoItemId = WibboEnvironment.GetSettings().GetData<int>("photo.item.id");
         if (!WibboEnvironment.GetGame().GetItemManager().GetItem(photoItemId, out var itemData))
         {
-            return false;
+            return true;
         }
 
         var time = WibboEnvironment.GetUnixTimestamp();

@@ -29,6 +29,7 @@ public class CommandManager
 
             return command.TryExecute(parameters);
         }
+
         return false;
     }
 
