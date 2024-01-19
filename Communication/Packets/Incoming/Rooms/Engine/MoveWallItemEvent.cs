@@ -47,10 +47,10 @@ internal sealed class MoveWallItemEvent : IPacketEvent
         //:w=3,2 l=9,63 l
         try
         {
-            if (wallPosition.Contains(Convert.ToChar(13)))
-            { return ":w=0,0 l=0,0 l"; }
-            if (wallPosition.Contains(Convert.ToChar(9)))
-            { return ":w=0,0 l=0,0 l"; }
+            if (wallPosition.Contains(Convert.ToChar(13)) || wallPosition.Contains(Convert.ToChar(9)))
+            {
+                return ":w=0,0 l=0,0 l";
+            }
 
             var posD = wallPosition.Split(' ');
             if (posD[2] is not "l" and not "r")

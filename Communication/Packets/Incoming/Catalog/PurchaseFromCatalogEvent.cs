@@ -231,7 +231,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
         }
 
 
-        if (session.User.InventoryComponent.IsOverlowLimit(amountPurchase, item.Data.Type.ToString()))
+        if (session.User.InventoryComponent.IsOverlowLimit(amountPurchase, item.Data.Type))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("catalog.purchase.limit", session.Langue));
             session.SendPacket(new PurchaseErrorComposer());
@@ -288,7 +288,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
             LogShopDao.Insert(dbClient, session.User.Id, totalLimitCoinCost, $"Achat de {item.Name} (x{item.Amount})", item.Id);
         }
 
-        switch (item.Data.Type.ToString())
+        switch (item.Data.Type)
         {
             default:
                 var generatedGenericItems = new List<Item>();
@@ -371,7 +371,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                 }
                 break;
 
-            case "r":
+            case ItemType.R:
                 var bot = BotUtility.CreateBot(dbClient, item.Data, session.User.Id);
                 if (bot != null)
                 {
@@ -385,7 +385,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                 }
                 break;
 
-            case "p":
+            case ItemType.P:
             {
                 var bits = extraData.Split('\n');
 
@@ -407,12 +407,12 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                 break;
             }
 
-            case "b":
+            case ItemType.B:
             {
                 break;
             }
 
-            case "c":
+            case ItemType.C:
             {
                 if (item.Name == "premium_club_3") //Legend
                 {

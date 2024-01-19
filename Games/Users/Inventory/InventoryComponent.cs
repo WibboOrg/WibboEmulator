@@ -497,17 +497,17 @@ public class InventoryComponent : IDisposable
         this._userInstance.Client.SendPacket(new FurniListAddComposer(userItem));
     }
 
-    public bool IsOverlowLimit(int amountPurchase, string type)
+    public bool IsOverlowLimit(int amountPurchase, ItemType type)
     {
-        if (type is "s" or "i")
+        if (type is ItemType.S or ItemType.I)
         {
             return this._userItems.Count + amountPurchase >= this._furniLimit;
         }
-        else if (type is "r")
+        else if (type is ItemType.R)
         {
             return this._botItems.Count + amountPurchase >= this._botLimit;
         }
-        else if (type is "p")
+        else if (type is ItemType.P)
         {
             return this._petItems.Count + amountPurchase >= this._petLimit;
         }
