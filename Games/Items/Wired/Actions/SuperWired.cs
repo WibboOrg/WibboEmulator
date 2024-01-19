@@ -934,26 +934,36 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                if (rp.Money - count < 0)
-                {
-                    rp.Money = 0;
-                }
-                else
+                if (rp.Money >= count)
                 {
                     rp.Money -= count;
                 }
+                else
+                {
+                    rp.Money = 0;
+                }
+
                 rp.SendUpdate();
                 break;
             }
             case "addmoney":
             {
-                _ = int.TryParse(value, out var count);
-                if (count <= 0)
+                _ = int.TryParse(value, out var points);
+                if (points <= 0)
                 {
                     break;
                 }
 
-                rp.Money += count;
+                if (rp.Money <= int.MaxValue - points)
+                {
+                    rp.Money += points;
+                    rp.SendUpdate();
+                }
+                else
+                {
+                    rp.Money = int.MaxValue;
+                }
+
                 rp.SendUpdate();
                 break;
             }
@@ -1865,7 +1875,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                if (roomUser.UserTimer + points <= int.MaxValue)
+                if (points > 0 && roomUser.UserTimer <= int.MaxValue - points)
                 {
                     roomUser.UserTimer += points;
                 }
@@ -1885,7 +1895,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 {
                     roomUser.UserTimer = 0;
                 }
-                else
+                else if (points > 0 && roomUser.UserTimer >= int.MinValue + points)
                 {
                     roomUser.UserTimer -= points;
                 }
@@ -1904,12 +1914,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 _ = int.TryParse(value, out var points);
 
-                if (points == 0)
-                {
-                    break;
-                }
-
-                if (roomUser.WiredPoints + points <= int.MaxValue)
+                if (points > 0 && roomUser.WiredPoints <= int.MaxValue - points)
                 {
                     roomUser.WiredPoints += points;
                 }
@@ -1920,12 +1925,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 _ = int.TryParse(value, out var points);
 
-                if (points == 0)
-                {
-                    break;
-                }
-
-                if (roomUser.WiredPoints - points >= int.MinValue)
+                if (points > 0 && roomUser.WiredPoints >= int.MinValue + points)
                 {
                     roomUser.WiredPoints -= points;
                 }
