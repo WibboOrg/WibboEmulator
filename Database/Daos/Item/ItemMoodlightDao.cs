@@ -20,8 +20,8 @@ internal sealed class ItemMoodlightDao
         new { Id = itemId, Preset = "#000000,255,0" });
 
     internal static void InsertDuplicate(IDbConnection dbClient, int itemId, int oldItemId) => dbClient.Execute(
-        "INSERT INTO `item_moodlight` (item_id, enabled, current_preset, preset_one, preset_two, preset_three)" +
-        "SELECT '" + itemId + "', enabled, current_preset, preset_one, preset_two, preset_three FROM `item_moodlight` WHERE item_id = '" + oldItemId + "'");
+       @"INSERT INTO `item_moodlight` (item_id, enabled, current_preset, preset_one, preset_two, preset_three)
+       SELECT '" + itemId + "', enabled, current_preset, preset_one, preset_two, preset_three FROM `item_moodlight` WHERE item_id = '" + oldItemId + "'");
 }
 
 public class ItemMoodlightEntity

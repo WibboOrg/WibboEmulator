@@ -160,10 +160,6 @@ internal sealed class ItemDao
         new { RoomId = roomId }
     ).ToList();
 
-    internal static List<ItemEntity> GetAllIdAndBaseItem(IDbConnection dbClient, int roomId) => dbClient.Query<ItemEntity>(
-        "SELECT id, base_item FROM `item` WHERE room_id = '" + roomId + "'"
-    ).ToList();
-
     internal static int GetOneLimitedId(IDbConnection dbClient, int limitedNumber, int itemId) => dbClient.ExecuteScalar<int>(
         "SELECT id FROM `item` WHERE id IN (SELECT item_id FROM `item_limited` WHERE limited_number = '" + limitedNumber + "') AND base_item = '" + itemId + "' LIMIT 1");
 

@@ -115,7 +115,7 @@ internal sealed class RoomDao
 
     internal static int InsertDuplicate(IDbConnection dbClient, int roomId, string username) => dbClient.ExecuteScalar<int>(
         @"INSERT INTO room (caption, owner, description, model_name, wallpaper, floor, landscape, allow_hidewall, wallthick, floorthick, allow_rightsoverride, allow_hidewireds)
-        SELECT 'Appart @RoomId copie', @Username, description, model_name, wallpaper, floor, landscape, allow_hidewall, wallthick, floorthick, allow_rightsoverride, allow_hidewireds 
+        SELECT CONCAT(caption, ' (Copie)'), @Username, description, model_name, wallpaper, floor, landscape, allow_hidewall, wallthick, floorthick, allow_rightsoverride, allow_hidewireds 
         FROM room 
         WHERE id = @RoomId;
         SELECT LAST_INSERT_ID();",

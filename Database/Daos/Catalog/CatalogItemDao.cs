@@ -11,15 +11,6 @@ internal sealed class CatalogItemDao
         ON (`catalog_item_limited`.catalog_item_id = id) 
         ORDER by ID DESC"
     ).ToList();
-
-    internal static List<CatalogItemEntity> GetAllItemIdByRank(IDbConnection dbClient, string permission) => dbClient.Query<CatalogItemEntity>(
-        @"SELECT `item_id` FROM `catalog_item` 
-        WHERE `page_id` 
-        IN (SELECT `id` FROM `catalog_page` WHERE `required_right` <= @Permission) 
-        AND `cost_pixels` = '0' AND `cost_diamonds` = '0' AND `offer_active` = '1' 
-        GROUP BY `item_id`",
-        new { Permission = permission }
-    ).ToList();
 }
 
 public class CatalogItemEntity

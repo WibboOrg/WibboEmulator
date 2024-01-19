@@ -1,11 +1,13 @@
 namespace WibboEmulator.Games.Catalogs;
 using System.Data;
 using WibboEmulator.Database.Daos.Catalog;
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.Catalogs.Marketplace;
 using WibboEmulator.Games.Catalogs.Pets;
 using WibboEmulator.Games.Catalogs.Vouchers;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Users;
+using WibboEmulator.Utilities;
 
 public class CatalogManager
 {
@@ -174,29 +176,61 @@ public class CatalogManager
 
     public CatalogItem FindItem(int itemId, User user)
     {
-        if (!this._itemsPage.ContainsKey(itemId))
+        if (!this._itemsPage.TryGetValue(itemId, out var pageId))
         {
             return null;
         }
 
-        var pageId = this._itemsPage[itemId];
-        if (!this._pages.ContainsKey(pageId))
+        if (!this._pages.TryGetValue(pageId, out var page))
         {
             return null;
         }
 
-        var page = this._pages[pageId];
         if (page == null || !page.Enabled || !page.HavePermission(user))
         {
             return null;
         }
 
-        if (page.Items.TryGetValue(itemId, out var value))
+        if (page.Items.TryGetValue(itemId, out var item))
         {
-            return value;
+            return item;
         }
 
         return null;
+    }
+
+    public List<int> GetAllItemsIdAllowed()
+    {
+        var furniIdAllow = new List<int>();
+
+        foreach (var page in this._pages.Values)
+        {
+            if (page.RequiredRight == "")
+            {
+                foreach (var item in page.Items.Values)
+                {
+                    if (item.Data.InteractionType == InteractionType.TROPHY)
+                    {
+                        continue;
+                    }
+
+                    if (item.IsLimited || item.Amount > 1 || item.Data.InteractionType == InteractionType.EXCHANGE ||
+                        item.Data.InteractionType == InteractionType.BADGE || (item.Data.Type != ItemType.S && item.Data.Type != ItemType.I) || item.CostWibboPoints > 0 || item.CostLimitCoins > 0)
+                    {
+                        continue;
+                    }
+
+                    if (item.Data.IsRare || item.Data.RarityLevel > RaretyLevelType.None)
+                    {
+                        continue;
+                    }
+
+                    furniIdAllow.AddIfNotExists(item.ItemId);
+                }
+            }
+        }
+
+        return furniIdAllow;
     }
 
     public bool TryGetBot(int itemId, out CatalogBot bot) => this._botPresets.TryGetValue(itemId, out bot);

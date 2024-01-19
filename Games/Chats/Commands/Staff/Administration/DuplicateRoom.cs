@@ -2,7 +2,6 @@ namespace WibboEmulator.Games.Chats.Commands.Staff.Administration;
 
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Database.Daos.Bot;
-using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
@@ -25,26 +24,17 @@ internal sealed class DuplicateRoom : IChatCommand
 
             RoomModelCustomDao.InsertDuplicate(dbClient, roomId, oldRoomId);
 
-            var furniIdAllow = new List<int>();
-
-            var catalogItemList = CatalogItemDao.GetAllItemIdByRank(dbClient, "");
-            foreach (var catalogItem in catalogItemList)
-            {
-                if (!furniIdAllow.Contains(catalogItem.ItemId))
-                {
-                    furniIdAllow.Add(catalogItem.ItemId);
-                }
-            }
+            var furniIdAllow = WibboEnvironment.GetGame().GetCatalog().GetAllItemsIdAllowed();
 
             var newItemsId = new Dictionary<int, int>();
             var wiredId = new List<int>();
             var teleportId = new List<int>();
 
-            var itemList = ItemDao.GetAllIdAndBaseItem(dbClient, oldRoomId);
+            var itemList = room.RoomItemHandling.GetWallAndFloor;
             foreach (var item in itemList)
             {
                 var oldItemId = item.Id;
-                var baseID = item.UserId;
+                var baseID = item.BaseItem;
 
                 if (!furniIdAllow.Contains(baseID))
                 {
