@@ -13,7 +13,7 @@ internal sealed class GameTime : IChatCommand
         }
         else
         {
-            session.SendWhisper("Les animations de Jack & Daisy sont désactivées");
+            session.SendWhisper("Les animations de Jack & Daisy sont désactivées.");
         }
     }
 }
