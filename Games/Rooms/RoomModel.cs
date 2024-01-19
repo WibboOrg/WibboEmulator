@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Rooms;
 
+using WibboEmulator.Core;
 using WibboEmulator.Games.Rooms.Map;
 
 public class RoomModel
@@ -57,7 +58,7 @@ public class RoomModel
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error during room modeldata loading for model " + id + ": " + ex);
+            ExceptionLogger.LogThreadException(ex.ToString(), "Error during room modeldata loading for model " + id);
         }
     }
 

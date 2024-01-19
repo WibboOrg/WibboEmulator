@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
+using WibboEmulator.Core;
 using WibboEmulator.Core.OpenIA;
 using WibboEmulator.Games.GameClients;
 
@@ -333,7 +334,7 @@ public partial class ChatGPTBot : BotAI
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                ExceptionLogger.LogException(ex.ToString());
             }
             finally
             {

@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Core;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class MoveWallItemEvent : IPacketEvent
@@ -70,8 +71,9 @@ internal sealed class MoveWallItemEvent : IPacketEvent
             //return ":w=0,0 l=0,0 l";
             return ":w=" + widthX + "," + widthY + " " + "l=" + lengthX + "," + lengthY + " " + posD[2];
         }
-        catch
+        catch (Exception ex)
         {
+            ExceptionLogger.LogException(ex.ToString());
             return ":w=0,0 l=0,0 l";
         }
     }

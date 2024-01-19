@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Items;
 using System.Data;
+using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.Item;
 
 public class ItemDataManager
@@ -68,9 +69,9 @@ public class ItemDataManager
                         this._items.Add(id, itemData);
                     }
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Console.WriteLine(e.ToString());
+                    ExceptionLogger.LogCriticalException(ex.ToString());
                 }
             }
         }

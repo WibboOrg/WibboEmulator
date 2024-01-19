@@ -46,9 +46,9 @@ public class ConsoleCommands
                     break;
             }
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            ExceptionLogger.LogMessage("Error in command [" + inputData + "]: " + e);
+            ExceptionLogger.LogMessage("Error in command [" + inputData + "]: " + ex);
         }
     }
 }

@@ -45,7 +45,10 @@ public class ServerStatusUpdater
                 EmulatorStatsDao.Insert(dbClient, usersOnline, roomsLoaded);
                 EmulatorStatusDao.UpdateScore(dbClient, usersOnline, roomsLoaded, _userPeak);
             }
-            catch (Exception e) { ExceptionLogger.LogThreadException(e.ToString(), "Server status update task"); }
+            catch (Exception e)
+            {
+                ExceptionLogger.LogThreadException(e.ToString(), "ServerStatusUpdate");
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
+using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
@@ -257,8 +258,9 @@ internal sealed class PlaceObjectEvent : IPacketEvent
 
             return ":w=" + widthX + "," + widthY + " " + "l=" + lengthX + "," + lengthY + " " + posD[2];
         }
-        catch
+        catch (Exception ex)
         {
+            ExceptionLogger.LogException(ex.ToString());
             return null;
         }
     }

@@ -1,4 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.Stickys;
+
+using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
@@ -77,8 +79,9 @@ internal sealed class AddStickyNoteEvent : IPacketEvent
             //return ":w=0,0 l=0,0 l";
             return ":w=" + widthX + "," + widthY + " " + "l=" + lengthX + "," + lengthY + " " + posD[2];
         }
-        catch
+        catch (Exception ex)
         {
+            ExceptionLogger.LogException(ex.ToString());
             return ":w=0,0 l=0,0 l";
         }
     }

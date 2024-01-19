@@ -57,7 +57,10 @@ public class OpenAIProxy : IDisposable
 
             return audioBytes;
         }
-        catch { }
+        catch (Exception ex)
+        {
+            ExceptionLogger.LogException(ex.ToString());
+        }
 
         this._waitedAudioAPI = false;
         return null;
@@ -117,8 +120,9 @@ public class OpenAIProxy : IDisposable
 
             return messagesGtp;
         }
-        catch
+        catch (Exception ex)
         {
+            ExceptionLogger.LogException(ex.ToString());
             this._waitedChatAPI = false;
         }
 

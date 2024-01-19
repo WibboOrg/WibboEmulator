@@ -285,7 +285,10 @@ public class FigureDataManager
 
             return rebuildFigure.Remove(rebuildFigure.Length - 1);
         }
-        catch { }
+        catch (Exception ex)
+        {
+            ExceptionLogger.LogException(ex.ToString());
+        }
         return "hd-180-1.lg-270-1408";
     }
 

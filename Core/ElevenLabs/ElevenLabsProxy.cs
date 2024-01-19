@@ -53,7 +53,10 @@ public class ElevenLabsProxy : IDisposable
 
             return audioBytes;
         }
-        catch { }
+        catch (Exception ex)
+        {
+            ExceptionLogger.LogException(ex.ToString());
+        }
 
         this._waitedAudioAPI = false;
         return null;

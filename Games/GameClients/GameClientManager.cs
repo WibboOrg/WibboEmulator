@@ -458,7 +458,6 @@ public class GameClientManager
         var expire = lengthSeconds == -1 ? int.MaxValue : WibboEnvironment.GetUnixTimestamp() + lengthSeconds;
         if (ipBan)
         {
-            //Variable = Client.GetConnection().getIp();
             variable = client.User.IP;
             str = "ip";
         }

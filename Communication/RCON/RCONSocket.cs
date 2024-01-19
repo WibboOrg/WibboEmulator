@@ -50,7 +50,7 @@ public class RCONSocket : IDisposable
             var str = socket.RemoteEndPoint?.ToString()?.Split(':')[0];
             if (this._allowedIps.Contains(str) || str == "127.0.0.1")
             {
-                var connection = new RCONConnection(socket);
+                _ = new RCONConnection(socket);
             }
             else
             {
@@ -58,7 +58,7 @@ public class RCONSocket : IDisposable
                 socket.Close();
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             ExceptionLogger.LogException(ex.ToString());
         }
