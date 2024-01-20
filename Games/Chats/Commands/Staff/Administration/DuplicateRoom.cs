@@ -36,13 +36,7 @@ internal sealed class DuplicateRoom : IChatCommand
                 var oldItemId = item.Id;
                 var baseID = item.BaseItem;
 
-                if (!furniIdAllow.Contains(baseID))
-                {
-                    continue;
-                }
-
-                _ = WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out var data);
-                if (data == null || data.IsRare || data.RarityLevel > RaretyLevelType.None)
+                if (!furniIdAllow.Contains(baseID) || item.Data == null)
                 {
                     continue;
                 }
@@ -51,17 +45,17 @@ internal sealed class DuplicateRoom : IChatCommand
 
                 newItemsId.Add(oldItemId, itemId);
 
-                if (data.InteractionType is InteractionType.TELEPORT or InteractionType.TELEPORT_ARROW)
+                if (item.Data.InteractionType is InteractionType.TELEPORT or InteractionType.TELEPORT_ARROW)
                 {
                     teleportId.Add(oldItemId);
                 }
 
-                if (data.InteractionType == InteractionType.MOODLIGHT)
+                if (item.Data.InteractionType == InteractionType.MOODLIGHT)
                 {
                     ItemMoodlightDao.InsertDuplicate(dbClient, itemId, oldItemId);
                 }
 
-                if (WiredUtillity.TypeIsWired(data.InteractionType))
+                if (WiredUtillity.TypeIsWired(item.Data.InteractionType))
                 {
                     ItemWiredDao.InsertDuplicate(dbClient, itemId, oldItemId);
 
@@ -165,6 +159,6 @@ internal sealed class DuplicateRoom : IChatCommand
             session.User.UsersRooms.Add(roomId);
         }
 
-        session.SendPacket(new FlatCreatedComposer(roomId, "Appart " + oldRoomId + " copie"));
+        session.SendPacket(new FlatCreatedComposer(roomId, room.RoomData.Name + " (Copie)"));
     }
 }
