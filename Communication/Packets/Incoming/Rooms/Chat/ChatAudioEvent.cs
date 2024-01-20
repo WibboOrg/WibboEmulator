@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Chat;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Core;
+using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
 
@@ -107,6 +108,9 @@ internal sealed partial class ChatAudioEvent : IPacketEvent
 
         session.User.ChatMessageManager.AddMessage(session.User.Id, session.User.Username, room.Id, audioUrl, UnixTimestamp.GetNow());
         room.ChatlogManager.AddMessage(session.User.Id, session.User.Username, room.Id, audioUrl, UnixTimestamp.GetNow());
+
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        LogChatDao.Insert(dbClient, session.User.Id, room.Id, audioUrl, "audio", session.User.Username);
 
         user.OnChatAudio(audioPath);
     }
