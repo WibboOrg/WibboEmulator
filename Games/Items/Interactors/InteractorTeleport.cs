@@ -105,11 +105,11 @@ public class InteractorTeleport : FurniInteractor
                 if (roomUserTarget.Coordinate == item.Coordinate)
                 {
                     roomUserTarget.AllowOverride = false;
-                    if (ItemTeleporterFinder.IsTeleLinked(item.Id, item.GetRoom()))
+
+                    var (isLinked, linkedTele, teleRoomId) = ItemTeleporterFinder.IsTeleLinked(item.Id, item.GetRoom());
+                    if (isLinked)
                     {
                         showTeleEffect = true;
-                        var linkedTele = ItemTeleporterFinder.GetLinkedTele(item.Id);
-                        var teleRoomId = ItemTeleporterFinder.GetTeleRoomId(linkedTele, item.GetRoom());
                         if (teleRoomId == item.RoomId)
                         {
                             var roomItem = item.GetRoom().RoomItemHandling.GetItem(linkedTele);

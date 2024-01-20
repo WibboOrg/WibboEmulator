@@ -35,15 +35,18 @@ public static class ItemTeleporterFinder
         return roomId;
     }
 
-    public static bool IsTeleLinked(int teleId, Room room)
+    public static (bool isLinked, int linkedTele, int teleRoomId) IsTeleLinked(int teleId, Room room)
     {
         var linkedTele = GetLinkedTele(teleId);
         if (linkedTele == 0)
         {
-            return false;
+            return (isLinked: false, linkedTele: 0, teleRoomIdteleRoomId: 0);
         }
 
         var roomItem = room.RoomItemHandling.GetItem(linkedTele);
-        return (roomItem != null && (roomItem.GetBaseItem().InteractionType == InteractionType.TELEPORT || roomItem.GetBaseItem().InteractionType == InteractionType.TELEPORT_ARROW)) || GetTeleRoomId(linkedTele, room) != 0;
+
+        var teleRoomId = roomItem != null ? roomItem.RoomId : GetTeleRoomId(linkedTele, room);
+
+        return (isLinked: true, linkedTele, teleRoomId);
     }
 }
