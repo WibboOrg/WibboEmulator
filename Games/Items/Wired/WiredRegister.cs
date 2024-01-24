@@ -166,6 +166,12 @@ public class WiredRegister
             case InteractionType.ACTION_TRIDIMENSION:
                 handler = new Tridimension(item, room);
                 break;
+            case InteractionType.ACTION_GIVE_POINTS_HIGHSCORE:
+                handler = new GivePointsHighScore(item, room);
+                break;
+            case InteractionType.ACTION_RESET_POINTS_HIGHSCORE:
+                handler = new ResetPointsHighScore(item, room);
+                break;
 
             case InteractionType.HIGH_SCORE:
                 handler = new HighScore(item, room);
@@ -239,6 +245,9 @@ public class WiredRegister
                 break;
             case InteractionType.CONDITION_NOT_IN_TEAM:
                 handler = new ActorNotInTeam(item, room);
+                break;
+            case InteractionType.CONDITION_COMPARE_HIGHSCORE:
+                handler = new CompareHighScore(item, room);
                 break;
         }
 

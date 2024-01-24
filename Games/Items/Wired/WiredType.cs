@@ -28,6 +28,7 @@ public enum WiredConditionType
     NOT_ACTOR_WEARING_EFFECT = 23,
     DATE_RANGE_ACTIVE = 24,
     ACTOR_HAS_HANDITEM = 25,
+    ACTOR_COMPARE_HIGHSCORE = 26,
 }
 
 public enum WiredActionType
@@ -60,6 +61,7 @@ public enum WiredActionType
     BOT_TALK_DIRECT_TO_AVTR = 27,
     TRI_DIMENSION = 28,
     COLLISION_CASE = 29,
+    GIVE_POINTS_HIGHSCORE = 30,
 }
 
 public enum WiredTriggerType

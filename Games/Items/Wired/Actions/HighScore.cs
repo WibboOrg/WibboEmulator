@@ -46,7 +46,7 @@ public class HighScore : WiredActionBase, IWired, IWiredEffect
     {
         var triggerItems = "";
 
-        foreach (var score in this.ItemInstance.Scores.OrderByDescending(x => x.Value))
+        foreach (var score in this.ItemInstance.Scores.OrderByDescending(x => x.Value).Take(1000))
         {
             triggerItems += score.Key + ":" + score.Value + ";";
         }

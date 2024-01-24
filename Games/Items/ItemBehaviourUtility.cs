@@ -127,9 +127,9 @@ internal static class ItemBehaviourUtility
                 message.WriteInteger(0); //Type de duré
 
 
-                message.WriteInteger((item.Scores.Count > 20) ? 20 : item.Scores.Count); //count
+                message.WriteInteger((item.Scores.Count > 50) ? 50 : item.Scores.Count); //count
 
-                foreach (var score in item.Scores.OrderByDescending(x => x.Value).Take(20))
+                foreach (var score in item.Scores.OrderByDescending(x => x.Value).Take(50))
                 {
                     message.WriteInteger(score.Value); //score
                     message.WriteInteger(1); //(score.Key.Count); //count
