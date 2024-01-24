@@ -52,7 +52,7 @@ public class UserClickSelf : WiredTriggerBase, IWired
     {
         var distance = this.GetIntParam(0);
 
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, distance.ToString(), false, null);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, distance.ToString(), false, null);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

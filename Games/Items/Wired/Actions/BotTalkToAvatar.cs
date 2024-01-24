@@ -82,7 +82,7 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
     {
         var isWhisper = this.GetIntParam(0) == 1;
 
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, isWhisper, null, this.Delay);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, this.StringParam, isWhisper, null, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

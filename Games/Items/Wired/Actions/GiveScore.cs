@@ -47,7 +47,7 @@ public class GiveScore : WiredActionBase, IWiredEffect, IWired
         var scoreToGive = this.GetIntParam(0);
         var maxCountPerGame = this.GetIntParam(1);
 
-        WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, scoreToGive.ToString(), maxCountPerGame.ToString(), false, null, this.Delay);
+        WiredUtillity.SaveInDatabase(dbClient, this.ItemInstance.Id, scoreToGive.ToString(), maxCountPerGame.ToString(), false, null, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

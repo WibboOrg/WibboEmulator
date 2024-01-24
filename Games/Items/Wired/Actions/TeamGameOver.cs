@@ -69,7 +69,7 @@ public class TeamGameOver : WiredActionBase, IWired, IWiredEffect
     {
         var team = this.GetIntParam(0);
 
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, team.ToString(), false, null, this.Delay);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, team.ToString(), false, null, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

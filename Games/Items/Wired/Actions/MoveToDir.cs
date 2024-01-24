@@ -1215,7 +1215,7 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
         var startDirection = (MovementDirection)this.GetIntParam(0);
         var whenMoveIsBlocked = (WhenMovementBlock)this.GetIntParam(1);
 
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, Convert.ToInt32(startDirection).ToString(), Convert.ToInt32(whenMoveIsBlocked).ToString(), false, this.Items, this.Delay);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, Convert.ToInt32(startDirection).ToString(), Convert.ToInt32(whenMoveIsBlocked).ToString(), false, this.Items, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

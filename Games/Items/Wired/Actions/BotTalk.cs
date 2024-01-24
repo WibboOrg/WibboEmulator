@@ -43,7 +43,7 @@ public class BotTalk : WiredActionBase, IWired, IWiredEffect
     {
         var isShout = this.GetIntParam(0) == 1;
 
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, isShout, null, this.Delay);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, this.StringParam, isShout, null, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

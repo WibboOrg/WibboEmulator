@@ -73,7 +73,7 @@ public class WiredUtillity
         return false;
     }
 
-    public static void SaveTriggerItem(IDbConnection dbClient, int triggerId, string triggerData2, string triggerData, bool allUsertriggerable, List<Item> itemslist, int delay = 0)
+    public static void SaveInDatabase(IDbConnection dbClient, int triggerId, string triggerData2, string triggerData, bool allUsertriggerable, List<Item> itemslist, int delay = 0)
     {
         var triggerItems = "";
 

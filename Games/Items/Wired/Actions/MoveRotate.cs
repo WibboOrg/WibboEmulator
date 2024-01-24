@@ -48,7 +48,7 @@ public class MoveRotate : WiredActionBase, IWiredEffect, IWired
         var rotation = this.GetIntParam(1);
 
         var rotAndMove = rotation + ";" + movement;
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, rotAndMove, string.Empty, false, this.Items, this.Delay);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, rotAndMove, string.Empty, false, this.Items, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

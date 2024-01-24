@@ -39,7 +39,7 @@ public class CollisionCase : WiredActionBase, IWiredEffect, IWired
     {
         var isAllUser = this.GetIntParam(0);
 
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, isAllUser.ToString(), false, this.Items, this.Delay);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, isAllUser.ToString(), false, this.Items, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

@@ -60,7 +60,7 @@ public class CompareHighScore : WiredConditionBase, IWiredCondition, IWired
     public void SaveToDatabase(IDbConnection dbClient)
     {
         var highScoreOperator = this.GetIntParam(0);
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, highScoreOperator.ToString(), this.StringParam, false, null);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, highScoreOperator.ToString(), this.StringParam, false, null);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

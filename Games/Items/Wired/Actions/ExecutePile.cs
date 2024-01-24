@@ -32,7 +32,7 @@ public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
     {
         var ignoreCondition = this.GetIntParam(0);
 
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, ignoreCondition.ToString(), false, this.Items, this.Delay);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, ignoreCondition.ToString(), false, this.Items, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

@@ -44,7 +44,7 @@ public class HasFurniOnFurniNegative : WiredConditionBase, IWiredCondition, IWir
     public void SaveToDatabase(IDbConnection dbClient)
     {
         var requireAll = this.GetIntParam(0);
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, requireAll.ToString(), false, this.Items);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, requireAll.ToString(), false, this.Items);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

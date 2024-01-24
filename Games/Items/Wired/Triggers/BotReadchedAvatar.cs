@@ -32,7 +32,7 @@ public class BotReadchedAvatar : WiredTriggerBase, IWired
         this.RoomInstance.WiredHandler.TrgBotCollision -= this.OnCollision;
     }
 
-    public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, false, null);
+    public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveInDatabase(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, false, null);
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay) => this.StringParam = wiredTriggerData;
 }

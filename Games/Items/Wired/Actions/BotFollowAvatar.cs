@@ -44,7 +44,7 @@ public class BotFollowAvatar : WiredActionBase, IWired, IWiredEffect
     {
         var isFollow = this.GetIntParam(0) == 1;
 
-        WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, isFollow, null, this.Delay);
+        WiredUtillity.SaveInDatabase(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, isFollow, null, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

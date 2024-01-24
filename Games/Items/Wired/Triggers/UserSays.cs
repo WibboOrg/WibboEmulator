@@ -61,7 +61,7 @@ public class UserSays : WiredTriggerBase, IWired
         var isOwnerOnly = this.GetIntParam(0) == 1;
         var isContains = this.GetIntParam(1) == 1;
 
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, isContains ? "1" : "0", this.StringParam, isOwnerOnly, null);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, isContains ? "1" : "0", this.StringParam, isOwnerOnly, null);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

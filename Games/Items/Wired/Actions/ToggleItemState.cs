@@ -35,7 +35,7 @@ public class ToggleItemState : WiredActionBase, IWired, IWiredEffect
     {
         var reverse = this.GetIntParam(0);
 
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, reverse.ToString(), string.Empty, false, this.Items, this.Delay);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, reverse.ToString(), string.Empty, false, this.Items, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

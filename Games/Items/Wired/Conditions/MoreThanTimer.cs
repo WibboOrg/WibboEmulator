@@ -20,7 +20,7 @@ public class MoreThanTimer : WiredConditionBase, IWiredCondition, IWired
     {
         var timeout = this.GetIntParam(0);
 
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, timeout.ToString(), false, null);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, timeout.ToString(), false, null);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

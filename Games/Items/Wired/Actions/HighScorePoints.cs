@@ -56,7 +56,7 @@ public class HighScorePoints : WiredActionBase, IWired, IWiredEffect
 
         triggerItems = triggerItems.TrimEnd(';');
 
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, triggerItems, false, null, this.Delay);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, triggerItems, false, null, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

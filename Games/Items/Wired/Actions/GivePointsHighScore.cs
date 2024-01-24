@@ -63,7 +63,7 @@ public class GivePointsHighScore : WiredActionBase, IWired, IWiredEffect, IWired
     public void SaveToDatabase(IDbConnection dbClient)
     {
         var highScoreOperator = this.GetIntParam(0);
-        WiredUtillity.SaveTriggerItem(dbClient, this.Id, highScoreOperator.ToString(), this.StringParam, false, this.Items, this.Delay);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, highScoreOperator.ToString(), this.StringParam, false, this.Items, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
