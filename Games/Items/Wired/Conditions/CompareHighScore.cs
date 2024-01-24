@@ -19,19 +19,20 @@ public class CompareHighScore : WiredConditionBase, IWiredCondition, IWired
             return false;
         }
 
-        var hightScoreItem = this.Items.FirstOrDefault();
+        var highScoreItem = this.Items.FirstOrDefault();
 
-        if (hightScoreItem != null && hightScoreItem.Data != null &&
-            (hightScoreItem.Data.InteractionType == InteractionType.HIGH_SCORE || hightScoreItem.Data.InteractionType == InteractionType.HIGH_SCORE_POINTS))
+        if (highScoreItem != null && highScoreItem.Data != null &&
+            (highScoreItem.Data.InteractionType == InteractionType.HIGH_SCORE || highScoreItem.Data.InteractionType == InteractionType.HIGH_SCORE_POINTS))
         {
             var highScoreOperator = (HighScoreOperatorCondition)this.GetIntParam(0);
 
-            if (!int.TryParse(this.StringParam, out var valueInt))
+            _ = int.TryParse(this.StringParam, out var valueInt);
+            if (this.StringParam == "#point#")
             {
-                return false;
+                valueInt = user.WiredPoints;
             }
 
-            var inHighScore = hightScoreItem.Scores.TryGetValue(user.GetUsername(), out var score);
+            var inHighScore = highScoreItem.Scores.TryGetValue(user.GetUsername(), out var score);
 
             switch (highScoreOperator)
             {
@@ -40,13 +41,13 @@ public class CompareHighScore : WiredConditionBase, IWiredCondition, IWired
                 case HighScoreOperatorCondition.NotEqual:
                     return valueInt != score;
                 case HighScoreOperatorCondition.LessThanOrEqual:
-                    return valueInt <= score;
-                case HighScoreOperatorCondition.LessThan:
-                    return valueInt < score;
-                case HighScoreOperatorCondition.GreaterThanOrEqual:
                     return valueInt >= score;
-                case HighScoreOperatorCondition.GreaterThan:
+                case HighScoreOperatorCondition.LessThan:
                     return valueInt > score;
+                case HighScoreOperatorCondition.GreaterThanOrEqual:
+                    return valueInt <= score;
+                case HighScoreOperatorCondition.GreaterThan:
+                    return valueInt < score;
                 case HighScoreOperatorCondition.InHighScore:
                     return inHighScore;
                 case HighScoreOperatorCondition.InNotHighScore:
@@ -66,6 +67,8 @@ public class CompareHighScore : WiredConditionBase, IWiredCondition, IWired
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
         this.Delay = wiredDelay;
+
+        this.StringParam = wiredTriggerData;
 
         if (int.TryParse(wiredTriggerData2, out var highScoreOperator))
         {

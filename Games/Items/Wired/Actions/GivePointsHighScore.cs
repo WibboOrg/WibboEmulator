@@ -15,20 +15,21 @@ public class GivePointsHighScore : WiredActionBase, IWired, IWiredEffect, IWired
             return false;
         }
 
-        if (!int.TryParse(this.StringParam, out var valueInt))
+        _ = int.TryParse(this.StringParam, out var valueInt);
+        if (this.StringParam == "#point#")
         {
-            return false;
+            valueInt = user.WiredPoints;
         }
 
         var highScoreOperator = (HighScoreOperatorAction)this.GetIntParam(0);
 
-        foreach (var hightScoreItem in this.Items)
+        foreach (var highScoreItem in this.Items)
         {
-            if (hightScoreItem?.Data != null &&
-                (hightScoreItem.Data.InteractionType == InteractionType.HIGH_SCORE ||
-                hightScoreItem.Data.InteractionType == InteractionType.HIGH_SCORE_POINTS))
+            if (highScoreItem?.Data != null &&
+                (highScoreItem.Data.InteractionType == InteractionType.HIGH_SCORE ||
+                highScoreItem.Data.InteractionType == InteractionType.HIGH_SCORE_POINTS))
             {
-                var scores = hightScoreItem.Scores;
+                var scores = highScoreItem.Scores;
 
                 if (scores.TryGetValue(user.GetUsername(), out var score))
                 {
@@ -53,7 +54,7 @@ public class GivePointsHighScore : WiredActionBase, IWired, IWiredEffect, IWired
                     scores.Add(user.GetUsername(), valueInt);
                 }
 
-                hightScoreItem.UpdateState(false);
+                highScoreItem.UpdateState(false);
             }
         }
 

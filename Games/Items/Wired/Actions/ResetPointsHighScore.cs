@@ -17,14 +17,14 @@ public class ResetPointsHighScore : WiredActionBase, IWired, IWiredEffect, IWire
             return false;
         }
 
-        foreach (var hightScoreItem in this.Items)
+        foreach (var highScoreItem in this.Items)
         {
-            if (hightScoreItem?.Data != null &&
-                (hightScoreItem.Data.InteractionType == InteractionType.HIGH_SCORE ||
-                hightScoreItem.Data.InteractionType == InteractionType.HIGH_SCORE_POINTS))
+            if (highScoreItem?.Data != null &&
+                (highScoreItem.Data.InteractionType == InteractionType.HIGH_SCORE ||
+                highScoreItem.Data.InteractionType == InteractionType.HIGH_SCORE_POINTS))
             {
-                hightScoreItem.Scores.Clear();
-                hightScoreItem.UpdateState(false);
+                highScoreItem.Scores.Clear();
+                highScoreItem.UpdateState(false);
             }
         }
 

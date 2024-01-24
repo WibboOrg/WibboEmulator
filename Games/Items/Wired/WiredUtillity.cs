@@ -75,17 +75,7 @@ public class WiredUtillity
 
     public static void SaveInDatabase(IDbConnection dbClient, int triggerId, string triggerData2, string triggerData, bool allUsertriggerable, List<Item> itemslist, int delay = 0)
     {
-        var triggerItems = "";
-
-        if (itemslist != null)
-        {
-            foreach (var item in itemslist)
-            {
-                triggerItems += item.Id + ";";
-            }
-        }
-
-        triggerItems = triggerItems.TrimEnd(';');
+        var triggerItems = itemslist != null ? string.Join(";", itemslist.Select(item => item.Id)) : "";
 
         ItemWiredDao.Replace(dbClient, triggerId, triggerData, triggerData2, allUsertriggerable, triggerItems, delay);
     }
