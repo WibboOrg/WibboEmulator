@@ -75,7 +75,7 @@ public class FigureDataManager
 
             foreach (var set in child.Sets)
             {
-                if (!this._setTypes[child.Type].Sets.ContainsKey(set.Id))
+                if (!this._setTypes[child.Type].Sets.TryGetValue(set.Id, out var sets))
                 {
                     this._setTypes[child.Type].Sets.Add(set.Id, new Set(set.Id, set.Gender, set.Club, set.Colorable));
                 }
@@ -84,10 +84,10 @@ public class FigureDataManager
                 {
                     if (part.Type != null)
                     {
-                        if (!this._setTypes[child.Type].Sets[set.Id].Parts.ContainsKey(part.Id + "-" + part.Type))
+                        if (sets != null && !sets.Parts.ContainsKey(part.Id + "-" + part.Type))
                         {
                             this._setTypes[child.Type].Sets[set.Id].Parts.Add(part.Id + "-" + part.Type,
-                          new Part(part.Id, SetTypeUtility.GetSetType(child.Type), part.Colorable, part.Index, part.Colorindex));
+                                new Part(part.Id, SetTypeUtility.GetSetType(child.Type), part.Colorable, part.Index, part.Colorindex));
                         }
                     }
                 }

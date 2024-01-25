@@ -31,7 +31,7 @@ public class EntersRoom : WiredTriggerBase, IWired
         this.RoomInstance.RoomUserManager.OnUserEnter -= this.OnUserEnter;
     }
 
-    public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, this.StringParam, false, null);
+    public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, this.StringParam);
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay) => this.StringParam = wiredTriggerData;
 }

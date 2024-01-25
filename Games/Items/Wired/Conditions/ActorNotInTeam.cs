@@ -34,7 +34,7 @@ public class ActorNotInTeam : WiredConditionBase, IWiredCondition, IWired
     {
         var teamId = this.GetIntParam(0);
 
-        WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, teamId.ToString(), false, null);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, teamId.ToString());
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

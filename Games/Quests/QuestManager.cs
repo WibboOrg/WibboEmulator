@@ -151,12 +151,12 @@ public class QuestManager
 
         foreach (var quest in this._quests.Values)
         {
-            if (!dictionary1.ContainsKey(quest.Category))
+            if (!dictionary1.TryGetValue(quest.Category, out var questCategory))
             {
                 dictionary1.Add(quest.Category, 1);
                 dictionary2.Add(quest.Category, null);
             }
-            if (quest.Number >= dictionary1[quest.Category])
+            if (quest.Number >= questCategory)
             {
                 var questProgress = session.User.GetQuestProgress(quest.Id);
                 if (session.User.CurrentQuestId != quest.Id && questProgress >= (long)quest.GoalData)

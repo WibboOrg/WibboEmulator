@@ -85,7 +85,7 @@ public class GameMap
 
     public void RemoveUserFromMap(RoomUser user, Point coord)
     {
-        if (!this._userMap.ContainsKey(coord))
+        if (!this._userMap.TryGetValue(coord, out var userMap))
         {
             if (this.ValidTile(coord.X, coord.Y))
             {
@@ -95,12 +95,12 @@ public class GameMap
             return;
         }
 
-        if (this._userMap[coord].Contains(user))
+        if (userMap.Contains(user))
         {
             _ = this._userMap[coord].Remove(user);
         }
 
-        if (this._userMap[coord].Count > 0)
+        if (userMap.Count > 0)
         {
             return;
         }
@@ -374,13 +374,12 @@ public class GameMap
 
     public void AddCoordinatedItem(Item item, Point coord)
     {
-        if (!this.CoordinatedItems.ContainsKey(coord))
+        if (!this.CoordinatedItems.TryGetValue(coord, out var items))
         {
             _ = this.CoordinatedItems.TryAdd(coord, new List<Item>() { item });
         }
         else
         {
-            var items = this.CoordinatedItems[coord];
             if (items.Contains(item))
             {
                 return;
@@ -407,7 +406,7 @@ public class GameMap
     public bool RemoveCoordinatedItem(Item item, Point coord)
     {
         var point = new Point(coord.X, coord.Y);
-        if (!this.CoordinatedItems.ContainsKey(point) || !this.CoordinatedItems[point].Contains(item))
+        if (!this.CoordinatedItems.TryGetValue(point, out var items) || !items.Contains(item))
         {
             return false;
         }
@@ -1096,21 +1095,27 @@ public class GameMap
 
     public RoomUser SquareHasUserNear(int x, int y)
     {
-        if (this.SquareHasUsers(x - 1, y))
+        var directions = new List<Point>
         {
-            return this._roomInstance.RoomUserManager.GetUserForSquare(x - 1, y);
-        }
-        else if (this.SquareHasUsers(x + 1, y))
+            new(-1, 0),   // Gauche
+            new(1, 0),    // Droite
+            new(0, -1),   // Haut
+            new(0, 1),    // Bas
+            new(-1, -1),  // Diagonale supérieure gauche
+            new(-1, 1),   // Diagonale inférieure gauche
+            new(1, -1),   // Diagonale supérieure droite
+            new(1, 1)     // Diagonale inférieure droite
+        };
+
+        foreach (var direction in directions)
         {
-            return this._roomInstance.RoomUserManager.GetUserForSquare(x + 1, y);
-        }
-        else if (this.SquareHasUsers(x, y - 1))
-        {
-            return this._roomInstance.RoomUserManager.GetUserForSquare(x, y - 1);
-        }
-        else if (this.SquareHasUsers(x, y + 1))
-        {
-            return this._roomInstance.RoomUserManager.GetUserForSquare(x, y + 1);
+            var newX = x + direction.X;
+            var newY = y + direction.Y;
+
+            if (this.SquareHasUsers(newX, newY))
+            {
+                return this._roomInstance.RoomUserManager.GetUserForSquare(newX, newY);
+            }
         }
 
         return null;
@@ -1119,42 +1124,34 @@ public class GameMap
     public RoomUser LookHasUserNearNotBot(int x, int y, int distance = 0)
     {
         distance++;
-        if (this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x - distance, y) != null)
+
+        var directions = new List<Point>
         {
-            return this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x - distance, y);
-        }
-        else if (this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x + distance, y) != null)
+            new(-distance, 0),   // Gauche
+            new(distance, 0),    // Droite
+            new(0, -distance),   // Haut
+            new(0, distance),    // Bas
+            new(distance, distance), // Diagonale inférieure droite
+            new(-distance, -distance), // Diagonale supérieure gauche
+            new(distance, -distance), // Diagonale supérieure droite
+            new(-distance, distance) // Diagonale inférieure gauche
+        };
+
+        foreach (var direction in directions)
         {
-            return this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x + distance, y);
-        }
-        else if (this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x, y - distance) != null)
-        {
-            return this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x, y - distance);
-        }
-        else if (this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x, y + distance) != null)
-        {
-            return this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x, y + distance);
-        }
-        //diago
-        else if (this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x + distance, y + distance) != null)
-        {
-            return this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x + distance, y + distance);
-        }
-        else if (this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x - distance, y - distance) != null)
-        {
-            return this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x - distance, y + distance);
-        }
-        else if (this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x - distance, y + distance) != null)
-        {
-            return this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x - distance, y + distance);
-        }
-        else if (this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x + distance, y - distance) != null)
-        {
-            return this._roomInstance.RoomUserManager.GetUserForSquareNotBot(x + distance, y + distance);
+            var newX = x + direction.X;
+            var newY = y + direction.Y;
+
+            if (this._roomInstance.RoomUserManager.GetUserForSquareNotBot(newX, newY) != null)
+            {
+                return this._roomInstance.RoomUserManager.GetUserForSquareNotBot(newX, newY);
+            }
         }
 
         return null;
     }
+
+    public bool SquareHasUsers(Point coord) => this.SquareHasUsers(coord.X, coord.Y);
 
     public bool SquareHasUsers(int x, int y)
     {

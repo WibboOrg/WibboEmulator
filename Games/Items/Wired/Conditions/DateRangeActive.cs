@@ -28,7 +28,7 @@ public class DateRangeActive : WiredConditionBase, IWiredCondition, IWired
         var startDate = this.GetIntParam(0);
         var endDate = this.GetIntParam(1);
 
-        WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, startDate + ":" + endDate, false, null);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, startDate + ":" + endDate);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

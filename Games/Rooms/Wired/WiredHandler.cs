@@ -137,11 +137,11 @@ public class WiredHandler
 
     private static void RemoveFromStack(ConcurrentDictionary<Point, List<Item>> stack, Point coordinate, Item item)
     {
-        if (stack.ContainsKey(coordinate))
+        if (stack.TryGetValue(coordinate, out var stackItems))
         {
             _ = stack[coordinate].Remove(item);
 
-            if (stack[coordinate].Count == 0)
+            if (stackItems.Count == 0)
             {
                 _ = stack.TryRemove(coordinate, out _);
             }

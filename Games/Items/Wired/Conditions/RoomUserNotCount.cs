@@ -31,7 +31,7 @@ public class RoomUserNotCount : WiredConditionBase, IWiredCondition, IWired
         var minUsers = this.GetIntParam(0);
         var maxUsers = this.GetIntParam(1);
 
-        WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, minUsers + ":" + maxUsers, false, null);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, minUsers + ":" + maxUsers);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

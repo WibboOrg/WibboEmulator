@@ -18,30 +18,27 @@ public class MarketplaceManager
 
     public int AvgPriceForSprite(int spriteID)
     {
-        var num = 0;
-        var num2 = 0;
-        if (this.MarketAverages.ContainsKey(spriteID) && this.MarketCounts.ContainsKey(spriteID))
+        if (this.MarketAverages.TryGetValue(spriteID, out var spriteCount) && this.MarketCounts.TryGetValue(spriteID, out var averageSprite))
         {
-            if (this.MarketCounts[spriteID] > 0)
+            if (spriteCount > 0)
             {
-                return this.MarketAverages[spriteID] / this.MarketCounts[spriteID];
+                return averageSprite / spriteCount;
             }
+
             return 0;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+
+        var priceSprite = CatalogMarketplaceDataDao.GetPriceBySprite(dbClient, spriteID);
+        var soldSprite = CatalogMarketplaceDataDao.GetSoldBySprite(dbClient, spriteID);
+
+        this.MarketAverages.Add(spriteID, priceSprite);
+        this.MarketCounts.Add(spriteID, soldSprite);
+
+        if (soldSprite > 0)
         {
-            num = CatalogMarketplaceDataDao.GetPriceBySprite(dbClient, spriteID);
-
-            num2 = CatalogMarketplaceDataDao.GetSoldBySprite(dbClient, spriteID);
-        }
-
-        this.MarketAverages.Add(spriteID, num);
-        this.MarketCounts.Add(spriteID, num2);
-
-        if (num2 > 0)
-        {
-            return Convert.ToInt32(Math.Ceiling((double)(num / num2)));
+            return Convert.ToInt32(Math.Ceiling((double)(priceSprite / soldSprite)));
         }
 
         return 0;

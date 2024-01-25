@@ -41,12 +41,12 @@ public class RPTrocUser
 
     public void RemoveItemId(int itemId)
     {
-        if (!this.ItemIds.ContainsKey(itemId))
+        if (!this.ItemIds.TryGetValue(itemId, out var itemCount))
         {
             return;
         }
 
-        if (this.ItemIds[itemId] > 1)
+        if (itemCount > 1)
         {
             this.ItemIds[itemId]--;
         }

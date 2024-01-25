@@ -54,12 +54,10 @@ public class AchievementManager
 
     public bool ProgressAchievement(GameClient session, string achievementGroup, int progressAmount)
     {
-        if (!this._achievements.ContainsKey(achievementGroup))
+        if (!this._achievements.TryGetValue(achievementGroup, out var achievementData))
         {
             return false;
         }
-
-        var achievementData = this._achievements[achievementGroup];
 
         var userData = session.User.AchievementComponent.GetAchievementData(achievementGroup);
 

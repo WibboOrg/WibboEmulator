@@ -136,15 +136,7 @@ public class Pet
         this.PetCommands = this.GetPetCommands();
     }
 
-    public bool HasCommand(short command)
-    {
-        if (!this.PetCommands.ContainsKey(command))
-        {
-            return false;
-        }
-
-        return this.PetCommands[command];
-    }
+    public bool HasCommand(short command) => this.PetCommands.TryGetValue(command, out var value) && value;
 
     public Dictionary<short, bool> GetPetCommands()
     {

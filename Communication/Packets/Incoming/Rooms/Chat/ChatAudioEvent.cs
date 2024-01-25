@@ -11,7 +11,7 @@ internal sealed partial class ChatAudioEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.User == null || !session.User.InRoom || !session.User.HasPermission("chat_audio"))
+        if (session == null || session.User == null || !session.User.InRoom || !session.User.HasPermission("chat_audio") || session.User.IgnoreAll)
         {
             return;
         }

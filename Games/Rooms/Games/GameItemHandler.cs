@@ -154,12 +154,12 @@ public class GameItemHandler
 
     public void RemoveGroupGate(Item item)
     {
-        if (!this._groupGate.ContainsKey(item.Coordinate))
+        if (!this._groupGate.TryGetValue(item.Coordinate, out var groupGate))
         {
             return;
         }
         _ = this._groupGate[item.Coordinate].Remove(item);
-        if (this._groupGate.Count == 0)
+        if (groupGate.Count == 0)
         {
             _ = this._groupGate.Remove(item.Coordinate);
         }
@@ -188,17 +188,17 @@ public class GameItemHandler
             return false;
         }
 
-        if (!this._groupGate.ContainsKey(coordinate))
+        if (!this._groupGate.TryGetValue(coordinate, out var groupGate))
         {
             return false;
         }
 
-        if (this._groupGate[coordinate].Count == 0)
+        if (groupGate.Count == 0)
         {
             return false;
         }
 
-        var item = this._groupGate[coordinate].FirstOrDefault();
+        var item = groupGate.FirstOrDefault();
 
         if (item == null)
         {
@@ -210,27 +210,8 @@ public class GameItemHandler
             return true;
         }
 
-        if (user == null)
-        {
-            return false;
-        }
-
-        if (user.IsBot)
-        {
-            return false;
-        }
-
-        if (user.Client == null)
-        {
-            return false;
-        }
-
-        if (user.Client.User == null)
-        {
-            return false;
-        }
-
-        if (user.Client.User.Rank > 5)
+        if (user == null || user.IsBot || user.Client == null || user.Client.User == null ||
+            user.Client.User.Rank > 5)
         {
             return false;
         }

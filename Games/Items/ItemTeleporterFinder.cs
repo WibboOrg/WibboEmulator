@@ -40,7 +40,7 @@ public static class ItemTeleporterFinder
         var linkedTele = GetLinkedTele(teleId);
         if (linkedTele == 0)
         {
-            return (isLinked: false, linkedTele: 0, teleRoomIdteleRoomId: 0);
+            return (isLinked: false, linkedTele: 0, teleRoomId: 0);
         }
 
         var roomItem = room.RoomItemHandling.GetItem(linkedTele);

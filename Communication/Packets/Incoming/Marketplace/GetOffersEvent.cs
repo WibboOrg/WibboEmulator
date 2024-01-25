@@ -39,7 +39,7 @@ internal sealed class GetOffersEvent : IPacketEvent
 
         foreach (var item in WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems)
         {
-            if (dictionary.ContainsKey(item.SpriteId))
+            if (dictionary.TryGetValue(item.SpriteId, out var spriteOffer))
             {
                 if (item.LimitedNumber > 0)
                 {
@@ -55,7 +55,7 @@ internal sealed class GetOffersEvent : IPacketEvent
                 }
                 else
                 {
-                    if (dictionary[item.SpriteId].TotalPrice > item.TotalPrice)
+                    if (spriteOffer.TotalPrice > item.TotalPrice)
                     {
                         _ = dictionary.Remove(item.SpriteId);
                         dictionary.Add(item.SpriteId, item);
