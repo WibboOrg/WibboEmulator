@@ -35,21 +35,30 @@ public class GivePointsHighScore : WiredActionBase, IWired, IWiredEffect, IWired
                 {
                     switch (highScoreOperator)
                     {
-                        case HighScoreOperatorAction.ADD:
+                        case HighScoreOperatorAction.Addition:
                             scores[user.GetUsername()] = score <= int.MaxValue - valueInt ? score + valueInt : valueInt;
                             break;
-                        case HighScoreOperatorAction.SUBTRACT:
+                        case HighScoreOperatorAction.Subtraction:
                             scores[user.GetUsername()] = score >= int.MinValue + valueInt ? score - valueInt : valueInt;
                             break;
-                        case HighScoreOperatorAction.EQUAL:
+                        case HighScoreOperatorAction.Multiplication:
+                            scores[user.GetUsername()] = unchecked(score * valueInt);
+                            break;
+                        case HighScoreOperatorAction.Division:
+                            scores[user.GetUsername()] = valueInt != 0 ? (int)Math.Round((double)score / valueInt) : 0;
+                            break;
+                        case HighScoreOperatorAction.Modulo:
+                            scores[user.GetUsername()] = valueInt != 0 ? score % valueInt : 0;
+                            break;
+                        case HighScoreOperatorAction.Remplace:
                             scores[user.GetUsername()] = valueInt;
                             break;
-                        case HighScoreOperatorAction.DEL:
+                        case HighScoreOperatorAction.Delete:
                             _ = scores.Remove(user.GetUsername());
                             break;
                     }
                 }
-                else if (highScoreOperator != HighScoreOperatorAction.DEL)
+                else if (highScoreOperator != HighScoreOperatorAction.Delete)
                 {
                     scores.Add(user.GetUsername(), valueInt);
                 }
@@ -84,8 +93,11 @@ public class GivePointsHighScore : WiredActionBase, IWired, IWiredEffect, IWired
 
 public enum HighScoreOperatorAction
 {
-    ADD = 0,
-    SUBTRACT = 1,
-    EQUAL = 2,
-    DEL = 3
+    Addition,
+    Subtraction,
+    Multiplication,
+    Division,
+    Modulo,
+    Remplace,
+    Delete
 }
