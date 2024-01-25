@@ -74,7 +74,7 @@ public class CompareHighScore : WiredConditionBase, IWiredCondition, IWired
 
         if (int.TryParse(wiredTriggerData2, out var highScoreOperator))
         {
-            this.IntParams.Add(highScoreOperator);
+            this.SetIntParam(0, highScoreOperator);
         }
 
         this.LoadStuffIds(wiredTriggersItem);

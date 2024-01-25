@@ -232,7 +232,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                if (!int.TryParse(value, out var count))
+                if (!int.TryParse(value, out var count) || count < 0)
                 {
                     break;
                 }
@@ -271,7 +271,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                if (!int.TryParse(value, out var count))
+                if (!int.TryParse(value, out var count) || count <= 0)
                 {
                     break;
                 }
