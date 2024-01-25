@@ -37,17 +37,19 @@ public class CompareHighScore : WiredConditionBase, IWiredCondition, IWired
             switch (highScoreOperator)
             {
                 case HighScoreOperatorCondition.Equal:
-                    return valueInt == score;
+                    return score == valueInt;
                 case HighScoreOperatorCondition.NotEqual:
-                    return valueInt != score;
+                    return score != valueInt;
                 case HighScoreOperatorCondition.LessThanOrEqual:
-                    return valueInt >= score;
+                    return score <= valueInt;
                 case HighScoreOperatorCondition.LessThan:
-                    return valueInt > score;
+                    return score < valueInt;
                 case HighScoreOperatorCondition.GreaterThanOrEqual:
-                    return valueInt <= score;
+                    return score >= valueInt;
                 case HighScoreOperatorCondition.GreaterThan:
-                    return valueInt < score;
+                    return score > valueInt;
+                case HighScoreOperatorCondition.Modulo:
+                    return valueInt == 0 || score % valueInt == 0;
                 case HighScoreOperatorCondition.InHighScore:
                     return inHighScore;
                 case HighScoreOperatorCondition.InNotHighScore:
@@ -61,7 +63,7 @@ public class CompareHighScore : WiredConditionBase, IWiredCondition, IWired
     public void SaveToDatabase(IDbConnection dbClient)
     {
         var highScoreOperator = this.GetIntParam(0);
-        WiredUtillity.SaveInDatabase(dbClient, this.Id, highScoreOperator.ToString(), this.StringParam, false, null);
+        WiredUtillity.SaveInDatabase(dbClient, this.Id, highScoreOperator.ToString(), this.StringParam, false, this.Items);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
@@ -87,6 +89,7 @@ public enum HighScoreOperatorCondition
     LessThan,
     GreaterThanOrEqual,
     GreaterThan,
+    Modulo,
     InHighScore,
     InNotHighScore
 }
