@@ -33,6 +33,19 @@ public class GivePointsHighScore : WiredActionBase, IWired, IWiredEffect, IWired
 
                 if (scores.TryGetValue(user.GetUsername(), out var score))
                 {
+                    if (valueInt < 0)
+                    {
+                        switch (highScoreOperator)
+                        {
+                            case HighScoreOperatorAction.Addition:
+                                highScoreOperator = HighScoreOperatorAction.Subtraction;
+                                break;
+                            case HighScoreOperatorAction.Subtraction:
+                                highScoreOperator = HighScoreOperatorAction.Addition;
+                                break;
+                        }
+                    }
+
                     switch (highScoreOperator)
                     {
                         case HighScoreOperatorAction.Addition:
@@ -42,13 +55,24 @@ public class GivePointsHighScore : WiredActionBase, IWired, IWiredEffect, IWired
                             scores[user.GetUsername()] = score >= int.MinValue + valueInt ? score - valueInt : valueInt;
                             break;
                         case HighScoreOperatorAction.Multiplication:
-                            scores[user.GetUsername()] = unchecked(score * valueInt);
+                            if (valueInt > 0)
+                            {
+                                scores[user.GetUsername()] = (score > int.MaxValue / valueInt) ? int.MaxValue : score * valueInt;
+                            }
+                            else if (valueInt < 0)
+                            {
+                                scores[user.GetUsername()] = (score < int.MinValue / valueInt) ? int.MinValue : score * valueInt;
+                            }
+                            else
+                            {
+                                scores[user.GetUsername()] = 0;
+                            }
                             break;
                         case HighScoreOperatorAction.Division:
-                            scores[user.GetUsername()] = valueInt != 0 ? (int)Math.Round((double)score / valueInt) : 0;
+                            scores[user.GetUsername()] = valueInt != 0 && score != 0 ? (int)Math.Round((double)score / valueInt) : 0;
                             break;
                         case HighScoreOperatorAction.Modulo:
-                            scores[user.GetUsername()] = valueInt != 0 ? score % valueInt : 0;
+                            scores[user.GetUsername()] = valueInt != 0 && score != 0 ? score % valueInt : 0;
                             break;
                         case HighScoreOperatorAction.Remplace:
                             scores[user.GetUsername()] = valueInt;

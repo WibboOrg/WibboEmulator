@@ -49,7 +49,7 @@ public class CompareHighScore : WiredConditionBase, IWiredCondition, IWired
                 case HighScoreOperatorCondition.GreaterThan:
                     return score > valueInt;
                 case HighScoreOperatorCondition.Modulo:
-                    return valueInt == 0 || score % valueInt == 0;
+                    return valueInt == 0 || score == 0 || score % valueInt == 0;
                 case HighScoreOperatorCondition.InHighScore:
                     return inHighScore;
                 case HighScoreOperatorCondition.InNotHighScore:
