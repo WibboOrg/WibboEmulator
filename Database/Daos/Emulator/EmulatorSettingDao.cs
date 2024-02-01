@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Database.Daos.Emulator;
+namespace WibboEmulator.Database.Daos.Emulator;
 using System.Data;
 using Dapper;
 
@@ -9,7 +9,7 @@ internal sealed class EmulatorSettingDao
     ).ToList();
 
     internal static void Update(IDbConnection dbClient, string key, string value) => dbClient.Execute(
-        "UPDATE emulator_setting SET value = @Value WHERE key = @Key",
+        "UPDATE `emulator_setting` SET `value` = @Value WHERE `key` = @Key",
         new { Value = value, Key = key });
 
 }
