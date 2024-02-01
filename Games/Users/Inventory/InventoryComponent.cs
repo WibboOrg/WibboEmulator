@@ -169,7 +169,10 @@ public class InventoryComponent : IDisposable
                 continue;
             }
 
-            var magotCount = int.Parse(roomItem.GetBaseItem().ItemName.Split(new char[1] { '_' })[1]);
+            if (!int.TryParse(roomItem.GetBaseItem().ItemName.Split(new char[1] { '_' })[1], out var magotCount))
+            {
+                continue;
+            }
 
             if (magotCount > 0)
             {
