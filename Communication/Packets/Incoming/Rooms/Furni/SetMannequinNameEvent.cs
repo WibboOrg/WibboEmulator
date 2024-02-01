@@ -27,16 +27,8 @@ internal sealed class SetMannequinNameEvent : IPacketEvent
             return;
         }
 
-        var look = "";
-        foreach (var part in session.User.Look.Split('.'))
-        {
-            if (part.StartsWith("ch") || part.StartsWith("lg") || part.StartsWith("cc") || part.StartsWith("ca") || part.StartsWith("sh") || part.StartsWith("wa"))
-            {
-                look = look + part + ".";
-            }
-        }
-
-        look = look[..^1];
+        var allowedParts = new List<string> { "ha", "he", "ea", "ch", "fa", "cp", "lg", "cc", "ca", "sh", "wa" };
+        var look = string.Join(".", session.User.Look.Split('.').Where(part => allowedParts.Contains(part.Split('-')[0])));
 
         name = name.Replace(";", ":");
 
