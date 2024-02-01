@@ -223,6 +223,32 @@ internal static class ItemBehaviourUtility
             }
             break;
 
+            case InteractionType.PREMIUM_CLASSIC:
+            case InteractionType.PREMIUM_EPIC:
+            case InteractionType.PREMIUM_LEGEND:
+            {
+                var premiumName = "classique";
+                switch (itemData.InteractionType)
+                {
+                    case InteractionType.PREMIUM_EPIC:
+                        premiumName = "épique";
+                        break;
+                    case InteractionType.PREMIUM_LEGEND:
+                        premiumName = "légende";
+                        break;
+                }
+
+                message.WriteInteger(1);
+                message.WriteInteger(3);
+                message.WriteString("MESSAGE");
+                message.WriteString($"Bravo tu as reçu une {premiumName} box ! Ouvre-là pour reçevoir 31 jours de premium");
+                message.WriteString("PURCHASER_NAME");
+                message.WriteString("");
+                message.WriteString("PURCHASER_FIGURE");
+                message.WriteString("");
+            }
+            break;
+
             case InteractionType.GIFT:
             {
                 if (!item.ExtraData.Contains(Convert.ToChar(5).ToString()))
