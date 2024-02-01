@@ -442,7 +442,7 @@ public sealed class PacketManager
         this._incomingPackets.Add(ClientPacketHeader.WIRED_CONDITION_SAVE, new UpdateConditionEvent());
         this._incomingPackets.Add(ClientPacketHeader.SET_OBJECT_DATA, new SaveBrandingItemEvent());
         this._incomingPackets.Add(ClientPacketHeader.ROOM_TONER_APPLY, new SetTonerEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ITEM_DICE_CLOSE, new DiceOffEvent());
+        this._incomingPackets.Add(ClientPacketHeader.ITEM_DICE_CLOSE, new UseFurnitureEvent());
         this._incomingPackets.Add(ClientPacketHeader.ITEM_DICE_CLICK, new UseFurnitureEvent());
         this._incomingPackets.Add(ClientPacketHeader.MANNEQUIN_SAVE_NAME, new SetMannequinNameEvent());
         this._incomingPackets.Add(ClientPacketHeader.MANNEQUIN_SAVE_LOOK, new SetMannequinFigureEvent());
