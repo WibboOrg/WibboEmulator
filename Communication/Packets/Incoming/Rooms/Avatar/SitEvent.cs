@@ -7,21 +7,28 @@ internal sealed class SitEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var room = session.User.CurrentRoom;        if (room == null)
+        var room = session.User.CurrentRoom;
+        if (room == null)
         {
             return;
         }
 
-        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);        if (roomUserByUserId == null)
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        if (roomUserByUserId == null)
         {
             return;
         }
 
-        if (roomUserByUserId.ContainStatus("sit") || roomUserByUserId.ContainStatus("lay"))
+        if (roomUserByUserId.ContainStatus("sit") || roomUserByUserId.ContainStatus("lay") || roomUserByUserId.RidingHorse)
         {
             return;
         }
 
-        if (roomUserByUserId.RotBody % 2 == 0)        {            roomUserByUserId.SetStatus("sit", "0.5");            roomUserByUserId.IsSit = true;            roomUserByUserId.UpdateNeeded = true;        }
+        if (roomUserByUserId.RotBody % 2 == 0)
+        {
+            roomUserByUserId.SetStatus("sit", "0.5");
+            roomUserByUserId.IsSit = true;
+            roomUserByUserId.UpdateNeeded = true;
+        }
     }
 }

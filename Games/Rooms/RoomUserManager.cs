@@ -923,7 +923,7 @@ public class RoomUserManager
                 roomItem.UserWalksOnFurni(user, roomItem);
             }
 
-            if (roomItem.GetBaseItem().IsSeat)
+            if (roomItem.GetBaseItem().IsSeat && !user.RidingHorse)
             {
                 if (!user.ContainStatus("sit"))
                 {
@@ -939,6 +939,10 @@ public class RoomUserManager
             switch (roomItem.GetBaseItem().InteractionType)
             {
                 case InteractionType.BED:
+                    if (user.RidingHorse)
+                    {
+                        break;
+                    }
                     if (!user.ContainStatus("lay"))
                     {
                         user.SetStatus("lay", roomItem.Height.ToString() + " null");

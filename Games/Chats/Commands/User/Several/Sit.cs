@@ -6,7 +6,7 @@ internal sealed class Sit : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (userRoom.ContainStatus("sit") || userRoom.ContainStatus("lay"))
+        if (userRoom.ContainStatus("sit") || userRoom.ContainStatus("lay") || userRoom.RidingHorse)
         {
             return;
         }
