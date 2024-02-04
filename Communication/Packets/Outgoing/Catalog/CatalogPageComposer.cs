@@ -4,7 +4,7 @@ using WibboEmulator.Games.Catalogs;
 
 public class CatalogPageComposer : ServerPacket
 {
-    public CatalogPageComposer(CatalogPage page, string cataMode, Language langue)
+    public CatalogPageComposer(CatalogPage page, string cataMode, Language langue, int offerId = -1)
         : base(ServerPacketHeader.CATALOG_PAGE)
     {
         this.WriteInteger(page.Id);
@@ -44,7 +44,7 @@ public class CatalogPageComposer : ServerPacket
             this.WriteInteger(0);
         }
 
-        this.WriteInteger(-1);
+        this.WriteInteger(offerId);
         this.WriteBoolean(false);
 
         this.WriteInteger(WibboEnvironment.GetGame().GetCatalog().GetPromotions().ToList().Count);//Count

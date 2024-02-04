@@ -10,7 +10,7 @@ internal sealed class GetCatalogPageEvent : IPacketEvent
     {
         var pageId = packet.PopInt();
 
-        _ = packet.PopInt();
+        var offerId = packet.PopInt();
         var cataMode = packet.PopString();
 
         _ = WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out var page);
@@ -24,6 +24,6 @@ internal sealed class GetCatalogPageEvent : IPacketEvent
             session.SendPacket(new ClubGiftInfoComposer(page.Items.Values.ToList()));
         }
 
-        session.SendPacket(new CatalogPageComposer(page, cataMode, session.Langue));
+        session.SendPacket(new CatalogPageComposer(page, cataMode, session.Langue, offerId));
     }
 }
