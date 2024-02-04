@@ -100,6 +100,11 @@ public class FigureDataManager
 
     public string ProcessFigure(string figure, string gender, bool hasClub)
     {
+        if (figure == string.Empty || gender == string.Empty)
+        {
+            return "hd-180-1.lg-270-1408";
+        }
+
         try
         {
             figure = figure.ToLower();
@@ -289,6 +294,7 @@ public class FigureDataManager
         {
             ExceptionLogger.LogException(ex.ToString());
         }
+
         return "hd-180-1.lg-270-1408";
     }
 
