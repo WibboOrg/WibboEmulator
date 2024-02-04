@@ -453,7 +453,20 @@ public class RoomItemHandling
                             (!userForSquare.IsWalking || userForSquare.Freeze) && nextRollerClear && this._roomInstance.GameMap.CanWalk(nextCoord.X, nextCoord.Y) &&
                             this._roomInstance.GameMap.SquareTakingOpen(nextCoord.X, nextCoord.Y) && !this._rollerUsersMoved.Contains(userForSquare.UserId))
                         {
-                            this._rollerMessages.Add(new SlideObjectBundleComposer(userForSquare.X, userForSquare.Y, userForSquare.Z, nextCoord.X, nextCoord.Y, nextZ, userForSquare.VirtualId, roller.Id, false));
+                            var userNextZ = nextZ;
+                            if (userForSquare.RidingHorse && !userForSquare.IsPet)
+                            {
+                                var horseRoomUser = this._roomInstance.RoomUserManager.GetRoomUserByVirtualId(userForSquare.HorseID);
+                                if (horseRoomUser != null)
+                                {
+                                    this._rollerMessages.Add(new SlideObjectBundleComposer(horseRoomUser.X, horseRoomUser.Y, horseRoomUser.Z, nextCoord.X, nextCoord.Y, nextZ, horseRoomUser.VirtualId, roller.Id, false));
+                                    this._rollerUsersMoved.Add(horseRoomUser.UserId);
+
+                                    horseRoomUser.SetPosRoller(nextCoord.X, nextCoord.Y, nextZ);
+                                }
+                                userNextZ += 1;
+                            }
+                            this._rollerMessages.Add(new SlideObjectBundleComposer(userForSquare.X, userForSquare.Y, userForSquare.Z, nextCoord.X, nextCoord.Y, userNextZ, userForSquare.VirtualId, roller.Id, false));
                             this._rollerUsersMoved.Add(userForSquare.UserId);
 
                             userForSquare.SetPosRoller(nextCoord.X, nextCoord.Y, nextZ);

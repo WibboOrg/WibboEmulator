@@ -4,7 +4,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms.AI;
 
 internal sealed class PickUpPetEvent : IPacketEvent
 {

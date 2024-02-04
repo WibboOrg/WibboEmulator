@@ -289,7 +289,18 @@ public class RoomUser : IEquatable<RoomUser>
         this.Unidle();
         if (this.TeleportEnabled)
         {
-            this.Room.SendPacket(RoomItemHandling.TeleportUser(this, new Point(x, y), 0, this.Room.GameMap.SqAbsoluteHeight(x, y)));
+            var newZ = this.Room.GameMap.SqAbsoluteHeight(x, y);
+
+            if (this.RidingHorse && !this.IsPet)
+            {
+                var horseRoomUser = this.Room.RoomUserManager.GetRoomUserByVirtualId(this.HorseID);
+                if (horseRoomUser != null)
+                {
+                    this.Room.SendPacket(RoomItemHandling.TeleportUser(horseRoomUser, new Point(x, y), 0, newZ));
+                }
+                newZ += 1;
+            }
+            this.Room.SendPacket(RoomItemHandling.TeleportUser(this, new Point(x, y), 0, newZ));
         }
         else
         {

@@ -899,7 +899,12 @@ public class RoomUserManager
 
         var roomItemForSquare = this._room.GameMap.GetCoordinatedItems(new Point(user.X, user.Y)).OrderBy(p => p.Z).ToList();
 
-        var newZ = !user.RidingHorse || user.IsPet ? this._room.GameMap.SqAbsoluteHeight(user.X, user.Y, roomItemForSquare) : this._room.GameMap.SqAbsoluteHeight(user.X, user.Y, roomItemForSquare) + 1.0;
+        var newZ = this._room.GameMap.SqAbsoluteHeight(user.X, user.Y, roomItemForSquare);
+        if (user.RidingHorse && !user.IsPet)
+        {
+            newZ += 1;
+        }
+
         if (newZ != user.Z)
         {
             user.Z = newZ;
@@ -1291,7 +1296,7 @@ public class RoomUserManager
 
                 if (user.RidingHorse && !user.IsPet)
                 {
-                    var roomUserByVirtualId = this.GetRoomUserByVirtualId(Convert.ToInt32(user.HorseID));
+                    var roomUserByVirtualId = this.GetRoomUserByVirtualId(user.HorseID);
                     if (this.SetStepForUser(roomUserByVirtualId))
                     {
                         continue;
@@ -1312,7 +1317,7 @@ public class RoomUserManager
                 user.UpdateNeeded = true;
                 if (user.RidingHorse && !user.IsPet)
                 {
-                    var roomUserByVirtualId = this.GetRoomUserByVirtualId(Convert.ToInt32(user.HorseID));
+                    var roomUserByVirtualId = this.GetRoomUserByVirtualId(user.HorseID);
                     roomUserByVirtualId.UpdateNeeded = true;
                 }
             }
@@ -1324,7 +1329,7 @@ public class RoomUserManager
 
                 if (user.RidingHorse && !user.IsPet)
                 {
-                    var roomUserByVirtualId = this.GetRoomUserByVirtualId(Convert.ToInt32(user.HorseID));
+                    var roomUserByVirtualId = this.GetRoomUserByVirtualId(user.HorseID);
                     roomUserByVirtualId.RemoveStatus("mv");
                     roomUserByVirtualId.IsWalking = false;
                     roomUserByVirtualId.UpdateNeeded = true;
@@ -1381,7 +1386,7 @@ public class RoomUserManager
 
             if (user.RidingHorse && !user.IsPet)
             {
-                var roomUserByVirtualId = this.GetRoomUserByVirtualId(Convert.ToInt32(user.HorseID));
+                var roomUserByVirtualId = this.GetRoomUserByVirtualId(user.HorseID);
                 roomUserByVirtualId.IsWalking = false;
                 this.UpdateUserStatus(roomUserByVirtualId, false);
                 roomUserByVirtualId.RemoveStatus("mv");
@@ -1395,7 +1400,7 @@ public class RoomUserManager
 
             if (user.RidingHorse && !user.IsPet)
             {
-                var roomUserByVirtualId = this.GetRoomUserByVirtualId(Convert.ToInt32(user.HorseID));
+                var roomUserByVirtualId = this.GetRoomUserByVirtualId(user.HorseID);
                 roomUserByVirtualId.IsWalking = false;
                 this.UpdateUserStatus(roomUserByVirtualId, false);
                 roomUserByVirtualId.RemoveStatus("mv");
@@ -1412,7 +1417,7 @@ public class RoomUserManager
 
             if (user.RidingHorse && !user.IsPet)
             {
-                var roomUserByVirtualId = this.GetRoomUserByVirtualId(Convert.ToInt32(user.HorseID));
+                var roomUserByVirtualId = this.GetRoomUserByVirtualId(user.HorseID);
                 this.HandleSetMovement(nextStep, roomUserByVirtualId);
                 roomUserByVirtualId.UpdateNeeded = true;
             }
