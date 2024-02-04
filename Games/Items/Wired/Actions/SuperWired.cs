@@ -1179,7 +1179,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             case "addclassement":
             {
                 var itemHighScore = this.RoomInstance.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
-                if (itemHighScore == null)
+                if (itemHighScore == null || user == null)
                 {
                     break;
                 }

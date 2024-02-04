@@ -300,6 +300,7 @@ public class RoomUser : IEquatable<RoomUser>
                 }
                 newZ += 1;
             }
+
             this.Room.SendPacket(RoomItemHandling.TeleportUser(this, new Point(x, y), 0, newZ));
         }
         else
