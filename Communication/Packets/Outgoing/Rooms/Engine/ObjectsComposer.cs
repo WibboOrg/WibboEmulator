@@ -87,7 +87,8 @@ internal sealed class ObjectsComposer : ServerPacket
         this.WriteInteger(item.Y);
         this.WriteInteger(item.Rotation);
         this.WriteString(string.Format(/*lang=json*/ "{0:0.00}", item.Z));
-        this.WriteString(item.GetBaseItem().Height.ToString());
+        this.WriteString(item.Data.Height.ToString());
+        this.WriteInteger(item.Extra);
 
         ItemBehaviourUtility.GenerateExtradata(item, this);
     }

@@ -11,6 +11,7 @@ internal sealed class FurniListAddComposer : ServerPacket
         this.WriteString(item.GetBaseItem().Type.ToString());
         this.WriteInteger(item.Id);
         this.WriteInteger(item.GetBaseItem().SpriteId);
+        this.WriteInteger((int)item.Category);
 
         ItemBehaviourUtility.GenerateExtradata(item, this);
 
@@ -25,7 +26,7 @@ internal sealed class FurniListAddComposer : ServerPacket
         if (!item.IsWallItem)
         {
             this.WriteString(string.Empty);
-            this.WriteInteger(0);
+            this.WriteInteger(item.Extra);
         }
     }
 }

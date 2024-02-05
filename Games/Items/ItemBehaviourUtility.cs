@@ -7,9 +7,6 @@ internal static class ItemBehaviourUtility
     public static void GenerateExtradata(Item item, ServerPacket message)
     {
         var itemData = item.GetBaseItem();
-
-        message.WriteInteger(ItemCategory(item));
-
         switch (itemData.InteractionType)
         {
             default:
@@ -251,32 +248,27 @@ internal static class ItemBehaviourUtility
 
             case InteractionType.GIFT:
             {
-                if (!item.ExtraData.Contains(Convert.ToChar(5).ToString()))
+                if (!item.ExtraData.Contains(Convert.ToChar(5)))
                 {
                     message.WriteInteger(0);
                     message.WriteString(item.ExtraData);
                 }
                 else
                 {
+                    var giftData = item.ExtraData.Split(';');
+                    var giftUserId = int.Parse(giftData[0]);
+                    var giftExtraData = giftData[1].Split(Convert.ToChar(5));
+                    var giftMessage = giftExtraData[0];
 
-                    var extraData = item.ExtraData.Split(Convert.ToChar(5));
-                    var style = (int.Parse(item.ExtraData.Split(new char[1] { '\x0005' })[1]) * 1000) + int.Parse(item.ExtraData.Split(new char[1] { '\x0005' })[2]);
-
-                    var purchaser = WibboEnvironment.GetUserById(int.Parse(item.ExtraData.Split(new char[1] { ';' })[0]));
+                    var giftPurchaser = WibboEnvironment.GetUserById(giftUserId);
                     message.WriteInteger(1);
-                    message.WriteInteger(6);
-                    message.WriteString("EXTRA_PARAM");
-                    message.WriteString("");
+                    message.WriteInteger(3);
                     message.WriteString("MESSAGE");
-                    message.WriteString(item.ExtraData.Split(new char[1] { ';' })[1].Split(new char[1] { '\x0005' })[0]);
+                    message.WriteString(giftMessage);
                     message.WriteString("PURCHASER_NAME");
-                    message.WriteString(purchaser == null ? "" : purchaser.Username);
+                    message.WriteString(giftPurchaser == null ? "" : giftPurchaser.Username);
                     message.WriteString("PURCHASER_FIGURE");
-                    message.WriteString(purchaser == null ? "" : purchaser.Look);
-                    message.WriteString("PRODUCT_CODE");
-                    message.WriteString(itemData.SpriteId.ToString());
-                    message.WriteString("state");
-                    message.WriteString(style.ToString());
+                    message.WriteString(giftPurchaser == null ? "" : giftPurchaser.Look);
                 }
             }
             break;
@@ -375,15 +367,4 @@ internal static class ItemBehaviourUtility
                 break;
         }
     }
-
-    public static int ItemCategory(Item item) => item.GetBaseItem().InteractionType switch
-    {
-        InteractionType.GIFT or InteractionType.LEGEND_BOX or InteractionType.BADGE_BOX or InteractionType.LOOTBOX_2022 or InteractionType.DELUXE_BOX or InteractionType.EXTRA_BOX => 9,
-        InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE => 17,
-        InteractionType.LANDSCAPE => 4,
-        InteractionType.FLOOR => 3,
-        InteractionType.WALLPAPER => 2,
-        InteractionType.TROPHY => 11,
-        _ => 1,
-    };
 }

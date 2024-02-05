@@ -28,23 +28,16 @@ public class ItemFactory
 
     public static Item CreateSingleItem(IDbConnection dbClient, ItemData data, User user, string extraData, int itemId, int limitedNumber = 0, int limitedStack = 0)
     {
-        if (data == null)
+        if (data == null || itemId <= 0)
         {
             return null;
         }
 
-        var insertId = 0;
+        ItemDao.Insert(dbClient, itemId, data.Id, user.Id, extraData);
 
-        insertId = ItemDao.Insert(dbClient, itemId, data.Id, user.Id, extraData);
-
-        if (limitedNumber > 0 && insertId > 0)
+        if (limitedNumber > 0)
         {
             ItemLimitedDao.Insert(dbClient, itemId, limitedNumber, limitedStack);
-        }
-
-        if (insertId <= 0)
-        {
-            return null;
         }
 
         var item = new Item(itemId, 0, data.Id, extraData, limitedNumber, limitedStack, 0, 0, 0, 0, "", null);

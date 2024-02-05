@@ -3,7 +3,7 @@ using WibboEmulator.Games.Items;
 
 internal sealed class ObjectAddComposer : ServerPacket
 {
-    public ObjectAddComposer(Item item, string userame, int userId)
+    public ObjectAddComposer(Item item, string username, int userId)
         : base(ServerPacketHeader.FURNITURE_FLOOR_ADD)
     {
         this.WriteInteger(item.Id);
@@ -12,14 +12,15 @@ internal sealed class ObjectAddComposer : ServerPacket
         this.WriteInteger(item.Y);
         this.WriteInteger(item.Rotation);
         this.WriteString(string.Format(/*lang=json*/ "{0:0.00}", item.Z));
-        this.WriteString(string.Empty);
+        this.WriteString(item.Data.Height.ToString());
+        this.WriteInteger(item.Extra);
 
         ItemBehaviourUtility.GenerateExtradata(item, this);
 
         this.WriteInteger(-1);
         this.WriteInteger(1);
         this.WriteInteger(userId);
-        this.WriteString(userame);
+        this.WriteString(username);
     }
 
     public ObjectAddComposer(ItemTemp item)

@@ -205,7 +205,7 @@ public static class WibboEnvironment
 
     public static User GetUserById(int userId)
     {
-        if (userId == 0)
+        if (userId <= 0)
         {
             return null;
         }

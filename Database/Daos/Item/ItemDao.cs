@@ -90,10 +90,9 @@ internal sealed class ItemDao
         SELECT LAST_INSERT_ID();",
         new { BaseItem = baseItem, UserId = userId, ExtraData = extraData });
 
-    internal static int Insert(IDbConnection dbClient, int itemId, int baseItem, int userId, string extraData) => dbClient.ExecuteScalar<int>(
+    internal static void Insert(IDbConnection dbClient, int itemId, int baseItem, int userId, string extraData) => dbClient.Execute(
         @"INSERT INTO item (id, base_item, user_id, extra_data) 
-        VALUES (@ItemId, @BaseItem, @UserId, @ExtraData);
-        SELECT LAST_INSERT_ID();",
+        VALUES (@ItemId, @BaseItem, @UserId, @ExtraData);",
         new { ItemId = itemId, BaseItem = baseItem, UserId = userId, ExtraData = extraData });
 
     internal static int InsertDuplicate(IDbConnection dbClient, int userId, int roomId, int itemId) => dbClient.ExecuteScalar<int>(

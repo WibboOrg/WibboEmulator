@@ -20,6 +20,7 @@ public class Item : IEquatable<Item>
     public int RoomId { get; set; }
     public int BaseItem { get; set; }
     public string ExtraData { get; set; }
+    public int Extra { get; set; }
     public int GroupId { get; set; }
     public int Limited { get; set; }
     public int LimitedStack { get; set; }
@@ -166,6 +167,17 @@ public class Item : IEquatable<Item>
         }
     }
 
+    public ItemCategoryType Category => this.GetBaseItem().InteractionType switch
+    {
+        InteractionType.GIFT or InteractionType.LEGEND_BOX or InteractionType.BADGE_BOX or InteractionType.LOOTBOX_2022 or InteractionType.DELUXE_BOX or InteractionType.EXTRA_BOX => ItemCategoryType.PRESENT,
+        InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE => ItemCategoryType.GUILD_FURNI,
+        InteractionType.LANDSCAPE => ItemCategoryType.LANDSCAPE,
+        InteractionType.FLOOR => ItemCategoryType.FLOOR,
+        InteractionType.WALLPAPER => ItemCategoryType.WALL_PAPER,
+        InteractionType.TROPHY => ItemCategoryType.TROPHY,
+        _ => ItemCategoryType.DEFAULT,
+    };
+
     public Item(int id, int roomId, int baseItem, string extraData, int limitedNumber, int limitedStack, int x, int y, double z, int rot,
         string wallCoord, Room room)
     {
@@ -246,6 +258,19 @@ public class Item : IEquatable<Item>
                         }
                     }
                     break;
+                case InteractionType.GIFT:
+                {
+                    if (!string.IsNullOrEmpty(extraData) && extraData.Contains(';') && extraData.Contains(Convert.ToChar(5)))
+                    {
+                        var giftData = this.ExtraData.Split(';');
+                        var giftExtraData = giftData[1].Split(Convert.ToChar(5));
+                        var giftRibbon = int.Parse(giftExtraData[1]);
+                        var giftBoxId = int.Parse(giftExtraData[2]);
+
+                        this.Extra = (giftBoxId * 1000) + giftRibbon;
+                    }
+                    break;
+                }
             }
             this.IsWallItem = this.GetBaseItem().Type == ItemType.I;
             this.IsFloorItem = this.GetBaseItem().Type == ItemType.S;

@@ -22,10 +22,10 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
         var giftUser = StringCharFilter.Escape(packet.PopString(16));
         var giftMessage = StringCharFilter.Escape(packet.PopString().Replace(Convert.ToChar(5), ' '));
         var spriteId = packet.PopInt();
+        var boxId = packet.PopInt();
         var ribbon = packet.PopInt();
-        var colour = packet.PopInt();
 
-        _ = packet.PopBoolean();
+        var showMyFace = packet.PopBoolean();
 
         if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out var page))
         {
@@ -39,7 +39,18 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 
         if (!page.Items.TryGetValue(itemId, out var item))
         {
-            return;
+            if (page.ItemOffers.TryGetValue(itemId, out var value))
+            {
+                item = value;
+                if (item == null)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                return;
+            }
         }
 
         if (!ItemUtility.CanGiftItem(item))
@@ -105,7 +116,7 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             return;
         }
 
-        var ed = session.User.Id + ";" + giftMessage + Convert.ToChar(5) + ribbon + Convert.ToChar(5) + colour;
+        var ed = (showMyFace ? session.User.Id : 0) + ";" + giftMessage + Convert.ToChar(5) + ribbon + Convert.ToChar(5) + boxId;
 
         var newItemId = ItemDao.Insert(dbClient, presentData.Id, user.Id, ed);
 
@@ -241,11 +252,7 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
         if (giveItem != null)
         {
             var receiver = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(user.Id);
-            if (receiver != null)
-            {
-                receiver.User.InventoryComponent.TryAddItem(giveItem);
-                receiver.SendPacket(new PurchaseOKComposer());
-            }
+            receiver?.User.InventoryComponent.TryAddItem(giveItem);
 
             if (user.Id != session.User.Id && !string.IsNullOrWhiteSpace(giftMessage))
             {
