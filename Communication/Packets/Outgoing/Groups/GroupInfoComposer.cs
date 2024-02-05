@@ -18,18 +18,17 @@ internal sealed class GroupInfoComposer : ServerPacket
         this.WriteString(group.Description);
         this.WriteString(group.Badge);
         this.WriteInteger(group.RoomId);
-        this.WriteString((WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(group.RoomId) == null) ? "No room found.." : WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(group.RoomId).Name);    // room name
+        this.WriteString((WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(group.RoomId) == null) ? "Unknown" : WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(group.RoomId).Name);
         this.WriteInteger(group.CreatorId == session.User.Id ? 3 : group.HasRequest(session.User.Id) ? 2 : group.IsMember(session.User.Id) ? 1 : 0);
-        this.WriteInteger(group.MemberCount); // Members
-        this.WriteBoolean(false);//?? CHANGED
+        this.WriteInteger(group.MemberCount);
+        this.WriteBoolean(false);
         this.WriteString(origin.Day + "-" + origin.Month + "-" + origin.Year);
         this.WriteBoolean(group.CreatorId == session.User.Id);
-        this.WriteBoolean(group.IsAdmin(session.User.Id)); // admin
+        this.WriteBoolean(group.IsAdmin(session.User.Id));
         this.WriteString(userCreator != null ? userCreator.Username : "");
-        this.WriteBoolean(newWindow); // Show group info
-        this.WriteBoolean(group.AdminOnlyDeco == false); // Any user can place furni in home room
-        this.WriteInteger(group.CreatorId == session.User.Id ? group.RequestCount : group.IsAdmin(session.User.Id) ? group.RequestCount : group.IsMember(session.User.Id) ? 0 : 0); // Pending users
-        //base.WriteInteger(0);//what the fuck
+        this.WriteBoolean(newWindow);
+        this.WriteBoolean(group.AdminOnlyDeco == false);
+        this.WriteInteger(group.CreatorId == session.User.Id ? group.RequestCount : group.IsAdmin(session.User.Id) ? group.RequestCount : group.IsMember(session.User.Id) ? 0 : 0);
         this.WriteBoolean(group == null || group.ForumEnabled);
     }
 }

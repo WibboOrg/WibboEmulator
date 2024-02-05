@@ -15,7 +15,7 @@ internal sealed class ManageGroupComposer : ServerPacket
         this.WriteInteger(group.Colour1);
         this.WriteInteger(group.Colour2);
         this.WriteInteger(group.GroupType == GroupType.Open ? 0 : group.GroupType == GroupType.Locked ? 1 : 2);
-        this.WriteInteger(group.AdminOnlyDeco ? 0 : 1);
+        this.WriteInteger(group.AdminOnlyDeco ? 1 : 0);
         this.WriteBoolean(false);
         this.WriteString("");
 
