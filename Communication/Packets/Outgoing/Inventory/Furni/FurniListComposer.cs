@@ -32,8 +32,8 @@ internal sealed class FurniListComposer : ServerPacket
         this.WriteBoolean(item.Limited == 0 && item.GetBaseItem().AllowInventoryStack);
         this.WriteBoolean(ItemUtility.IsRare(item));
         this.WriteInteger(-1);//Seconds to expiration.
-        this.WriteBoolean(true);
-        this.WriteInteger(-1);//Item RoomId
+        this.WriteBoolean(false);
+        this.WriteInteger(item.Id);//Item RoomId
 
         if (!item.IsWallItem)
         {
