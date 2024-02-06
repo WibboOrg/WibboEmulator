@@ -155,7 +155,7 @@ public class RoomManager
         }
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._roomModels.Clear();
 

@@ -15,7 +15,7 @@ public sealed partial class WordFilterManager
         this._pubWords = new List<string>();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         if (this._filteredWords.Count > 0)
         {

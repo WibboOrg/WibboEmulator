@@ -7,7 +7,7 @@ public class SettingsManager
 {
     private readonly Dictionary<string, string> _settings = new();
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._settings.Clear();
 

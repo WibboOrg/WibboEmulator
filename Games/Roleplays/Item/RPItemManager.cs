@@ -19,7 +19,7 @@ public class RPItemManager
         return item;
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._items.Clear();
 

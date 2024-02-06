@@ -24,7 +24,7 @@ public class PremiumComponent : IDisposable
         this._expireLegend = DateTime.UtcNow;
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         var userPremium = UserPremiumDao.GetOne(dbClient, this._userInstance.Id);
 

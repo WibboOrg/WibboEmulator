@@ -33,7 +33,7 @@ public class ModerationManager
         this._moderationCFHTopicActions = new Dictionary<int, List<ModerationPresetActions>>();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this.LoadMessageTopics(dbClient);
         this.LoadMessagePresets(dbClient);

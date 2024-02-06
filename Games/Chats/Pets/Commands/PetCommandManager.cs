@@ -8,7 +8,7 @@ public class PetCommandManager
 
     public PetCommandManager() => this._petCommands = new Dictionary<string, PetCommand>();
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._petCommands.Clear();
 

@@ -8,7 +8,7 @@ public class LandingViewManager
 
     public LandingViewManager() => this.HotelViewPromosIndexers = new List<Promotion>();
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this.HotelViewPromosIndexers.Clear();
 

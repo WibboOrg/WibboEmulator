@@ -21,15 +21,15 @@ internal sealed class GetHelperToolConfigurationEvent : IPacketEvent
 
         if (onDuty && !session.User.OnDuty)
         {
-            guideManager.AddGuide(session.User.Id);
+            guideManager.TryAddGuide(session.User.Id);
             session.User.OnDuty = true;
         }
         else
         {
-            guideManager.RemoveGuide(session.User.Id);
+            guideManager.TryRemoveGuide(session.User.Id);
             session.User.OnDuty = false;
         }
 
-        session.SendPacket(new HelperToolComposer(session.User.OnDuty, guideManager.GuidesCount));
+        session.SendPacket(new HelperToolComposer(session.User.OnDuty, guideManager.Count));
     }
 }

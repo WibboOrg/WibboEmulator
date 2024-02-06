@@ -135,7 +135,7 @@ internal sealed class HttpConnection : IDisposable
         this._timer = new Timer(OnTimeout, this, Timeout.Infinite, Timeout.Infinite);
 
         // 90k ms for first request, 15k ms from then on.
-        this.Init(new MemoryStream(), 90000);
+        this.Initialize(new MemoryStream(), 90000);
     }
 
     #endregion
@@ -269,7 +269,7 @@ internal sealed class HttpConnection : IDisposable
         this._timer = null;
     }
 
-    private void Init(MemoryStream requestBuffer, int timeout)
+    private void Initialize(MemoryStream requestBuffer, int timeout)
     {
         this._requestBuffer = requestBuffer;
         this._timeout = timeout;
@@ -616,7 +616,7 @@ internal sealed class HttpConnection : IDisposable
             var buff = this.TakeOverRequestBuffer();
             var len = buff.Length;
 
-            this.Init(buff, 15000);
+            this.Initialize(buff, 15000);
 
             if (len > 0)
             {

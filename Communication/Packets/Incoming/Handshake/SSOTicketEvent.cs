@@ -12,7 +12,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Settings;
 using WibboEmulator.Core;
-using WibboEmulator.Core.Language;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
@@ -75,20 +74,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
 
             WibboEnvironment.GetGame().GetGameClientManager().RegisterClient(session, user.Id, user.Username, ssoTicket);
 
-            if (session.Langue == Language.French)
-            {
-                WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersFr++;
-            }
-            else if (session.Langue == Language.English)
-            {
-                WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersEn++;
-            }
-            else if (session.Langue == Language.Portuguese)
-            {
-                WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersBr++;
-            }
-
-            session.User.Init(dbClient, session);
+            session.User.Initialize(dbClient, session);
 
             IsFirstConnexionToday(session, dbClient, packetList);
 
@@ -137,13 +123,13 @@ internal sealed class SSOTicketEvent : IPacketEvent
                     WibboEnvironment.GetGame().GetModerationManager().Tickets()));
             }
 
-            if (session.User.HasPermission("helptool"))
+            if (session.User.HasPermission("helptool") && session.User.BadgeComponent.HasBadgeSlot("STAFF_HELPER"))
             {
                 var guideManager = WibboEnvironment.GetGame().GetHelpManager();
-                guideManager.AddGuide(session.User.Id);
+                guideManager.TryAddGuide(session.User.Id);
                 session.User.OnDuty = true;
 
-                packetList.Add(new HelperToolComposer(session.User.OnDuty, guideManager.GuidesCount));
+                packetList.Add(new HelperToolComposer(session.User.OnDuty, guideManager.Count));
             }
 
             session.SendPacket(packetList);

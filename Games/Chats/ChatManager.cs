@@ -52,12 +52,12 @@ public sealed class ChatManager
         this._filter = new WordFilterManager();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
-        this._petCommands.Init(dbClient);
-        this._commands.Init(dbClient);
-        this._chatStyles.Init(dbClient);
-        this._filter.Init(dbClient);
+        this._petCommands.Initialize(dbClient);
+        this._commands.Initialize(dbClient);
+        this._chatStyles.Initialize(dbClient);
+        this._filter.Initialize(dbClient);
     }
 
     public ChatEmotionsManager GetEmotions() => this._emotions;

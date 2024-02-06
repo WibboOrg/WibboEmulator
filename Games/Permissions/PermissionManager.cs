@@ -13,7 +13,7 @@ public class PermissionManager
         this._commands = new Dictionary<string, PermissionCommand>();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._rights.Clear();
         this._commands.Clear();

@@ -100,7 +100,7 @@ public class AnimationManager
         return $"{time.Minutes} minutes et {time.Seconds} secondes";
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._roomId.Clear();
 
@@ -205,14 +205,7 @@ public class AnimationManager
 
         ModerationManager.LogStaffEntry(1953042, gameOwner, room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
 
-        WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer(
-            "gameauto",
-            "Message d'animation",
-            alertMessage,
-            "Je veux y jouer !",
-            room.Id,
-            ""
-        ));
+        WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer("gameauto", "Message d'animation", alertMessage, "Je veux y jouer !", room.Id, ""));
     }
 
     public void OnCycle(Stopwatch moduleWatch)

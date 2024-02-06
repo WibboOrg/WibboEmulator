@@ -17,7 +17,7 @@ public class BannerComponent : IDisposable
         this.BannerList = new();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this.LoadDefaultBanner();
 

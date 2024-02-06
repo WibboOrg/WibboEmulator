@@ -237,7 +237,7 @@ public class User : IDisposable, IEquatable<User>
         this.OldChat = false;
     }
 
-    public void Init(IDbConnection dbClient, GameClient client)
+    public void Initialize(IDbConnection dbClient, GameClient client)
     {
         this.Client = client;
 
@@ -251,13 +251,13 @@ public class User : IDisposable, IEquatable<User>
         this.Premium = new PremiumComponent(this);
         this.Banner = new BannerComponent(this);
 
-        this.BadgeComponent.Init(dbClient);
-        this.AchievementComponent.Init(dbClient);
-        this.WardrobeComponent.Init(dbClient);
-        this.Messenger.Init(dbClient, this.HideOnline);
+        this.BadgeComponent.Initialize(dbClient);
+        this.AchievementComponent.Initialize(dbClient);
+        this.WardrobeComponent.Initialize(dbClient);
+        this.Messenger.Initialize(dbClient, this.HideOnline);
         this.ChatMessageManager.LoadUserChatlogs(dbClient, this.Id);
-        this.Premium.Init(dbClient);
-        this.Banner.Init(dbClient);
+        this.Premium.Initialize(dbClient);
+        this.Banner.Initialize(dbClient);
 
         var userRoomIdList = RoomDao.GetAllIdByOwner(dbClient, this.Username);
         foreach (var userRoomId in userRoomIdList)
@@ -451,7 +451,7 @@ public class User : IDisposable, IEquatable<User>
         }
         if (this.OnDuty)
         {
-            WibboEnvironment.GetGame().GetHelpManager().RemoveGuide(this.Id);
+            WibboEnvironment.GetGame().GetHelpManager().TryRemoveGuide(this.Id);
         }
 
         if (this.Messenger != null)

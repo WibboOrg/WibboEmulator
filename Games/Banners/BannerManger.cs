@@ -9,13 +9,13 @@ public class BannerManager
 
     public BannerManager() => this._banners = new Dictionary<int, Banner>();
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._banners.Clear();
 
         var emulatorBannerList = EmulatorBannerDao.GetAll(dbClient);
 
-        if (emulatorBannerList.Count == 0)
+        if (!emulatorBannerList.Any())
         {
             return;
         }

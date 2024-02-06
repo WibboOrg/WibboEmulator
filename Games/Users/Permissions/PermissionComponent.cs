@@ -11,7 +11,7 @@ public sealed class PermissionComponent : IDisposable
         this._commands = new List<string>();
     }
 
-    public bool Init()
+    public bool Initialize()
     {
         this._permissions.Clear();
         this._commands.Clear();

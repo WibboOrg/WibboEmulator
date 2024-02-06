@@ -4,20 +4,13 @@ using WibboEmulator.Database.Daos.Emulator;
 
 public class EffectManager
 {
-    private readonly List<int> _effectsStaff;
+    private Dictionary<int, bool> Effects { get; }
 
-    public List<int> Effects { get; }
+    public EffectManager() => this.Effects = new Dictionary<int, bool>();
 
-    public EffectManager()
-    {
-        this.Effects = new List<int>();
-        this._effectsStaff = new List<int>();
-    }
-
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this.Effects.Clear();
-        this._effectsStaff.Clear();
 
         var emulatorEffectList = EmulatorEffectDao.GetAll(dbClient);
         if (emulatorEffectList.Count == 0)
@@ -29,35 +22,12 @@ public class EffectManager
         {
             var effectId = emulatorEffect.Id;
 
-            if (emulatorEffect.OnlyStaff)
+            if (!this.Effects.ContainsKey(effectId))
             {
-                if (!this._effectsStaff.Contains(effectId))
-                {
-                    this._effectsStaff.Add(effectId);
-                }
-            }
-            else
-            {
-                if (!this.Effects.Contains(effectId))
-                {
-                    this.Effects.Add(effectId);
-                }
+                this.Effects.Add(effectId, emulatorEffect.OnlyStaff);
             }
         }
     }
 
-    public bool HaveEffect(int effectId, bool isStaff = false)
-    {
-        if (this.Effects.Contains(effectId))
-        {
-            return true;
-        }
-
-        if (isStaff && this._effectsStaff.Contains(effectId))
-        {
-            return true;
-        }
-
-        return false;
-    }
+    public bool HasEffect(int effectId, bool isStaff = false) => this.Effects.TryGetValue(effectId, out var onlyStaff) && (!onlyStaff || isStaff);
 }

@@ -8,7 +8,7 @@ public sealed class ChatStyleManager
 
     public ChatStyleManager() => this._styles = new Dictionary<int, ChatStyle>();
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         if (this._styles.Count > 0)
         {

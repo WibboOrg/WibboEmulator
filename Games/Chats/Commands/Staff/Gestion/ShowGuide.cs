@@ -8,7 +8,7 @@ internal sealed class ShowGuide : IChatCommand
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var guideManager = WibboEnvironment.GetGame().GetHelpManager();
-        if (guideManager.GuidesCount <= 0)
+        if (guideManager.Count <= 0)
         {
             session.SendHugeNotif("Aucun guide n'utilise la Guide tool");
         }
@@ -16,7 +16,7 @@ internal sealed class ShowGuide : IChatCommand
         {
             var stringBuilder = new StringBuilder();
 
-            _ = stringBuilder.Append("Guide en service (" + guideManager.GuidesCount + "):\r\r");
+            _ = stringBuilder.Append("Guide en service (" + guideManager.Count + "):\r\r");
             foreach (var entry in guideManager.GuidesOnDuty)
             {
                 var guide = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(entry.Key);

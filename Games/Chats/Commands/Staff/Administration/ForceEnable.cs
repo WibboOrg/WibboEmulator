@@ -13,7 +13,7 @@ internal sealed class ForceEnable : IChatCommand
 
         _ = int.TryParse(parameters[1], out var effectId);
 
-        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(effectId, session.User.HasPermission("god")))
+        if (!WibboEnvironment.GetGame().GetEffectManager().HasEffect(effectId, session.User.HasPermission("god")))
         {
             return;
         }

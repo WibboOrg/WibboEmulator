@@ -156,7 +156,7 @@ public class WebSocket : IDisposable
         this._waitTime = TimeSpan.FromSeconds(1);
         this._client = false;
 
-        this.Init();
+        this.Initialize();
     }
 
     // As server
@@ -172,7 +172,7 @@ public class WebSocket : IDisposable
         this._stream = context.Stream;
         this._waitTime = TimeSpan.FromSeconds(1);
 
-        this.Init();
+        this.Initialize();
     }
 
     #endregion
@@ -1112,7 +1112,7 @@ public class WebSocket : IDisposable
         this.Close(data, false, false);
     }
 
-    private void Init()
+    private void Initialize()
     {
         this._compression = CompressionMethod.None;
         this.CookieCollection = new CookieCollection();

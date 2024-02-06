@@ -10,7 +10,7 @@ public class CalendarManager
     {
     }
 
-    public void Init()
+    public void Initialize()
     {
         this._calendarItem = new Dictionary<int, CalendarItem>();
         this._currentDay = 0;

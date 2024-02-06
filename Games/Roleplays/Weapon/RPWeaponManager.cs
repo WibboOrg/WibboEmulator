@@ -38,7 +38,7 @@ public class RPWeaponManager
         return weapon;
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._weaponCac.Clear();
         this._weaponGun.Clear();

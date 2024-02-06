@@ -26,7 +26,7 @@ public class MessengerComponent : IDisposable
         this.Relation = new Dictionary<int, Relationship>();
     }
 
-    public void Init(IDbConnection dbClient, bool appearOffline)
+    public void Initialize(IDbConnection dbClient, bool appearOffline)
     {
         var frienShips = MessengerFriendshipDao.GetAllFriendShips(dbClient, this._userInstance.Id);
 

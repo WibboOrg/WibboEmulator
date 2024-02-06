@@ -30,7 +30,7 @@ public class GroupManager
         this._backgroundColours = new Dictionary<int, GroupColours>();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._bases.Clear();
         this._symbols.Clear();

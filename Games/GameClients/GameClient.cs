@@ -100,19 +100,6 @@ public class GameClient
 
     public void Dispose()
     {
-        if (this.Langue == Language.French)
-        {
-            WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersFr--;
-        }
-        else if (this.Langue == Language.English)
-        {
-            WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersEn--;
-        }
-        else if (this.Langue == Language.Portuguese)
-        {
-            WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersBr--;
-        }
-
         this.IsDisconnected = true;
 
         this.User?.Dispose();

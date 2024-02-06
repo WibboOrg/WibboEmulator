@@ -14,7 +14,7 @@ public class AchievementManager
 
     public AchievementManager() => this._achievements = new Dictionary<string, AchievementData>();
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._achievements.Clear();
 

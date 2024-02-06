@@ -23,7 +23,7 @@ public class LanguageManager
         this._valuesBr = new Dictionary<string, string>();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._valuesFr.Clear();
         this._valuesEn.Clear();

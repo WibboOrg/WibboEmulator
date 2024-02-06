@@ -635,7 +635,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     botOrPet.BotData.RoleBot = null;
                     botOrPet.BotData.AiType = BotAIType.Generic;
                     botOrPet.BotAI = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
-                    botOrPet.BotAI.Init(botOrPet.BotData.Id, botOrPet, botOrPet.Room);
+                    botOrPet.BotAI.Initialize(botOrPet.BotData.Id, botOrPet, botOrPet.Room);
                 }
                 else
                 {
@@ -643,7 +643,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     botOrPet.BotData.RoleBot = null;
                     botOrPet.BotData.AiType = BotAIType.Pet;
                     botOrPet.BotAI = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
-                    botOrPet.BotAI.Init(botOrPet.BotData.Id, botOrPet, botOrPet.Room);
+                    botOrPet.BotAI.Initialize(botOrPet.BotData.Id, botOrPet, botOrPet.Room);
                 }
                 break;
             }
@@ -663,7 +663,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         botOrPet.BotData.RoleBot = new RoleBot(rpEnemyConfig);
                         botOrPet.BotData.AiType = BotAIType.RoleplayBot;
                         botOrPet.BotAI = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
-                        botOrPet.BotAI.Init(botOrPet.BotData.Id, botOrPet, botOrPet.Room);
+                        botOrPet.BotAI.Initialize(botOrPet.BotData.Id, botOrPet, botOrPet.Room);
                     }
                 }
                 else
@@ -674,7 +674,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         botOrPet.BotData.RoleBot = new RoleBot(rpEnemyConfig);
                         botOrPet.BotData.AiType = BotAIType.RoleplayPet;
                         botOrPet.BotAI = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
-                        botOrPet.BotAI.Init(botOrPet.BotData.Id, botOrPet, botOrPet.Room);
+                        botOrPet.BotAI.Initialize(botOrPet.BotData.Id, botOrPet, botOrPet.Room);
                     }
                 }
                 break;
@@ -1127,7 +1127,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     return;
                 }
 
-                if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(numEnable, false))
+                if (!WibboEnvironment.GetGame().GetEffectManager().HasEffect(numEnable, false))
                 {
                     return;
                 }
@@ -1277,7 +1277,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                         _ = int.TryParse(parameters[2], out var intValue);
 
-                        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(intValue, false))
+                        if (!WibboEnvironment.GetGame().GetEffectManager().HasEffect(intValue, false))
                         {
                             return;
                         }
@@ -1959,7 +1959,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     return;
                 }
 
-                if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(numEnable, false))
+                if (!WibboEnvironment.GetGame().GetEffectManager().HasEffect(numEnable, false))
                 {
                     return;
                 }
@@ -1974,7 +1974,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     return;
                 }
 
-                if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(numEnable, true))
+                if (!WibboEnvironment.GetGame().GetEffectManager().HasEffect(numEnable, true))
                 {
                     return;
                 }

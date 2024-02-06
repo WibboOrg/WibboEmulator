@@ -8,7 +8,7 @@ public class VoucherManager
 
     public VoucherManager() => this._vouchers = new Dictionary<string, Voucher>();
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         if (this._vouchers.Count > 0)
         {

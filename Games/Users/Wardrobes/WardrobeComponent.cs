@@ -14,7 +14,7 @@ public class WardrobeComponent : IDisposable
         this._wardrobes = new Dictionary<int, Wardrobe>();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._wardrobes.Clear();
 

@@ -260,7 +260,7 @@ public class WiredRegister
 
         if (handler != null)
         {
-            handler.Init(intParams, stringParam, stuffIds, selectionCode, delay, isStaff, isGod);
+            handler.Initialize(intParams, stringParam, stuffIds, selectionCode, delay, isStaff, isGod);
             handler.LoadItems();
 
             using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())

@@ -38,13 +38,13 @@ public class RoleplayManager
         return rp;
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._rolePlay.Clear();
 
-        this.ItemManager.Init(dbClient);
-        this.WeaponManager.Init(dbClient);
-        this.EnemyManager.Init(dbClient);
+        this.ItemManager.Initialize(dbClient);
+        this.WeaponManager.Initialize(dbClient);
+        this.EnemyManager.Initialize(dbClient);
 
         var roleplayList = RoleplayDao.GetAll(dbClient);
         if (roleplayList.Count != 0)

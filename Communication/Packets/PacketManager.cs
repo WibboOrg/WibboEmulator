@@ -58,7 +58,7 @@ public sealed class PacketManager
 
     public PacketManager() => this._incomingPackets = new Dictionary<int, IPacketEvent>();
 
-    public void Init()
+    public void Initialize()
     {
         this.UnregisterAll();
 

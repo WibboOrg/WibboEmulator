@@ -22,7 +22,7 @@ public sealed class NavigatorManager
         this._featuredRooms = new Dictionary<int, FeaturedRoom>();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         if (this._searchResultLists.Count > 0)
         {

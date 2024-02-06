@@ -14,7 +14,7 @@ public class ItemDataManager
         this._gifts = new Dictionary<int, ItemData>();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         if (this._items.Count > 0)
         {

@@ -20,7 +20,7 @@ public class BadgeComponent : IDisposable
         this.BadgeList = new Dictionary<string, Badge>();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         var userBadgeList = UserBadgeDao.GetAll(dbClient, this._userInstance.Id);
 
@@ -38,17 +38,7 @@ public class BadgeComponent : IDisposable
 
     public Dictionary<string, Badge> BadgeList { get; }
 
-    public bool HasBadgeSlot(string badge)
-    {
-        if (this.BadgeList.TryGetValue(badge, out var value))
-        {
-            return value.Slot > 0;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    public bool HasBadgeSlot(string badge) => this.BadgeList.TryGetValue(badge, out var value) && value.Slot > 0;
 
     public ICollection<Badge> GetBadges() => this.BadgeList.Values;
 

@@ -8,7 +8,7 @@ public class ServerStatusUpdater
     private static int _userPeak;
     private static bool _isExecuted;
 
-    public static void Init(IDbConnection dbClient)
+    public static void Initialize(IDbConnection dbClient)
     {
         _userPeak = EmulatorStatusDao.GetUserpeak(dbClient);
 

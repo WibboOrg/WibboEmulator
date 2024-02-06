@@ -84,31 +84,31 @@ public class Game : IDisposable
         this._moduleWatch = new Stopwatch();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         DatabaseCleanup(dbClient);
 
-        this._permissionManager.Init(dbClient);
-        this._itemDataManager.Init(dbClient);
-        this._catalogManager.Init(dbClient, this._itemDataManager);
-        this._navigatorManager.Init(dbClient);
-        this._roleplayManager.Init(dbClient);
-        this._roomManager.Init(dbClient);
-        this._groupManager.Init(dbClient);
-        this._moderationManager.Init(dbClient);
-        this._questManager.Init(dbClient);
-        this._landingViewManager.Init(dbClient);
-        this._hallOfFameManager.Init(dbClient);
-        this._chatManager.Init(dbClient);
-        this._effectManager.Init(dbClient);
-        this._badgeManager.Init();
-        this._achievementManager.Init(dbClient);
-        this._animationManager.Init(dbClient);
-        this._lootManager.Init(dbClient);
-        this._bannerManager.Init(dbClient);
-        this._packetManager.Init();
+        this._permissionManager.Initialize(dbClient);
+        this._itemDataManager.Initialize(dbClient);
+        this._catalogManager.Initialize(dbClient, this._itemDataManager);
+        this._navigatorManager.Initialize(dbClient);
+        this._roleplayManager.Initialize(dbClient);
+        this._roomManager.Initialize(dbClient);
+        this._groupManager.Initialize(dbClient);
+        this._moderationManager.Initialize(dbClient);
+        this._questManager.Initialize(dbClient);
+        this._landingViewManager.Initialize(dbClient);
+        this._hallOfFameManager.Initialize(dbClient);
+        this._chatManager.Initialize(dbClient);
+        this._effectManager.Initialize(dbClient);
+        this._badgeManager.Initialize();
+        this._achievementManager.Initialize(dbClient);
+        this._animationManager.Initialize(dbClient);
+        this._lootManager.Initialize(dbClient);
+        this._bannerManager.Initialize(dbClient);
+        this._packetManager.Initialize();
 
-        ServerStatusUpdater.Init(dbClient);
+        ServerStatusUpdater.Initialize(dbClient);
     }
 
     public LootManager GetLootManager() => this._lootManager;

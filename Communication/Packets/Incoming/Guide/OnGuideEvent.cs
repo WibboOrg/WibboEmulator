@@ -12,7 +12,7 @@ internal sealed class OnGuideEvent : IPacketEvent
         var message = packet.PopString();
 
         var guideManager = WibboEnvironment.GetGame().GetHelpManager();
-        if (guideManager.GuidesCount <= 0)
+        if (guideManager.Count <= 0)
         {
             session.SendPacket(new OnGuideSessionErrorComposer(2));
             return;
@@ -20,23 +20,24 @@ internal sealed class OnGuideEvent : IPacketEvent
 
         if (session.User.OnDuty)
         {
-            guideManager.RemoveGuide(session.User.Id);
+            guideManager.TryRemoveGuide(session.User.Id);
         }
 
-        var guideId = guideManager.GetRandomGuide();
+        var guideId = guideManager.RandomAvailableGuide();
         if (guideId == 0)
         {
             session.SendPacket(new OnGuideSessionErrorComposer(2));
             return;
         }
 
+        guideManager.GuideLeftService(guideId);
+
         var guide = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(guideId);
 
         session.SendPacket(new OnGuideSessionAttachedComposer(false, userId, message, 30));
         guide.SendPacket(new OnGuideSessionAttachedComposer(true, userId, message, 15));
 
-        guide.
-        User.GuideOtherUserId = session.User.Id;
+        guide.User.GuideOtherUserId = session.User.Id;
         session.User.GuideOtherUserId = guide.User.Id;
     }
 }

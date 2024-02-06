@@ -13,7 +13,7 @@ public class AchievementComponent : IDisposable
         this._achievements = new Dictionary<string, UserAchievement>();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         var achievementList = UserAchievementDao.GetAll(dbClient, this._userInstance.Id);
 

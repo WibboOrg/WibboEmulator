@@ -50,7 +50,7 @@ public class WiredBase
         this.IsDisposed = false;
     }
 
-    public void Init(List<int> intParams, string stringParam, List<int> stuffIds, int selectionCode, int delay, bool isStaff, bool isGod)
+    public void Initialize(List<int> intParams, string stringParam, List<int> stuffIds, int selectionCode, int delay, bool isStaff, bool isGod)
     {
         this.IntParams = intParams;
         this.StringParam = stringParam.Length <= 255 ? stringParam : stringParam[..255];

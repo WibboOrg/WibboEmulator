@@ -35,7 +35,7 @@ public class RPEnemyManager
         return enemy;
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._enemyBot.Clear();
         this._enemyPet.Clear();

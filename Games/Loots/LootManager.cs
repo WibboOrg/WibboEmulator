@@ -15,7 +15,7 @@ public class LootManager
         this._rarityCounter = new Dictionary<int, int>();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._lootItem.Clear();
         this._rarityCounter.Clear();

@@ -17,7 +17,7 @@ internal sealed class Enable : IChatCommand
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(numEnable, session.User.HasPermission("god")))
+        if (!WibboEnvironment.GetGame().GetEffectManager().HasEffect(numEnable, session.User.HasPermission("god")))
         {
             return;
         }

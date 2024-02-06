@@ -29,7 +29,7 @@ internal sealed class ConfigBot : IChatCommand
 
                 _ = int.TryParse(parameters[3], out var intValue);
 
-                if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(intValue, false))
+                if (!WibboEnvironment.GetGame().GetEffectManager().HasEffect(intValue, false))
                 {
                     return;
                 }

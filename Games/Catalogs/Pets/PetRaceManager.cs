@@ -4,7 +4,7 @@ public class PetRaceManager
 {
     private readonly List<PetRace> _races = new();
 
-    public static void Init()
+    public static void Initialize()
     {
 
     }

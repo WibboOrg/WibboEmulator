@@ -15,7 +15,7 @@ internal sealed class GuideEndSessionEvent : IPacketEvent
         session.User.GuideOtherUserId = 0;
         if (session.User.OnDuty)
         {
-            WibboEnvironment.GetGame().GetHelpManager().EndService(session.User.Id);
+            WibboEnvironment.GetGame().GetHelpManager().MarkAsOffDuty(session.User.Id);
         }
 
         if (requester != null)
@@ -25,7 +25,7 @@ internal sealed class GuideEndSessionEvent : IPacketEvent
 
             if (requester.User.OnDuty)
             {
-                WibboEnvironment.GetGame().GetHelpManager().EndService(requester.User.Id);
+                WibboEnvironment.GetGame().GetHelpManager().MarkAsOffDuty(requester.User.Id);
             }
         }
     }

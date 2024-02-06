@@ -35,7 +35,7 @@ public class CatalogManager
         this._races = new List<PetRace>();
     }
 
-    public void Init(IDbConnection dbClient, ItemDataManager itemDataManager)
+    public void Initialize(IDbConnection dbClient, ItemDataManager itemDataManager)
     {
         if (this._pages.Count > 0)
         {
@@ -72,7 +72,7 @@ public class CatalogManager
             this._races.Clear();
         }
 
-        this._voucherManager.Init(dbClient);
+        this._voucherManager.Initialize(dbClient);
 
         var catalogItemList = CatalogItemDao.GetAll(dbClient);
 

@@ -17,7 +17,7 @@ public class QuestManager
         this._questCount = new Dictionary<string, int>();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this._quests.Clear();
         this._questCount.Clear();

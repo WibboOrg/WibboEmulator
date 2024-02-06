@@ -20,10 +20,6 @@ public class GameClientManager
     private readonly ConcurrentDictionary<string, DateTime> _pendingDisconnect;
     private readonly List<int> _userStaff;
 
-    public int OnlineUsersFr { get; set; }
-    public int OnlineUsersEn { get; set; }
-    public int OnlineUsersBr { get; set; }
-
     public int Count => this._userIDRegister.Count;
 
     public GameClientManager()

@@ -85,19 +85,19 @@ public static class WibboEnvironment
             using var dbClient = GetDatabaseManager().Connection();
 
             _settingsManager = new SettingsManager();
-            _settingsManager.Init(dbClient);
+            _settingsManager.Initialize(dbClient);
 
             _languageManager = new LanguageManager();
-            _languageManager.Init(dbClient);
+            _languageManager.Initialize(dbClient);
 
             _figureManager = new FigureDataManager();
-            _figureManager.Init();
+            _figureManager.Initialize();
 
             _chatOpenAI = new OpenAIProxy(_settingsManager.GetData<string>("openia.api.key"));
             _elevenLabs = new ElevenLabsProxy(_settingsManager.GetData<string>("elevenlabs.api.key"));
 
             _game = new Game();
-            _game.Init(dbClient);
+            _game.Initialize(dbClient);
             _game.StartGameLoop();
 
             var webSocketOrigins = _settingsManager.GetData<string>("game.ws.origins").Split(',').ToList();

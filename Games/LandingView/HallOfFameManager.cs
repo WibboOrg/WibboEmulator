@@ -20,7 +20,7 @@ public class HallOfFameManager
         this._hofStopwatch.Start();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
         this.UserRanking.Clear();
 

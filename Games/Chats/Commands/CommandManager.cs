@@ -35,7 +35,7 @@ public class CommandManager
         this._listCommande = new Dictionary<string, string>();
     }
 
-    public void Init(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient)
     {
 
         this.InitInvokeableRegister(dbClient);

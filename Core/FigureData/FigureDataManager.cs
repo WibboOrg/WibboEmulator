@@ -22,7 +22,7 @@ public class FigureDataManager
         };
     }
 
-    public void Init()
+    public void Initialize()
     {
         if (this._palettes.Count > 0)
         {

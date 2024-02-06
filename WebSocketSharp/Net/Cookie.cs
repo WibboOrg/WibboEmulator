@@ -120,7 +120,7 @@ public sealed class Cookie
     /// <summary>
     /// Initializes a new instance of the <see cref="Cookie"/> class.
     /// </summary>
-    internal Cookie() => this.Init(string.Empty, string.Empty, string.Empty, string.Empty);
+    internal Cookie() => this.Initialize(string.Empty, string.Empty, string.Empty, string.Empty);
 
     #endregion
 
@@ -315,7 +315,7 @@ public sealed class Cookie
             }
         }
 
-        this.Init(name, value, path ?? string.Empty, domain ?? string.Empty);
+        this.Initialize(name, value, path ?? string.Empty, domain ?? string.Empty);
     }
 
     #endregion
@@ -718,7 +718,7 @@ public sealed class Cookie
                ^ ((l << 7) | (l >> 25))
                ^ ((m << 20) | (m >> 12));
 
-    private void Init(string name, string value, string path, string domain)
+    private void Initialize(string name, string value, string path, string domain)
     {
         this._name = name;
         this._value = value;

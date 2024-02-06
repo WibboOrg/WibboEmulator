@@ -70,7 +70,7 @@ public class RoomUserManager
 
         roomUser.BotData = bot;
         roomUser.BotAI = bot.GenerateBotAI(roomUser.VirtualId);
-        roomUser.BotAI.Init(bot.Id, roomUser, this._room);
+        roomUser.BotAI.Initialize(bot.Id, roomUser, this._room);
 
         roomUser.SetStatus("flatctrl", "4");
         this.UpdateUserStatus(roomUser, false);
@@ -143,7 +143,7 @@ public class RoomUserManager
         }
 
         roomUser.BotAI = bot.GenerateBotAI(roomUser.VirtualId);
-        roomUser.BotAI.Init(bot.Id, roomUser, this._room);
+        roomUser.BotAI.Initialize(bot.Id, roomUser, this._room);
 
         if (roomUser.IsPet)
         {

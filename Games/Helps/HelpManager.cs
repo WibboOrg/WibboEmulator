@@ -4,46 +4,66 @@ public class HelpManager
 {
     public Dictionary<int, bool> GuidesOnDuty { get; set; } = new();
 
-    public int GuidesCount => this.GuidesOnDuty.Count;
+    public int Count => this.GuidesOnDuty.Count;
 
-    public int GetRandomGuide()
+    public int RandomAvailableGuide()
     {
-        if (this.GuidesCount == 0)
+        if (this.Count == 0)
         {
             return 0;
         }
 
         var availableGuideIds = this.GuidesOnDuty
             .Where(guide => !guide.Value)
-            .Select(guide => guide.Key)
-            .ToList();
+            .Select(guide => guide.Key);
 
-        if (availableGuideIds.Count == 0)
-        {
-            return 0;
-        }
-
-        var randomId = availableGuideIds[WibboEnvironment.GetRandomNumber(0, availableGuideIds.Count - 1)];
-        this.GuidesOnDuty[randomId] = true;
-
-        return randomId;
+        return this.SelectAvailableGuides().SingleOrDefault();
     }
 
-    public void EndService(int id)
+    public void GuideLeftService(int id) => this.MarkAsAvailable(id);
+
+    private void MarkAsAvailable(int id)
     {
-        if (this.GuidesOnDuty.ContainsKey(id))
+        if (!this.GuidesOnDuty.TryGetValue(id, out var onDuty))
         {
-            this.GuidesOnDuty[id] = false;
+            return;
         }
+
+        if (onDuty)
+        {
+            return;
+        }
+
+        this.GuidesOnDuty[id] = true;
     }
 
-    public void AddGuide(int guide)
+    private IEnumerable<int> SelectAvailableGuides() => this.GuidesOnDuty.Where(g => !g.Value).Select(g => g.Key);
+
+    public void MarkAsOffDuty(int id)
+    {
+        if (!this.GuidesOnDuty.TryGetValue(id, out var onDuty))
+        {
+            return;
+        }
+
+        if (!onDuty)
+        {
+            return;
+        }
+
+        this.GuidesOnDuty[id] = false;
+    }
+
+    public bool TryAddGuide(int guide)
     {
         if (!this.GuidesOnDuty.ContainsKey(guide))
         {
             this.GuidesOnDuty.Add(guide, false);
+            return true;
         }
+
+        return false;
     }
 
-    public void RemoveGuide(int guide) => _ = this.GuidesOnDuty.Remove(guide);
+    public void TryRemoveGuide(int guide) => _ = this.GuidesOnDuty.Remove(guide);
 }

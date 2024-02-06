@@ -12,7 +12,7 @@ public interface IWired
 
     void OnTrigger(GameClient session);
 
-    void Init(List<int> intParams, string stringParam, List<int> stuffIds, int selectionCode, int delay, bool isStaff, bool isGod);
+    void Initialize(List<int> intParams, string stringParam, List<int> stuffIds, int selectionCode, int delay, bool isStaff, bool isGod);
 
     void LoadItems(bool inDatabase = false);
 }

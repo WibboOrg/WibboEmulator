@@ -94,7 +94,7 @@ public class WebSocketServer
     {
         var addr = System.Net.IPAddress.Any;
 
-        this.Init(addr.ToString(), addr, 80, false);
+        this.Initialize(addr.ToString(), addr, 80, false);
     }
 
     /// <summary>
@@ -193,7 +193,7 @@ public class WebSocketServer
             throw new ArgumentException(msg, nameof(url));
         }
 
-        this.Init(host, addr, uri.Port, uri.Scheme == "wss");
+        this.Initialize(host, addr, uri.Port, uri.Scheme == "wss");
     }
 
     /// <summary>
@@ -226,7 +226,7 @@ public class WebSocketServer
 
         var addr = System.Net.IPAddress.Any;
 
-        this.Init(addr.ToString(), addr, port, secure);
+        this.Initialize(addr.ToString(), addr, port, secure);
     }
 
     /// <summary>
@@ -314,7 +314,7 @@ public class WebSocketServer
             throw new ArgumentOutOfRangeException(nameof(port), msg);
         }
 
-        this.Init(address.ToString(), address, port, secure);
+        this.Initialize(address.ToString(), address, port, secure);
     }
 
     #endregion
@@ -753,7 +753,7 @@ public class WebSocketServer
         return this._sslConfig;
     }
 
-    private void Init(
+    private void Initialize(
       string hostname, System.Net.IPAddress address, int port, bool secure
     )
     {
