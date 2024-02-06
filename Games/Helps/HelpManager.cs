@@ -13,11 +13,9 @@ public class HelpManager
             return 0;
         }
 
-        var availableGuideIds = this.GuidesOnDuty
-            .Where(guide => !guide.Value)
-            .Select(guide => guide.Key);
+        var availableGuideIds = this.SelectAvailableGuides();
 
-        return this.SelectAvailableGuides().SingleOrDefault();
+        return availableGuideIds[WibboEnvironment.GetRandomNumber(0, availableGuideIds.Length - 1)];
     }
 
     public void GuideLeftService(int id) => this.MarkAsAvailable(id);
@@ -37,7 +35,7 @@ public class HelpManager
         this.GuidesOnDuty[id] = true;
     }
 
-    private IEnumerable<int> SelectAvailableGuides() => this.GuidesOnDuty.Where(g => !g.Value).Select(g => g.Key);
+    private int[] SelectAvailableGuides() => this.GuidesOnDuty.Where(g => !g.Value).Select(g => g.Key).ToArray();
 
     public void MarkAsOffDuty(int id)
     {
