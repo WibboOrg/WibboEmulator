@@ -14,10 +14,13 @@ internal sealed class GiftWrappingConfigurationComposer : ServerPacket
             this.WriteInteger(i);
         }
 
-        this.WriteInteger(9); // boxTypes total
+        this.WriteInteger(7); // boxTypes total
         for (var i = 0; i < 9; i++)
         {
-            this.WriteInteger(i);
+            if (i is not 7 or 8)
+            {
+                this.WriteInteger(i);
+            }
         }
 
         this.WriteInteger(11); // ribbonTypes total

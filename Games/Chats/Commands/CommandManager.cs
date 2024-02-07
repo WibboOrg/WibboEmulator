@@ -123,7 +123,7 @@ public class CommandManager
             var descriptionEn = emulatorCommand.DescriptionEn;
             var descriptionBr = emulatorCommand.DescriptionBr;
             var input = emulatorCommand.Input;
-            var strArray = input.ToLower().Split(new char[1] { ',' });
+            var strArray = input.ToLower().Split(',');
 
             foreach (var command in strArray)
             {

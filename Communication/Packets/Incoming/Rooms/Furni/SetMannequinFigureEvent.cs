@@ -28,7 +28,7 @@ internal sealed class SetMannequinFigureEvent : IPacketEvent
 
         var allowedParts = new List<string> { "ha", "he", "ea", "ch", "fa", "cp", "lg", "cc", "ca", "sh", "wa" };
         var look = string.Join(".", session.User.Look.Split('.').Where(part => allowedParts.Contains(part.Split('-')[0])));
-        var stuff = roomItem.ExtraData.Split(new char[1] { ';' });
+        var stuff = roomItem.ExtraData.Split(';');
         var name = "";
 
         if (stuff.Length >= 3)

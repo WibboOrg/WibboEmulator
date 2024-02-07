@@ -247,14 +247,11 @@ public class Item : IEquatable<Item>
                     break;
                 case InteractionType.GUILD_ITEM:
                 case InteractionType.GUILD_GATE:
-                    if (!string.IsNullOrEmpty(extraData))
+                    if (!string.IsNullOrEmpty(extraData) && extraData.Contains(';'))
                     {
-                        if (extraData.Contains(';'))
+                        if (int.TryParse(this.ExtraData.Split(';')[1], out var groupId))
                         {
-                            if (int.TryParse(this.ExtraData.Split(new char[1] { ';' })[1], out var groupId))
-                            {
-                                this.GroupId = groupId;
-                            }
+                            this.GroupId = groupId;
                         }
                     }
                     break;
@@ -615,7 +612,7 @@ public class Item : IEquatable<Item>
                 {
                     if (this.ExtraData.Contains(';'))
                     {
-                        if (int.TryParse(this.ExtraData.Split(new char[1] { ';' })[1], out var groupId))
+                        if (int.TryParse(this.ExtraData.Split(';')[1], out var groupId))
                         {
                             this.GroupId = groupId;
                         }

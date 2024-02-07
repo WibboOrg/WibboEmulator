@@ -26,7 +26,7 @@ public class InteractorManiqui : FurniInteractor
             return;
         }
 
-        var lookSplit = session.User.Look.Split(new char[1] { '.' });
+        var lookSplit = session.User.Look.Split('.');
         var lookCode = "";
         foreach (var part in lookSplit)
         {
@@ -36,7 +36,7 @@ public class InteractorManiqui : FurniInteractor
             }
         }
 
-        var look = lookCode + item.ExtraData.Split(new char[1] { ';' })[1];
+        var look = lookCode + item.ExtraData.Split(';')[1];
         session.User.Look = look;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())

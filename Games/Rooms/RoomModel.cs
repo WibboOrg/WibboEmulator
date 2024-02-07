@@ -26,7 +26,7 @@ public class RoomModel
             this.DoorZ = doorZ;
             this.DoorOrientation = doorOrientation;
             this.Heightmap = heightmap.ToLower();
-            var tmpHeightmap = this.Heightmap.Split(new char[1] { Convert.ToChar(13) });
+            var tmpHeightmap = this.Heightmap.Split(Convert.ToChar(13));
             this.MapSizeX = tmpHeightmap[0].Length;
             this.MapSizeY = tmpHeightmap.Length;
             this.SqState = new SquareStateType[this.MapSizeX, this.MapSizeY];

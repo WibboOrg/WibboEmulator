@@ -220,7 +220,7 @@ public class GameWebSocket : WebSocketBehavior
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogPacketException(message.ToString(), ex.ToString());
+                ExceptionLogger.LogPacketException(message.ToString() + " in " + client.User?.Username ?? client.Connection.GetIp(), ex.ToString());
             }
         }
         catch (Exception ex)

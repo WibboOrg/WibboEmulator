@@ -26,7 +26,7 @@ internal sealed class WhisperEvent : IPacketEvent
             return;
         }
 
-        var toUser = parameters.Split(new char[1] { ' ' })[0];
+        var toUser = parameters.Split(' ')[0];
 
         if (toUser.Length + 1 > parameters.Length)
         {

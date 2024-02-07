@@ -169,7 +169,7 @@ public class InventoryComponent : IDisposable
                 continue;
             }
 
-            if (!int.TryParse(roomItem.GetBaseItem().ItemName.Split(new char[1] { '_' })[1], out var magotCount))
+            if (!int.TryParse(roomItem.GetBaseItem().ItemName.Split('_')[1], out var magotCount))
             {
                 continue;
             }
@@ -421,7 +421,7 @@ public class InventoryComponent : IDisposable
             return;
         }
 
-        var magotCount = int.Parse(roomItem.GetBaseItem().ItemName.Split(new char[1] { '_' })[1]);
+        var magotCount = int.Parse(roomItem.GetBaseItem().ItemName.Split('_')[1]);
 
         this._inventoryPoints += magotCount;
     }
@@ -438,9 +438,10 @@ public class InventoryComponent : IDisposable
             return;
         }
 
-        var magotCount = int.Parse(roomItem.GetBaseItem().ItemName.Split(new char[1] { '_' })[1]);
-
-        this._inventoryPoints -= magotCount;
+        if (int.TryParse(roomItem.GetBaseItem().ItemName.Split('_')[1], out var magotCount))
+        {
+            this._inventoryPoints -= magotCount;
+        }
     }
 
     public Item GetItem(int id)

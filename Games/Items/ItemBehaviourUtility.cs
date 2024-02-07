@@ -10,7 +10,7 @@ internal static class ItemBehaviourUtility
         switch (itemData.InteractionType)
         {
             default:
-                message.WriteInteger(item.Limited > 0 ? 256 + 1 : 1);
+                message.WriteInteger(item.Limited > 0 ? (int)ObjectDataKey.UNIQUE_SET + (int)ObjectDataKey.MAP_KEY : (int)ObjectDataKey.MAP_KEY);
 
                 var totalSets = 1;
                 if (itemData.RarityLevel > RaretyLevelType.None)
@@ -70,28 +70,28 @@ internal static class ItemBehaviourUtility
 
                 var state = secondeLeft > 0 ? 10 - (int)Math.Ceiling((double)secondeLeft / expireSeconds * 10) : 10;
 
-                message.WriteInteger(item.Limited > 0 ? 256 : 0);
+                message.WriteInteger(item.Limited > 0 ? (int)ObjectDataKey.UNIQUE_SET : (int)ObjectDataKey.LEGACY_KEY);
                 message.WriteString(state.ToString());
                 break;
 
             case InteractionType.TROPHY:
             case InteractionType.PHOTO:
-                message.WriteInteger(item.Limited > 0 ? 256 : 0);
+                message.WriteInteger(item.Limited > 0 ? (int)ObjectDataKey.UNIQUE_SET : (int)ObjectDataKey.LEGACY_KEY);
                 message.WriteString((itemData.InteractionType is not InteractionType.TONER and not InteractionType.FOOTBALL_GATE) ? item.ExtraData : string.Empty);
                 break;
 
             case InteractionType.WALLPAPER:
-                message.WriteInteger(0);
+                message.WriteInteger((int)ObjectDataKey.LEGACY_KEY);
                 message.WriteString(item.ExtraData);
 
                 break;
             case InteractionType.FLOOR:
-                message.WriteInteger(0);
+                message.WriteInteger((int)ObjectDataKey.LEGACY_KEY);
                 message.WriteString(item.ExtraData);
                 break;
 
             case InteractionType.LANDSCAPE:
-                message.WriteInteger(0);
+                message.WriteInteger((int)ObjectDataKey.LEGACY_KEY);
                 message.WriteString(item.ExtraData);
                 break;
 
@@ -100,14 +100,14 @@ internal static class ItemBehaviourUtility
                 Group group = null;
                 if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(item.GroupId, out group))
                 {
-                    message.WriteInteger(0);
+                    message.WriteInteger((int)ObjectDataKey.LEGACY_KEY);
                     message.WriteString(item.ExtraData);
                 }
                 else
                 {
-                    message.WriteInteger(2);
+                    message.WriteInteger((int)ObjectDataKey.STRING_KEY);
                     message.WriteInteger(5);
-                    message.WriteString(item.ExtraData.Split(new char[1] { ';' })[0]);
+                    message.WriteString(item.ExtraData.Split(';')[0]);
                     message.WriteString(group.Id.ToString());
                     message.WriteString(group.Badge);
                     message.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour1, true));
@@ -117,7 +117,7 @@ internal static class ItemBehaviourUtility
 
             case InteractionType.HIGH_SCORE:
             case InteractionType.HIGH_SCORE_POINTS:
-                message.WriteInteger(6); //Type
+                message.WriteInteger((int)ObjectDataKey.HIGHSCORE_KEY); //Type
 
                 message.WriteString(item.ExtraData);
                 message.WriteInteger(2); //Type de victoire
@@ -141,7 +141,7 @@ internal static class ItemBehaviourUtility
                 {
                     var eData = item.ExtraData.Split((char)5);
                     var i = 0;
-                    message.WriteInteger(2);
+                    message.WriteInteger((int)ObjectDataKey.STRING_KEY);
                     message.WriteInteger(eData.Length);
                     while (i < eData.Length)
                     {
@@ -151,13 +151,13 @@ internal static class ItemBehaviourUtility
                 }
                 else
                 {
-                    message.WriteInteger(0);
+                    message.WriteInteger((int)ObjectDataKey.LEGACY_KEY);
                     message.WriteString("0");
                 }
                 break;
 
             case InteractionType.CRACKABLE:
-                message.WriteInteger(7); //Type
+                message.WriteInteger((int)ObjectDataKey.CRACKABLE_KEY); //Type
 
                 _ = int.TryParse(item.ExtraData, out var clickNumber);
 
@@ -169,7 +169,7 @@ internal static class ItemBehaviourUtility
             case InteractionType.ADS_BACKGROUND:
                 if (!string.IsNullOrEmpty(item.ExtraData))
                 {
-                    message.WriteInteger(1);
+                    message.WriteInteger((int)ObjectDataKey.MAP_KEY);
 
                     var extraDatabackground = "state" + Convert.ToChar(9) + "0" + Convert.ToChar(9) + item.ExtraData;
 
@@ -184,7 +184,7 @@ internal static class ItemBehaviourUtility
                 }
                 else
                 {
-                    message.WriteInteger(0);
+                    message.WriteInteger((int)ObjectDataKey.LEGACY_KEY);
                     message.WriteString("");
                 }
                 break;
@@ -209,7 +209,7 @@ internal static class ItemBehaviourUtility
                         break;
                 }
 
-                message.WriteInteger(1);
+                message.WriteInteger((int)ObjectDataKey.MAP_KEY);
                 message.WriteInteger(3);
                 message.WriteString("MESSAGE");
                 message.WriteString($"Bravo tu as reçu une {lotName} ! Ouvre-là pour y découvrir ton lot");
@@ -235,7 +235,7 @@ internal static class ItemBehaviourUtility
                         break;
                 }
 
-                message.WriteInteger(1);
+                message.WriteInteger((int)ObjectDataKey.MAP_KEY);
                 message.WriteInteger(3);
                 message.WriteString("MESSAGE");
                 message.WriteString($"Bravo tu as reçu une {premiumName} box ! Ouvre-là pour reçevoir 31 jours de premium");
@@ -250,7 +250,7 @@ internal static class ItemBehaviourUtility
             {
                 if (!item.ExtraData.Contains(Convert.ToChar(5)))
                 {
-                    message.WriteInteger(0);
+                    message.WriteInteger((int)ObjectDataKey.LEGACY_KEY);
                     message.WriteString(item.ExtraData);
                 }
                 else
@@ -261,8 +261,8 @@ internal static class ItemBehaviourUtility
                     var giftMessage = giftExtraData[0];
 
                     var giftPurchaser = WibboEnvironment.GetUserById(giftUserId);
-                    message.WriteInteger(1);
-                    message.WriteInteger(3);
+                    message.WriteInteger((int)ObjectDataKey.MAP_KEY);
+                    message.WriteInteger(3); // Count
                     message.WriteString("MESSAGE");
                     message.WriteString(giftMessage);
                     message.WriteString("PURCHASER_NAME");
@@ -274,11 +274,11 @@ internal static class ItemBehaviourUtility
             break;
 
             case InteractionType.MANNEQUIN:
-                message.WriteInteger(1);
+                message.WriteInteger((int)ObjectDataKey.MAP_KEY);
                 message.WriteInteger(3);
                 if (item.ExtraData.Contains(';'))
                 {
-                    var stuff = item.ExtraData.Split(new char[1] { ';' });
+                    var stuff = item.ExtraData.Split(';');
                     message.WriteString("GENDER");
                     message.WriteString(stuff[0].ToUpper() == "M" ? "M" : "F");
                     message.WriteString("FIGURE");
@@ -303,9 +303,9 @@ internal static class ItemBehaviourUtility
                     message.WriteInteger(5);
                     message.WriteInteger(4);
                     message.WriteInteger(item.ExtraData.StartsWith("on") ? 1 : 0);
-                    message.WriteInteger(int.Parse(item.ExtraData.Split(new char[1] { ',' })[1]));
-                    message.WriteInteger(int.Parse(item.ExtraData.Split(new char[1] { ',' })[2]));
-                    message.WriteInteger(int.Parse(item.ExtraData.Split(new char[1] { ',' })[3]));
+                    message.WriteInteger(int.Parse(item.ExtraData.Split(',')[1]));
+                    message.WriteInteger(int.Parse(item.ExtraData.Split(',')[2]));
+                    message.WriteInteger(int.Parse(item.ExtraData.Split(',')[3]));
                 }
                 else
                 {
@@ -316,7 +316,7 @@ internal static class ItemBehaviourUtility
 
             case InteractionType.BADGE_DISPLAY:
             case InteractionType.BADGE_TROC:
-                message.WriteInteger(2);
+                message.WriteInteger((int)ObjectDataKey.STRING_KEY);
                 message.WriteInteger(4);
 
                 if (item.ExtraData.Contains(Convert.ToChar(9).ToString()))
@@ -338,7 +338,7 @@ internal static class ItemBehaviourUtility
                 break;
 
             case InteractionType.TV_YOUTUBE:
-                message.WriteInteger(1);
+                message.WriteInteger((int)ObjectDataKey.MAP_KEY);
                 message.WriteInteger(2);
                 message.WriteString("THUMBNAIL_URL");
                 message.WriteString(string.IsNullOrEmpty(item.ExtraData) ? "" : "https://" + WibboEnvironment.GetSettings().GetData<string>("cdn.url") + "/youtubethumbnail.php?videoid=" + item.ExtraData);
@@ -367,4 +367,17 @@ internal static class ItemBehaviourUtility
                 break;
         }
     }
+}
+
+public enum ObjectDataKey
+{
+    LEGACY_KEY = 0,
+    MAP_KEY = 1,
+    STRING_KEY = 2,
+    VOTE_KEY = 3,
+    EMPTY_KEY = 4,
+    NUMBER_KEY = 5,
+    HIGHSCORE_KEY = 6,
+    CRACKABLE_KEY = 7,
+    UNIQUE_SET = 256
 }
