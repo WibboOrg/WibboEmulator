@@ -25,7 +25,7 @@ internal sealed class AddStickyNoteEvent : IPacketEvent
         var str = packet.PopString();
 
         var userItem = session.User.InventoryComponent.GetItem(id);
-        if (userItem == null)
+        if (userItem == null || !userItem.IsWallItem || userItem.Data.InteractionType != InteractionType.POSTIT)
         {
             return;
         }

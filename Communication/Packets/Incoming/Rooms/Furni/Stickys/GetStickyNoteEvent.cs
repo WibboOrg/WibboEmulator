@@ -14,7 +14,9 @@ internal sealed class GetStickyNoteEvent : IPacketEvent
             return;
         }
 
-        var roomItem = room.RoomItemHandling.GetItem(packet.PopInt());
+        var itemId = packet.PopInt();
+
+        var roomItem = room.RoomItemHandling.GetItem(itemId);
         if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.POSTIT)
         {
             return;

@@ -18,14 +18,15 @@ internal sealed class UpdateStickyNoteEvent : IPacketEvent
             return;
         }
 
-        var roomItem = room.RoomItemHandling.GetItem(packet.PopInt());
+        var itemId = packet.PopInt();
+        var color = packet.PopString();
+        var message = packet.PopString();
+
+        var roomItem = room.RoomItemHandling.GetItem(itemId);
         if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.POSTIT)
         {
             return;
         }
-
-        var color = packet.PopString();
-        var message = packet.PopString();
 
         if (!room.CheckRights(session) && !message.StartsWith(roomItem.ExtraData))
         {
