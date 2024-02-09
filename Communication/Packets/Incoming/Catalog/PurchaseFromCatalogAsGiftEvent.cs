@@ -5,7 +5,6 @@ using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Utilities;
 
@@ -18,10 +17,10 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
         var pageId = packet.PopInt();
         var itemId = packet.PopInt();
 
-        var extraData = packet.PopString();
+        var extraData = packet.PopString(512);
         var giftUser = StringCharFilter.Escape(packet.PopString(16));
-        var giftMessage = StringCharFilter.Escape(packet.PopString().Replace(Convert.ToChar(5), ' '));
-        var spriteId = packet.PopInt();
+        var giftMessage = StringCharFilter.Escape(packet.PopString(140).Replace(Convert.ToChar(5), ' '));
+        var boxSpriteId = packet.PopInt();
         var boxId = packet.PopInt();
         var ribbon = packet.PopInt();
 
@@ -58,7 +57,7 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetItemManager().GetGift(spriteId, out var presentData) || presentData.InteractionType != InteractionType.GIFT)
+        if (!WibboEnvironment.GetGame().GetItemManager().GetGift(boxSpriteId, out var presentData) || presentData.InteractionType != InteractionType.GIFT)
         {
             return;
         }
@@ -116,133 +115,15 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             return;
         }
 
+        if (!ItemUtility.TryProcessExtraData(item, session, ref extraData))
+        {
+            session.SendPacket(new PurchaseErrorComposer());
+            return;
+        }
+
         var ed = (showMyFace ? session.User.Id : 0) + ";" + giftMessage + Convert.ToChar(5) + ribbon + Convert.ToChar(5) + boxId;
 
         var newItemId = ItemDao.Insert(dbClient, presentData.Id, user.Id, ed);
-
-        switch (item.Data.InteractionType)
-        {
-            case InteractionType.WIRED_ITEM:
-            case InteractionType.NONE:
-                extraData = "";
-                break;
-
-            case InteractionType.EXCHANGE_TREE:
-            case InteractionType.EXCHANGE_TREE_CLASSIC:
-            case InteractionType.EXCHANGE_TREE_EPIC:
-            case InteractionType.EXCHANGE_TREE_LEGEND:
-                extraData = WibboEnvironment.GetUnixTimestamp().ToString();
-                break;
-            case InteractionType.GUILD_ITEM:
-            case InteractionType.GUILD_GATE:
-                int groupId;
-                if (!int.TryParse(extraData, out groupId))
-                {
-                    session.SendPacket(new PurchaseErrorComposer());
-                    return;
-                }
-
-                Group group;
-                if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out group))
-                {
-                    session.SendPacket(new PurchaseErrorComposer());
-                    return;
-                }
-
-                extraData = "0;" + group.Id;
-                break;
-
-            case InteractionType.PET:
-                var bits = extraData.Split('\n');
-                var petName = bits[0];
-                var race = bits[1];
-                var color = bits[2];
-
-                if (!int.TryParse(race, out _) || color.Length != 6 || race.Length > 2 || !PetUtility.CheckPetName(petName))
-                {
-                    session.SendPacket(new PurchaseErrorComposer());
-                    return;
-                }
-
-                _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_PetLover", 1);
-
-                break;
-
-            case InteractionType.FLOOR:
-            case InteractionType.WALLPAPER:
-            case InteractionType.LANDSCAPE:
-
-                double number;
-                if (string.IsNullOrEmpty(extraData))
-                {
-                    number = 0;
-                }
-                else
-                {
-                    _ = double.TryParse(extraData, out number);
-                }
-
-                extraData = number.ToString().Replace(',', '.');
-                break; // maintain extra data // todo: validate
-
-            case InteractionType.POSTIT:
-                extraData = "FFFF33";
-                break;
-
-            case InteractionType.MOODLIGHT:
-                extraData = "1,1,1,#000000,255";
-                break;
-
-            case InteractionType.TROPHY:
-                extraData = session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + Convert.ToChar(9) + extraData;
-                break;
-
-            case InteractionType.MANNEQUIN:
-                extraData = "m;ch-210-1321.lg-285-92;Mannequin";
-                break;
-
-            case InteractionType.BADGE_TROC:
-            {
-                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(extraData) || !WibboEnvironment.GetGame().GetCatalog().HasBadge(extraData) || !session.User.BadgeComponent.HasBadge(extraData))
-                {
-                    session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", session.Langue));
-                    session.SendPacket(new PurchaseErrorComposer());
-                    return;
-                }
-
-                if (!extraData.StartsWith("perso_"))
-                {
-                    session.User.BadgeComponent.RemoveBadge(extraData);
-                }
-
-                break;
-            }
-
-            case InteractionType.BADGE_DISPLAY:
-                if (!session.User.BadgeComponent.HasBadge(extraData))
-                {
-                    session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", session.Langue));
-                    session.SendPacket(new PurchaseErrorComposer());
-                    return;
-                }
-
-                extraData = extraData + Convert.ToChar(9) + session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
-                break;
-
-            case InteractionType.BADGE:
-            {
-                if (session.User.BadgeComponent.HasBadge(item.Badge))
-                {
-                    session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadge.error", session.Langue));
-                    session.SendPacket(new PurchaseErrorComposer());
-                    return;
-                }
-                break;
-            }
-            default:
-                extraData = "";
-                break;
-        }
 
         ItemPresentDao.Insert(dbClient, newItemId, item.Data.Id, extraData);
 

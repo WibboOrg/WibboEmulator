@@ -1,6 +1,8 @@
 namespace WibboEmulator.Games.Catalogs.Utilities;
 
 using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
 
 public static class ItemUtility
@@ -66,5 +68,131 @@ public static class ItemUtility
         }
 
         return false;
+    }
+
+    public static bool TryProcessExtraData(CatalogItem item, GameClient session, ref string extraData)
+    {
+        switch (item.Data.InteractionType)
+        {
+            case InteractionType.WIRED_ITEM:
+            case InteractionType.NONE:
+                extraData = "";
+                break;
+
+            case InteractionType.EXCHANGE_TREE:
+            case InteractionType.EXCHANGE_TREE_CLASSIC:
+            case InteractionType.EXCHANGE_TREE_EPIC:
+            case InteractionType.EXCHANGE_TREE_LEGEND:
+                extraData = WibboEnvironment.GetUnixTimestamp().ToString();
+                break;
+            case InteractionType.GUILD_ITEM:
+            case InteractionType.GUILD_GATE:
+                int groupId;
+                if (!int.TryParse(extraData, out groupId))
+                {
+                    return false;
+                }
+
+                Group group;
+                if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out group))
+                {
+                    return false;
+                }
+
+                extraData = "0;" + group.Id;
+                break;
+
+            case InteractionType.PET:
+                if (string.IsNullOrEmpty(extraData) || !extraData.Contains('\n'))
+                {
+                    return false;
+                }
+
+                var bits = extraData.Split('\n');
+
+                if (bits.Length < 3)
+                {
+                    return false;
+                }
+
+                var petName = bits[0];
+                var race = bits[1];
+                var color = bits[2];
+
+                if (!int.TryParse(race, out _) || color.Length != 6 || race.Length > 2 || !PetUtility.CheckPetName(petName))
+                {
+                    return false;
+                }
+
+                _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_PetLover", 1);
+
+                break;
+
+            case InteractionType.FLOOR:
+            case InteractionType.WALLPAPER:
+            case InteractionType.LANDSCAPE:
+
+                _ = double.TryParse(extraData, out var number);
+
+                extraData = number.ToString();
+                break;
+
+            case InteractionType.POSTIT:
+                extraData = "FFFF33";
+                break;
+
+            case InteractionType.MOODLIGHT:
+                extraData = "1,1,1,#000000,255";
+                break;
+
+            case InteractionType.TROPHY:
+                extraData = session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + Convert.ToChar(9) + extraData;
+                break;
+
+            case InteractionType.MANNEQUIN:
+                extraData = "m;ch-210-1321.lg-285-92;Mannequin";
+                break;
+
+            case InteractionType.BADGE_TROC:
+            {
+                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(extraData) || !WibboEnvironment.GetGame().GetCatalog().HasBadge(extraData) || !session.User.BadgeComponent.HasBadge(extraData))
+                {
+                    session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", session.Langue));
+                    return false;
+                }
+
+                if (!extraData.StartsWith("perso_"))
+                {
+                    session.User.BadgeComponent.RemoveBadge(extraData);
+                }
+
+                break;
+            }
+
+            case InteractionType.BADGE_DISPLAY:
+                if (!session.User.BadgeComponent.HasBadge(extraData))
+                {
+                    session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", session.Langue));
+                    return false;
+                }
+
+                extraData = extraData + Convert.ToChar(9) + session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
+                break;
+
+            case InteractionType.BADGE:
+            {
+                if (session.User.BadgeComponent.HasBadge(item.Badge))
+                {
+                    session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadge.error", session.Langue));
+                    return false;
+                }
+                break;
+            }
+            default:
+                extraData = "";
+                break;
+        }
+
+        return true;
     }
 }
