@@ -255,7 +255,7 @@ internal static class ItemBehaviourUtility
                 }
                 else
                 {
-                    var giftData = item.ExtraData.Split(';');
+                    var giftData = item.ExtraData.Split(';', 2);
                     var giftUserId = int.Parse(giftData[0]);
                     var giftExtraData = giftData[1].Split(Convert.ToChar(5));
                     var giftMessage = giftExtraData[0];

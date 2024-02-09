@@ -259,7 +259,7 @@ public class Item : IEquatable<Item>
                 {
                     if (!string.IsNullOrEmpty(extraData) && extraData.Contains(';') && extraData.Contains(Convert.ToChar(5)))
                     {
-                        var giftData = this.ExtraData.Split(';');
+                        var giftData = this.ExtraData.Split(';', 2);
                         var giftExtraData = giftData[1].Split(Convert.ToChar(5));
                         var giftRibbon = int.Parse(giftExtraData[1]);
                         var giftBoxId = int.Parse(giftExtraData[2]);
