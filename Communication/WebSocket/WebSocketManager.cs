@@ -241,7 +241,7 @@ public class GameWebSocket : WebSocketBehavior
         this.Send(bytes);
     }
 
-    public void Disconnect() => this.Close();
+    public void Disconnect() => this.Close(CloseStatusCode.Normal, "Disconnected");
 
     public string GetUserAgent() => this.Headers["User-Agent"] ?? "";
 
