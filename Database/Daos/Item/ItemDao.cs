@@ -20,7 +20,7 @@ internal sealed class ItemDao
         {
             if (roomItem.IsWallItem)
             {
-                updateWall.Add(new ItemEntity { WallPos = roomItem.WallCoord, Id = roomItem.Id });
+                updateWall.Add(new ItemEntity { WallPos = roomItem.WallCoord, Id = roomItem.Id, ExtraData = roomItem.ExtraData });
             }
             else
             {
@@ -32,7 +32,7 @@ internal sealed class ItemDao
         {
             _ = dbClient.Execute(
                 @"UPDATE item 
-                SET wall_pos = @WallPos 
+                SET wall_pos = @WallPos, extra_data = @ExtraData
                 WHERE id = @Id",
                 updateWall);
         }
