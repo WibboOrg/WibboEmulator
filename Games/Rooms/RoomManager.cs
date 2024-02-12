@@ -323,7 +323,7 @@ public class RoomManager
         {
             this._roomCycleStopwatch.Restart();
 
-            foreach (var room in this._rooms.ToList())
+            foreach (var room in this._rooms)
             {
                 if (room.Value == null)
                 {
@@ -355,7 +355,7 @@ public class RoomManager
         var count = this._rooms.Count;
         var num = 0;
 
-        foreach (var room in this._rooms.Values.ToList())
+        foreach (var room in this._rooms.Values)
         {
             if (room == null)
             {
@@ -373,7 +373,7 @@ public class RoomManager
 
     public void UnloadEmptyRooms()
     {
-        foreach (var room in this._rooms.Values.ToList())
+        foreach (var room in this._rooms.Values)
         {
             if (room == null)
             {
