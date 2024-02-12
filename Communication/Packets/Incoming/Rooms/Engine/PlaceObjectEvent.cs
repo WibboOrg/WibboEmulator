@@ -218,50 +218,8 @@ internal sealed class PlaceObjectEvent : IPacketEvent
 
         var wallPos = ":w=" + w1 + "," + w2 + " l=" + l1 + "," + l2 + " " + data[2];
 
-        position = WallPositionCheck(wallPos);
+        position = ItemWallUtility.WallPositionCheck(wallPos);
 
         return position != "";
-    }
-
-    private static string WallPositionCheck(string wallPosition)
-    {
-        //:w=3,2 l=9,63 l
-        try
-        {
-            if (wallPosition.Contains(Convert.ToChar(13)))
-            {
-                return "";
-            }
-
-            if (wallPosition.Contains(Convert.ToChar(9)))
-            {
-                return "";
-            }
-
-            var posD = wallPosition.Split(' ');
-            if (posD[2] is not "l" and not "r")
-            {
-                return "";
-            }
-
-            var widD = posD[0][3..].Split(',');
-            var widthX = int.Parse(widD[0]);
-            var widthY = int.Parse(widD[1]);
-            //if (widthX < -1000 || widthY < -1 || widthX > 700 || widthY > 700)
-            //return null;
-
-            var lenD = posD[1][2..].Split(',');
-            var lengthX = int.Parse(lenD[0]);
-            var lengthY = int.Parse(lenD[1]);
-            //if (lengthX < -1 || lengthY < -1000 || lengthX > 700 || lengthY > 700)
-            //return null;
-
-            return ":w=" + widthX + "," + widthY + " " + "l=" + lengthX + "," + lengthY + " " + posD[2];
-        }
-        catch (Exception ex)
-        {
-            ExceptionLogger.LogException(ex.ToString());
-            return null;
-        }
     }
 }
