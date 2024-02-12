@@ -130,7 +130,11 @@ public class FigureDataManager
                         continue;
                     }
 
-                    var partId = Convert.ToInt32(splitpart[1]);
+                    if (!int.TryParse(splitpart[1], out var partId))
+                    {
+                        continue;
+                    }
+
                     var colorId = 0;
                     var secondColorId = 0;
 
@@ -169,8 +173,6 @@ public class FigureDataManager
                                 {
                                     if (int.TryParse(part.Split('-')[2], out colorId))
                                     {
-                                        colorId = Convert.ToInt32(part.Split('-')[2]);
-
                                         var palette = this.GetPalette(colorId);
                                         if (palette != null && colorId != 0)
                                         {
@@ -201,8 +203,6 @@ public class FigureDataManager
                                 {
                                     if (int.TryParse(part.Split('-')[3], out secondColorId))
                                     {
-                                        secondColorId = Convert.ToInt32(part.Split('-')[3]);
-
                                         var palette = this.GetPalette(secondColorId);
                                         if (palette != null && secondColorId != 0)
                                         {
@@ -238,7 +238,7 @@ public class FigureDataManager
                                 {
                                     if (!string.IsNullOrEmpty(part.Split('-')[2]))
                                     {
-                                        colorId = Convert.ToInt32(part.Split('-')[2]);
+                                        _ = int.TryParse(part.Split('-')[2], out colorId);
                                     }
                                 }
                             }
