@@ -8,6 +8,7 @@ public class ItemWallUtility
     public static string WallPositionCheck(string wallPosition)
     {
         const int maxWidthHeight = 2000;
+        const int minWidthHeight = -2000;
 
         try
         {
@@ -24,13 +25,13 @@ public class ItemWallUtility
 
             var dimensions = parts[0][3..].Split(',').Select(int.Parse).ToArray();
             var size = (dimensions[0], dimensions[1]);
-            if (size.Item1 < 0 || size.Item1 > maxWidthHeight || size.Item2 < 0 || size.Item2 > maxWidthHeight)
+            if (size.Item1 < minWidthHeight || size.Item1 > maxWidthHeight || size.Item2 < minWidthHeight || size.Item2 > maxWidthHeight)
             {
                 return ":w=0,0 l=0,0 l";
             }
 
             var length = parts[1][2..].Split(',').Select(int.Parse).ToArray();
-            if (length[0] < 0 || length[0] > maxWidthHeight || length[1] < 0 || length[1] > maxWidthHeight)
+            if (length[0] < minWidthHeight || length[0] > maxWidthHeight || length[1] < minWidthHeight || length[1] > maxWidthHeight)
             {
                 return ":w=0,0 l=0,0 l";
             }
