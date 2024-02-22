@@ -55,7 +55,17 @@ public class MoodlightData
 
     public static MoodlightPreset GeneratePreset(string data)
     {
+        if (!data.Contains(','))
+        {
+            return new MoodlightPreset("#000000", 0, false);
+        }
+
         var bits = data.Split(',');
+
+        if (bits.Length != 3)
+        {
+            return new MoodlightPreset("#000000", 0, false);
+        }
 
         if (!IsValidColor(bits[0]))
         {

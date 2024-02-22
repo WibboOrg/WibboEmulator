@@ -46,7 +46,10 @@ internal sealed class CreditFurniRedeemEvent : IPacketEvent
 
         room.RoomItemHandling.RemoveFurniture(null, exchange.Id);
 
-        var value = int.Parse(exchange.GetBaseItem().ItemName.Split('_')[1]);
+        if (!int.TryParse(exchange.GetBaseItem().ItemName.Split('_')[1], out var value))
+        {
+            return;
+        }
 
         if (value > 0)
         {
