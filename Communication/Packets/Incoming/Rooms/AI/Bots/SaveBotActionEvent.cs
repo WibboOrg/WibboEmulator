@@ -30,11 +30,6 @@ internal sealed class SaveBotActionEvent : IPacketEvent
             return;
         }
 
-        if (actionId is < 1 or > 5)
-        {
-            return;
-        }
-
         if (!room.RoomUserManager.TryGetBot(botId, out var bot))
         {
             return;
@@ -51,6 +46,7 @@ internal sealed class SaveBotActionEvent : IPacketEvent
          * 3 = Relax
          * 4 = Dance
          * 5 = Change Name
+         * 9 = Change Motto
          */
 
         switch (actionId)
@@ -148,11 +144,7 @@ internal sealed class SaveBotActionEvent : IPacketEvent
 
             case 5:
             {
-                if (dataString.Length == 0)
-                {
-                    return;
-                }
-                else if (dataString.Length >= 16)
+                if (dataString.Length is 0 or >= 16)
                 {
                     return;
                 }
@@ -163,6 +155,22 @@ internal sealed class SaveBotActionEvent : IPacketEvent
                 BotUserDao.UpdateName(dbClient, bot.BotData.Id, dataString);
 
                 room.SendPacket(new UserNameChangeComposer(bot.BotData.Name, bot.VirtualId));
+                break;
+            }
+
+            case 9:
+            {
+                if (dataString.Length is 0 or >= 38)
+                {
+                    return;
+                }
+
+                bot.BotData.Motto = dataString;
+
+                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                BotUserDao.UpdateMotto(dbClient, bot.BotData.Id, dataString);
+
+                room.SendPacket(new UserChangeComposer(bot));
                 break;
             }
         }

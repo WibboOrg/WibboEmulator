@@ -16,5 +16,9 @@ internal sealed class OpenBotActionComposer : ServerPacket
         {
             this.WriteString(botUser.BotData.Name);
         }
+        else if (actionId == 9)
+        {
+            this.WriteString(botUser.BotData.Motto);
+        }
     }
 }

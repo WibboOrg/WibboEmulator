@@ -27,8 +27,8 @@ internal sealed class BotUserDao
         if (botUpdateList.Count != 0)
         {
             _ = dbClient.Execute(
-                @"UPDATE bot_user 
-                SET x = @X, y = @Y, z = @Z, rotation = @Rotation 
+                @"UPDATE bot_user
+                SET x = @X, y = @Y, z = @Z, rotation = @Rotation
                 WHERE id = @Id",
                 botUpdateList);
         }
@@ -46,11 +46,11 @@ internal sealed class BotUserDao
         new { Look = look, Gender = gender, BotId = botId });
 
     internal static void UpdateChat(IDbConnection dbClient, int botId, bool automaticChat, int speakingInterval, bool mixChat, string chatText) => dbClient.Execute(
-        @"UPDATE bot_user 
-        SET chat_enabled = @AutomaticChat, 
-            chat_seconds = @SpeakingInterval, 
-            is_mixchat = @MixChat, 
-            chat_text = @ChatText 
+        @"UPDATE bot_user
+        SET chat_enabled = @AutomaticChat,
+            chat_seconds = @SpeakingInterval,
+            is_mixchat = @MixChat,
+            chat_text = @ChatText
         WHERE id = @BotId LIMIT 1",
         new
         {
@@ -74,6 +74,10 @@ internal sealed class BotUserDao
     internal static void UpdateName(IDbConnection dbClient, int botId, string name) => dbClient.Execute(
         "UPDATE bot_user SET name = @Name WHERE id = @BotId LIMIT 1",
         new { BotId = botId, Name = name });
+
+    internal static void UpdateMotto(IDbConnection dbClient, int botId, string motto) => dbClient.Execute(
+        "UPDATE bot_user SET motto = @Motto WHERE id = @BotId LIMIT 1",
+        new { BotId = botId, Motto = motto });
 
     internal static void UpdateRoomBot(IDbConnection dbClient, int roomId) => dbClient.Execute(
         "UPDATE `bot_user` SET room_id = '0' WHERE room_id = '" + roomId + "'");
@@ -103,8 +107,8 @@ internal sealed class BotUserDao
         "UPDATE `bot_user` SET status = '" + status + "' WHERE id = '" + botId + "'");
 
     internal static List<BotUserEntity> GetAllByRoomId(IDbConnection dbClient, int roomId) => dbClient.Query<BotUserEntity>(
-        @"SELECT `id`, `user_id`, `name`, `motto`, `gender`, `look`, `room_id`, `walk_enabled`, `x`, `y`, `z`, `rotation`, `chat_enabled`, `chat_text`, `chat_seconds`, `is_dancing`, `is_mixchat`, `status`, `enable`, `handitem`, `ai_type` 
-        FROM `bot_user` 
+        @"SELECT `id`, `user_id`, `name`, `motto`, `gender`, `look`, `room_id`, `walk_enabled`, `x`, `y`, `z`, `rotation`, `chat_enabled`, `chat_text`, `chat_seconds`, `is_dancing`, `is_mixchat`, `status`, `enable`, `handitem`, `ai_type`
+        FROM `bot_user`
         WHERE room_id = @RoomId",
         new { RoomId = roomId }
     ).ToList();
@@ -113,8 +117,8 @@ internal sealed class BotUserDao
         "DELETE FROM `bot_user` WHERE room_id = '0' AND user_id = '" + userId + "'");
 
     internal static List<BotUserEntity> GetAllByUserId(IDbConnection dbClient, int userId, int limit) => dbClient.Query<BotUserEntity>(
-        @"SELECT `id`, `user_id`, `name`, `motto`, `gender`, `look`, `room_id`, `walk_enabled`, `x`, `y`, `z`, `rotation`, `chat_enabled`, `chat_text`, `chat_seconds`, `is_dancing`, `is_mixchat`, `status`, `enable`, `handitem`, `ai_type` 
-        FROM `bot_user` 
+        @"SELECT `id`, `user_id`, `name`, `motto`, `gender`, `look`, `room_id`, `walk_enabled`, `x`, `y`, `z`, `rotation`, `chat_enabled`, `chat_text`, `chat_seconds`, `is_dancing`, `is_mixchat`, `status`, `enable`, `handitem`, `ai_type`
+        FROM `bot_user`
         WHERE user_id = @UserId AND room_id = '0' LIMIT @Limit;",
         new { UserId = userId, Limit = limit }
     ).ToList();

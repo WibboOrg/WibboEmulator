@@ -45,7 +45,7 @@ internal sealed class OpenBotActionEvent : IPacketEvent
         botSpeech += ";#;";
         botSpeech += botUser.BotData.MixSentences;
 
-        if (actionId is 2 or 5)
+        if (actionId is 2 or 5 or 9)
         {
             session.SendPacket(new OpenBotActionComposer(botUser, actionId, botSpeech));
         }

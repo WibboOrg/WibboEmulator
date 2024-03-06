@@ -62,8 +62,8 @@ internal sealed class UsersComposer : ServerPacket
                 this.WriteInteger(roomUser.BotData.OwnerId);
                 this.WriteString(roomUser.BotData.OwnerName);
 
-                //List<int> ActionIds = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 24, 25 };
-                var actionIds = new List<int>() { 1, 2, 3, 4, 5, 6 };
+                // var actionIds = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 24, 25 };
+                var actionIds = new List<int>() { 1, 2, 3, 4, 5, 6, 9 };
                 this.WriteInteger(actionIds.Count);
                 foreach (var id in actionIds)
                 {
