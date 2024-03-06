@@ -38,6 +38,10 @@ internal sealed class UserBadgeDao
         "DELETE FROM user_badge WHERE badge_id = @Badge AND user_id = @UserId LIMIT 1",
         new { Badge = badge, UserId = userId });
 
+    internal static List<UserBadgeEntity> GetAllProfil(IDbConnection dbClient, int userId) => dbClient.Query<UserBadgeEntity>(
+        "SELECT `user_id`, `badge_id`, `badge_slot` FROM `user_badge` WHERE user_id = '" + userId + "' AND badge_slot != '0'"
+    ).ToList();
+
     internal static List<UserBadgeEntity> GetAll(IDbConnection dbClient, int userId) => dbClient.Query<UserBadgeEntity>(
         "SELECT `user_id`, `badge_id`, `badge_slot` FROM `user_badge` WHERE user_id = '" + userId + "'"
     ).ToList();

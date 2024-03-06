@@ -15,7 +15,9 @@ public class MessengerComponent : IDisposable
     public Dictionary<int, Relationship> Relation { get; private set; }
     public bool AppearOffline { get; set; }
 
-    public int Count => this.Friends.Count;
+    public int Count => this._profilFriendCount > -1 ? this._profilFriendCount : this.Friends.Count;
+
+    private int _profilFriendCount;
 
     public MessengerComponent(User user)
     {
@@ -26,11 +28,11 @@ public class MessengerComponent : IDisposable
         this.Relation = new Dictionary<int, Relationship>();
     }
 
-    public void Initialize(IDbConnection dbClient, bool appearOffline)
+    public void Initialize(IDbConnection dbClient, bool appearOffline, bool onlyProfil = false)
     {
-        var frienShips = MessengerFriendshipDao.GetAllFriendShips(dbClient, this._userInstance.Id);
+        var frienShips = onlyProfil ? MessengerFriendshipDao.GetAllFriendRelations(dbClient, this._userInstance.Id) : MessengerFriendshipDao.GetAllFriendShips(dbClient, this._userInstance.Id);
 
-        var requests = MessengerRequestDao.GetAllFriendRequests(dbClient, this._userInstance.Id);
+        var requests = onlyProfil ? new List<MessengerRequestEntity>() : MessengerRequestDao.GetAllFriendRequests(dbClient, this._userInstance.Id);
 
         foreach (var friend in frienShips)
         {
@@ -62,6 +64,7 @@ public class MessengerComponent : IDisposable
             }
         }
 
+        this._profilFriendCount = onlyProfil ? MessengerFriendshipDao.GetCount(dbClient, this._userInstance.Id) : -1;
         this.AppearOffline = appearOffline;
     }
 

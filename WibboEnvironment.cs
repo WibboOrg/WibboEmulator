@@ -230,10 +230,12 @@ public static class WibboEnvironment
                 }
                 else
                 {
-                    var user = UserFactory.GetUserData(userId);
+                    using var dbClient = GetDatabaseManager().Connection();
+                    var user = UserFactory.GetUserData(dbClient, userId);
 
                     if (user != null)
                     {
+                        user.InitializeProfil(dbClient);
                         _ = UsersCached.TryAdd(userId, user);
                         return user;
                     }

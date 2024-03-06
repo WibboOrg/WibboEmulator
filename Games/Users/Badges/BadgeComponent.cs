@@ -12,6 +12,8 @@ public class BadgeComponent : IDisposable
 
     private int _virtualBadgeId;
 
+    public Dictionary<string, Badge> BadgeList { get; }
+
     public BadgeComponent(User user)
     {
         this._userInstance = user;
@@ -20,9 +22,9 @@ public class BadgeComponent : IDisposable
         this.BadgeList = new Dictionary<string, Badge>();
     }
 
-    public void Initialize(IDbConnection dbClient)
+    public void Initialize(IDbConnection dbClient, bool onlyProfil = false)
     {
-        var userBadgeList = UserBadgeDao.GetAll(dbClient, this._userInstance.Id);
+        var userBadgeList = onlyProfil ? UserBadgeDao.GetAllProfil(dbClient, this._userInstance.Id) : UserBadgeDao.GetAll(dbClient, this._userInstance.Id);
 
         foreach (var userBadge in userBadgeList)
         {
@@ -35,8 +37,6 @@ public class BadgeComponent : IDisposable
             }
         }
     }
-
-    public Dictionary<string, Badge> BadgeList { get; }
 
     public bool HasBadgeSlot(string badge) => this.BadgeList.TryGetValue(badge, out var value) && value.Slot > 0;
 

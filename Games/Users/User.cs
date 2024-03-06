@@ -237,6 +237,21 @@ public class User : IDisposable, IEquatable<User>
         this.OldChat = false;
     }
 
+    public void InitializeProfil(IDbConnection dbClient)
+    {
+        this.BadgeComponent = new BadgeComponent(this);
+        this.Messenger = new MessengerComponent(this);
+
+        this.BadgeComponent.Initialize(dbClient, true);
+        this.Messenger.Initialize(dbClient, this.HideOnline, true);
+
+        var guildMembershipList = GuildMembershipDao.GetAllByUserId(dbClient, this.Id);
+        foreach (var guildMembership in guildMembershipList)
+        {
+            this.MyGroups.Add(guildMembership);
+        }
+    }
+
     public void Initialize(IDbConnection dbClient, GameClient client)
     {
         this.Client = client;

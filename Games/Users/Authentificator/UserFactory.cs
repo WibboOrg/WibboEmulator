@@ -62,14 +62,13 @@ public class UserFactory
         return GenerateUser(user, dUserStats, isFirstConnexionToday, ignoreAllExpire);
     }
 
-    public static User GetUserData(int userId)
+    public static User GetUserData(IDbConnection dbClient, int userId)
     {
         if (WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId) != null)
         {
             return null;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         var dUserInfo = UserDao.GetOne(dbClient, userId);
         if (dUserInfo == null)
         {

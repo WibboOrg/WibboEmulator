@@ -1,6 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
-using WibboEmulator.Database.Daos.Messenger;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class OpenPlayerProfileEvent : IPacketEvent
@@ -26,11 +25,6 @@ internal sealed class OpenPlayerProfileEvent : IPacketEvent
         if (targetData.Messenger != null)
         {
             friendCount = targetData.Messenger.Count;
-        }
-        else
-        {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
-            friendCount = MessengerFriendshipDao.GetCount(dbClient, userId);
         }
 
         session.SendPacket(new ProfileInformationComposer(targetData, session, groups, friendCount));

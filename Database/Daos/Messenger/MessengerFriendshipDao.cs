@@ -23,10 +23,18 @@ internal sealed class MessengerFriendshipDao
         new { MyId = userId, FriendId = requestID }) != 0;
 
     internal static List<MessengerFriendshipEntity> GetAllFriendShips(IDbConnection dbClient, int userId) => dbClient.Query<MessengerFriendshipEntity>(
-        @"SELECT `user`.id, `user`.username, `messenger_friendship`.relation 
-        FROM `messenger_friendship` 
-        JOIN `user` ON `user`.id = `messenger_friendship`.user_two_id 
+        @"SELECT `user`.id, `user`.username, `messenger_friendship`.relation
+        FROM `messenger_friendship`
+        JOIN `user` ON `user`.id = `messenger_friendship`.user_two_id
         WHERE `messenger_friendship`.user_one_id = @UserId",
+        new { UserId = userId }
+    ).ToList();
+
+    internal static List<MessengerFriendshipEntity> GetAllFriendRelations(IDbConnection dbClient, int userId) => dbClient.Query<MessengerFriendshipEntity>(
+        @"SELECT `user`.id, `user`.username, `messenger_friendship`.relation
+        FROM `messenger_friendship`
+        JOIN `user` ON `user`.id = `messenger_friendship`.user_two_id
+        WHERE `messenger_friendship`.user_one_id = @UserId AND `messenger_friendship`.relation != 0",
         new { UserId = userId }
     ).ToList();
 }
