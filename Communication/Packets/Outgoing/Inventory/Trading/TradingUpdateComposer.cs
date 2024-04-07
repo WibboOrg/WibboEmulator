@@ -33,50 +33,17 @@ internal sealed class TradingUpdateComposer : ServerPacket
         this.WriteString(userItem.GetBaseItem().Type.ToString());
         this.WriteInteger(userItem.Id);
         this.WriteInteger(userItem.GetBaseItem().SpriteId);
-        this.WriteInteger(0);
-        if (userItem.Limited > 0)
-        {
-            this.WriteBoolean(false);
-            this.WriteInteger(256);
-            this.WriteString("");
-            this.WriteInteger(userItem.Limited);
-            this.WriteInteger(userItem.LimitedStack);
-        }
-        else if (userItem.GetBaseItem().InteractionType is InteractionType.BADGE_DISPLAY or InteractionType.BADGE_TROC)
-        {
-            this.WriteBoolean(false);
-            this.WriteInteger(2);
-            this.WriteInteger(4);
+        this.WriteInteger((int)userItem.Category);
 
-            if (userItem.ExtraData.Contains(Convert.ToChar(9).ToString()))
-            {
-                var badgeData = userItem.ExtraData.Split(Convert.ToChar(9));
+        this.WriteBoolean(userItem.GetBaseItem().AllowInventoryStack);
+        ItemBehaviourUtility.GenerateExtradata(userItem, this);
 
-                this.WriteString("0");//No idea
-                this.WriteString(badgeData[0]);//Badge name
-                this.WriteString(badgeData[1]);//Owner
-                this.WriteString(badgeData[2]);//Date
-            }
-            else
-            {
-                this.WriteString("0");//No idea
-                this.WriteString(userItem.ExtraData);//Badge name
-                this.WriteString("");//Owner
-                this.WriteString("");//Date
-            }
-        }
-        else
-        {
-            this.WriteBoolean(true);
-            this.WriteInteger(0);
-            this.WriteString("");
-        }
         this.WriteInteger(0);
         this.WriteInteger(0);
         this.WriteInteger(0);
         if (userItem.GetBaseItem().Type == ItemType.S)
         {
-            this.WriteInteger(0);
+            this.WriteInteger(userItem.Extra);
         }
     }
 }
