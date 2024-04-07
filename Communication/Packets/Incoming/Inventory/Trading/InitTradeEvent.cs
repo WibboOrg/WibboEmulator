@@ -46,18 +46,18 @@ internal sealed class InitTradeEvent : IPacketEvent
             return;
         }
 
-        if (room.RoomData.TrocStatus == 0)
+        if (room.RoomData.TrocStatus == 0 && !room.CheckRights(session, true) && !session.User.HasPermission("force_trade"))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.1", session.Langue));
             return;
         }
-        else if (room.RoomData.TrocStatus == 1 && !room.CheckRights(session))
+        else if (room.RoomData.TrocStatus == 1 && !room.CheckRights(session) && !session.User.HasPermission("force_trade"))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.2", session.Langue));
             return;
         }
 
-        if (!roomUserTarget.Client.User.AcceptTrading && session.User.Rank < 3)
+        if (!roomUserTarget.Client.User.AcceptTrading && !session.User.HasPermission("force_trade"))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.tradedisabled", session.Langue));
         }
