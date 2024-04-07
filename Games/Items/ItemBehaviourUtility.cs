@@ -80,16 +80,22 @@ internal static class ItemBehaviourUtility
                 message.WriteString((itemData.InteractionType is not InteractionType.TONER and not InteractionType.FOOTBALL_GATE) ? item.ExtraData : string.Empty);
                 break;
 
+            case InteractionType.TROC_BANNER:
+                if (!int.TryParse(item.ExtraData, out var bannerId) ||
+                !WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(bannerId, out var banner))
+                {
+                    message.WriteInteger((int)ObjectDataKey.LEGACY_KEY);
+                    message.WriteString(item.ExtraData);
+                    break;
+                }
+                message.WriteInteger((int)ObjectDataKey.NUMBER_KEY);
+                message.WriteInteger(2);
+                message.WriteInteger(banner.Id);
+                message.WriteInteger(banner.HaveLayer ? 1 : -1);
+                break;
+
             case InteractionType.WALLPAPER:
-                message.WriteInteger((int)ObjectDataKey.LEGACY_KEY);
-                message.WriteString(item.ExtraData);
-
-                break;
             case InteractionType.FLOOR:
-                message.WriteInteger((int)ObjectDataKey.LEGACY_KEY);
-                message.WriteString(item.ExtraData);
-                break;
-
             case InteractionType.LANDSCAPE:
                 message.WriteInteger((int)ObjectDataKey.LEGACY_KEY);
                 message.WriteString(item.ExtraData);
@@ -239,6 +245,19 @@ internal static class ItemBehaviourUtility
                 message.WriteInteger(3);
                 message.WriteString("MESSAGE");
                 message.WriteString($"Bravo tu as reçu une {premiumName} box ! Ouvre-là pour reçevoir 31 jours de premium");
+                message.WriteString("PURCHASER_NAME");
+                message.WriteString("");
+                message.WriteString("PURCHASER_FIGURE");
+                message.WriteString("");
+            }
+            break;
+
+            case InteractionType.GIFT_BANNER:
+            {
+                message.WriteInteger((int)ObjectDataKey.MAP_KEY);
+                message.WriteInteger(3);
+                message.WriteString("MESSAGE");
+                message.WriteString($"Bravo tu as reçu une bannière box ! Ouvre-là pour reçevoir 1 bannière trocable aléatoire");
                 message.WriteString("PURCHASER_NAME");
                 message.WriteString("");
                 message.WriteString("PURCHASER_FIGURE");
