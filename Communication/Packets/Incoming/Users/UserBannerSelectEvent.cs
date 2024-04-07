@@ -16,9 +16,7 @@ internal sealed class UserBannerSelectEvent : IPacketEvent
             return;
         }
 
-        var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(bannerId);
-
-        if (banner == null && bannerId != -1)
+        if (!WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(bannerId, out var banner))
         {
             return;
         }

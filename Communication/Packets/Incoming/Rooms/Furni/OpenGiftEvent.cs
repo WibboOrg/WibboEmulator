@@ -36,7 +36,7 @@ internal sealed class OpenGiftEvent : IPacketEvent
             return;
         }
 
-        if (present.GetBaseItem().InteractionType is InteractionType.PREMIUM_CLASSIC or InteractionType.PREMIUM_EPIC or InteractionType.PREMIUM_LEGEND)
+        if (present.GetBaseItem().InteractionType is InteractionType.GIFT_BANNER or InteractionType.PREMIUM_CLASSIC or InteractionType.PREMIUM_EPIC or InteractionType.PREMIUM_LEGEND)
         {
             present.Interactor.OnTrigger(session, present, -1, true, false);
         }

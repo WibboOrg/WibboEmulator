@@ -129,6 +129,7 @@ public class BadgeComponent : IDisposable
             { "WC_LEGEND", 593 },
             { "WC_EPIC", 592 },
             { "WC_CLASSIC", 591 },
+            { "WIBORGOFF", 607 },
         };
 
         var enableId = 0;

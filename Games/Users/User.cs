@@ -188,7 +188,7 @@ public class User : IDisposable, IEquatable<User>
         this.IsFirstConnexionToday = isFirstConnexionToday;
         this.Langue = langue;
         this.IgnoreAllExpireTime = ignoreAllExpire;
-        this.BannerSelected = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(bannerId);
+        this.BannerSelected = WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(bannerId, out var banner) ? banner : null;
 
         if (clientVolume.Contains(','))
         {

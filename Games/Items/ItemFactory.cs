@@ -116,6 +116,9 @@ public class ItemFactory
         InteractionType.EXCHANGE_TREE or InteractionType.EXCHANGE_TREE_CLASSIC or InteractionType.EXCHANGE_TREE_EPIC or InteractionType.EXCHANGE_TREE_LEGEND => new InteractorExchangeTree(),
         InteractionType.PREMIUM_CLASSIC or InteractionType.PREMIUM_EPIC or InteractionType.PREMIUM_LEGEND => new InteractorPremiumBox(),
         InteractionType.BANZAI_TELE => new InteractorBanzaiTele(),
+        InteractionType.BADGE_TROC => new InteractorBadgeTroc(),
+        InteractionType.TROC_BANNER => new InteractorBannerTroc(),
+        InteractionType.GIFT_BANNER => new InteractorBannerGift(),
         InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS => new InteractorGenericSwitch(2),
         _ => new InteractorGenericSwitch(item.GetBaseItem().Modes),
     };

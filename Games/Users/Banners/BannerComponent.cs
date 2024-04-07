@@ -25,9 +25,7 @@ public class BannerComponent : IDisposable
 
         foreach (var id in emulatorBannerIdList)
         {
-            var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(id);
-
-            if (!this.BannerList.Contains(banner))
+            if (WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(id, out var banner) && !this.BannerList.Contains(banner))
             {
                 this.BannerList.Add(banner);
             }
@@ -71,9 +69,7 @@ public class BannerComponent : IDisposable
 
     private void LoadBanner(int id)
     {
-        var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(id);
-
-        if (banner != null && !this.BannerList.Contains(banner))
+        if (WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(id, out var banner) && !this.BannerList.Contains(banner))
         {
             this.BannerList.Add(banner);
         }
@@ -81,9 +77,7 @@ public class BannerComponent : IDisposable
 
     public void AddBanner(IDbConnection dbClient, int id)
     {
-        var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(id);
-
-        if (banner != null && !this.BannerList.Contains(banner))
+        if (WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(id, out var banner) && !this.BannerList.Contains(banner))
         {
             this.BannerList.Add(banner);
 
@@ -96,9 +90,7 @@ public class BannerComponent : IDisposable
 
     public void RemoveBanner(IDbConnection dbClient, int id)
     {
-        var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(id);
-
-        if (this.BannerList.Contains(banner))
+        if (WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(id, out var banner) && this.BannerList.Contains(banner))
         {
             this.BannerList.Remove(banner);
 

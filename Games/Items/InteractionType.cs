@@ -176,6 +176,8 @@ public enum InteractionType
     NONE,
     GATE,
     GIFT,
+    GIFT_BANNER,
+    TROC_BANNER,
 
     HABBOWHEEL,
 

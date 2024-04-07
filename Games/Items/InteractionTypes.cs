@@ -129,6 +129,8 @@ public class InteractionTypes
         "wf_xtra_or_eval" => InteractionType.SPECIAL_OR_EVAL,
         "puzzlebox" => InteractionType.PUZZLE_BOX,
         "gift" => InteractionType.GIFT,
+        "gift_banner" => InteractionType.GIFT_BANNER,
+        "troc_banner" => InteractionType.TROC_BANNER,
         "extrabox" => InteractionType.EXTRA_BOX,
         "deluxebox" => InteractionType.DELUXE_BOX,
         "legendbox" => InteractionType.LEGEND_BOX,

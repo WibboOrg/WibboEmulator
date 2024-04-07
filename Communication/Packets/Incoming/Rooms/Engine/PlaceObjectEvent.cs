@@ -1,6 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
-using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
@@ -57,27 +56,6 @@ internal sealed class PlaceObjectEvent : IPacketEvent
         if (userItem.Data.IsRare && !room.CheckRights(session, true))
         {
             session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_trade_stuff}"));
-            return;
-        }
-
-        if (userItem.GetBaseItem().InteractionType == InteractionType.BADGE_TROC)
-        {
-            if (session.User.BadgeComponent.HasBadge(userItem.ExtraData))
-            {
-                session.SendNotification("Vous posséder déjà ce badge !");
-                return;
-            }
-
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
-            {
-                ItemDao.DeleteById(dbClient, itemId);
-            }
-
-            session.User.InventoryComponent.RemoveItem(itemId);
-
-            session.User.BadgeComponent.GiveBadge(userItem.ExtraData);
-
-            session.SendNotification("Vous avez reçu le badge: " + userItem.ExtraData + " !");
             return;
         }
 

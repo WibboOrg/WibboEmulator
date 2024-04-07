@@ -24,9 +24,7 @@ internal sealed class GiveBanner : IChatCommand
             return;
         }
 
-        var banner = WibboEnvironment.GetGame().GetBannerManager().GetBannerById(bannerId);
-
-        if (banner == null)
+        if (!WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(bannerId, out var banner))
         {
             return;
         }
@@ -38,5 +36,7 @@ internal sealed class GiveBanner : IChatCommand
 
         var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
         targetUser.User.Banner.AddBanner(dbClient, bannerId);
+
+        userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("command.givebanner.success", session.Langue));
     }
 }

@@ -22,11 +22,28 @@ public class BannerManager
 
         foreach (var emulatorBanner in emulatorBannerList)
         {
-            this._banners.Add(emulatorBanner.Id, new Banner(emulatorBanner.Id, emulatorBanner.HaveLayer));
+            this._banners.Add(emulatorBanner.Id, new Banner(emulatorBanner.Id, emulatorBanner.HaveLayer, emulatorBanner.CanTrade));
         }
+    }
+
+    public Banner GetOneRandomBanner()
+    {
+        if (!this._banners.Any())
+        {
+            return null;
+        }
+
+        var allBannerTrade = this._banners.Values.Where(x => x.CanTrade);
+
+        if (!allBannerTrade.Any())
+        {
+            return null;
+        }
+
+        return allBannerTrade.ElementAt(WibboEnvironment.GetRandomNumber(0, allBannerTrade.Count() - 1));
     }
 
     public List<Banner> GetBanners() => this._banners.Values.ToList();
 
-    public Banner GetBannerById(int id) => this._banners.TryGetValue(id, out var banner) ? banner : null;
+    public bool TryGetBannerById(int id, out Banner banner) => this._banners.TryGetValue(id, out banner);
 }
