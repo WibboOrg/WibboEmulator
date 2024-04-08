@@ -18,7 +18,7 @@ internal sealed class FurniListAddComposer : ServerPacket
         this.WriteBoolean(item.GetBaseItem().AllowEcotronRecycle);
         this.WriteBoolean(item.GetBaseItem().AllowTrade);
         this.WriteBoolean(item.Limited == 0 && item.GetBaseItem().AllowInventoryStack);
-        this.WriteBoolean(ItemUtility.IsRare(item));
+        this.WriteBoolean(ItemUtility.IsRare(item) && item.GetBaseItem().AllowMarketplaceSell);
         this.WriteInteger(-1);//Seconds to expiration.
         this.WriteBoolean(true);
         this.WriteInteger(-1);//Item RoomId

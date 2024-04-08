@@ -29,7 +29,7 @@ public class ItemData
     public int Amount { get; set; }
 
     public ItemData(int id, int sprite, string name, ItemType type, int width, int length, double height, bool stackable, bool walkable, bool isSeat,
-        bool allowRecycle, bool allowTrade, bool allowGift, bool allowInventoryStack, InteractionType interactionType, int modes,
+        bool allowRecycle, bool allowTrade, bool allowGift, bool allowInventoryStack, bool allowMarketplaceSell, InteractionType interactionType, int modes,
         string vendingIds, string adjustableHeights, int effectId, bool isRare, int rarityLevel, int amount)
     {
         this.Id = id;
@@ -46,6 +46,7 @@ public class ItemData
         this.AllowTrade = allowTrade;
         this.AllowGift = allowGift;
         this.AllowInventoryStack = allowInventoryStack;
+        this.AllowMarketplaceSell = allowMarketplaceSell;
         this.InteractionType = interactionType;
         this.Modes = modes;
         this.VendingIds = new List<int>();

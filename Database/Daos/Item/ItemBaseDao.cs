@@ -6,7 +6,7 @@ using Dapper;
 internal sealed class ItemBaseDao
 {
     internal static List<ItemBaseEntity> GetAll(IDbConnection dbClient) => dbClient.Query<ItemBaseEntity>(
-        @"SELECT id, sprite_id, item_name, type, width, length, stack_height, can_stack, is_walkable, can_sit, allow_recycle, allow_trade, allow_gift, allow_inventory_stack, interaction_type, interaction_modes_count, vending_ids, height_adjustable, effect_id, is_rare, rarity_level, item_stat.amount
+        @"SELECT id, sprite_id, item_name, type, width, length, stack_height, can_stack, is_walkable, can_sit, allow_recycle, allow_trade, allow_gift, allow_inventory_stack, allow_marketplace_sell, interaction_type, interaction_modes_count, vending_ids, height_adjustable, effect_id, is_rare, rarity_level, item_stat.amount
         FROM `item_base` 
         LEFT JOIN item_stat ON item_base.id = item_stat.base_id"
     ).ToList();

@@ -48,6 +48,7 @@ public class ItemDataManager
                     var allowTrade = itemBase.AllowTrade;
                     var allowGift = itemBase.AllowGift;
                     var allowInventoryStack = itemBase.AllowInventoryStack;
+                    var allowMarketplaceSell = itemBase.AllowMarketplaceSell;
                     var interactionType = InteractionTypes.GetTypeFromString(itemBase.InteractionType);
                     var cycleCount = itemBase.InteractionModesCount;
                     var vendingIDS = itemBase.VendingIds;
@@ -57,7 +58,7 @@ public class ItemDataManager
                     var rarityLevel = itemBase.RarityLevel;
                     var amount = itemBase.Amount ?? -1;
 
-                    var itemData = new ItemData(id, spriteID, itemName, type, width, length, height, allowStack, allowWalk, allowSit, allowRecycle, allowTrade, allowGift, allowInventoryStack, interactionType, cycleCount, vendingIDS, heightAdjustable, effectId, isRare, rarityLevel, amount);
+                    var itemData = new ItemData(id, spriteID, itemName, type, width, length, height, allowStack, allowWalk, allowSit, allowRecycle, allowTrade, allowGift, allowInventoryStack, allowMarketplaceSell, interactionType, cycleCount, vendingIDS, heightAdjustable, effectId, isRare, rarityLevel, amount);
 
                     if (!this._gifts.ContainsKey(spriteID) && interactionType == InteractionType.GIFT)
                     {

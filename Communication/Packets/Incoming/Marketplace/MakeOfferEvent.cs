@@ -22,7 +22,7 @@ internal sealed class MakeOfferEvent : IPacketEvent
             return;
         }
 
-        if (!ItemUtility.IsRare(item))
+        if (!ItemUtility.IsRare(item) || !item.GetBaseItem().AllowMarketplaceSell)
         {
             return;
         }
