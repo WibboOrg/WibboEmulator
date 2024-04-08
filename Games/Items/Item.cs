@@ -568,10 +568,11 @@ public class Item : IEquatable<Item>
         }
     }
 
-    public void ResetBaseItem()
+    public void ResetBaseItem(Room room)
     {
         this.Data = null;
         this.Data = this.GetBaseItem();
+        this._roomInstance = room;
 
         switch (this.GetBaseItem().InteractionType)
         {
@@ -622,6 +623,7 @@ public class Item : IEquatable<Item>
         }
 
         this.GetAffectedTiles = GameMap.GetAffectedTiles(this.GetBaseItem().Length, this.GetBaseItem().Width, this.X, this.Y, this.Rotation);
+        this.Interactor = ItemFactory.CreateInteractor(this);
     }
 
     public ItemData GetBaseItem()

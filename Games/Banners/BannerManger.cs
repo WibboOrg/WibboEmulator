@@ -33,14 +33,16 @@ public class BannerManager
             return null;
         }
 
-        var allBannerTrade = this._banners.Values.Where(x => x.CanTrade);
+        var addBannerLayer = WibboEnvironment.GetRandomNumber(0, 2) == 2;
+
+        var allBannerTrade = this._banners.Values.Where(x => (x.CanTrade && !x.HaveLayer) || (x.CanTrade && x.HaveLayer && addBannerLayer)).ToList();
 
         if (!allBannerTrade.Any())
         {
             return null;
         }
 
-        return allBannerTrade.ElementAt(WibboEnvironment.GetRandomNumber(0, allBannerTrade.Count() - 1));
+        return allBannerTrade.ElementAt(WibboEnvironment.GetRandomNumber(0, allBannerTrade.Count - 1));
     }
 
     public List<Banner> GetBanners() => this._banners.Values.ToList();

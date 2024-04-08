@@ -74,6 +74,19 @@ public static class ItemUtility
     {
         switch (item.Data.InteractionType)
         {
+            case InteractionType.TROC_BANNER:
+                if (!int.TryParse(extraData, out var bannerId))
+                {
+                    return false;
+                }
+
+                if (!WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(bannerId, out var banner))
+                {
+                    return false;
+                }
+
+                extraData = banner.Id.ToString();
+                break;
             case InteractionType.WIRED_ITEM:
             case InteractionType.NONE:
                 extraData = "";

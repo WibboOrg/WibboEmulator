@@ -297,7 +297,7 @@ internal static class ItemLootBox
         }
 
         present.BaseItem = lotData.Id;
-        present.ResetBaseItem();
+        present.ResetBaseItem(room);
 
         var itemIsInRoom = true;
 

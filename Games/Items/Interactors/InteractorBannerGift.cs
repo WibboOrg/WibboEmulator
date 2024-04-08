@@ -50,7 +50,7 @@ public class InteractorBannerGift : FurniInteractor
         ItemDao.UpdateBaseItemAndExtraData(dbClient, item.Id, bannerTrocData.Id, banner.Id.ToString());
 
         item.BaseItem = bannerTrocData.Id;
-        item.ResetBaseItem();
+        item.ResetBaseItem(room);
         item.ExtraData = banner.Id.ToString();
 
         var itemIsInRoom = true;

@@ -76,6 +76,7 @@ internal static class ItemBehaviourUtility
 
             case InteractionType.TROPHY:
             case InteractionType.PHOTO:
+            case InteractionType.BADGE_TROC:
                 message.WriteInteger(item.Limited > 0 ? (int)ObjectDataKey.UNIQUE_SET : (int)ObjectDataKey.LEGACY_KEY);
                 message.WriteString((itemData.InteractionType is not InteractionType.TONER and not InteractionType.FOOTBALL_GATE) ? item.ExtraData : string.Empty);
                 break;
@@ -334,7 +335,6 @@ internal static class ItemBehaviourUtility
                 break;
 
             case InteractionType.BADGE_DISPLAY:
-            case InteractionType.BADGE_TROC:
                 message.WriteInteger((int)ObjectDataKey.STRING_KEY);
                 message.WriteInteger(4);
 

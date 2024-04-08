@@ -103,7 +103,7 @@ internal sealed class OpenGiftEvent : IPacketEvent
         ItemPresentDao.Delete(dbClient, present.Id);
 
         present.BaseItem = itemPresent.BaseId;
-        present.ResetBaseItem();
+        present.ResetBaseItem(room);
         present.ExtraData = !string.IsNullOrEmpty(itemPresent.ExtraData) ? itemPresent.ExtraData : "";
 
         if (present.Data.Type == ItemType.S)
