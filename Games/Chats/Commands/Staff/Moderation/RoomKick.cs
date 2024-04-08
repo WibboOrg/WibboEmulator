@@ -34,7 +34,7 @@ internal sealed class RoomKick : IChatCommand
                 user.GoalY = room.GameMap.Model.DoorY;
             }
 
-            await Task.Delay(3000);
+            await Task.Delay(2500);
 
             foreach (var user in userKick)
             {
