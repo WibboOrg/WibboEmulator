@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Items.Interactors;
 
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 
@@ -36,7 +37,8 @@ public class InteractorBannerTroc : FurniInteractor
 
         if (!WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(bannerId, out var banner) || session.User.Banner.BannerList.Contains(banner))
         {
-            session.SendNotification("Vous possédez déjà cette bannière !");
+            //session.SendNotification("Vous possédez déjà cette bannière !");
+            session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous possèdez déjà cette bannière."));
             return;
         }
 

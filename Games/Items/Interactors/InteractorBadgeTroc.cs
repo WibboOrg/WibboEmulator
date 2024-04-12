@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Items.Interactors;
 
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 
@@ -31,7 +32,8 @@ public class InteractorBadgeTroc : FurniInteractor
 
         if (session.User.BadgeComponent.HasBadge(item.ExtraData))
         {
-            session.SendNotification("Vous posséder déjà ce badge !");
+            //session.SendNotification("Vous posséder déjà ce badge !");
+            session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous possèdez déjà ce badge."));
             return;
         }
 
