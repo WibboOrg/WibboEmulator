@@ -36,7 +36,7 @@ public class InteractorBannerTroc : FurniInteractor
 
         if (!WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(bannerId, out var banner) || session.User.Banner.BannerList.Contains(banner))
         {
-            session.SendNotification("Vous posséder déjà cette bannière !");
+            session.SendNotification("Vous possédez déjà cette bannière !");
             return;
         }
 
