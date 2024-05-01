@@ -128,6 +128,10 @@ internal sealed class PlaceObjectEvent : IPacketEvent
                     {
                         ItemLootBox.OpenBadgeBox(session, item, room);
                     }
+                    else if (item.GetBaseItem().InteractionType == InteractionType.GIFT_BANNER)
+                    {
+                        item.Interactor.OnTrigger(session, item, 0, true, false);
+                    }
                 }
 
                 WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FurniPlace, 0);
