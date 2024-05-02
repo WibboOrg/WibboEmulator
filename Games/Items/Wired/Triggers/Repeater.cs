@@ -12,7 +12,7 @@ public class Repeater : WiredTriggerBase, IWired, IWiredCycleable
 
     public Repeater(Item item, Room room) : base(item, room, (int)WiredTriggerType.TRIGGER_PERIODICALLY)
     {
-        this.DefaultIntParams(new int[] { 0 });
+        this.DefaultIntParams(0);
 
         this.Room.WiredHandler.RequestCycle(new WiredCycle(this, null, null));
     }

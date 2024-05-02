@@ -10,7 +10,7 @@ using WibboEmulator.Games.Rooms.AI;
 
 public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
 {
-    public BotTalkToAvatar(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_TALK_DIRECT_TO_AVTR) => this.DefaultIntParams(new int[] { 0 });
+    public BotTalkToAvatar(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_TALK_DIRECT_TO_AVTR) => this.DefaultIntParams(0);
 
     public override bool OnCycle(RoomUser user, Item item)
     {

@@ -12,7 +12,7 @@ public class Repeaterlong : WiredTriggerBase, IWired, IWiredCycleable
 
     public Repeaterlong(Item item, Room room) : base(item, room, (int)WiredTriggerType.TRIGGER_PERIODICALLY_LONG)
     {
-        this.DefaultIntParams(new int[] { 0 });
+        this.DefaultIntParams(0);
 
         this.Room.WiredHandler.RequestCycle(new WiredCycle(this, null, null));
     }

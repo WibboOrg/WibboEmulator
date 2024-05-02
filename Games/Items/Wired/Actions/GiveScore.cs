@@ -14,7 +14,7 @@ public class GiveScore : WiredActionBase, IWiredEffect, IWired
         this._currentGameCount = 0;
         this.Room.GameManager.OnGameStart += this.OnGameStart;
 
-        this.DefaultIntParams(new int[] { 1, 1 });
+        this.DefaultIntParams(1, 1);
     }
 
     private void OnGameStart(object sender, EventArgs e) => this._currentGameCount = 0;

@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 public class ActorNotInTeam : WiredConditionBase, IWiredCondition, IWired
 {
-    public ActorNotInTeam(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_ACTOR_IN_TEAM) => this.DefaultIntParams(new int[] { (int)TeamType.Red });
+    public ActorNotInTeam(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_ACTOR_IN_TEAM) => this.DefaultIntParams((int)TeamType.Red);
 
     public bool AllowsExecution(RoomUser user, Item item)
     {

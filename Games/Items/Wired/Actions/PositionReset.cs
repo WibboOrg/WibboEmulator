@@ -13,7 +13,7 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
     {
         this._itemsData = new Dictionary<int, ItemsPosReset>();
 
-        this.DefaultIntParams(new int[] { 0, 0, 0 });
+        this.DefaultIntParams(0, 0, 0);
     }
 
     public override void LoadItems(bool inDatabase = false)

@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class DateRangeActive : WiredConditionBase, IWiredCondition, IWired
 {
-    public DateRangeActive(Item item, Room room) : base(item, room, (int)WiredConditionType.DATE_RANGE_ACTIVE) => this.DefaultIntParams(new int[] { WibboEnvironment.GetUnixTimestamp(), WibboEnvironment.GetUnixTimestamp() });
+    public DateRangeActive(Item item, Room room) : base(item, room, (int)WiredConditionType.DATE_RANGE_ACTIVE) => this.DefaultIntParams(WibboEnvironment.GetUnixTimestamp(), WibboEnvironment.GetUnixTimestamp());
 
     public bool AllowsExecution(RoomUser user, Item item)
     {

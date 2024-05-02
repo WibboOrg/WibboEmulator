@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
 {
-    public ExecutePile(Item item, Room room) : base(item, room, (int)WiredActionType.CALL_ANOTHER_STACK) => this.DefaultIntParams(new int[] { 0 });
+    public ExecutePile(Item item, Room room) : base(item, room, (int)WiredActionType.CALL_ANOTHER_STACK) => this.DefaultIntParams(0);
 
     public override bool OnCycle(RoomUser user, Item item)
     {

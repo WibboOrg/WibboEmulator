@@ -8,7 +8,7 @@ using WibboEmulator.Games.Rooms.Map.Movement;
 
 public class MoveRotate : WiredActionBase, IWiredEffect, IWired
 {
-    public MoveRotate(Item item, Room room) : base(item, room, (int)WiredActionType.MOVE_FURNI) => this.DefaultIntParams(new int[] { 0, 0 });
+    public MoveRotate(Item item, Room room) : base(item, room, (int)WiredActionType.MOVE_FURNI) => this.DefaultIntParams(0, 0);
 
     public override bool OnCycle(RoomUser user, Item item)
     {

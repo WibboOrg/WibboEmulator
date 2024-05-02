@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class MoreThanTimer : WiredConditionBase, IWiredCondition, IWired
 {
-    public MoreThanTimer(Item item, Room room) : base(item, room, (int)WiredConditionType.TIME_ELAPSED_MORE) => this.DefaultIntParams(new int[] { 0 });
+    public MoreThanTimer(Item item, Room room) : base(item, room, (int)WiredConditionType.TIME_ELAPSED_MORE) => this.DefaultIntParams(0);
 
     public bool AllowsExecution(RoomUser user, Item item)
     {

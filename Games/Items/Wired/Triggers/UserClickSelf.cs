@@ -9,7 +9,7 @@ public class UserClickSelf : WiredTriggerBase, IWired
 {
     public UserClickSelf(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_CLICK)
     {
-        this.DefaultIntParams(new int[] { 1 });
+        this.DefaultIntParams(1);
 
         room.OnUserClickSelf += this.OnUserClick;
     }

@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class RoomUserNotCount : WiredConditionBase, IWiredCondition, IWired
 {
-    public RoomUserNotCount(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_USER_COUNT_IN) => this.DefaultIntParams(new int[] { 0, 0 });
+    public RoomUserNotCount(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_USER_COUNT_IN) => this.DefaultIntParams(0, 0);
 
     public bool AllowsExecution(RoomUser user, Item item)
     {

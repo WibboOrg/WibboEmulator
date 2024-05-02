@@ -11,7 +11,7 @@ public class ScoreAchieved : WiredTriggerBase, IWired
     {
         this.Room.GameManager.OnScoreChanged += this.OnScoreChanged;
 
-        this.DefaultIntParams(new int[] { 0 });
+        this.DefaultIntParams(0);
     }
 
     private void OnScoreChanged(object sender, TeamScoreChangedEventArgs e)

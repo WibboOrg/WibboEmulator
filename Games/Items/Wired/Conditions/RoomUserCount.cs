@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class RoomUserCount : WiredConditionBase, IWiredCondition, IWired
 {
-    public RoomUserCount(Item item, Room room) : base(item, room, (int)WiredConditionType.USER_COUNT_IN) => this.DefaultIntParams(new int[] { 0, 0 });
+    public RoomUserCount(Item item, Room room) : base(item, room, (int)WiredConditionType.USER_COUNT_IN) => this.DefaultIntParams(0, 0);
 
     public bool AllowsExecution(RoomUser user, Item item)
     {

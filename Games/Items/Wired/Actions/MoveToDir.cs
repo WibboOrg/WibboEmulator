@@ -14,7 +14,7 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
     {
         this._moveToDirMovement = MovementDirection.none;
 
-        this.DefaultIntParams(new int[] { 0, 0 });
+        this.DefaultIntParams(0, 0);
     }
 
     public override bool OnCycle(RoomUser user, Item item)

@@ -13,7 +13,7 @@ public class FurniStatePosMatchNegative : WiredConditionBase, IWiredCondition, I
     {
         this._itemsData = new Dictionary<int, ItemsPosReset>();
 
-        this.DefaultIntParams(new int[] { 0, 0, 0, 0, 1 });
+        this.DefaultIntParams(0, 0, 0, 0, 1);
     }
 
     public bool AllowsExecution(RoomUser user, Item item)

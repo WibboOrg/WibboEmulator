@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class CollisionCase : WiredActionBase, IWiredEffect, IWired
 {
-    public CollisionCase(Item item, Room room) : base(item, room, (int)WiredActionType.COLLISION_CASE) => this.DefaultIntParams(new int[] { 0 });
+    public CollisionCase(Item item, Room room) : base(item, room, (int)WiredActionType.COLLISION_CASE) => this.DefaultIntParams(0);
 
     public override bool OnCycle(RoomUser user, Item item)
     {

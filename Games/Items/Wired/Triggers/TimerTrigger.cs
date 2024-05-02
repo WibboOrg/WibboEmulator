@@ -16,7 +16,7 @@ public class TimerTrigger : WiredTriggerBase, IWired, IWiredCycleable
     {
         this.Room.WiredHandler.TrgTimer += this.OnResetTimer;
 
-        this.DefaultIntParams(new int[] { 0 });
+        this.DefaultIntParams(0);
     }
 
     public void OnResetTimer(object sender, EventArgs e)

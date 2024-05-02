@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class BotTalk : WiredActionBase, IWired, IWiredEffect
 {
-    public BotTalk(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_TALK) => this.DefaultIntParams(new int[] { 0 });
+    public BotTalk(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_TALK) => this.DefaultIntParams(0);
 
     public override bool OnCycle(RoomUser user, Item item)
     {

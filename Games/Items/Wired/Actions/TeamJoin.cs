@@ -8,7 +8,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 public class TeamJoin : WiredActionBase, IWired, IWiredEffect
 {
-    public TeamJoin(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM) => this.DefaultIntParams(new int[] { (int)TeamType.Red });
+    public TeamJoin(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM) => this.DefaultIntParams((int)TeamType.Red);
 
     public override bool OnCycle(RoomUser user, Item item)
     {

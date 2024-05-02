@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class HasFurniOnFurniNegative : WiredConditionBase, IWiredCondition, IWired
 {
-    public HasFurniOnFurniNegative(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_HAS_STACKED_FURNIS) => this.DefaultIntParams(new int[] { 1 });
+    public HasFurniOnFurniNegative(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_HAS_STACKED_FURNIS) => this.DefaultIntParams(1);
 
     public bool AllowsExecution(RoomUser user, Item item)
     {

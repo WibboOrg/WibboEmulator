@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class BotFollowAvatar : WiredActionBase, IWired, IWiredEffect
 {
-    public BotFollowAvatar(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_FOLLOW_AVATAR) => this.DefaultIntParams(new int[] { 0 });
+    public BotFollowAvatar(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_FOLLOW_AVATAR) => this.DefaultIntParams(0);
 
     public override bool OnCycle(RoomUser user, Item item)
     {

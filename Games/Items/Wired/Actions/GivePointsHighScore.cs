@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class GivePointsHighScore : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
 {
-    public GivePointsHighScore(Item item, Room room) : base(item, room, (int)WiredActionType.GIVE_POINTS_HIGHSCORE) => this.DefaultIntParams(new int[] { 0 });
+    public GivePointsHighScore(Item item, Room room) : base(item, room, (int)WiredActionType.GIVE_POINTS_HIGHSCORE) => this.DefaultIntParams(0);
 
     public override bool OnCycle(RoomUser user, Item item)
     {
