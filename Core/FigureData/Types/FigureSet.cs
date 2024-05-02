@@ -10,7 +10,7 @@ internal sealed class FigureSet
         this.Type = type;
         this.PalletId = palletId;
 
-        this.Sets = new Dictionary<int, Set>();
+        this.Sets = [];
     }
 
     public Dictionary<int, Set> Sets { get; set; }

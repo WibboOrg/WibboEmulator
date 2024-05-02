@@ -18,7 +18,7 @@ public class ProjectileManager
 
     public ProjectileManager(Room room)
     {
-        this._projectile = new List<ItemTemp>();
+        this._projectile = [];
         this._queueProjectile = new ConcurrentQueue<ItemTemp>();
         this._room = room;
         this._messages = new ServerPacketList();

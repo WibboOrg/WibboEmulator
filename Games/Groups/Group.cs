@@ -53,9 +53,9 @@ public class Group
         this.AdminOnlyDeco = adminOnlyDeco;
         this.ForumEnabled = false;
 
-        this._members = new List<int>();
-        this._requests = new List<int>();
-        this._administrators = new List<int>();
+        this._members = [];
+        this._requests = [];
+        this._administrators = [];
 
         this.InitMembers();
     }

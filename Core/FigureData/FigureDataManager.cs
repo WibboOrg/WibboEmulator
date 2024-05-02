@@ -6,9 +6,9 @@ using WibboEmulator.Core.Settings;
 
 public static class FigureDataManager
 {
-    private static readonly List<string> Requirements = new() { "hd", "ch", "lg" };
-    private static readonly Dictionary<int, Palette> Palettes = new();
-    private static readonly Dictionary<string, FigureSet> SetTypes = new();
+    private static readonly List<string> Requirements = ["hd", "ch", "lg"];
+    private static readonly Dictionary<int, Palette> Palettes = [];
+    private static readonly Dictionary<string, FigureSet> SetTypes = [];
 
     public static void Initialize()
     {

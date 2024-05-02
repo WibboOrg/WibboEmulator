@@ -44,10 +44,10 @@ public class WiredHandler
         this._requestingUpdates = new ConcurrentQueue<WiredCycle>();
         this._wiredUsed = new ConcurrentDictionary<Point, List<int>>();
 
-        this._specialRandom = new List<Point>();
-        this._specialAnimate = new List<Point>();
-        this._specialOrEval = new List<Point>();
-        this._specialUnseen = new Dictionary<Point, int>();
+        this._specialRandom = [];
+        this._specialAnimate = [];
+        this._specialOrEval = [];
+        this._specialUnseen = [];
         this._tickCounter = 0;
 
         this.SecurityEnabled = SettingsManager.GetData<bool>("wired.security.enable");
@@ -251,7 +251,7 @@ public class WiredHandler
             }
             else
             {
-                _ = this._wiredUsed.TryAdd(coordinate, new() { user?.VirtualId ?? 0 });
+                _ = this._wiredUsed.TryAdd(coordinate, [user?.VirtualId ?? 0]);
             }
         }
 

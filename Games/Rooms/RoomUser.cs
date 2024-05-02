@@ -174,19 +174,19 @@ public class RoomUser : IEquatable<RoomUser>
         this.RotHead = 0;
         this.RotBody = 0;
         this.UpdateNeeded = true;
-        this.Statusses = new Dictionary<string, string>();
+        this.Statusses = [];
         this.Room = room;
         this.AllowOverride = false;
         this.CanWalk = true;
         this.CurrentItemEffect = ItemEffectType.None;
         this.BreakWalkEnable = false;
         this.AllowShoot = false;
-        this.AllowBuyItems = new List<int>();
+        this.AllowBuyItems = [];
         this.IsDispose = false;
         this.AllowMoveTo = true;
         this.AllowArrowMove = true;
         this.AllowMouseMove = true;
-        this.WhiperGroupUsers = new List<string>();
+        this.WhiperGroupUsers = [];
 
         if (!this.IsBot)
         {

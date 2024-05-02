@@ -16,7 +16,7 @@ public static class WebSocketManager
 
     private static readonly ConcurrentDictionary<string, int> IpConnectionsCount = new();
     private static readonly ConcurrentDictionary<string, int> LastTimeConnection = new();
-    private static readonly List<string> BannedIp = new();
+    private static readonly List<string> BannedIp = [];
     private static List<string> _webSocketOrigins;
 
     public static void Initialize(int port, bool isSecure, List<string> webSocketOrigins)

@@ -16,7 +16,7 @@ public class Freeze
     public Freeze(Room room)
     {
         this._room = room;
-        this._freezeBlocks = new Dictionary<int, Item>();
+        this._freezeBlocks = [];
         this.IsGameActive = false;
     }
 

@@ -4,13 +4,13 @@ using WibboEmulator.Core.Settings;
 
 public static class BadgeManager
 {
-    private static readonly List<string> DisallowedBadgePrefixes = new()
-    {
+    private static readonly List<string> DisallowedBadgePrefixes =
+    [
         "MRUN",
         "WORLDRUNSAVE",
         "ACH_"
-    };
-    private static readonly List<string> NotAllowed = new();
+    ];
+    private static readonly List<string> NotAllowed = [];
 
     public static void Initialize()
     {

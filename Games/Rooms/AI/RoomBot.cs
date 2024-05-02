@@ -65,7 +65,7 @@ public class RoomBot
         this.Handitem = handitemId;
         this.Status = status;
 
-        this.RandomSpeech = new List<string>();
+        this.RandomSpeech = [];
 
         this.LoadRandomSpeech(this.ChatText);
     }

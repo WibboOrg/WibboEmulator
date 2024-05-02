@@ -10,7 +10,7 @@ public class RPTrocUser
     public RPTrocUser(int userId)
     {
         this.UserId = userId;
-        this.ItemIds = new Dictionary<int, int>();
+        this.ItemIds = [];
         this.Accepted = false;
         this.Confirmed = false;
     }

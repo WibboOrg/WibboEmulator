@@ -52,7 +52,7 @@ public class GameMap
         }
         else
         {
-            _ = this._userMap.TryAdd(coord, new List<RoomUser>() { user });
+            _ = this._userMap.TryAdd(coord, [user]);
         }
         if (this.ValidTile(coord.X, coord.Y))
         {
@@ -147,7 +147,7 @@ public class GameMap
         }
         else
         {
-            return new List<RoomUser>();
+            return [];
         }
     }
 
@@ -376,7 +376,7 @@ public class GameMap
     {
         if (!this.CoordinatedItems.TryGetValue(coord, out var items))
         {
-            _ = this.CoordinatedItems.TryAdd(coord, new List<Item>() { item });
+            _ = this.CoordinatedItems.TryAdd(coord, [item]);
         }
         else
         {
@@ -399,7 +399,7 @@ public class GameMap
         }
         else
         {
-            return new List<Item>();
+            return [];
         }
     }
 

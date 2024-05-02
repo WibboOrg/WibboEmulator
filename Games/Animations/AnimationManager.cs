@@ -17,7 +17,7 @@ public static class AnimationManager
     private static readonly TimeSpan CloseTime = TimeSpan.FromMinutes(1);
 
     private static DateTime _animationTime = DateTime.Now;
-    private static List<int> _roomId = new();
+    private static List<int> _roomId = [];
     private static bool _started;
     private static int _roomIdGame;
 

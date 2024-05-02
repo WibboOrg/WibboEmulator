@@ -11,7 +11,7 @@ using WibboEmulator.Games.Users.Achievements;
 
 public static class AchievementManager
 {
-    private static readonly Dictionary<string, AchievementData> Achievements = new();
+    private static readonly Dictionary<string, AchievementData> Achievements = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

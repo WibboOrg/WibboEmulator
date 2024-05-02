@@ -62,7 +62,7 @@ public class RoomData
         this.UsersMax = 0;
         this.ModelName = "model_a";
         this.Score = 0;
-        this.Tags = new List<string>();
+        this.Tags = [];
         this.AllowPets = true;
         this.AllowPetsEating = false;
         this.AllowWalkthrough = true;
@@ -112,7 +112,7 @@ public class RoomData
         this.UsersMax = room.UsersMax;
         this.ModelName = room.ModelName;
         this.Score = room.Score;
-        this.Tags = new List<string>();
+        this.Tags = [];
         this.AllowPets = room.AllowPets;
         this.AllowPetsEating = room.AllowPetsEat;
         this.AllowWalkthrough = room.AllowWalkthrough;

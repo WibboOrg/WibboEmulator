@@ -68,7 +68,7 @@ internal sealed class ChunkStream
         this.Headers = headers;
 
         this._chunkSize = -1;
-        this._chunks = new List<Chunk>();
+        this._chunks = [];
         this._saved = new StringBuilder();
     }
 

@@ -4,7 +4,7 @@ using WibboEmulator.Utilities;
 
 public static class HelpManager
 {
-    public static Dictionary<int, bool> GuidesOnDuty { get; set; } = new();
+    public static Dictionary<int, bool> GuidesOnDuty { get; set; } = [];
 
     public static int Count => GuidesOnDuty.Count;
 

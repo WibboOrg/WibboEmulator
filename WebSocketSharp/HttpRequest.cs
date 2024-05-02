@@ -68,7 +68,7 @@ internal sealed class HttpRequest : HttpBase
     #region Internal Constructors
 
     internal HttpRequest(string method, string target)
-      : this(method, target, HttpVersion.Version11, new NameValueCollection()) => this.Headers["User-Agent"] = "websocket-sharp/1.0";
+      : this(method, target, HttpVersion.Version11, []) => this.Headers["User-Agent"] = "websocket-sharp/1.0";
 
     #endregion
 

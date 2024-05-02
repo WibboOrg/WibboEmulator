@@ -28,7 +28,7 @@ public class GameClient
         this.Connection = connection;
         this.Language = Language.French;
 
-        this._packetTimeout = new Dictionary<int, double>();
+        this._packetTimeout = [];
         this._packetCount = 0;
         this._packetLastTimestamp = UnixTimestamp.GetNow();
     }

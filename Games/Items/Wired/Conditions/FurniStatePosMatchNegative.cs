@@ -11,7 +11,7 @@ public class FurniStatePosMatchNegative : WiredConditionBase, IWiredCondition, I
 
     public FurniStatePosMatchNegative(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_STATES_MATCH)
     {
-        this._itemsData = new Dictionary<int, ItemsPosReset>();
+        this._itemsData = [];
 
         this.DefaultIntParams(0, 0, 0, 0, 1);
     }

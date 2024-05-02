@@ -4,7 +4,7 @@ using WibboEmulator.Database.Daos.Emulator;
 
 public static class EffectManager
 {
-    private static Dictionary<int, bool> Effects { get; } = new();
+    private static Dictionary<int, bool> Effects { get; } = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

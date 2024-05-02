@@ -4,9 +4,9 @@ using WibboEmulator.Database.Daos.Emulator;
 
 public static class LanguageManager
 {
-    private static readonly Dictionary<string, string> ValuesFr = new();
-    private static readonly Dictionary<string, string> ValuesEn = new();
-    private static readonly Dictionary<string, string> ValuesBr = new();
+    private static readonly Dictionary<string, string> ValuesFr = [];
+    private static readonly Dictionary<string, string> ValuesEn = [];
+    private static readonly Dictionary<string, string> ValuesBr = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

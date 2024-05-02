@@ -4,7 +4,7 @@ using WibboEmulator.Database.Daos.Emulator;
 
 public static class LandingViewManager
 {
-    public static List<Promotion> HotelViewPromosIndexers { get; private set; } = new();
+    public static List<Promotion> HotelViewPromosIndexers { get; private set; } = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

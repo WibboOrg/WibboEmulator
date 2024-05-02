@@ -4,7 +4,7 @@ using WibboEmulator.Database.Daos.Log;
 
 public class ChatlogManager
 {
-    public ChatlogManager() => this.ListOfMessages = new List<ChatlogEntry>();
+    public ChatlogManager() => this.ListOfMessages = [];
 
     public void LoadUserChatlogs(IDbConnection dbClient, int userId)
     {

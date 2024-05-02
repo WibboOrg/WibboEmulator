@@ -4,7 +4,7 @@ using WibboEmulator.Database.Daos.Catalog;
 
 public static class VoucherManager
 {
-    private static readonly Dictionary<string, Voucher> Vouchers = new();
+    private static readonly Dictionary<string, Voucher> Vouchers = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

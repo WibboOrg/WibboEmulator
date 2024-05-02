@@ -25,16 +25,16 @@ public class MessengerComponent : IDisposable
     {
         this._user = user;
 
-        this.Requests = new Dictionary<int, MessengerRequest>();
-        this.Friends = new Dictionary<int, MessengerBuddy>();
-        this.Relation = new Dictionary<int, Relationship>();
+        this.Requests = [];
+        this.Friends = [];
+        this.Relation = [];
     }
 
     public void Initialize(IDbConnection dbClient, bool appearOffline, bool onlyProfil = false)
     {
         var frienShips = onlyProfil ? MessengerFriendshipDao.GetAllFriendRelations(dbClient, this._user.Id) : MessengerFriendshipDao.GetAllFriendShips(dbClient, this._user.Id);
 
-        var requests = onlyProfil ? new List<MessengerRequestEntity>() : MessengerRequestDao.GetAllFriendRequests(dbClient, this._user.Id);
+        var requests = onlyProfil ? [] : MessengerRequestDao.GetAllFriendRequests(dbClient, this._user.Id);
 
         foreach (var friend in frienShips)
         {

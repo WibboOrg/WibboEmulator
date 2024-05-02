@@ -52,8 +52,8 @@ using WibboEmulator.Games.GameClients;
 
 public static class PacketManager
 {
-    private static readonly Dictionary<int, IPacketEvent> IncomingPackets = new();
-    private static readonly List<int> HandshakePacketIds = new() { ClientPacketHeader.RELEASE_VERSION, ClientPacketHeader.SECURITY_TICKET, ClientPacketHeader.CLIENT_PONG };
+    private static readonly Dictionary<int, IPacketEvent> IncomingPackets = [];
+    private static readonly List<int> HandshakePacketIds = [ClientPacketHeader.RELEASE_VERSION, ClientPacketHeader.SECURITY_TICKET, ClientPacketHeader.CLIENT_PONG];
 
     private static readonly TimeSpan MaximumRunTimeInSec = TimeSpan.FromSeconds(5);
 

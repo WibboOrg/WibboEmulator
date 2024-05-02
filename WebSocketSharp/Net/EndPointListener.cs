@@ -113,8 +113,8 @@ internal sealed class EndPointListener : IDisposable
             };
         }
 
-        this._prefixes = new List<HttpListenerPrefix>();
-        this._connections = new Dictionary<HttpConnection, HttpConnection>();
+        this._prefixes = [];
+        this._connections = [];
         this._connectionsSync = ((ICollection)this._connections).SyncRoot;
 
         this._socket = new Socket(
@@ -493,7 +493,7 @@ internal sealed class EndPointListener : IDisposable
                 current = this._unhandled;
                 future = current != null
                          ? new List<HttpListenerPrefix>(current)
-                         : new List<HttpListenerPrefix>();
+                         : [];
 
                 AddSpecial(future, prefix);
             }
@@ -511,7 +511,7 @@ internal sealed class EndPointListener : IDisposable
                 current = this._all;
                 future = current != null
                          ? new List<HttpListenerPrefix>(current)
-                         : new List<HttpListenerPrefix>();
+                         : [];
 
                 AddSpecial(future, prefix);
             }

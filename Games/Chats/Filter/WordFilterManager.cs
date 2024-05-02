@@ -7,8 +7,8 @@ using WibboEmulator.Database.Daos.Room;
 
 public static partial class WordFilterManager
 {
-    private static readonly List<string> FilteredWords = new();
-    private static readonly List<string> PubWords = new();
+    private static readonly List<string> FilteredWords = [];
+    private static readonly List<string> PubWords = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

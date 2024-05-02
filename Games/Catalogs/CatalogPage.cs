@@ -44,31 +44,31 @@ public class CatalogPage
 
         foreach (var str in pageStrings1.Split('|'))
         {
-            this.PageStrings1 ??= new List<string>();
+            this.PageStrings1 ??= [];
             this.PageStrings1.Add(str);
         }
 
         foreach (var str in pageStrings2.Split('|'))
         {
-            this._pageStrings2 ??= new List<string>();
+            this._pageStrings2 ??= [];
             this._pageStrings2.Add(str);
         }
 
         foreach (var str in pageStrings2En.Split('|'))
         {
-            this._pageStrings2En ??= new List<string>();
+            this._pageStrings2En ??= [];
             this._pageStrings2En.Add(str);
         }
 
         foreach (var str in pageStrings2Br.Split('|'))
         {
-            this._pageStrings2Br ??= new List<string>();
+            this._pageStrings2Br ??= [];
             this._pageStrings2Br.Add(str);
         }
 
         this.Items = items;
 
-        this.ItemOffers = new Dictionary<int, CatalogItem>();
+        this.ItemOffers = [];
         if (template.StartsWith("default_3x3"))
         {
             foreach (var item in this.Items.Values)

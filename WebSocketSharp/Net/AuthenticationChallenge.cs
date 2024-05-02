@@ -45,7 +45,7 @@ internal sealed class AuthenticationChallenge : AuthenticationBase
     #region Internal Constructors
 
     internal AuthenticationChallenge(AuthenticationSchemes scheme, string realm)
-      : base(scheme, new NameValueCollection())
+      : base(scheme, [])
     {
         this.Parameters["realm"] = realm;
         if (scheme == AuthenticationSchemes.Digest)

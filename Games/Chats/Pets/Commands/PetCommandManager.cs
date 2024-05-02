@@ -4,7 +4,7 @@ using WibboEmulator.Database.Daos.Emulator;
 
 public static class PetCommandManager
 {
-    private static readonly Dictionary<string, PetCommand> PetCommands = new();
+    private static readonly Dictionary<string, PetCommand> PetCommands = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

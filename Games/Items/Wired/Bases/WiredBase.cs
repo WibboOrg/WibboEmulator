@@ -29,7 +29,7 @@ public class WiredBase
 
     internal WiredBase(Item item, Room room, int type)
     {
-        this.Items = new List<Item>();
+        this.Items = [];
         this.Item = item;
         this.Room = room;
         this.Type = type;
@@ -39,11 +39,11 @@ public class WiredBase
 
         this.StuffTypeSelectionEnabled = false;
         this.FurniLimit = SettingsManager.GetData<int>("wired.furni.limit");
-        this.StuffIds = new List<int>();
+        this.StuffIds = [];
         this.StringParam = "";
-        this.IntParams = new List<int>();
+        this.IntParams = [];
         this.StuffTypeSelectionCode = 0;
-        this.Conflicting = new List<int>();
+        this.Conflicting = [];
         this.Delay = 0;
 
         this.IsStaff = false;

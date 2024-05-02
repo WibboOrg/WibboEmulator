@@ -5,11 +5,11 @@ using WibboEmulator.Communication.Interfaces;
 public class ServerPacket : IServerPacket
 {
     private readonly Encoding _encoding = Encoding.UTF8;
-    private readonly List<byte> _body = new();
+    private readonly List<byte> _body = [];
 
     public ServerPacket(int header)
     {
-        this._body = new List<byte>();
+        this._body = [];
         this.WriteShort(header);
     }
 

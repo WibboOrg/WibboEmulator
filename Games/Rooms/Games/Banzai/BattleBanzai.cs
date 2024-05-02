@@ -22,7 +22,7 @@ public class BattleBanzai
 
     public BattleBanzai(Room room)
     {
-        this.BanzaiTiles = new Dictionary<int, Item>();
+        this.BanzaiTiles = [];
 
         this._room = room;
         this._banzaiStarted = false;

@@ -59,7 +59,7 @@ public class WebSocketServiceManager
     {
         this._log = log;
 
-        this._hosts = new Dictionary<string, WebSocketServiceHost>();
+        this._hosts = [];
         this._keepClean = true;
         this._state = ServerState.Ready;
         this._sync = ((ICollection)this._hosts).SyncRoot;

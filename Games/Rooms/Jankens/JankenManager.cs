@@ -11,7 +11,7 @@ public class JankenManager
     public JankenManager(Room room)
     {
         this._party = new ConcurrentDictionary<int, Janken>();
-        this._remove = new List<Janken>();
+        this._remove = [];
         this._room = room;
     }
 

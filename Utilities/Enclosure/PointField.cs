@@ -18,7 +18,7 @@ public class PointField
 
     public PointField(byte forValue)
     {
-        this._pointList = new List<Point>();
+        this._pointList = [];
         this.ForValue = forValue;
     }
 

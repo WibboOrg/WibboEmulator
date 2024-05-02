@@ -49,8 +49,8 @@ public class RoomItemHandling
         this._roomItemUpdateQueue = new ConcurrentQueue<Item>();
         this._rollerCycle = 0;
         this._rollerSpeed = 4;
-        this._rollerItemsMoved = new List<int>();
-        this._rollerUsersMoved = new List<int>();
+        this._rollerItemsMoved = [];
+        this._rollerUsersMoved = [];
         this._rollerMessages = new ServerPacketList();
     }
 

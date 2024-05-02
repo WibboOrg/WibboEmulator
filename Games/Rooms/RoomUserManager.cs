@@ -50,7 +50,7 @@ public class RoomUserManager
         this._bots = new ConcurrentDictionary<int, RoomUser>();
         this._usersByUsername = new ConcurrentDictionary<string, RoomUser>();
         this._usersByUserID = new ConcurrentDictionary<int, RoomUser>();
-        this._staffIds = new List<int>();
+        this._staffIds = [];
         this._primaryPrivateUserID = 1;
     }
 

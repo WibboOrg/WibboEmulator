@@ -15,7 +15,7 @@ internal sealed class Set
         this.ClubLevel = clubLevel;
         this.Colorable = colorable;
 
-        this.Parts = new Dictionary<string, Part>();
+        this.Parts = [];
     }
 
 }

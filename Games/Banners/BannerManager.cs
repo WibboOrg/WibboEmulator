@@ -6,7 +6,7 @@ using WibboEmulator.Utilities;
 
 public static class BannerManager
 {
-    private static readonly Dictionary<int, Banner> BannerList = new();
+    private static readonly Dictionary<int, Banner> BannerList = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

@@ -202,7 +202,7 @@ public class Item : IEquatable<Item>
             this.LimitedStack = limitedStack;
             this.Data = data;
             this.WallCoord = wallCoord;
-            this.Scores = new Dictionary<string, int>();
+            this.Scores = [];
             this.EffectId = this.Data.EffectId;
 
             if (this.ItemData == null)

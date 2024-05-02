@@ -12,7 +12,7 @@ public class WardrobeComponent : IDisposable
     public WardrobeComponent(User user)
     {
         this._user = user;
-        this.Wardrobes = new Dictionary<int, Wardrobe>();
+        this.Wardrobes = [];
     }
 
     public void Initialize(IDbConnection dbClient)

@@ -4,8 +4,8 @@ using WibboEmulator.Database.Daos.Emulator;
 
 public static class PermissionManager
 {
-    private static readonly Dictionary<string, int> Rights = new();
-    private static readonly Dictionary<string, PermissionCommand> Commands = new();
+    private static readonly Dictionary<string, int> Rights = [];
+    private static readonly Dictionary<string, PermissionCommand> Commands = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

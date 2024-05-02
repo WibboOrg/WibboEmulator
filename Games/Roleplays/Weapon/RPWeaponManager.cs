@@ -5,8 +5,8 @@ using WibboEmulator.Utilities;
 
 public static class RPWeaponManager
 {
-    private static readonly Dictionary<int, RPWeapon> WeaponCac = new();
-    private static readonly Dictionary<int, RPWeapon> WeaponGun = new();
+    private static readonly Dictionary<int, RPWeapon> WeaponCac = [];
+    private static readonly Dictionary<int, RPWeapon> WeaponGun = [];
 
     public static RPWeapon GetWeaponCac(int id)
     {

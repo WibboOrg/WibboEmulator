@@ -4,7 +4,7 @@ using WibboEmulator.Database.Daos.Emulator;
 
 public static class ChatStyleManager
 {
-    private static readonly Dictionary<int, ChatStyle> Styles = new();
+    private static readonly Dictionary<int, ChatStyle> Styles = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

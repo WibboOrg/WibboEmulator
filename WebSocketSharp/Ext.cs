@@ -451,7 +451,7 @@ public static class Ext
 
         return val != null
                ? CookieCollection.Parse(val, response)
-               : new CookieCollection();
+               : [];
     }
 
     internal static string GetDnsSafeHost(this Uri uri, bool bracketIPv6) => bracketIPv6 && uri.HostNameType == UriHostNameType.IPv6

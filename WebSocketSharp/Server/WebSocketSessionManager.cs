@@ -73,7 +73,7 @@ public class WebSocketSessionManager : IDisposable
 
         this._forSweep = new object();
         this._keepClean = true;
-        this._sessions = new Dictionary<string, IWebSocketSession>();
+        this._sessions = [];
         this._state = ServerState.Ready;
         this._sync = ((ICollection)this._sessions).SyncRoot;
         this._waitTime = TimeSpan.FromSeconds(1);

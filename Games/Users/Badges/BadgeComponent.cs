@@ -19,7 +19,7 @@ public class BadgeComponent : IDisposable
         this._user = user;
         this.BadgeMaxCount = SettingsManager.GetData<int>("badge.max.count");
         this._virtualBadgeId = 0;
-        this.BadgeList = new Dictionary<string, Badge>();
+        this.BadgeList = [];
     }
 
     public void Initialize(IDbConnection dbClient, bool onlyProfil = false)

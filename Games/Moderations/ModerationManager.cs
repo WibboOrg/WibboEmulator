@@ -13,16 +13,16 @@ using WibboEmulator.Games.Rooms;
 
 public static class ModerationManager
 {
-    public static List<string> UserMessagePresets { get; } = new();
-    public static List<ModerationTicket> Tickets { get; } = new();
-    public static List<string> RoomMessagePresets { get; } = new();
+    public static List<string> UserMessagePresets { get; } = [];
+    public static List<ModerationTicket> Tickets { get; } = [];
+    public static List<string> RoomMessagePresets { get; } = [];
 
-    private static readonly List<ModerationPresetActionMessages> TicketResolution1 = new();
-    private static readonly List<ModerationPresetActionMessages> TicketResolution2 = new();
+    private static readonly List<ModerationPresetActionMessages> TicketResolution1 = [];
+    private static readonly List<ModerationPresetActionMessages> TicketResolution2 = [];
 
-    private static readonly Dictionary<int, string> ModerationCFHTopics = new();
+    private static readonly Dictionary<int, string> ModerationCFHTopics = [];
 
-    private static readonly Dictionary<int, List<ModerationPresetActions>> ModerationCFHTopicActions = new();
+    private static readonly Dictionary<int, List<ModerationPresetActions>> ModerationCFHTopicActions = [];
 
     public static void Initialize(IDbConnection dbClient)
     {
@@ -39,7 +39,7 @@ public static class ModerationManager
             var result = new Dictionary<string, List<ModerationPresetActions>>();
             foreach (var category in ModerationCFHTopics.ToList())
             {
-                result.Add(category.Value, new List<ModerationPresetActions>());
+                result.Add(category.Value, []);
 
                 if (ModerationCFHTopicActions.TryGetValue(category.Key, out var value))
                 {
@@ -76,7 +76,7 @@ public static class ModerationManager
             {
                 if (!ModerationCFHTopicActions.ContainsKey(topicAction.ParentId))
                 {
-                    ModerationCFHTopicActions.Add(topicAction.ParentId, new List<ModerationPresetActions>());
+                    ModerationCFHTopicActions.Add(topicAction.ParentId, []);
                 }
 
                 ModerationCFHTopicActions[topicAction.ParentId].Add(new ModerationPresetActions(topicAction.Id, topicAction.ParentId, topicAction.Type, topicAction.Caption, topicAction.MessageText,

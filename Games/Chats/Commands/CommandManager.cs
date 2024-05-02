@@ -23,9 +23,9 @@ using WibboEmulator.Games.Rooms;
 
 public static class CommandManager
 {
-    private static readonly Dictionary<string, AuthorizationCommands> CommandRegisterInvokeable = new();
-    private static readonly Dictionary<string, string> ListCommande = new();
-    private static readonly Dictionary<int, IChatCommand> Commands = new();
+    private static readonly Dictionary<string, AuthorizationCommands> CommandRegisterInvokeable = [];
+    private static readonly Dictionary<string, string> ListCommande = [];
+    private static readonly Dictionary<int, IChatCommand> Commands = [];
     private static readonly string Prefix = ":";
 
     public static void Initialize(IDbConnection dbClient)

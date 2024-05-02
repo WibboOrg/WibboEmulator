@@ -12,7 +12,7 @@ public static class RoomManager
     private static readonly object RoomLoadingSync = new();
 
     private static readonly ConcurrentDictionary<int, Room> Rooms = new();
-    private static readonly Dictionary<string, RoomModel> RoomModels = new();
+    private static readonly Dictionary<string, RoomModel> RoomModels = [];
     private static readonly ConcurrentDictionary<int, RoomData> RoomsData = new();
 
     public static int Count => Rooms.Count;

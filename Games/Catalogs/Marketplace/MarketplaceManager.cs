@@ -5,10 +5,10 @@ using WibboEmulator.Database.Daos.Catalog;
 
 public static class MarketplaceManager
 {
-    public static List<int> MarketItemKeys { get; set; } = new();
-    public static List<MarketOffer> MarketItems { get; set; } = new();
-    public static Dictionary<int, int> MarketCounts { get; set; } = new();
-    public static Dictionary<int, int> MarketAverages { get; set; } = new();
+    public static List<int> MarketItemKeys { get; set; } = [];
+    public static List<MarketOffer> MarketItems { get; set; } = [];
+    public static Dictionary<int, int> MarketCounts { get; set; } = [];
+    public static Dictionary<int, int> MarketAverages { get; set; } = [];
 
     public static int AvgPriceForSprite(int spriteID)
     {

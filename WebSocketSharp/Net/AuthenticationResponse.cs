@@ -59,7 +59,7 @@ internal sealed class AuthenticationResponse : AuthenticationBase
     #region Internal Constructors
 
     internal AuthenticationResponse(NetworkCredential credentials)
-      : this(AuthenticationSchemes.Basic, new NameValueCollection(), credentials, 0)
+      : this(AuthenticationSchemes.Basic, [], credentials, 0)
     {
     }
 

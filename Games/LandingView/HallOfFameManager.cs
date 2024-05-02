@@ -12,7 +12,7 @@ public static class HallOfFameManager
 {
     private static readonly int MAX_USERS = 10;
     private static DateTime _lastUpdate = DateTime.UnixEpoch.AddSeconds(SettingsManager.GetData<int>("hof.lastupdate"));
-    public static List<User> UserRanking { get; private set; } = new();
+    public static List<User> UserRanking { get; private set; } = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

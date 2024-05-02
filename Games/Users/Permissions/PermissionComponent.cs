@@ -7,8 +7,8 @@ public sealed class PermissionComponent : IDisposable
 
     public PermissionComponent()
     {
-        this._permissions = new List<string>();
-        this._commands = new List<string>();
+        this._permissions = [];
+        this._commands = [];
     }
 
     public bool Initialize()

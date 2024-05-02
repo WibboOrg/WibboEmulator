@@ -6,8 +6,8 @@ using WibboEmulator.Games.Items;
 
 public static class LootManager
 {
-    private static readonly Dictionary<InteractionType, List<Loot>> LootItem = new();
-    private static readonly Dictionary<int, int> RarityCounter = new();
+    private static readonly Dictionary<InteractionType, List<Loot>> LootItem = [];
+    private static readonly Dictionary<int, int> RarityCounter = [];
 
     public static void Initialize(IDbConnection dbClient)
     {
@@ -38,7 +38,7 @@ public static class LootManager
 
             if (!LootItem.ContainsKey(interactionType))
             {
-                LootItem.Add(interactionType, new List<Loot>());
+                LootItem.Add(interactionType, []);
             }
 
             if (LootItem.TryGetValue(interactionType, out var loots))

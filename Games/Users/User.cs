@@ -179,11 +179,11 @@ public class User : IDisposable, IEquatable<User>
         this.RoomId = 0;
         this.LoadingRoomId = 0;
         this.HomeRoom = homeRoom;
-        this.FavoriteRooms = new List<int>();
-        this.RoomRightsList = new List<int>();
-        this.UsersRooms = new List<int>();
-        this.MutedUsers = new List<int>();
-        this.RatedRooms = new List<int>();
+        this.FavoriteRooms = [];
+        this.RoomRightsList = [];
+        this.UsersRooms = [];
+        this.MutedUsers = [];
+        this.RatedRooms = [];
         this.Respect = respect;
         this.DailyRespectPoints = dailyRespectPoints;
         this.DailyPetRespectPoints = dailyPetRespectPoints;
@@ -219,8 +219,8 @@ public class User : IDisposable, IEquatable<User>
         }
 
         this.LastOnline = lastOnline;
-        this.MyGroups = new List<int>();
-        this.Quests = new Dictionary<int, int>();
+        this.MyGroups = [];
+        this.Quests = [];
         this.FavouriteGroupId = favoriteGroup;
         this.AccountCreated = accountCreated;
         this.QuestId = currentQuestID;
@@ -238,7 +238,7 @@ public class User : IDisposable, IEquatable<User>
         this.LastGiftPurchaseTime = DateTime.Now;
         this.Nuxenable = nuxenable;
         this.NewUser = nuxenable;
-        this.Visits = new Dictionary<double, int>();
+        this.Visits = [];
         this.IgnoreRoomInvites = ignoreRoomInvite;
         this.CameraFollowDisabled = cameraFollowDisabled;
         this.OldChat = false;

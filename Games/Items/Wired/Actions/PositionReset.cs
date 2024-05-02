@@ -11,7 +11,7 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
 
     public PositionReset(Item item, Room room) : base(item, room, (int)WiredActionType.SET_FURNI_STATE)
     {
-        this._itemsData = new Dictionary<int, ItemsPosReset>();
+        this._itemsData = [];
 
         this.DefaultIntParams(0, 0, 0);
     }

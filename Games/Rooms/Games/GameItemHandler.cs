@@ -14,10 +14,10 @@ public class GameItemHandler
     public GameItemHandler(Room room)
     {
         this._room = room;
-        this._banzaiPyramids = new Dictionary<int, Item>();
-        this._banzaiTeleports = new Dictionary<int, Item>();
-        this._groupGate = new Dictionary<Point, List<Item>>();
-        this._banzaiBlobs = new Dictionary<int, Item>();
+        this._banzaiPyramids = [];
+        this._banzaiTeleports = [];
+        this._groupGate = [];
+        this._banzaiBlobs = [];
     }
 
     public void OnCycle() => this.CyclePyramids();
@@ -148,7 +148,7 @@ public class GameItemHandler
         }
         else
         {
-            this._groupGate.Add(item.Coordinate, new List<Item>() { item });
+            this._groupGate.Add(item.Coordinate, [item]);
         }
     }
 

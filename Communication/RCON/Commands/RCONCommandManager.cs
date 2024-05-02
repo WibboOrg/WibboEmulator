@@ -4,7 +4,7 @@ using WibboEmulator.Communication.RCON.Commands.User;
 
 public static class RCONCommandManager
 {
-    private static readonly Dictionary<string, IRCONCommand> Commands = new();
+    private static readonly Dictionary<string, IRCONCommand> Commands = [];
 
     public static void Initialize()
     {

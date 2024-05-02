@@ -4,8 +4,8 @@ using WibboEmulator.Database.Daos.Item;
 
 public static class ItemManager
 {
-    private static readonly Dictionary<int, ItemData> Items = new();
-    private static readonly Dictionary<int, ItemData> Gifts = new();
+    private static readonly Dictionary<int, ItemData> Items = [];
+    private static readonly Dictionary<int, ItemData> Gifts = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

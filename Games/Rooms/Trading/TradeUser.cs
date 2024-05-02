@@ -16,7 +16,7 @@ public class TradeUser
 
         this.UserId = userId;
         this.HasAccepted = false;
-        this.OfferedItems = new List<Item>();
+        this.OfferedItems = [];
     }
 
     public RoomUser RoomUser

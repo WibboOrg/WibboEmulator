@@ -20,7 +20,7 @@ public static class GameClientManager
     private static readonly ConcurrentDictionary<int, string> UserIDRegister = new();
     private static readonly ConcurrentDictionary<string, string> SsoTicketRegister = new();
     private static readonly ConcurrentDictionary<string, DateTime> PendingDisconnect = new();
-    private static readonly List<int> StaffIds = new();
+    private static readonly List<int> StaffIds = [];
 
     public static int Count => UserIDRegister.Count;
 

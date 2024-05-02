@@ -10,13 +10,13 @@ using WibboEmulator.Utilities;
 
 public static class CatalogManager
 {
-    private static readonly Dictionary<int, CatalogPage> CatalogPages = new();
-    private static readonly Dictionary<int, CatalogBot> BotPresets = new();
-    private static readonly Dictionary<int, Dictionary<int, CatalogItem>> Items = new();
-    private static readonly Dictionary<int, CatalogPromotion> CatalogPromotions = new();
-    private static readonly Dictionary<int, int> ItemsPage = new();
-    private static readonly List<string> Badges = new();
-    private static readonly List<PetRace> Races = new();
+    private static readonly Dictionary<int, CatalogPage> CatalogPages = [];
+    private static readonly Dictionary<int, CatalogBot> BotPresets = [];
+    private static readonly Dictionary<int, Dictionary<int, CatalogItem>> Items = [];
+    private static readonly Dictionary<int, CatalogPromotion> CatalogPromotions = [];
+    private static readonly Dictionary<int, int> ItemsPage = [];
+    private static readonly List<string> Badges = [];
+    private static readonly List<PetRace> Races = [];
 
     public static void Initialize(IDbConnection dbClient)
     {
@@ -85,7 +85,7 @@ public static class CatalogManager
 
                 if (!Items.TryGetValue(pageId, out var items))
                 {
-                    Items.Add(pageId, new Dictionary<int, CatalogItem>());
+                    Items.Add(pageId, []);
                 }
 
                 Items[pageId].Add(catalogItem.Id, new CatalogItem(catalogItem.Id, catalogItem.ItemId,
@@ -108,7 +108,7 @@ public static class CatalogManager
                        catalogPage.PageLink, catalogPage.IconImage, catalogPage.RequiredRight, catalogPage.PageLayout,
                        catalogPage.PageStrings1, catalogPage.PageStrings2, catalogPage.CaptionEn ?? "",
                        catalogPage.CaptionBr ?? "", catalogPage.PageStrings2En ?? "", catalogPage.PageStrings2Br ?? "", catalogPage.IsPremium,
-                        Items.TryGetValue(catalogPage.Id, out var value) ? value : new Dictionary<int, CatalogItem>()));
+                        Items.TryGetValue(catalogPage.Id, out var value) ? value : []));
                 }
             }
 

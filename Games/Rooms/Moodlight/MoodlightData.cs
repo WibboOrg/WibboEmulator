@@ -17,12 +17,12 @@ public class MoodlightData
 
         this.Enabled = enabled;
         this.CurrentPreset = currentPreset;
-        this.Presets = new List<MoodlightPreset>
-        {
+        this.Presets =
+        [
             GeneratePreset(presetOne),
             GeneratePreset(presetTwo),
             GeneratePreset(presetThree)
-        };
+        ];
     }
 
     public void Enable() => this.Enabled = true;

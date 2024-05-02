@@ -5,7 +5,7 @@ using WibboEmulator.Utilities;
 
 public static class SettingsManager
 {
-    private static readonly Dictionary<string, string> Settings = new();
+    private static readonly Dictionary<string, string> Settings = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

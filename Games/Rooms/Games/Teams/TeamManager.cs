@@ -8,10 +8,10 @@ public class TeamManager
 
     public TeamManager()
     {
-        this.BlueTeam = new List<RoomUser>();
-        this.RedTeam = new List<RoomUser>();
-        this.GreenTeam = new List<RoomUser>();
-        this.YellowTeam = new List<RoomUser>();
+        this.BlueTeam = [];
+        this.RedTeam = [];
+        this.GreenTeam = [];
+        this.YellowTeam = [];
     }
 
     public List<RoomUser> AllPlayers

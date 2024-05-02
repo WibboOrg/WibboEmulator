@@ -4,7 +4,7 @@ using WibboEmulator.Database.Daos.Roleplay;
 
 public static class RPItemManager
 {
-    private static readonly Dictionary<int, RPItem> Items = new();
+    private static readonly Dictionary<int, RPItem> Items = [];
 
     public static RPItem GetItem(int id)
     {

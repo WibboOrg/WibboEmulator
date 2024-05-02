@@ -95,9 +95,9 @@ public class Room : IDisposable
         }
 
         this.Disposed = false;
-        this.Bans = new Dictionary<int, double>();
-        this.Mutes = new Dictionary<int, double>();
-        this.ActiveTrades = new List<Trade>();
+        this.Bans = [];
+        this.Mutes = [];
+        this.ActiveTrades = [];
         this.RoomData = data;
         this.IdleTime = 0;
         this.RoomMuted = false;
@@ -292,7 +292,7 @@ public class Room : IDisposable
 
     public void LoadRights(IDbConnection dbClient)
     {
-        this.UsersWithRights = new List<int>();
+        this.UsersWithRights = [];
 
         var roomRightIdList = RoomRightDao.GetAllByRoomId(dbClient, this.RoomData.Id);
 

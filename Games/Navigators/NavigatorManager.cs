@@ -5,9 +5,9 @@ using WibboEmulator.Database.Daos.Navigator;
 
 public static class NavigatorManager
 {
-    private static readonly Dictionary<int, FeaturedRoom> FeaturedRooms = new();
-    private static readonly Dictionary<int, TopLevelItem> _TopLevelItems = new();
-    private static readonly Dictionary<int, SearchResultList> _SearchResultLists = new();
+    private static readonly Dictionary<int, FeaturedRoom> FeaturedRooms = [];
+    private static readonly Dictionary<int, TopLevelItem> _TopLevelItems = [];
+    private static readonly Dictionary<int, SearchResultList> _SearchResultLists = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

@@ -68,7 +68,7 @@ public class CookieCollection : ICollection<Cookie>
     /// </summary>
     public CookieCollection()
     {
-        this._list = new List<Cookie>();
+        this._list = [];
         this._sync = ((ICollection)this._list).SyncRoot;
     }
 

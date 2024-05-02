@@ -11,7 +11,7 @@ public class AchievementComponent : IDisposable
     public AchievementComponent(User user)
     {
         this._user = user;
-        this.Achievements = new Dictionary<string, UserAchievement>();
+        this.Achievements = [];
     }
 
     public void Initialize(IDbConnection dbClient)

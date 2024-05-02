@@ -9,8 +9,8 @@ using WibboEmulator.Games.GameClients;
 
 public static class QuestManager
 {
-    private static readonly Dictionary<int, Quest> Quests = new();
-    private static readonly Dictionary<string, int> QuestCount = new();
+    private static readonly Dictionary<int, Quest> Quests = [];
+    private static readonly Dictionary<string, int> QuestCount = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

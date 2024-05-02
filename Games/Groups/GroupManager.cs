@@ -12,11 +12,11 @@ public static class GroupManager
 
     private static readonly ConcurrentDictionary<int, Group> Groups = new();
 
-    private static readonly List<GroupBadgeParts> Bases = new();
-    private static readonly List<GroupBadgeParts> Symbols = new();
-    private static readonly List<GroupColours> BaseColours = new();
-    private static readonly Dictionary<int, GroupColours> SymbolColours = new();
-    private static readonly Dictionary<int, GroupColours> BackgroundColours = new();
+    private static readonly List<GroupBadgeParts> Bases = [];
+    private static readonly List<GroupBadgeParts> Symbols = [];
+    private static readonly List<GroupColours> BaseColours = [];
+    private static readonly Dictionary<int, GroupColours> SymbolColours = [];
+    private static readonly Dictionary<int, GroupColours> BackgroundColours = [];
 
     public static void Initialize(IDbConnection dbClient)
     {

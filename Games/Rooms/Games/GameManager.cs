@@ -26,10 +26,10 @@ public class GameManager
     {
         this.TeamPoints = new int[5];
 
-        this._redTeamItems = new Dictionary<int, Item>();
-        this._blueTeamItems = new Dictionary<int, Item>();
-        this._greenTeamItems = new Dictionary<int, Item>();
-        this._yellowTeamItems = new Dictionary<int, Item>();
+        this._redTeamItems = [];
+        this._blueTeamItems = [];
+        this._greenTeamItems = [];
+        this._yellowTeamItems = [];
         this.Room = room;
     }
 
@@ -39,7 +39,7 @@ public class GameManager
         TeamType.Green => this._greenTeamItems,
         TeamType.Blue => this._blueTeamItems,
         TeamType.Yellow => this._yellowTeamItems,
-        _ => new Dictionary<int, Item>(),
+        _ => [],
     };
 
     public TeamType WinningTeam
@@ -110,7 +110,7 @@ public class GameManager
         TeamType.Green => this._greenTeamItems,
         TeamType.Blue => this._blueTeamItems,
         TeamType.Yellow => this._yellowTeamItems,
-        _ => new Dictionary<int, Item>(),
+        _ => [],
     };
 
     private static bool IsScoreItem(InteractionType type) => type switch

@@ -14,7 +14,7 @@ public class BannerComponent : IDisposable
     public BannerComponent(User user)
     {
         this._user = user;
-        this.BannerList = new();
+        this.BannerList = [];
     }
 
     public void Initialize(IDbConnection dbClient)

@@ -24,8 +24,8 @@ public partial class ChatGPTBot : BotAI
     public ChatGPTBot(int virtualId)
     {
         this.VirtualId = virtualId;
-        this._userMessages = new();
-        this._listUserName = new();
+        this._userMessages = [];
+        this._listUserName = [];
 
         this._listActions = new Dictionary<int, string>()
         {
@@ -311,7 +311,7 @@ public partial class ChatGPTBot : BotAI
                     Role = "system"
                 };
                 var messagesSend = new List<ChatCompletionMessage>(new[] { prePrompt });
-                messagesSend.AddRange(this._userMessages.TryGetValue(userId, out var userMessages) ? userMessages : new List<ChatCompletionMessage>());
+                messagesSend.AddRange(this._userMessages.TryGetValue(userId, out var userMessages) ? userMessages : []);
 
                 var messagesGtp = await OpenAIProxy.SendChatMessage(messagesSend);
 

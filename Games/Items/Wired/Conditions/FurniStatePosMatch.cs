@@ -13,7 +13,7 @@ public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
 
     public FurniStatePosMatch(Item item, Room room) : base(item, room, (int)WiredConditionType.STATES_MATCH)
     {
-        this._itemsData = new Dictionary<int, ItemsPosReset>();
+        this._itemsData = [];
 
         this.DefaultIntParams(0, 0, 0, 0, 1);
     }

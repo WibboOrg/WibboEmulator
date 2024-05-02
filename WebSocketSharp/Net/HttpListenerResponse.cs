@@ -403,7 +403,7 @@ public sealed class HttpListenerResponse : IDisposable
     {
         get
         {
-            this._cookies ??= new CookieCollection();
+            this._cookies ??= [];
 
             return this._cookies;
         }

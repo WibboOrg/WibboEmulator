@@ -5,8 +5,8 @@ using WibboEmulator.Database.Daos.Roleplay;
 
 public static class RPEnemyManager
 {
-    private static readonly Dictionary<int, RPEnemy> EnemyBot = new();
-    private static readonly Dictionary<int, RPEnemy> EnemyPet = new();
+    private static readonly Dictionary<int, RPEnemy> EnemyBot = [];
+    private static readonly Dictionary<int, RPEnemy> EnemyPet = [];
 
     public static RPEnemy GetEnemyBot(int id)
     {
