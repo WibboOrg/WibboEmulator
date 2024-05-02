@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Navigators;
 
 internal sealed class GetUserFlatCatsEvent : IPacketEvent
 {
@@ -8,7 +9,7 @@ internal sealed class GetUserFlatCatsEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var categories = WibboEnvironment.GetGame().GetNavigator().GetFlatCategories();
+        var categories = NavigatorManager.FlatCategories;
 
         session.SendPacket(new UserFlatCatsComposer(categories, session.User.Rank));
     }

@@ -4,16 +4,14 @@ using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay.Troc;
 using WibboEmulator.Games.Roleplays.Item;
 
-public class RPTrocManager
+public static class RPTrocManager
 {
-    private int _tradeId;
-    private readonly ConcurrentDictionary<int, RPTroc> _usersTrade;
+    private static int _tradeId;
+    private static readonly ConcurrentDictionary<int, RPTroc> UsersTrade = new();
 
-    public RPTrocManager() => this._usersTrade = new ConcurrentDictionary<int, RPTroc>();
-
-    public void Confirme(int trocId, int userId)
+    public static void Confirm(int trocId, int userId)
     {
-        var troc = this.GetTroc(trocId);
+        var troc = GetTroc(trocId);
         if (troc == null)
         {
             return;
@@ -42,12 +40,12 @@ public class RPTrocManager
             //SendPacket error ?
         }
 
-        this.CloseTrade(troc);
+        CloseTrade(troc);
     }
 
-    public void Accepte(int trocId, int userId)
+    public static void Accept(int trocId, int userId)
     {
-        var troc = this.GetTroc(trocId);
+        var troc = GetTroc(trocId);
         if (troc == null)
         {
             return;
@@ -79,7 +77,7 @@ public class RPTrocManager
 
     private static void SendPacketUsers(IServerPacket packet, RPTroc troc)
     {
-        var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(troc.RPId);
+        var rpManager = RoleplayManager.GetRolePlay(troc.RPId);
         if (rpManager == null)
         {
             return;
@@ -92,9 +90,9 @@ public class RPTrocManager
         playerTwo?.SendPacket(packet);
     }
 
-    private void CloseTrade(RPTroc troc)
+    private static void CloseTrade(RPTroc troc)
     {
-        var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(troc.RPId);
+        var rpManager = RoleplayManager.GetRolePlay(troc.RPId);
         if (rpManager == null)
         {
             return;
@@ -114,12 +112,12 @@ public class RPTrocManager
             playerTwo.SendPacket(new RpTrocStopComposer());
         }
 
-        _ = this._usersTrade.TryRemove(troc.Id, out _);
+        _ = UsersTrade.TryRemove(troc.Id, out _);
     }
 
     private static bool EndTrade(RPTroc troc)
     {
-        var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(troc.RPId);
+        var rpManager = RoleplayManager.GetRolePlay(troc.RPId);
         if (rpManager == null)
         {
             return false;
@@ -185,9 +183,9 @@ public class RPTrocManager
         return true;
     }
 
-    public void AddItem(int tradeId, int userId, int itemId)
+    public static void AddItem(int tradeId, int userId, int itemId)
     {
-        var troc = this.GetTroc(tradeId);
+        var troc = GetTroc(tradeId);
         if (troc == null)
         {
             return;
@@ -204,13 +202,13 @@ public class RPTrocManager
             return;
         }
 
-        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(itemId);
+        var rpItem = RPItemManager.GetItem(itemId);
         if (rpItem == null || rpItem.Category == RPItemCategory.Quete || !rpItem.AllowStack)
         {
             return;
         }
 
-        var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(troc.RPId);
+        var rpManager = RoleplayManager.GetRolePlay(troc.RPId);
         if (rpManager == null)
         {
             return;
@@ -238,9 +236,9 @@ public class RPTrocManager
         SendPacketUsers(new RpTrocUpdateItemsComposer(userId, trocUser.ItemIds), troc);
     }
 
-    public void RemoveItem(int tradeId, int userId, int itemId)
+    public static void RemoveItem(int tradeId, int userId, int itemId)
     {
-        var troc = this.GetTroc(tradeId);
+        var troc = GetTroc(tradeId);
         if (troc == null)
         {
             return;
@@ -257,7 +255,7 @@ public class RPTrocManager
             return;
         }
 
-        var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(troc.RPId);
+        var rpManager = RoleplayManager.GetRolePlay(troc.RPId);
         if (rpManager == null)
         {
             return;
@@ -285,9 +283,9 @@ public class RPTrocManager
         SendPacketUsers(new RpTrocUpdateItemsComposer(userId, trocUser.ItemIds), troc);
     }
 
-    public void AddTrade(int rpId, int userOne, int userTwo, string userNameOne, string userNameTwo)
+    public static void AddTrade(int rpId, int userOne, int userTwo, string userNameOne, string userNameTwo)
     {
-        var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(rpId);
+        var rpManager = RoleplayManager.GetRolePlay(rpId);
         if (rpManager == null)
         {
             return;
@@ -300,24 +298,24 @@ public class RPTrocManager
             return;
         }
 
-        this._tradeId++;
-        _ = this._usersTrade.TryAdd(this._tradeId, new RPTroc(this._tradeId, rpId, userOne, userTwo));
+        _tradeId++;
+        _ = UsersTrade.TryAdd(_tradeId, new RPTroc(_tradeId, rpId, userOne, userTwo));
 
-        playerOne.TradeId = this._tradeId;
+        playerOne.TradeId = _tradeId;
         playerOne.SendPacket(new RpTrocStartComposer(userTwo, userNameTwo));
 
-        playerTwo.TradeId = this._tradeId;
+        playerTwo.TradeId = _tradeId;
         playerTwo.SendPacket(new RpTrocStartComposer(userOne, userNameOne));
     }
 
-    public void RemoveTrade(int trocId)
+    public static void RemoveTrade(int trocId)
     {
         if (trocId == 0)
         {
             return;
         }
 
-        _ = this._usersTrade.TryGetValue(trocId, out var troc);
+        _ = UsersTrade.TryGetValue(trocId, out var troc);
         if (troc == null)
         {
             return;
@@ -328,18 +326,18 @@ public class RPTrocManager
             return;
         }
 
-        this.CloseTrade(troc);
+        CloseTrade(troc);
     }
 
-    public RPTroc GetTroc(int trocId)
+    public static RPTroc GetTroc(int trocId)
     {
-        _ = this._usersTrade.TryGetValue(trocId, out var troc);
+        _ = UsersTrade.TryGetValue(trocId, out var troc);
         return troc;
     }
 
-    public RPTrocUser GetTradeUser(int trocId, int userId)
+    public static RPTrocUser GetTradeUser(int trocId, int userId)
     {
-        _ = this._usersTrade.TryGetValue(trocId, out var troc);
+        _ = UsersTrade.TryGetValue(trocId, out var troc);
         if (troc == null)
         {
             return null;

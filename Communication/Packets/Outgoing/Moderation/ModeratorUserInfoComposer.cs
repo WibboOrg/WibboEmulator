@@ -1,4 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
+
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users;
 
 internal sealed class ModeratorUserInfoComposer : ServerPacket
@@ -11,7 +13,7 @@ internal sealed class ModeratorUserInfoComposer : ServerPacket
         this.WriteString(user.Look);
         this.WriteInteger(Convert.ToInt32(Math.Ceiling((WibboEnvironment.GetUnixTimestamp() - Convert.ToDouble(user.AccountCreated)) / 60)));
         this.WriteInteger(Convert.ToInt32(Math.Ceiling((WibboEnvironment.GetUnixTimestamp() - Convert.ToDouble(user.LastOnline)) / 60)));
-        this.WriteBoolean(WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(user.Id) != null);
+        this.WriteBoolean(GameClientManager.GetClientByUserID(user.Id) != null);
         this.WriteInteger(/*info != null ? Convert.ToInt32(info["cfhs"]) : */0);
         this.WriteInteger(/*info != null ? Convert.ToInt32(info["cfhs_abusive"]) : */0);
         this.WriteInteger(/*info != null ? Convert.ToInt32(info["cautions"]) : */0);

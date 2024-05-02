@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Room;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -8,7 +10,7 @@ internal sealed class SetSpeed : IChatCommand
     {
         if (parameters.Length < 2)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.intonly", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("input.intonly", session.Language));
             return;
         }
 
@@ -18,7 +20,7 @@ internal sealed class SetSpeed : IChatCommand
         }
         else
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.intonly", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("input.intonly", session.Language));
         }
     }
 }

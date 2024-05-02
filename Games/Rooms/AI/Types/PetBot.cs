@@ -1,8 +1,12 @@
 namespace WibboEmulator.Games.Rooms.AI.Types;
+
+using WibboEmulator.Core.Language;
+using WibboEmulator.Games.Chats.Pets.Commands;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Rooms.Map;
 using WibboEmulator.Games.Rooms.PathFinding;
+using WibboEmulator.Utilities;
 
 public class PetBot : BotAI
 {
@@ -19,7 +23,7 @@ public class PetBot : BotAI
 
     private void RemovePetStatus()
     {
-        var roomUser = this.GetRoomUser();
+        var roomUser = this.RoomUser;
         roomUser.RemoveStatus("sit");
         roomUser.RemoveStatus("lay");
         roomUser.RemoveStatus("snf");
@@ -47,7 +51,7 @@ public class PetBot : BotAI
 
     public override void OnUserSay(RoomUser user, string message)
     {
-        var roomUser = this.GetRoomUser();
+        var roomUser = this.RoomUser;
 
         if (roomUser.PetData.OwnerId != user.Client.User.Id)
         {
@@ -70,11 +74,11 @@ public class PetBot : BotAI
             if (roomUser.PetData.Energy > 10 && randomNumber < 6)
             {
                 this.RemovePetStatus();
-                switch (WibboEnvironment.GetGame().GetChatManager().GetPetCommands().TryInvoke(input))
+                switch (PetCommandManager.TryInvoke(input))
                 {
                     case 0: //Libre
                         this.RemovePetStatus();
-                        var randomWalkableSquare = this.GetRoom().GameMap.GetRandomWalkableSquare(this.GetBotData().X, this.GetBotData().Y);
+                        var randomWalkableSquare = this.Room.GameMap.GetRandomWalkableSquare(this.BotData.X, this.BotData.Y);
                         roomUser.MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
                         roomUser.PetData.AddExpirience(10);
                         break;
@@ -201,8 +205,8 @@ public class PetBot : BotAI
                     case 20:
                         break;
                     default:
-                        var strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.unknowncommand", roomUser.Room.RoomData.Langue).Split(',');
-                        roomUser.OnChat(strArray[WibboEnvironment.GetRandomNumber(0, strArray.Length - 1)], 0, false);
+                        var strArray = LanguageManager.TryGetValue("pet.unknowncommand", roomUser.Room.RoomData.Language).Split(',');
+                        roomUser.OnChat(strArray.GetRandomElement(), 0, false);
                         break;
                 }
                 roomUser.PetData.PetEnergy(false);
@@ -215,9 +219,9 @@ public class PetBot : BotAI
                 {
                     if (roomUser.PetData.Energy < 10)
                     {
-                        var strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.tired", roomUser.Room.RoomData.Langue).Split(',');
+                        var strArray = LanguageManager.TryGetValue("pet.tired", roomUser.Room.RoomData.Language).Split(',');
 
-                        roomUser.OnChat(strArray[WibboEnvironment.GetRandomNumber(0, strArray.Length - 1)], 0, false);
+                        roomUser.OnChat(strArray.GetRandomElement(), 0, false);
                         roomUser.SetStatus("lay", roomUser.Z.ToString());
                         roomUser.IsLay = true;
                         this._actionTimer = 45;
@@ -225,9 +229,9 @@ public class PetBot : BotAI
                     }
                     else
                     {
-                        var strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.lazy", roomUser.Room.RoomData.Langue).Split(',');
+                        var strArray = LanguageManager.TryGetValue("pet.lazy", roomUser.Room.RoomData.Language).Split(',');
 
-                        roomUser.OnChat(strArray[WibboEnvironment.GetRandomNumber(0, strArray.Length - 1)], 0, false);
+                        roomUser.OnChat(strArray.GetRandomElement(), 0, false);
                         roomUser.PetData.PetEnergy(false);
                     }
                 }
@@ -246,11 +250,11 @@ public class PetBot : BotAI
             this.RemovePetStatus();
             this._actionTimer = WibboEnvironment.GetRandomNumber(10, 60);
 
-            if (!this.GetRoomUser().RidingHorse && this.GetRoomUser().PetData.Type != 16)
+            if (!this.RoomUser.RidingHorse && this.RoomUser.PetData.Type != 16)
             {
                 this.RemovePetStatus();
-                var randomWalkableSquare = this.GetRoom().GameMap.GetRandomWalkableSquare(this.GetBotData().X, this.GetBotData().Y);
-                this.GetRoomUser().MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
+                var randomWalkableSquare = this.Room.GameMap.GetRandomWalkableSquare(this.BotData.X, this.BotData.Y);
+                this.                RoomUser.MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
             }
         }
         else
@@ -261,7 +265,7 @@ public class PetBot : BotAI
         if (this._energyTimer <= 0)
         {
             this.RemovePetStatus();
-            this.GetRoomUser().PetData.PetEnergy(true);
+            this.            RoomUser.PetData.PetEnergy(true);
             this._energyTimer = WibboEnvironment.GetRandomNumber(30, 120);
         }
         else
@@ -269,18 +273,18 @@ public class PetBot : BotAI
             this._energyTimer--;
         }
 
-        if (this.GetBotData().FollowUser != 0)
+        if (this.BotData.FollowUser != 0)
         {
-            var user = this.GetRoom().RoomUserManager.GetRoomUserByVirtualId(this.GetBotData().FollowUser);
+            var user = this.Room.RoomUserManager.GetRoomUserByVirtualId(this.BotData.FollowUser);
             if (user == null)
             {
-                this.GetBotData().FollowUser = 0;
+                this.                BotData.FollowUser = 0;
             }
             else
             {
-                if (!GameMap.TilesTouching(this.GetRoomUser().X, this.GetRoomUser().Y, user.X, user.Y))
+                if (!GameMap.TilesTouching(this.RoomUser.X, this.RoomUser.Y, user.X, user.Y))
                 {
-                    this.GetRoomUser().MoveTo(user.X, user.Y, true);
+                    this.                    RoomUser.MoveTo(user.X, user.Y, true);
                 }
             }
         }

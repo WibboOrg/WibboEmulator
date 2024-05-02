@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Catalogs.Utilities;
+
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.Rooms.AI;
 
@@ -23,7 +25,7 @@ public static class PetUtility
     {
         var pet = new Pet(0, userId, 0, name, type, race, color, 0, 100, 100, 0, WibboEnvironment.GetUnixTimestamp(), 0, 0, 0.0, 0, 1, -1, false);
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             pet.PetId = BotPetDao.InsertGetId(dbClient, pet.Name, pet.Race, pet.Color, pet.OwnerId, pet.Type, pet.CreationStamp);
         }

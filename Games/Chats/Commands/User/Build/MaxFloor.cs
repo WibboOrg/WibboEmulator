@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Build;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
@@ -38,15 +39,15 @@ internal sealed class MaxFloor : IChatCommand
 
         map = map.TrimEnd(Convert.ToChar(13));
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             RoomModelCustomDao.Replace(dbClient, room.Id, room.GameMap.Model.DoorX, room.GameMap.Model.DoorY, room.GameMap.Model.DoorZ, room.GameMap.Model.DoorOrientation, map, room.GameMap.Model.WallHeight);
             RoomDao.UpdateModel(dbClient, room.Id);
         }
 
-        var usersToReturn = room.RoomUserManager.GetRoomUsers().ToList();
+        var usersToReturn = room.RoomUserManager.RoomUsers.ToList();
 
-        WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
+        RoomManager.UnloadRoom(room);
 
 
         foreach (var user in usersToReturn)

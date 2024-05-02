@@ -10,7 +10,7 @@ internal sealed class GuideToolMessageNewEvent : IPacketEvent
     {
         var message = packet.PopString();
 
-        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.User.GuideOtherUserId);
+        var requester = GameClientManager.GetClientByUserID(session.User.GuideOtherUserId);
         if (requester == null)
         {
             return;

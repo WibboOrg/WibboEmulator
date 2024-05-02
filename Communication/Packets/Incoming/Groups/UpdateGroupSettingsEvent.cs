@@ -1,9 +1,11 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class UpdateGroupSettingsEvent : IPacketEvent
 {
@@ -13,7 +15,7 @@ internal sealed class UpdateGroupSettingsEvent : IPacketEvent
     {
         var groupId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
+        if (!GroupManager.TryGetGroup(groupId, out var group))
         {
             return;
         }
@@ -45,19 +47,19 @@ internal sealed class UpdateGroupSettingsEvent : IPacketEvent
             }
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             GuildDao.UpdateStateAndDeco(dbClient, group.Id, group.GroupType == GroupType.Open ? 0 : group.GroupType == GroupType.Locked ? 1 : 2, furniOptions);
         }
 
         group.AdminOnlyDeco = furniOptions == 1;
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(group.RoomId, out var room))
         {
             return;
         }
 
-        foreach (var user in room.RoomUserManager.GetRoomUsers().ToList())
+        foreach (var user in room.RoomUserManager.RoomUsers.ToList())
         {
             if (room.RoomData.OwnerId == user.UserId || group.IsAdmin(user.UserId) || !group.IsMember(user.UserId))
             {

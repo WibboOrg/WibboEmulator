@@ -2,8 +2,11 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.FloorPlan;
 using System.Text.RegularExpressions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed partial class SaveFloorPlanModelEvent : IPacketEvent
 {
@@ -19,7 +22,7 @@ internal sealed partial class SaveFloorPlanModelEvent : IPacketEvent
         var floorThick = packet.PopInt();
         var wallHeight = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -31,7 +34,7 @@ internal sealed partial class SaveFloorPlanModelEvent : IPacketEvent
 
         if (room.RoomData.SellPrice > 0)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.8", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("roomsell.error.8", session.Language));
             return;
         }
 
@@ -129,15 +132,15 @@ internal sealed partial class SaveFloorPlanModelEvent : IPacketEvent
             wallHeight = 15;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             RoomModelCustomDao.Replace(dbClient, room.Id, doorX, doorY, doorZ, doorDirection, map, wallHeight);
             RoomDao.UpdateModelWallThickFloorThick(dbClient, room.Id, wallThick, floorThick);
         }
 
-        var usersToReturn = room.RoomUserManager.GetRoomUsers().ToList();
+        var usersToReturn = room.RoomUserManager.RoomUsers.ToList();
 
-        WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
+        RoomManager.UnloadRoom(room);
 
         foreach (var user in usersToReturn)
         {

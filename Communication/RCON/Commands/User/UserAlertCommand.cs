@@ -1,4 +1,7 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
+
+using WibboEmulator.Games.GameClients;
+
 internal sealed class UserAlertCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
@@ -18,7 +21,7 @@ internal sealed class UserAlertCommand : IRCONCommand
             return false;
         }
 
-        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userid);
+        var client = GameClientManager.GetClientByUserID(userid);
         if (client == null)
         {
             return true;

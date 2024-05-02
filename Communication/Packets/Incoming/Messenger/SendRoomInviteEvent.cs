@@ -58,7 +58,7 @@ internal sealed class SendRoomInviteEvent : IPacketEvent
         {
             if (session.User.Messenger.FriendshipExists(userId))
             {
-                var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+                var clientByUserId = GameClientManager.GetClientByUserID(userId);
                 if (clientByUserId == null || clientByUserId.User.IgnoreRoomInvites)
                 {
                     break;

@@ -1,4 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Furni;
+
+using WibboEmulator.Database;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class DeleteFurniTypeInventoryEvent : IPacketEvent
@@ -26,14 +28,14 @@ internal sealed class DeleteFurniTypeInventoryEvent : IPacketEvent
             return;
         }
 
-        if (item.GetBaseItem().IsRare && !session.User.HasPermission("empty_items_all"))
+        if (item.ItemData.IsRare && !session.User.HasPermission("empty_items_all"))
         {
             return;
         }
 
-        var items = session.User.InventoryComponent.GetItemsByType(item.BaseItem);
+        var items = session.User.InventoryComponent.GetItemsByType(item.BaseItemId);
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
-        session.User.InventoryComponent.DeleteItems(dbClient, items, item.BaseItem);
+        using var dbClient = DatabaseManager.Connection;
+        session.User.InventoryComponent.DeleteItems(dbClient, items, item.BaseItemId);
     }
 }

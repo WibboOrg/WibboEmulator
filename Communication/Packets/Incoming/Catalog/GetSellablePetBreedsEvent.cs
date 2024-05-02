@@ -1,6 +1,8 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
+using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Items;
 
 internal sealed class GetSellablePetBreedsEvent : IPacketEvent
 {
@@ -10,7 +12,7 @@ internal sealed class GetSellablePetBreedsEvent : IPacketEvent
     {
         var type = packet.PopString();
 
-        var item = WibboEnvironment.GetGame().GetItemManager().GetItemByName(type);
+        var item = ItemManager.GetItemByName(type);
         if (item == null)
         {
             return;
@@ -18,6 +20,6 @@ internal sealed class GetSellablePetBreedsEvent : IPacketEvent
 
         var petId = item.SpriteId;
 
-        session.SendPacket(new SellablePetBreedsComposer(type, petId, WibboEnvironment.GetGame().GetCatalog().GetRacesForRaceId(petId)));
+        session.SendPacket(new SellablePetBreedsComposer(type, petId, CatalogManager.GetRacesForRaceId(petId)));
     }
 }

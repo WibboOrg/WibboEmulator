@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Room;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -9,7 +10,7 @@ internal sealed class Pickall : IChatCommand
     {
         if (room.RoomData.SellPrice > 0)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.pickall", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("roomsell.pickall", session.Language));
             return;
         }
 

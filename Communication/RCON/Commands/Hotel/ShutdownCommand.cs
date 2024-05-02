@@ -4,7 +4,7 @@ internal sealed class ShutdownCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
     {
-        WibboEnvironment.PreformShutDown();
+        WibboEnvironment.PerformShutDown();
 
         return true;
     }

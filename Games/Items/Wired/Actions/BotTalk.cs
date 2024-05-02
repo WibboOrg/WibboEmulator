@@ -24,13 +24,13 @@ public class BotTalk : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        var bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName(name);
+        var bot = this.Room.RoomUserManager.GetBotOrPetByName(name);
         if (bot == null)
         {
             return false;
         }
 
-        WiredUtillity.ParseMessage(user, this.RoomInstance, ref message);
+        WiredUtillity.ParseMessage(user, this.Room, ref message);
 
         var isShout = this.GetIntParam(0) == 1;
 

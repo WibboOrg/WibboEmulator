@@ -19,7 +19,7 @@ internal sealed class ProfileInformationComposer : ServerPacket
         this.WriteInteger(friendCount); // Friend Count
         this.WriteBoolean(habbo.Id != session.User.Id && session.User.Messenger.FriendshipExists(habbo.Id)); //  Is friend
         this.WriteBoolean(habbo.Id != session.User.Id && !session.User.Messenger.FriendshipExists(habbo.Id) && session.User.Messenger.RequestExists(habbo.Id)); // Sent friend request
-        this.WriteBoolean(WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(habbo.Id) != null);
+        this.WriteBoolean(GameClientManager.GetClientByUserID(habbo.Id) != null);
 
         this.WriteInteger(groups.Count);
         foreach (var group in groups)
@@ -27,8 +27,8 @@ internal sealed class ProfileInformationComposer : ServerPacket
             this.WriteInteger(group.Id);
             this.WriteString(group.Name);
             this.WriteString(group.Badge);
-            this.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour1, true));
-            this.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour2, false));
+            this.WriteString(GroupManager.GetColourCode(group.Colour1, true));
+            this.WriteString(GroupManager.GetColourCode(group.Colour2, false));
             this.WriteBoolean(habbo.FavouriteGroupId == group.Id); // todo favs
             this.WriteInteger(0);//what the fuck
             this.WriteBoolean(group == null || group.ForumEnabled);//HabboTalk

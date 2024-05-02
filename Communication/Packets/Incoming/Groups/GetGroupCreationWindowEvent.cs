@@ -17,7 +17,7 @@ internal sealed class GetGroupCreationWindowEvent : IPacketEvent
         var validRooms = new List<RoomData>();
         foreach (var roomId in session.User.UsersRooms)
         {
-            var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+            var data = RoomManager.GenerateRoomData(roomId);
             if (data == null)
             {
                 continue;

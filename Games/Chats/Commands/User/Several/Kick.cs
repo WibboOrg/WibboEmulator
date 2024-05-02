@@ -11,7 +11,7 @@ internal sealed class Kick : IChatCommand
             return;
         }
 
-        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
 
         if (targetUser == null || targetUser.User == null)
         {

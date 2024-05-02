@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
@@ -25,7 +26,7 @@ internal sealed class RemoveFavouriteRoomEvent : IPacketEvent
 
         session.SendPacket(new UpdateFavouriteRoomComposer(roomId, false));
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         UserFavoriteDao.Delete(dbClient, session.User.Id, roomId);
     }
 }

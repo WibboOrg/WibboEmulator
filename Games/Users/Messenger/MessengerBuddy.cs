@@ -1,5 +1,7 @@
 namespace WibboEmulator.Games.Users.Messenger;
 
+using WibboEmulator.Games.GameClients;
+
 public class MessengerBuddy
 {
     public int UserId { get; }
@@ -21,7 +23,7 @@ public class MessengerBuddy
 
     public void UpdateUser()
     {
-        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this.UserId);
+        var client = GameClientManager.GetClientByUserID(this.UserId);
         if (client != null && client.User != null && client.User.Messenger != null && !client.User.Messenger.AppearOffline)
         {
             this.IsOnline = true;

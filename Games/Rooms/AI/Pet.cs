@@ -60,7 +60,7 @@ public class Pet
             }
             else
             {
-                _ = WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out var room);
+                _ = RoomManager.TryGetRoom(this.RoomId, out var room);
 
                 return room;
             }

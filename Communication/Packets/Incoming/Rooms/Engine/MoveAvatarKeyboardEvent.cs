@@ -25,7 +25,7 @@ internal sealed class MoveAvatarKeyboardEvent : IPacketEvent
             return;
         }
 
-        var currentRoom = session.User.CurrentRoom;
+        var currentRoom = session.User.Room;
         if (currentRoom == null)
         {
             return;

@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class UpdateMagicTileEvent : IPacketEvent
 {
@@ -13,7 +14,7 @@ internal sealed class UpdateMagicTileEvent : IPacketEvent
             var itemId = packet.PopInt();
             var heightToSet = packet.PopInt();
 
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+            if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
             {
                 return;
             }
@@ -24,7 +25,7 @@ internal sealed class UpdateMagicTileEvent : IPacketEvent
             }
 
             var item = room.RoomItemHandling.GetItem(itemId);
-            if (item != null && item.GetBaseItem().InteractionType == InteractionType.PILE_MAGIC)
+            if (item != null && item.ItemData.InteractionType == InteractionType.PILE_MAGIC)
             {
                 if (heightToSet > 5000)
                 {

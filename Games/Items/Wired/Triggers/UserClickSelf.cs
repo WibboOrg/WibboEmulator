@@ -38,14 +38,14 @@ public class UserClickSelf : WiredTriggerBase, IWired
             return;
         }
 
-        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, null);
+        this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, user, null);
     }
 
     public override void Dispose()
     {
         base.Dispose();
 
-        this.RoomInstance.OnUserClickSelf -= this.OnUserClick;
+        this.Room.OnUserClickSelf -= this.OnUserClick;
     }
 
     public void SaveToDatabase(IDbConnection dbClient)

@@ -1,5 +1,7 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
@@ -14,24 +16,24 @@ internal sealed class DeleteMission : IChatCommand
         }
 
         var username = parameters[1];
-        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
+        var targetUser = GameClientManager.GetClientByUsername(username);
         if (targetUser == null)
         {
-            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
         }
         else if (session.User.Rank <= targetUser.User.Rank)
         {
-            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("user.notpermitted", session.Langue));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("user.notpermitted", session.Language));
         }
         else
         {
-            targetUser.User.Motto = WibboEnvironment.GetLanguageManager().TryGetValue("user.unacceptable_motto", targetUser.Langue);
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+            targetUser.User.Motto = LanguageManager.TryGetValue("user.unacceptable_motto", targetUser.Language);
+            using (var dbClient = DatabaseManager.Connection)
             {
                 UserDao.UpdateMotto(dbClient, targetUser.User.Id, targetUser.User.Motto);
             }
 
-            var currentRoom2 = targetUser.User.CurrentRoom;
+            var currentRoom2 = targetUser.User.Room;
             if (currentRoom2 == null)
             {
                 return;

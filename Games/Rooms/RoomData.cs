@@ -11,7 +11,7 @@ public class RoomData
     public string Description { get; set; }
     public string OwnerName { get; set; }
     public int OwnerId { get; set; }
-    public Language Langue { get; set; }
+    public Language Language { get; set; }
     public string Password { get; set; }
     public RoomAccess Access { get; set; }
     public int Category { get; set; }
@@ -85,7 +85,7 @@ public class RoomData
         this.TrocStatus = 2;
         this.Group = null;
         this.AllowRightsOverride = false;
-        this.Model = WibboEnvironment.GetGame().GetRoomManager().GetModel(this.ModelName, id);
+        this.Model = RoomManager.GetModel(this.ModelName, id);
         this.HideWireds = false;
         this.SellPrice = 0;
     }
@@ -97,7 +97,7 @@ public class RoomData
         this.Description = room.Description;
         this.OwnerName = room.Owner;
         this.OwnerId = room.OwnerId;
-        this.Langue = LanguageManager.ParseLanguage(room.Langue);
+        this.Language = LanguageManager.ParseLanguage(room.Langue);
 
         this.Access = room.State switch
         {
@@ -135,7 +135,7 @@ public class RoomData
         this.WhoCanKick = room.ModerationKickFuse;
         this.BanFuse = room.ModerationBanFuse;
         this.GroupId = room.GroupId;
-        if (WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(this.GroupId, out var group))
+        if (GroupManager.TryGetGroup(this.GroupId, out var group))
         {
             this.Group = group;
         }
@@ -154,6 +154,6 @@ public class RoomData
 
         this.SellPrice = room.Price;
         this.WiredSecurity = room.WiredSecurity;
-        this.Model = WibboEnvironment.GetGame().GetRoomManager().GetModel(this.ModelName, this.Id);
+        this.Model = RoomManager.GetModel(this.ModelName, this.Id);
     }
 }

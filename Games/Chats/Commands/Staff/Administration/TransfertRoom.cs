@@ -1,6 +1,7 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Administration;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
@@ -22,7 +23,7 @@ internal sealed class TransfertRoom : IChatCommand
 
         var username = parameters[1];
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         var userId = UserDao.GetIdByName(dbClient, username);
         if (userId == 0)
@@ -37,9 +38,9 @@ internal sealed class TransfertRoom : IChatCommand
         room.RoomData.OwnerName = userTarget.Username;
         room.SendPacket(new RoomInfoUpdatedComposer(room.Id));
 
-        var usersToReturn = room.RoomUserManager.GetRoomUsers().ToList();
+        var usersToReturn = room.RoomUserManager.RoomUsers.ToList();
 
-        WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
+        RoomManager.UnloadRoom(room);
 
         foreach (var user in usersToReturn)
         {

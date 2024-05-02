@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Inventory;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -8,7 +10,7 @@ internal sealed class EmptyItems : IChatCommand
     {
         if (userRoom.IsTrading)
         {
-            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.troc.not.allowed", session.Langue));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("cmd.troc.not.allowed", session.Language));
             return;
         }
 
@@ -20,6 +22,6 @@ internal sealed class EmptyItems : IChatCommand
         }
 
         session.User.InventoryComponent.ClearItems(emptyAll);
-        userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("empty.cleared", session.Langue));
+        userRoom.SendWhisperChat(LanguageManager.TryGetValue("empty.cleared", session.Language));
     }
 }

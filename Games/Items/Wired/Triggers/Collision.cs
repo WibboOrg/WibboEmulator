@@ -7,15 +7,15 @@ using WibboEmulator.Games.Rooms.Events;
 
 public class Collision : WiredTriggerBase, IWired
 {
-    public Collision(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION) => this.RoomInstance.WiredHandler.TrgCollision += this.OnFurniCollision;
+    public Collision(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION) => this.Room.WiredHandler.TrgCollision += this.OnFurniCollision;
 
-    private void OnFurniCollision(object obj, ItemTriggeredEventArgs args) => this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, args.User, args.Item);
+    private void OnFurniCollision(object obj, ItemTriggeredEventArgs args) => this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, args.User, args.Item);
 
     public override void Dispose()
     {
         base.Dispose();
 
-        this.RoomInstance.WiredHandler.TrgCollision -= this.OnFurniCollision;
+        this.Room.WiredHandler.TrgCollision -= this.OnFurniCollision;
     }
 
     public void SaveToDatabase(IDbConnection dbClient)

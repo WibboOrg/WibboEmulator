@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Catalog;
 
 internal sealed class MarketPlaceOwnOffersComposer : ServerPacket
@@ -7,7 +8,7 @@ internal sealed class MarketPlaceOwnOffersComposer : ServerPacket
     public MarketPlaceOwnOffersComposer(int userId)
        : base(ServerPacketHeader.MARKETPLACE_OWN_ITEMS)
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         var offerList = CatalogMarketplaceOfferDao.GetAllByUserId(dbClient, userId);
         var sunPrice = CatalogMarketplaceOfferDao.GetSunPrice(dbClient, userId);

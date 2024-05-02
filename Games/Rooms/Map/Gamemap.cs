@@ -10,7 +10,7 @@ using WibboEmulator.Utilities;
 
 public class GameMap
 {
-    private readonly Room _roomInstance;
+    private readonly Room _room;
     private readonly ConcurrentDictionary<Point, List<RoomUser>> _userMap;
 
     public bool DiagonalEnabled { get; set; }
@@ -26,11 +26,11 @@ public class GameMap
 
     public GameMap(Room room)
     {
-        this._roomInstance = room;
+        this._room = room;
         this.ObliqueDisable = true;
         this.DiagonalEnabled = true;
 
-        var staticModel = WibboEnvironment.GetGame().GetRoomManager().GetModel(room.RoomData.ModelName, room.Id) ?? throw new ArgumentNullException("No modeldata found for roomID " + room.Id);
+        var staticModel = RoomManager.GetModel(room.RoomData.ModelName, room.Id) ?? throw new ArgumentNullException("No modeldata found for roomID " + room.Id);
 
         this.Model = new RoomModelDynamic(staticModel);
 
@@ -62,12 +62,12 @@ public class GameMap
 
     public static void TeleportToItem(RoomUser user, Item item)
     {
-        if (item.GetRoom() != null)
+        if (item.Room != null)
         {
             user.RemoveStatus("mv");
             user.UpdateNeeded = true;
-            item.GetRoom().SendPacket(RoomItemHandling.TeleportUser(user, item.Coordinate, 0, item.Z, true));
-            item.GetRoom().RoomUserManager.UpdateUserStatus(user, false);
+            item.            Room.SendPacket(RoomItemHandling.TeleportUser(user, item.Coordinate, 0, item.Z, true));
+            item.            Room.RoomUserManager.UpdateUserStatus(user, false);
         }
     }
 
@@ -136,7 +136,7 @@ public class GameMap
             return true;
         }
 
-        return this._roomInstance.RoomData.AllowWalkthrough || this.SquareTaking[x, y] == 0;
+        return this._room.RoomData.AllowWalkthrough || this.SquareTaking[x, y] == 0;
     }
 
     public List<RoomUser> GetRoomUsers(Point coord)
@@ -215,7 +215,7 @@ public class GameMap
         var maxY = 0;
         if (checkLines)
         {
-            var items = this._roomInstance.RoomItemHandling.GetFloor.ToArray();
+            var items = this._room.RoomItemHandling.FloorItems.ToArray();
             foreach (var item in items.ToList())
             {
                 if (item == null)
@@ -276,7 +276,7 @@ public class GameMap
             }
         }
 
-        foreach (var item in this._roomInstance.RoomItemHandling.GetFloor.ToArray())
+        foreach (var item in this._room.RoomItemHandling.FloorItems.ToArray())
         {
             if (!this.AddItemToMap(item))
             {
@@ -284,7 +284,7 @@ public class GameMap
             }
         }
 
-        foreach (var user in this._roomInstance.RoomUserManager.GetUserList().ToList())
+        foreach (var user in this._room.RoomUserManager.UserList.ToList())
         {
             if (this.ValidTile(user.X, user.Y))
             {
@@ -303,7 +303,7 @@ public class GameMap
         {
             if (this.ItemHeightMap[coord.X, coord.Y] <= item.TotalHeight)
             {
-                if (item.GetBaseItem().IsSeat || item.GetBaseItem().InteractionType == InteractionType.BED)
+                if (item.ItemData.IsSeat || item.ItemData.InteractionType == InteractionType.BED)
                 {
                     this.ItemHeightMap[coord.X, coord.Y] = item.Z - this.Model.SqFloorHeight[item.X, item.Y];
                 }
@@ -312,7 +312,7 @@ public class GameMap
                     this.ItemHeightMap[coord.X, coord.Y] = item.TotalHeight - this.Model.SqFloorHeight[item.X, item.Y];
                 }
 
-                this.EffectMap[coord.X, coord.Y] = item.GetBaseItem().InteractionType switch
+                this.EffectMap[coord.X, coord.Y] = item.ItemData.InteractionType switch
                 {
                     InteractionType.POOL => 1,
                     InteractionType.ICESKATES => 3,
@@ -324,42 +324,42 @@ public class GameMap
                     InteractionType.CROSSTRAINER => 9,
                     _ => 0,
                 };
-                if (item.GetBaseItem().InteractionType == InteractionType.FREEZE_TILE_BLOCK && item.ExtraData != "")
+                if (item.ItemData.InteractionType == InteractionType.FREEZE_TILE_BLOCK && item.ExtraData != "")
                 {
                     if (this.MapGame[coord.X, coord.Y] != 3)
                     {
                         this.MapGame[coord.X, coord.Y] = 1;
                     }
                 }
-                else if (item.GetBaseItem().InteractionType == InteractionType.BANZAI_PYRAMID && item.ExtraData == "1")
+                else if (item.ItemData.InteractionType == InteractionType.BANZAI_PYRAMID && item.ExtraData == "1")
                 {
                     if (this.MapGame[coord.X, coord.Y] != 3)
                     {
                         this.MapGame[coord.X, coord.Y] = 1;
                     }
                 }
-                else if (item.GetBaseItem().InteractionType == InteractionType.GATE && item.ExtraData == "1")
+                else if (item.ItemData.InteractionType == InteractionType.GATE && item.ExtraData == "1")
                 {
                     if (this.MapGame[coord.X, coord.Y] != 3)
                     {
                         this.MapGame[coord.X, coord.Y] = 1;
                     }
                 }
-                else if (item.GetBaseItem().Walkable)
+                else if (item.ItemData.Walkable)
                 {
                     if (this.MapGame[coord.X, coord.Y] != 3)
                     {
                         this.MapGame[coord.X, coord.Y] = 1;
                     }
                 }
-                else if (!item.GetBaseItem().Walkable && item.GetBaseItem().Stackable)
+                else if (!item.ItemData.Walkable && item.ItemData.Stackable)
                 {
                     if (this.MapGame[coord.X, coord.Y] != 3)
                     {
                         this.MapGame[coord.X, coord.Y] = 2;
                     }
                 }
-                else if (item.GetBaseItem().IsSeat || item.GetBaseItem().InteractionType == InteractionType.BED)
+                else if (item.ItemData.IsSeat || item.ItemData.InteractionType == InteractionType.BED)
                 {
                     this.MapGame[coord.X, coord.Y] = 3;
                 }
@@ -416,56 +416,56 @@ public class GameMap
 
     private void AddSpecialItems(Item item)
     {
-        switch (item.GetBaseItem().InteractionType)
+        switch (item.ItemData.InteractionType)
         {
             case InteractionType.GUILD_GATE:
-                this._roomInstance.GameItemHandler.AddGroupGate(item);
+                this._room.GameItemHandler.AddGroupGate(item);
                 break;
             case InteractionType.BANZAI_FLOOR:
-                this._roomInstance.BattleBanzai.AddTile(item, item.Id);
+                this._room.BattleBanzai.AddTile(item, item.Id);
                 break;
             case InteractionType.BANZAI_TELE:
-                this._roomInstance.GameItemHandler.AddTeleport(item, item.Id);
+                this._room.GameItemHandler.AddTeleport(item, item.Id);
                 item.ExtraData = "";
                 break;
             case InteractionType.BANZAI_PYRAMID:
-                this._roomInstance.GameItemHandler.AddPyramid(item, item.Id);
+                this._room.GameItemHandler.AddPyramid(item, item.Id);
                 break;
             case InteractionType.BANZAI_BLOB_2:
             case InteractionType.BANZAI_BLOB:
-                this._roomInstance.GameItemHandler.AddBlob(item, item.Id);
+                this._room.GameItemHandler.AddBlob(item, item.Id);
                 break;
             case InteractionType.FREEZE_EXIT:
-                this._roomInstance.GameItemHandler.AddExitTeleport(item);
+                this._room.GameItemHandler.AddExitTeleport(item);
                 break;
             case InteractionType.FREEZE_TILE_BLOCK:
-                this._roomInstance.Freeze.AddFreezeBlock(item);
+                this._room.Freeze.AddFreezeBlock(item);
                 break;
         }
     }
 
     private void RemoveSpecialItem(Item item)
     {
-        switch (item.GetBaseItem().InteractionType)
+        switch (item.ItemData.InteractionType)
         {
             case InteractionType.GUILD_GATE:
-                this._roomInstance.GameItemHandler.RemoveGroupGate(item);
+                this._room.GameItemHandler.RemoveGroupGate(item);
                 break;
             case InteractionType.BANZAI_FLOOR:
-                this._roomInstance.BattleBanzai.RemoveTile(item.Id);
+                this._room.BattleBanzai.RemoveTile(item.Id);
                 break;
             case InteractionType.BANZAI_TELE:
-                this._roomInstance.GameItemHandler.RemoveTeleport(item.Id);
+                this._room.GameItemHandler.RemoveTeleport(item.Id);
                 break;
             case InteractionType.BANZAI_PYRAMID:
-                this._roomInstance.GameItemHandler.RemovePyramid(item.Id);
+                this._room.GameItemHandler.RemovePyramid(item.Id);
                 break;
             case InteractionType.BANZAI_BLOB_2:
             case InteractionType.BANZAI_BLOB:
-                this._roomInstance.GameItemHandler.RemoveBlob(item.Id);
+                this._room.GameItemHandler.RemoveBlob(item.Id);
                 break;
             case InteractionType.FREEZE_TILE_BLOCK:
-                this._roomInstance.Freeze.RemoveFreezeBlock(item.Id);
+                this._room.Freeze.RemoveFreezeBlock(item.Id);
                 break;
             case InteractionType.FOOTBALL_GOAL_GREEN:
             case InteractionType.FOOTBALL_COUNTER_GREEN:
@@ -473,7 +473,7 @@ public class GameMap
             case InteractionType.BANZAI_GATE_GREEN:
             case InteractionType.FREEZE_GREEN_COUNTER:
             case InteractionType.FREEZE_GREEN_GATE:
-                this._roomInstance.GameManager.RemoveFurnitureFromTeam(item, TeamType.Green);
+                this._room.GameManager.RemoveFurnitureFromTeam(item, TeamType.Green);
                 break;
             case InteractionType.FOOTBALL_GOAL_YELLOW:
             case InteractionType.FOOTBALL_COUNTER_YELLOW:
@@ -481,7 +481,7 @@ public class GameMap
             case InteractionType.BANZAI_GATE_YELLOW:
             case InteractionType.FREEZE_YELLOW_COUNTER:
             case InteractionType.FREEZE_YELLOW_GATE:
-                this._roomInstance.GameManager.RemoveFurnitureFromTeam(item, TeamType.Yellow);
+                this._room.GameManager.RemoveFurnitureFromTeam(item, TeamType.Yellow);
                 break;
             case InteractionType.FOOTBALL_GOAL_BLUE:
             case InteractionType.FOOTBALL_COUNTER_BLUE:
@@ -489,7 +489,7 @@ public class GameMap
             case InteractionType.BANZAI_GATE_BLUE:
             case InteractionType.FREEZE_BLUE_COUNTER:
             case InteractionType.FREEZE_BLUE_GATE:
-                this._roomInstance.GameManager.RemoveFurnitureFromTeam(item, TeamType.Blue);
+                this._room.GameManager.RemoveFurnitureFromTeam(item, TeamType.Blue);
                 break;
             case InteractionType.FOOTBALL_GOAL_RED:
             case InteractionType.FOOTBALL_COUNTER_RED:
@@ -497,19 +497,19 @@ public class GameMap
             case InteractionType.BANZAI_GATE_RED:
             case InteractionType.FREEZE_RED_COUNTER:
             case InteractionType.FREEZE_RED_GATE:
-                this._roomInstance.GameManager.RemoveFurnitureFromTeam(item, TeamType.Red);
+                this._room.GameManager.RemoveFurnitureFromTeam(item, TeamType.Red);
                 break;
             case InteractionType.FREEZE_EXIT:
-                this._roomInstance.GameItemHandler.RemoveExitTeleport(item);
+                this._room.GameItemHandler.RemoveExitTeleport(item);
                 break;
         }
     }
 
     public bool RemoveFromMap(Item item)
     {
-        if (WiredUtillity.TypeIsWired(item.GetBaseItem().InteractionType))
+        if (WiredUtillity.TypeIsWired(item.ItemData.InteractionType))
         {
-            this._roomInstance.WiredHandler.RemoveFurniture(item);
+            this._room.WiredHandler.RemoveFurniture(item);
         }
 
         this.RemoveSpecialItem(item);
@@ -556,19 +556,19 @@ public class GameMap
 
     public bool AddItemToMap(Item item)
     {
-        if (WiredUtillity.TypeIsWired(item.GetBaseItem().InteractionType))
+        if (WiredUtillity.TypeIsWired(item.ItemData.InteractionType))
         {
-            this._roomInstance.WiredHandler.AddFurniture(item);
+            this._room.WiredHandler.AddFurniture(item);
         }
 
         this.AddSpecialItems(item);
 
-        switch (item.GetBaseItem().InteractionType)
+        switch (item.ItemData.InteractionType)
         {
             case InteractionType.ROLLER:
-                if (!this._roomInstance.RoomItemHandling.GetRollers().Contains(item))
+                if (!this._room.RoomItemHandling.Rollers.Contains(item))
                 {
-                    this._roomInstance.RoomItemHandling.TryAddRoller(item.Id, item);
+                    this._room.RoomItemHandling.TryAddRoller(item.Id, item);
                 }
 
                 break;
@@ -578,7 +578,7 @@ public class GameMap
             case InteractionType.BANZAI_GATE_GREEN:
             case InteractionType.FREEZE_GREEN_COUNTER:
             case InteractionType.FREEZE_GREEN_GATE:
-                this._roomInstance.GameManager.AddFurnitureToTeam(item, TeamType.Green);
+                this._room.GameManager.AddFurnitureToTeam(item, TeamType.Green);
                 break;
             case InteractionType.FOOTBALL_GOAL_YELLOW:
             case InteractionType.FOOTBALL_COUNTER_YELLOW:
@@ -586,7 +586,7 @@ public class GameMap
             case InteractionType.BANZAI_GATE_YELLOW:
             case InteractionType.FREEZE_YELLOW_COUNTER:
             case InteractionType.FREEZE_YELLOW_GATE:
-                this._roomInstance.GameManager.AddFurnitureToTeam(item, TeamType.Yellow);
+                this._room.GameManager.AddFurnitureToTeam(item, TeamType.Yellow);
                 break;
             case InteractionType.FOOTBALL_GOAL_BLUE:
             case InteractionType.FOOTBALL_COUNTER_BLUE:
@@ -594,7 +594,7 @@ public class GameMap
             case InteractionType.BANZAI_GATE_BLUE:
             case InteractionType.FREEZE_BLUE_COUNTER:
             case InteractionType.FREEZE_BLUE_GATE:
-                this._roomInstance.GameManager.AddFurnitureToTeam(item, TeamType.Blue);
+                this._room.GameManager.AddFurnitureToTeam(item, TeamType.Blue);
                 break;
             case InteractionType.FOOTBALL_GOAL_RED:
             case InteractionType.FOOTBALL_COUNTER_RED:
@@ -602,11 +602,11 @@ public class GameMap
             case InteractionType.BANZAI_GATE_RED:
             case InteractionType.FREEZE_RED_COUNTER:
             case InteractionType.FREEZE_RED_GATE:
-                this._roomInstance.GameManager.AddFurnitureToTeam(item, TeamType.Red);
+                this._room.GameManager.AddFurnitureToTeam(item, TeamType.Red);
                 break;
         }
 
-        if (item.GetBaseItem().Type != ItemType.S)
+        if (item.ItemData.Type != ItemType.S)
         {
             return true;
         }
@@ -616,7 +616,7 @@ public class GameMap
             this.AddCoordinatedItem(item, point);
         }
 
-        if (item.GetBaseItem().InteractionType == InteractionType.FOOTBALL)
+        if (item.ItemData.InteractionType == InteractionType.FOOTBALL)
         {
             return true;
         }
@@ -651,7 +651,7 @@ public class GameMap
         }
         else
         {
-            return (this._roomInstance.RoomData.AllowWalkthrough || isOverride || this.UserOnMap[x, y] == 0) && CanWalkState(this.MapGame[x, y], isOverride);
+            return (this._room.RoomData.AllowWalkthrough || isOverride || this.UserOnMap[x, y] == 0) && CanWalkState(this.MapGame[x, y], isOverride);
         };
     }
 
@@ -716,7 +716,7 @@ public class GameMap
         {
             if (roomItem.TotalHeight > highestStack)
             {
-                if (roomItem.GetBaseItem().IsSeat || roomItem.GetBaseItem().InteractionType == InteractionType.BED)
+                if (roomItem.ItemData.IsSeat || roomItem.ItemData.InteractionType == InteractionType.BED)
                 {
                     deduct = true;
                     deductable = roomItem.Height;
@@ -757,11 +757,11 @@ public class GameMap
             {
                 for (var i = 1; i < length; i++)
                 {
-                    pointList.AddIfNotExists(new Point(posX, posY + i));
+                    pointList.TryAdd(new Point(posX, posY + i));
 
                     for (var j = 1; j < width; j++)
                     {
-                        pointList.AddIfNotExists(new Point(posX + j, posY + i));
+                        pointList.TryAdd(new Point(posX + j, posY + i));
                     }
                 }
             }
@@ -769,11 +769,11 @@ public class GameMap
             {
                 for (var i = 1; i < length; i++)
                 {
-                    pointList.AddIfNotExists(new Point(posX + i, posY));
+                    pointList.TryAdd(new Point(posX + i, posY));
 
                     for (var j = 1; j < width; j++)
                     {
-                        pointList.AddIfNotExists(new Point(posX + i, posY + j));
+                        pointList.TryAdd(new Point(posX + i, posY + j));
                     }
                 }
             }
@@ -785,11 +785,11 @@ public class GameMap
             {
                 for (var i = 1; i < width; i++)
                 {
-                    pointList.AddIfNotExists(new Point(posX + i, posY));
+                    pointList.TryAdd(new Point(posX + i, posY));
 
                     for (var j = 1; j < length; j++)
                     {
-                        pointList.AddIfNotExists(new Point(posX + i, posY + j));
+                        pointList.TryAdd(new Point(posX + i, posY + j));
                     }
                 }
             }
@@ -797,11 +797,11 @@ public class GameMap
             {
                 for (var i = 1; i < width; i++)
                 {
-                    pointList.AddIfNotExists(new Point(posX, posY + i));
+                    pointList.TryAdd(new Point(posX, posY + i));
 
                     for (var j = 1; j < length; j++)
                     {
-                        pointList.AddIfNotExists(new Point(posX + j, posY + i));
+                        pointList.TryAdd(new Point(posX + j, posY + i));
                     }
                 }
             }
@@ -906,7 +906,7 @@ public class GameMap
 
         if (movements.Count > 0)
         {
-            return movements[WibboEnvironment.GetRandomNumber(0, movements.Count - 1)];
+            return movements.GetRandomElement();
         }
         else
         {
@@ -954,7 +954,7 @@ public class GameMap
 
         if (movements2.Count > 0)
         {
-            return movements2[WibboEnvironment.GetRandomNumber(0, movements2.Count - 1)];
+            return movements2.GetRandomElement();
         }
 
         return MovementState.none;
@@ -1039,7 +1039,7 @@ public class GameMap
 
         if (movements.Count > 0)
         {
-            return movements[WibboEnvironment.GetRandomNumber(0, movements.Count - 1)];
+            return movements.GetRandomElement();
         }
         else
         {
@@ -1087,7 +1087,7 @@ public class GameMap
 
         if (movements2.Count > 0)
         {
-            return movements2[WibboEnvironment.GetRandomNumber(0, movements2.Count - 1)];
+            return movements2.GetRandomElement();
         }
 
         return MovementState.none;
@@ -1114,7 +1114,7 @@ public class GameMap
 
             if (this.SquareHasUsers(newX, newY))
             {
-                return this._roomInstance.RoomUserManager.GetUserForSquare(newX, newY);
+                return this._room.RoomUserManager.GetUserForSquare(newX, newY);
             }
         }
 
@@ -1142,9 +1142,9 @@ public class GameMap
             var newX = x + direction.X;
             var newY = y + direction.Y;
 
-            if (this._roomInstance.RoomUserManager.GetUserForSquareNotBot(newX, newY) != null)
+            if (this._room.RoomUserManager.GetUserForSquareNotBot(newX, newY) != null)
             {
-                return this._roomInstance.RoomUserManager.GetUserForSquareNotBot(newX, newY);
+                return this._room.RoomUserManager.GetUserForSquareNotBot(newX, newY);
             }
         }
 

@@ -4,22 +4,22 @@ using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Games.GameClients;
 
-public class MentionManager
+public static class MentionManager
 {
-    private readonly string _mentionPattern = @"@(.*?)(?=\s|$)";
+    private static readonly string MentionPattern = @"@(.*?)(?=\s|$)";
 
-    private readonly string _stylePrefix = "[tag]";
-    private readonly string _styleSuffix = "[/tag]";
+    private static readonly string StylePrefix = "[tag]";
+    private static readonly string StyleSuffix = "[/tag]";
 
-    public string Parse(GameClient session, string message)
+    public static string Parse(GameClient session, string message)
     {
         var styledMessage = message;
 
-        var changeLength = this._stylePrefix.Length + this._styleSuffix.Length;
+        var changeLength = StylePrefix.Length + StyleSuffix.Length;
         var changeCount = 0;
         var usersTarget = new List<string>();
 
-        foreach (var m in Regex.Matches(message, this._mentionPattern).Cast<Match>())
+        foreach (var m in Regex.Matches(message, MentionPattern).Cast<Match>())
         {
             var targetUsername = m.Groups[1].Value.ToLower();
 
@@ -49,13 +49,13 @@ public class MentionManager
                     break;
                 }
             }
-            else if (!SendNotif(session, targetUsername, message))
+            else if (!SendNotification(session, targetUsername, message))
             {
                 continue;
             }
 
-            styledMessage = styledMessage.Insert((changeCount * changeLength) + m.Index, this._stylePrefix);
-            styledMessage = styledMessage.Insert((changeCount * changeLength) + m.Index + this._stylePrefix.Length + m.Length, this._styleSuffix);
+            styledMessage = styledMessage.Insert((changeCount * changeLength) + m.Index, StylePrefix);
+            styledMessage = styledMessage.Insert((changeCount * changeLength) + m.Index + StylePrefix.Length + m.Length, StyleSuffix);
 
             changeCount++;
         }
@@ -63,9 +63,9 @@ public class MentionManager
         return styledMessage;
     }
 
-    public static bool SendNotif(GameClient session, string targetUsername, string message)
+    public static bool SendNotification(GameClient session, string targetUsername, string message)
     {
-        var targetClient = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(targetUsername);
+        var targetClient = GameClientManager.GetClientByUsername(targetUsername);
 
         if (targetClient == null)
         {
@@ -110,7 +110,7 @@ public class MentionManager
 
         session.User.EveryoneTimer = DateTime.Now;
 
-        var onlineUsers = WibboEnvironment.GetGame().GetGameClientManager().GetClientsById(session.User.Messenger.Friends.Keys);
+        var onlineUsers = GameClientManager.GetClientsById(session.User.Messenger.Friends.Keys);
 
         if (onlineUsers == null)
         {
@@ -138,7 +138,7 @@ public class MentionManager
             return false;
         }
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null)
         {
             return false;
@@ -159,7 +159,7 @@ public class MentionManager
 
         session.User.HereTimer = DateTime.Now;
 
-        var onlineUsers = room.RoomUserManager.GetUserList();
+        var onlineUsers = room.RoomUserManager.UserList;
 
         if (onlineUsers == null)
         {

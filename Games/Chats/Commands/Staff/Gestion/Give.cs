@@ -7,7 +7,7 @@ internal sealed class Give : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
 
         var updateVal = parameters[2];
         switch (updateVal.ToLower())

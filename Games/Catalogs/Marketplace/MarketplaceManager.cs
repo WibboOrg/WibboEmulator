@@ -1,24 +1,18 @@
 namespace WibboEmulator.Games.Catalogs.Marketplace;
+
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Catalog;
 
-public class MarketplaceManager
+public static class MarketplaceManager
 {
-    public List<int> MarketItemKeys { get; set; } = new();
-    public List<MarketOffer> MarketItems { get; set; } = new();
-    public Dictionary<int, int> MarketCounts { get; set; } = new();
-    public Dictionary<int, int> MarketAverages { get; set; } = new();
+    public static List<int> MarketItemKeys { get; set; } = new();
+    public static List<MarketOffer> MarketItems { get; set; } = new();
+    public static Dictionary<int, int> MarketCounts { get; set; } = new();
+    public static Dictionary<int, int> MarketAverages { get; set; } = new();
 
-    public MarketplaceManager()
+    public static int AvgPriceForSprite(int spriteID)
     {
-        this.MarketItemKeys = new List<int>();
-        this.MarketItems = new List<MarketOffer>();
-        this.MarketCounts = new Dictionary<int, int>();
-        this.MarketAverages = new Dictionary<int, int>();
-    }
-
-    public int AvgPriceForSprite(int spriteID)
-    {
-        if (this.MarketAverages.TryGetValue(spriteID, out var spriteCount) && this.MarketCounts.TryGetValue(spriteID, out var averageSprite))
+        if (MarketAverages.TryGetValue(spriteID, out var spriteCount) && MarketCounts.TryGetValue(spriteID, out var averageSprite))
         {
             if (spriteCount > 0)
             {
@@ -28,13 +22,13 @@ public class MarketplaceManager
             return 0;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         var priceSprite = CatalogMarketplaceDataDao.GetPriceBySprite(dbClient, spriteID);
         var soldSprite = CatalogMarketplaceDataDao.GetSoldBySprite(dbClient, spriteID);
 
-        this.MarketAverages.Add(spriteID, priceSprite);
-        this.MarketCounts.Add(spriteID, soldSprite);
+        MarketAverages.Add(spriteID, priceSprite);
+        MarketCounts.Add(spriteID, soldSprite);
 
         if (soldSprite > 0)
         {
@@ -46,11 +40,11 @@ public class MarketplaceManager
 
     public static double FormatTimestamp() => WibboEnvironment.GetUnixTimestamp() - 172800;
 
-    public int OfferCountForSprite(int spriteID)
+    public static int OfferCountForSprite(int spriteID)
     {
         var dictionary = new Dictionary<int, MarketOffer>();
         var dictionary2 = new Dictionary<int, int>();
-        foreach (var item in this.MarketItems)
+        foreach (var item in MarketItems)
         {
             if (dictionary.TryGetValue(item.SpriteId, out var _))
             {

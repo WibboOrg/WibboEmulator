@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Moderation;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -11,30 +13,30 @@ internal sealed class Ban : IChatCommand
             return;
         }
 
-        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
         if (targetUser == null || targetUser.User == null)
         {
-            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
             return;
         }
 
         if (targetUser.User.Rank >= session.User.Rank)
         {
-            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", session.Language));
             return;
         }
 
         _ = int.TryParse(parameters.Length >= 3 ? parameters[2] : "0", out var expire);
         if (expire <= 600)
         {
-            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("ban.toolesstime", session.Langue));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("ban.toolesstime", session.Language));
         }
         else
         {
             var raison = CommandManager.MergeParams(parameters, 3);
             session.SendWhisper("Tu as bannit " + targetUser.User.Username + " pour " + raison + "!");
 
-            WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.User.Username, expire, raison, false);
+            GameClientManager.BanUser(targetUser, session.User.Username, expire, raison, false);
             _ = session.User.CheckChatMessage(raison, "<CMD>", room.Id);
         }
     }

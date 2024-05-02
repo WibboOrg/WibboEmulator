@@ -3,14 +3,16 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
+using WibboEmulator.Core.Settings;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms.Events;
+using WibboEmulator.Utilities;
 
 public class WiredHandler
 {
-    private readonly Room _roomInstance;
+    private readonly Room _room;
 
     private readonly ConcurrentDictionary<Point, List<Item>> _actionStacks;
     private readonly ConcurrentDictionary<Point, List<Item>> _conditionStacks;
@@ -36,7 +38,7 @@ public class WiredHandler
 
     public WiredHandler(Room room)
     {
-        this._roomInstance = room;
+        this._room = room;
         this._actionStacks = new ConcurrentDictionary<Point, List<Item>>();
         this._conditionStacks = new ConcurrentDictionary<Point, List<Item>>();
         this._requestingUpdates = new ConcurrentQueue<WiredCycle>();
@@ -48,13 +50,13 @@ public class WiredHandler
         this._specialUnseen = new Dictionary<Point, int>();
         this._tickCounter = 0;
 
-        this.SecurityEnabled = WibboEnvironment.GetSettings().GetData<bool>("wired.security.enable");
+        this.SecurityEnabled = SettingsManager.GetData<bool>("wired.security.enable");
     }
 
     public void AddFurniture(Item item)
     {
         var itemCoord = item.Coordinate;
-        if (WiredUtillity.TypeIsWiredAction(item.GetBaseItem().InteractionType))
+        if (WiredUtillity.TypeIsWiredAction(item.ItemData.InteractionType))
         {
             this._actionStacks.AddOrUpdate(itemCoord, _ => new List<Item> { item }, (_, existingValue) =>
             {
@@ -62,7 +64,7 @@ public class WiredHandler
                 return existingValue;
             });
         }
-        else if (WiredUtillity.TypeIsWiredCondition(item.GetBaseItem().InteractionType))
+        else if (WiredUtillity.TypeIsWiredCondition(item.ItemData.InteractionType))
         {
             this._conditionStacks.AddOrUpdate(itemCoord, _ => new List<Item> { item }, (_, existingValue) =>
             {
@@ -70,28 +72,28 @@ public class WiredHandler
                 return existingValue;
             });
         }
-        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_RANDOM)
+        else if (item.ItemData.InteractionType == InteractionType.SPECIAL_RANDOM)
         {
             if (!this._specialRandom.Contains(itemCoord))
             {
                 this._specialRandom.Add(itemCoord);
             }
         }
-        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_UNSEEN)
+        else if (item.ItemData.InteractionType == InteractionType.SPECIAL_UNSEEN)
         {
             if (!this._specialUnseen.ContainsKey(itemCoord))
             {
                 this._specialUnseen.Add(itemCoord, 0);
             }
         }
-        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_ANIMATE)
+        else if (item.ItemData.InteractionType == InteractionType.SPECIAL_ANIMATE)
         {
             if (!this._specialAnimate.Contains(itemCoord))
             {
                 this._specialAnimate.Add(itemCoord);
             }
         }
-        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIAL_OR_EVAL)
+        else if (item.ItemData.InteractionType == InteractionType.SPECIAL_OR_EVAL)
         {
             if (!this._specialOrEval.Contains(itemCoord))
             {
@@ -104,17 +106,17 @@ public class WiredHandler
     {
         var itemCoord = item.Coordinate;
 
-        if (WiredUtillity.TypeIsWiredAction(item.GetBaseItem().InteractionType))
+        if (WiredUtillity.TypeIsWiredAction(item.ItemData.InteractionType))
         {
             RemoveFromStack(this._actionStacks, itemCoord, item);
         }
-        else if (WiredUtillity.TypeIsWiredCondition(item.GetBaseItem().InteractionType))
+        else if (WiredUtillity.TypeIsWiredCondition(item.ItemData.InteractionType))
         {
             RemoveFromStack(this._conditionStacks, itemCoord, item);
         }
         else
         {
-            var interactionType = item.GetBaseItem().InteractionType;
+            var interactionType = item.ItemData.InteractionType;
 
             if (interactionType == InteractionType.SPECIAL_RANDOM && this._specialRandom.Contains(itemCoord))
             {
@@ -257,7 +259,7 @@ public class WiredHandler
         {
             this._blockWired = true;
             this._blockWiredDateTime = DateTime.Now;
-            this._roomInstance.SendPacket(new BroadcastMessageAlertComposer("Attention la limite d'effets wired est dépassée, ils sont par conséquent désactivés durant 5 secondes"));
+            this._room.SendPacket(new BroadcastMessageAlertComposer("Attention la limite d'effets wired est dépassée, ils sont par conséquent désactivés durant 5 secondes"));
             return;
         }
 
@@ -295,8 +297,7 @@ public class WiredHandler
 
         if (this._specialRandom.Contains(coordinate))
         {
-            var rdnWired = WibboEnvironment.GetRandomNumber(0, actionStack.Count - 1);
-            var actRand = actionStack[rdnWired];
+            var actRand = actionStack.GetRandomElement();
             ((IWiredEffect)actRand.WiredHandler).Handle(user, item);
         }
         else if (this._specialUnseen.TryGetValue(coordinate, out var nextWiredIndex))

@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Several;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -24,9 +26,9 @@ internal sealed class SuperPull : IChatCommand
             return;
         }
 
-        if (targetUser.Client.User.PremiumProtect && !session.User.HasPermission("mod"))
+        if (targetUser.Client.User.HasPremiumProtect && !session.User.HasPermission("mod"))
         {
-            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("premium.notallowed", session.Language));
             return;
         }
 
@@ -35,7 +37,7 @@ internal sealed class SuperPull : IChatCommand
             return;
         }
 
-        userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.pull.chat.success", session.Langue), targetName), 0, false);
+        userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.pull.chat.success", session.Language), targetName), 0, false);
         if (userRoom.RotBody % 2 != 0)
         {
             userRoom.RotBody--;

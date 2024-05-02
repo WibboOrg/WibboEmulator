@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
@@ -14,9 +15,9 @@ public class KickUser : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
     {
         if (user != null && user.Client != null)
         {
-            if (user.RoomId == this.RoomInstance.RoomData.Id)
+            if (user.RoomId == this.Room.RoomData.Id)
             {
-                this.RoomInstance.RoomUserManager.RemoveUserFromRoom(user.Client, true, true);
+                this.Room.RoomUserManager.RemoveUserFromRoom(user.Client, true, true);
             }
         }
 
@@ -35,9 +36,9 @@ public class KickUser : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
     {
         if (user != null && user.Client != null && user.Client.User != null)
         {
-            if (user.Client.User.HasPermission("mod") || this.RoomInstance.RoomData.OwnerId == user.UserId)
+            if (user.Client.User.HasPermission("mod") || this.Room.RoomData.OwnerId == user.UserId)
             {
-                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("wired.kick.exception", user.Client.Langue));
+                user.SendWhisperChat(LanguageManager.TryGetValue("wired.kick.exception", user.Client.Language));
 
                 return false;
             }

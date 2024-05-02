@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Administration;
+
+using WibboEmulator.Games.Chats.Filter;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -11,7 +13,7 @@ internal sealed class AddFilter : IChatCommand
             return;
         }
 
-        WibboEnvironment.GetGame().GetChatManager().GetFilter().AddFilterPub(parameters[1].ToLower());
+        WordFilterManager.AddFilterPub(parameters[1].ToLower());
         session.SendWhisper("Le mot" + parameters[1] + " vient d'être ajouté au filtre des mots interdits.");
     }
 }

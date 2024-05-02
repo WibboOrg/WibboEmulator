@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Several;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games.Teams;
@@ -15,11 +17,11 @@ internal sealed class MoonWalk : IChatCommand
         userRoom.MoonwalkEnabled = !userRoom.MoonwalkEnabled;
         if (userRoom.MoonwalkEnabled)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.true", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.moonwalk.true", session.Language));
         }
         else
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.false", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.moonwalk.false", session.Language));
         }
     }
 }

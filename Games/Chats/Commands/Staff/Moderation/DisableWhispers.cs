@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Moderation;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -8,11 +10,11 @@ internal sealed class DisableWhispers : IChatCommand
     {
         if (session.User.ViewMurmur)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.murmur.true", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.murmur.true", session.Language));
         }
         else
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.murmur.false", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.murmur.false", session.Language));
         }
 
         session.User.ViewMurmur = !session.User.ViewMurmur;

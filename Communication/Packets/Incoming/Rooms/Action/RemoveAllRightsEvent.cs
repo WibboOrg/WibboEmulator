@@ -1,8 +1,10 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Action;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class RemoveAllRightsEvent : IPacketEvent
 {
@@ -15,7 +17,7 @@ internal sealed class RemoveAllRightsEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -46,7 +48,7 @@ internal sealed class RemoveAllRightsEvent : IPacketEvent
             session.SendPacket(new FlatControllerRemovedMessageComposer(room.Id, num));
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             RoomRightDao.Delete(dbClient, room.Id);
         }

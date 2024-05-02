@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Pets.Horse;
 using System.Drawing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -16,7 +17,7 @@ internal sealed class RideHorseEvent : IPacketEvent
         }
 
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -55,7 +56,7 @@ internal sealed class RideHorseEvent : IPacketEvent
         {
             if (pet.RidingHorse)
             {
-                var speechtxt = WibboEnvironment.GetLanguageManager().TryGetValue("pet.alreadymounted", session.Langue);
+                var speechtxt = LanguageManager.TryGetValue("pet.alreadymounted", session.Language);
                 pet.OnChat(speechtxt, 0, false);
             }
             else if (user.RidingHorse)

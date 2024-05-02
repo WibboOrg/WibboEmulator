@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Inventory.Bots;
@@ -22,7 +23,7 @@ internal sealed class PickUpBotEvent : IPacketEvent
             return;
         }
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null || !room.CheckRights(session, true))
         {
             return;
@@ -30,7 +31,7 @@ internal sealed class PickUpBotEvent : IPacketEvent
 
         if (!room.RoomUserManager.TryGetBot(botId, out var botUser))
         {
-            var targetUser = session.User.CurrentRoom.RoomUserManager.GetRoomUserByUserId(botId);
+            var targetUser = session.User.Room.RoomUserManager.GetRoomUserByUserId(botId);
             if (targetUser == null)
             {
                 return;
@@ -50,13 +51,13 @@ internal sealed class PickUpBotEvent : IPacketEvent
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             BotUserDao.UpdateRoomId(dbClient, botId);
         }
 
         _ = session.User.InventoryComponent.TryAddBot(new Bot(botUser.BotData.Id, botUser.BotData.OwnerId, botUser.BotData.Name, botUser.BotData.Motto, botUser.BotData.Look, botUser.BotData.Gender, botUser.BotData.WalkingEnabled, botUser.BotData.AutomaticChat, botUser.BotData.ChatText, botUser.BotData.SpeakingInterval, botUser.BotData.IsDancing, botUser.BotData.Enable, botUser.BotData.Handitem, botUser.BotData.Status, botUser.BotData.AiType));
-        session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.GetBots()));
+        session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.Bots));
         room.RoomUserManager.RemoveBot(botUser.VirtualId, false);
     }
 }

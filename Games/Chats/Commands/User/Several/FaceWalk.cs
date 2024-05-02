@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Several;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games.Teams;
@@ -15,11 +17,11 @@ internal sealed class FaceWalk : IChatCommand
         userRoom.FacewalkEnabled = !userRoom.FacewalkEnabled;
         if (userRoom.FacewalkEnabled)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.true", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.facewalk.true", session.Language));
         }
         else
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.false", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.facewalk.false", session.Language));
         }
     }
 }

@@ -4,6 +4,7 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map;
+using WibboEmulator.Utilities;
 
 public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
 {
@@ -29,7 +30,7 @@ public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEf
 
         if (this.Items.Count > 1)
         {
-            var roomItem = this.Items[WibboEnvironment.GetRandomNumber(0, this.Items.Count - 1)];
+            var roomItem = this.Items.GetRandomElement();
             if (roomItem == null)
             {
                 return false;

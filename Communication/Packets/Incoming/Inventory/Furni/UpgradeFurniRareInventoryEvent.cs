@@ -1,8 +1,12 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Furni;
 
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Utilities;
 
 internal sealed class UpgradeFurniRareInventoryEvent : IPacketEvent
 {
@@ -29,59 +33,59 @@ internal sealed class UpgradeFurniRareInventoryEvent : IPacketEvent
             return;
         }
 
-        if (item.GetBaseItem().RarityLevel is RaretyLevelType.None or RaretyLevelType.Legendary)
+        if (item.ItemData.RarityLevel is RaretyLevelType.None or RaretyLevelType.Legendary)
         {
             return;
         }
 
-        _ = WibboEnvironment.GetGame().GetCatalog().TryGetPage(1635463734, out var pageLegendary);
-        _ = WibboEnvironment.GetGame().GetCatalog().TryGetPage(1635463733, out var pageEpic);
-        _ = WibboEnvironment.GetGame().GetCatalog().TryGetPage(1635463732, out var pageCommun);
-        _ = WibboEnvironment.GetGame().GetCatalog().TryGetPage(1635463731, out var pageBasic);
+        _ = CatalogManager.TryGetPage(1635463734, out var pageLegendary);
+        _ = CatalogManager.TryGetPage(1635463733, out var pageEpic);
+        _ = CatalogManager.TryGetPage(1635463732, out var pageCommun);
+        _ = CatalogManager.TryGetPage(1635463731, out var pageBasic);
 
         if (pageLegendary == null || pageEpic == null || pageCommun == null || pageBasic == null)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
-        if (item.GetBaseItem().RarityLevel == RaretyLevelType.Basic && pageBasic.ItemOffers.TryGetValue(item.BaseItem, out var basicOffers))
+        if (item.ItemData.RarityLevel == RaretyLevelType.Basic && pageBasic.ItemOffers.TryGetValue(item.BaseItemId, out var basicOffers))
         {
             return;
         }
 
         ItemData lotData;
         int amount;
-        if (item.GetBaseItem().RarityLevel == RaretyLevelType.Epic)
+        if (item.ItemData.RarityLevel == RaretyLevelType.Epic)
         {
-            lotData = pageLegendary.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, pageLegendary.Items.Count - 1)).Value.Data;
+            lotData = pageLegendary.Items.GetRandomElement().Value.Data;
             amount = 10;
         }
-        else if (item.GetBaseItem().RarityLevel == RaretyLevelType.Commun)
+        else if (item.ItemData.RarityLevel == RaretyLevelType.Commun)
         {
-            lotData = pageEpic.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, pageEpic.Items.Count - 1)).Value.Data;
+            lotData = pageEpic.Items.GetRandomElement().Value.Data;
             amount = 10;
         }
         else
         {
-            lotData = pageCommun.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, pageCommun.Items.Count - 1)).Value.Data;
+            lotData = pageCommun.Items.GetRandomElement().Value.Data;
             amount = 50;
         }
 
         if (lotData == null)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
-        var items = session.User.InventoryComponent.GetItemsByType(item.BaseItem, amount);
+        var items = session.User.InventoryComponent.GetItemsByType(item.BaseItemId, amount);
 
         if (items.Count < amount)
         {
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         session.User.InventoryComponent.DeleteItems(dbClient, items);
 

@@ -12,7 +12,7 @@ public class GiveScore : WiredActionBase, IWiredEffect, IWired
     public GiveScore(Item item, Room room) : base(item, room, (int)WiredActionType.GIVE_SCORE)
     {
         this._currentGameCount = 0;
-        this.RoomInstance.GameManager.OnGameStart += this.OnGameStart;
+        this.Room.GameManager.OnGameStart += this.OnGameStart;
 
         this.DefaultIntParams(new int[] { 1, 1 });
     }
@@ -30,7 +30,7 @@ public class GiveScore : WiredActionBase, IWiredEffect, IWired
         }
 
         this._currentGameCount++;
-        this.RoomInstance.GameManager.AddPointToTeam(user.Team, scoreToGive, user);
+        this.Room.GameManager.AddPointToTeam(user.Team, scoreToGive, user);
 
         return false;
     }
@@ -39,7 +39,7 @@ public class GiveScore : WiredActionBase, IWiredEffect, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.GameManager.OnGameStart -= this.OnGameStart;
+        this.Room.GameManager.OnGameStart -= this.OnGameStart;
     }
 
     public void SaveToDatabase(IDbConnection dbClient)
@@ -47,7 +47,7 @@ public class GiveScore : WiredActionBase, IWiredEffect, IWired
         var scoreToGive = this.GetIntParam(0);
         var maxCountPerGame = this.GetIntParam(1);
 
-        WiredUtillity.SaveInDatabase(dbClient, this.ItemInstance.Id, scoreToGive.ToString(), maxCountPerGame.ToString(), false, null, this.Delay);
+        WiredUtillity.SaveInDatabase(dbClient, this.Item.Id, scoreToGive.ToString(), maxCountPerGame.ToString(), false, null, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

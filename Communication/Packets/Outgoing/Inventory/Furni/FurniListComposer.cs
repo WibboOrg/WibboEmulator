@@ -20,17 +20,17 @@ internal sealed class FurniListComposer : ServerPacket
     private void WriteItem(Item item)
     {
         this.WriteInteger(item.Id);
-        this.WriteString(item.GetBaseItem().Type.ToString());
+        this.WriteString(item.ItemData.Type.ToString());
         this.WriteInteger(item.Id);
-        this.WriteInteger(item.GetBaseItem().SpriteId);
+        this.WriteInteger(item.ItemData.SpriteId);
         this.WriteInteger((int)item.Category);
 
         ItemBehaviourUtility.GenerateExtradata(item, this);
 
-        this.WriteBoolean(item.GetBaseItem().AllowEcotronRecycle);
-        this.WriteBoolean(item.GetBaseItem().AllowTrade);
-        this.WriteBoolean(item.Limited == 0 && item.GetBaseItem().AllowInventoryStack);
-        this.WriteBoolean(ItemUtility.IsRare(item) && item.GetBaseItem().AllowMarketplaceSell);
+        this.WriteBoolean(item.ItemData.AllowEcotronRecycle);
+        this.WriteBoolean(item.ItemData.AllowTrade);
+        this.WriteBoolean(item.Limited == 0 && item.ItemData.AllowInventoryStack);
+        this.WriteBoolean(ItemUtility.IsRare(item) && item.ItemData.AllowMarketplaceSell);
         this.WriteInteger(-1);//Seconds to expiration.
         this.WriteBoolean(false);
         this.WriteInteger(item.Id);//Item RoomId

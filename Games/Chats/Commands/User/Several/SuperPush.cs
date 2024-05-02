@@ -3,6 +3,7 @@ using WibboEmulator;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games.Teams;
+using WibboEmulator.Core.Language;
 
 internal sealed class SuperPush : IChatCommand
 {
@@ -37,9 +38,9 @@ internal sealed class SuperPush : IChatCommand
             return;
         }
 
-        if (targetRoomUser.Client.User.PremiumProtect && !session.User.HasPermission("mod"))
+        if (targetRoomUser.Client.User.HasPremiumProtect && !session.User.HasPermission("mod"))
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("premium.notallowed", session.Language));
             return;
         }
 
@@ -65,11 +66,11 @@ internal sealed class SuperPush : IChatCommand
                 targetRoomUser.MoveTo(targetRoomUser.X - 4, targetRoomUser.Y, true);
             }
 
-            userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.superpush.chat.success", session.Langue), targetName), 0, false);
+            userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.superpush.chat.success", session.Language), targetName), 0, false);
         }
         else
         {
-            userRoom.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.superpush.fail", session.Langue), targetName));
+            userRoom.SendWhisperChat(string.Format(LanguageManager.TryGetValue("cmd.superpush.fail", session.Language), targetName));
         }
     }
 }

@@ -20,7 +20,7 @@ public class CatalogPageComposer : ServerPacket
         if (page.GetPageStrings2ByLangue(langue).Count == 1 && (page.Template == "default_3x3" || page.Template == "default_3x3_color_grouping") && string.IsNullOrEmpty(page.GetPageStrings2ByLangue(langue)[0]))
         {
             this.WriteInteger(1);
-            this.WriteString(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("catalog.desc.default", langue), page.GetCaptionByLangue(langue)));
+            this.WriteString(string.Format(LanguageManager.TryGetValue("catalog.desc.default", langue), page.GetCaptionByLangue(langue)));
         }
         else
         {
@@ -47,8 +47,8 @@ public class CatalogPageComposer : ServerPacket
         this.WriteInteger(offerId);
         this.WriteBoolean(false);
 
-        this.WriteInteger(WibboEnvironment.GetGame().GetCatalog().GetPromotions().ToList().Count);//Count
-        foreach (var promotion in WibboEnvironment.GetGame().GetCatalog().GetPromotions().ToList())
+        this.WriteInteger(CatalogManager.Promotions.ToList().Count);//Count
+        foreach (var promotion in CatalogManager.Promotions.ToList())
         {
             this.WriteInteger(promotion.Id);
             this.WriteString(promotion.GetTitleByLangue(langue));

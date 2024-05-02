@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms.Events;
 
 public class BotReadchedAvatar : WiredTriggerBase, IWired
 {
-    public BotReadchedAvatar(Item item, Room room) : base(item, room, (int)WiredTriggerType.BOT_REACHED_AVATAR) => this.RoomInstance.WiredHandler.TrgBotCollision += this.OnCollision;
+    public BotReadchedAvatar(Item item, Room room) : base(item, room, (int)WiredTriggerType.BOT_REACHED_AVATAR) => this.Room.WiredHandler.TrgBotCollision += this.OnCollision;
 
     private void OnCollision(object obj, ItemTriggeredEventArgs args)
     {
@@ -21,7 +21,7 @@ public class BotReadchedAvatar : WiredTriggerBase, IWired
             return;
         }
 
-        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, args.User, null);
+        this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, args.User, null);
     }
 
 
@@ -29,10 +29,10 @@ public class BotReadchedAvatar : WiredTriggerBase, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.WiredHandler.TrgBotCollision -= this.OnCollision;
+        this.Room.WiredHandler.TrgBotCollision -= this.OnCollision;
     }
 
-    public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveInDatabase(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam);
+    public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveInDatabase(dbClient, this.Item.Id, string.Empty, this.StringParam);
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay) => this.StringParam = wiredTriggerData;
 }

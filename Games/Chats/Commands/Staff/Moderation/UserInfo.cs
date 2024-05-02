@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Moderation;
 using System.Text;
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -16,13 +17,13 @@ internal sealed class UserInfo : IChatCommand
 
         if (string.IsNullOrEmpty(username))
         {
-            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.userparammissing", session.Langue));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.userparammissing", session.Language));
             return;
         }
-        var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
+        var clientByUsername = GameClientManager.GetClientByUsername(username);
         if (clientByUsername == null || clientByUsername.User == null)
         {
-            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.useroffline", session.Langue));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.useroffline", session.Language));
             return;
         }
 
@@ -45,20 +46,20 @@ internal sealed class UserInfo : IChatCommand
 
         _ = stringBuilder.Append("Dans un appart: " + (user.InRoom ? "Oui" : "Non") + "\r");
 
-        if (user.CurrentRoom != null && !user.SpectatorMode)
+        if (user.Room != null && !user.IsSpectator)
         {
-            _ = stringBuilder.Append("\r - Information sur l'appart  [" + user.CurrentRoom.Id + "] - \r");
-            _ = stringBuilder.Append("Propriétaire: " + user.CurrentRoom.RoomData.OwnerName + "\r");
-            _ = stringBuilder.Append("Nom: " + user.CurrentRoom.RoomData.Name + "\r");
-            _ = stringBuilder.Append("Utilisateurs: " + user.CurrentRoom.UserCount + "/" + user.CurrentRoom.RoomData.UsersMax + "\r");
+            _ = stringBuilder.Append("\r - Information sur l'appart  [" + user.Room.Id + "] - \r");
+            _ = stringBuilder.Append("Propriétaire: " + user.Room.RoomData.OwnerName + "\r");
+            _ = stringBuilder.Append("Nom: " + user.Room.RoomData.Name + "\r");
+            _ = stringBuilder.Append("Utilisateurs: " + user.Room.UserCount + "/" + user.Room.RoomData.UsersMax + "\r");
         }
 
         if (session.User.HasPermission("god"))
         {
             _ = stringBuilder.Append("\r - Autre information - \r");
             _ = stringBuilder.Append("IP Web: " + clientByUsername.User.IP + "\r");
-            _ = stringBuilder.Append("IP Emu: " + clientByUsername.Connection.GetIp() + "\r");
-            _ = stringBuilder.Append("Langue: " + clientByUsername.Langue.ToString() + "\r");
+            _ = stringBuilder.Append("IP Emu: " + clientByUsername.Connection.Ip + "\r");
+            _ = stringBuilder.Append("Langue: " + clientByUsername.Language.ToString() + "\r");
         }
 
         session.SendNotification(stringBuilder.ToString());

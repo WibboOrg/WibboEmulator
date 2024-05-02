@@ -6,7 +6,9 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Core;
 using WibboEmulator.Core.OpenIA;
+using WibboEmulator.Core.Settings;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Utilities;
 
 public partial class ChatGPTBot : BotAI
 {
@@ -66,9 +68,9 @@ public partial class ChatGPTBot : BotAI
 
     public override void OnUserEnterRoom(RoomUser user)
     {
-        if (this._listUserName.Contains(user.GetUsername()) == false)
+        if (this._listUserName.Contains(user.Username) == false)
         {
-            this._listUserName.Add(user.GetUsername());
+            this._listUserName.Add(user.Username);
         }
     }
 
@@ -84,12 +86,12 @@ public partial class ChatGPTBot : BotAI
 
     public override void OnUserSay(RoomUser user, string message)
     {
-        if (this.GetBotData() == null)
+        if (this.BotData == null)
         {
             return;
         }
 
-        var botName = this.GetBotData().Name;
+        var botName = this.BotData.Name;
 
         if (!message.Contains("@" + botName) && !message.StartsWith(": " + botName) && !message.StartsWith(botName))
         {
@@ -122,7 +124,7 @@ public partial class ChatGPTBot : BotAI
             return;
         }
 
-        var targetUser = this.GetRoom().RoomUserManager.GetRoomUserByUserId(userId);
+        var targetUser = this.Room.RoomUserManager.GetRoomUserByUserId(userId);
         if (targetUser == null || actionId == 0)
         {
             return;
@@ -132,16 +134,16 @@ public partial class ChatGPTBot : BotAI
         {
             case 1: //Greet
             {
-                this.GetRoom().SendPacket(new ActionComposer(this.GetRoomUser().VirtualId, 1));
+                this.Room.SendPacket(new ActionComposer(this.RoomUser.VirtualId, 1));
                 break;
             }
             case 2: //Sand up
             {
-                if (this.GetRoomUser().ContainStatus("sit"))
+                if (this.RoomUser.ContainStatus("sit"))
                 {
-                    this.GetRoomUser().RemoveStatus("sit");
-                    this.GetRoomUser().IsSit = false;
-                    this.GetRoomUser().UpdateNeeded = true;
+                    this.RoomUser.RemoveStatus("sit");
+                    this.RoomUser.IsSit = false;
+                    this.RoomUser.UpdateNeeded = true;
                 }
                 break;
             }
@@ -156,73 +158,75 @@ public partial class ChatGPTBot : BotAI
             }
             case 4: //Sit down
             {
-                if (this.GetRoomUser().ContainStatus("sit") || this.GetRoomUser().ContainStatus("lay"))
+                if (this.RoomUser.ContainStatus("sit") || this.RoomUser.ContainStatus("lay"))
                 {
                     break;
                 }
 
-                if (this.GetRoomUser().RotBody % 2 == 0)
+                if (this.RoomUser.RotBody % 2 == 0)
                 {
-                    this.GetRoomUser().SetStatus("sit", "0.5");
-                    this.GetRoomUser().IsSit = true;
-                    this.GetRoomUser().UpdateNeeded = true;
+                    this.RoomUser.SetStatus("sit", "0.5");
+                    this.RoomUser.IsSit = true;
+                    this.RoomUser.UpdateNeeded = true;
                 }
                 break;
             }
             case 5: //Move to user
             {
                 var numberCars = new List<int> { 22, 21, 17, 15, 6, 3, 2 };
-                this.GetRoomUser().ApplyEffect(numberCars[WibboEnvironment.GetRandomNumber(0, numberCars.Count)], true);
+                this.RoomUser.ApplyEffect(numberCars.GetRandomElement(), true);
 
-                this.GetRoomUser().TimerResetEffect = 6;
-                this.GetRoomUser().MoveTo(targetUser.X, targetUser.Y, true);
+                this.
+                RoomUser.TimerResetEffect = 6;
+                this.RoomUser.MoveTo(targetUser.X, targetUser.Y, true);
 
                 this._resetBotTimer = 600;
                 break;
             }
             case 6: //Love or like
             {
-                this.GetRoomUser().ApplyEffect(168, true);
-                this.GetRoomUser().TimerResetEffect = 6;
+                this.RoomUser.ApplyEffect(168, true);
+                this.RoomUser.TimerResetEffect = 6;
                 break;
             }
             case 7: //Sad or bad or angry
             {
-                this.GetRoomUser().ApplyEffect(113, true);
-                this.GetRoomUser().TimerResetEffect = 6;
+                this.RoomUser.ApplyEffect(113, true);
+                this.RoomUser.TimerResetEffect = 6;
                 break;
             }
             case 8: //Laugther
             {
-                this.GetRoom().SendPacket(new ActionComposer(this.GetRoomUser().VirtualId, 3));
+                this.Room.SendPacket(new ActionComposer(this.RoomUser.VirtualId, 3));
                 break;
             }
             case 9: //Kiss or embrace
             {
-                this.GetRoom().SendPacket(new ActionComposer(this.GetRoomUser().VirtualId, 2));
+                this.Room.SendPacket(new ActionComposer(this.RoomUser.VirtualId, 2));
                 break;
             }
             case 10: //Danse
             {
                 var danceId = WibboEnvironment.GetRandomNumber(1, 4);
-                if (danceId > 0 && this.GetRoomUser().CarryItemID > 0)
+                if (danceId > 0 && this.RoomUser.CarryItemID > 0)
                 {
-                    this.GetRoomUser().CarryItem(0);
+                    this.RoomUser.CarryItem(0);
                 }
 
-                this.GetRoomUser().DanceId = danceId;
-                this.GetRoom().SendPacket(new DanceComposer(this.GetRoomUser().VirtualId, danceId));
+                this.
+                RoomUser.DanceId = danceId;
+                this.Room.SendPacket(new DanceComposer(this.RoomUser.VirtualId, danceId));
                 this._resetDanseTimer = 12;
                 break;
             }
         }
 
-        _ = this.GetRoom().AllowsShous(this.GetRoomUser(), this.GetBotData().Name + "_" + actionId);
+        _ = this.Room.AllowsShous(this.RoomUser, this.BotData.Name + "_" + actionId);
     }
 
     public override void OnTimerTick()
     {
-        if (this.GetBotData() == null)
+        if (this.BotData == null)
         {
             return;
         }
@@ -233,10 +237,10 @@ public partial class ChatGPTBot : BotAI
 
             if (this._resetDanseTimer <= 0)
             {
-                if (this.GetRoomUser().DanceId > 0)
+                if (this.RoomUser.DanceId > 0)
                 {
-                    this.GetRoomUser().DanceId = 0;
-                    this.GetRoom().SendPacket(new DanceComposer(this.GetRoomUser().VirtualId, 0));
+                    this.RoomUser.DanceId = 0;
+                    this.Room.SendPacket(new DanceComposer(this.RoomUser.VirtualId, 0));
                 }
             }
         }
@@ -247,15 +251,15 @@ public partial class ChatGPTBot : BotAI
 
             if (this._resetBotTimer <= 0)
             {
-                var bot = this.GetRoomUser();
+                var bot = this.RoomUser;
 
                 bot.RotHead = bot.BotData.Rot;
                 bot.RotBody = bot.BotData.Rot;
-                this.GetRoom().SendPacket(RoomItemHandling.TeleportUser(bot, new Point(bot.BotData.X, bot.BotData.Y), 0, this.GetRoom().GameMap.SqAbsoluteHeight(bot.BotData.X, bot.BotData.Y)));
+                this.Room.SendPacket(RoomItemHandling.TeleportUser(bot, new Point(bot.BotData.X, bot.BotData.Y), 0, this.Room.GameMap.SqAbsoluteHeight(bot.BotData.X, bot.BotData.Y)));
             }
         }
 
-        if (!WibboEnvironment.GetChatOpenAI().IsReadyToSendChat() || this._lastMessageUser == null)
+        if (!OpenAIProxy.IsReadyToSendChat || this._lastMessageUser == null)
         {
             return;
         }
@@ -267,24 +271,25 @@ public partial class ChatGPTBot : BotAI
             return;
         }
 
-        var botName = this.GetBotData().Name;
+        var botName = this.BotData.Name;
         var userId = this._lastMessageUser.UserId;
-        var userName = this._lastMessageUser.GetUsername();
+        var userName = this._lastMessageUser.Username;
         var userGender = this._lastMessageUser.Client?.User?.Gender;
 
         this._lastMessageUser = null;
         this._timeoutTimer = 10;
 
-        _ = this.GetRoom().RunTask(async () =>
+        _ = this.Room.RunTask(async () =>
         {
             try
             {
-                if (!WibboEnvironment.GetChatOpenAI().IsReadyToSendChat())
+                if (!OpenAIProxy.IsReadyToSendChat)
                 {
                     return;
                 }
 
-                this.GetRoom().SendPacket(new UserTypingComposer(this.VirtualId, true));
+                this.
+                Room.SendPacket(new UserTypingComposer(this.VirtualId, true));
 
                 var listActions = "";
                 foreach (var kvp in this._listActions)
@@ -292,7 +297,7 @@ public partial class ChatGPTBot : BotAI
                     listActions += $"{kvp.Key}: {kvp.Value}. ";
                 }
 
-                var firstPrompt = !string.IsNullOrWhiteSpace(this.GetBotData().ChatText) ? this.GetBotData().ChatText : WibboEnvironment.GetSettings().GetData<string>("openia.prompt");
+                var firstPrompt = !string.IsNullOrWhiteSpace(this.BotData.ChatText) ? this.BotData.ChatText : SettingsManager.GetData<string>("openia.prompt");
                 firstPrompt = firstPrompt.Replace("{{botname}}", botName);
                 firstPrompt = firstPrompt.Replace("{{username}}", userName);
                 firstPrompt = firstPrompt.Replace("{{usergender}}", userGender == "M" ? "man" : "women");
@@ -308,7 +313,7 @@ public partial class ChatGPTBot : BotAI
                 var messagesSend = new List<ChatCompletionMessage>(new[] { prePrompt });
                 messagesSend.AddRange(this._userMessages.TryGetValue(userId, out var userMessages) ? userMessages : new List<ChatCompletionMessage>());
 
-                var messagesGtp = await WibboEnvironment.GetChatOpenAI().SendChatMessage(messagesSend);
+                var messagesGtp = await OpenAIProxy.SendChatMessage(messagesSend);
 
                 if (messagesGtp != null)
                 {
@@ -325,7 +330,7 @@ public partial class ChatGPTBot : BotAI
                     {
                         if (string.IsNullOrWhiteSpace(chatText) == false)
                         {
-                            this.GetRoomUser().OnChat(chatText.Length > 150 ? chatText[..150] + "..." : chatText);
+                            this.RoomUser.OnChat(chatText.Length > 150 ? chatText[..150] + "..." : chatText);
                         }
                     }
 
@@ -338,7 +343,7 @@ public partial class ChatGPTBot : BotAI
             }
             finally
             {
-                this.GetRoom().SendPacket(new UserTypingComposer(this.VirtualId, false));
+                this.Room.SendPacket(new UserTypingComposer(this.VirtualId, false));
             }
         });
     }

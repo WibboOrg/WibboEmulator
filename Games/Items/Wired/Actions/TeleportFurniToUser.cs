@@ -16,7 +16,7 @@ public class TeleportFurniToUser : WiredActionBase, IWired, IWiredCycleable, IWi
             return false;
         }
 
-        var disableAnimation = this.RoomInstance.WiredHandler.DisableAnimate(this.ItemInstance.Coordinate);
+        var disableAnimation = this.Room.WiredHandler.DisableAnimate(this.Item.Coordinate);
 
         foreach (var roomItem in this.Items.ToList())
         {
@@ -25,7 +25,7 @@ public class TeleportFurniToUser : WiredActionBase, IWired, IWiredCycleable, IWi
                 continue;
             }
 
-            this.RoomInstance.RoomItemHandling.PositionReset(roomItem, user.SetX, user.SetY, user.SetZ, disableAnimation);
+            this.Room.RoomItemHandling.PositionReset(roomItem, user.SetX, user.SetY, user.SetZ, disableAnimation);
         }
 
         return false;

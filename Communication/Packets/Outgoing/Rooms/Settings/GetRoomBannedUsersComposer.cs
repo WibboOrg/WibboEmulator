@@ -8,8 +8,8 @@ internal sealed class GetRoomBannedUsersComposer : ServerPacket
     {
         this.WriteInteger(instance.Id);
 
-        this.WriteInteger(instance.GetBans().Count);//Count
-        foreach (var id in instance.GetBans().Keys)
+        this.WriteInteger(instance.Bans.Count);//Count
+        foreach (var id in instance.Bans.Keys)
         {
             var data = WibboEnvironment.GetUserById(id);
 

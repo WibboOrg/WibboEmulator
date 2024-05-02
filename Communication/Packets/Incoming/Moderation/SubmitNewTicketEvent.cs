@@ -14,7 +14,7 @@ internal sealed class SubmitNewTicketEvent : IPacketEvent
             return;
         }
 
-        if (WibboEnvironment.GetGame().GetModerationManager().UsersHasPendingTicket(session.User.Id))
+        if (ModerationManager.UsersHasPendingTicket(session.User.Id))
         {
             return;
         }
@@ -33,8 +33,8 @@ internal sealed class SubmitNewTicketEvent : IPacketEvent
             return;
         }
 
-        WibboEnvironment.GetGame().GetModerationManager().SendNewTicket(session, ticketType, reporterId, message);
+        ModerationManager.SendNewTicket(session, ticketType, reporterId, message);
         ModerationManager.ApplySanction(session, reporterId);
-        WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(RoomNotificationComposer.SendBubble("mention", "Un nouveau ticket vient d'arriver sur le support"));
+        GameClientManager.SendMessageStaff(RoomNotificationComposer.SendBubble("mention", "Un nouveau ticket vient d'arriver sur le support"));
     }
 }

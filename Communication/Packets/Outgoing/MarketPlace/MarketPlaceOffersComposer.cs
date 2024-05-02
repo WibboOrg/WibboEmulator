@@ -23,7 +23,7 @@ internal sealed class MarketPlaceOffersComposer : ServerPacket
 
                 this.WriteInteger(pair.Value.TotalPrice);
                 this.WriteInteger(0);
-                this.WriteInteger(WibboEnvironment.GetGame().GetCatalog().GetMarketplace().AvgPriceForSprite(pair.Value.SpriteId));
+                this.WriteInteger(MarketplaceManager.AvgPriceForSprite(pair.Value.SpriteId));
                 this.WriteInteger(dictionary2[pair.Value.SpriteId]);
             }
         }

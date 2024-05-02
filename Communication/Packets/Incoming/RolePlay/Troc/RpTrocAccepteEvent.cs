@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.RolePlay.Troc;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Roleplays.Troc;
 
 internal sealed class RpTrocAccepteEvent : IPacketEvent
 {
@@ -12,7 +13,7 @@ internal sealed class RpTrocAccepteEvent : IPacketEvent
             return;
         }
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null || !room.IsRoleplay)
         {
             return;
@@ -30,6 +31,6 @@ internal sealed class RpTrocAccepteEvent : IPacketEvent
             return;
         }
 
-        WibboEnvironment.GetGame().GetRoleplayManager().TrocManager.Accepte(rp.TradeId, user.UserId);
+        RPTrocManager.Accept(rp.TradeId, user.UserId);
     }
 }

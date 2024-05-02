@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.Catalogs.Utilities;
@@ -22,7 +23,7 @@ internal sealed class MakeOfferEvent : IPacketEvent
             return;
         }
 
-        if (!ItemUtility.IsRare(item) || !item.GetBaseItem().AllowMarketplaceSell)
+        if (!ItemUtility.IsRare(item) || !item.ItemData.AllowMarketplaceSell)
         {
             return;
         }
@@ -35,16 +36,16 @@ internal sealed class MakeOfferEvent : IPacketEvent
 
         var totalPrice = sellingPrice;
         var itemType = 1;
-        if (item.GetBaseItem().Type == ItemType.I)
+        if (item.ItemData.Type == ItemType.I)
         {
             itemType++;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             ItemDao.Delete(dbClient, itemId);
 
-            CatalogMarketplaceOfferDao.Insert(dbClient, item.GetBaseItem().ItemName, item.ExtraData, itemId, item.BaseItem, session.User.Id, sellingPrice, totalPrice, item.GetBaseItem().SpriteId, itemType, item.Limited, item.LimitedStack);
+            CatalogMarketplaceOfferDao.Insert(dbClient, item.ItemData.ItemName, item.ExtraData, itemId, item.BaseItemId, session.User.Id, sellingPrice, totalPrice, item.ItemData.SpriteId, itemType, item.Limited, item.LimitedStack);
         }
 
         session.User.InventoryComponent.RemoveItem(itemId);

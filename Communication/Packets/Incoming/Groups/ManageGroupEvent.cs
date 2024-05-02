@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Groups;
 
 internal sealed class ManageGroupEvent : IPacketEvent
 {
@@ -10,7 +11,7 @@ internal sealed class ManageGroupEvent : IPacketEvent
     {
         var groupId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
+        if (!GroupManager.TryGetGroup(groupId, out var group))
         {
             return;
         }

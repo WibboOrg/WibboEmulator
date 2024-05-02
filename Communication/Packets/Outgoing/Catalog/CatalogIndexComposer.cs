@@ -17,7 +17,7 @@ internal sealed class CatalogIndexComposer : ServerPacket
                 continue;
             }
 
-            this.WritePage(parent, CalcTreeSize(session, pages, parent.Id), session.Langue);
+            this.WritePage(parent, CalcTreeSize(session, pages, parent.Id), session.Language);
 
             foreach (var child in pages)
             {
@@ -28,11 +28,11 @@ internal sealed class CatalogIndexComposer : ServerPacket
 
                 if (child.Enabled)
                 {
-                    this.WritePage(child, CalcTreeSize(session, pages, child.Id), session.Langue);
+                    this.WritePage(child, CalcTreeSize(session, pages, child.Id), session.Language);
                 }
                 else
                 {
-                    this.WriteNodeIndex(child, CalcTreeSize(session, pages, child.Id), session.Langue);
+                    this.WriteNodeIndex(child, CalcTreeSize(session, pages, child.Id), session.Language);
                 }
 
                 foreach (var subChild in pages)
@@ -44,11 +44,11 @@ internal sealed class CatalogIndexComposer : ServerPacket
 
                     if (subChild.Enabled)
                     {
-                        this.WritePage(subChild, CalcTreeSize(session, pages, subChild.Id), session.Langue);
+                        this.WritePage(subChild, CalcTreeSize(session, pages, subChild.Id), session.Language);
                     }
                     else
                     {
-                        this.WriteNodeIndex(subChild, CalcTreeSize(session, pages, subChild.Id), session.Langue);
+                        this.WriteNodeIndex(subChild, CalcTreeSize(session, pages, subChild.Id), session.Language);
                     }
 
                     foreach (var subSubChild in pages)
@@ -60,11 +60,11 @@ internal sealed class CatalogIndexComposer : ServerPacket
 
                         if (subSubChild.Enabled)
                         {
-                            this.WritePage(subSubChild, 0, session.Langue);
+                            this.WritePage(subSubChild, 0, session.Language);
                         }
                         else
                         {
-                            this.WriteNodeIndex(subSubChild, 0, session.Langue);
+                            this.WriteNodeIndex(subSubChild, 0, session.Language);
                         }
                     }
                 }

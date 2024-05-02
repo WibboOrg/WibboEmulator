@@ -1,28 +1,24 @@
 namespace WibboEmulator.Games.LandingView;
 using System.Data;
 using System.Diagnostics;
+using WibboEmulator.Core.Settings;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users;
 
-public class HallOfFameManager
+public static class HallOfFameManager
 {
     private static readonly int MAX_USERS = 10;
-    private DateTime _lastUpdate;
-    public List<User> UserRanking { get; private set; }
+    private static DateTime _lastUpdate = DateTime.UnixEpoch.AddSeconds(SettingsManager.GetData<int>("hof.lastupdate"));
+    public static List<User> UserRanking { get; private set; } = new();
 
-    public HallOfFameManager()
+    public static void Initialize(IDbConnection dbClient)
     {
-        this.UserRanking = new List<User>();
+        HofStopwatch.Start();
 
-        this._lastUpdate = DateTime.UnixEpoch.AddSeconds(Convert.ToInt32(WibboEnvironment.GetSettings().GetData<int>("hof.lastupdate")));
-        this._hofStopwatch = new();
-        this._hofStopwatch.Start();
-    }
-
-    public void Initialize(IDbConnection dbClient)
-    {
-        this.UserRanking.Clear();
+        UserRanking.Clear();
 
         var userIds = UserDao.GetTop10ByGamePointMonth(dbClient);
 
@@ -32,26 +28,26 @@ public class HallOfFameManager
 
             if (user != null)
             {
-                this.UserRanking.Add(user);
+                UserRanking.Add(user);
             }
         }
     }
 
-    private readonly Stopwatch _hofStopwatch;
-    public void OnCycle()
+    private static readonly Stopwatch HofStopwatch = new();
+    public static void OnCycle()
     {
-        if (this._hofStopwatch.ElapsedMilliseconds >= 60000)
+        if (HofStopwatch.ElapsedMilliseconds >= 60000)
         {
-            this._hofStopwatch.Restart();
+            HofStopwatch.Restart();
 
-            if (this._lastUpdate.Month == DateTime.UtcNow.Month)
+            if (_lastUpdate.Month == DateTime.UtcNow.Month)
             {
                 return;
             }
 
-            this._lastUpdate = DateTime.UtcNow;
+            _lastUpdate = DateTime.UtcNow;
 
-            foreach (var client in WibboEnvironment.GetGame().GetGameClientManager().GetClients.ToList())
+            foreach (var client in GameClientManager.Clients.ToList())
             {
                 if (client == null || client.User == null)
                 {
@@ -61,27 +57,27 @@ public class HallOfFameManager
                 client.User.GamePointsMonth = 0;
             }
 
-            this.UserRanking.Clear();
+            UserRanking.Clear();
 
-            var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+            var dbClient = DatabaseManager.Connection;
             EmulatorSettingDao.Update(dbClient, "hof.lastupdate", WibboEnvironment.GetUnixTimestamp().ToString());
         }
     }
 
-    public void UpdateRakings(User user)
+    public static void UpdateRakings(User user)
     {
         if (user == null || user.Rank >= 6)
         {
             return;
         }
 
-        if (this.UserRanking.Contains(user))
+        if (UserRanking.Contains(user))
         {
-            this.UserRanking.Remove(user);
+            UserRanking.Remove(user);
         }
 
-        this.UserRanking.Add(user);
+        UserRanking.Add(user);
 
-        this.UserRanking = this.UserRanking.OrderByDescending(x => x.GamePointsMonth).Take(MAX_USERS).ToList();
+        UserRanking = UserRanking.OrderByDescending(x => x.GamePointsMonth).Take(MAX_USERS).ToList();
     }
 }

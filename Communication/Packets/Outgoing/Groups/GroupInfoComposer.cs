@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class GroupInfoComposer : ServerPacket
 {
@@ -18,7 +19,7 @@ internal sealed class GroupInfoComposer : ServerPacket
         this.WriteString(group.Description);
         this.WriteString(group.Badge);
         this.WriteInteger(group.RoomId);
-        this.WriteString((WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(group.RoomId) == null) ? "Unknown" : WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(group.RoomId).Name);
+        this.WriteString((RoomManager.GenerateRoomData(group.RoomId) == null) ? "Unknown" : RoomManager.GenerateRoomData(group.RoomId).Name);
         this.WriteInteger(group.CreatorId == session.User.Id ? 3 : group.HasRequest(session.User.Id) ? 2 : group.IsMember(session.User.Id) ? 1 : 0);
         this.WriteInteger(group.MemberCount);
         this.WriteBoolean(false);

@@ -1,6 +1,7 @@
 namespace WibboEmulator.Games.Items.Interactors;
 
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 
@@ -23,7 +24,7 @@ public class InteractorBadgeTroc : FurniInteractor
             return;
         }
 
-        var room = item.GetRoom();
+        var room = item.Room;
 
         if (room == null || !room.CheckRights(session, true))
         {
@@ -39,7 +40,7 @@ public class InteractorBadgeTroc : FurniInteractor
 
         this._haveReward = true;
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         ItemDao.DeleteById(dbClient, item.Id);
 
         room.RoomItemHandling.RemoveFurniture(null, item.Id);

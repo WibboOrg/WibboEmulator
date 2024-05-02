@@ -32,7 +32,7 @@ public class CompareHighScore : WiredConditionBase, IWiredCondition, IWired
                 valueInt = user.WiredPoints;
             }
 
-            var inHighScore = highScoreItem.Scores.TryGetValue(user.GetUsername(), out var score);
+            var inHighScore = highScoreItem.Scores.TryGetValue(user.Username, out var score);
 
             switch (highScoreOperator)
             {

@@ -9,7 +9,7 @@ public class WalksOnFurni : WiredTriggerBase, IWired
 {
     public WalksOnFurni(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_WALKS_ON_FURNI) { }
 
-    private void OnUserWalksOnFurni(object obj, ItemTriggeredEventArgs args) => this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, args.User, args.Item);
+    private void OnUserWalksOnFurni(object obj, ItemTriggeredEventArgs args) => this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, args.User, args.Item);
 
     public override void LoadItems(bool inDatabase = false)
     {
@@ -37,7 +37,7 @@ public class WalksOnFurni : WiredTriggerBase, IWired
         base.Dispose();
     }
 
-    public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveInDatabase(dbClient, this.ItemInstance.Id, string.Empty, string.Empty, false, this.Items);
+    public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveInDatabase(dbClient, this.Item.Id, string.Empty, string.Empty, false, this.Items);
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay) => this.LoadStuffIds(wiredTriggersItem);
 }

@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.Catalogs.Vouchers;
 using WibboEmulator.Games.GameClients;
@@ -13,7 +14,7 @@ internal sealed class RedeemVoucherEvent : IPacketEvent
     {
         var voucherCode = packet.PopString().Replace("\r", "");
 
-        if (!WibboEnvironment.GetGame().GetCatalog().GetVoucherManager().TryGetVoucher(voucherCode, out var voucher))
+        if (!VoucherManager.TryGetVoucher(voucherCode, out var voucher))
         {
             session.SendPacket(new VoucherRedeemErrorComposer(0));
             return;
@@ -24,7 +25,7 @@ internal sealed class RedeemVoucherEvent : IPacketEvent
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         var haveVoucher = UserVoucherDao.HaveVoucher(dbClient, session.User.Id, voucherCode);
 

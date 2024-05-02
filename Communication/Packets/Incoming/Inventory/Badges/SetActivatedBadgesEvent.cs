@@ -1,9 +1,11 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Badges;
 
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class SetActivatedBadgesEvent : IPacketEvent
 {
@@ -16,13 +18,13 @@ internal sealed class SetActivatedBadgesEvent : IPacketEvent
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         UserBadgeDao.UpdateResetSlot(dbClient, session.User.Id);
 
         session.User.BadgeComponent.ResetSlots();
 
-        var maxBadgeCount = session.User.BadgeComponent.BadgeMaxCount();
+        var maxBadgeCount = session.User.BadgeComponent.BadgeMaxCount;
 
         for (var i = 0; i < maxBadgeCount; i++)
         {
@@ -44,7 +46,7 @@ internal sealed class SetActivatedBadgesEvent : IPacketEvent
             UserBadgeDao.UpdateSlot(dbClient, session.User.Id, slot, badge);
         }
 
-        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ProfileBadge, 0);
+        QuestManager.ProgressUserQuest(session, QuestType.ProfileBadge, 0);
 
         if (!session.User.InRoom)
         {
@@ -52,7 +54,7 @@ internal sealed class SetActivatedBadgesEvent : IPacketEvent
         }
         else
         {
-            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+            if (RoomManager.TryGetRoom(session.User.RoomId, out var room))
             {
                 room.SendPacket(new UserBadgesComposer(session.User));
             }

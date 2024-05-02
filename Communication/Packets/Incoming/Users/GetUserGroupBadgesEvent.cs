@@ -1,6 +1,8 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Groups;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class GetUserGroupBadgesEvent : IPacketEvent
 {
@@ -13,13 +15,13 @@ internal sealed class GetUserGroupBadgesEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.LoadingRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.LoadingRoomId, out var room))
         {
             return;
         }
 
         var badges = new Dictionary<int, string>();
-        foreach (var user in room.RoomUserManager.GetRoomUsers().ToList())
+        foreach (var user in room.RoomUserManager.RoomUsers.ToList())
         {
             if (user.IsBot || user.Client == null || user.Client.User == null)
             {
@@ -31,7 +33,7 @@ internal sealed class GetUserGroupBadgesEvent : IPacketEvent
                 continue;
             }
 
-            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.Client.User.FavouriteGroupId, out var group))
+            if (!GroupManager.TryGetGroup(user.Client.User.FavouriteGroupId, out var group))
             {
                 continue;
             }
@@ -44,7 +46,7 @@ internal sealed class GetUserGroupBadgesEvent : IPacketEvent
 
         if (session.User.FavouriteGroupId > 0)
         {
-            if (WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(session.User.FavouriteGroupId, out var group))
+            if (GroupManager.TryGetGroup(session.User.FavouriteGroupId, out var group))
             {
                 if (!badges.ContainsKey(group.Id))
                 {

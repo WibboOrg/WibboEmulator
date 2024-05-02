@@ -14,7 +14,7 @@ public class CollisionCase : WiredActionBase, IWiredEffect, IWired
 
         foreach (var roomItem in this.Items.ToList())
         {
-            if (this.RoomInstance.RoomItemHandling.GetItem(roomItem.Id) == null)
+            if (this.Room.RoomItemHandling.GetItem(roomItem.Id) == null)
             {
                 continue;
             }
@@ -23,12 +23,12 @@ public class CollisionCase : WiredActionBase, IWiredEffect, IWired
 
             foreach (var coord in roomItem.GetAffectedTiles)
             {
-                usersToTrigger.AddRange(this.RoomInstance.RoomUserManager.GetUsersForSquare(coord.X, coord.Y));
+                usersToTrigger.AddRange(this.Room.RoomUserManager.GetUsersForSquare(coord.X, coord.Y));
             }
 
             foreach (var roomUser in usersToTrigger.Where(u => u != null).Take(isAllUser ? usersToTrigger.Count : 1))
             {
-                this.RoomInstance.WiredHandler.TriggerCollision(roomUser, roomItem);
+                this.Room.WiredHandler.TriggerCollision(roomUser, roomItem);
             }
         }
 

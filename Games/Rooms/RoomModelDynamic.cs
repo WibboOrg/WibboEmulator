@@ -77,15 +77,18 @@ public class RoomModelDynamic
         return this._serializedRelativeHeightmap;
     }
 
-    public ServerPacket GetHeightmap()
+    public ServerPacket SerializedHeightmap
     {
-        if (!this._heightmapSerialized)
+        get
         {
-            this._serializedHeightmap = this.SerializeHeightmap();
-            this._heightmapSerialized = true;
-        }
+            if (!this._heightmapSerialized)
+            {
+                this._serializedHeightmap = this.SerializeHeightmap();
+                this._heightmapSerialized = true;
+            }
 
-        return this._serializedHeightmap;
+            return this._serializedHeightmap;
+        }
     }
 
     private ServerPacket SerializeHeightmap()

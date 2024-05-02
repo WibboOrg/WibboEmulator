@@ -1,51 +1,46 @@
 namespace WibboEmulator.Games.Roleplays.Enemy;
 using System.Data;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Roleplay;
 
-public class RPEnemyManager
+public static class RPEnemyManager
 {
-    private readonly Dictionary<int, RPEnemy> _enemyBot;
-    private readonly Dictionary<int, RPEnemy> _enemyPet;
+    private static readonly Dictionary<int, RPEnemy> EnemyBot = new();
+    private static readonly Dictionary<int, RPEnemy> EnemyPet = new();
 
-    public RPEnemyManager()
+    public static RPEnemy GetEnemyBot(int id)
     {
-        this._enemyBot = new Dictionary<int, RPEnemy>();
-        this._enemyPet = new Dictionary<int, RPEnemy>();
-    }
-
-    public RPEnemy GetEnemyBot(int id)
-    {
-        if (!this._enemyBot.ContainsKey(id))
+        if (!EnemyBot.ContainsKey(id))
         {
             return null;
         }
 
-        _ = this._enemyBot.TryGetValue(id, out var enemy);
+        _ = EnemyBot.TryGetValue(id, out var enemy);
         return enemy;
     }
 
-    public RPEnemy GetEnemyPet(int id)
+    public static RPEnemy GetEnemyPet(int id)
     {
-        if (!this._enemyPet.ContainsKey(id))
+        if (!EnemyPet.ContainsKey(id))
         {
             return null;
         }
 
-        _ = this._enemyPet.TryGetValue(id, out var enemy);
+        _ = EnemyPet.TryGetValue(id, out var enemy);
         return enemy;
     }
 
-    public void Initialize(IDbConnection dbClient)
+    public static void Initialize(IDbConnection dbClient)
     {
-        this._enemyBot.Clear();
-        this._enemyPet.Clear();
+        EnemyBot.Clear();
+        EnemyPet.Clear();
 
         var enemyList = RoleplayEnemyDao.GetAll(dbClient);
         if (enemyList.Count != 0)
         {
             foreach (var enemy in enemyList)
             {
-                if ((this._enemyBot.ContainsKey(enemy.Id) && enemy.Type == "bot") || (this._enemyPet.ContainsKey(enemy.Id) && enemy.Type == "pet"))
+                if ((EnemyBot.ContainsKey(enemy.Id) && enemy.Type == "bot") || (EnemyPet.ContainsKey(enemy.Id) && enemy.Type == "pet"))
                 {
                     continue;
                 }
@@ -56,77 +51,77 @@ public class RPEnemyManager
 
                 if (enemy.Type == "bot")
                 {
-                    this._enemyBot.Add(enemy.Id, config);
+                    EnemyBot.Add(enemy.Id, config);
                 }
                 else
                 {
-                    this._enemyPet.Add(enemy.Id, config);
+                    EnemyPet.Add(enemy.Id, config);
                 }
             }
         }
     }
 
-    public RPEnemy AddEnemyBot(int botId)
+    public static RPEnemy AddEnemyBot(int botId)
     {
-        if (this._enemyBot.ContainsKey(botId))
+        if (EnemyBot.ContainsKey(botId))
         {
-            return this.GetEnemyBot(botId);
+            return GetEnemyBot(botId);
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             RoleplayEnemyDao.Insert(dbClient, botId, "bot");
         }
 
         var enemyConfig = new RPEnemy(botId, 100, 1, 4, 30, 0, 0, 5461, 0, 0, 0, true, 12, false);
-        this._enemyBot.Add(botId, enemyConfig);
-        return this.GetEnemyBot(botId);
+        EnemyBot.Add(botId, enemyConfig);
+        return GetEnemyBot(botId);
     }
 
-    public RPEnemy AddEnemyPet(int petId)
+    public static RPEnemy AddEnemyPet(int petId)
     {
-        if (this._enemyPet.ContainsKey(petId))
+        if (EnemyPet.ContainsKey(petId))
         {
-            return this.GetEnemyPet(petId);
+            return GetEnemyPet(petId);
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             RoleplayEnemyDao.Insert(dbClient, petId, "pet");
         }
 
         var enemyConfig = new RPEnemy(petId, 100, 0, 0, 0, 0, 0, 5461, 0, 0, 0, true, 12, false);
-        this._enemyPet.Add(petId, enemyConfig);
-        return this.GetEnemyPet(petId);
+        EnemyPet.Add(petId, enemyConfig);
+        return GetEnemyPet(petId);
     }
 
-    internal void RemoveEnemyBot(int botId)
+    internal static void RemoveEnemyBot(int botId)
     {
-        if (!this._enemyBot.ContainsKey(botId))
+        if (!EnemyBot.ContainsKey(botId))
         {
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             RoleplayEnemyDao.Delete(dbClient, botId);
         }
 
-        _ = this._enemyBot.Remove(botId);
+        _ = EnemyBot.Remove(botId);
     }
 
-    internal void RemoveEnemyPet(int petId)
+    internal static void RemoveEnemyPet(int petId)
     {
-        if (!this._enemyPet.ContainsKey(petId))
+        if (!EnemyPet.ContainsKey(petId))
         {
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             RoleplayEnemyDao.Delete(dbClient, petId);
         }
 
-        _ = this._enemyPet.Remove(petId);
+        _ = EnemyPet.Remove(petId);
     }
 }

@@ -2,31 +2,22 @@ namespace WibboEmulator.Games.Quests;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Quests;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
-public class QuestManager
+public static class QuestManager
 {
-    private readonly Dictionary<int, Quest> _quests;
-    private readonly Dictionary<string, int> _questCount;
+    private static readonly Dictionary<int, Quest> Quests = new();
+    private static readonly Dictionary<string, int> QuestCount = new();
 
-    public QuestManager()
+    public static void Initialize(IDbConnection dbClient)
     {
-        this._quests = new Dictionary<int, Quest>();
-        this._questCount = new Dictionary<string, int>();
-    }
-
-    public void Initialize(IDbConnection dbClient)
-    {
-        this._quests.Clear();
-        this._questCount.Clear();
+        Quests.Clear();
+        QuestCount.Clear();
 
         var emulatorQuestList = EmulatorQuestDao.GetAll(dbClient);
-        if (emulatorQuestList.Count == 0)
-        {
-            return;
-        }
 
         foreach (var emulatorQuest in emulatorQuestList)
         {
@@ -39,27 +30,27 @@ public class QuestManager
             var reward = emulatorQuest.Reward;
             var dataBit = emulatorQuest.DataBit;
 
-            this._quests.Add(id, new Quest(id, category, seriesNumber, (QuestType)goalType, goalData, name, reward, dataBit));
+            Quests.Add(id, new Quest(id, category, seriesNumber, (QuestType)goalType, goalData, name, reward, dataBit));
 
-            this.AddToCounter(category);
+            AddToCounter(category);
         }
     }
 
-    private void AddToCounter(string category)
+    private static void AddToCounter(string category)
     {
-        if (this._questCount.TryGetValue(category, out var num))
+        if (QuestCount.TryGetValue(category, out var num))
         {
-            this._questCount[category] = num + 1;
+            QuestCount[category] = num + 1;
         }
         else
         {
-            this._questCount.Add(category, 1);
+            QuestCount.Add(category, 1);
         }
     }
 
-    public Quest GetQuest(int id)
+    public static Quest GetQuest(int id)
     {
-        if (this._quests.TryGetValue(id, out var quest))
+        if (Quests.TryGetValue(id, out var quest))
         {
             return quest;
         }
@@ -67,23 +58,23 @@ public class QuestManager
         return null;
     }
 
-    public int GetAmountOfQuestsInCategory(string category)
+    public static int GetAmountOfQuestsInCategory(string category)
     {
-        if (this._questCount.TryGetValue(category, out var num))
+        if (QuestCount.TryGetValue(category, out var num))
         {
             return num;
         }
         return 0;
     }
 
-    public void ProgressUserQuest(GameClient session, QuestType questType, int eventData = 0)
+    public static void ProgressUserQuest(GameClient session, QuestType questType, int eventData = 0)
     {
-        if (session == null || session.User == null || session.User.CurrentQuestId <= 0)
+        if (session == null || session.User == null || session.User.QuestId <= 0)
         {
             return;
         }
 
-        var quest = this.GetQuest(session.User.CurrentQuestId);
+        var quest = GetQuest(session.User.QuestId);
         if (quest == null || quest.GoalType != questType)
         {
             return;
@@ -110,12 +101,12 @@ public class QuestManager
             progress = quest.GoalData;
             flag = true;
         }
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             UserQuestDao.Update(dbClient, session.User.Id, quest.Id, progress);
         }
 
-        session.User.Quests[session.User.CurrentQuestId] = progress;
+        session.User.Quests[session.User.QuestId] = progress;
         session.SendPacket(new QuestStartedComposer(session, quest));
 
         if (!flag)
@@ -123,17 +114,17 @@ public class QuestManager
             return;
         }
 
-        session.User.CurrentQuestId = 0;
+        session.User.QuestId = 0;
         session.User.LastCompleted = quest.Id;
         session.SendPacket(new QuestCompletedComposer(session, quest));
         session.User.Duckets += quest.Reward;
         session.SendPacket(new ActivityPointNotificationComposer(session.User.Duckets, 1));
-        this.SendQuestList(session);
+        SendQuestList(session);
     }
 
-    public Quest GetNextQuestInSeries(string category, int number)
+    public static Quest GetNextQuestInSeries(string category, int number)
     {
-        foreach (var quest in this._quests.Values)
+        foreach (var quest in Quests.Values)
         {
             if (quest.Category == category && quest.Number == number)
             {
@@ -144,12 +135,12 @@ public class QuestManager
         return null;
     }
 
-    public void SendQuestList(GameClient session, bool send = true)
+    public static void SendQuestList(GameClient session, bool send = true)
     {
         var dictionary1 = new Dictionary<string, int>();
         var dictionary2 = new Dictionary<string, Quest>();
 
-        foreach (var quest in this._quests.Values)
+        foreach (var quest in Quests.Values)
         {
             if (!dictionary1.TryGetValue(quest.Category, out var questCategory))
             {
@@ -159,14 +150,14 @@ public class QuestManager
             if (quest.Number >= questCategory)
             {
                 var questProgress = session.User.GetQuestProgress(quest.Id);
-                if (session.User.CurrentQuestId != quest.Id && questProgress >= (long)quest.GoalData)
+                if (session.User.QuestId != quest.Id && questProgress >= (long)quest.GoalData)
                 {
                     dictionary1[quest.Category] = quest.Number + 1;
                 }
             }
         }
 
-        foreach (var quest in this._quests.Values)
+        foreach (var quest in Quests.Values)
         {
             foreach (var keyValuePair in dictionary1)
             {
@@ -181,63 +172,63 @@ public class QuestManager
         session.SendPacket(new QuestListComposer(dictionary2, session, send));
     }
 
-    public void ActivateQuest(GameClient session, int questId)
+    public static void ActivateQuest(GameClient session, int questId)
     {
-        var quest = this.GetQuest(questId);
+        var quest = GetQuest(questId);
         if (quest == null)
         {
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             UserQuestDao.Replace(dbClient, session.User.Id, quest.Id);
         }
 
-        session.User.CurrentQuestId = quest.Id;
-        this.SendQuestList(session);
+        session.User.QuestId = quest.Id;
+        SendQuestList(session);
         session.SendPacket(new QuestStartedComposer(session, quest));
     }
 
-    public void GetCurrentQuest(GameClient session)
+    public static void GetCurrentQuest(GameClient session)
     {
         if (!session.User.InRoom)
         {
             return;
         }
 
-        var quest = this.GetQuest(session.User.LastCompleted);
-        var nextQuestInSeries = this.GetNextQuestInSeries(quest.Category, quest.Number + 1);
+        var quest = GetQuest(session.User.LastCompleted);
+        var nextQuestInSeries = GetNextQuestInSeries(quest.Category, quest.Number + 1);
         if (nextQuestInSeries == null)
         {
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             UserQuestDao.Replace(dbClient, session.User.Id, nextQuestInSeries.Id);
         }
 
-        session.User.CurrentQuestId = nextQuestInSeries.Id;
-        this.SendQuestList(session);
+        session.User.QuestId = nextQuestInSeries.Id;
+        SendQuestList(session);
         session.SendPacket(new QuestStartedComposer(session, nextQuestInSeries));
     }
 
-    public void CancelQuest(GameClient session)
+    public static void CancelQuest(GameClient session)
     {
-        var quest = this.GetQuest(session.User.CurrentQuestId);
+        var quest = GetQuest(session.User.QuestId);
         if (quest == null)
         {
             return;
         }
 
-        session.User.CurrentQuestId = 0;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        session.User.QuestId = 0;
+        using (var dbClient = DatabaseManager.Connection)
         {
             UserQuestDao.Delete(dbClient, session.User.Id, quest.Id);
         }
 
         session.SendPacket(new QuestAbortedComposer());
-        this.SendQuestList(session);
+        SendQuestList(session);
     }
 }

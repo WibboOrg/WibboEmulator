@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Moderation;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -18,10 +20,10 @@ internal sealed class UnMute : IChatCommand
             return;
         }
 
-        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
+        var targetUser = GameClientManager.GetClientByUsername(username);
         if (targetUser == null || targetUser.User == null)
         {
-            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
         }
         else
         {

@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Build;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -9,6 +11,6 @@ internal sealed class SetZStop : IChatCommand
         userRoom.ConstruitZMode = false;
         session.SendPacket(room.GameMap.Model.SerializeRelativeHeightmap());
 
-        session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.setz.disabled", session.Langue));
+        session.SendWhisper(LanguageManager.TryGetValue("cmd.setz.disabled", session.Language));
     }
 }

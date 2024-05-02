@@ -1,6 +1,9 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Gestion;
 
 using WibboEmulator.Core;
+using WibboEmulator.Core.ElevenLabs;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Core.Settings;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Utilities;
@@ -17,7 +20,7 @@ internal sealed class ChatToSpeechElevenlabs : IChatCommand
             return;
         }
 
-        if (WibboEnvironment.GetElevenLabs().IsReadyToSendAudio() == false)
+        if (!ElevenLabsProxy.IsReadyToSendAudio)
         {
             userRoom.SendWhisperChat("L'api n'est pas encore disponible");
             return;
@@ -35,7 +38,7 @@ internal sealed class ChatToSpeechElevenlabs : IChatCommand
             return;
         }
 
-        var audioBinary = WibboEnvironment.GetElevenLabs().TextToSpeech(modelId, text).GetAwaiter().GetResult();
+        var audioBinary = ElevenLabsProxy.TextToSpeech(modelId, text).GetAwaiter().GetResult();
 
         var audioName = $"{session.User.Id}_{room.Id}_{Guid.NewGuid()}";
 
@@ -43,13 +46,13 @@ internal sealed class ChatToSpeechElevenlabs : IChatCommand
 
         if (string.IsNullOrEmpty(audioId) || audioName != audioId)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
         var audioPath = $"/chat-audio/{audioName}.webm";
 
-        var audioUploadUrl = WibboEnvironment.GetSettings().GetData<string>("audio.upload.url");
+        var audioUploadUrl = SettingsManager.GetData<string>("audio.upload.url");
         var basePath = new Uri(audioUploadUrl).GetLeftPart(UriPartial.Authority);
 
         var audioUrl = $"{basePath}{audioPath}";

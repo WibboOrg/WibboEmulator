@@ -21,7 +21,7 @@ public class HasFurniOnFurni : WiredConditionBase, IWiredCondition, IWired
         {
             foreach (var coord in roomItem.GetAffectedTiles)
             {
-                var totalFloorHeight = this.RoomInstance.GameMap.Model.SqFloorHeight[coord.X, coord.Y] + this.RoomInstance.GameMap.ItemHeightMap[coord.X, coord.Y];
+                var totalFloorHeight = this.Room.GameMap.Model.SqFloorHeight[coord.X, coord.Y] + this.Room.GameMap.ItemHeightMap[coord.X, coord.Y];
                 if (totalFloorHeight > roomItem.TotalHeight)
                 {
                     if (!requireAll)

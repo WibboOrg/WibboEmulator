@@ -23,6 +23,6 @@ internal sealed class GetRelationshipsEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new GetRelationshipsComposer(user.Id, user.Messenger.GetRelationships()));
+        session.SendPacket(new GetRelationshipsComposer(user.Id, user.Messenger.Relationships));
     }
 }

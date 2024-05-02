@@ -30,18 +30,18 @@ internal sealed class TradingUpdateComposer : ServerPacket
     private void WriteItem(Item userItem)
     {
         this.WriteInteger(userItem.Id);
-        this.WriteString(userItem.GetBaseItem().Type.ToString());
+        this.WriteString(userItem.ItemData.Type.ToString());
         this.WriteInteger(userItem.Id);
-        this.WriteInteger(userItem.GetBaseItem().SpriteId);
+        this.WriteInteger(userItem.ItemData.SpriteId);
         this.WriteInteger((int)userItem.Category);
 
-        this.WriteBoolean(userItem.GetBaseItem().AllowInventoryStack);
+        this.WriteBoolean(userItem.ItemData.AllowInventoryStack);
         ItemBehaviourUtility.GenerateExtradata(userItem, this);
 
         this.WriteInteger(0);
         this.WriteInteger(0);
         this.WriteInteger(0);
-        if (userItem.GetBaseItem().Type == ItemType.S)
+        if (userItem.ItemData.Type == ItemType.S)
         {
             this.WriteInteger(userItem.Extra);
         }

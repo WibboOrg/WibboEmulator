@@ -34,6 +34,6 @@ public static class Program
         ExceptionLogger.DisablePrimaryWriting(true);
         ExceptionLogger.LogCriticalException("SYSTEM CRITICAL EXCEPTION: " + ((Exception)args.ExceptionObject).ToString());
 
-        WibboEnvironment.PreformShutDown();
+        WibboEnvironment.PerformShutDown();
     }
 }

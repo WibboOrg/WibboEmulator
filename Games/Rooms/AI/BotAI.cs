@@ -5,8 +5,8 @@ public abstract class BotAI
 {
     public int Id { get; set; }
     public int VirtualId { get; set; }
-    private RoomUser _roomUser;
-    private Room _room;
+    public RoomUser RoomUser { get; private set; }
+    public Room Room { get; private set; }
 
     public BotAI()
     {
@@ -15,23 +15,22 @@ public abstract class BotAI
     public virtual void Initialize(int baseId, RoomUser user, Room room)
     {
         this.Id = baseId;
-        this._roomUser = user;
-        this._room = room;
+        this.RoomUser = user;
+        this.Room = room;
     }
 
-    public Room GetRoom() => this._room;
-
-    public RoomUser GetRoomUser() => this._roomUser;
-
-    public RoomBot GetBotData()
+    public RoomBot BotData
     {
-        if (this.GetRoomUser() == null)
+        get
         {
-            return null;
-        }
-        else
-        {
-            return this.GetRoomUser().BotData;
+            if (this.RoomUser == null)
+            {
+                return null;
+            }
+            else
+            {
+                return this.RoomUser.BotData;
+            }
         }
     }
 

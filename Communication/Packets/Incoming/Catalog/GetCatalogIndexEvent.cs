@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.BuildersClub;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
+using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
 
@@ -12,7 +13,7 @@ internal sealed class GetCatalogIndexEvent : IPacketEvent
     {
         var packetList = new ServerPacketList();
 
-        packetList.Add(new CatalogIndexComposer(session, WibboEnvironment.GetGame().GetCatalog().GetPages()));//, Sub));
+        packetList.Add(new CatalogIndexComposer(session, CatalogManager.Pages));//, Sub));
         packetList.Add(new CatalogItemDiscountComposer());
         packetList.Add(new BCBorrowedItemsComposer());
 

@@ -13,6 +13,6 @@ internal sealed class GetBotInventoryEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.GetBots()));
+        session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.Bots));
     }
 }

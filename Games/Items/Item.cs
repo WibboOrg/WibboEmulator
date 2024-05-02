@@ -14,11 +14,9 @@ using WibboEmulator.Games.Rooms.Map.Movement;
 
 public class Item : IEquatable<Item>
 {
-    private Room _roomInstance;
-
     public int Id { get; set; }
     public int RoomId { get; set; }
-    public int BaseItem { get; set; }
+    public int BaseItemId { get; set; }
     public string ExtraData { get; set; }
     public int Extra { get; set; }
     public int GroupId { get; set; }
@@ -57,15 +55,15 @@ public class Item : IEquatable<Item>
     {
         get
         {
-            if (this.GetBaseItem().AdjustableHeights.Count > 1 && this.ExtraData != "")
+            if (this.ItemData.AdjustableHeights.Count > 1 && this.ExtraData != "")
             {
                 if (int.TryParse(this.ExtraData, out var index))
                 {
-                    if (index < this.GetBaseItem().AdjustableHeights.Count && index >= 0)
+                    if (index < this.ItemData.AdjustableHeights.Count && index >= 0)
                     {
-                        if (index < this.GetBaseItem().AdjustableHeights.Count && index >= 0)
+                        if (index < this.ItemData.AdjustableHeights.Count && index >= 0)
                         {
-                            return this.GetBaseItem().AdjustableHeights[index];
+                            return this.ItemData.AdjustableHeights[index];
                         }
                     }
                 }
@@ -167,7 +165,7 @@ public class Item : IEquatable<Item>
         }
     }
 
-    public ItemCategoryType Category => this.GetBaseItem().InteractionType switch
+    public ItemCategoryType Category => this.ItemData.InteractionType switch
     {
         InteractionType.GIFT or InteractionType.LEGEND_BOX or InteractionType.BADGE_BOX or InteractionType.LOOTBOX_2022 or InteractionType.DELUXE_BOX or InteractionType.EXTRA_BOX => ItemCategoryType.PRESENT,
         InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE => ItemCategoryType.GUILD_FURNI,
@@ -178,14 +176,14 @@ public class Item : IEquatable<Item>
         _ => ItemCategoryType.DEFAULT,
     };
 
-    public Item(int id, int roomId, int baseItem, string extraData, int limitedNumber, int limitedStack, int x, int y, double z, int rot,
+    public Item(int id, int roomId, int baseItemId, string extraData, int limitedNumber, int limitedStack, int x, int y, double z, int rot,
         string wallCoord, Room room)
     {
-        if (WibboEnvironment.GetGame().GetItemManager().GetItem(baseItem, out var data))
+        if (ItemManager.GetItem(baseItemId, out var data))
         {
             this.Id = id;
             this.RoomId = roomId;
-            this.BaseItem = baseItem;
+            this.BaseItemId = baseItemId;
             this.ExtraData = extraData;
             this.X = x;
             this.Y = y;
@@ -207,12 +205,12 @@ public class Item : IEquatable<Item>
             this.Scores = new Dictionary<string, int>();
             this.EffectId = this.Data.EffectId;
 
-            if (this.GetBaseItem() == null)
+            if (this.ItemData == null)
             {
-                ExceptionLogger.LogException("Unknown baseID: " + baseItem);
+                ExceptionLogger.LogException("Unknown baseID: " + baseItemId);
             }
 
-            switch (this.GetBaseItem().InteractionType)
+            switch (this.ItemData.InteractionType)
             {
                 case InteractionType.FOOTBALL_COUNTER_GREEN:
                 case InteractionType.BANZAI_GATE_GREEN:
@@ -269,16 +267,16 @@ public class Item : IEquatable<Item>
                     break;
                 }
             }
-            this.IsWallItem = this.GetBaseItem().Type == ItemType.I;
-            this.IsFloorItem = this.GetBaseItem().Type == ItemType.S;
+            this.IsWallItem = this.ItemData.Type == ItemType.I;
+            this.IsFloorItem = this.ItemData.Type == ItemType.S;
 
             if (room == null)
             {
                 return;
             }
 
-            this._roomInstance = room;
-            this.GetAffectedTiles = GameMap.GetAffectedTiles(this.GetBaseItem().Length, this.GetBaseItem().Width, this.X, this.Y, rot);
+            this.Room = room;
+            this.GetAffectedTiles = GameMap.GetAffectedTiles(this.ItemData.Length, this.ItemData.Width, this.X, this.Y, rot);
             this.Interactor = ItemFactory.CreateInteractor(this);
         }
     }
@@ -294,7 +292,7 @@ public class Item : IEquatable<Item>
 
         if (updateTiles)
         {
-            this.GetAffectedTiles = GameMap.GetAffectedTiles(this.GetBaseItem().Length, this.GetBaseItem().Width, this.X, this.Y, this.Rotation);
+            this.GetAffectedTiles = GameMap.GetAffectedTiles(this.ItemData.Length, this.ItemData.Width, this.X, this.Y, this.Rotation);
         }
     }
 
@@ -314,7 +312,7 @@ public class Item : IEquatable<Item>
 
         this.WiredHandler?.Dispose();
 
-        this._roomInstance = null;
+        this.Room = null;
         this.WiredHandler = null;
 
         this.ItemTrigger = null;
@@ -396,13 +394,13 @@ public class Item : IEquatable<Item>
                 break;
 
             case MovementDirection.upright:
-                if (!this.GetRoom().GameMap.CanStackItem(x + 1, y + 1, true) && !this.GetRoom().GameMap.CanStackItem(x - 1, y - 1, true))
+                if (!this.Room.GameMap.CanStackItem(x + 1, y + 1, true) && !this.Room.GameMap.CanStackItem(x - 1, y - 1, true))
                 {
                     this.MovementDir = MovementDirection.downleft;
                 }
                 else
                 {
-                    if (this.GetRoom().GameMap.CanStackItem(x + 1, y + 1, true) && this.GetRoom().GameMap.CanStackItem(x - 1, y - 1, true))
+                    if (this.Room.GameMap.CanStackItem(x + 1, y + 1, true) && this.Room.GameMap.CanStackItem(x - 1, y - 1, true))
                     {
                         if (WibboEnvironment.GetRandomNumber(1, 2) == 1)
                         {
@@ -415,11 +413,11 @@ public class Item : IEquatable<Item>
                     }
                     else
                     {
-                        if (this.GetRoom().GameMap.CanStackItem(x - 1, y - 1, true) && !this.GetRoom().GameMap.CanStackItem(x + 1, y + 1, true))
+                        if (this.Room.GameMap.CanStackItem(x - 1, y - 1, true) && !this.Room.GameMap.CanStackItem(x + 1, y + 1, true))
                         {
                             this.MovementDir = MovementDirection.upleft;
                         }
-                        else if (this.GetRoom().GameMap.CanStackItem(x + 1, y + 1, true) && !this.GetRoom().GameMap.CanStackItem(x - 1, y - 1, true))
+                        else if (this.Room.GameMap.CanStackItem(x + 1, y + 1, true) && !this.Room.GameMap.CanStackItem(x - 1, y - 1, true))
                         {
                             this.MovementDir = MovementDirection.downright;
                         }
@@ -427,13 +425,13 @@ public class Item : IEquatable<Item>
                 }
                 break;
             case MovementDirection.upleft:
-                if (!this.GetRoom().GameMap.CanStackItem(x - 1, y + 1, true) && !this.GetRoom().GameMap.CanStackItem(x + 1, y - 1, true))
+                if (!this.Room.GameMap.CanStackItem(x - 1, y + 1, true) && !this.Room.GameMap.CanStackItem(x + 1, y - 1, true))
                 {
                     this.MovementDir = MovementDirection.downright;
                 }
                 else
                 {
-                    if (this.GetRoom().GameMap.CanStackItem(x - 1, y + 1, true) && this.GetRoom().GameMap.CanStackItem(x + 1, y - 1, true))
+                    if (this.Room.GameMap.CanStackItem(x - 1, y + 1, true) && this.Room.GameMap.CanStackItem(x + 1, y - 1, true))
                     {
                         if (WibboEnvironment.GetRandomNumber(1, 2) == 1)
                         {
@@ -446,11 +444,11 @@ public class Item : IEquatable<Item>
                     }
                     else
                     {
-                        if (this.GetRoom().GameMap.CanStackItem(x + 1, y - 1, true) && !this.GetRoom().GameMap.CanStackItem(x - 1, y + 1, true))
+                        if (this.Room.GameMap.CanStackItem(x + 1, y - 1, true) && !this.Room.GameMap.CanStackItem(x - 1, y + 1, true))
                         {
                             this.MovementDir = MovementDirection.upright;
                         }
-                        else if (this.GetRoom().GameMap.CanStackItem(x - 1, y + 1, true) && !this.GetRoom().GameMap.CanStackItem(x + 1, y - 1, true))
+                        else if (this.Room.GameMap.CanStackItem(x - 1, y + 1, true) && !this.Room.GameMap.CanStackItem(x + 1, y - 1, true))
                         {
                             this.MovementDir = MovementDirection.downleft;
                         }
@@ -458,13 +456,13 @@ public class Item : IEquatable<Item>
                 }
                 break;
             case MovementDirection.downright:
-                if (!this.GetRoom().GameMap.CanStackItem(x - 1, y + 1, true) && !this.GetRoom().GameMap.CanStackItem(x + 1, y - 1, true))
+                if (!this.Room.GameMap.CanStackItem(x - 1, y + 1, true) && !this.Room.GameMap.CanStackItem(x + 1, y - 1, true))
                 {
                     this.MovementDir = MovementDirection.upleft;
                 }
                 else
                 {
-                    if (this.GetRoom().GameMap.CanStackItem(x - 1, y + 1, true) && this.GetRoom().GameMap.CanStackItem(x + 1, y - 1, true))
+                    if (this.Room.GameMap.CanStackItem(x - 1, y + 1, true) && this.Room.GameMap.CanStackItem(x + 1, y - 1, true))
                     {
                         if (WibboEnvironment.GetRandomNumber(1, 2) == 1)
                         {
@@ -477,11 +475,11 @@ public class Item : IEquatable<Item>
                     }
                     else
                     {
-                        if (this.GetRoom().GameMap.CanStackItem(x + 1, y - 1, true) && !this.GetRoom().GameMap.CanStackItem(x - 1, y + 1, true))
+                        if (this.Room.GameMap.CanStackItem(x + 1, y - 1, true) && !this.Room.GameMap.CanStackItem(x - 1, y + 1, true))
                         {
                             this.MovementDir = MovementDirection.upright;
                         }
-                        else if (this.GetRoom().GameMap.CanStackItem(x - 1, y + 1, true) && !this.GetRoom().GameMap.CanStackItem(x + 1, y - 1, true))
+                        else if (this.Room.GameMap.CanStackItem(x - 1, y + 1, true) && !this.Room.GameMap.CanStackItem(x + 1, y - 1, true))
                         {
                             this.MovementDir = MovementDirection.downleft;
                         }
@@ -489,13 +487,13 @@ public class Item : IEquatable<Item>
                 }
                 break;
             case MovementDirection.downleft:
-                if (!this.GetRoom().GameMap.CanStackItem(x + 1, y + 1, true) && !this.GetRoom().GameMap.CanStackItem(x - 1, y - 1, true))
+                if (!this.Room.GameMap.CanStackItem(x + 1, y + 1, true) && !this.Room.GameMap.CanStackItem(x - 1, y - 1, true))
                 {
                     this.MovementDir = MovementDirection.upright;
                 }
                 else
                 {
-                    if (this.GetRoom().GameMap.CanStackItem(x + 1, y + 1, true) && this.GetRoom().GameMap.CanStackItem(x - 1, y - 1, true))
+                    if (this.Room.GameMap.CanStackItem(x + 1, y + 1, true) && this.Room.GameMap.CanStackItem(x - 1, y - 1, true))
                     {
                         if (WibboEnvironment.GetRandomNumber(1, 2) == 1)
                         {
@@ -508,11 +506,11 @@ public class Item : IEquatable<Item>
                     }
                     else
                     {
-                        if (this.GetRoom().GameMap.CanStackItem(x - 1, y - 1, true) && !this.GetRoom().GameMap.CanStackItem(x + 1, y + 1, true))
+                        if (this.Room.GameMap.CanStackItem(x - 1, y - 1, true) && !this.Room.GameMap.CanStackItem(x + 1, y + 1, true))
                         {
                             this.MovementDir = MovementDirection.upleft;
                         }
-                        else if (this.GetRoom().GameMap.CanStackItem(x + 1, y + 1, true) && !this.GetRoom().GameMap.CanStackItem(x - 1, y - 1, true))
+                        else if (this.Room.GameMap.CanStackItem(x + 1, y + 1, true) && !this.Room.GameMap.CanStackItem(x - 1, y - 1, true))
                         {
                             this.MovementDir = MovementDirection.downright;
                         }
@@ -543,38 +541,38 @@ public class Item : IEquatable<Item>
         }
 
         this.UpdateCounter = cycles;
-        this.GetRoom().RoomItemHandling.QueueRoomItemUpdate(this);
+        this.        Room.RoomItemHandling.QueueRoomItemUpdate(this);
     }
 
     public void UpdateState(bool inDb = true)
     {
-        if (this.GetRoom() == null)
+        if (this.Room == null)
         {
             return;
         }
 
         if (inDb)
         {
-            this.GetRoom().RoomItemHandling.UpdateItem(this);
+            this.            Room.RoomItemHandling.UpdateItem(this);
         }
 
         if (this.IsFloorItem)
         {
-            this.GetRoom().SendPacket(new ObjectUpdateComposer(this, this.GetRoom().RoomData.OwnerId));
+            this.            Room.SendPacket(new ObjectUpdateComposer(this, this.Room.RoomData.OwnerId));
         }
         else
         {
-            this.GetRoom().SendPacket(new ItemUpdateComposer(this, this.GetRoom().RoomData.OwnerId));
+            this.            Room.SendPacket(new ItemUpdateComposer(this, this.Room.RoomData.OwnerId));
         }
     }
 
     public void ResetBaseItem(Room room)
     {
         this.Data = null;
-        this.Data = this.GetBaseItem();
-        this._roomInstance = room;
+        this.Data = this.ItemData;
+        this.Room = room;
 
-        switch (this.GetBaseItem().InteractionType)
+        switch (this.ItemData.InteractionType)
         {
             case InteractionType.FOOTBALL_COUNTER_GREEN:
             case InteractionType.BANZAI_GATE_GREEN:
@@ -622,24 +620,27 @@ public class Item : IEquatable<Item>
                 break;
         }
 
-        this.GetAffectedTiles = GameMap.GetAffectedTiles(this.GetBaseItem().Length, this.GetBaseItem().Width, this.X, this.Y, this.Rotation);
+        this.GetAffectedTiles = GameMap.GetAffectedTiles(this.ItemData.Length, this.ItemData.Width, this.X, this.Y, this.Rotation);
         this.Interactor = ItemFactory.CreateInteractor(this);
     }
 
-    public ItemData GetBaseItem()
+    public ItemData ItemData
     {
-        if (this.Data == null)
+        get
         {
-            if (WibboEnvironment.GetGame().GetItemManager().GetItem(this.BaseItem, out var itemData))
+            if (this.Data == null)
             {
-                this.Data = itemData;
+                if (ItemManager.GetItem(this.BaseItemId, out var itemData))
+                {
+                    this.Data = itemData;
+                }
             }
-        }
 
-        return this.Data;
+            return this.Data;
+        }
     }
 
-    public Room GetRoom() => this._roomInstance;
+    public Room Room { get; private set; }
 
     public void UserWalksOnFurni(RoomUser user, Item item) => this.OnUserWalksOnFurni?.Invoke(this, new(user, item));
 

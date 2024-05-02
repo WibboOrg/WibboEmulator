@@ -1,6 +1,10 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
+
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class PickupObjectEvent : IPacketEvent
 {
@@ -11,7 +15,7 @@ internal sealed class PickupObjectEvent : IPacketEvent
         _ = packet.PopInt();
         var itemId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -29,14 +33,14 @@ internal sealed class PickupObjectEvent : IPacketEvent
 
         if (room.RoomData.SellPrice > 0)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("roomsell.error.7", session.Language));
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         room.RoomItemHandling.RemoveFurniture(session, item.Id);
         session.User.InventoryComponent.AddItem(dbClient, item);
-        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FurniPick, 0);
+        QuestManager.ProgressUserQuest(session, QuestType.FurniPick, 0);
     }
 }

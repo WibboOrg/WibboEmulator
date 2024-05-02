@@ -1,30 +1,31 @@
 namespace WibboEmulator.Games.Users.Wardrobes;
 using System.Data;
+using WibboEmulator.Core.FigureData;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 
 public class WardrobeComponent : IDisposable
 {
     private static readonly int MAX_SLOT = 24;
-    private readonly User _userInstance;
-    private readonly Dictionary<int, Wardrobe> _wardrobes;
+    private readonly User _user;
 
     public WardrobeComponent(User user)
     {
-        this._userInstance = user;
-        this._wardrobes = new Dictionary<int, Wardrobe>();
+        this._user = user;
+        this.Wardrobes = new Dictionary<int, Wardrobe>();
     }
 
     public void Initialize(IDbConnection dbClient)
     {
-        this._wardrobes.Clear();
+        this.Wardrobes.Clear();
 
-        var userWardrobeList = UserWardrobeDao.GetAll(dbClient, this._userInstance.Id);
+        var userWardrobeList = UserWardrobeDao.GetAll(dbClient, this._user.Id);
 
         foreach (var userWardrobe in userWardrobeList)
         {
             var slotId = userWardrobe.SlotId;
 
-            if (this._wardrobes.ContainsKey(slotId))
+            if (this.Wardrobes.ContainsKey(slotId))
             {
                 continue;
             }
@@ -35,7 +36,7 @@ public class WardrobeComponent : IDisposable
             }
 
             var wardrobe = new Wardrobe(slotId, userWardrobe.Look, userWardrobe.Gender!.ToUpper());
-            this._wardrobes.Add(slotId, wardrobe);
+            this.Wardrobes.Add(slotId, wardrobe);
         }
     }
 
@@ -53,25 +54,25 @@ public class WardrobeComponent : IDisposable
             return;
         }
 
-        if (this._wardrobes.ContainsKey(slotId))
+        if (this.Wardrobes.ContainsKey(slotId))
         {
-            _ = this._wardrobes.Remove(slotId);
+            _ = this.Wardrobes.Remove(slotId);
         }
 
-        look = WibboEnvironment.GetFigureManager().ProcessFigure(look, gender, true);
+        look = FigureDataManager.ProcessFigure(look, gender, true);
 
         var wardrobe = new Wardrobe(slotId, look, gender);
-        this._wardrobes.Add(slotId, wardrobe);
+        this.Wardrobes.Add(slotId, wardrobe);
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
-        UserWardrobeDao.Insert(dbClient, this._userInstance.Id, slotId, look, gender);
+        using var dbClient = DatabaseManager.Connection;
+        UserWardrobeDao.Insert(dbClient, this._user.Id, slotId, look, gender);
     }
 
-    public Dictionary<int, Wardrobe> GetWardrobes() => this._wardrobes;
+    public Dictionary<int, Wardrobe> Wardrobes { get; }
 
     public void Dispose()
     {
-        this._wardrobes.Clear();
+        this.Wardrobes.Clear();
         GC.SuppressFinalize(this);
     }
 }

@@ -3,52 +3,46 @@ using System.Data;
 using WibboEmulator.Database.Daos.Roleplay;
 using WibboEmulator.Utilities;
 
-public class RPWeaponManager
+public static class RPWeaponManager
 {
-    private readonly Dictionary<int, RPWeapon> _weaponCac;
-    private readonly Dictionary<int, RPWeapon> _weaponGun;
+    private static readonly Dictionary<int, RPWeapon> WeaponCac = new();
+    private static readonly Dictionary<int, RPWeapon> WeaponGun = new();
 
-    public RPWeaponManager()
-    {
-        this._weaponCac = new Dictionary<int, RPWeapon>();
-        this._weaponGun = new Dictionary<int, RPWeapon>();
-    }
-
-    public RPWeapon GetWeaponCac(int id)
+    public static RPWeapon GetWeaponCac(int id)
     {
         var weapon = new RPWeapon(0, 1, 3, RPWeaponInteraction.None, 0, 1, 1);
-        if (!this._weaponCac.ContainsKey(id))
+        if (!WeaponCac.ContainsKey(id))
         {
             return weapon;
         }
 
-        _ = this._weaponCac.TryGetValue(id, out weapon);
+        _ = WeaponCac.TryGetValue(id, out weapon);
         return weapon;
     }
 
-    public RPWeapon GetWeaponGun(int id)
+    public static RPWeapon GetWeaponGun(int id)
     {
         var weapon = new RPWeapon(0, 5, 10, RPWeaponInteraction.None, 164, 3, 10);
-        if (!this._weaponGun.ContainsKey(id))
+        if (!WeaponGun.ContainsKey(id))
         {
             return weapon;
         }
 
-        _ = this._weaponGun.TryGetValue(id, out weapon);
+        _ = WeaponGun.TryGetValue(id, out weapon);
         return weapon;
     }
 
-    public void Initialize(IDbConnection dbClient)
+    public static void Initialize(IDbConnection dbClient)
     {
-        this._weaponCac.Clear();
-        this._weaponGun.Clear();
+        WeaponCac.Clear();
+        WeaponGun.Clear();
 
         var weaponList = RoleplayWeaponDao.GetAll(dbClient);
         if (weaponList.Count != 0)
         {
             foreach (var weapon in weaponList)
             {
-                if (this._weaponCac.ContainsKey(weapon.Id) || this._weaponGun.ContainsKey(weapon.Id))
+                if (WeaponCac.ContainsKey(weapon.Id) || WeaponGun.ContainsKey(weapon.Id))
                 {
                     continue;
                 }
@@ -57,11 +51,11 @@ public class RPWeaponManager
 
                 if (weapon.Type == "cac")
                 {
-                    this._weaponCac.Add(weapon.Id, rpWeapon);
+                    WeaponCac.Add(weapon.Id, rpWeapon);
                 }
                 else
                 {
-                    this._weaponGun.Add(weapon.Id, rpWeapon);
+                    WeaponGun.Add(weapon.Id, rpWeapon);
                 }
             }
         }

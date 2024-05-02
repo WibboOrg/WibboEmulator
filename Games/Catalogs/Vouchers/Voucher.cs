@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Catalogs.Vouchers;
+
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Catalog;
 
 public class Voucher
@@ -16,7 +18,7 @@ public class Voucher
     {
         this.CurrentUses += 1;
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         CatalogVoucherDao.Update(dbClient, this.Code);
     }
 

@@ -14,16 +14,19 @@ public class TeamManager
         this.YellowTeam = new List<RoomUser>();
     }
 
-    public List<RoomUser> GetAllPlayer()
+    public List<RoomUser> AllPlayers
     {
-        var players = new List<RoomUser>();
+        get
+        {
+            var players = new List<RoomUser>();
 
-        players.AddRange(this.BlueTeam);
-        players.AddRange(this.RedTeam);
-        players.AddRange(this.GreenTeam);
-        players.AddRange(this.YellowTeam);
+            players.AddRange(this.BlueTeam);
+            players.AddRange(this.RedTeam);
+            players.AddRange(this.GreenTeam);
+            players.AddRange(this.YellowTeam);
 
-        return players;
+            return players;
+        }
     }
 
     public bool CanEnterOnTeam(TeamType t)

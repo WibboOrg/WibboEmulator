@@ -1,7 +1,9 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Pets.Horse;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class ModifyWhoCanRideHorseEvent : IPacketEvent
 {
@@ -14,7 +16,7 @@ internal sealed class ModifyWhoCanRideHorseEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -59,7 +61,7 @@ internal sealed class ModifyWhoCanRideHorseEvent : IPacketEvent
             }
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             BotPetDao.UpdateAnyoneRide(dbClient, petId, pet.PetData.AnyoneCanRide);
         }

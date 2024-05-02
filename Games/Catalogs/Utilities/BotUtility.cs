@@ -9,7 +9,7 @@ public static class BotUtility
 {
     public static Bot CreateBot(IDbConnection dbClient, ItemData data, int ownerId)
     {
-        if (!WibboEnvironment.GetGame().GetCatalog().TryGetBot(data.Id, out var cataBot))
+        if (!CatalogManager.TryGetBot(data.Id, out var cataBot))
         {
             return null;
         }

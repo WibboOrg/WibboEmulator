@@ -1,8 +1,12 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Games.Achievements;
+using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
@@ -26,7 +30,7 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 
         var showMyFace = packet.PopBoolean();
 
-        if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out var page))
+        if (!CatalogManager.TryGetPage(pageId, out var page))
         {
             return;
         }
@@ -57,7 +61,7 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetItemManager().GetGift(boxSpriteId, out var presentData) || presentData.InteractionType != InteractionType.GIFT)
+        if (!ItemManager.GetGift(boxSpriteId, out var presentData) || presentData.InteractionType != InteractionType.GIFT)
         {
             return;
         }
@@ -81,7 +85,7 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         var id = UserDao.GetIdByName(dbClient, giftUser);
         if (id == 0)
@@ -99,7 +103,7 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 
         if ((DateTime.Now - session.User.LastGiftPurchaseTime).TotalSeconds <= 15.0)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buygift.flood", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.buygift.flood", session.Language));
 
             session.User.GiftPurchasingWarnings += 1;
             if (session.User.GiftPurchasingWarnings >= 3)
@@ -132,15 +136,15 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
         var giveItem = ItemFactory.CreateSingleItem(dbClient, presentData, user, ed, newItemId);
         if (giveItem != null)
         {
-            var receiver = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(user.Id);
+            var receiver = GameClientManager.GetClientByUserID(user.Id);
             receiver?.User.InventoryComponent.TryAddItem(giveItem);
 
             if (user.Id != session.User.Id && !string.IsNullOrWhiteSpace(giftMessage))
             {
-                _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_GiftGiver", 1);
+                _ = AchievementManager.ProgressAchievement(session, "ACH_GiftGiver", 1);
                 if (receiver != null)
                 {
-                    _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(receiver, "ACH_GiftReceiver", 1);
+                    _ = AchievementManager.ProgressAchievement(receiver, "ACH_GiftReceiver", 1);
                 }
             }
         }

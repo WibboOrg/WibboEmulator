@@ -6,7 +6,7 @@ internal sealed class AllFriends : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        foreach (var user in WibboEnvironment.GetGame().GetGameClientManager().GetClients.ToList())
+        foreach (var user in GameClientManager.Clients.ToList())
         {
             if (user == null)
             {

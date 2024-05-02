@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
 
@@ -15,7 +16,7 @@ internal sealed class SaveBotActionEvent : IPacketEvent
             return;
         }
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null || !room.CheckRights(session, true))
         {
             return;
@@ -59,7 +60,7 @@ internal sealed class SaveBotActionEvent : IPacketEvent
 
                 room.SendPacket(new UserChangeComposer(bot));
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                using var dbClient = DatabaseManager.Connection;
                 BotUserDao.UpdateLookGender(dbClient, bot.BotData.Id, session.User.Gender, session.User.Look);
                 break;
             }
@@ -107,7 +108,7 @@ internal sealed class SaveBotActionEvent : IPacketEvent
                 roomBot.ChatText = text;
                 roomBot.LoadRandomSpeech(text);
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                using var dbClient = DatabaseManager.Connection;
                 BotUserDao.UpdateChat(dbClient, botId, roomBot.AutomaticChat, roomBot.SpeakingInterval, roomBot.MixSentences, roomBot.ChatText);
 
                 break;
@@ -116,7 +117,7 @@ internal sealed class SaveBotActionEvent : IPacketEvent
             case 3:
             {
                 bot.BotData.WalkingEnabled = !bot.BotData.WalkingEnabled;
-                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                using var dbClient = DatabaseManager.Connection;
                 BotUserDao.UpdateWalkEnabled(dbClient, bot.BotData.Id, bot.BotData.WalkingEnabled);
                 break;
             }
@@ -136,7 +137,7 @@ internal sealed class SaveBotActionEvent : IPacketEvent
 
                 room.SendPacket(new DanceComposer(bot.VirtualId, bot.DanceId));
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                using var dbClient = DatabaseManager.Connection;
                 BotUserDao.UpdateIsDancing(dbClient, bot.BotData.Id, bot.BotData.IsDancing);
 
                 break;
@@ -151,7 +152,7 @@ internal sealed class SaveBotActionEvent : IPacketEvent
 
                 bot.BotData.Name = dataString;
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                using var dbClient = DatabaseManager.Connection;
                 BotUserDao.UpdateName(dbClient, bot.BotData.Id, dataString);
 
                 room.SendPacket(new UserNameChangeComposer(bot.BotData.Name, bot.VirtualId));
@@ -167,7 +168,7 @@ internal sealed class SaveBotActionEvent : IPacketEvent
 
                 bot.BotData.Motto = dataString;
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                using var dbClient = DatabaseManager.Connection;
                 BotUserDao.UpdateMotto(dbClient, bot.BotData.Id, dataString);
 
                 room.SendPacket(new UserChangeComposer(bot));

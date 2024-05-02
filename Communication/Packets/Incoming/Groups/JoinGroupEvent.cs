@@ -15,7 +15,7 @@ internal sealed class JoinGroupEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(packet.PopInt(), out var group))
+        if (!GroupManager.TryGetGroup(packet.PopInt(), out var group))
         {
             return;
         }
@@ -40,10 +40,10 @@ internal sealed class JoinGroupEvent : IPacketEvent
         else
         {
             session.User.MyGroups.Add(group.Id);
-            session.SendPacket(new GroupFurniConfigComposer(WibboEnvironment.GetGame().GetGroupManager().GetGroupsForUser(session.User.MyGroups)));
+            session.SendPacket(new GroupFurniConfigComposer(GroupManager.GetGroupsForUser(session.User.MyGroups)));
             session.SendPacket(new GroupInfoComposer(group, session));
 
-            var room = session.User.CurrentRoom;
+            var room = session.User.Room;
             if (room != null)
             {
                 room.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));

@@ -1,6 +1,8 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Gestion;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
@@ -23,14 +25,14 @@ internal sealed class RoomBuy : IChatCommand
         session.User.WibboPoints -= room.RoomData.SellPrice;
         session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
 
-        var clientOwner = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(room.RoomData.OwnerId);
+        var clientOwner = GameClientManager.GetClientByUserID(room.RoomData.OwnerId);
         if (clientOwner != null && clientOwner.User != null)
         {
             clientOwner.User.WibboPoints += room.RoomData.SellPrice;
             clientOwner.SendPacket(new ActivityPointNotificationComposer(clientOwner.User.WibboPoints, 0, 105));
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             UserDao.UpdateRemovePoints(dbClient, session.User.Id, room.RoomData.SellPrice);
             UserDao.UpdateAddPoints(dbClient, room.RoomData.OwnerId, room.RoomData.SellPrice);
@@ -40,12 +42,12 @@ internal sealed class RoomBuy : IChatCommand
             RoomDao.UpdatePrice(dbClient, room.Id, 0);
         }
 
-        userRoom.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("roombuy.sucess", session.Langue), room.RoomData.SellPrice));
+        userRoom.SendWhisperChat(string.Format(LanguageManager.TryGetValue("roombuy.sucess", session.Language), room.RoomData.SellPrice));
 
         room.RoomData.SellPrice = 0;
 
-        var usersToReturn = room.RoomUserManager.GetRoomUsers().ToList();
-        WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
+        var usersToReturn = room.RoomUserManager.RoomUsers.ToList();
+        RoomManager.UnloadRoom(room);
 
         foreach (var user in usersToReturn)
         {

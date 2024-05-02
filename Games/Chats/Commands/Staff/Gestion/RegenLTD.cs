@@ -1,6 +1,9 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Gestion;
+
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
@@ -9,12 +12,12 @@ internal sealed class RegenLTD : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(984897, out var page))
+        if (!CatalogManager.TryGetPage(984897, out var page))
         {
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         foreach (var item in page.Items.Values)
         {
             var limitedSells = item.LimitedEditionSells;

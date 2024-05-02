@@ -1,7 +1,10 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Guild;
+using WibboEmulator.Games.Chats.Filter;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Groups;
 
 internal sealed class UpdateGroupIdentityEvent : IPacketEvent
 {
@@ -10,8 +13,8 @@ internal sealed class UpdateGroupIdentityEvent : IPacketEvent
     public void Parse(GameClient session, ClientPacket packet)
     {
         var groupId = packet.PopInt();
-        var name = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
-        var desc = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+        var name = WordFilterManager.CheckMessage(packet.PopString());
+        var desc = WordFilterManager.CheckMessage(packet.PopString());
 
         if (name.Length > 50)
         {
@@ -23,7 +26,7 @@ internal sealed class UpdateGroupIdentityEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
+        if (!GroupManager.TryGetGroup(groupId, out var group))
         {
             return;
         }
@@ -33,7 +36,7 @@ internal sealed class UpdateGroupIdentityEvent : IPacketEvent
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             GuildDao.UpdateNameAndDesc(dbClient, groupId, name, desc);
         }

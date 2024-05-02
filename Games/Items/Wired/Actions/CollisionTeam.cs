@@ -11,7 +11,7 @@ public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        var managerForBanzai = this.RoomInstance.TeamManager;
+        var managerForBanzai = this.Room.TeamManager;
 
         var listTeam = new List<RoomUser>();
 
@@ -50,7 +50,7 @@ public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
                 continue;
             }
 
-            this.RoomInstance.WiredHandler.TriggerCollision(teamUser, null);
+            this.Room.WiredHandler.TriggerCollision(teamUser, null);
         }
 
         return false;

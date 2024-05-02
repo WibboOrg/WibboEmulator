@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Action;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class WhiperGroupEvent : IPacketEvent
 {
@@ -7,7 +8,7 @@ internal sealed class WhiperGroupEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -26,18 +27,18 @@ internal sealed class WhiperGroupEvent : IPacketEvent
             return;
         }
 
-        if (!roomUserByUserId.WhiperGroupUsers.Contains(roomUserByUserTarget.GetUsername()))
+        if (!roomUserByUserId.WhiperGroupUsers.Contains(roomUserByUserTarget.Username))
         {
             if (roomUserByUserId.WhiperGroupUsers.Count >= 5)
             {
                 roomUserByUserId.WhiperGroupUsers.RemoveAt(0);
             }
 
-            roomUserByUserId.WhiperGroupUsers.Add(roomUserByUserTarget.GetUsername());
+            roomUserByUserId.WhiperGroupUsers.Add(roomUserByUserTarget.Username);
         }
         else
         {
-            _ = roomUserByUserId.WhiperGroupUsers.Remove(roomUserByUserTarget.GetUsername());
+            _ = roomUserByUserId.WhiperGroupUsers.Remove(roomUserByUserTarget.Username);
         }
     }
 }

@@ -3,6 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class ActionEvent : IPacketEvent
 {
@@ -10,7 +11,7 @@ internal sealed class ActionEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -32,6 +33,6 @@ internal sealed class ActionEvent : IPacketEvent
             room.SendPacket(new SleepComposer(roomUserByUserId.VirtualId, true));
         }
 
-        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialWave, 0);
+        QuestManager.ProgressUserQuest(session, QuestType.SocialWave, 0);
     }
 }

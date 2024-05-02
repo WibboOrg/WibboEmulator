@@ -1,5 +1,6 @@
 namespace WibboEmulator.Core;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
+using WibboEmulator.Games.GameClients;
 
 public class ConsoleCommands
 {
@@ -21,7 +22,7 @@ public class ConsoleCommands
                 {
                     ExceptionLogger.LogMessage("Server exiting at " + DateTime.Now);
                     ExceptionLogger.DisablePrimaryWriting(true);
-                    WibboEnvironment.PreformShutDown();
+                    WibboEnvironment.PerformShutDown();
                     break;
                 }
 
@@ -35,7 +36,7 @@ public class ConsoleCommands
                 {
                     var notice = inputData[6..];
 
-                    WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new BroadcastMessageAlertComposer(notice));
+                    GameClientManager.SendMessage(new BroadcastMessageAlertComposer(notice));
 
                     Console.WriteLine("Alert successfully sent.");
                     break;

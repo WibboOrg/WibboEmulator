@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class UserExit : WiredTriggerBase, IWired
 {
-    public UserExit(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION) => this.RoomInstance.RoomUserManager.OnUserExit += this.OnUserExit;
+    public UserExit(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION) => this.Room.RoomUserManager.OnUserExit += this.OnUserExit;
 
     private void OnUserExit(object sender, EventArgs e)
     {
@@ -15,11 +15,11 @@ public class UserExit : WiredTriggerBase, IWired
             return;
         }
 
-        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, (RoomUser)sender, null);
+        this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, (RoomUser)sender, null);
     }
     public override void Dispose()
     {
-        this.RoomInstance.RoomUserManager.OnUserExit -= this.OnUserExit;
+        this.Room.RoomUserManager.OnUserExit -= this.OnUserExit;
 
         base.Dispose();
     }

@@ -21,7 +21,7 @@ public class InteractorDice : FurniInteractor
             return;
         }
 
-        var roomUser = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var roomUser = item.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
 
         if (roomUser == null)
         {
@@ -44,7 +44,7 @@ public class InteractorDice : FurniInteractor
                 {
                     roomUser.DiceCounterAmount = 0;
                     roomUser.DiceCounter = 0;
-                    roomUser.OnChat($"Dée: remise à 0 ({roomUser.GetUsername()})", 33);
+                    roomUser.OnChat($"Dée: remise à 0 ({roomUser.Username})", 33);
                 }
             }
             else
@@ -69,14 +69,14 @@ public class InteractorDice : FurniInteractor
         item.ExtraData = numberDice.ToString();
         item.UpdateState();
 
-        var user = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
+        var user = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
         if (user != null)
         {
             if (!user.InGame)
             {
                 user.DiceCounterAmount += numberDice;
                 user.DiceCounter++;
-                user.OnChat($"Dée {user.DiceCounter}: +{numberDice} = {user.DiceCounterAmount} ({user.GetUsername()})", 33);
+                user.OnChat($"Dée {user.DiceCounter}: +{numberDice} = {user.DiceCounterAmount} ({user.Username})", 33);
             }
         }
     }

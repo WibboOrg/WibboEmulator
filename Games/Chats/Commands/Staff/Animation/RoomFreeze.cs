@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Animation;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -10,11 +12,11 @@ internal sealed class RoomFreeze : IChatCommand
 
         if (room.FreezeRoom)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.roomfreeze.true", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.roomfreeze.true", session.Language));
         }
         else
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.roomfreeze.false", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.roomfreeze.false", session.Language));
         }
     }
 }

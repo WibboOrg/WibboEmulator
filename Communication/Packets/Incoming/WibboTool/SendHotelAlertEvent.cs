@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.WibboTool;
 
 using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
+using WibboEmulator.Games.Animations;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Moderations;
 
@@ -45,32 +46,32 @@ internal sealed class SendHotelAlertEvent : IPacketEvent
             //     return;
             // }
 
-            WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer("annonce", "Message de communication", message, "Allez voir !", 0, url));
+            GameClientManager.SendMessage(new NotifAlertComposer("annonce", "Message de communication", message, "Allez voir !", 0, url));
             return;
         }
 
         if (eventAlert)
         {
-            if (session.User.CurrentRoom == null)
+            if (session.User.Room == null)
             {
                 return;
             }
 
-            ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, session.User.CurrentRoom.Id, string.Empty, "eventha", string.Format("WibbobTool EventHa: {0}", message));
+            ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, session.User.Room.Id, string.Empty, "eventha", string.Format("WibbobTool EventHa: {0}", message));
             //if (session.User.Antipub(message, "<eventalert>", session.User.CurrentRoom.Id))
             //{
             //return;
             //}
 
-            if (!WibboEnvironment.GetGame().GetAnimationManager().AllowAnimation())
+            if (!AnimationManager.AllowAnimation)
             {
                 session.SendNotification("Vous pourrez lancer l'alerte une fois que l'animation en cours sera terminé.");
                 return;
             }
 
-            WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer("game_promo_small", "Message d'animation", message, "Je veux y jouer !", session.User.CurrentRoom.Id, ""));
+            GameClientManager.SendMessage(new NotifAlertComposer("game_promo_small", "Message d'animation", message, "Je veux y jouer !", session.User.Room.Id, ""));
 
-            session.User.CurrentRoom.CloseFullRoom = true;
+            session.User.Room.CloseFullRoom = true;
         }
         else
         {
@@ -80,7 +81,7 @@ internal sealed class SendHotelAlertEvent : IPacketEvent
                 return;
             }
 
-            WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer("staff", "Message de l'Équipe", message, "Compris !", 0, ""));
+            GameClientManager.SendMessage(new NotifAlertComposer("staff", "Message de l'Équipe", message, "Compris !", 0, ""));
         }
 
     }

@@ -1,4 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
+
+using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Users;
 using WibboEmulator.Utilities;
 
@@ -13,7 +15,7 @@ internal sealed class ModeratorUserRoomVisitsComposer : ServerPacket
 
         foreach (var visit in visits)
         {
-            var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(visit.Value);
+            var roomData = RoomManager.GenerateNullableRoomData(visit.Value);
 
             this.WriteInteger(roomData.Id);
             this.WriteString(roomData.Name);

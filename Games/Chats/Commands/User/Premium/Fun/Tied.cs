@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Premium;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games.Teams;
@@ -28,9 +30,9 @@ internal sealed class Tied : IChatCommand
             return;
         }
 
-        if (targetUser.Client.User.PremiumProtect && !session.User.HasPermission("mod"))
+        if (targetUser.Client.User.HasPremiumProtect && !session.User.HasPermission("mod"))
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("premium.notallowed", session.Language));
             return;
         }
 
@@ -42,14 +44,14 @@ internal sealed class Tied : IChatCommand
         var timeSpan = DateTime.Now - session.User.CommandFunTimer;
         if (timeSpan.TotalSeconds < 10)
         {
-            userRoom.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.fun.timeout", session.Langue), 10 - (int)timeSpan.TotalSeconds));
+            userRoom.SendWhisperChat(string.Format(LanguageManager.TryGetValue("cmd.fun.timeout", session.Language), 10 - (int)timeSpan.TotalSeconds));
             return;
         }
 
         session.User.CommandFunTimer = DateTime.Now;
 
-        userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.tied.chat", session.Langue), targetUser.GetUsername()), 32);
-        targetUser.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.tied.chat.target", session.Langue), userRoom.GetUsername()), 18);
+        userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.tied.chat", session.Language), targetUser.Username), 32);
+        targetUser.OnChat(string.Format(LanguageManager.TryGetValue("cmd.tied.chat.target", session.Language), userRoom.Username), 18);
 
         targetUser.ApplyEffect(729, true);
         targetUser.TimerResetEffect = 6;

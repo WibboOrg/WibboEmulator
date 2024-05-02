@@ -7,7 +7,7 @@ internal sealed class Emblem : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var emblemId = session.User.BadgeComponent.GetEmblemId();
+        var emblemId = session.User.BadgeComponent.EmblemId;
 
         if (emblemId > 0)
         {

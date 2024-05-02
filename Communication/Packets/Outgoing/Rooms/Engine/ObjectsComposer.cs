@@ -1,4 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+
+using WibboEmulator.Core.Settings;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Rooms;
@@ -63,7 +65,7 @@ internal sealed class ObjectsComposer : ServerPacket
             this.WriteString("state");
             this.WriteString("0");
             this.WriteString("imageUrl");
-            this.WriteString("https://" + WibboEnvironment.GetSettings().GetData<string>("cdn.url") + "/items/" + item.ExtraData + ".png");
+            this.WriteString("https://" + SettingsManager.GetData<string>("cdn.url") + "/items/" + item.ExtraData + ".png");
             this.WriteString("offsetX");
             this.WriteString("-20");
             this.WriteString("offsetY");
@@ -82,7 +84,7 @@ internal sealed class ObjectsComposer : ServerPacket
     private void WriteFloorItem(Item item, bool hideWired)
     {
         this.WriteInteger(item.Id);
-        this.WriteInteger(hideWired && WiredUtillity.AllowHideWiredType(item.GetBaseItem().InteractionType) ? WibboEnvironment.GetSettings().GetData<int>("wired.hide.item.id") : item.GetBaseItem().SpriteId);
+        this.WriteInteger(hideWired && WiredUtillity.AllowHideWiredType(item.ItemData.InteractionType) ? SettingsManager.GetData<int>("wired.hide.item.id") : item.ItemData.SpriteId);
         this.WriteInteger(item.X);
         this.WriteInteger(item.Y);
         this.WriteInteger(item.Rotation);

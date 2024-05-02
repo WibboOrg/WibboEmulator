@@ -15,6 +15,6 @@ internal sealed class RequestBuddyEvent : IPacketEvent
             return;
         }
 
-        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialFriend, 0);
+        QuestManager.ProgressUserQuest(session, QuestType.SocialFriend, 0);
     }
 }

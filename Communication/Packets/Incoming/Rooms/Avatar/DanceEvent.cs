@@ -2,6 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class DanceEvent : IPacketEvent
 {
@@ -9,7 +10,7 @@ internal sealed class DanceEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -34,6 +35,6 @@ internal sealed class DanceEvent : IPacketEvent
 
         roomUserByUserId.DanceId = danceId;
         room.SendPacket(new DanceComposer(roomUserByUserId.VirtualId, danceId));
-        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialDance, 0);
+        QuestManager.ProgressUserQuest(session, QuestType.SocialDance, 0);
     }
 }

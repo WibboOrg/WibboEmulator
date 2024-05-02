@@ -14,7 +14,7 @@ public class TimerTrigger : WiredTriggerBase, IWired, IWiredCycleable
 
     public TimerTrigger(Item item, Room room) : base(item, room, (int)WiredTriggerType.TRIGGER_ONCE)
     {
-        this.RoomInstance.WiredHandler.TrgTimer += this.OnResetTimer;
+        this.Room.WiredHandler.TrgTimer += this.OnResetTimer;
 
         this.DefaultIntParams(new int[] { 0 });
     }
@@ -22,7 +22,7 @@ public class TimerTrigger : WiredTriggerBase, IWired, IWiredCycleable
     public void OnResetTimer(object sender, EventArgs e)
     {
         this._skipCycleCount++;
-        this.RoomInstance.WiredHandler.RequestCycle(new WiredCycle(this, null, null));
+        this.Room.WiredHandler.RequestCycle(new WiredCycle(this, null, null));
     }
 
     public bool OnCycle(RoomUser user, Item item)
@@ -34,13 +34,13 @@ public class TimerTrigger : WiredTriggerBase, IWired, IWiredCycleable
             return false;
         }
 
-        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, null, null);
+        this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, null, null);
         return false;
     }
 
     public override void Dispose()
     {
-        this.RoomInstance.WiredHandler.TrgTimer -= this.OnResetTimer;
+        this.Room.WiredHandler.TrgTimer -= this.OnResetTimer;
 
         base.Dispose();
     }

@@ -1,4 +1,7 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Several;
+
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
@@ -26,15 +29,15 @@ internal sealed class Mazo : IChatCommand
 
             if (user.MazoHighScore < user.Mazo)
             {
-                session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.newscore", session.Langue), user.Mazo));
+                session.SendWhisper(string.Format(LanguageManager.TryGetValue("cmd.mazo.newscore", session.Language), user.Mazo));
                 user.MazoHighScore = user.Mazo;
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                using var dbClient = DatabaseManager.Connection;
                 UserDao.UpdateMazoScore(dbClient, user.Id, user.MazoHighScore);
             }
             else
             {
-                session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.win", session.Langue), user.Mazo));
+                session.SendWhisper(string.Format(LanguageManager.TryGetValue("cmd.mazo.win", session.Language), user.Mazo));
             }
 
             userRoom.ApplyEffect(566, true);
@@ -45,11 +48,11 @@ internal sealed class Mazo : IChatCommand
         {
             if (user.Mazo > 0)
             {
-                session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.bigloose", session.Langue));
+                session.SendWhisper(LanguageManager.TryGetValue("cmd.mazo.bigloose", session.Language));
             }
             else
             {
-                session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.loose", session.Langue));
+                session.SendWhisper(LanguageManager.TryGetValue("cmd.mazo.loose", session.Language));
             }
 
             user.Mazo = 0;
@@ -58,7 +61,7 @@ internal sealed class Mazo : IChatCommand
             userRoom.TimerResetEffect = 4;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             UserDao.UpdateMazo(dbClient, user.Id, user.Mazo);
         }

@@ -1,11 +1,11 @@
 namespace WibboEmulator.Games;
+using System.Data;
 using System.Diagnostics;
 using WibboEmulator.Communication.Packets;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
-using System.Data;
 using WibboEmulator.Games.Achievements;
 using WibboEmulator.Games.Animations;
 using WibboEmulator.Games.Badges;
@@ -15,7 +15,6 @@ using WibboEmulator.Games.Chats;
 using WibboEmulator.Games.Effects;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
-using WibboEmulator.Games.Helps;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.LandingView;
 using WibboEmulator.Games.Loots;
@@ -26,200 +25,110 @@ using WibboEmulator.Games.Quests;
 using WibboEmulator.Games.Roleplays;
 using WibboEmulator.Games.Rooms;
 
-public class Game : IDisposable
+public static class Game
 {
-    private readonly GameClientManager _gameClientManager;
-    private readonly PermissionManager _permissionManager;
-    private readonly CatalogManager _catalogManager;
-    private readonly NavigatorManager _navigatorManager;
-    private readonly ItemDataManager _itemDataManager;
-    private readonly RoomManager _roomManager;
-    private readonly AchievementManager _achievementManager;
-    private readonly ModerationManager _moderationManager;
-    private readonly QuestManager _questManager;
-    private readonly GroupManager _groupManager;
-    private readonly LandingViewManager _landingViewManager;
-    private readonly HallOfFameManager _hallOfFameManager;
-    private readonly HelpManager _helpManager;
-    private readonly PacketManager _packetManager;
-    private readonly ChatManager _chatManager;
-    private readonly EffectManager _effectManager;
-    private readonly BadgeManager _badgeManager;
-    private readonly RoleplayManager _roleplayManager;
-    private readonly AnimationManager _animationManager;
-    private readonly LootManager _lootManager;
-    private readonly BannerManager _bannerManager;
+    private static Thread _gameLoop;
+    private static readonly int CycleSleepTime = 25;
+    private static bool _cycleEnded;
+    private static bool _gameLoopActive;
 
-    private Thread _gameLoop;
-    private readonly int _cycleSleepTime = 25;
-    private bool _cycleEnded;
-    private bool _gameLoopActive;
+    private static readonly Stopwatch ModuleWatch = new();
 
-    private readonly Stopwatch _moduleWatch;
-
-    public Game()
-    {
-        this._gameClientManager = new GameClientManager();
-        this._permissionManager = new PermissionManager();
-        this._itemDataManager = new ItemDataManager();
-        this._catalogManager = new CatalogManager();
-        this._navigatorManager = new NavigatorManager();
-        this._roleplayManager = new RoleplayManager();
-        this._roomManager = new RoomManager();
-        this._groupManager = new GroupManager();
-        this._moderationManager = new ModerationManager();
-        this._questManager = new QuestManager();
-        this._landingViewManager = new LandingViewManager();
-        this._hallOfFameManager = new HallOfFameManager();
-        this._helpManager = new HelpManager();
-        this._chatManager = new ChatManager();
-        this._effectManager = new EffectManager();
-        this._badgeManager = new BadgeManager();
-        this._achievementManager = new AchievementManager();
-        this._animationManager = new AnimationManager();
-        this._lootManager = new LootManager();
-        this._bannerManager = new BannerManager();
-        this._packetManager = new PacketManager();
-
-        this._moduleWatch = new Stopwatch();
-    }
-
-    public void Initialize(IDbConnection dbClient)
+    public static void Initialize(IDbConnection dbClient)
     {
         DatabaseCleanup(dbClient);
 
-        this._permissionManager.Initialize(dbClient);
-        this._itemDataManager.Initialize(dbClient);
-        this._catalogManager.Initialize(dbClient, this._itemDataManager);
-        this._navigatorManager.Initialize(dbClient);
-        this._roleplayManager.Initialize(dbClient);
-        this._roomManager.Initialize(dbClient);
-        this._groupManager.Initialize(dbClient);
-        this._moderationManager.Initialize(dbClient);
-        this._questManager.Initialize(dbClient);
-        this._landingViewManager.Initialize(dbClient);
-        this._hallOfFameManager.Initialize(dbClient);
-        this._chatManager.Initialize(dbClient);
-        this._effectManager.Initialize(dbClient);
-        this._badgeManager.Initialize();
-        this._achievementManager.Initialize(dbClient);
-        this._animationManager.Initialize(dbClient);
-        this._lootManager.Initialize(dbClient);
-        this._bannerManager.Initialize(dbClient);
-        this._packetManager.Initialize();
+        GameClientManager.Initialize();
+        PermissionManager.Initialize(dbClient);
+        ItemManager.Initialize(dbClient);
+        CatalogManager.Initialize(dbClient);
+        NavigatorManager.Initialize(dbClient);
+        RoleplayManager.Initialize(dbClient);
+        RoomManager.Initialize(dbClient);
+        GroupManager.Initialize(dbClient);
+        ModerationManager.Initialize(dbClient);
+        QuestManager.Initialize(dbClient);
+        LandingViewManager.Initialize(dbClient);
+        HallOfFameManager.Initialize(dbClient);
+        ChatManager.Initialize(dbClient);
+        EffectManager.Initialize(dbClient);
+        BadgeManager.Initialize();
+        AchievementManager.Initialize(dbClient);
+        AnimationManager.Initialize(dbClient);
+        LootManager.Initialize(dbClient);
+        BannerManager.Initialize(dbClient);
+        PacketManager.Initialize();
 
         ServerStatusUpdater.Initialize(dbClient);
     }
 
-    public LootManager GetLootManager() => this._lootManager;
-
-    public AnimationManager GetAnimationManager() => this._animationManager;
-
-    public BadgeManager GetBadgeManager() => this._badgeManager;
-
-    public EffectManager GetEffectManager() => this._effectManager;
-
-    public ChatManager GetChatManager() => this._chatManager;
-
-    public PacketManager GetPacketManager() => this._packetManager;
-
-    public HelpManager GetHelpManager() => this._helpManager;
-
-    public RoleplayManager GetRoleplayManager() => this._roleplayManager;
-
-    public GameClientManager GetGameClientManager() => this._gameClientManager;
-
-    public PermissionManager GetPermissionManager() => this._permissionManager;
-
-    public CatalogManager GetCatalog() => this._catalogManager;
-
-    public NavigatorManager GetNavigator() => this._navigatorManager;
-
-    public ItemDataManager GetItemManager() => this._itemDataManager;
-
-    public RoomManager GetRoomManager() => this._roomManager;
-
-    public AchievementManager GetAchievementManager() => this._achievementManager;
-
-    public ModerationManager GetModerationManager() => this._moderationManager;
-
-    public QuestManager GetQuestManager() => this._questManager;
-
-    public GroupManager GetGroupManager() => this._groupManager;
-
-    public BannerManager GetBannerManager() => this._bannerManager;
-
-    public LandingViewManager GetHotelView() => this._landingViewManager;
-
-    public HallOfFameManager GetHallOFFame() => this._hallOfFameManager;
-
-    public void StartGameLoop()
+    public static void StartGameLoop()
     {
-        this._gameLoopActive = true;
+        _gameLoopActive = true;
 
-        var receiver = new ThreadStart(this.MainGameLoop);
-        this._gameLoop = new Thread(receiver)
+        var receiver = new ThreadStart(MainGameLoop);
+        _gameLoop = new Thread(receiver)
         {
             IsBackground = true
         };
 
-        this._gameLoop.Start();
+        _gameLoop.Start();
     }
 
-    private void MainGameLoop()
+    private static void MainGameLoop()
     {
-        while (this._gameLoopActive)
+        while (_gameLoopActive)
         {
-            this._cycleEnded = false;
+            _cycleEnded = false;
 
             try
             {
-                this._moduleWatch.Restart();
+                ModuleWatch.Restart();
 
                 ServerStatusUpdater.Process();
 
-                if (this._moduleWatch.ElapsedMilliseconds > 500)
+                if (ModuleWatch.ElapsedMilliseconds > 500)
                 {
-                    Console.WriteLine("High latency in LowPriorityWorker.Process ({0} ms)", this._moduleWatch.ElapsedMilliseconds);
+                    Console.WriteLine("High latency in LowPriorityWorker.Process ({0} ms)", ModuleWatch.ElapsedMilliseconds);
                 }
 
-                this._moduleWatch.Restart();
+                ModuleWatch.Restart();
 
-                this._roomManager.OnCycle(this._moduleWatch);
+                RoomManager.OnCycle(ModuleWatch);
 
-                if (this._moduleWatch.ElapsedMilliseconds > 500)
+                if (ModuleWatch.ElapsedMilliseconds > 500)
                 {
-                    Console.WriteLine("High latency in RoomManager ({0} ms)", this._moduleWatch.ElapsedMilliseconds);
+                    Console.WriteLine("High latency in RoomManager ({0} ms)", ModuleWatch.ElapsedMilliseconds);
                 }
 
-                this._moduleWatch.Restart();
+                ModuleWatch.Restart();
 
-                this._gameClientManager.OnCycle();
+                GameClientManager.OnCycle();
 
-                if (this._moduleWatch.ElapsedMilliseconds > 500)
+                if (ModuleWatch.ElapsedMilliseconds > 500)
                 {
-                    Console.WriteLine("High latency in GameClientManager ({0} ms)", this._moduleWatch.ElapsedMilliseconds);
+                    Console.WriteLine("High latency in GameClientManager ({0} ms)", ModuleWatch.ElapsedMilliseconds);
                 }
 
-                this._moduleWatch.Restart();
+                ModuleWatch.Restart();
 
-                this._hallOfFameManager.OnCycle();
+                HallOfFameManager.OnCycle();
 
-                if (this._moduleWatch.ElapsedMilliseconds > 500)
+                if (ModuleWatch.ElapsedMilliseconds > 500)
                 {
-                    Console.WriteLine("High latency in HallOfFame ({0} ms)", this._moduleWatch.ElapsedMilliseconds);
+                    Console.WriteLine("High latency in HallOfFame ({0} ms)", ModuleWatch.ElapsedMilliseconds);
                 }
 
-                this._moduleWatch.Restart();
+                ModuleWatch.Restart();
 
-                this._animationManager.OnCycle(this._moduleWatch);
+                AnimationManager.OnCycle(ModuleWatch);
 
-                if (this._moduleWatch.ElapsedMilliseconds > 500)
+                if (ModuleWatch.ElapsedMilliseconds > 500)
                 {
-                    Console.WriteLine("High latency in AnimationManager ({0} ms)", this._moduleWatch.ElapsedMilliseconds);
+                    Console.WriteLine("High latency in AnimationManager ({0} ms)", ModuleWatch.ElapsedMilliseconds);
                 }
 
-                this._moduleWatch.Restart();
+                ModuleWatch.Restart();
             }
             catch (OperationCanceledException e)
             {
@@ -230,9 +139,9 @@ public class Game : IDisposable
                 ExceptionLogger.LogThreadException(e.ToString(), "MainThread");
             }
 
-            this._cycleEnded = true;
+            _cycleEnded = true;
 
-            Thread.Sleep(this._cycleSleepTime);
+            Thread.Sleep(CycleSleepTime);
         }
 
         Console.WriteLine("MainGameLoop end");
@@ -249,14 +158,12 @@ public class Game : IDisposable
         }
     }
 
-    public void StopGameLoop()
+    public static void StopGameLoop()
     {
-        this._gameLoopActive = false;
-        while (!this._cycleEnded)
+        _gameLoopActive = false;
+        while (!_cycleEnded)
         {
-            Thread.Sleep(this._cycleSleepTime);
+            Thread.Sleep(CycleSleepTime);
         }
     }
-
-    public void Dispose() => GC.SuppressFinalize(this);
 }

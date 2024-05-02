@@ -5,30 +5,23 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-public class OpenAIProxy : IDisposable
+public static class OpenAIProxy
 {
     private const string BASE_URL = "https://api.openai.com/v1/";
-    private readonly HttpClient _openAIClient;
-    private DateTime _lastRequestChat;
-    private DateTime _lastRequestAudio;
-    private bool _waitedChatAPI;
-    private bool _waitedAudioAPI;
-
-    public OpenAIProxy(string apiKey)
+    private static readonly HttpClient OpenAIClient = new()
     {
-        this._openAIClient = new()
-        {
-            Timeout = TimeSpan.FromSeconds(10)
-        };
-        this._openAIClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
+        Timeout = TimeSpan.FromSeconds(10)
+    };
+    private static DateTime _lastRequestChat = DateTime.Now;
+    private static DateTime _lastRequestAudio = DateTime.Now;
+    private static bool _waitedChatAPI;
+    private static bool _waitedAudioAPI;
 
-        this._lastRequestChat = DateTime.Now;
-        this._lastRequestAudio = DateTime.Now;
-    }
+    public static void Initialize(string apiKey) => OpenAIClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
 
-    public async Task<byte[]> TextToSpeech(string nameVoice, string text)
+    public static async Task<byte[]> TextToSpeech(string nameVoice, string text)
     {
-        if (this.IsReadyToSendAudio() == false)
+        if (!IsReadyToSendAudio)
         {
             return null;
         }
@@ -43,10 +36,10 @@ public class OpenAIProxy : IDisposable
             };
             var requestJson = JsonConvert.SerializeObject(request);
             var requestContent = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
-            var httpResponseMessage = await this._openAIClient.PostAsync(BASE_URL + "audio/speech", requestContent);
+            var httpResponseMessage = await OpenAIClient.PostAsync(BASE_URL + "audio/speech", requestContent);
 
-            this._lastRequestAudio = DateTime.Now;
-            this._waitedAudioAPI = false;
+            _lastRequestAudio = DateTime.Now;
+            _waitedAudioAPI = false;
 
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
@@ -62,20 +55,20 @@ public class OpenAIProxy : IDisposable
             ExceptionLogger.LogException(ex.ToString());
         }
 
-        this._waitedAudioAPI = false;
+        _waitedAudioAPI = false;
         return null;
     }
 
-    public async Task<ChatCompletionMessage> SendChatMessage(List<ChatCompletionMessage> messagesSend)
+    public static async Task<ChatCompletionMessage> SendChatMessage(List<ChatCompletionMessage> messagesSend)
     {
         try
         {
-            if (this.IsReadyToSendChat() == false)
+            if (!IsReadyToSendChat)
             {
                 return null;
             }
 
-            this._waitedChatAPI = true;
+            _waitedChatAPI = true;
 
             var request = new
             {
@@ -88,10 +81,10 @@ public class OpenAIProxy : IDisposable
 
             var requestJson = JsonConvert.SerializeObject(request);
             var requestContent = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
-            var httpResponseMessage = await this._openAIClient.PostAsync(BASE_URL + "chat/completions", requestContent);
+            var httpResponseMessage = await OpenAIClient.PostAsync(BASE_URL + "chat/completions", requestContent);
 
-            this._lastRequestChat = DateTime.Now;
-            this._waitedChatAPI = false;
+            _lastRequestChat = DateTime.Now;
+            _waitedChatAPI = false;
 
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
@@ -112,39 +105,32 @@ public class OpenAIProxy : IDisposable
             }
 
             var messagesGtp = responseObject?.choices[0]?.message;
-
-            if (messagesGtp == null)
-            {
-                return null;
-            }
-
             return messagesGtp;
         }
         catch (Exception ex)
         {
             ExceptionLogger.LogException(ex.ToString());
-            this._waitedChatAPI = false;
+            _waitedChatAPI = false;
         }
 
         return null;
     }
 
-    public bool IsReadyToSendChat()
+    public static bool IsReadyToSendChat
     {
-        var timespan = DateTime.Now - this._lastRequestChat;
-        return timespan.TotalSeconds > 3 && !this._waitedChatAPI;
+        get
+        {
+            var timespan = DateTime.Now - _lastRequestChat;
+            return timespan.TotalSeconds > 3 && !_waitedChatAPI;
+        }
     }
 
-    public bool IsReadyToSendAudio()
+    public static bool IsReadyToSendAudio
     {
-        var timespan = DateTime.Now - this._lastRequestAudio;
-        return timespan.TotalSeconds > 3 && !this._waitedAudioAPI;
-    }
-
-    public void Dispose()
-    {
-        this._openAIClient.Dispose();
-
-        GC.SuppressFinalize(this);
+        get
+        {
+            var timespan = DateTime.Now - _lastRequestAudio;
+            return timespan.TotalSeconds > 3 && !_waitedAudioAPI;
+        }
     }
 }

@@ -14,7 +14,7 @@ internal sealed class MakeSay : IChatCommand
         var username = parameters[1];
         var message = CommandManager.MergeParams(parameters, 2);
 
-        var roomUserByUserId = session.User.CurrentRoom.RoomUserManager.GetRoomUserByName(username);
+        var roomUserByUserId = session.User.Room.RoomUserManager.GetRoomUserByName(username);
         if (roomUserByUserId == null)
         {
             return;

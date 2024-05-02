@@ -1,4 +1,6 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Settings;
+namespace WibboEmulator.Communication.Packets.Incoming.Settings;
+
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
@@ -15,7 +17,7 @@ internal sealed class UserSettingsCameraFollowEvent : IPacketEvent
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             UserDao.UpdateCameraFollowDisabled(dbClient, session.User.Id, flag);
         }

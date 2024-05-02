@@ -14,12 +14,12 @@ public class Repeaterlong : WiredTriggerBase, IWired, IWiredCycleable
     {
         this.DefaultIntParams(new int[] { 0 });
 
-        this.RoomInstance.WiredHandler.RequestCycle(new WiredCycle(this, null, null));
+        this.Room.WiredHandler.RequestCycle(new WiredCycle(this, null, null));
     }
 
     public bool OnCycle(RoomUser user, Item item)
     {
-        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, null, null);
+        this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, null, null);
         return true;
     }
 

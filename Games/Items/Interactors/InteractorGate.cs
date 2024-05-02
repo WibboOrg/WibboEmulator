@@ -37,7 +37,7 @@ public class InteractorGate : FurniInteractor
 
         item.ExtraData = newMode.ToString();
         item.UpdateState();
-        item.GetRoom()?.GameMap.UpdateMapForItem(item);
+        item.        Room?.GameMap.UpdateMapForItem(item);
     }
 
     public override void OnTick(Item item)

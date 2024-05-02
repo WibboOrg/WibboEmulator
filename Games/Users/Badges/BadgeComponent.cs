@@ -2,29 +2,29 @@ namespace WibboEmulator.Games.Users.Badges;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
+using WibboEmulator.Core.Settings;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.Users;
 
 public class BadgeComponent : IDisposable
 {
-    private readonly User _userInstance;
-    private readonly int _maxBadgeCount;
-
+    private readonly User _user;
     private int _virtualBadgeId;
 
     public Dictionary<string, Badge> BadgeList { get; }
 
     public BadgeComponent(User user)
     {
-        this._userInstance = user;
-        this._maxBadgeCount = WibboEnvironment.GetSettings().GetData<int>("badge.max.count");
+        this._user = user;
+        this.BadgeMaxCount = SettingsManager.GetData<int>("badge.max.count");
         this._virtualBadgeId = 0;
         this.BadgeList = new Dictionary<string, Badge>();
     }
 
     public void Initialize(IDbConnection dbClient, bool onlyProfil = false)
     {
-        var userBadgeList = onlyProfil ? UserBadgeDao.GetAllProfil(dbClient, this._userInstance.Id) : UserBadgeDao.GetAll(dbClient, this._userInstance.Id);
+        var userBadgeList = onlyProfil ? UserBadgeDao.GetAllProfil(dbClient, this._user.Id) : UserBadgeDao.GetAll(dbClient, this._user.Id);
 
         foreach (var userBadge in userBadgeList)
         {
@@ -40,7 +40,7 @@ public class BadgeComponent : IDisposable
 
     public bool HasBadgeSlot(string badge) => this.BadgeList.TryGetValue(badge, out var value) && value.Slot > 0;
 
-    public ICollection<Badge> GetBadges() => this.BadgeList.Values;
+    public ICollection<Badge> Badges => this.BadgeList.Values;
 
     public Badge GetBadge(string badge)
     {
@@ -73,16 +73,16 @@ public class BadgeComponent : IDisposable
 
         if (inDatabase)
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
-            UserBadgeDao.Insert(dbClient, this._userInstance.Id, 0, badge);
+            using var dbClient = DatabaseManager.Connection;
+            UserBadgeDao.Insert(dbClient, this._user.Id, 0, badge);
         }
 
         this.BadgeList.Add(badge, new Badge(badge, 0));
 
         this._virtualBadgeId++;
 
-        this._userInstance.Client?.SendPacket(new UnseenItemsComposer(this._virtualBadgeId, UnseenItemsType.Badge));
-        this._userInstance.Client?.SendPacket(new ReceiveBadgeComposer(this._virtualBadgeId, badge));
+        this._user.Client?.SendPacket(new UnseenItemsComposer(this._virtualBadgeId, UnseenItemsType.Badge));
+        this._user.Client?.SendPacket(new ReceiveBadgeComposer(this._virtualBadgeId, badge));
     }
 
     public void ResetSlots()
@@ -100,18 +100,20 @@ public class BadgeComponent : IDisposable
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
-            UserBadgeDao.Delete(dbClient, this._userInstance.Id, badge);
+            UserBadgeDao.Delete(dbClient, this._user.Id, badge);
         }
 
         _ = this.BadgeList.Remove(badge);
-        this._userInstance.Client?.SendPacket(new RemovedBadgeComposer(badge));
+        this._user.Client?.SendPacket(new RemovedBadgeComposer(badge));
     }
 
-    public int GetEmblemId()
+    public int EmblemId
     {
-        var emblems = new Dictionary<string, int>
+        get
+        {
+            var emblems = new Dictionary<string, int>
         {
             { "STAFF_GESTION", 587 },
             { "STAFF_DEV", 606 },
@@ -132,23 +134,26 @@ public class BadgeComponent : IDisposable
             { "WIBORGOFF", 607 },
         };
 
-        var enableId = 0;
+            var enableId = 0;
 
-        foreach (var emblem in emblems)
-        {
-            if (this.HasBadgeSlot(emblem.Key))
+            foreach (var emblem in emblems)
             {
-                enableId = emblem.Value;
-                break;
+                if (this.HasBadgeSlot(emblem.Key))
+                {
+                    enableId = emblem.Value;
+                    break;
+                }
             }
-        }
 
-        return enableId;
+            return enableId;
+        }
     }
 
-    public int GetStaffBulleId()
+    public int StaffBulleId
     {
-        var bubbles = new Dictionary<string, int>
+        get
+        {
+            var bubbles = new Dictionary<string, int>
         {
             { "STAFF_GESTION", 41 },
             { "STAFF_DEV", 41 },
@@ -165,21 +170,22 @@ public class BadgeComponent : IDisposable
             { "STAFF_PROWIRED", 48 },
         };
 
-        var bubbleId = 23;
+            var bubbleId = 23;
 
-        foreach (var bubble in bubbles)
-        {
-            if (this.HasBadgeSlot(bubble.Key))
+            foreach (var bubble in bubbles)
             {
-                bubbleId = bubble.Value;
-                break;
+                if (this.HasBadgeSlot(bubble.Key))
+                {
+                    bubbleId = bubble.Value;
+                    break;
+                }
             }
-        }
 
-        return bubbleId;
+            return bubbleId;
+        }
     }
 
-    public int BadgeMaxCount() => this._maxBadgeCount;
+    public int BadgeMaxCount { get; }
 
     public void Dispose()
     {

@@ -1,7 +1,9 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class PickupObjectAllEvent : IPacketEvent
 {
@@ -9,7 +11,7 @@ internal sealed class PickupObjectAllEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -21,7 +23,7 @@ internal sealed class PickupObjectAllEvent : IPacketEvent
 
         if (room.RoomData.SellPrice > 0)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("roomsell.error.7", session.Language));
             return;
         }
 

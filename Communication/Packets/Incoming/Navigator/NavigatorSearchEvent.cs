@@ -17,18 +17,18 @@ internal sealed class NavigatorSearchEvent : IPacketEvent
 
         if (!string.IsNullOrEmpty(search))
         {
-            if (WibboEnvironment.GetGame().GetNavigator().TryGetSearchResultList(0, out var queryResult))
+            if (NavigatorManager.TryGetSearchResultList(0, out var queryResult))
             {
                 categories.Add(queryResult);
             }
         }
         else
         {
-            categories = WibboEnvironment.GetGame().GetNavigator().GetCategorysForSearch(category);
+            categories = NavigatorManager.GetCategorysForSearch(category);
             if (categories.Count == 0)
             {
                 //Are we going in deep?!
-                categories = WibboEnvironment.GetGame().GetNavigator().GetResultByIdentifier(category);
+                categories = NavigatorManager.GetResultByIdentifier(category);
                 if (categories.Count > 0)
                 {
                     session.SendPacket(new NavigatorSearchResultSetComposer(category, search, categories, session, 2, 50));

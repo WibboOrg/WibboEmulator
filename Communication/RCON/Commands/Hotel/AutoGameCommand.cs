@@ -1,5 +1,7 @@
 namespace WibboEmulator.Communication.RCON.Commands.Hotel;
 
+using WibboEmulator.Games.Animations;
+
 internal sealed class AutoGameCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
@@ -9,7 +11,7 @@ internal sealed class AutoGameCommand : IRCONCommand
             return false;
         }
 
-        WibboEnvironment.GetGame().GetAnimationManager().ForceDisabled(parameters[0] == "1");
+        AnimationManager.ForceDisabled(parameters[0] == "1");
         return true;
     }
 }

@@ -1,8 +1,10 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.Moodlight;
 
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class ToggleMoodlightEvent : IPacketEvent
 {
@@ -10,7 +12,7 @@ internal sealed class ToggleMoodlightEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -21,7 +23,7 @@ internal sealed class ToggleMoodlightEvent : IPacketEvent
         }
 
         var roomItem = room.RoomItemHandling.GetItem(room.MoodlightData.ItemId);
-        if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.MOODLIGHT)
+        if (roomItem == null || roomItem.ItemData.InteractionType != InteractionType.MOODLIGHT)
         {
             return;
         }
@@ -35,7 +37,7 @@ internal sealed class ToggleMoodlightEvent : IPacketEvent
             room.MoodlightData.Enable();
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         ItemMoodlightDao.UpdateEnabled(dbClient, room.MoodlightData.ItemId, room.MoodlightData.Enabled);
 
         roomItem.ExtraData = room.MoodlightData.GenerateExtraData();

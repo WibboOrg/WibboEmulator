@@ -18,9 +18,9 @@ public class ShowMessageRoom : WiredActionBase, IWired, IWiredEffect
         }
 
         var textMessage = this.StringParam;
-        WiredUtillity.ParseMessage(user, this.RoomInstance, ref textMessage);
+        WiredUtillity.ParseMessage(user, this.Room, ref textMessage);
 
-        foreach (var userTarget in this.RoomInstance.RoomUserManager.GetUserList().ToList())
+        foreach (var userTarget in this.Room.RoomUserManager.UserList.ToList())
         {
             userTarget?.SendWhisperChat(textMessage);
         }

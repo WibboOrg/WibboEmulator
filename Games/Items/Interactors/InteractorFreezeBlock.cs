@@ -19,13 +19,14 @@ public class InteractorFreezeBlock : FurniInteractor
         }
 
         var name = session.User.Username;
-        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByName(name);
+        var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByName(name);
         if (roomUserByUserId == null || roomUserByUserId.CountFreezeBall == 0 || roomUserByUserId.Freezed)
         {
             return;
         }
 
-        item.GetRoom().Freeze.ThrowBall(item, roomUserByUserId);
+        item.
+        Room.Freeze.ThrowBall(item, roomUserByUserId);
     }
 
     public override void OnTick(Item item)

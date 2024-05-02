@@ -29,7 +29,7 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        var bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName(name);
+        var bot = this.Room.RoomUserManager.GetBotOrPetByName(name);
         if (bot == null || bot.BotData == null)
         {
             return false;
@@ -37,9 +37,9 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
 
         var isWhisper = this.GetIntParam(0) == 1;
 
-        WiredUtillity.ParseMessage(user, this.RoomInstance, ref message);
+        WiredUtillity.ParseMessage(user, this.Room, ref message);
 
-        if (isWhisper && message.Contains(" : ") && (this.RoomInstance.IsRoleplay || this.RoomInstance.RoomData.OwnerName == "LieuPublic"))
+        if (isWhisper && message.Contains(" : ") && (this.Room.IsRoleplay || this.Room.RoomData.OwnerName == "LieuPublic"))
         {
             SendBotChoose(message, user, bot.BotData);
         }

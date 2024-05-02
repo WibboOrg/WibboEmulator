@@ -1,8 +1,10 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
+using WibboEmulator.Games.Achievements;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class RespectPetEvent : IPacketEvent
 {
@@ -16,7 +18,7 @@ internal sealed class RespectPetEvent : IPacketEvent
         }
 
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -29,9 +31,9 @@ internal sealed class RespectPetEvent : IPacketEvent
 
         var petId = packet.PopInt();
 
-        if (!session.User.CurrentRoom.RoomUserManager.TryGetPet(petId, out var pet))
+        if (!session.User.Room.RoomUserManager.TryGetPet(petId, out var pet))
         {
-            var targetUser = session.User.CurrentRoom.RoomUserManager.GetRoomUserByUserId(petId);
+            var targetUser = session.User.Room.RoomUserManager.GetRoomUserByUserId(petId);
             if (targetUser == null)
             {
                 return;
@@ -47,9 +49,9 @@ internal sealed class RespectPetEvent : IPacketEvent
                 return;
             }
 
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialRespect);
-            _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RespectGiven", 1);
-            _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(targetUser.Client, "ACH_RespectEarned", 1);
+            QuestManager.ProgressUserQuest(session, QuestType.SocialRespect);
+            _ = AchievementManager.ProgressAchievement(session, "ACH_RespectGiven", 1);
+            _ = AchievementManager.ProgressAchievement(targetUser.Client, "ACH_RespectEarned", 1);
 
             //Take away from pet respect points, just in-case users abuse this..
             session.            //Take away from pet respect points, just in-case users abuse this..
@@ -66,13 +68,13 @@ internal sealed class RespectPetEvent : IPacketEvent
             return;
         }
 
-        if (pet == null || pet.PetData == null || pet.RoomId != session.User.CurrentRoomId)
+        if (pet == null || pet.PetData == null || pet.RoomId != session.User.RoomId)
         {
             return;
         }
 
         session.User.DailyPetRespectPoints -= 1;
-        _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_PetRespectGiver", 1);
+        _ = AchievementManager.ProgressAchievement(session, "ACH_PetRespectGiver", 1);
 
         thisUser.CarryItemID = 999999999;
         thisUser.CarryTimer = 5;

@@ -1,4 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Moderations;
 
@@ -16,7 +18,7 @@ internal sealed class ModerationMsgEvent : IPacketEvent
         var userId = packet.PopInt();
         var message = packet.PopString();
 
-        var clientTarget = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        var clientTarget = GameClientManager.GetClientByUserID(userId);
         if (clientTarget == null)
         {
             return;
@@ -29,7 +31,7 @@ internal sealed class ModerationMsgEvent : IPacketEvent
 
         if (clientTarget.User.Rank >= session.User.Rank)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("moderation.caution.missingrank", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("moderation.caution.missingrank", session.Language));
         }
 
         if (session.User.CheckChatMessage(message, "<MT>"))

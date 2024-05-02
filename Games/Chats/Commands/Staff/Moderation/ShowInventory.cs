@@ -1,5 +1,7 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Moderation;
 
+using WibboEmulator.Core.Language;
+using WibboEmulator.Core.Settings;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -12,10 +14,10 @@ internal sealed class ShowInventory : IChatCommand
             return;
         }
 
-        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
         if (targetUser == null || targetUser.User == null || targetUser.User.InventoryComponent == null)
         {
-            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
             return;
         }
 
@@ -24,22 +26,22 @@ internal sealed class ShowInventory : IChatCommand
         var itemRareCount = new Dictionary<string, int>();
         foreach (var item in targetUser.User.InventoryComponent.GetWallAndFloor)
         {
-            if (item.GetBaseItem().IsRare == false)
+            if (item.ItemData.IsRare == false)
             {
                 continue;
             }
 
-            if (itemRareCount.TryGetValue(item.GetBaseItem().ItemName, out _))
+            if (itemRareCount.TryGetValue(item.ItemData.ItemName, out _))
             {
-                itemRareCount[item.GetBaseItem().ItemName]++;
+                itemRareCount[item.ItemData.ItemName]++;
             }
             else
             {
-                itemRareCount.Add(item.GetBaseItem().ItemName, 1);
+                itemRareCount.Add(item.ItemData.ItemName, 1);
             }
         }
 
-        var assetsUrl = WibboEnvironment.GetSettings().GetData<string>("assets.url");
+        var assetsUrl = SettingsManager.GetData<string>("assets.url");
 
         var output = "Inventaire rare de " + targetUser.User.Username + ":<br><br>";
         output += "<div class=\"overflow-auto grid gap-2\" style=\"--bs-columns: 5; --nitro-grid-column-min-height: 40px; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));\">";

@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Rooms.Moodlight;
 using System.Text;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 
 public class MoodlightData
@@ -44,7 +45,7 @@ public class MoodlightData
 
         if (inDb)
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+            using var dbClient = DatabaseManager.Connection;
             ItemMoodlightDao.Update(dbClient, this.ItemId, color, pr, intensity, bgOnly, preset);
         }
 

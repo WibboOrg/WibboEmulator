@@ -15,7 +15,7 @@ public class SuperBot : BotAI
         this._actionTimer = WibboEnvironment.GetRandomNumber(0, 60);
     }
 
-    public override void OnSelfEnterRoom() => this.GetRoomUser().MoveTo(this.GetRoomUser().X + WibboEnvironment.GetRandomNumber(-10, 10), this.GetRoomUser().Y + WibboEnvironment.GetRandomNumber(-10, 10), true);
+    public override void OnSelfEnterRoom() => this.RoomUser.MoveTo(this.RoomUser.X + WibboEnvironment.GetRandomNumber(-10, 10), this.RoomUser.Y + WibboEnvironment.GetRandomNumber(-10, 10), true);
 
     public override void OnSelfLeaveRoom(bool kicked)
     {
@@ -39,25 +39,25 @@ public class SuperBot : BotAI
 
     public override void OnTimerTick()
     {
-        if (this.GetBotData() == null)
+        if (this.BotData == null)
         {
             return;
         }
 
-        var ownerUser = this.GetRoom().RoomUserManager.GetRoomUserByUserId((this.GetBotData().OwnerId == 0) ? this.GetRoom().RoomData.OwnerId : this.GetBotData().OwnerId);
+        var ownerUser = this.Room.RoomUserManager.GetRoomUserByUserId((this.BotData.OwnerId == 0) ? this.Room.RoomData.OwnerId : this.BotData.OwnerId);
         if (ownerUser == null)
         {
-            this.GetRoom().RoomUserManager.RemoveBot(this.VirtualId, false);
+            this.            Room.RoomUserManager.RemoveBot(this.VirtualId, false);
 
             return;
         }
 
         if (this._actionTimer <= 0)
         {
-            if (this.GetBotData().FollowUser == 0)
+            if (this.BotData.FollowUser == 0)
             {
-                var randomWalkableSquare = this.GetRoom().GameMap.GetRandomWalkableSquare(this.GetRoomUser().GoalX, this.GetRoomUser().GoalY);
-                this.GetRoomUser().MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
+                var randomWalkableSquare = this.Room.GameMap.GetRandomWalkableSquare(this.RoomUser.GoalX, this.RoomUser.GoalY);
+                this.                RoomUser.MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
             }
 
             this._actionTimer = WibboEnvironment.GetRandomNumber(10, 60);
@@ -67,37 +67,37 @@ public class SuperBot : BotAI
             this._actionTimer--;
         }
 
-        if (ownerUser.DanceId != this.GetRoomUser().DanceId)
+        if (ownerUser.DanceId != this.RoomUser.DanceId)
         {
-            this.GetRoomUser().DanceId = ownerUser.DanceId;
-            this.GetRoom().SendPacket(new DanceComposer(this.GetRoomUser().VirtualId, this.GetRoomUser().DanceId));
+            this.            RoomUser.DanceId = ownerUser.DanceId;
+            this.            Room.SendPacket(new DanceComposer(this.RoomUser.VirtualId, this.RoomUser.DanceId));
         }
-        else if (ownerUser.IsAsleep != this.GetRoomUser().IsAsleep)
+        else if (ownerUser.IsAsleep != this.RoomUser.IsAsleep)
         {
-            this.GetRoomUser().IsAsleep = ownerUser.IsAsleep;
-            this.GetRoom().SendPacket(new SleepComposer(this.GetRoomUser().VirtualId, this.GetRoomUser().IsAsleep));
+            this.            RoomUser.IsAsleep = ownerUser.IsAsleep;
+            this.            Room.SendPacket(new SleepComposer(this.RoomUser.VirtualId, this.RoomUser.IsAsleep));
         }
-        else if (ownerUser.CarryItemID != this.GetRoomUser().CarryItemID)
+        else if (ownerUser.CarryItemID != this.RoomUser.CarryItemID)
         {
-            this.GetRoomUser().CarryItemID = ownerUser.CarryItemID;
-            this.GetRoom().SendPacket(new CarryObjectComposer(this.GetRoomUser().VirtualId, this.GetRoomUser().CarryItemID));
+            this.            RoomUser.CarryItemID = ownerUser.CarryItemID;
+            this.            Room.SendPacket(new CarryObjectComposer(this.RoomUser.VirtualId, this.RoomUser.CarryItemID));
         }
-        else if (ownerUser.CurrentEffect != this.GetRoomUser().CurrentEffect)
+        else if (ownerUser.CurrentEffect != this.RoomUser.CurrentEffect)
         {
-            this.GetRoomUser().CurrentEffect = ownerUser.CurrentEffect;
-            this.GetRoom().SendPacket(new AvatarEffectComposer(this.GetRoomUser().VirtualId, this.GetRoomUser().CurrentEffect));
+            this.            RoomUser.CurrentEffect = ownerUser.CurrentEffect;
+            this.            Room.SendPacket(new AvatarEffectComposer(this.RoomUser.VirtualId, this.RoomUser.CurrentEffect));
         }
 
-        if (this.GetBotData().FollowUser > 0)
+        if (this.BotData.FollowUser > 0)
         {
-            var user = this.GetRoom().RoomUserManager.GetRoomUserByVirtualId(this.GetBotData().FollowUser);
+            var user = this.Room.RoomUserManager.GetRoomUserByVirtualId(this.BotData.FollowUser);
             if (user == null)
             {
-                this.GetBotData().FollowUser = 0;
+                this.                BotData.FollowUser = 0;
             }
             else
             {
-                if (!GameMap.TilesTouching(this.GetRoomUser().X, this.GetRoomUser().Y, user.X, user.Y))
+                if (!GameMap.TilesTouching(this.RoomUser.X, this.RoomUser.Y, user.X, user.Y))
                 {
                     var newX = user.X;
                     var newY = user.Y;
@@ -126,7 +126,8 @@ public class SuperBot : BotAI
                             break;
                     }
 
-                    this.GetRoomUser().MoveTo(newX, newY, true);
+                    this.
+                    RoomUser.MoveTo(newX, newY, true);
                 }
             }
         }

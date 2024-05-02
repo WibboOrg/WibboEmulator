@@ -13,7 +13,7 @@ internal sealed class UnbanUserFromRoomEvent : IPacketEvent
             return;
         }
 
-        var instance = session.User.CurrentRoom;
+        var instance = session.User.Room;
         if (instance == null || !instance.CheckRights(session, true))
         {
             return;

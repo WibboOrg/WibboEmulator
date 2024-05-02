@@ -18,14 +18,14 @@ internal sealed class UserBannerEvent : IPacketEvent
             return;
         }
 
-        if (user.Banner == null)
+        if (user.BannerComponent == null)
         {
             return;
         }
 
         if (all)
         {
-            session.SendPacket(new UserBannerListComposer(user.Banner.BannerList));
+            session.SendPacket(new UserBannerListComposer(user.BannerComponent.BannerList));
         }
 
         session.SendPacket(new UserBannerComposer(user.Id, user.BannerSelected));

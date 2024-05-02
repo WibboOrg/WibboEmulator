@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Room;
 
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
@@ -27,7 +28,7 @@ internal sealed class SetMax : IChatCommand
             room.RoomData.UsersMax = maxUsers;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         RoomDao.UpdateUsersMax(dbClient, room.Id, maxUsers);
     }
 }

@@ -11,7 +11,6 @@ public class GameManager
     private Dictionary<int, Item> _blueTeamItems;
     private Dictionary<int, Item> _greenTeamItems;
     private Dictionary<int, Item> _yellowTeamItems;
-    private Room _roomInstance;
 
     public int[] Points
     {
@@ -31,7 +30,7 @@ public class GameManager
         this._blueTeamItems = new Dictionary<int, Item>();
         this._greenTeamItems = new Dictionary<int, Item>();
         this._yellowTeamItems = new Dictionary<int, Item>();
-        this._roomInstance = room;
+        this.Room = room;
     }
 
     public Dictionary<int, Item> GetItems(TeamType team) => team switch
@@ -43,24 +42,27 @@ public class GameManager
         _ => new Dictionary<int, Item>(),
     };
 
-    public TeamType GetWinningTeam()
+    public TeamType WinningTeam
     {
-        var nbTeam = 0;
-        var maxPoints = 0;
-        for (var i = 1; i < 5; ++i)
+        get
         {
-            if (this.TeamPoints[i] == maxPoints)
+            var nbTeam = 0;
+            var maxPoints = 0;
+            for (var i = 1; i < 5; ++i)
             {
-                nbTeam = 0;
-            }
+                if (this.TeamPoints[i] == maxPoints)
+                {
+                    nbTeam = 0;
+                }
 
-            if (this.TeamPoints[i] > maxPoints && this.TeamPoints[i] > 0)
-            {
-                maxPoints = this.TeamPoints[i];
-                nbTeam = i;
+                if (this.TeamPoints[i] > maxPoints && this.TeamPoints[i] > 0)
+                {
+                    maxPoints = this.TeamPoints[i];
+                    nbTeam = i;
+                }
             }
+            return (TeamType)nbTeam;
         }
-        return (TeamType)nbTeam;
     }
 
     public void AddPointToTeam(TeamType team, RoomUser user) => this.AddPointToTeam(team, 1, user);
@@ -84,7 +86,7 @@ public class GameManager
 
         foreach (var roomItem in this.GetFurniItems(team).Values)
         {
-            if (IsScoreItem(roomItem.GetBaseItem().InteractionType))
+            if (IsScoreItem(roomItem.ItemData.InteractionType))
             {
                 roomItem.ExtraData = this.TeamPoints[(int)team].ToString();
                 roomItem.UpdateState();
@@ -196,7 +198,7 @@ public class GameManager
 
     private static void LockGate(Item item)
     {
-        switch (item.GetBaseItem().InteractionType)
+        switch (item.ItemData.InteractionType)
         {
             case InteractionType.FREEZE_BLUE_GATE:
             case InteractionType.FREEZE_GREEN_GATE:
@@ -236,26 +238,26 @@ public class GameManager
 
     private void UpdateGateTeamCount(Item item)
     {
-        switch (item.GetBaseItem().InteractionType)
+        switch (item.ItemData.InteractionType)
         {
             case InteractionType.BANZAI_GATE_BLUE:
             case InteractionType.FREEZE_BLUE_GATE:
-                item.ExtraData = this._roomInstance.TeamManager.BlueTeam.Count.ToString();
+                item.ExtraData = this.Room.TeamManager.BlueTeam.Count.ToString();
                 item.UpdateState();
                 break;
             case InteractionType.BANZAI_GATE_RED:
             case InteractionType.FREEZE_RED_GATE:
-                item.ExtraData = this._roomInstance.TeamManager.RedTeam.Count.ToString();
+                item.ExtraData = this.Room.TeamManager.RedTeam.Count.ToString();
                 item.UpdateState();
                 break;
             case InteractionType.BANZAI_GATE_GREEN:
             case InteractionType.FREEZE_GREEN_GATE:
-                item.ExtraData = this._roomInstance.TeamManager.GreenTeam.Count.ToString();
+                item.ExtraData = this.Room.TeamManager.GreenTeam.Count.ToString();
                 item.UpdateState();
                 break;
             case InteractionType.BANZAI_GATE_YELLOW:
             case InteractionType.FREEZE_YELLOW_GATE:
-                item.ExtraData = this._roomInstance.TeamManager.YellowTeam.Count.ToString();
+                item.ExtraData = this.Room.TeamManager.YellowTeam.Count.ToString();
                 item.UpdateState();
                 break;
         }
@@ -263,7 +265,7 @@ public class GameManager
 
     private static void UnlockGate(Item item)
     {
-        switch (item.GetBaseItem().InteractionType)
+        switch (item.ItemData.InteractionType)
         {
             case InteractionType.BANZAI_GATE_BLUE:
             case InteractionType.FREEZE_BLUE_GATE:
@@ -303,23 +305,23 @@ public class GameManager
 
     public void StopGame()
     {
-        this._roomInstance.BattleBanzai.BanzaiEnd();
-        this._roomInstance.Freeze.StopGame();
+        this.Room.BattleBanzai.BanzaiEnd();
+        this.Room.Freeze.StopGame();
 
         this.OnGameEnd?.Invoke(this, new());
     }
 
     public void StartGame()
     {
-        this._roomInstance.BattleBanzai.BanzaiStart();
-        this._roomInstance.Freeze.StartGame();
+        this.Room.BattleBanzai.BanzaiStart();
+        this.Room.Freeze.StartGame();
 
         this.OnGameStart?.Invoke(this, new());
 
-        this._roomInstance.LastTimerReset = DateTime.Now;
+        this.Room.LastTimerReset = DateTime.Now;
     }
 
-    public Room GetRoom() => this._roomInstance;
+    public Room Room { get; private set; }
 
     public void Destroy()
     {
@@ -335,6 +337,6 @@ public class GameManager
         this._blueTeamItems = null;
         this._greenTeamItems = null;
         this._yellowTeamItems = null;
-        this._roomInstance = null;
+        this.Room = null;
     }
 }

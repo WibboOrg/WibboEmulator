@@ -1,6 +1,12 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Chat;
 using System.Text.RegularExpressions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
+using WibboEmulator.Communication.RCON.Commands;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Games.Chats.Commands;
+using WibboEmulator.Games.Chats.Filter;
+using WibboEmulator.Games.Chats.Mentions;
+using WibboEmulator.Games.Chats.Styles;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 using WibboEmulator.Utilities;
@@ -19,7 +25,7 @@ internal sealed partial class ChatEvent : IPacketEvent
             return;
         }
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null)
         {
             return;
@@ -44,14 +50,14 @@ internal sealed partial class ChatEvent : IPacketEvent
         var color = packet.PopInt();
         var chatColour = packet.PopString(10);
 
-        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(color, out var style) || (style.RequiredRight.Length > 0 && !session.User.HasPermission(style.RequiredRight)))
+        if (!ChatStyleManager.TryGetStyle(color, out var style) || (style.RequiredRight.Length > 0 && !session.User.HasPermission(style.RequiredRight)))
         {
             color = 0;
         }
 
         if (color == 23)
         {
-            color = session.User.BadgeComponent.GetStaffBulleId();
+            color = session.User.BadgeComponent.StaffBulleId;
         }
         else
         {
@@ -60,9 +66,9 @@ internal sealed partial class ChatEvent : IPacketEvent
 
         user.Unidle();
 
-        if (!session.User.HasPermission("no_mute") && !user.IsOwner() && !room.CheckRights(session) && room.RoomMuted)
+        if (!session.User.HasPermission("no_mute") && !user.IsOwner && !room.CheckRights(session) && room.RoomMuted)
         {
-            user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("room.muted", session.Langue));
+            user.SendWhisperChat(LanguageManager.TryGetValue("room.muted", session.Language));
             return;
         }
 
@@ -70,17 +76,17 @@ internal sealed partial class ChatEvent : IPacketEvent
         {
             if (!room.JankenManager.PickChoice(user, message))
             {
-                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.choice", session.Langue));
+                user.SendWhisperChat(LanguageManager.TryGetValue("janken.choice", session.Language));
             }
 
             return;
         }
 
-        if (!session.User.HasPermission("mod") && !user.IsOwner() && !room.CheckRights(session) && room.UserIsMuted(session.User.Id))
+        if (!session.User.HasPermission("mod") && !user.IsOwner && !room.CheckRights(session) && room.UserIsMuted(session.User.Id))
         {
             if (!room.HasMuteExpired(session.User.Id))
             {
-                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("user.muted", session.Langue));
+                user.SendWhisperChat(LanguageManager.TryGetValue("user.muted", session.Language));
                 return;
             }
             else
@@ -136,7 +142,7 @@ internal sealed partial class ChatEvent : IPacketEvent
         session.User.SpamFloodTime = DateTime.Now;
         session.User.FloodCount++;
 
-        if (message.StartsWith(":", StringComparison.CurrentCulture) && WibboEnvironment.GetGame().GetChatManager().GetCommands().Parse(session, user, room, message))
+        if (message.StartsWith(":", StringComparison.CurrentCulture) && CommandManager.Parse(session, user, room, message))
         {
             room.ChatlogManager.AddMessage(session.User.Id, session.User.Username, room.Id, string.Format("{0} a utilisé la commande {1}", session.User.Username, message), UnixTimestamp.GetNow());
             return;
@@ -147,7 +153,7 @@ internal sealed partial class ChatEvent : IPacketEvent
             return;
         }
 
-        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialChat, 0);
+        QuestManager.ProgressUserQuest(session, QuestType.SocialChat, 0);
         session.User.ChatMessageManager.AddMessage(session.User.Id, session.User.Username, room.Id, message, UnixTimestamp.GetNow());
         room.ChatlogManager.AddMessage(session.User.Id, session.User.Username, room.Id, message, UnixTimestamp.GetNow());
 
@@ -158,7 +164,7 @@ internal sealed partial class ChatEvent : IPacketEvent
 
         if (!session.User.HasPermission("word_filter_override"))
         {
-            message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(message);
+            message = WordFilterManager.CheckMessage(message);
         }
 
         message = MyRegex().Replace(message, "<tag>$1</tag>");
@@ -183,7 +189,7 @@ internal sealed partial class ChatEvent : IPacketEvent
 
         if (!session.User.IgnoreAll)
         {
-            message = WibboEnvironment.GetGame().GetChatManager().GetMention().Parse(session, message);
+            message = MentionManager.Parse(session, message);
         }
 
         user.OnChat(message, color, this._isShout, chatColour);

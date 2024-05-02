@@ -1,7 +1,10 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.Stickys;
+
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class DeleteStickyNoteEvent : IPacketEvent
 {
@@ -9,7 +12,7 @@ internal sealed class DeleteStickyNoteEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -21,13 +24,13 @@ internal sealed class DeleteStickyNoteEvent : IPacketEvent
 
         var itemId = packet.PopInt();
         var roomItem = room.RoomItemHandling.GetItem(itemId);
-        if (roomItem == null || (roomItem.GetBaseItem().InteractionType != InteractionType.POSTIT && roomItem.GetBaseItem().InteractionType != InteractionType.PHOTO))
+        if (roomItem == null || (roomItem.ItemData.InteractionType != InteractionType.POSTIT && roomItem.ItemData.InteractionType != InteractionType.PHOTO))
         {
             return;
         }
 
         room.RoomItemHandling.RemoveFurniture(session, roomItem.Id);
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         ItemDao.DeleteById(dbClient, roomItem.Id);
     }
 }

@@ -9,7 +9,7 @@ public class ScoreAchieved : WiredTriggerBase, IWired
 {
     public ScoreAchieved(Item item, Room room) : base(item, room, (int)WiredTriggerType.SCORE_ACHIEVED)
     {
-        this.RoomInstance.GameManager.OnScoreChanged += this.OnScoreChanged;
+        this.Room.GameManager.OnScoreChanged += this.OnScoreChanged;
 
         this.DefaultIntParams(new int[] { 0 });
     }
@@ -22,12 +22,12 @@ public class ScoreAchieved : WiredTriggerBase, IWired
             return;
         }
 
-        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, e.User, null);
+        this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, e.User, null);
     }
 
     public override void Dispose()
     {
-        this.RoomInstance.GameManager.OnScoreChanged -= this.OnScoreChanged;
+        this.Room.GameManager.OnScoreChanged -= this.OnScoreChanged;
 
         base.Dispose();
     }

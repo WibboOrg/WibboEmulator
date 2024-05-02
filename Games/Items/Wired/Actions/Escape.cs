@@ -14,23 +14,23 @@ public class Escape : WiredActionBase, IWiredEffect, IWired
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        var disableAnimation = this.RoomInstance.WiredHandler.DisableAnimate(this.ItemInstance.Coordinate);
+        var disableAnimation = this.Room.WiredHandler.DisableAnimate(this.Item.Coordinate);
 
         foreach (var roomItem in this.Items.ToList())
         {
-            if (this.RoomInstance.RoomItemHandling.GetItem(roomItem.Id) == null)
+            if (this.Room.RoomItemHandling.GetItem(roomItem.Id) == null)
             {
                 continue;
             }
 
-            var roomUser = this.RoomInstance.GameMap.SquareHasUserNear(roomItem.X, roomItem.Y);
+            var roomUser = this.Room.GameMap.SquareHasUserNear(roomItem.X, roomItem.Y);
             if (roomUser != null)
             {
-                this.RoomInstance.WiredHandler.TriggerCollision(roomUser, roomItem);
+                this.Room.WiredHandler.TriggerCollision(roomUser, roomItem);
                 continue;
             }
 
-            roomItem.Movement = this.RoomInstance.GameMap.GetEscapeMovement(roomItem.X, roomItem.Y, roomItem.Movement);
+            roomItem.Movement = this.Room.GameMap.GetEscapeMovement(roomItem.X, roomItem.Y, roomItem.Movement);
             if (roomItem.Movement == MovementState.none)
             {
                 continue;
@@ -44,9 +44,9 @@ public class Escape : WiredActionBase, IWiredEffect, IWired
                 var oldY = disableAnimation ? newPoint.Y : roomItem.Y;
                 var oldZ = roomItem.Z;
 
-                if (this.RoomInstance.RoomItemHandling.SetFloorItem(null, roomItem, newPoint.X, newPoint.Y, roomItem.Rotation, false, false, false))
+                if (this.Room.RoomItemHandling.SetFloorItem(null, roomItem, newPoint.X, newPoint.Y, roomItem.Rotation, false, false, false))
                 {
-                    this.RoomInstance.SendPacket(new SlideObjectBundleComposer(oldX, oldY, disableAnimation ? roomItem.Z : oldZ, newPoint.X, newPoint.Y, roomItem.Z, roomItem.Id));
+                    this.Room.SendPacket(new SlideObjectBundleComposer(oldX, oldY, disableAnimation ? roomItem.Z : oldZ, newPoint.X, newPoint.Y, roomItem.Z, roomItem.Id));
                 }
             }
         }

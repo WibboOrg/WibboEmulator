@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Guide;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Helps;
 
 internal sealed class OnGuideEvent : IPacketEvent
 {
@@ -11,8 +12,7 @@ internal sealed class OnGuideEvent : IPacketEvent
         var userId = packet.PopInt();
         var message = packet.PopString();
 
-        var guideManager = WibboEnvironment.GetGame().GetHelpManager();
-        if (guideManager.Count <= 0)
+        if (HelpManager.Count <= 0)
         {
             session.SendPacket(new OnGuideSessionErrorComposer(2));
             return;
@@ -20,19 +20,19 @@ internal sealed class OnGuideEvent : IPacketEvent
 
         if (session.User.OnDuty)
         {
-            guideManager.TryRemoveGuide(session.User.Id);
+            HelpManager.TryRemoveGuide(session.User.Id);
         }
 
-        var guideId = guideManager.RandomAvailableGuide();
+        var guideId = HelpManager.RandomAvailableGuide();
         if (guideId == 0)
         {
             session.SendPacket(new OnGuideSessionErrorComposer(2));
             return;
         }
 
-        guideManager.GuideLeftService(guideId);
+        HelpManager.GuideLeftService(guideId);
 
-        var guide = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(guideId);
+        var guide = GameClientManager.GetClientByUserID(guideId);
 
         session.SendPacket(new OnGuideSessionAttachedComposer(false, userId, message, 30));
         guide.SendPacket(new OnGuideSessionAttachedComposer(true, userId, message, 15));

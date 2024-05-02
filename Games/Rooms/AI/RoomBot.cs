@@ -1,6 +1,7 @@
 namespace WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Roleplays.Enemy;
 using WibboEmulator.Games.Rooms.AI.Types;
+using WibboEmulator.Utilities;
 
 public class RoomBot
 {
@@ -90,7 +91,7 @@ public class RoomBot
         }
     }
 
-    public string GetRandomSpeech() => this.RandomSpeech[WibboEnvironment.GetRandomNumber(0, this.RandomSpeech.Count - 1)];
+    public string GetRandomSpeech() => this.RandomSpeech.GetRandomElement();
 
     public BotAI GenerateBotAI(int virtualId)
     {

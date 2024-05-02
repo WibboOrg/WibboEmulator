@@ -16,7 +16,7 @@ public class GameClient
     private double _packetLastTimestamp;
 
     public string SSOTicket { get; set; }
-    public Language Langue { get; set; }
+    public Language Language { get; set; }
     public string ConnectionID { get; set; }
     public bool IsDisconnected { get; set; }
     public GameWebSocket Connection { get; private set; }
@@ -26,7 +26,7 @@ public class GameClient
     {
         this.ConnectionID = clientId;
         this.Connection = connection;
-        this.Langue = Language.French;
+        this.Language = Language.French;
 
         this._packetTimeout = new Dictionary<int, double>();
         this._packetCount = 0;
@@ -41,12 +41,12 @@ public class GameClient
 
     public void SendWhisper(string message, bool info = true)
     {
-        if (this.User == null || this.User.CurrentRoom == null)
+        if (this.User == null || this.User.Room == null)
         {
             return;
         }
 
-        var user = this.User.CurrentRoom.RoomUserManager.GetRoomUserByName(this.User.Username);
+        var user = this.User.Room.RoomUserManager.GetRoomUserByName(this.User.Username);
         if (user == null)
         {
             return;
@@ -57,7 +57,7 @@ public class GameClient
 
     public void SendNotification(string message) => this.SendPacket(new BroadcastMessageAlertComposer(message));
 
-    public void SendHugeNotif(string message) => this.SendPacket(new MOTDNotificationComposer(message));
+    public void SendHugeNotification(string message) => this.SendPacket(new MOTDNotificationComposer(message));
 
     public bool PacketTimeout(int packetId, double delay)
     {
@@ -126,7 +126,7 @@ public class GameClient
             return;
         }
 
-        this.Connection.SendData(packets.GetBytes);
+        this.Connection.SendData(packets.Bytes);
     }
 
     public void SendPacket(IServerPacket packet)
@@ -136,6 +136,6 @@ public class GameClient
             return;
         }
 
-        this.Connection.SendData(packet.GetBytes());
+        this.Connection.SendData(packet.Bytes);
     }
 }

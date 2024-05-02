@@ -7,67 +7,62 @@ using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.WebSocket;
+using WibboEmulator.Core.Settings;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.Users.Messenger;
 
-public class GameClientManager
+public static class GameClientManager
 {
-    private readonly ConcurrentDictionary<string, GameClient> _clients;
-    private readonly ConcurrentDictionary<string, string> _usernameRegister;
-    private readonly ConcurrentDictionary<int, string> _userIDRegister;
-    private readonly ConcurrentDictionary<string, string> _ssoTicketRegister;
-    private readonly ConcurrentDictionary<string, DateTime> _pendingDisconnect;
-    private readonly List<int> _userStaff;
+    private static readonly ConcurrentDictionary<string, GameClient> ClientRegister = new();
+    private static readonly ConcurrentDictionary<string, string> UsernameRegister = new();
+    private static readonly ConcurrentDictionary<int, string> UserIDRegister = new();
+    private static readonly ConcurrentDictionary<string, string> SsoTicketRegister = new();
+    private static readonly ConcurrentDictionary<string, DateTime> PendingDisconnect = new();
+    private static readonly List<int> StaffIds = new();
 
-    public int Count => this._userIDRegister.Count;
+    public static int Count => UserIDRegister.Count;
 
-    public GameClientManager()
+    public static void Initialize()
     {
-        this._clients = new ConcurrentDictionary<string, GameClient>();
-        this._usernameRegister = new ConcurrentDictionary<string, string>();
-        this._userIDRegister = new ConcurrentDictionary<int, string>();
-        this._ssoTicketRegister = new ConcurrentDictionary<string, string>();
-        this._pendingDisconnect = new ConcurrentDictionary<string, DateTime>();
-        this._userStaff = new List<int>();
-
-        this._gameClientCycleStopwatch = new();
-        this._disconnectCycleStopwatch = new();
-
-        this._gameClientCycleStopwatch.Start();
-        this._disconnectCycleStopwatch.Start();
+        GameClientCycleStopwatch.Start();
+        DisconnectCycleStopwatch.Start();
     }
 
-    public List<GameClient> GetStaffUsers()
+    public static List<GameClient> StaffUsers
     {
-        var users = new List<GameClient>();
-
-        foreach (var userId in this._userStaff)
+        get
         {
-            var client = this.GetClientByUserID(userId);
-            if (client == null || client.User == null)
+            var users = new List<GameClient>();
+
+            foreach (var userId in StaffIds)
             {
-                continue;
+                var client = GetClientByUserID(userId);
+                if (client == null || client.User == null)
+                {
+                    continue;
+                }
+
+                users.Add(client);
             }
 
-            users.Add(client);
+            return users;
         }
-
-        return users;
     }
 
-    public GameClient GetClientById(string clientID)
+    public static GameClient GetClientById(string clientID)
     {
-        _ = this.TryGetClient(clientID, out var client);
+        _ = TryGetClient(clientID, out var client);
 
         return client;
     }
 
-    public GameClient GetClientBySSOTicket(string ssoTicket)
+    public static GameClient GetClientBySSOTicket(string ssoTicket)
     {
-        if (this._ssoTicketRegister.TryGetValue(ssoTicket.ToLower(), out var clientId))
+        if (SsoTicketRegister.TryGetValue(ssoTicket.ToLower(), out var clientId))
         {
-            if (!this.TryGetClient(clientId, out var client))
+            if (!TryGetClient(clientId, out var client))
             {
                 return null;
             }
@@ -80,11 +75,11 @@ public class GameClientManager
         }
     }
 
-    public GameClient GetClientByUserID(int userID)
+    public static GameClient GetClientByUserID(int userID)
     {
-        if (this._userIDRegister.TryGetValue(userID, out var clientId))
+        if (UserIDRegister.TryGetValue(userID, out var clientId))
         {
-            if (!this.TryGetClient(clientId, out var client))
+            if (!TryGetClient(clientId, out var client))
             {
                 return null;
             }
@@ -97,11 +92,11 @@ public class GameClientManager
         }
     }
 
-    public GameClient GetClientByUsername(string username)
+    public static GameClient GetClientByUsername(string username)
     {
-        if (this._usernameRegister.TryGetValue(username.ToLower(), out var clientId))
+        if (UsernameRegister.TryGetValue(username.ToLower(), out var clientId))
         {
-            if (!this.TryGetClient(clientId, out var client))
+            if (!TryGetClient(clientId, out var client))
             {
                 return null;
             }
@@ -111,26 +106,26 @@ public class GameClientManager
         return null;
     }
 
-    public bool UpdateClientUsername(string clientId, string oldUsername, string newUsername)
+    public static bool UpdateClientUsername(string clientId, string oldUsername, string newUsername)
     {
-        if (!this._usernameRegister.ContainsKey(oldUsername.ToLower()))
+        if (!UsernameRegister.ContainsKey(oldUsername.ToLower()))
         {
             return false;
         }
 
-        _ = this._usernameRegister.TryRemove(oldUsername.ToLower(), out _);
-        _ = this._usernameRegister.TryAdd(newUsername.ToLower(), clientId);
+        _ = UsernameRegister.TryRemove(oldUsername.ToLower(), out _);
+        _ = UsernameRegister.TryAdd(newUsername.ToLower(), clientId);
         return true;
     }
 
-    public bool TryGetClient(string clientId, out GameClient client) => this._clients.TryGetValue(clientId, out client);
+    public static bool TryGetClient(string clientId, out GameClient client) => ClientRegister.TryGetValue(clientId, out client);
 
-    public List<GameClient> GetClientsById(Dictionary<int, MessengerBuddy>.KeyCollection users)
+    public static List<GameClient> GetClientsById(Dictionary<int, MessengerBuddy>.KeyCollection users)
     {
         var clientOnline = new List<GameClient>();
         foreach (var userID in users)
         {
-            var client = this.GetClientByUserID(userID);
+            var client = GetClientByUserID(userID);
             if (client != null)
             {
                 clientOnline.Add(client);
@@ -140,11 +135,11 @@ public class GameClientManager
         return clientOnline;
     }
 
-    public void SendMessageStaff(IServerPacket packet)
+    public static void SendMessageStaff(IServerPacket packet)
     {
-        foreach (var userId in this._userStaff)
+        foreach (var userId in StaffIds)
         {
-            var client = this.GetClientByUserID(userId);
+            var client = GetClientByUserID(userId);
             if (client == null || client.User == null)
             {
                 continue;
@@ -154,9 +149,9 @@ public class GameClientManager
         }
     }
 
-    public void SendMessage(IServerPacket packet)
+    public static void SendMessage(IServerPacket packet)
     {
-        foreach (var client in this._clients.Values.ToList())
+        foreach (var client in ClientRegister.Values.ToList())
         {
             if (client == null || client.User == null)
             {
@@ -167,29 +162,29 @@ public class GameClientManager
         }
     }
 
-    public void CreateAndStartClient(string clientID, GameWebSocket connection)
+    public static void CreateAndStartClient(string clientID, GameWebSocket connection)
     {
         var client = new GameClient(clientID, connection);
-        if (!this._clients.TryAdd(clientID, client))
+        if (!ClientRegister.TryAdd(clientID, client))
         {
             connection.Disconnect();
         }
     }
 
-    public void OnCycle()
+    public static void OnCycle()
     {
-        this.PendingDisconnectCycle();
-        this.GameClientCycle();
+        PendingDisconnectCycle();
+        GameClientCycle();
     }
 
-    private readonly Stopwatch _gameClientCycleStopwatch;
-    private void GameClientCycle()
+    private static readonly Stopwatch GameClientCycleStopwatch = new();
+    private static void GameClientCycle()
     {
-        if (this._gameClientCycleStopwatch.ElapsedMilliseconds >= 60000)
+        if (GameClientCycleStopwatch.ElapsedMilliseconds >= 60000)
         {
-            this._gameClientCycleStopwatch.Restart();
+            GameClientCycleStopwatch.Restart();
 
-            foreach (var client in this._clients.Values.ToList())
+            foreach (var client in ClientRegister.Values.ToList())
             {
                 if (client == null || client.User == null)
                 {
@@ -209,7 +204,7 @@ public class GameClientManager
                 {
                     client.User.LastCreditsTime = DateTime.Now;
 
-                    var amountCredits = WibboEnvironment.GetSettings().GetData<int>("user.amount.credits.hours");
+                    var amountCredits = SettingsManager.GetData<int>("user.amount.credits.hours");
 
                     if (amountCredits > 0)
                     {
@@ -221,20 +216,20 @@ public class GameClientManager
         }
     }
 
-    private readonly Stopwatch _disconnectCycleStopwatch;
-    private void PendingDisconnectCycle()
+    private static readonly Stopwatch DisconnectCycleStopwatch = new();
+    private static void PendingDisconnectCycle()
     {
-        if (this._pendingDisconnect.IsEmpty)
+        if (PendingDisconnect.IsEmpty)
         {
             return;
         }
 
-        if (this._disconnectCycleStopwatch.ElapsedMilliseconds >= 1000)
+        if (DisconnectCycleStopwatch.ElapsedMilliseconds >= 1000)
         {
-            this._disconnectCycleStopwatch.Restart();
+            DisconnectCycleStopwatch.Restart();
 
             var removeIds = new List<string>();
-            foreach (var pending in this._pendingDisconnect)
+            foreach (var pending in PendingDisconnect)
             {
                 var timeExecution = DateTime.Now - pending.Value;
 
@@ -245,28 +240,28 @@ public class GameClientManager
 
                 removeIds.Add(pending.Key);
 
-                this.DisposeConnection(pending.Key);
+                DisposeConnection(pending.Key);
             }
 
             foreach (var id in removeIds)
             {
-                _ = this._pendingDisconnect.TryRemove(id, out _);
+                _ = PendingDisconnect.TryRemove(id, out _);
             }
 
             removeIds.Clear();
         }
     }
 
-    public bool TryReconnection(ref GameClient newClient, string ssoTicket)
+    public static bool TryReconnection(ref GameClient newClient, string ssoTicket)
     {
-        var oldClient = this.GetClientBySSOTicket(ssoTicket);
+        var oldClient = GetClientBySSOTicket(ssoTicket);
 
         if (oldClient == null)
         {
             return false;
         }
 
-        if (!this._pendingDisconnect.TryGetValue(oldClient.ConnectionID, out _))
+        if (!PendingDisconnect.TryGetValue(oldClient.ConnectionID, out _))
         {
             newClient.IsDisconnected = true;
             return false;
@@ -284,56 +279,56 @@ public class GameClientManager
             return false;
         }*/
 
-        _ = this._pendingDisconnect.TryRemove(oldClient.ConnectionID, out _);
+        _ = PendingDisconnect.TryRemove(oldClient.ConnectionID, out _);
 
-        _ = this._clients.TryRemove(oldClient.ConnectionID, out _);
+        _ = ClientRegister.TryRemove(oldClient.ConnectionID, out _);
 
         //Update oldClient with new connectionId
         oldClient.UpdateClient(newClient);
 
         //Change the connectionId
-        this.UnregisterClient(oldClient.User.Id, oldClient.User.Username, oldClient.SSOTicket);
-        this.RegisterClient(oldClient, oldClient.User.Id, oldClient.User.Username, oldClient.SSOTicket);
+        UnregisterClient(oldClient.User.Id, oldClient.User.Username, oldClient.SSOTicket);
+        RegisterClient(oldClient, oldClient.User.Id, oldClient.User.Username, oldClient.SSOTicket);
 
         //Replace newClient per the oldClient
-        this._clients[newClient.ConnectionID] = oldClient;
+        ClientRegister[newClient.ConnectionID] = oldClient;
 
         newClient = oldClient;
 
         return true;
     }
 
-    public void DisconnectConnection(string clientID)
+    public static void DisconnectConnection(string clientID)
     {
-        if (!this.TryGetClient(clientID, out var client))
+        if (!TryGetClient(clientID, out var client))
         {
             return;
         }
 
         if (client.User == null || client.IsDisconnected)
         {
-            this.DisposeConnection(clientID);
+            DisposeConnection(clientID);
             return;
         }
 
-        _ = this._pendingDisconnect.TryAdd(clientID, DateTime.Now);
+        _ = PendingDisconnect.TryAdd(clientID, DateTime.Now);
     }
 
-    public void DisposeConnection(string clientID)
+    public static void DisposeConnection(string clientID)
     {
-        if (!this.TryGetClient(clientID, out var client))
+        if (!TryGetClient(clientID, out var client))
         {
             return;
         }
 
         client.Dispose();
 
-        _ = this._clients.TryRemove(clientID, out _);
+        _ = ClientRegister.TryRemove(clientID, out _);
     }
 
-    public void LogClonesOut(int userId)
+    public static void LogClonesOut(int userId)
     {
-        var clientByUserId = this.GetClientByUserID(userId);
+        var clientByUserId = GetClientByUserID(userId);
         if (clientByUserId == null)
         {
             return;
@@ -342,64 +337,64 @@ public class GameClientManager
         clientByUserId.Disconnect();
     }
 
-    public void RegisterClient(GameClient client, int userID, string username, string ssoTicket)
+    public static void RegisterClient(GameClient client, int userID, string username, string ssoTicket)
     {
-        if (this._usernameRegister.ContainsKey(username.ToLower()))
+        if (UsernameRegister.ContainsKey(username.ToLower()))
         {
-            this._usernameRegister[username.ToLower()] = client.ConnectionID;
+            UsernameRegister[username.ToLower()] = client.ConnectionID;
         }
         else
         {
-            _ = this._usernameRegister.TryAdd(username.ToLower(), client.ConnectionID);
+            _ = UsernameRegister.TryAdd(username.ToLower(), client.ConnectionID);
         }
 
-        if (this._userIDRegister.ContainsKey(userID))
+        if (UserIDRegister.ContainsKey(userID))
         {
-            this._userIDRegister[userID] = client.ConnectionID;
+            UserIDRegister[userID] = client.ConnectionID;
         }
         else
         {
-            _ = this._userIDRegister.TryAdd(userID, client.ConnectionID);
+            _ = UserIDRegister.TryAdd(userID, client.ConnectionID);
         }
 
-        if (this._ssoTicketRegister.ContainsKey(ssoTicket.ToLower()))
+        if (SsoTicketRegister.ContainsKey(ssoTicket.ToLower()))
         {
-            this._ssoTicketRegister[ssoTicket.ToLower()] = client.ConnectionID;
+            SsoTicketRegister[ssoTicket.ToLower()] = client.ConnectionID;
         }
         else
         {
-            _ = this._ssoTicketRegister.TryAdd(ssoTicket.ToLower(), client.ConnectionID);
+            _ = SsoTicketRegister.TryAdd(ssoTicket.ToLower(), client.ConnectionID);
         }
     }
 
-    public void UnregisterClient(int userId, string username, string ssoTicket)
+    public static void UnregisterClient(int userId, string username, string ssoTicket)
     {
-        _ = this._userIDRegister.TryRemove(userId, out var _);
-        _ = this._usernameRegister.TryRemove(username.ToLower(), out _);
-        _ = this._ssoTicketRegister.TryRemove(ssoTicket.ToLower(), out _);
+        _ = UserIDRegister.TryRemove(userId, out var _);
+        _ = UsernameRegister.TryRemove(username.ToLower(), out _);
+        _ = SsoTicketRegister.TryRemove(ssoTicket.ToLower(), out _);
     }
 
-    public void AddUserStaff(int userId)
+    public static void AddUserStaff(int userId)
     {
-        if (!this._userStaff.Contains(userId))
+        if (!StaffIds.Contains(userId))
         {
-            this._userStaff.Add(userId);
+            StaffIds.Add(userId);
         }
     }
 
-    public void RemoveUserStaff(int userId)
+    public static void RemoveUserStaff(int userId)
     {
-        if (this._userStaff.Contains(userId))
+        if (StaffIds.Contains(userId))
         {
-            _ = this._userStaff.Remove(userId);
+            _ = StaffIds.Remove(userId);
         }
     }
 
-    public void CloseAll()
+    public static void CloseAll()
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
-        foreach (var client in this.GetClients.ToList())
+        foreach (var client in Clients.ToList())
         {
             if (client == null)
             {
@@ -423,7 +418,7 @@ public class GameClientManager
         Console.WriteLine("Done saving users inventory!");
         Console.WriteLine("Closing server connections...");
 
-        foreach (var client in this.GetClients.ToList())
+        foreach (var client in Clients.ToList())
         {
             if (client == null || client.Connection == null)
             {
@@ -438,11 +433,11 @@ public class GameClientManager
             {
             }
         }
-        this._clients.Clear();
+        ClientRegister.Clear();
         Console.WriteLine("Connections closed!");
     }
 
-    public void BanUser(GameClient client, string moderator, int lengthSeconds, string reason, bool ipBan)
+    public static void BanUser(GameClient client, string moderator, int lengthSeconds, string reason, bool ipBan)
     {
         if (string.IsNullOrEmpty(reason))
         {
@@ -463,7 +458,7 @@ public class GameClientManager
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             if (str == "user")
             {
@@ -475,7 +470,7 @@ public class GameClientManager
 
         if (ipBan)
         {
-            this.BanUser(client, moderator, lengthSeconds, reason, false);
+            BanUser(client, moderator, lengthSeconds, reason, false);
         }
         else
         {
@@ -483,7 +478,7 @@ public class GameClientManager
         }
     }
 
-    public void SendSuperNotif(string title, string notice, string picture, string link, string linkTitle) => this.SendMessage(new RoomNotificationComposer(title, notice, picture, linkTitle, link));
+    public static void SendSuperNotification(string title, string notice, string picture, string link, string linkTitle) => SendMessage(new RoomNotificationComposer(title, notice, picture, linkTitle, link));
 
-    public ICollection<GameClient> GetClients => this._clients.Values;
+    public static ICollection<GameClient> Clients => ClientRegister.Values;
 }

@@ -1,12 +1,14 @@
 namespace WibboEmulator.Games.Items;
 using WibboEmulator.Communication.Packets.Outgoing;
+using WibboEmulator.Core.Settings;
+using WibboEmulator.Games.Banners;
 using WibboEmulator.Games.Groups;
 
 internal static class ItemBehaviourUtility
 {
     public static void GenerateExtradata(Item item, ServerPacket message)
     {
-        var itemData = item.GetBaseItem();
+        var itemData = item.ItemData;
         switch (itemData.InteractionType)
         {
             default:
@@ -83,7 +85,7 @@ internal static class ItemBehaviourUtility
 
             case InteractionType.TROC_BANNER:
                 if (!int.TryParse(item.ExtraData, out var bannerId) ||
-                !WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(bannerId, out var banner))
+                !BannerManager.TryGetBannerById(bannerId, out var banner))
                 {
                     message.WriteInteger((int)ObjectDataKey.LEGACY_KEY);
                     message.WriteString(item.ExtraData);
@@ -105,7 +107,7 @@ internal static class ItemBehaviourUtility
             case InteractionType.GUILD_ITEM:
             case InteractionType.GUILD_GATE:
                 Group group = null;
-                if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(item.GroupId, out group))
+                if (!GroupManager.TryGetGroup(item.GroupId, out group))
                 {
                     message.WriteInteger((int)ObjectDataKey.LEGACY_KEY);
                     message.WriteString(item.ExtraData);
@@ -117,8 +119,8 @@ internal static class ItemBehaviourUtility
                     message.WriteString(item.ExtraData.Split(';')[0]);
                     message.WriteString(group.Id.ToString());
                     message.WriteString(group.Badge);
-                    message.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour1, true));
-                    message.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour2, false));
+                    message.WriteString(GroupManager.GetColourCode(group.Colour1, true));
+                    message.WriteString(GroupManager.GetColourCode(group.Colour2, false));
                 }
                 break;
 
@@ -360,7 +362,7 @@ internal static class ItemBehaviourUtility
                 message.WriteInteger((int)ObjectDataKey.MAP_KEY);
                 message.WriteInteger(2);
                 message.WriteString("THUMBNAIL_URL");
-                message.WriteString(string.IsNullOrEmpty(item.ExtraData) ? "" : "https://" + WibboEnvironment.GetSettings().GetData<string>("cdn.url") + "/youtubethumbnail.php?videoid=" + item.ExtraData);
+                message.WriteString(string.IsNullOrEmpty(item.ExtraData) ? "" : "https://" + SettingsManager.GetData<string>("cdn.url") + "/youtubethumbnail.php?videoid=" + item.ExtraData);
                 message.WriteString("VideoId");
                 message.WriteString(item.ExtraData);
                 break;
@@ -375,7 +377,7 @@ internal static class ItemBehaviourUtility
 
     public static void GenerateWallExtradata(Item item, ServerPacket message)
     {
-        switch (item.GetBaseItem().InteractionType)
+        switch (item.ItemData.InteractionType)
         {
             default:
                 message.WriteString(item.ExtraData);

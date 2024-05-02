@@ -9,7 +9,7 @@ internal sealed class AllWarp : IChatCommand
     {
         var messageList = new ServerPacketList();
 
-        foreach (var user in room.RoomUserManager.GetUserList().ToList())
+        foreach (var user in room.RoomUserManager.UserList.ToList())
         {
             if (user == null || user.IsBot)
             {

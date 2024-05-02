@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Administration;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -19,9 +21,9 @@ internal sealed class ForceControlUser : IChatCommand
             return;
         }
 
-        if (session.Langue != roomUserByUserId.Client.Langue)
+        if (session.Language != roomUserByUserId.Client.Language)
         {
-            session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.langue.user", roomUserByUserId.Client.Langue), session.Langue));
+            session.SendWhisper(string.Format(LanguageManager.TryGetValue("cmd.authorized.langue.user", roomUserByUserId.Client.Language), session.Language));
             return;
         }
 

@@ -10,7 +10,7 @@ internal sealed class OnGuideSessionDetachedEvent : IPacketEvent
     {
         var state = packet.PopBoolean();
 
-        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.User.GuideOtherUserId);
+        var requester = GameClientManager.GetClientByUserID(session.User.GuideOtherUserId);
 
         if (!state)
         {

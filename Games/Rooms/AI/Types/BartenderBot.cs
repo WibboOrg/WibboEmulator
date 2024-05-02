@@ -41,19 +41,19 @@ public class BartenderBot : BotAI
 
     public override void OnTimerTick()
     {
-        if (this.GetBotData() == null)
+        if (this.BotData == null)
         {
             return;
         }
 
         if (this._speechTimer <= 0)
         {
-            if (this.GetBotData().RandomSpeech.Count > 0 && this.GetBotData().AutomaticChat)
+            if (this.BotData.RandomSpeech.Count > 0 && this.BotData.AutomaticChat)
             {
-                this.GetRoomUser().OnChat(this.GetBotData().GetRandomSpeech(), 2, false);
+                this.RoomUser.OnChat(this.BotData.GetRandomSpeech(), 2, false);
             }
 
-            this._speechTimer = this.GetBotData().SpeakingInterval * 2;
+            this._speechTimer = this.BotData.SpeakingInterval * 2;
         }
         else
         {
@@ -62,10 +62,10 @@ public class BartenderBot : BotAI
 
         if (this._actionTimer <= 0)
         {
-            if (this.GetBotData().WalkingEnabled && this.GetBotData().FollowUser == 0)
+            if (this.BotData.WalkingEnabled && this.BotData.FollowUser == 0)
             {
-                var randomWalkableSquare = this.GetRoom().GameMap.GetRandomWalkableSquare(this.GetBotData().X, this.GetBotData().Y);
-                this.GetRoomUser().MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
+                var randomWalkableSquare = this.Room.GameMap.GetRandomWalkableSquare(this.BotData.X, this.BotData.Y);
+                this.RoomUser.MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
             }
             this._actionTimer = WibboEnvironment.GetRandomNumber(10, 60);
         }
@@ -74,18 +74,18 @@ public class BartenderBot : BotAI
             this._actionTimer--;
         }
 
-        if (this.GetBotData().FollowUser != 0)
+        if (this.BotData.FollowUser != 0)
         {
-            var user = this.GetRoom().RoomUserManager.GetRoomUserByVirtualId(this.GetBotData().FollowUser);
+            var user = this.Room.RoomUserManager.GetRoomUserByVirtualId(this.BotData.FollowUser);
             if (user == null)
             {
-                this.GetBotData().FollowUser = 0;
+                this.BotData.FollowUser = 0;
             }
             else
             {
-                if (!GameMap.TilesTouching(this.GetRoomUser().X, this.GetRoomUser().Y, user.X, user.Y))
+                if (!GameMap.TilesTouching(this.RoomUser.X, this.RoomUser.Y, user.X, user.Y))
                 {
-                    this.GetRoomUser().MoveTo(user.X, user.Y, true);
+                    this.RoomUser.MoveTo(user.X, user.Y, true);
                 }
             }
         }

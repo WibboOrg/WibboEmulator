@@ -1,5 +1,7 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Moderations;
 
 internal sealed class HaCommand : IRCONCommand
@@ -21,7 +23,7 @@ internal sealed class HaCommand : IRCONCommand
             return false;
         }
 
-        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        var client = GameClientManager.GetClientByUserID(userId);
         if (client == null)
         {
             return true;
@@ -35,7 +37,7 @@ internal sealed class HaCommand : IRCONCommand
             return true;
         }
 
-        WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new BroadcastMessageAlertComposer(WibboEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", client.Langue) + "\r\n" + message + "\r\n- " + client.User.Username));
+        GameClientManager.SendMessage(new BroadcastMessageAlertComposer(LanguageManager.TryGetValue("hotelallert.notice", client.Language) + "\r\n" + message + "\r\n- " + client.User.Username));
         return true;
     }
 }

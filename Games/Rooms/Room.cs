@@ -6,11 +6,14 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Core;
+using WibboEmulator.Core.Settings;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.Chats.Logs;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Roleplays;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Rooms.Events;
 using WibboEmulator.Games.Rooms.Games;
@@ -33,9 +36,6 @@ public class Room : IDisposable
 
     private readonly TimeSpan _saveRoomTimer = TimeSpan.FromMinutes(2);
     private DateTime _saveRoomTimerLast = DateTime.Now;
-
-    private readonly Dictionary<int, double> _bans;
-    private readonly Dictionary<int, double> _mutes;
 
     public MoodlightData MoodlightData { get; set; }
     public RoomData RoomData { get; set; }
@@ -76,7 +76,7 @@ public class Room : IDisposable
     public int VotedYesCount { get; set; }
     public int VotedNoCount { get; set; }
 
-    public int UserCount => this.RoomUserManager.GetRoomUserCount();
+    public int UserCount => this.RoomUserManager.RoomUserCount;
 
     public event EventHandler<UserSaysEventArgs> OnUserSays;
     public event EventHandler<UserSaysEventArgs> OnCommandTarget;
@@ -88,15 +88,15 @@ public class Room : IDisposable
 
     public Room(RoomData data)
     {
-        var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(data.OwnerId);
+        var rpManager = RoleplayManager.GetRolePlay(data.OwnerId);
         if (rpManager != null)
         {
             this.RoomRoleplay = new RoomRoleplay(this);
         }
 
         this.Disposed = false;
-        this._bans = new Dictionary<int, double>();
-        this._mutes = new Dictionary<int, double>();
+        this.Bans = new Dictionary<int, double>();
+        this.Mutes = new Dictionary<int, double>();
         this.ActiveTrades = new List<Trade>();
         this.RoomData = data;
         this.IdleTime = 0;
@@ -118,14 +118,14 @@ public class Room : IDisposable
         this.TeamManager = new TeamManager();
         this.Soccer = new Soccer(this);
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         this.ChatlogManager.LoadRoomChatlogs(this.Id, dbClient);
 
         this.RoomItemHandling.LoadFurniture(dbClient);
-        if (this.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
+        if (this.RoomData.OwnerName == SettingsManager.GetData<string>("autogame.owner"))
         {
-            this.RoomItemHandling.LoadFurniture(dbClient, WibboEnvironment.GetSettings().GetData<int>("autogame.deco.room.id"));
+            this.RoomItemHandling.LoadFurniture(dbClient, SettingsManager.GetData<int>("autogame.deco.room.id"));
         }
 
         this.GameMap.GenerateMaps(true);
@@ -265,7 +265,7 @@ public class Room : IDisposable
 
     public void OnUserSay(RoomUser user, string message, bool shout)
     {
-        foreach (var roomUser in this.RoomUserManager.GetPets().ToList())
+        foreach (var roomUser in this.RoomUserManager.Pets.ToList())
         {
             if (shout)
             {
@@ -277,7 +277,7 @@ public class Room : IDisposable
             }
         }
 
-        foreach (var roomUser in this.RoomUserManager.GetBots().ToList())
+        foreach (var roomUser in this.RoomUserManager.Bots.ToList())
         {
             if (shout)
             {
@@ -356,7 +356,7 @@ public class Room : IDisposable
     {
         var packetList = new ServerPacketList();
 
-        foreach (var roomUser in this.RoomUserManager.GetUserList().ToList())
+        foreach (var roomUser in this.RoomUserManager.UserList.ToList())
         {
             if (roomUser == null)
             {
@@ -401,10 +401,10 @@ public class Room : IDisposable
             }
         }
 
-        packetList.Add(new UserUpdateComposer(this.RoomUserManager.GetUserList().ToList()));
-        packetList.Add(new ObjectsComposer(this.RoomItemHandling.GetFloor.ToArray(), this));
-        packetList.Add(new ObjectsComposer(this.RoomItemHandling.GetTempItems.ToArray(), this));
-        packetList.Add(new ItemWallComposer(this.RoomItemHandling.GetWall.ToArray(), this));
+        packetList.Add(new UserUpdateComposer(this.RoomUserManager.UserList.ToList()));
+        packetList.Add(new ObjectsComposer(this.RoomItemHandling.FloorItems.ToArray(), this));
+        packetList.Add(new ObjectsComposer(this.RoomItemHandling.TempItems.ToArray(), this));
+        packetList.Add(new ItemWallComposer(this.RoomItemHandling.WallItems.ToArray(), this));
 
         session.SendPacket(packetList);
         packetList.Clear();
@@ -442,7 +442,7 @@ public class Room : IDisposable
 
             if (this.IdleTime >= 60)
             {
-                WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
+                RoomManager.UnloadRoom(this);
 
                 return Task.CompletedTask;
             }
@@ -455,7 +455,7 @@ public class Room : IDisposable
             {
                 this._saveRoomTimerLast = timeStarted;
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                using var dbClient = DatabaseManager.Connection;
                 RoomDao.UpdateUsersNow(dbClient, this.Id, this.UserCount);
 
                 this.RoomItemHandling.SaveFurniture(dbClient);
@@ -472,7 +472,7 @@ public class Room : IDisposable
         catch (Exception ex)
         {
             ExceptionLogger.LogThreadException(ex.ToString(), "Room cycle task for room " + this.Id);
-            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
+            RoomManager.UnloadRoom(this);
         }
 
         return Task.CompletedTask;
@@ -490,7 +490,7 @@ public class Room : IDisposable
             return;
         }
 
-        var users = this.RoomUserManager.GetUserList().ToList();
+        var users = this.RoomUserManager.UserList.ToList();
         if (users == null)
         {
             return;
@@ -544,7 +544,7 @@ public class Room : IDisposable
             return;
         }
 
-        var users = this.RoomUserManager.GetUserList().ToList();
+        var users = this.RoomUserManager.UserList.ToList();
         if (users == null)
         {
             return;
@@ -578,12 +578,12 @@ public class Room : IDisposable
             return;
         }
 
-        this.BroadcastPacket(messages.GetBytes);
+        this.BroadcastPacket(messages.Bytes);
     }
 
     public void BroadcastPacket(byte[] packet)
     {
-        foreach (var user in this.RoomUserManager.GetUserList().ToList())
+        foreach (var user in this.RoomUserManager.UserList.ToList())
         {
             if (user == null || user.IsBot)
             {
@@ -621,7 +621,7 @@ public class Room : IDisposable
 
         this._cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(1));
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             RoomDao.UpdateUsersNow(dbClient, this.Id, 0);
 
@@ -630,10 +630,10 @@ public class Room : IDisposable
 
         this.RoomData.Tags.Clear();
         this.UsersWithRights.Clear();
-        this._bans.Clear();
+        this.Bans.Clear();
         this.ActiveTrades.Clear();
 
-        foreach (var roomItem in this.RoomItemHandling.GetWallAndFloor)
+        foreach (var roomItem in this.RoomItemHandling.WallAndFloorItems)
         {
             roomItem.Destroy();
         }
@@ -647,41 +647,41 @@ public class Room : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public Dictionary<int, double> GetBans() => this._bans;
+    public Dictionary<int, double> Bans { get; }
 
-    public bool UserIsBanned(int id) => this._bans.ContainsKey(id);
+    public bool UserIsBanned(int id) => this.Bans.ContainsKey(id);
 
-    public void RemoveBan(int id) => this._bans.Remove(id);
+    public void RemoveBan(int id) => this.Bans.Remove(id);
 
     public void AddBan(int id, int time)
     {
-        if (this._bans.ContainsKey(id))
+        if (this.Bans.ContainsKey(id))
         {
             return;
         }
 
-        this._bans.Add(id, WibboEnvironment.GetUnixTimestamp() + time);
+        this.Bans.Add(id, WibboEnvironment.GetUnixTimestamp() + time);
     }
 
-    public bool HasBanExpired(int id) => !this.UserIsBanned(id) || this._bans[id] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
+    public bool HasBanExpired(int id) => !this.UserIsBanned(id) || this.Bans[id] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
 
-    public Dictionary<int, double> GetMute() => this._mutes;
+    public Dictionary<int, double> Mutes { get; }
 
-    public bool UserIsMuted(int id) => this._mutes.ContainsKey(id);
+    public bool UserIsMuted(int id) => this.Mutes.ContainsKey(id);
 
-    public void RemoveMute(int id) => this._mutes.Remove(id);
+    public void RemoveMute(int id) => this.Mutes.Remove(id);
 
     public void AddMute(int id, int time)
     {
-        if (this._mutes.ContainsKey(id))
+        if (this.Mutes.ContainsKey(id))
         {
             this.RemoveMute(id);
         }
 
-        this._mutes.Add(id, WibboEnvironment.GetUnixTimestamp() + time);
+        this.Mutes.Add(id, WibboEnvironment.GetUnixTimestamp() + time);
     }
 
-    public bool HasMuteExpired(int id) => !this.UserIsMuted(id) || this._mutes[id] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
+    public bool HasMuteExpired(int id) => !this.UserIsMuted(id) || this.Mutes[id] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
 
     public bool HasActiveTrade(RoomUser user)
     {

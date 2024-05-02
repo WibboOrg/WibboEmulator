@@ -6,13 +6,13 @@ using WibboEmulator.Games.Rooms.Map.Movement;
 
 public class Soccer
 {
-    private Room _roomInstance;
+    private Room _room;
 
-    public Soccer(Room room) => this._roomInstance = room;
+    public Soccer(Room room) => this._room = room;
 
     public void HandleFootballGameItems(Point ballItemCoord)
     {
-        foreach (var roomItem in this._roomInstance.GameManager.GetItems(TeamType.Red).Values)
+        foreach (var roomItem in this._room.GameManager.GetItems(TeamType.Red).Values)
         {
             foreach (var threeDcoord in roomItem.GetAffectedTiles)
             {
@@ -23,7 +23,7 @@ public class Soccer
                 }
             }
         }
-        foreach (var roomItem in this._roomInstance.GameManager.GetItems(TeamType.Green).Values)
+        foreach (var roomItem in this._room.GameManager.GetItems(TeamType.Green).Values)
         {
             foreach (var threeDcoord in roomItem.GetAffectedTiles)
             {
@@ -34,7 +34,7 @@ public class Soccer
                 }
             }
         }
-        foreach (var roomItem in this._roomInstance.GameManager.GetItems(TeamType.Blue).Values)
+        foreach (var roomItem in this._room.GameManager.GetItems(TeamType.Blue).Values)
         {
             foreach (var threeDcoord in roomItem.GetAffectedTiles)
             {
@@ -45,7 +45,7 @@ public class Soccer
                 }
             }
         }
-        foreach (var roomItem in this._roomInstance.GameManager.GetItems(TeamType.Yellow).Values)
+        foreach (var roomItem in this._room.GameManager.GetItems(TeamType.Yellow).Values)
         {
             foreach (var threeDcoord in roomItem.GetAffectedTiles)
             {
@@ -60,9 +60,9 @@ public class Soccer
 
     private void AddPointToScoreCounters(TeamType team)
     {
-        foreach (var roomItem in this._roomInstance.GameManager.GetItems(team).Values)
+        foreach (var roomItem in this._room.GameManager.GetItems(team).Values)
         {
-            switch (roomItem.GetBaseItem().InteractionType)
+            switch (roomItem.ItemData.InteractionType)
             {
                 case InteractionType.FOOTBALL_COUNTER_BLUE:
                 case InteractionType.FOOTBALL_COUNTER_GREEN:
@@ -89,20 +89,20 @@ public class Soccer
             return;
         }
 
-        if (!user.AllowBall && shoot && !this._roomInstance.OldFoot)
+        if (!user.AllowBall && shoot && !this._room.OldFoot)
         {
             user.AllowBall = true;
             user.MoveWithBall = false;
             return;
         }
 
-        var roomItemForSquare = this._roomInstance.GameMap.GetCoordinatedItems(new Point(user.SetX, user.SetY));
+        var roomItemForSquare = this._room.GameMap.GetCoordinatedItems(new Point(user.SetX, user.SetY));
 
         var moveBall = false;
 
         foreach (var ball in roomItemForSquare)
         {
-            if (ball.GetBaseItem().InteractionType != InteractionType.FOOTBALL)
+            if (ball.ItemData.InteractionType != InteractionType.FOOTBALL)
             {
                 continue;
             }
@@ -159,7 +159,7 @@ public class Soccer
                     user.AllowBall = true;
                 }
 
-                if (ball.GetRoom().GameMap.CanStackItem(newPoint.X, newPoint.Y, true))
+                if (ball.Room.GameMap.CanStackItem(newPoint.X, newPoint.Y, true))
                 {
                     this.MoveBall(ball, newPoint.X, newPoint.Y);
                 }
@@ -191,11 +191,11 @@ public class Soccer
 
         item.UpdateState(false);
 
-        var z = this._roomInstance.GameMap.SqAbsoluteHeight(newX, newY);
-        this._roomInstance.RoomItemHandling.PositionReset(item, newX, newY, z);
+        var z = this._room.GameMap.SqAbsoluteHeight(newX, newY);
+        this._room.RoomItemHandling.PositionReset(item, newX, newY, z);
 
         this.HandleFootballGameItems(new Point(newX, newY));
     }
 
-    public void Destroy() => this._roomInstance = null;
+    public void Destroy() => this._room = null;
 }

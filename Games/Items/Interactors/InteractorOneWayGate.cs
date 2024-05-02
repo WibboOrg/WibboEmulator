@@ -16,7 +16,7 @@ public class InteractorOneWayGate : FurniInteractor
             return;
         }
 
-        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
+        var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
         roomUserByUserId?.UnlockWalking();
 
         item.InteractingUser = 0;
@@ -31,7 +31,7 @@ public class InteractorOneWayGate : FurniInteractor
             return;
         }
 
-        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
+        var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
         roomUserByUserId?.UnlockWalking();
 
         item.InteractingUser = 0;
@@ -39,12 +39,12 @@ public class InteractorOneWayGate : FurniInteractor
 
     public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (session == null || session.User == null || item == null || item.GetRoom() == null)
+        if (session == null || session.User == null || item == null || item.Room == null)
         {
             return;
         }
 
-        var roomUser = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var roomUser = item.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (roomUser == null)
         {
             return;
@@ -63,12 +63,12 @@ public class InteractorOneWayGate : FurniInteractor
                 return;
             }
 
-            if (!item.GetRoom().GameMap.CanWalk(item.SquareBehind.X, item.SquareBehind.Y, roomUser.AllowOverride))
+            if (!item.Room.GameMap.CanWalk(item.SquareBehind.X, item.SquareBehind.Y, roomUser.AllowOverride))
             {
                 return;
             }
 
-            var roomUserTarget = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
+            var roomUserTarget = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
             if (roomUserTarget != null)
             {
                 return;
@@ -94,7 +94,7 @@ public class InteractorOneWayGate : FurniInteractor
         RoomUser roomUserTarget = null;
         if (item.InteractingUser > 0)
         {
-            roomUserTarget = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
+            roomUserTarget = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
         }
 
         if (roomUserTarget == null)

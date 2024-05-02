@@ -44,7 +44,7 @@ internal static class CatalogItemUtility
             }
             else if (item.Data.InteractionType == InteractionType.BOT)//Bots
             {
-                if (!WibboEnvironment.GetGame().GetCatalog().TryGetBot(item.ItemId, out var catalogBot))
+                if (!CatalogManager.TryGetBot(item.ItemId, out var catalogBot))
                 {
                     message.WriteString("hd-180-7.ea-1406-62.ch-210-1321.hr-831-49.ca-1813-62.sh-295-1321.lg-285-92");
                 }

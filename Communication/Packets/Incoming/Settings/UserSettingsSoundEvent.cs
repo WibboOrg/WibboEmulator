@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Settings;
 
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
@@ -23,7 +24,7 @@ internal sealed class UserSettingsSoundEvent : IPacketEvent
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             UserDao.UpdateVolume(dbClient, session.User.Id, volume1, +volume2, +volume3);
         }

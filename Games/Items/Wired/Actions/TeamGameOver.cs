@@ -13,7 +13,7 @@ public class TeamGameOver : WiredActionBase, IWired, IWiredEffect
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        var managerForBanzai = this.RoomInstance.TeamManager;
+        var managerForBanzai = this.Room.TeamManager;
 
         var listTeam = new List<RoomUser>();
 
@@ -40,7 +40,7 @@ public class TeamGameOver : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        var exitTeleport = this.RoomInstance.GameItemHandler.GetExitTeleport();
+        var exitTeleport = this.Room.GameItemHandler.ExitTeleport;
 
         foreach (var teamuser in listTeam)
         {
@@ -50,7 +50,7 @@ public class TeamGameOver : WiredActionBase, IWired, IWiredEffect
             }
 
             managerForBanzai.OnUserLeave(teamuser);
-            this.RoomInstance.GameManager.UpdateGatesTeamCounts();
+            this.Room.GameManager.UpdateGatesTeamCounts();
             teamuser.ApplyEffect(0);
             teamuser.Team = TeamType.None;
 

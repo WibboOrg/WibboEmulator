@@ -14,7 +14,7 @@ public class BattleBanzai
 {
     public Dictionary<int, Item> BanzaiTiles { get; set; }
 
-    private Room _roomInstance;
+    private Room _room;
     private bool _banzaiStarted;
     private byte[,] _floorMap;
     private GameField _field;
@@ -24,7 +24,7 @@ public class BattleBanzai
     {
         this.BanzaiTiles = new Dictionary<int, Item>();
 
-        this._roomInstance = room;
+        this._room = room;
         this._banzaiStarted = false;
         this._tilesUsed = 0;
     }
@@ -48,11 +48,11 @@ public class BattleBanzai
             return;
         }
 
-        var roomItemForSquare = this._roomInstance.GameMap.GetCoordinatedItems(new Point(user.SetX, user.SetY));
+        var roomItemForSquare = this._room.GameMap.GetCoordinatedItems(new Point(user.SetX, user.SetY));
 
         foreach (var ball in roomItemForSquare)
         {
-            if (ball.GetBaseItem().InteractionType != InteractionType.BANZAI_PUCK)
+            if (ball.ItemData.InteractionType != InteractionType.BANZAI_PUCK)
             {
                 continue;
             }
@@ -97,7 +97,7 @@ public class BattleBanzai
                     break;
             }
 
-            if (!this._roomInstance.GameMap.CanStackItem(goalX, goalY))
+            if (!this._room.GameMap.CanStackItem(goalX, goalY))
             {
                 switch (user.RotBody)
                 {
@@ -149,14 +149,14 @@ public class BattleBanzai
 
         this._banzaiStarted = true;
 
-        this._roomInstance.GameItemHandler.ResetAllBlob();
-        this._roomInstance.GameManager.Reset();
-        this._floorMap = new byte[this._roomInstance.GameMap.Model.MapSizeY, this._roomInstance.GameMap.Model.MapSizeX];
+        this._room.GameItemHandler.ResetAllBlob();
+        this._room.GameManager.Reset();
+        this._floorMap = new byte[this._room.GameMap.Model.MapSizeY, this._room.GameMap.Model.MapSizeX];
         this._field = new GameField(this._floorMap, true);
 
         for (var index = 1; index < 5; ++index)
         {
-            this._roomInstance.GameManager.Points[index] = 0;
+            this._room.GameManager.Points[index] = 0;
         }
 
         foreach (Item roomItem in (IEnumerable)this.BanzaiTiles.Values)
@@ -186,9 +186,9 @@ public class BattleBanzai
             return;
         }
 
-        var winningTeam = this._roomInstance.GameManager.GetWinningTeam();
+        var winningTeam = this._room.GameManager.WinningTeam;
 
-        foreach (var user in this._roomInstance.TeamManager.GetAllPlayer())
+        foreach (var user in this._room.TeamManager.AllPlayers)
         {
             this.EndGame(user, winningTeam);
         }
@@ -198,7 +198,7 @@ public class BattleBanzai
     {
         if (roomUser.Team == winningTeam && winningTeam != TeamType.None)
         {
-            this._roomInstance.SendPacket(new ActionComposer(roomUser.VirtualId, 1));
+            this._room.SendPacket(new ActionComposer(roomUser.VirtualId, 1));
         }
         else if (roomUser.Team != TeamType.None)
         {
@@ -209,14 +209,14 @@ public class BattleBanzai
                 return;
             }
 
-            if (this._roomInstance.GameItemHandler.GetExitTeleport() != null)
+            if (this._room.GameItemHandler.ExitTeleport != null)
             {
-                GameMap.TeleportToItem(roomUser, this._roomInstance.GameItemHandler.GetExitTeleport());
+                GameMap.TeleportToItem(roomUser, this._room.GameItemHandler.ExitTeleport);
             }
 
-            var managerForBanzai = roomUser.Client.User.CurrentRoom.TeamManager;
+            var managerForBanzai = roomUser.Client.User.Room.TeamManager;
             managerForBanzai.OnUserLeave(roomUser);
-            this._roomInstance.GameManager.UpdateGatesTeamCounts();
+            this._room.GameManager.UpdateGatesTeamCounts();
             roomUser.ApplyEffect(0);
             roomUser.Team = TeamType.None;
 
@@ -226,7 +226,7 @@ public class BattleBanzai
 
     public void MovePuck(Item item, GameClient mover, int newX, int newY, TeamType team)
     {
-        if (item == null || mover == null || !this._roomInstance.GameMap.CanStackItem(newX, newY))
+        if (item == null || mover == null || !this._room.GameMap.CanStackItem(newX, newY))
         {
             return;
         }
@@ -235,10 +235,10 @@ public class BattleBanzai
         item.UpdateState();
 
         var oldZ = item.Z;
-        var newZ = (double)this._roomInstance.GameMap.SqAbsoluteHeight(newX, newY);
-        if (this._roomInstance.RoomItemHandling.SetFloorItem(item, newX, newY, newZ))
+        var newZ = (double)this._room.GameMap.SqAbsoluteHeight(newX, newY);
+        if (this._room.RoomItemHandling.SetFloorItem(item, newX, newY, newZ))
         {
-            this._roomInstance.SendPacket(new SlideObjectBundleComposer(item.Coordinate.X, item.Coordinate.Y, oldZ, newX, newY, newZ, item.Id));
+            this._room.SendPacket(new SlideObjectBundleComposer(item.Coordinate.X, item.Coordinate.Y, oldZ, newX, newY, newZ, item.Id));
         }
 
         if (!this._banzaiStarted)
@@ -246,7 +246,7 @@ public class BattleBanzai
             return;
         }
 
-        this.HandleBanzaiTiles(new Point(newX, newY), team, this._roomInstance.RoomUserManager.GetRoomUserByUserId(mover.User.Id));
+        this.HandleBanzaiTiles(new Point(newX, newY), team, this._room.RoomUserManager.GetRoomUserByUserId(mover.User.Id));
     }
 
     private void SetTile(Item item, TeamType team, RoomUser user)
@@ -258,12 +258,12 @@ public class BattleBanzai
                 ++item.Value;
                 if (item.Value == 3)
                 {
-                    this._roomInstance.GameManager.AddPointToTeam(item.Team, user);
+                    this._room.GameManager.AddPointToTeam(item.Team, user);
                     this._field.UpdateLocation(item.X, item.Y, (byte)team);
                     foreach (var pointField in this._field.DoUpdate())
                     {
                         var team1 = (TeamType)pointField.ForValue;
-                        foreach (var point in pointField.GetPoints())
+                        foreach (var point in pointField.Points)
                         {
                             if (this._floorMap[point.Y, point.X] == (byte)team1)
                             {
@@ -289,9 +289,9 @@ public class BattleBanzai
 
     private Item GetFirstTile(int x, int y)
     {
-        foreach (var roomItem in this._roomInstance.GameMap.GetCoordinatedItems(new Point(x, y)))
+        foreach (var roomItem in this._room.GameMap.GetCoordinatedItems(new Point(x, y)))
         {
-            if (roomItem.GetBaseItem().InteractionType == InteractionType.BANZAI_FLOOR)
+            if (roomItem.ItemData.InteractionType == InteractionType.BANZAI_FLOOR)
             {
                 return roomItem;
             }
@@ -347,8 +347,8 @@ public class BattleBanzai
         }
 
         SetMaxForTile(roomItem, team);
-        this._roomInstance.GameManager.AddPointToTeam(team, user);
-        this._roomInstance.GameManager.AddPointToTeam(oldteam, -1, user);
+        this._room.GameManager.AddPointToTeam(team, user);
+        this._room.GameManager.AddPointToTeam(oldteam, -1, user);
         roomItem.UpdateState(false);
     }
 
@@ -369,7 +369,7 @@ public class BattleBanzai
         this.BanzaiTiles.Clear();
         Array.Clear(this._floorMap, 0, this._floorMap.Length);
         this._field.Destroy();
-        this._roomInstance = null;
+        this._room = null;
         this.BanzaiTiles = null;
         this._floorMap = null;
         this._field = null;

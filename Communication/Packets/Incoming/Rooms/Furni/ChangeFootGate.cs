@@ -12,14 +12,14 @@ internal sealed class ChangeFootGate : IPacketEvent
         var gender = packet.PopString(1);
         var look = packet.PopString();
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null || !room.CheckRights(session, true))
         {
             return;
         }
 
         var item = room.RoomItemHandling.GetItem(id);
-        if (item == null || item.GetBaseItem().InteractionType != InteractionType.FOOTBALL_GATE)
+        if (item == null || item.ItemData.InteractionType != InteractionType.FOOTBALL_GATE)
         {
             return;
         }

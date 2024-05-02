@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Roleplays.Player;
 using System.Collections.Concurrent;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 
 public class RolePlayerManager
@@ -32,7 +33,7 @@ public class RolePlayerManager
 
         RolePlayer player = null;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             var rpUser = UserRoleplayDao.GetOne(dbClient, userId, this._id);
             if (rpUser == null)

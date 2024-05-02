@@ -6,7 +6,7 @@ internal sealed class AllAroundMe : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var users = room.RoomUserManager.GetRoomUsers();
+        var users = room.RoomUserManager.RoomUsers;
         foreach (var user in users.ToList())
         {
             if (user == null || session.User.Id == user.UserId)

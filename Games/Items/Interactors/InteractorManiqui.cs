@@ -1,8 +1,10 @@
-﻿namespace WibboEmulator.Games.Items.Interactors;
+namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Communication.Packets.Outgoing.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 public class InteractorManiqui : FurniInteractor
 {
@@ -39,13 +41,13 @@ public class InteractorManiqui : FurniInteractor
         var look = lookCode + item.ExtraData.Split(';')[1];
         session.User.Look = look;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             UserDao.UpdateLook(dbClient, session.User.Id, look);
         }
 
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }

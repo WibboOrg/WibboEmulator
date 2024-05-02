@@ -49,12 +49,15 @@ public class ServerPacket : IServerPacket
 
     public int Id { get; }
 
-    public byte[] GetBytes()
+    public byte[] Bytes
     {
-        var final = new List<byte>();
-        final.AddRange(BitConverter.GetBytes(this._body.Count));
-        final.Reverse();
-        final.AddRange(this._body);
-        return final.ToArray();
+        get
+        {
+            var final = new List<byte>();
+            final.AddRange(BitConverter.GetBytes(this._body.Count));
+            final.Reverse();
+            final.AddRange(this._body);
+            return final.ToArray();
+        }
     }
 }

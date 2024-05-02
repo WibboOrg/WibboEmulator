@@ -2,6 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Chats.Logs;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class GetModeratorRoomChatlogEvent : IPacketEvent
 {
@@ -17,7 +18,7 @@ internal sealed class GetModeratorRoomChatlogEvent : IPacketEvent
         _ = packet.PopInt(); //useless
         var roomId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out var room))
+        if (!RoomManager.TryGetRoom(roomId, out var room))
         {
             return;
         }

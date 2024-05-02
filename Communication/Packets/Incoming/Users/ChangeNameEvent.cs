@@ -3,10 +3,13 @@ using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class ChangeNameEvent : IPacketEvent
 {
@@ -19,7 +22,7 @@ internal sealed class ChangeNameEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -34,7 +37,7 @@ internal sealed class ChangeNameEvent : IPacketEvent
 
         if (!session.User.CanChangeName && session.User.Rank == 1)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.changename.error.1", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.changename.error.1", session.Language));
             return;
         }
 
@@ -46,11 +49,11 @@ internal sealed class ChangeNameEvent : IPacketEvent
 
         if (WibboEnvironment.NameAvailable(newUsername) != 1)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.changename.error.2", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.changename.error.2", session.Language));
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             RoomDao.UpdateOwner(dbClient, newUsername, session.User.Username);
 
@@ -59,7 +62,7 @@ internal sealed class ChangeNameEvent : IPacketEvent
             LogFlagmeDao.Insert(dbClient, session.User.Id, session.User.Username, newUsername);
         }
 
-        _ = WibboEnvironment.GetGame().GetGameClientManager().UpdateClientUsername(session.ConnectionID, session.User.Username, newUsername);
+        _ = GameClientManager.UpdateClientUsername(session.ConnectionID, session.User.Username, newUsername);
         _ = room.RoomUserManager.UpdateClientUsername(roomUser, session.User.Username, newUsername);
         session.User.Username = newUsername;
         session.User.CanChangeName = false;
@@ -69,12 +72,12 @@ internal sealed class ChangeNameEvent : IPacketEvent
 
         foreach (var roomId in session.User.UsersRooms)
         {
-            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out var roomOwner))
+            if (RoomManager.TryGetRoom(roomId, out var roomOwner))
             {
                 roomOwner.RoomData.OwnerName = newUsername;
             }
 
-            WibboEnvironment.GetGame().GetRoomManager().RoomDataRemove(roomId);
+            RoomManager.RoomDataRemove(roomId);
         }
 
         room.SendPacket(new UserNameChangeComposer(newUsername, roomUser.VirtualId));

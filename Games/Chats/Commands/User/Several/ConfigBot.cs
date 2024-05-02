@@ -1,5 +1,8 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Several;
+
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Bot;
+using WibboEmulator.Games.Effects;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -29,7 +32,7 @@ internal sealed class ConfigBot : IChatCommand
 
                 _ = int.TryParse(parameters[3], out var intValue);
 
-                if (!WibboEnvironment.GetGame().GetEffectManager().HasEffect(intValue, false))
+                if (!EffectManager.HasEffect(intValue, false))
                 {
                     return;
                 }
@@ -43,7 +46,7 @@ internal sealed class ConfigBot : IChatCommand
                 {
                     bot.BotData.Enable = intValue;
 
-                    using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                    using var dbClient = DatabaseManager.Connection;
                     BotUserDao.UpdateEnable(dbClient, bot.BotData.Id, intValue);
                 }
                 break;
@@ -66,7 +69,7 @@ internal sealed class ConfigBot : IChatCommand
                 {
                     bot.BotData.Handitem = intValue;
 
-                    using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                    using var dbClient = DatabaseManager.Connection;
                     BotUserDao.UpdateHanditem(dbClient, bot.BotData.Id, intValue);
                 }
                 break;
@@ -92,7 +95,7 @@ internal sealed class ConfigBot : IChatCommand
                 {
                     bot.BotData.Rot = intValue;
 
-                    using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                    using var dbClient = DatabaseManager.Connection;
                     BotUserDao.UpdateRotation(dbClient, bot.BotData.Id, bot.RotBody);
                 }
                 break;
@@ -107,7 +110,7 @@ internal sealed class ConfigBot : IChatCommand
                     bot.IsSit = false;
                     bot.UpdateNeeded = true;
 
-                    using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                    using var dbClient = DatabaseManager.Connection;
                     BotUserDao.UpdateStatus(dbClient, bot.BotData.Id, 0);
                 }
                 else
@@ -121,7 +124,7 @@ internal sealed class ConfigBot : IChatCommand
 
                     bot.BotData.Status = 1;
 
-                    using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                    using var dbClient = DatabaseManager.Connection;
                     BotUserDao.UpdateStatus(dbClient, bot.BotData.Id, 1);
                 }
                 break;
@@ -136,7 +139,7 @@ internal sealed class ConfigBot : IChatCommand
                     bot.IsSit = false;
                     bot.UpdateNeeded = true;
 
-                    using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                    using var dbClient = DatabaseManager.Connection;
                     BotUserDao.UpdateStatus(dbClient, bot.BotData.Id, 0);
                 }
                 else
@@ -150,7 +153,7 @@ internal sealed class ConfigBot : IChatCommand
 
                     bot.BotData.Status = 2;
 
-                    using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                    using var dbClient = DatabaseManager.Connection;
                     BotUserDao.UpdateStatus(dbClient, bot.BotData.Id, 2);
                 }
                 break;

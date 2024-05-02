@@ -3,6 +3,8 @@ using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Trading;
 using WibboEmulator.Core;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Games.Items;
 
@@ -43,10 +45,10 @@ public class Trade
 
         foreach (var tradeUser in this._users)
         {
-            if (!tradeUser.GetRoomUser().ContainStatus("trd"))
+            if (!tradeUser.RoomUser.ContainStatus("trd"))
             {
-                tradeUser.GetRoomUser().SetStatus("trd", "");
-                tradeUser.GetRoomUser().UpdateNeeded = true;
+                tradeUser.RoomUser.SetStatus("trd", "");
+                tradeUser.RoomUser.UpdateNeeded = true;
             }
         }
     }
@@ -79,7 +81,7 @@ public class Trade
     public void OfferItem(int userId, Item item, bool updateWindows = true)
     {
         var tradeUser = this.GetTradeUser(userId);
-        if (tradeUser == null || item == null || !item.GetBaseItem().AllowTrade || tradeUser.HasAccepted || this._tradeStage != 1)
+        if (tradeUser == null || item == null || !item.ItemData.AllowTrade || tradeUser.HasAccepted || this._tradeStage != 1)
         {
             return;
         }
@@ -194,12 +196,12 @@ public class Trade
         var tradeUserOne = this.GetTradeUser(this._oneId);
         var tradeUserTwo = this.GetTradeUser(this._twoId);
 
-        if (tradeUserOne.GetClient() == null || tradeUserTwo.GetClient() == null)
+        if (tradeUserOne.Client == null || tradeUserTwo.Client == null)
         {
             return;
         }
 
-        if (tradeUserOne.GetClient().User == null || tradeUserTwo.GetClient().User == null)
+        if (tradeUserOne.Client.User == null || tradeUserTwo.Client.User == null)
         {
             return;
         }
@@ -212,12 +214,12 @@ public class Trade
         var tradeUserOne = this.GetTradeUser(this._oneId);
         var tradeUserTwo = this.GetTradeUser(this._twoId);
 
-        if (tradeUserOne.GetClient() == null || tradeUserTwo.GetClient() == null)
+        if (tradeUserOne.Client == null || tradeUserTwo.Client == null)
         {
             return false;
         }
 
-        if (tradeUserOne.GetClient().User == null || tradeUserTwo.GetClient().User == null)
+        if (tradeUserOne.Client.User == null || tradeUserTwo.Client.User == null)
         {
             return false;
         }
@@ -227,43 +229,45 @@ public class Trade
 
         foreach (var userItem in userOneItems)
         {
-            if (tradeUserOne.GetClient().User.InventoryComponent.GetItem(userItem.Id) == null)
+            if (tradeUserOne.Client.User.InventoryComponent.GetItem(userItem.Id) == null)
             {
-                tradeUserOne.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserOne.GetClient().Langue));
-                tradeUserTwo.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserTwo.GetClient().Langue));
+                tradeUserOne.Client.SendNotification(LanguageManager.TryGetValue("trade.failed", tradeUserOne.Client.Language));
+                tradeUserTwo.Client.SendNotification(LanguageManager.TryGetValue("trade.failed", tradeUserTwo.Client.Language));
                 return false;
             }
         }
 
         foreach (var userItem in userTwoItems)
         {
-            if (tradeUserTwo.GetClient().User.InventoryComponent.GetItem(userItem.Id) == null)
+            if (tradeUserTwo.Client.User.InventoryComponent.GetItem(userItem.Id) == null)
             {
-                tradeUserOne.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserOne.GetClient().Langue));
-                tradeUserTwo.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserTwo.GetClient().Langue));
+                tradeUserOne.Client.SendNotification(LanguageManager.TryGetValue("trade.failed", tradeUserOne.Client.Language));
+                tradeUserTwo.Client.SendNotification(LanguageManager.TryGetValue("trade.failed", tradeUserTwo.Client.Language));
                 return false;
             }
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         foreach (var userItem in userOneItems)
         {
-            tradeUserOne.GetClient().User.InventoryComponent.RemoveItem(userItem.Id);
-            tradeUserTwo.GetClient().User.InventoryComponent.AddItem(dbClient, userItem);
+            tradeUserOne.Client.User.InventoryComponent.RemoveItem(userItem.Id);
+            tradeUserTwo.Client.User.InventoryComponent.AddItem(dbClient, userItem);
         }
 
         foreach (var userItem in userTwoItems)
         {
-            tradeUserTwo.GetClient().User.InventoryComponent.RemoveItem(userItem.Id);
-            tradeUserOne.GetClient().User.InventoryComponent.AddItem(dbClient, userItem);
+            tradeUserTwo.Client.User.InventoryComponent.RemoveItem(userItem.Id);
+            tradeUserOne.Client.User.InventoryComponent.AddItem(dbClient, userItem);
         }
 
-        tradeUserTwo.GetClient().SendPacket(new UnseenItemsComposer(userOneItems, UnseenItemsType.Furni));
-        tradeUserOne.GetClient().SendPacket(new UnseenItemsComposer(userTwoItems, UnseenItemsType.Furni));
+        tradeUserTwo.
+        Client.SendPacket(new UnseenItemsComposer(userOneItems, UnseenItemsType.Furni));
+        tradeUserOne.Client.SendPacket(new UnseenItemsComposer(userTwoItems, UnseenItemsType.Furni));
 
-        tradeUserOne.GetClient().SendPacket(new FurniListUpdateComposer());
-        tradeUserTwo.GetClient().SendPacket(new FurniListUpdateComposer());
+        tradeUserOne.
+        Client.SendPacket(new FurniListUpdateComposer());
+        tradeUserTwo.Client.SendPacket(new FurniListUpdateComposer());
 
         return true;
     }
@@ -275,25 +279,25 @@ public class Trade
 
         foreach (var userItem in this.GetTradeUser(this._oneId).OfferedItems)
         {
-            if (!itemsOneCounter.ContainsKey(userItem.GetBaseItem().ItemName))
+            if (!itemsOneCounter.ContainsKey(userItem.ItemData.ItemName))
             {
-                itemsOneCounter.Add(userItem.GetBaseItem().ItemName, 1);
+                itemsOneCounter.Add(userItem.ItemData.ItemName, 1);
             }
             else
             {
-                itemsOneCounter[userItem.GetBaseItem().ItemName]++;
+                itemsOneCounter[userItem.ItemData.ItemName]++;
             }
         }
 
         foreach (var userItem in this.GetTradeUser(this._twoId).OfferedItems)
         {
-            if (!itemsTwoCounter.ContainsKey(userItem.GetBaseItem().ItemName))
+            if (!itemsTwoCounter.ContainsKey(userItem.ItemData.ItemName))
             {
-                itemsTwoCounter.Add(userItem.GetBaseItem().ItemName, 1);
+                itemsTwoCounter.Add(userItem.ItemData.ItemName, 1);
             }
             else
             {
-                itemsTwoCounter[userItem.GetBaseItem().ItemName]++;
+                itemsTwoCounter[userItem.ItemData.ItemName]++;
             }
         }
 
@@ -313,7 +317,7 @@ public class Trade
 
         logsTwoString = logsTwoString.TrimEnd(',');
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         LogTradeDao.Insert(dbClient, this._oneId, this._twoId, logsOneString, logsTwoString, this._roomId);
     }
 
@@ -321,16 +325,16 @@ public class Trade
     {
         foreach (var tradeUser in this._users)
         {
-            if (tradeUser != null && tradeUser.GetRoomUser() != null)
+            if (tradeUser != null && tradeUser.RoomUser != null)
             {
-                tradeUser.GetRoomUser().RemoveStatus("trd");
-                tradeUser.GetRoomUser().UpdateNeeded = true;
+                tradeUser.RoomUser.RemoveStatus("trd");
+                tradeUser.RoomUser.UpdateNeeded = true;
             }
         }
 
         this.SendMessageToUsers(new TradingFinishComposer());
 
-        if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this._roomId, out var room))
+        if (RoomManager.TryGetRoom(this._roomId, out var room))
         {
             _ = room.ActiveTrades.Remove(this);
         }
@@ -340,10 +344,10 @@ public class Trade
     {
         foreach (var tradeUser in this._users)
         {
-            if (tradeUser != null && tradeUser.GetRoomUser() != null)
+            if (tradeUser != null && tradeUser.RoomUser != null)
             {
-                tradeUser.GetRoomUser().RemoveStatus("trd");
-                tradeUser.GetRoomUser().UpdateNeeded = true;
+                tradeUser.RoomUser.RemoveStatus("trd");
+                tradeUser.RoomUser.UpdateNeeded = true;
             }
         }
 
@@ -359,9 +363,9 @@ public class Trade
 
         foreach (var tradeUser in this._users)
         {
-            if (tradeUser != null && tradeUser.GetClient() != null)
+            if (tradeUser != null && tradeUser.Client != null)
             {
-                tradeUser.GetClient().SendPacket(message);
+                tradeUser.Client.SendPacket(message);
             }
         }
     }

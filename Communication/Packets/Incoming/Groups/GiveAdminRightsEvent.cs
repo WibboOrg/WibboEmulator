@@ -2,6 +2,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Groups;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class GiveAdminRightsEvent : IPacketEvent
 {
@@ -12,7 +14,7 @@ internal sealed class GiveAdminRightsEvent : IPacketEvent
         var groupId = packet.PopInt();
         var userId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
+        if (!GroupManager.TryGetGroup(groupId, out var group))
         {
             return;
         }
@@ -30,7 +32,7 @@ internal sealed class GiveAdminRightsEvent : IPacketEvent
 
         group.MakeAdmin(userId);
 
-        if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var room))
+        if (RoomManager.TryGetRoom(group.RoomId, out var room))
         {
             var userRooom = room.RoomUserManager.GetRoomUserByUserId(userId);
             if (userRooom != null)

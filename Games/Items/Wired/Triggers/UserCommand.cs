@@ -57,8 +57,8 @@ public class UserCommand : WiredTriggerBase, IWired
 
         e.Result = true;
 
-        var targetUser = this.RoomInstance.RoomUserManager.GetRoomUserByName(messageUserName);
-        targetUser ??= this.RoomInstance.RoomUserManager.GetBotOrPetByName(messageUserName);
+        var targetUser = this.Room.RoomUserManager.GetRoomUserByName(messageUserName);
+        targetUser ??= this.Room.RoomUserManager.GetBotOrPetByName(messageUserName);
 
         if (targetUser == null)
         {
@@ -75,14 +75,14 @@ public class UserCommand : WiredTriggerBase, IWired
             return;
         }
 
-        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, targetUser, null);
+        this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, targetUser, null);
     }
 
     public override void Dispose()
     {
         base.Dispose();
 
-        this.RoomInstance.OnCommandTarget -= this.OnUserSays;
+        this.Room.OnCommandTarget -= this.OnUserSays;
     }
 
     public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, this.StringParam);

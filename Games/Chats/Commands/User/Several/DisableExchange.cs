@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Several;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -9,12 +11,12 @@ internal sealed class DisableExchange : IChatCommand
         if (session.User.AcceptTrading)
         {
             session.User.AcceptTrading = false;
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.troc.true", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.troc.true", session.Language));
         }
         else
         {
             session.User.AcceptTrading = true;
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.troc.false", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.troc.false", session.Language));
         }
     }
 }

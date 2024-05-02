@@ -1,7 +1,28 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Administration;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
+using WibboEmulator.Communication.WebSocket;
+using WibboEmulator.Core.FigureData;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Core.Settings;
+using WibboEmulator.Database;
+using WibboEmulator.Games.Animations;
+using WibboEmulator.Games.Banners;
+using WibboEmulator.Games.Catalogs;
+using WibboEmulator.Games.Chats.Filter;
+using WibboEmulator.Games.Chats.Styles;
+using WibboEmulator.Games.Effects;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Items;
+using WibboEmulator.Games.LandingView;
+using WibboEmulator.Games.Loots;
+using WibboEmulator.Games.Moderations;
+using WibboEmulator.Games.Navigators;
+using WibboEmulator.Games.Permissions;
+using WibboEmulator.Games.Roleplays;
+using WibboEmulator.Games.Roleplays.Enemy;
+using WibboEmulator.Games.Roleplays.Item;
+using WibboEmulator.Games.Roleplays.Weapon;
 using WibboEmulator.Games.Rooms;
 
 internal sealed class Update : IChatCommand
@@ -20,12 +41,12 @@ internal sealed class Update : IChatCommand
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         switch (cmd.ToLower())
         {
             case "emuban":
             {
-                WibboEnvironment.GetWebSocketManager().ResetBan();
+                WebSocketManager.ResetBan();
                 session.SendWhisper("Réinitialisation des bannissements de l'émulateur");
                 break;
             }
@@ -34,13 +55,13 @@ internal sealed class Update : IChatCommand
             case "lv":
             case "vue":
             {
-                WibboEnvironment.GetGame().GetHotelView().Initialize(dbClient);
+                LandingViewManager.Initialize(dbClient);
                 session.SendWhisper("Vue et promotion mises à jour");
                 break;
             }
             case "hof":
             {
-                WibboEnvironment.GetGame().GetHallOFFame().Initialize(dbClient);
+                HallOfFameManager.Initialize(dbClient);
                 session.SendWhisper("Hof mises à jour");
                 break;
             }
@@ -48,86 +69,86 @@ internal sealed class Update : IChatCommand
             case "texte":
             case "locale":
             {
-                WibboEnvironment.GetLanguageManager().Initialize(dbClient);
+                LanguageManager.Initialize(dbClient);
                 session.SendWhisper("Local mis à jour");
                 break;
             }
             case "autogame":
             {
-                WibboEnvironment.GetGame().GetAnimationManager().Initialize(dbClient);
+                AnimationManager.Initialize(dbClient);
                 session.SendWhisper("Jeux automatique mis à jour");
                 break;
             }
             case "lootbox":
             {
-                WibboEnvironment.GetGame().GetLootManager().Initialize(dbClient);
+                LootManager.Initialize(dbClient);
                 session.SendWhisper("Lootbox mis à jour");
                 break;
             }
             case "rpitems":
             {
-                WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.Initialize(dbClient);
+                RPItemManager.Initialize(dbClient);
                 session.SendWhisper("RP Items mis à jour");
                 break;
             }
             case "rpweapon":
             {
-                WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.Initialize(dbClient);
+                RPWeaponManager.Initialize(dbClient);
                 session.SendWhisper("RP Weapon mis à jour");
                 break;
             }
             case "rpenemy":
             {
-                WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.Initialize(dbClient);
+                RPEnemyManager.Initialize(dbClient);
                 session.SendWhisper("RP Enemy mis à jour");
                 break;
             }
             case "cmd":
             case "commands":
             {
-                WibboEnvironment.GetGame().GetChatManager().GetCommands().Initialize(dbClient);
+                CommandManager.Initialize(dbClient);
                 session.SendWhisper("Commands mis à jour");
                 break;
             }
             case "chat":
             {
-                WibboEnvironment.GetGame().GetChatManager().GetChatStyles().Initialize(dbClient);
+                ChatStyleManager.Initialize(dbClient);
                 session.SendWhisper("Chat mis à jour");
                 break;
             }
             case "permission":
             {
-                WibboEnvironment.GetGame().GetPermissionManager().Initialize(dbClient);
+                PermissionManager.Initialize(dbClient);
                 session.SendWhisper("Permissions mises à jour !");
                 break;
             }
             case "effet":
             case "enable":
             {
-                WibboEnvironment.GetGame().GetEffectManager().Initialize(dbClient);
+                EffectManager.Initialize(dbClient);
                 session.SendWhisper("Effet mis à jour");
                 break;
             }
             case "rp":
             case "roleplay":
             {
-                WibboEnvironment.GetGame().GetRoleplayManager().Initialize(dbClient);
+                RoleplayManager.Initialize(dbClient);
                 session.SendWhisper("Role play mis à jour");
                 break;
             }
             case "moderation":
             {
-                WibboEnvironment.GetGame().GetModerationManager().Initialize(dbClient);
+                ModerationManager.Initialize(dbClient);
                 session.SendWhisper("Moderation mis à jour");
-                WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(new WhisperComposer(userRoom.VirtualId, "Les outils de modération viennent d'être mis à jour, reconnectez-vous!", 23));
+                GameClientManager.SendMessageStaff(new WhisperComposer(userRoom.VirtualId, "Les outils de modération viennent d'être mis à jour, reconnectez-vous!", 23));
                 break;
             }
             case "catalogue":
             case "cata":
             {
-                WibboEnvironment.GetGame().GetItemManager().Initialize(dbClient);
-                WibboEnvironment.GetGame().GetCatalog().Initialize(dbClient, WibboEnvironment.GetGame().GetItemManager());
-                WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new CatalogUpdatedComposer());
+                ItemManager.Initialize(dbClient);
+                CatalogManager.Initialize(dbClient);
+                GameClientManager.SendMessage(new CatalogUpdatedComposer());
                 session.SendWhisper("Catalogue mis à jour");
                 break;
             }
@@ -135,53 +156,53 @@ internal sealed class Update : IChatCommand
             case "navi":
             case "navigator":
             {
-                WibboEnvironment.GetGame().GetNavigator().Initialize(dbClient);
+                NavigatorManager.Initialize(dbClient);
                 session.SendWhisper("Navigateur mis à jour");
                 break;
             }
             case "filter":
             case "filtre":
             {
-                WibboEnvironment.GetGame().GetChatManager().GetFilter().Initialize(dbClient);
+                WordFilterManager.Initialize(dbClient);
                 session.SendWhisper("Filtre mis à jour");
                 break;
             }
             case "items":
             case "furni":
             {
-                WibboEnvironment.GetGame().GetItemManager().Initialize(dbClient);
+                ItemManager.Initialize(dbClient);
                 session.SendWhisper("Items mis à jour");
                 break;
             }
             case "model":
             {
-                WibboEnvironment.GetGame().GetRoomManager().Initialize(dbClient);
+                RoomManager.Initialize(dbClient);
                 session.SendWhisper("Model mis à jour");
                 break;
             }
             case "mutant":
             case "figure":
             {
-                WibboEnvironment.GetFigureManager().Initialize();
+                FigureDataManager.Initialize();
                 session.SendWhisper("Mutant/Figure mises à jour");
                 break;
             }
             case "setting":
             case "settings":
             {
-                WibboEnvironment.GetSettings().Initialize(dbClient);
+                SettingsManager.Initialize(dbClient);
                 session.SendWhisper("Paramètre mises à jour");
                 break;
             }
             case "banner":
             {
-                WibboEnvironment.GetGame().GetBannerManager().Initialize(dbClient);
+                BannerManager.Initialize(dbClient);
                 session.SendWhisper("Bannière mises à jour");
                 break;
             }
             default:
             {
-                session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.notfound", session.Langue));
+                session.SendWhisper(LanguageManager.TryGetValue("cmd.notfound", session.Language));
                 return;
             }
         }

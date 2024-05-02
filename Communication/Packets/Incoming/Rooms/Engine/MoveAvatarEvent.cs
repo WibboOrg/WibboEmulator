@@ -7,7 +7,7 @@ internal sealed class MoveAvatarEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null)
         {
             return;

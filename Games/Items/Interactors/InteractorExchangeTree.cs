@@ -1,6 +1,8 @@
 namespace WibboEmulator.Games.Items.Interactors;
 
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
@@ -22,14 +24,14 @@ public class InteractorExchangeTree : FurniInteractor
             return;
         }
 
-        var room = item.GetRoom();
+        var room = item.Room;
 
         if (room == null || !room.CheckRights(session, true))
         {
             return;
         }
 
-        var roomUser = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var roomUser = item.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
 
         if (roomUser == null)
         {
@@ -61,7 +63,7 @@ public class InteractorExchangeTree : FurniInteractor
 
         if (timeLeft.TotalSeconds > 0)
         {
-            roomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("tree.exchange.timeout", session.Langue), timeLeft.Days, timeLeft.Hours, timeLeft.Minutes));
+            roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("tree.exchange.timeout", session.Language), timeLeft.Days, timeLeft.Hours, timeLeft.Minutes));
         }
         else if (timeLeft.TotalSeconds <= 0)
         {
@@ -84,7 +86,7 @@ public class InteractorExchangeTree : FurniInteractor
                     break;
             }
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+            using var dbClient = DatabaseManager.Connection;
             ItemDao.DeleteById(dbClient, item.Id);
 
             room.RoomItemHandling.RemoveFurniture(null, item.Id);
@@ -94,7 +96,7 @@ public class InteractorExchangeTree : FurniInteractor
 
             UserDao.UpdateAddPoints(dbClient, session.User.Id, rewards);
 
-            roomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("tree.exchange.convert", session.Langue), rewards));
+            roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("tree.exchange.convert", session.Language), rewards));
         }
     }
 

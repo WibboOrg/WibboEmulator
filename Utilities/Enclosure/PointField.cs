@@ -22,7 +22,7 @@ public class PointField
         this.ForValue = forValue;
     }
 
-    public List<Point> GetPoints() => this._pointList;
+    public List<Point> Points => this._pointList;
 
     public void Add(Point p)
     {

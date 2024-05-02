@@ -19,7 +19,7 @@ public class FurniNotStuffIs : WiredConditionBase, IWiredCondition, IWired
 
         foreach (var roomItem in this.Items.ToList())
         {
-            if (roomItem.BaseItem == item.BaseItem && roomItem.ExtraData == item.ExtraData)
+            if (roomItem.BaseItemId == item.BaseItemId && roomItem.ExtraData == item.ExtraData)
             {
                 return false;
             }

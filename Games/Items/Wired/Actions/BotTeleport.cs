@@ -4,6 +4,7 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map;
+using WibboEmulator.Utilities;
 
 public class BotTeleport : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
 {
@@ -20,7 +21,7 @@ public class BotTeleport : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
             return false;
         }
 
-        var bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName(this.StringParam);
+        var bot = this.Room.RoomUserManager.GetBotOrPetByName(this.StringParam);
         if (bot == null)
         {
             return false;
@@ -35,7 +36,7 @@ public class BotTeleport : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
             return true;
         }
 
-        var roomItem = this.Items[WibboEnvironment.GetRandomNumber(0, this.Items.Count - 1)];
+        var roomItem = this.Items.GetRandomElement();
         if (roomItem == null)
         {
             return false;
@@ -63,7 +64,7 @@ public class BotTeleport : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
             return;
         }
 
-        var bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName(this.StringParam);
+        var bot = this.Room.RoomUserManager.GetBotOrPetByName(this.StringParam);
         if (bot == null)
         {
             return;

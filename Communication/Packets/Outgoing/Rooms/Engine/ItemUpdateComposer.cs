@@ -9,9 +9,9 @@ internal sealed class ItemUpdateComposer : ServerPacket
     private void WriteWallItem(Item item, int userId)
     {
         this.WriteString(item.Id.ToString());
-        this.WriteInteger(item.GetBaseItem().SpriteId);
+        this.WriteInteger(item.ItemData.SpriteId);
         this.WriteString(item.WallCoord);
-        switch (item.GetBaseItem().InteractionType)
+        switch (item.ItemData.InteractionType)
         {
             case InteractionType.POSTIT:
                 this.WriteString(item.ExtraData.Split(' ')[0]);
@@ -22,7 +22,7 @@ internal sealed class ItemUpdateComposer : ServerPacket
                 break;
         }
         this.WriteInteger(-1);
-        this.WriteInteger((item.GetBaseItem().Modes > 1) ? 1 : 0);
+        this.WriteInteger((item.ItemData.Modes > 1) ? 1 : 0);
         this.WriteInteger(userId);
         this.WriteString("");
     }

@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Administration;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -26,7 +27,7 @@ internal sealed class ForceTransf : IChatCommand
             return;
         }
 
-        if (clientByUsername.User.SpectatorMode)
+        if (clientByUsername.User.IsSpectator)
         {
             return;
         }
@@ -56,11 +57,11 @@ internal sealed class ForceTransf : IChatCommand
 
         if (!roomUserByUserId.SetPetTransformation(parameters[2], raceId))
         {
-            session.SendHugeNotif(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.transf.help", session.Langue));
+            session.SendHugeNotification(LanguageManager.TryGetValue("cmd.transf.help", session.Language));
             return;
         }
 
-        roomUserByUserId.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.transf.helpstop", session.Langue));
+        roomUserByUserId.SendWhisperChat(LanguageManager.TryGetValue("cmd.transf.helpstop", session.Language));
 
         roomUserByUserId.IsTransf = true;
 

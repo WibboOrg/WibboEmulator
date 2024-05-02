@@ -2,32 +2,26 @@ namespace WibboEmulator.Games.Effects;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
 
-public class EffectManager
+public static class EffectManager
 {
-    private Dictionary<int, bool> Effects { get; }
+    private static Dictionary<int, bool> Effects { get; } = new();
 
-    public EffectManager() => this.Effects = new Dictionary<int, bool>();
-
-    public void Initialize(IDbConnection dbClient)
+    public static void Initialize(IDbConnection dbClient)
     {
-        this.Effects.Clear();
+        Effects.Clear();
 
         var emulatorEffectList = EmulatorEffectDao.GetAll(dbClient);
-        if (emulatorEffectList.Count == 0)
-        {
-            return;
-        }
 
         foreach (var emulatorEffect in emulatorEffectList)
         {
             var effectId = emulatorEffect.Id;
 
-            if (!this.Effects.ContainsKey(effectId))
+            if (!Effects.ContainsKey(effectId))
             {
-                this.Effects.Add(effectId, emulatorEffect.OnlyStaff);
+                Effects.Add(effectId, emulatorEffect.OnlyStaff);
             }
         }
     }
 
-    public bool HasEffect(int effectId, bool isStaff = false) => this.Effects.TryGetValue(effectId, out var onlyStaff) && (!onlyStaff || isStaff);
+    public static bool HasEffect(int effectId, bool isStaff = false) => Effects.TryGetValue(effectId, out var onlyStaff) && (!onlyStaff || isStaff);
 }

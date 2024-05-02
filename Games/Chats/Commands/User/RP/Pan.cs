@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.RP;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map.Movement;
@@ -30,13 +32,13 @@ internal sealed class Pan : IChatCommand
 
         if (rp.Munition <= 0)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("rp.munitionnotfound", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("rp.munitionnotfound", session.Language));
             return;
         }
 
         if (rp.GunLoad <= 0)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("rp.reloadweapon", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("rp.reloadweapon", session.Language));
             return;
         }
 

@@ -2,8 +2,12 @@ namespace WibboEmulator.Core;
 using System.Diagnostics;
 using WibboEmulator.Database.Daos.Emulator;
 using System.Data;
+using WibboEmulator.Database;
+using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Animations;
 
-public class ServerStatusUpdater
+public static class ServerStatusUpdater
 {
     private static int _userPeak;
     private static bool _isExecuted;
@@ -28,20 +32,20 @@ public class ServerStatusUpdater
             _lowPriorityProcessWatch.Restart();
             try
             {
-                var usersOnline = WibboEnvironment.GetGame().GetGameClientManager().Count;
+                var usersOnline = GameClientManager.Count;
 
-                WibboEnvironment.GetGame().GetAnimationManager().OnUpdateUsersOnline(usersOnline);
+                AnimationManager.OnUpdateUsersOnline(usersOnline);
 
                 if (usersOnline > _userPeak)
                 {
                     _userPeak = usersOnline;
                 }
 
-                var roomsLoaded = WibboEnvironment.GetGame().GetRoomManager().Count;
+                var roomsLoaded = RoomManager.Count;
 
                 var uptime = DateTime.Now - WibboEnvironment.ServerStarted;
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                using var dbClient = DatabaseManager.Connection;
                 EmulatorStatsDao.Insert(dbClient, usersOnline, roomsLoaded);
                 EmulatorStatusDao.UpdateScore(dbClient, usersOnline, roomsLoaded, _userPeak);
             }

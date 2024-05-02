@@ -12,7 +12,7 @@ public class GiveScoreTeam : WiredActionBase, IWiredEffect, IWired
     public GiveScoreTeam(Item item, Room room) : base(item, room, (int)WiredActionType.GIVE_SCORE_TO_PREDEFINED_TEAM)
     {
         this._currentGameCount = 0;
-        this.RoomInstance.GameManager.OnGameStart += this.OnGameStart;
+        this.Room.GameManager.OnGameStart += this.OnGameStart;
 
         this.DefaultIntParams(new int[] { 1, 1, (int)TeamType.Red });
     }
@@ -31,7 +31,7 @@ public class GiveScoreTeam : WiredActionBase, IWiredEffect, IWired
         }
 
         this._currentGameCount++;
-        this.RoomInstance.GameManager.AddPointToTeam(team, scoreToGive, user);
+        this.Room.GameManager.AddPointToTeam(team, scoreToGive, user);
 
         return false;
     }
@@ -40,7 +40,7 @@ public class GiveScoreTeam : WiredActionBase, IWiredEffect, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.GameManager.OnGameStart -= this.OnGameStart;
+        this.Room.GameManager.OnGameStart -= this.OnGameStart;
     }
 
     public void SaveToDatabase(IDbConnection dbClient)

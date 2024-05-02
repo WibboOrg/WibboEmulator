@@ -2,5 +2,5 @@
 
 public interface IServerPacket
 {
-    byte[] GetBytes();
+    byte[] Bytes { get; }
 }

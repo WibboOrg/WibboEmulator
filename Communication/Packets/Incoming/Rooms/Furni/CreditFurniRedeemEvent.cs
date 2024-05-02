@@ -2,10 +2,12 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class CreditFurniRedeemEvent : IPacketEvent
 {
@@ -18,7 +20,7 @@ internal sealed class CreditFurniRedeemEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -41,31 +43,31 @@ internal sealed class CreditFurniRedeemEvent : IPacketEvent
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         ItemDao.DeleteById(dbClient, exchange.Id);
 
         room.RoomItemHandling.RemoveFurniture(null, exchange.Id);
 
-        if (!int.TryParse(exchange.GetBaseItem().ItemName.Split('_')[1], out var value))
+        if (!int.TryParse(exchange.ItemData.ItemName.Split('_')[1], out var value))
         {
             return;
         }
 
         if (value > 0)
         {
-            if (exchange.GetBaseItem().ItemName.StartsWith("CF_") || exchange.GetBaseItem().ItemName.StartsWith("CFC_"))
+            if (exchange.ItemData.ItemName.StartsWith("CF_") || exchange.ItemData.ItemName.StartsWith("CFC_"))
             {
                 session.User.Credits += value;
                 session.SendPacket(new CreditBalanceComposer(session.User.Credits));
             }
-            else if (exchange.GetBaseItem().ItemName.StartsWith("PntEx_"))
+            else if (exchange.ItemData.ItemName.StartsWith("PntEx_"))
             {
                 session.User.WibboPoints += value;
                 session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
 
                 UserDao.UpdateAddPoints(dbClient, session.User.Id, value);
             }
-            else if (exchange.GetBaseItem().ItemName.StartsWith("WwnEx_"))
+            else if (exchange.ItemData.ItemName.StartsWith("WwnEx_"))
             {
                 UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, value);
 

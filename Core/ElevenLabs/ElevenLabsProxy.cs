@@ -5,27 +5,21 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-public class ElevenLabsProxy : IDisposable
+public static class ElevenLabsProxy
 {
     private const string BASE_URL = "https://api.elevenlabs.io/v1/";
-    private readonly HttpClient _apiClient;
-    private DateTime _lastRequestAudio;
-    private bool _waitedAudioAPI;
-
-    public ElevenLabsProxy(string apiKey)
+    private static readonly HttpClient ApiClient = new()
     {
-        this._apiClient = new()
-        {
-            Timeout = TimeSpan.FromSeconds(10)
-        };
-        this._apiClient.DefaultRequestHeaders.Add("xi-api-key", apiKey);
+        Timeout = TimeSpan.FromSeconds(10)
+    };
+    private static DateTime _lastRequestAudio = DateTime.Now;
+    private static bool _waitedAudioAPI;
 
-        this._lastRequestAudio = DateTime.Now;
-    }
+    public static void Initialize(string apiKey) => ApiClient.DefaultRequestHeaders.Add("xi-api-key", apiKey);
 
-    public async Task<byte[]> TextToSpeech(string modelId, string text)
+    public static async Task<byte[]> TextToSpeech(string modelId, string text)
     {
-        if (this.IsReadyToSendAudio() == false)
+        if (!IsReadyToSendAudio)
         {
             return null;
         }
@@ -39,10 +33,10 @@ public class ElevenLabsProxy : IDisposable
             };
             var requestJson = JsonConvert.SerializeObject(request);
             var requestContent = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
-            var httpResponseMessage = await this._apiClient.PostAsync(BASE_URL + "text-to-speech/" + modelId, requestContent);
+            var httpResponseMessage = await ApiClient.PostAsync(BASE_URL + "text-to-speech/" + modelId, requestContent);
 
-            this._lastRequestAudio = DateTime.Now;
-            this._waitedAudioAPI = false;
+            _lastRequestAudio = DateTime.Now;
+            _waitedAudioAPI = false;
 
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
@@ -58,19 +52,16 @@ public class ElevenLabsProxy : IDisposable
             ExceptionLogger.LogException(ex.ToString());
         }
 
-        this._waitedAudioAPI = false;
+        _waitedAudioAPI = false;
         return null;
     }
-    public bool IsReadyToSendAudio()
-    {
-        var timespan = DateTime.Now - this._lastRequestAudio;
-        return timespan.TotalSeconds > 3 && !this._waitedAudioAPI;
-    }
 
-    public void Dispose()
+    public static bool IsReadyToSendAudio
     {
-        this._apiClient.Dispose();
-
-        GC.SuppressFinalize(this);
+        get
+        {
+            var timespan = DateTime.Now - _lastRequestAudio;
+            return timespan.TotalSeconds > 3 && !_waitedAudioAPI;
+        }
     }
 }
