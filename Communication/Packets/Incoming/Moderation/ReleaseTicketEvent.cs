@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Moderations;
 
 internal sealed class ReleaseTicketEvent : IPacketEvent
 {
@@ -15,7 +16,7 @@ internal sealed class ReleaseTicketEvent : IPacketEvent
         var num = packet.PopInt();
         for (var index = 0; index < num; ++index)
         {
-            WibboEnvironment.GetGame().GetModerationManager().ReleaseTicket(session, packet.PopInt());
+            ModerationManager.ReleaseTicket(session, packet.PopInt());
         }
     }
 }

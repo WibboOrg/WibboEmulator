@@ -1,8 +1,10 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Users;
 
 internal sealed class GetGroupMembersEvent : IPacketEvent
@@ -21,7 +23,7 @@ internal sealed class GetGroupMembersEvent : IPacketEvent
         var searchVal = packet.PopString(16);
         var requestType = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
+        if (!GroupManager.TryGetGroup(groupId, out var group))
         {
             return;
         }
@@ -117,7 +119,7 @@ internal sealed class GetGroupMembersEvent : IPacketEvent
 
     private static List<int> GetSearchRequests(int groupeId, string searchVal)
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         var membersId = GuildRequestDao.GetAllBySearch(dbClient, groupeId, searchVal);
 
         return membersId;
@@ -125,7 +127,7 @@ internal sealed class GetGroupMembersEvent : IPacketEvent
 
     private static List<int> GetSearchAdmins(int groupeId, string searchVal)
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         var membersId = GuildMembershipDao.GetAllUserIdBySearchAndStaff(dbClient, groupeId, searchVal);
 
         return membersId;
@@ -133,7 +135,7 @@ internal sealed class GetGroupMembersEvent : IPacketEvent
 
     private static List<int> GetSearchMembres(int groupeId, string searchVal)
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         var membersId = GuildMembershipDao.GetAllUserIdBySearch(dbClient, groupeId, searchVal);
 
         return membersId;

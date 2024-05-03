@@ -71,7 +71,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "rpminute":
             case "winusermoney":
             case "notwinusermoney":
-                if (this.RoomInstance.IsRoleplay)
+                if (this.Room.IsRoleplay)
                 {
                     return;
                 }
@@ -210,27 +210,27 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
         var result = false;
         if (user != null)
         {
-            result = UserCommand(user, this.RoomInstance, effect, value);
+            result = UserCommand(user, this.Room, effect, value);
         }
 
         if (result == false)
         {
-            result = RoomCommand(this.RoomInstance, effect, value);
+            result = RoomCommand(this.Room, effect, value);
         }
 
         if (result == false)
         {
-            result = RpUserCommand(this.RoomInstance, user, effect, value);
+            result = RpUserCommand(this.Room, user, effect, value);
         }
 
         if (result == false)
         {
-            result = RpGlobalCommand(this.RoomInstance, effect, value);
+            result = RpGlobalCommand(this.Room, effect, value);
         }
 
         if (result == false && item != null)
         {
-            result = ItemCommand(this.RoomInstance, item, user, effect, value);
+            result = ItemCommand(this.Room, item, user, effect, value);
         }
 
         if (effect.Contains("not"))
@@ -608,7 +608,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 result = true;
 
-                foreach (var userSearch in room.RoomUserManager.GetRoomUsers())
+                foreach (var userSearch in room.RoomUserManager.RoomUsers)
                 {
                     if (userSearch == null)
                     {
@@ -799,7 +799,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                 var teamManager = room.TeamManager;
 
                 _ = int.TryParse(value, out var count);
-                if (teamManager.GetAllPlayer().Count == count)
+                if (teamManager.AllPlayers.Count == count)
                 {
                     result = true;
                 }
@@ -870,13 +870,13 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "classement":
             case "notclassement":
             {
-                var itemHighScore = room.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
                 }
 
-                if (itemHighScore.Scores.TryGetValue(user.GetUsername(), out var score))
+                if (itemHighScore.Scores.TryGetValue(user.Username, out var score))
                 {
                     result = true;
                 }
@@ -888,13 +888,13 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 _ = int.TryParse(value, out var valueInt);
 
-                var itemHighScore = room.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
                 }
 
-                var postClassement = itemHighScore.Scores.Keys.ToList().IndexOf(user.GetUsername()) + 1;
+                var postClassement = itemHighScore.Scores.Keys.ToList().IndexOf(user.Username) + 1;
 
                 if (postClassement == valueInt)
                 {
@@ -905,7 +905,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "ptsclassementplus":
             {
-                var itemHighScore = room.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
@@ -913,7 +913,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
 
                 _ = int.TryParse(value, out var valueInt);
 
-                if (itemHighScore.Scores.TryGetValue(user.GetUsername(), out var score) && score > valueInt)
+                if (itemHighScore.Scores.TryGetValue(user.Username, out var score) && score > valueInt)
                 {
                     result = true;
                 }
@@ -922,7 +922,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "ptsclassementmoins":
             {
-                var itemHighScore = room.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
@@ -930,7 +930,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
 
                 _ = int.TryParse(value, out var valueInt);
 
-                if (itemHighScore.Scores.TryGetValue(user.GetUsername(), out var score) && score < valueInt)
+                if (itemHighScore.Scores.TryGetValue(user.Username, out var score) && score < valueInt)
                 {
                     result = true;
                 }
@@ -940,14 +940,14 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "ptsclassement":
             case "notptsclassement":
             {
-                var itemHighScore = room.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
                 }
                 _ = int.TryParse(value, out var valueInt);
 
-                if (itemHighScore.Scores.TryGetValue(user.GetUsername(), out var score) && score == valueInt)
+                if (itemHighScore.Scores.TryGetValue(user.Username, out var score) && score == valueInt)
                 {
                     result = true;
                 }
@@ -957,13 +957,13 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "winclassement":
             case "notwinclassement":
             {
-                var itemHighScore = room.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
                 }
 
-                var firstScore = itemHighScore.Scores.Keys.FirstOrDefault(x => x == user.GetUsername());
+                var firstScore = itemHighScore.Scores.Keys.FirstOrDefault(x => x == user.Username);
 
                 if (firstScore == null)
                 {
@@ -977,7 +977,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 result = true;
 
-                foreach (var userSearch in room.RoomUserManager.GetRoomUsers())
+                foreach (var userSearch in room.RoomUserManager.RoomUsers)
                 {
                     if (userSearch == null)
                     {
@@ -1090,7 +1090,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                var winningTeam = room.GameManager.GetWinningTeam();
+                var winningTeam = room.GameManager.WinningTeam;
                 if (user.Team == winningTeam)
                 {
                     result = true;
@@ -1275,7 +1275,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "username":
             case "notusername":
             {
-                if (user.GetUsername().ToLower() == value.ToLower())
+                if (user.Username.ToLower() == value.ToLower())
                 {
                     result = true;
                 }

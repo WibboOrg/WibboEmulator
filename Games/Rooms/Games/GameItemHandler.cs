@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Rooms.Games;
 using System.Drawing;
+using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
 
 public class GameItemHandler
@@ -8,16 +9,15 @@ public class GameItemHandler
     private Dictionary<int, Item> _banzaiPyramids;
     private readonly Dictionary<Point, List<Item>> _groupGate;
     private readonly Dictionary<int, Item> _banzaiBlobs;
-    private Room _roomInstance;
-    private Item _exitTeleport;
+    private Room _room;
 
     public GameItemHandler(Room room)
     {
-        this._roomInstance = room;
-        this._banzaiPyramids = new Dictionary<int, Item>();
-        this._banzaiTeleports = new Dictionary<int, Item>();
-        this._groupGate = new Dictionary<Point, List<Item>>();
-        this._banzaiBlobs = new Dictionary<int, Item>();
+        this._room = room;
+        this._banzaiPyramids = [];
+        this._banzaiTeleports = [];
+        this._groupGate = [];
+        this._banzaiBlobs = [];
     }
 
     public void OnCycle() => this.CyclePyramids();
@@ -46,13 +46,13 @@ public class GameItemHandler
                 {
                     roomItem.ExtraData = "1";
                     roomItem.UpdateState();
-                    this._roomInstance.GameMap.UpdateMapForItem(roomItem);
+                    this._room.GameMap.UpdateMapForItem(roomItem);
                 }
-                else if (this._roomInstance.GameMap.CanStackItem(roomItem.X, roomItem.Y))
+                else if (this._room.GameMap.CanStackItem(roomItem.X, roomItem.Y))
                 {
                     roomItem.ExtraData = "0";
                     roomItem.UpdateState();
-                    this._roomInstance.GameMap.UpdateMapForItem(roomItem);
+                    this._room.GameMap.UpdateMapForItem(roomItem);
                 }
             }
         }
@@ -75,16 +75,16 @@ public class GameItemHandler
 
     public void RemoveBlob(int itemID) => this._banzaiBlobs.Remove(itemID);
 
-    public Item GetExitTeleport() => this._exitTeleport;
+    public Item ExitTeleport { get; private set; }
 
-    public void AddExitTeleport(Item item) => this._exitTeleport = item;
+    public void AddExitTeleport(Item item) => this.ExitTeleport = item;
 
     public void RemoveExitTeleport(Item item)
     {
-        var exitTeleport = this._exitTeleport;
+        var exitTeleport = this.ExitTeleport;
         if (exitTeleport != null && item.Id == exitTeleport.Id)
         {
-            this._exitTeleport = null;
+            this.ExitTeleport = null;
         }
     }
 
@@ -107,7 +107,7 @@ public class GameItemHandler
             return;
         }
 
-        this._roomInstance.
+        this._room.
         GameManager.AddPointToTeam(user.Team, user);
         item.ExtraData = "1";
         item.UpdateState();
@@ -120,7 +120,7 @@ public class GameItemHandler
             return;
         }
 
-        this._roomInstance.
+        this._room.
         GameManager.AddPointToTeam(user.Team, 5, user);
         item.ExtraData = "1";
         item.UpdateState();
@@ -148,7 +148,7 @@ public class GameItemHandler
         }
         else
         {
-            this._groupGate.Add(item.Coordinate, new List<Item>() { item });
+            this._groupGate.Add(item.Coordinate, [item]);
         }
     }
 
@@ -205,7 +205,7 @@ public class GameItemHandler
             return false;
         }
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(item.GroupId, out var group))
+        if (!GroupManager.TryGetGroup(item.GroupId, out var group))
         {
             return true;
         }
@@ -271,6 +271,6 @@ public class GameItemHandler
 
         this._banzaiPyramids = null;
         this._banzaiTeleports = null;
-        this._roomInstance = null;
+        this._room = null;
     }
 }

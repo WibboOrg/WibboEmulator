@@ -1,5 +1,8 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Gestion;
 
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
+using WibboEmulator.Games.Banners;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -12,10 +15,10 @@ internal sealed class RemoveBanner : IChatCommand
             return;
         }
 
-        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (targetUser == null || targetUser.User == null || targetUser.User.Banner == null)
+        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        if (targetUser == null || targetUser.User == null || targetUser.User.BannerComponent == null)
         {
-            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
             return;
         }
 
@@ -24,17 +27,17 @@ internal sealed class RemoveBanner : IChatCommand
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(bannerId, out var banner))
+        if (!BannerManager.TryGetBannerById(bannerId, out var banner))
         {
             return;
         }
 
-        if (!targetUser.User.Banner.BannerList.Contains(banner))
+        if (!targetUser.User.BannerComponent.BannerList.Contains(banner))
         {
             return;
         }
 
-        var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
-        targetUser.User.Banner.RemoveBanner(dbClient, bannerId);
+        var dbClient = DatabaseManager.Connection;
+        targetUser.User.BannerComponent.RemoveBanner(dbClient, bannerId);
     }
 }

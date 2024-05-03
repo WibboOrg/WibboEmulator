@@ -19,10 +19,10 @@ internal sealed class GetRelationshipsEvent : IPacketEvent
 
         if (user.Messenger == null)
         {
-            session.SendPacket(new GetRelationshipsComposer(user.Id, new List<Relationship>()));
+            session.SendPacket(new GetRelationshipsComposer(user.Id, []));
             return;
         }
 
-        session.SendPacket(new GetRelationshipsComposer(user.Id, user.Messenger.GetRelationships()));
+        session.SendPacket(new GetRelationshipsComposer(user.Id, user.Messenger.Relationships));
     }
 }

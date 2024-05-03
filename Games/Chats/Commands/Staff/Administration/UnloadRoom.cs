@@ -16,11 +16,11 @@ internal sealed class UnloadRoom : IChatCommand
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out var roomTarget))
+        if (!RoomManager.TryGetRoom(roomId, out var roomTarget))
         {
             return;
         }
 
-        WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(roomTarget);
+        RoomManager.UnloadRoom(roomTarget);
     }
 }

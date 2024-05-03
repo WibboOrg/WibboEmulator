@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Several;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -9,12 +11,12 @@ internal sealed class Override : IChatCommand
         if (userRoom.AllowOverride)
         {
             userRoom.AllowOverride = false;
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("override.disabled", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("override.disabled", session.Language));
         }
         else
         {
             userRoom.AllowOverride = true;
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("override.enabled", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("override.enabled", session.Language));
         }
     }
 }

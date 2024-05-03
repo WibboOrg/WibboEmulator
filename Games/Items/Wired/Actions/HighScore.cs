@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
+using WibboEmulator.Database;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -18,18 +19,18 @@ public class HighScore : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        var scores = this.ItemInstance.Scores;
+        var scores = this.Item.Scores;
 
-        if (scores.TryGetValue(user.GetUsername(), out var score))
+        if (scores.TryGetValue(user.Username, out var score))
         {
-            scores[user.GetUsername()] = score + 1;
+            scores[user.Username] = score + 1;
         }
         else
         {
-            scores.Add(user.GetUsername(), 1);
+            scores.Add(user.Username, 1);
         }
 
-        this.ItemInstance.UpdateState(false);
+        this.Item.UpdateState(false);
 
         return false;
     }
@@ -38,7 +39,7 @@ public class HighScore : WiredActionBase, IWired, IWiredEffect
     {
         base.Dispose();
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         this.SaveToDatabase(dbClient);
     }
 
@@ -46,7 +47,7 @@ public class HighScore : WiredActionBase, IWired, IWiredEffect
     {
         var triggerItems = "";
 
-        foreach (var score in this.ItemInstance.Scores.OrderByDescending(x => x.Value).Take(1000))
+        foreach (var score in this.Item.Scores.OrderByDescending(x => x.Value).Take(1000))
         {
             triggerItems += score.Key + ":" + score.Value + ";";
         }
@@ -85,16 +86,16 @@ public class HighScore : WiredActionBase, IWired, IWiredEffect
                 }
             }
 
-            if (!this.ItemInstance.Scores.ContainsKey(username))
+            if (!this.Item.Scores.ContainsKey(username))
             {
-                this.ItemInstance.Scores.Add(username, score);
+                this.Item.Scores.Add(username, score);
             }
         }
     }
 
     public override void OnTrigger(GameClient session)
     {
-        _ = int.TryParse(this.ItemInstance.ExtraData, out var numMode);
+        _ = int.TryParse(this.Item.ExtraData, out var numMode);
 
         if (numMode != 1)
         {
@@ -105,7 +106,7 @@ public class HighScore : WiredActionBase, IWired, IWiredEffect
             numMode = 0;
         }
 
-        this.ItemInstance.ExtraData = numMode.ToString();
-        this.ItemInstance.UpdateState(false);
+        this.Item.ExtraData = numMode.ToString();
+        this.Item.UpdateState(false);
     }
 }

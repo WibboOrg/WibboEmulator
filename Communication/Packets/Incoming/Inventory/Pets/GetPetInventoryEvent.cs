@@ -20,6 +20,6 @@ internal sealed class GetPetInventoryEvent : IPacketEvent
 
         session.User.InventoryComponent.LoadInventory();
 
-        session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.GetPets()));
+        session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.Pets));
     }
 }

@@ -12,8 +12,8 @@ public class TimerReset : WiredActionBase, IWiredEffect, IWired
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        this.RoomInstance.WiredHandler.TriggerTimer();
-        this.RoomInstance.LastTimerReset = DateTime.Now;
+        this.Room.WiredHandler.TriggerTimer();
+        this.Room.LastTimerReset = DateTime.Now;
 
         return false;
     }

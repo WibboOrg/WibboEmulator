@@ -3,35 +3,27 @@ using System.Data;
 using WibboEmulator.Core.Language;
 using WibboEmulator.Database.Daos.Navigator;
 
-public sealed class NavigatorManager
+public static class NavigatorManager
 {
-    private readonly Dictionary<int, FeaturedRoom> _featuredRooms;
-    private readonly Dictionary<int, TopLevelItem> _topLevelItems;
-    private readonly Dictionary<int, SearchResultList> _searchResultLists;
+    private static readonly Dictionary<int, FeaturedRoom> FeaturedRooms = [];
+    private static readonly Dictionary<int, TopLevelItem> _TopLevelItems = [];
+    private static readonly Dictionary<int, SearchResultList> _SearchResultLists = [];
 
-    public NavigatorManager()
+    public static void Initialize(IDbConnection dbClient)
     {
-        this._topLevelItems = new Dictionary<int, TopLevelItem>();
-        this._searchResultLists = new Dictionary<int, SearchResultList>();
+        _TopLevelItems.Add(1, new(1, "official_view", "", ""));
+        _TopLevelItems.Add(2, new(2, "hotel_view", "", ""));
+        _TopLevelItems.Add(3, new(3, "rooms_game", "", ""));
+        _TopLevelItems.Add(4, new(4, "myworld_view", "", ""));
 
-        this._topLevelItems.Add(1, new TopLevelItem(1, "official_view", "", ""));
-        this._topLevelItems.Add(2, new TopLevelItem(2, "hotel_view", "", ""));
-        this._topLevelItems.Add(3, new TopLevelItem(3, "rooms_game", "", ""));
-        this._topLevelItems.Add(4, new TopLevelItem(4, "myworld_view", "", ""));
-
-        this._featuredRooms = new Dictionary<int, FeaturedRoom>();
-    }
-
-    public void Initialize(IDbConnection dbClient)
-    {
-        if (this._searchResultLists.Count > 0)
+        if (_SearchResultLists.Count > 0)
         {
-            this._searchResultLists.Clear();
+            _SearchResultLists.Clear();
         }
 
-        if (this._featuredRooms.Count > 0)
+        if (FeaturedRooms.Count > 0)
         {
-            this._featuredRooms.Clear();
+            FeaturedRooms.Clear();
         }
 
         var categoryList = NavigatorCategoryDao.GetAll(dbClient);
@@ -40,9 +32,9 @@ public sealed class NavigatorManager
         {
             foreach (var category in categoryList)
             {
-                if (!this._searchResultLists.ContainsKey(category.Id))
+                if (!_SearchResultLists.ContainsKey(category.Id))
                 {
-                    this._searchResultLists.Add(category.Id, new SearchResultList(category.Id, category.Category, category.CategoryIdentifier, category.PublicName, true, -1, category.RequiredRank, category.Minimized, NavigatorViewModeUtility.GetViewModeByString(category.ViewMode), category.CategoryType, category.SearchAllowance, category.OrderId));
+                    _SearchResultLists.Add(category.Id, new SearchResultList(category.Id, category.Category, category.CategoryIdentifier, category.PublicName, true, -1, category.RequiredRank, category.Minimized, NavigatorViewModeUtility.GetViewModeByString(category.ViewMode), category.CategoryType, category.SearchAllowance, category.OrderId));
                 }
             }
         }
@@ -53,63 +45,69 @@ public sealed class NavigatorManager
         {
             foreach (var navPublic in navPublicList)
             {
-                if (!this._featuredRooms.ContainsKey(navPublic.RoomId))
+                if (!FeaturedRooms.ContainsKey(navPublic.RoomId))
                 {
-                    this._featuredRooms.Add(navPublic.RoomId, new FeaturedRoom(navPublic.RoomId, navPublic.ImageUrl, LanguageManager.ParseLanguage(navPublic.Langue), navPublic.CategoryType));
+                    FeaturedRooms.Add(navPublic.RoomId, new FeaturedRoom(navPublic.RoomId, navPublic.ImageUrl, LanguageManager.ParseLanguage(navPublic.Langue), navPublic.CategoryType));
                 }
             }
         }
     }
 
-    public List<SearchResultList> GetCategorysForSearch(string category)
+    public static List<SearchResultList> GetCategorysForSearch(string category)
     {
         var categorys =
-            from Cat in this._searchResultLists
+            from Cat in _SearchResultLists
             where Cat.Value.Category == category
             orderby Cat.Value.OrderId ascending
             select Cat.Value;
         return categorys.ToList();
     }
 
-    public ICollection<SearchResultList> GetResultByIdentifier(string category)
+    public static ICollection<SearchResultList> GetResultByIdentifier(string category)
     {
         var categorys =
-            from Cat in this._searchResultLists
+            from Cat in _SearchResultLists
             where Cat.Value.CategoryIdentifier == category
             orderby Cat.Value.OrderId ascending
             select Cat.Value;
         return categorys.ToList();
     }
 
-    public ICollection<SearchResultList> GetFlatCategories()
+    public static ICollection<SearchResultList> FlatCategories
     {
-        var categorys =
-            from Cat in this._searchResultLists
-            where Cat.Value.CategoryType == NavigatorCategoryType.Category
-            orderby Cat.Value.OrderId ascending
-            select Cat.Value;
-        return categorys.ToList();
+        get
+        {
+            var categorys =
+                from Cat in _SearchResultLists
+                where Cat.Value.CategoryType == NavigatorCategoryType.Category
+                orderby Cat.Value.OrderId ascending
+                select Cat.Value;
+            return categorys.ToList();
+        }
     }
 
-    public ICollection<SearchResultList> GetEventCategories()
+    public static ICollection<SearchResultList> EventCategories
     {
-        var categorys =
-            from Cat in this._searchResultLists
-            where Cat.Value.CategoryType == NavigatorCategoryType.PromotionCategory
-            orderby Cat.Value.OrderId ascending
-            select Cat.Value;
-        return categorys.ToList();
+        get
+        {
+            var categorys =
+                from Cat in _SearchResultLists
+                where Cat.Value.CategoryType == NavigatorCategoryType.PromotionCategory
+                orderby Cat.Value.OrderId ascending
+                select Cat.Value;
+            return categorys.ToList();
+        }
     }
 
-    public ICollection<TopLevelItem> GetTopLevelItems() => this._topLevelItems.Values;
+    public static ICollection<TopLevelItem> TopLevelItems => _TopLevelItems.Values;
 
-    public ICollection<SearchResultList> GetSearchResultLists() => this._searchResultLists.Values;
+    public static ICollection<SearchResultList> SearchResultLists => _SearchResultLists.Values;
 
-    public bool TryGetTopLevelItem(int id, out TopLevelItem topLevelItem) => this._topLevelItems.TryGetValue(id, out topLevelItem);
+    public static bool TryGetTopLevelItem(int id, out TopLevelItem topLevelItem) => _TopLevelItems.TryGetValue(id, out topLevelItem);
 
-    public bool TryGetSearchResultList(int id, out SearchResultList searchResultList) => this._searchResultLists.TryGetValue(id, out searchResultList);
+    public static bool TryGetSearchResultList(int id, out SearchResultList searchResultList) => _SearchResultLists.TryGetValue(id, out searchResultList);
 
-    public bool TryGetFeaturedRoom(int roomId, out FeaturedRoom publicRoom) => this._featuredRooms.TryGetValue(roomId, out publicRoom);
+    public static bool TryGetFeaturedRoom(int roomId, out FeaturedRoom publicRoom) => FeaturedRooms.TryGetValue(roomId, out publicRoom);
 
-    public ICollection<FeaturedRoom> GetFeaturedRooms(Language langue) => this._featuredRooms.Values.Where(f => f.Langue == langue).ToList();
+    public static ICollection<FeaturedRoom> GetFeaturedRooms(Language langue) => FeaturedRooms.Values.Where(f => f.Langue == langue).ToList();
 }

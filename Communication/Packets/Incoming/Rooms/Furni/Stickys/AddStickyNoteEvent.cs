@@ -2,9 +2,11 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.Stickys;
 
 using System.Drawing;
 using WibboEmulator.Core;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class AddStickyNoteEvent : IPacketEvent
 {
@@ -12,7 +14,7 @@ internal sealed class AddStickyNoteEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -37,13 +39,13 @@ internal sealed class AddStickyNoteEvent : IPacketEvent
         }
 
         var wallCoord = ItemWallUtility.WallPositionCheck(":" + str.Split(':')[1]);
-        var roomItem = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, wallCoord, room);
+        var roomItem = new Item(userItem.Id, room.Id, userItem.BaseItemId, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, wallCoord, room);
         if (!room.RoomItemHandling.SetWallItem(session, roomItem))
         {
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             ItemDao.UpdateRoomIdAndUserId(dbClient, id, room.Id, room.RoomData.OwnerId);
         }

@@ -4,7 +4,10 @@ using System.Collections.Concurrent;
 using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Roleplays.Item;
 using WibboEmulator.Games.Roleplays.Weapon;
@@ -56,8 +59,8 @@ public class RolePlayer
         this.PvpEnable = true;
         this.CacEnable = true;
         this.FarEnable = true;
-        this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponCac(weaponCac);
-        this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponGun(weaponGun);
+        this.WeaponCac = RPWeaponManager.GetWeaponCac(weaponCac);
+        this.WeaponGun = RPWeaponManager.GetWeaponGun(weaponGun);
 
         this.GunLoad = 6;
         this.GunLoadTimer = 0;
@@ -101,12 +104,12 @@ public class RolePlayer
         this.Level = 1;
         this.HealthMax = 100;
 
-        this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponCac(0);
-        this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponGun(0);
+        this.WeaponCac = RPWeaponManager.GetWeaponCac(0);
+        this.WeaponGun = RPWeaponManager.GetWeaponGun(0);
 
         this._inventory.Clear();
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             UserRoleplayItemDao.Delete(dbClient, this._id, this._rpId);
             UserRoleplayDao.Delete(dbClient, this._id, this._rpId);
@@ -119,7 +122,7 @@ public class RolePlayer
 
     public void LoadInventory()
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         var rpItemList = UserRoleplayItemDao.GetAll(dbClient, this._id, this._rpId);
 
@@ -151,13 +154,13 @@ public class RolePlayer
 
     internal void AddInventoryItem(int itemId, int count = 1)
     {
-        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(itemId);
+        var rpItem = RPItemManager.GetItem(itemId);
         if (rpItem == null)
         {
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         var item = this.GetInventoryItem(itemId);
         if (item == null)
@@ -186,14 +189,14 @@ public class RolePlayer
         {
             item.Count -= count;
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+            using var dbClient = DatabaseManager.Connection;
             UserRoleplayItemDao.UpdateRemoveCount(dbClient, item.Id, count);
         }
         else
         {
             _ = this._inventory.TryRemove(itemId, out _);
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+            using var dbClient = DatabaseManager.Connection;
             UserRoleplayItemDao.Delete(dbClient, this._id);
         }
 
@@ -202,7 +205,7 @@ public class RolePlayer
 
     public void SendPacket(IServerPacket message)
     {
-        var session = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this._id);
+        var session = GameClientManager.GetClientByUserID(this._id);
         session?.SendPacket(message);
     }
 
@@ -363,7 +366,7 @@ public class RolePlayer
 
             if (user.Client != null)
             {
-                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.userdead", user.Client.Langue));
+                user.SendWhisperChat(LanguageManager.TryGetValue("rp.userdead", user.Client.Language));
             }
 
             if (this.Money > 10)
@@ -376,7 +379,7 @@ public class RolePlayer
 
             if (user.Client != null)
             {
-                user.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.ko", user.Client.Langue), this.Health, this.HealthMax), 0, true);
+                user.OnChat(string.Format(LanguageManager.TryGetValue("rp.chat.ko", user.Client.Language), this.Health, this.HealthMax), 0, true);
             }
         }
         else
@@ -388,7 +391,7 @@ public class RolePlayer
                 {
                     if (user.Client != null)
                     {
-                        user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hitslow", user.Client.Langue));
+                        user.SendWhisperChat(LanguageManager.TryGetValue("rp.hitslow", user.Client.Language));
                     }
                 }
                 this.SlowTimer = 6;
@@ -403,11 +406,11 @@ public class RolePlayer
             {
                 if (whisper)
                 {
-                    user.OnChatMe(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", user.Client.Langue), this.Health, this.HealthMax, dmg), 0, true);
+                    user.OnChatMe(string.Format(LanguageManager.TryGetValue("rp.hit", user.Client.Language), this.Health, this.HealthMax, dmg), 0, true);
                 }
                 else
                 {
-                    user.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", user.Client.Langue), this.Health, this.HealthMax, dmg), 0, true);
+                    user.OnChat(string.Format(LanguageManager.TryGetValue("rp.hit", user.Client.Language), this.Health, this.HealthMax, dmg), 0, true);
                 }
             }
         }
@@ -471,12 +474,12 @@ public class RolePlayer
                 user.RotHead = 2;
                 user.Freeze = true;
                 user.FreezeEndCounter = 0;
-                user.OnChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.energyout", user.Client.Langue));
+                user.OnChat(LanguageManager.TryGetValue("rp.chat.energyout", user.Client.Language));
                 user.SetStatus("sit", "0.5");
                 user.IsSit = true;
                 user.UpdateNeeded = true;
 
-                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.energyout", user.Client.Langue), true);
+                user.SendWhisperChat(LanguageManager.TryGetValue("rp.energyout", user.Client.Language), true);
             }
         }
 
@@ -494,7 +497,7 @@ public class RolePlayer
             if (this.GunLoad == 0)
             {
                 this.GunLoadTimer = 6;
-                user.OnChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.loadgun", user.Client.Langue));
+                user.OnChat(LanguageManager.TryGetValue("rp.chat.loadgun", user.Client.Language));
             }
         }
 
@@ -566,7 +569,7 @@ public class RolePlayer
         }
 
         this.Dispose = true;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             UserRoleplayDao.Update(dbClient, this._id, this._rpId, this.Health, this.Energy, this.Money, this.Munition, this.Exp, this.WeaponGun.Id, this.WeaponCac.Id);
         }

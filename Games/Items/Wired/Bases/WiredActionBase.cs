@@ -14,7 +14,7 @@ public class WiredActionBase : WiredBase, IWiredCycleable
     {
         if (this.DelayCycle > 0)
         {
-            this.RoomInstance.WiredHandler.RequestCycle(new WiredCycle(this, user, item));
+            this.Room.WiredHandler.RequestCycle(new WiredCycle(this, user, item));
         }
         else
         {

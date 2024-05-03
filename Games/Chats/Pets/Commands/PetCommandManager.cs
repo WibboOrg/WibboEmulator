@@ -1,36 +1,29 @@
-﻿namespace WibboEmulator.Games.Chats.Pets.Commands;
+namespace WibboEmulator.Games.Chats.Pets.Commands;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
 
-public class PetCommandManager
+public static class PetCommandManager
 {
-    private readonly Dictionary<string, PetCommand> _petCommands;
+    private static readonly Dictionary<string, PetCommand> PetCommands = [];
 
-    public PetCommandManager() => this._petCommands = new Dictionary<string, PetCommand>();
-
-    public void Initialize(IDbConnection dbClient)
+    public static void Initialize(IDbConnection dbClient)
     {
-        this._petCommands.Clear();
+        PetCommands.Clear();
 
         var emulatorCommandList = EmulatorCommandPetDao.GetAll(dbClient);
-
-        if (emulatorCommandList.Count == 0)
-        {
-            return;
-        }
 
         foreach (var emulatorCommand in emulatorCommandList)
         {
             var key = emulatorCommand.Id;
             var command = emulatorCommand.Command;
 
-            this._petCommands.Add(command, new PetCommand(key, command));
+            PetCommands.Add(command, new PetCommand(key, command));
         }
     }
 
-    public int TryInvoke(string input)
+    public static int TryInvoke(string input)
     {
-        if (this._petCommands.TryGetValue(input, out var petCommand))
+        if (PetCommands.TryGetValue(input, out var petCommand))
         {
             return petCommand.CommandID;
         }

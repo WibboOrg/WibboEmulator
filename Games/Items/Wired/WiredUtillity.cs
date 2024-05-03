@@ -84,7 +84,7 @@ public class WiredUtillity
     {
         if (user != null)
         {
-            textMessage = textMessage.Replace("#username#", user.GetUsername());
+            textMessage = textMessage.Replace("#username#", user.Username);
             textMessage = textMessage.Replace("#point#", user.WiredPoints.ToString());
 
             if (user.Client != null && user.Client.User != null && user.Client.User.InventoryComponent != null)

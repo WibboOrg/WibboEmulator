@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Items;
+
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.Rooms;
 
@@ -6,7 +8,7 @@ public static class ItemTeleporterFinder
 {
     public static int GetLinkedTele(int teleId)
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         var teleportId = ItemTeleportDao.GetOne(dbClient, teleId);
 
         return teleportId;
@@ -29,7 +31,7 @@ public static class ItemTeleporterFinder
             return room.Id;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         var roomId = ItemDao.GetOneRoomId(dbClient, teleId);
 
         return roomId;

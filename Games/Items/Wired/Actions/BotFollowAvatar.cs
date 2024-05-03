@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class BotFollowAvatar : WiredActionBase, IWired, IWiredEffect
 {
-    public BotFollowAvatar(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_FOLLOW_AVATAR) => this.DefaultIntParams(new int[] { 0 });
+    public BotFollowAvatar(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_FOLLOW_AVATAR) => this.DefaultIntParams(0);
 
     public override bool OnCycle(RoomUser user, Item item)
     {
@@ -15,7 +15,7 @@ public class BotFollowAvatar : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        var bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName(this.StringParam);
+        var bot = this.Room.RoomUserManager.GetBotOrPetByName(this.StringParam);
         if (bot == null)
         {
             return false;
@@ -44,7 +44,7 @@ public class BotFollowAvatar : WiredActionBase, IWired, IWiredEffect
     {
         var isFollow = this.GetIntParam(0) == 1;
 
-        WiredUtillity.SaveInDatabase(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, isFollow, null, this.Delay);
+        WiredUtillity.SaveInDatabase(dbClient, this.Item.Id, string.Empty, this.StringParam, isFollow, null, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

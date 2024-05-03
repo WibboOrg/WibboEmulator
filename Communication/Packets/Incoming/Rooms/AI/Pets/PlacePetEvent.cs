@@ -1,7 +1,10 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
 
 internal sealed class PlacePetEvent : IPacketEvent
@@ -10,7 +13,7 @@ internal sealed class PlacePetEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -23,7 +26,7 @@ internal sealed class PlacePetEvent : IPacketEvent
 
         if (room.RoomUserManager.BotPetCount >= 30)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.placepet.error", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.placepet.error", session.Language));
             return;
         }
 
@@ -63,7 +66,7 @@ internal sealed class PlacePetEvent : IPacketEvent
 
         _ = room.RoomUserManager.DeployBot(new RoomBot(pet.PetId, pet.OwnerId, pet.RoomId, BotAIType.Pet, true, pet.Name, "", "", pet.Look, x, y, 0, 0, false, "", 0, false, 0, 0, 0), pet);
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             BotPetDao.UpdateRoomId(dbClient, pet.PetId, pet.RoomId);
         }
@@ -73,6 +76,6 @@ internal sealed class PlacePetEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.GetPets()));
+        session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.Pets));
     }
 }

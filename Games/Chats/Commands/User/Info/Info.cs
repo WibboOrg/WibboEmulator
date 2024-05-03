@@ -9,8 +9,8 @@ internal sealed class Info : IChatCommand
     {
         var uptime = DateTime.Now - WibboEnvironment.ServerStarted;
 
-        var onlineUsers = WibboEnvironment.GetGame().GetGameClientManager().Count;
-        var roomCount = WibboEnvironment.GetGame().GetRoomManager().Count;
+        var onlineUsers = GameClientManager.Count;
+        var roomCount = RoomManager.Count;
 
         session.SendPacket(new BroadcastMessageAlertComposer("<b>Butterfly Edition Wibbo</b>\n\n" +
              "   <b>Credits</b>:\n" +

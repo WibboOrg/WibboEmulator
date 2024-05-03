@@ -14,12 +14,12 @@ public class CollisionItem : WiredActionBase, IWiredEffect, IWired
     {
         foreach (var roomItem in this.Items.ToList())
         {
-            if (this.RoomInstance.RoomItemHandling.GetItem(roomItem.Id) == null)
+            if (this.Room.RoomItemHandling.GetItem(roomItem.Id) == null)
             {
                 continue;
             }
 
-            this.RoomInstance.WiredHandler.TriggerCollision(null, roomItem);
+            this.Room.WiredHandler.TriggerCollision(null, roomItem);
         }
 
         return false;

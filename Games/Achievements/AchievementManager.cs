@@ -3,27 +3,21 @@ using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Achievements;
 
-public class AchievementManager
+public static class AchievementManager
 {
-    private readonly Dictionary<string, AchievementData> _achievements;
+    private static readonly Dictionary<string, AchievementData> Achievements = [];
 
-    public AchievementManager() => this._achievements = new Dictionary<string, AchievementData>();
-
-    public void Initialize(IDbConnection dbClient)
+    public static void Initialize(IDbConnection dbClient)
     {
-        this._achievements.Clear();
+        Achievements.Clear();
 
         var emulatorAchievementList = EmulatorAchievementDao.GetAll(dbClient);
-
-        if (emulatorAchievementList.Count == 0)
-        {
-            return;
-        }
 
         foreach (var emulatorAchievement in emulatorAchievementList)
         {
@@ -37,24 +31,24 @@ public class AchievementManager
             }
 
             var level = new AchievementLevel(emulatorAchievement.Level, emulatorAchievement.RewardPixels, emulatorAchievement.RewardPoints, emulatorAchievement.ProgressNeeded);
-            if (!this._achievements.ContainsKey(groupName))
+            if (!Achievements.ContainsKey(groupName))
             {
                 var achievement = new AchievementData(id, groupName, category);
                 achievement.AddLevel(level);
-                this._achievements.Add(groupName, achievement);
+                Achievements.Add(groupName, achievement);
             }
             else
             {
-                this._achievements[groupName].AddLevel(level);
+                Achievements[groupName].AddLevel(level);
             }
         }
     }
 
-    public void GetList(GameClient session) => session.SendPacket(new AchievementsComposer(session, this._achievements.Values.ToList()));
+    public static void GetList(GameClient session) => session.SendPacket(new AchievementsComposer(session, Achievements.Values.ToList()));
 
-    public bool ProgressAchievement(GameClient session, string achievementGroup, int progressAmount)
+    public static bool ProgressAchievement(GameClient session, string achievementGroup, int progressAmount)
     {
-        if (!this._achievements.TryGetValue(achievementGroup, out var achievementData))
+        if (!Achievements.TryGetValue(achievementGroup, out var achievementData))
         {
             return false;
         }
@@ -112,7 +106,7 @@ public class AchievementManager
 
             session.SendPacket(new AchievementUnlockedComposer(achievementData, targetLevel, targetLevelData.RewardPoints, targetLevelData.RewardPixels));
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+            using (var dbClient = DatabaseManager.Connection)
             {
                 UserAchievementDao.Replace(dbClient, session.User.Id, newLevel, newProgress, achievementGroup);
                 UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, targetLevelData.RewardPoints);
@@ -130,13 +124,13 @@ public class AchievementManager
             session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));
 
 
-            if (session.User.CurrentRoom != null)
+            if (session.User.Room != null)
             {
-                var roomUserByUserId = session.User.CurrentRoom.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+                var roomUserByUserId = session.User.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
                 if (roomUserByUserId != null)
                 {
                     session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
-                    session.User.CurrentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
+                    session.User.Room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
                 }
             }
 
@@ -154,7 +148,7 @@ public class AchievementManager
                 userData.Progress = newProgress;
             }
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+            using (var dbClient = DatabaseManager.Connection)
             {
                 UserAchievementDao.Replace(dbClient, session.User.Id, newLevel, newProgress, achievementGroup);
             }
@@ -166,9 +160,9 @@ public class AchievementManager
         return false;
     }
 
-    public AchievementData GetAchievement(string achievementGroup)
+    public static AchievementData GetAchievement(string achievementGroup)
     {
-        if (this._achievements.TryGetValue(achievementGroup, out var value))
+        if (Achievements.TryGetValue(achievementGroup, out var value))
         {
             return value;
         }

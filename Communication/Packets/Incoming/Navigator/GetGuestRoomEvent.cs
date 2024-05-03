@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class GetGuestRoomEvent : IPacketEvent
 {
@@ -10,7 +11,7 @@ internal sealed class GetGuestRoomEvent : IPacketEvent
     {
         var roomID = packet.PopInt();
 
-        var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomID);
+        var roomData = RoomManager.GenerateRoomData(roomID);
         if (roomData == null)
         {
             return;

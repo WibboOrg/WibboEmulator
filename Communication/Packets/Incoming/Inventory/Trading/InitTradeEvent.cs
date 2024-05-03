@@ -1,5 +1,9 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Trading;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Roleplays.Troc;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class InitTradeEvent : IPacketEvent
 {
@@ -7,7 +11,7 @@ internal sealed class InitTradeEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -31,39 +35,39 @@ internal sealed class InitTradeEvent : IPacketEvent
             var rp = roomUser.Roleplayer;
             if (rp == null || rp.TradeId > 0 || rp.Dead || rp.SendPrison || (rp.PvpEnable && room.RoomRoleplay.Pvp) || rp.AggroTimer > 0)
             {
-                roomUser.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.troc.zonesafe", session.Langue));
+                roomUser.SendWhisperChat(LanguageManager.TryGetValue("rp.troc.zonesafe", session.Language));
                 return;
             }
 
             var rpTarget = roomUserTarget.Roleplayer;
             if (rpTarget == null || rpTarget.TradeId > 0 || rpTarget.Dead || rpTarget.SendPrison || (rpTarget.PvpEnable && room.RoomRoleplay.Pvp) || rpTarget.AggroTimer > 0)
             {
-                roomUser.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.troc.fail", session.Langue));
+                roomUser.SendWhisperChat(LanguageManager.TryGetValue("rp.troc.fail", session.Language));
                 return;
             }
 
-            WibboEnvironment.GetGame().GetRoleplayManager().TrocManager.AddTrade(room.RoomData.OwnerId, roomUser.UserId, roomUserTarget.UserId, roomUser.GetUsername(), roomUserTarget.GetUsername());
+            RPTrocManager.AddTrade(room.RoomData.OwnerId, roomUser.UserId, roomUserTarget.UserId, roomUser.Username, roomUserTarget.Username);
             return;
         }
 
         if (room.RoomData.TrocStatus == 0 && !room.CheckRights(session, true) && !session.User.HasPermission("force_trade"))
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.1", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.trade.error.1", session.Language));
             return;
         }
         else if (room.RoomData.TrocStatus == 1 && !room.CheckRights(session) && !session.User.HasPermission("force_trade"))
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.2", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.trade.error.2", session.Language));
             return;
         }
 
         if (!roomUserTarget.Client.User.AcceptTrading && !session.User.HasPermission("force_trade"))
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.tradedisabled", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("user.tradedisabled", session.Language));
         }
         else if (roomUserTarget.IsTransf || roomUser.IsTransf || roomUser.IsSpectator || roomUserTarget.IsSpectator)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.3", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.trade.error.3", session.Language));
         }
         else
         {

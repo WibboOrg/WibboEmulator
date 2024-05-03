@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Rooms;
 using WibboEmulator.Communication.Packets.Outgoing;
+using WibboEmulator.Games.Navigators;
 
 internal static class RoomAppender
 {
@@ -30,7 +31,7 @@ internal static class RoomAppender
             roomType += 2;
         }
 
-        if (WibboEnvironment.GetGame().GetNavigator().TryGetFeaturedRoom(data.Id, out var item))
+        if (NavigatorManager.TryGetFeaturedRoom(data.Id, out var item))
         {
             roomType += 1;
         }

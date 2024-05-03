@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Moderations;
+
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Moderation;
 
 public class ModerationTicket
@@ -67,7 +69,7 @@ public class ModerationTicket
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         ModerationTicketDao.UpdateStatusPicked(dbClient, moderatorId, this.Id);
     }
 
@@ -85,7 +87,7 @@ public class ModerationTicket
             TicketStatusType.Invalid => "invalid",
             _ => "resolved",
         };
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         ModerationTicketDao.UpdateStatus(dbClient, str, this.Id);
     }
 
@@ -98,7 +100,7 @@ public class ModerationTicket
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         ModerationTicketDao.UpdateStatusOpen(dbClient, this.Id);
     }
 
@@ -111,7 +113,7 @@ public class ModerationTicket
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         ModerationTicketDao.UpdateStatusDeleted(dbClient, this.Id);
     }
 }

@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Moderations;
 
 internal sealed class PickTicketEvent : IPacketEvent
 {
@@ -13,6 +14,6 @@ internal sealed class PickTicketEvent : IPacketEvent
         }
 
         _ = packet.PopInt();
-        WibboEnvironment.GetGame().GetModerationManager().PickTicket(session, packet.PopInt());
+        ModerationManager.PickTicket(session, packet.PopInt());
     }
 }

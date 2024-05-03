@@ -6,14 +6,14 @@ using WibboEmulator.Games.Rooms;
 
 public class MoreThanTimer : WiredConditionBase, IWiredCondition, IWired
 {
-    public MoreThanTimer(Item item, Room room) : base(item, room, (int)WiredConditionType.TIME_ELAPSED_MORE) => this.DefaultIntParams(new int[] { 0 });
+    public MoreThanTimer(Item item, Room room) : base(item, room, (int)WiredConditionType.TIME_ELAPSED_MORE) => this.DefaultIntParams(0);
 
     public bool AllowsExecution(RoomUser user, Item item)
     {
         var timeout = this.GetIntParam(0);
 
-        _ = this.RoomInstance.LastTimerReset;
-        return (DateTime.Now - this.RoomInstance.LastTimerReset).TotalSeconds > timeout / 2;
+        _ = this.Room.LastTimerReset;
+        return (DateTime.Now - this.Room.LastTimerReset).TotalSeconds > timeout / 2;
     }
 
     public void SaveToDatabase(IDbConnection dbClient)

@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Users;
 
 using WibboEmulator.Communication.Packets.Outgoing.Users;
+using WibboEmulator.Games.Banners;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class UserBannerSelectEvent : IPacketEvent
@@ -11,17 +12,17 @@ internal sealed class UserBannerSelectEvent : IPacketEvent
     {
         var bannerId = packet.PopInt();
 
-        if (session == null || session.User == null || session.User.Banner == null)
+        if (session == null || session.User == null || session.User.BannerComponent == null)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(bannerId, out var banner))
+        if (!BannerManager.TryGetBannerById(bannerId, out var banner))
         {
             return;
         }
 
-        if (!session.User.Banner.BannerList.Contains(banner) && bannerId != -1)
+        if (!session.User.BannerComponent.BannerList.Contains(banner) && bannerId != -1)
         {
             return;
         }

@@ -16,14 +16,14 @@ internal sealed class EditTvYoutubeEvent : IPacketEvent
             return;
         }
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null || !room.CheckRights(session))
         {
             return;
         }
 
         var item = room.RoomItemHandling.GetItem(itemId);
-        if (item == null || item.GetBaseItem().InteractionType != InteractionType.TV_YOUTUBE)
+        if (item == null || item.ItemData.InteractionType != InteractionType.TV_YOUTUBE)
         {
             return;
         }

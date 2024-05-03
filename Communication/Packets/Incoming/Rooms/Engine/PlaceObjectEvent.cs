@@ -1,10 +1,13 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Quests;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class PlaceObjectEvent : IPacketEvent
 {
@@ -17,7 +20,7 @@ internal sealed class PlaceObjectEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -30,7 +33,7 @@ internal sealed class PlaceObjectEvent : IPacketEvent
 
         if (room.RoomData.SellPrice > 0)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("roomsell.error.7", session.Language));
             return;
         }
 
@@ -86,17 +89,17 @@ internal sealed class PlaceObjectEvent : IPacketEvent
                 rotation = session.User.ForceRot;
             }
 
-            var item = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, x, y, 0.0, rotation, "", room);
+            var item = new Item(userItem.Id, room.Id, userItem.BaseItemId, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, x, y, 0.0, rotation, "", room);
             if (room.RoomItemHandling.SetFloorItem(session, item, x, y, rotation, true, false, true))
             {
-                using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+                using (var dbClient = DatabaseManager.Connection)
                 {
                     ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                 }
 
                 session.User.InventoryComponent.RemoveItem(itemId);
 
-                if (WiredUtillity.TypeIsWired(userItem.GetBaseItem().InteractionType))
+                if (WiredUtillity.TypeIsWired(userItem.ItemData.InteractionType))
                 {
                     WiredRegister.HandleRegister(room, item);
                 }
@@ -108,33 +111,33 @@ internal sealed class PlaceObjectEvent : IPacketEvent
 
                 if (session.User.ForceOpenGift)
                 {
-                    if (item.GetBaseItem().InteractionType == InteractionType.EXTRA_BOX)
+                    if (item.ItemData.InteractionType == InteractionType.EXTRA_BOX)
                     {
                         ItemLootBox.OpenExtrabox(session, item, room);
                     }
-                    else if (item.GetBaseItem().InteractionType == InteractionType.DELUXE_BOX)
+                    else if (item.ItemData.InteractionType == InteractionType.DELUXE_BOX)
                     {
                         ItemLootBox.OpenDeluxeBox(session, item, room);
                     }
-                    else if (item.GetBaseItem().InteractionType == InteractionType.LOOTBOX_2022)
+                    else if (item.ItemData.InteractionType == InteractionType.LOOTBOX_2022)
                     {
                         ItemLootBox.OpenLootBox2022(session, item, room);
                     }
-                    else if (item.GetBaseItem().InteractionType == InteractionType.LEGEND_BOX)
+                    else if (item.ItemData.InteractionType == InteractionType.LEGEND_BOX)
                     {
                         ItemLootBox.OpenLegendBox(session, item, room);
                     }
-                    else if (item.GetBaseItem().InteractionType == InteractionType.BADGE_BOX)
+                    else if (item.ItemData.InteractionType == InteractionType.BADGE_BOX)
                     {
                         ItemLootBox.OpenBadgeBox(session, item, room);
                     }
-                    else if (item.GetBaseItem().InteractionType == InteractionType.GIFT_BANNER)
+                    else if (item.ItemData.InteractionType == InteractionType.GIFT_BANNER)
                     {
                         item.Interactor.OnTrigger(session, item, 0, true, false);
                     }
                 }
 
-                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FurniPlace, 0);
+                QuestManager.ProgressUserQuest(session, QuestType.FurniPlace, 0);
             }
             else
             {
@@ -155,10 +158,10 @@ internal sealed class PlaceObjectEvent : IPacketEvent
 
             if (TrySetWallItem(correctedData, out var wallPos))
             {
-                var roomItem = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, wallPos, room);
+                var roomItem = new Item(userItem.Id, room.Id, userItem.BaseItemId, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, wallPos, room);
                 if (room.RoomItemHandling.SetWallItem(session, roomItem))
                 {
-                    using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+                    using (var dbClient = DatabaseManager.Connection)
                     {
                         ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                     }

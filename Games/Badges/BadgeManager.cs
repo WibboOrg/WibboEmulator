@@ -1,35 +1,30 @@
 namespace WibboEmulator.Games.Badges;
 
-public class BadgeManager
+using WibboEmulator.Core.Settings;
+
+public static class BadgeManager
 {
-    private readonly List<string> _disallowedBadgePrefixes;
-    private readonly List<string> _notAllowed;
+    private static readonly List<string> DisallowedBadgePrefixes =
+    [
+        "MRUN",
+        "WORLDRUNSAVE",
+        "ACH_"
+    ];
+    private static readonly List<string> NotAllowed = [];
 
-    public BadgeManager()
+    public static void Initialize()
     {
-        this._disallowedBadgePrefixes = new List<string>
-        {
-            "MRUN",
-            "WORLDRUNSAVE",
-            "ACH_"
-        };
-
-        this._notAllowed = new List<string>();
+        NotAllowed.Clear();
+        AddDisallowedFromConfig();
     }
 
-    public void Initialize()
+    private static void AddDisallowedFromConfig(string configString = "badge.not.allowed")
     {
-        this._notAllowed.Clear();
-        this.AddDisallowedFromConfig();
+        var badgeNotAllowed = SettingsManager.GetData<string>(configString);
+        NotAllowed.AddRange(badgeNotAllowed?.Split(',') ?? Array.Empty<string>());
     }
 
-    private void AddDisallowedFromConfig(string configString = "badge.not.allowed")
-    {
-        var badgeNotAllowed = WibboEnvironment.GetSettings().GetData<string>(configString);
-        this._notAllowed.AddRange(badgeNotAllowed?.Split(',') ?? Array.Empty<string>());
-    }
+    public static bool HaveNotAllowed(string badgeId) => NotAllowed.Contains(badgeId) || IsDisallowedByType(badgeId);
 
-    public bool HaveNotAllowed(string badgeId) => this._notAllowed.Contains(badgeId) || this.IsDisallowedByType(badgeId);
-
-    private bool IsDisallowedByType(string badgeId) => this._disallowedBadgePrefixes.Exists(badgeId.StartsWith);
+    private static bool IsDisallowedByType(string badgeId) => DisallowedBadgePrefixes.Exists(badgeId.StartsWith);
 }

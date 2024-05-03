@@ -1,8 +1,10 @@
 namespace WibboEmulator.Games.Navigators;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Rooms;
 
 internal static class NavigatorHandler
@@ -23,7 +25,7 @@ internal static class NavigatorHandler
                     if (searchData.Length > 0)
                     {
                         List<RoomEntity> roomList = null;
-                        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+                        using (var dbClient = DatabaseManager.Connection)
                         {
                             if (searchData.ToLower().StartsWith("owner:"))
                             {
@@ -36,7 +38,7 @@ internal static class NavigatorHandler
                         {
                             foreach (var room in roomList)
                             {
-                                var roomData = WibboEnvironment.GetGame().GetRoomManager().FetchRoomData(room.Id, room);
+                                var roomData = RoomManager.FetchRoomData(room.Id, room);
                                 if (roomData != null && !results.Contains(roomData))
                                 {
                                     results.Add(roomData);
@@ -54,7 +56,7 @@ internal static class NavigatorHandler
                 else if (searchData.ToLower().StartsWith("tag:"))
                 {
                     searchData = searchData.Remove(0, 4);
-                    ICollection<RoomData> tagMatches = WibboEnvironment.GetGame().GetRoomManager().SearchTaggedRooms(searchData);
+                    ICollection<RoomData> tagMatches = RoomManager.SearchTaggedRooms(searchData);
 
                     message.WriteInteger(tagMatches.Count);
                     foreach (var data in tagMatches.ToList())
@@ -65,7 +67,7 @@ internal static class NavigatorHandler
                 else if (searchData.ToLower().StartsWith("group:"))
                 {
                     searchData = searchData.Remove(0, 6);
-                    ICollection<RoomData> groupRooms = WibboEnvironment.GetGame().GetRoomManager().SearchGroupRooms(searchData);
+                    ICollection<RoomData> groupRooms = RoomManager.SearchGroupRooms(searchData);
 
                     message.WriteInteger(groupRooms.Count);
                     foreach (var data in groupRooms.ToList())
@@ -78,7 +80,7 @@ internal static class NavigatorHandler
                     if (searchData.Length > 0)
                     {
                         List<RoomEntity> roomList = null;
-                        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+                        using (var dbClient = DatabaseManager.Connection)
                         {
                             roomList = RoomDao.GetAllSearch(dbClient, searchData);
                         }
@@ -93,7 +95,7 @@ internal static class NavigatorHandler
                                     continue;
                                 }
 
-                                var rData = WibboEnvironment.GetGame().GetRoomManager().FetchRoomData(room.Id, room);
+                                var rData = RoomManager.FetchRoomData(room.Id, room);
                                 if (rData != null && !results.Contains(rData))
                                 {
                                     results.Add(rData);
@@ -119,7 +121,7 @@ internal static class NavigatorHandler
             case NavigatorCategoryType.FeaturedRun:
             case NavigatorCategoryType.FeaturedCasino:
                 var rooms = new List<RoomData>();
-                var featured = WibboEnvironment.GetGame().GetNavigator().GetFeaturedRooms(session.Langue);
+                var featured = NavigatorManager.GetFeaturedRooms(session.Language);
                 foreach (var featuredItem in featured.ToList())
                 {
                     if (featuredItem == null)
@@ -132,7 +134,7 @@ internal static class NavigatorHandler
                         continue;
                     }
 
-                    var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(featuredItem.RoomId);
+                    var data = RoomManager.GenerateRoomData(featuredItem.RoomId);
                     if (data == null)
                     {
                         continue;
@@ -155,7 +157,7 @@ internal static class NavigatorHandler
             {
                 var popularRooms = new List<RoomData>();
 
-                popularRooms.AddRange(WibboEnvironment.GetGame().GetRoomManager().GetPopularRooms(-1, 20, session.Langue)); //FetchLimit
+                popularRooms.AddRange(RoomManager.GetPopularRooms(-1, 20, session.Language)); //FetchLimit
 
                 message.WriteInteger(popularRooms.Count);
                 foreach (var data in popularRooms.ToList())
@@ -167,7 +169,7 @@ internal static class NavigatorHandler
 
             case NavigatorCategoryType.Recommended:
             {
-                var recommendedRooms = WibboEnvironment.GetGame().GetRoomManager().GetRecommendedRooms(fetchLimit);
+                var recommendedRooms = RoomManager.GetRecommendedRooms(fetchLimit);
 
                 message.WriteInteger(recommendedRooms.Count);
                 foreach (var data in recommendedRooms.ToList())
@@ -179,7 +181,7 @@ internal static class NavigatorHandler
 
             case NavigatorCategoryType.Category:
             {
-                var getRoomsByCategory = WibboEnvironment.GetGame().GetRoomManager().GetRoomsByCategory(searchResult.Id, fetchLimit);
+                var getRoomsByCategory = RoomManager.GetRoomsByCategory(searchResult.Id, fetchLimit);
 
                 message.WriteInteger(getRoomsByCategory.Count);
                 foreach (var data in getRoomsByCategory.ToList())
@@ -195,7 +197,7 @@ internal static class NavigatorHandler
 
                 foreach (var roomId in session.User.UsersRooms)
                 {
-                    var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+                    var data = RoomManager.GenerateRoomData(roomId);
                     if (data == null)
                     {
                         continue;
@@ -218,7 +220,7 @@ internal static class NavigatorHandler
                 var favourites = new List<RoomData>();
                 foreach (var roomId in session.User.FavoriteRooms)
                 {
-                    var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+                    var data = RoomManager.GenerateRoomData(roomId);
                     if (data == null)
                     {
                         continue;
@@ -244,12 +246,12 @@ internal static class NavigatorHandler
 
                 foreach (var groupId in session.User.MyGroups.ToList())
                 {
-                    if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
+                    if (!GroupManager.TryGetGroup(groupId, out var group))
                     {
                         continue;
                     }
 
-                    var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(group.RoomId);
+                    var data = RoomManager.GenerateRoomData(group.RoomId);
                     if (data == null)
                     {
                         continue;
@@ -293,7 +295,7 @@ internal static class NavigatorHandler
 
                 foreach (var roomId in session.User.RoomRightsList)
                 {
-                    var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+                    var data = RoomManager.GenerateRoomData(roomId);
                     if (data == null)
                     {
                         continue;

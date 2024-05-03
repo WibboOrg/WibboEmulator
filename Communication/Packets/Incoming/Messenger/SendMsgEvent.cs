@@ -1,4 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Messenger;
+
+using WibboEmulator.Games.Chats.Filter;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class SendMsgEvent : IPacketEvent
@@ -19,7 +21,7 @@ internal sealed class SendMsgEvent : IPacketEvent
             return;
         }
 
-        var message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+        var message = WordFilterManager.CheckMessage(packet.PopString());
         if (string.IsNullOrWhiteSpace(message))
         {
             return;

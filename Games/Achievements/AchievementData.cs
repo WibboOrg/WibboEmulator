@@ -12,7 +12,7 @@ public class AchievementData
         this.Id = id;
         this.GroupName = groupName;
         this.Category = category;
-        this.Levels = new Dictionary<int, AchievementLevel>();
+        this.Levels = [];
     }
 
     public void AddLevel(AchievementLevel level) => this.Levels.Add(level.Level, level);

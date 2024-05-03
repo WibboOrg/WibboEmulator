@@ -1115,7 +1115,7 @@ public class WebSocket : IDisposable
     private void Initialize()
     {
         this._compression = CompressionMethod.None;
-        this.CookieCollection = new CookieCollection();
+        this.CookieCollection = [];
         this._forPing = new object();
         this._forSend = new object();
         this._forState = new object();

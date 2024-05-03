@@ -49,7 +49,7 @@ public class ItemData
         this.AllowMarketplaceSell = allowMarketplaceSell;
         this.InteractionType = interactionType;
         this.Modes = modes;
-        this.VendingIds = new List<int>();
+        this.VendingIds = [];
         if (vendingIds.Contains(','))
         {
             foreach (var vendingId in vendingIds.Split(','))
@@ -65,7 +65,7 @@ public class ItemData
             this.VendingIds.Add(int.Parse(vendingIds));
         }
 
-        this.AdjustableHeights = new List<double>();
+        this.AdjustableHeights = [];
 
         if (adjustableHeights.Contains(','))
         {

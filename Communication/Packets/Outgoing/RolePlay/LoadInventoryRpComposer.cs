@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using System.Collections.Concurrent;
+using WibboEmulator.Games.Roleplays.Item;
 using WibboEmulator.Games.Roleplays.Player;
 
 internal sealed class LoadInventoryRpComposer : ServerPacket
@@ -11,7 +12,7 @@ internal sealed class LoadInventoryRpComposer : ServerPacket
 
         foreach (var item in items.Values)
         {
-            var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(item.ItemId);
+            var rpItem = RPItemManager.GetItem(item.ItemId);
 
             this.WriteInteger(item.ItemId);
             this.WriteString(rpItem.Name);

@@ -2,6 +2,7 @@ namespace WibboEmulator.Games.Roleplays.Enemy;
 using System.Drawing;
 using WibboEmulator.Core.Language;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Roleplays.Item;
 using WibboEmulator.Games.Roleplays.Weapon;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map.Movement;
@@ -51,8 +52,8 @@ public class RoleBot
         this.Config = enemyConfig;
 
         this.Health = this.Config.Health;
-        this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponGun(this.Config.WeaponGunId);
-        this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponCac(this.Config.WeaponCacId);
+        this.WeaponGun = RPWeaponManager.GetWeaponGun(this.Config.WeaponGunId);
+        this.WeaponCac = RPWeaponManager.GetWeaponCac(this.Config.WeaponCacId);
     }
 
     private bool IsAllowZone(RoomUser bot)
@@ -83,7 +84,7 @@ public class RoleBot
             if (this.GunCharger == 0)
             {
                 this.GunLoadTimer = 6;
-                bot.OnChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.loadgun", Language.French));
+                bot.OnChat(LanguageManager.TryGetValue("rp.chat.loadgun", Language.French));
             }
         }
     }
@@ -190,14 +191,14 @@ public class RoleBot
 
             if (this.Config.LootItemId > 0)
             {
-                var item = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(this.Config.LootItemId);
+                var item = RPItemManager.GetItem(this.Config.LootItemId);
                 if (item != null)
                 {
                     _ = room.RoomItemHandling.AddTempItem(bot.VirtualId, 3996, bot.SetX, bot.SetY, bot.Z, item.Name, this.Config.LootItemId, InteractionTypeTemp.RpItem);
                 }
             }
 
-            bot.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.chat.ko", Language.French), this.Health, this.Config.Health), bot.IsPet ? 0 : 2, true);
+            bot.OnChat(string.Format(LanguageManager.TryGetValue("rp.chat.ko", Language.French), this.Health, this.Config.Health), bot.IsPet ? 0 : 2, true);
         }
         else
         {
@@ -225,7 +226,7 @@ public class RoleBot
                 }
             }
 
-            bot.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", room.RoomData.Langue), this.Health, this.Config.Health, dmg), bot.IsPet ? 0 : 2, true);
+            bot.OnChat(string.Format(LanguageManager.TryGetValue("rp.hit", room.RoomData.Language), this.Health, this.Config.Health, dmg), bot.IsPet ? 0 : 2, true);
         }
     }
 

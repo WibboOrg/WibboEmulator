@@ -1,4 +1,7 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Administration;
+
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
@@ -12,7 +15,7 @@ internal sealed class AllIgnore : IChatCommand
             return;
         }
 
-        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
         if (targetUser == null || targetUser.User == null)
         {
             return;
@@ -20,7 +23,7 @@ internal sealed class AllIgnore : IChatCommand
 
         if (targetUser.User.Rank >= session.User.Rank)
         {
-            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", session.Language));
             return;
         }
 
@@ -32,14 +35,14 @@ internal sealed class AllIgnore : IChatCommand
 
         if (lengthSeconds is <= 600 and > 0)
         {
-            userRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("ban.toolesstime", session.Langue));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("ban.toolesstime", session.Language));
             return;
         }
 
         var expireTime = lengthSeconds == -1 ? int.MaxValue : (int)(WibboEnvironment.GetUnixTimestamp() + lengthSeconds);
         var reason = CommandManager.MergeParams(parameters, 3);
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         var isIgnoreall = BanDao.GetOneIgnoreAll(dbClient, targetUser.User.Id);
         if (isIgnoreall == 0)
         {

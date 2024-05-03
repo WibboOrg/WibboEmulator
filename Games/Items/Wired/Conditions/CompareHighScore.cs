@@ -8,7 +8,7 @@ public class CompareHighScore : WiredConditionBase, IWiredCondition, IWired
 {
     public CompareHighScore(Item item, Room room) : base(item, room, (int)WiredConditionType.ACTOR_COMPARE_HIGHSCORE)
     {
-        this.DefaultIntParams(new int[] { 0 });
+        this.DefaultIntParams(0);
         this.FurniLimit = 1;
     }
 
@@ -32,7 +32,7 @@ public class CompareHighScore : WiredConditionBase, IWiredCondition, IWired
                 valueInt = user.WiredPoints;
             }
 
-            var inHighScore = highScoreItem.Scores.TryGetValue(user.GetUsername(), out var score);
+            var inHighScore = highScoreItem.Scores.TryGetValue(user.Username, out var score);
 
             switch (highScoreOperator)
             {

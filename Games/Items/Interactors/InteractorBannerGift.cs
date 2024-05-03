@@ -1,7 +1,9 @@
 namespace WibboEmulator.Games.Items.Interactors;
 
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Games.Banners;
 using WibboEmulator.Games.GameClients;
 
 public class InteractorBannerGift : FurniInteractor
@@ -23,19 +25,19 @@ public class InteractorBannerGift : FurniInteractor
             return;
         }
 
-        var room = item.GetRoom();
+        var room = item.Room;
 
         if (room == null || !room.CheckRights(session, true))
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(1000009301, out var bannerTrocData))
+        if (!ItemManager.GetItem(1000009301, out var bannerTrocData))
         {
             return;
         }
 
-        var banner = WibboEnvironment.GetGame().GetBannerManager().GetOneRandomBanner();
+        var banner = BannerManager.GetOneRandomBanner();
 
         if (banner == null)
         {
@@ -46,10 +48,10 @@ public class InteractorBannerGift : FurniInteractor
 
         room.RoomItemHandling.RemoveFurniture(session, item.Id);
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         ItemDao.UpdateBaseItemAndExtraData(dbClient, item.Id, bannerTrocData.Id, banner.Id.ToString());
 
-        item.BaseItem = bannerTrocData.Id;
+        item.BaseItemId = bannerTrocData.Id;
         item.ResetBaseItem(room);
         item.ExtraData = banner.Id.ToString();
 

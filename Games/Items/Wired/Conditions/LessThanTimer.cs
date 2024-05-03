@@ -6,13 +6,13 @@ using WibboEmulator.Games.Rooms;
 
 public class LessThanTimer : WiredConditionBase, IWiredCondition, IWired
 {
-    public LessThanTimer(Item item, Room room) : base(item, room, (int)WiredConditionType.TIME_ELAPSED_LESS) => this.DefaultIntParams(new int[] { 0 });
+    public LessThanTimer(Item item, Room room) : base(item, room, (int)WiredConditionType.TIME_ELAPSED_LESS) => this.DefaultIntParams(0);
 
     public bool AllowsExecution(RoomUser user, Item item)
     {
         var timeout = this.GetIntParam(0);
 
-        var dateTime = this.RoomInstance.LastTimerReset;
+        var dateTime = this.Room.LastTimerReset;
         return (DateTime.Now - dateTime).TotalSeconds < timeout / 2;
     }
 

@@ -10,7 +10,7 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        var disableAnimation = this.RoomInstance.WiredHandler.DisableAnimate(this.ItemInstance.Coordinate);
+        var disableAnimation = this.Room.WiredHandler.DisableAnimate(this.Item.Coordinate);
 
         var itemList = this.Items.ToList();
         if (itemList.Count >= 1)
@@ -30,7 +30,7 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
 
     private void HandleItem(Item roomItem, bool disableAnimation)
     {
-        if (this.RoomInstance.RoomItemHandling.GetItem(roomItem.Id) == null)
+        if (this.Room.RoomItemHandling.GetItem(roomItem.Id) == null)
         {
             return;
         }
@@ -65,14 +65,14 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
         var newY = roomItem.Y + y;
         var newZ = roomItem.Z + z;
 
-        if (newX > this.RoomInstance.GameMap.Model.MapSizeX)
+        if (newX > this.Room.GameMap.Model.MapSizeX)
         {
-            newX = this.RoomInstance.GameMap.Model.MapSizeX - 1;
+            newX = this.Room.GameMap.Model.MapSizeX - 1;
         }
 
-        if (newY > this.RoomInstance.GameMap.Model.MapSizeY)
+        if (newY > this.Room.GameMap.Model.MapSizeY)
         {
-            newY = this.RoomInstance.GameMap.Model.MapSizeY - 1;
+            newY = this.Room.GameMap.Model.MapSizeY - 1;
         }
 
         if (newX < 0)
@@ -97,9 +97,9 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
 
         if (newX != roomItem.X || newY != roomItem.Y || newZ != roomItem.Z)
         {
-            if (this.RoomInstance.GameMap.ValidTile(newX, newY, newZ))
+            if (this.Room.GameMap.ValidTile(newX, newY, newZ))
             {
-                this.RoomInstance.RoomItemHandling.PositionReset(roomItem, newX, newY, newZ, disableAnimation);
+                this.Room.RoomItemHandling.PositionReset(roomItem, newX, newY, newZ, disableAnimation);
             }
         }
 
@@ -115,12 +115,12 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
             needUpdate = true;
         }
 
-        if (roomItem.GetBaseItem().Modes > 1)
+        if (roomItem.ItemData.Modes > 1)
         {
             if (int.TryParse(roomItem.ExtraData, out var stateItem))
             {
-                var newState = (stateItem + state) % roomItem.GetBaseItem().Modes;
-                newState = newState < 0 ? newState + roomItem.GetBaseItem().Modes : newState;
+                var newState = (stateItem + state) % roomItem.ItemData.Modes;
+                newState = newState < 0 ? newState + roomItem.ItemData.Modes : newState;
 
                 if (newState != stateItem)
                 {

@@ -1,4 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Handshake;
+using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.BuildersClub;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
@@ -12,12 +13,16 @@ using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Settings;
 using WibboEmulator.Core;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Core.Settings;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
-using System.Data;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Helps;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Moderations;
 using WibboEmulator.Games.Users.Authentificator;
 using WibboEmulator.Utilities;
 
@@ -40,7 +45,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
             return;
         }
 
-        if (WibboEnvironment.GetGame().GetGameClientManager().TryReconnection(ref session, ssoTicket))
+        if (GameClientManager.TryReconnection(ref session, ssoTicket))
         {
             session.SendPacket(new AuthenticationOKComposer());
             return;
@@ -54,9 +59,9 @@ internal sealed class SSOTicketEvent : IPacketEvent
 
         try
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+            using var dbClient = DatabaseManager.Connection;
 
-            var ip = session.Connection.GetIp();
+            var ip = session.Connection.Ip;
             var user = UserFactory.GetUserData(dbClient, ssoTicket, ip);
 
             if (user == null)
@@ -67,12 +72,12 @@ internal sealed class SSOTicketEvent : IPacketEvent
 
             var packetList = new ServerPacketList();
 
-            WibboEnvironment.GetGame().GetGameClientManager().LogClonesOut(user.Id);
+            GameClientManager.LogClonesOut(user.Id);
             session.User = user;
-            session.Langue = user.Langue;
+            session.Language = user.Langue;
             session.SSOTicket = ssoTicket;
 
-            WibboEnvironment.GetGame().GetGameClientManager().RegisterClient(session, user.Id, user.Username, ssoTicket);
+            GameClientManager.RegisterClient(session, user.Id, user.Username, ssoTicket);
 
             session.User.Initialize(dbClient, session);
 
@@ -87,9 +92,9 @@ internal sealed class SSOTicketEvent : IPacketEvent
             packetList.Add(new AvailabilityStatusComposer());
             packetList.Add(new AchievementScoreComposer(session.User.AchievementPoints));
             packetList.Add(new BuildersClubMembershipComposer());
-            packetList.Add(new CfhTopicsInitComposer(WibboEnvironment.GetGame().GetModerationManager().UserActionPresets));
+            packetList.Add(new CfhTopicsInitComposer(ModerationManager.UserActionPresets));
             packetList.Add(new UserSettingsComposer(session.User.ClientVolume, session.User.OldChat, session.User.IgnoreRoomInvites, session.User.CameraFollowDisabled, 1, 0));
-            //packetList.Add(new AvatarEffectsComposer(WibboEnvironment.GetGame().GetEffectManager().Effects));
+            //packetList.Add(new AvatarEffectsComposer(EffectManager.Effects));
 
             packetList.Add(new CreditBalanceComposer(session.User.Credits));
 
@@ -116,20 +121,19 @@ internal sealed class SSOTicketEvent : IPacketEvent
 
             if (session.User.HasPermission("mod"))
             {
-                WibboEnvironment.GetGame().GetGameClientManager().AddUserStaff(session.User.Id);
+                GameClientManager.AddUserStaff(session.User.Id);
                 packetList.Add(new ModeratorInitComposer(
-                    WibboEnvironment.GetGame().GetModerationManager().UserMessagePresets(),
-                    WibboEnvironment.GetGame().GetModerationManager().RoomMessagePresets(),
-                    WibboEnvironment.GetGame().GetModerationManager().Tickets()));
+                    ModerationManager.UserMessagePresets,
+                    ModerationManager.RoomMessagePresets,
+                    ModerationManager.Tickets));
             }
 
             if (session.User.HasPermission("helptool") && session.User.BadgeComponent.HasBadgeSlot("STAFF_HELPER"))
             {
-                var guideManager = WibboEnvironment.GetGame().GetHelpManager();
-                guideManager.TryAddGuide(session.User.Id);
+                HelpManager.TryAddGuide(session.User.Id);
                 session.User.OnDuty = true;
 
-                packetList.Add(new HelperToolComposer(session.User.OnDuty, guideManager.Count));
+                packetList.Add(new HelperToolComposer(session.User.OnDuty, HelpManager.Count));
             }
 
             session.SendPacket(packetList);
@@ -186,9 +190,9 @@ internal sealed class SSOTicketEvent : IPacketEvent
 
         if (nbLot > 0)
         {
-            var lootboxId = WibboEnvironment.GetSettings().GetData<int>("givelot.lootbox.id");
+            var lootboxId = SettingsManager.GetData<int>("givelot.lootbox.id");
 
-            if (WibboEnvironment.GetGame().GetItemManager().GetItem(lootboxId, out var itemData))
+            if (ItemManager.GetItem(lootboxId, out var itemData))
             {
                 var items = ItemFactory.CreateMultipleItems(dbClient, itemData, session.User, "", nbLot);
 
@@ -233,9 +237,9 @@ internal sealed class SSOTicketEvent : IPacketEvent
 
         session.User.NewUser = false;
 
-        var homeId = WibboEnvironment.GetSettings().GetData<int>("default.home.id");
+        var homeId = SettingsManager.GetData<int>("default.home.id");
 
-        var roomId = RoomDao.InsertDuplicate(dbClient, session.User.Username, WibboEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", session.Langue));
+        var roomId = RoomDao.InsertDuplicate(dbClient, session.User.Username, LanguageManager.TryGetValue("room.welcome.desc", session.Language));
 
         UserDao.UpdateNuxEnable(dbClient, session.User.Id, homeId > 0 ? homeId : roomId);
 

@@ -21,7 +21,7 @@ internal sealed class OpenBotActionEvent : IPacketEvent
             return;
         }
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null || !room.CheckRights(session))
         {
             return;

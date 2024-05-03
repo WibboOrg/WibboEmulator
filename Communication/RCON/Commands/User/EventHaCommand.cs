@@ -1,5 +1,7 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
 using System.Text.RegularExpressions;
+using WibboEmulator.Games.Animations;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Moderations;
 
 internal sealed partial class EventHaCommand : IRCONCommand
@@ -21,8 +23,8 @@ internal sealed partial class EventHaCommand : IRCONCommand
             return false;
         }
 
-        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (client == null || client.User.CurrentRoom == null)
+        var client = GameClientManager.GetClientByUserID(userId);
+        if (client == null || client.User.Room == null)
         {
             return true;
         }
@@ -31,7 +33,7 @@ internal sealed partial class EventHaCommand : IRCONCommand
 
         ModerationManager.LogStaffEntry(client.User.Id, client.User.Username, 0, string.Empty, "eventha", string.Format("WbTool eventha: {0}", message));
 
-        if (!WibboEnvironment.GetGame().GetAnimationManager().AllowAnimation())
+        if (!AnimationManager.AllowAnimation)
         {
             return true;
         }
@@ -43,8 +45,8 @@ internal sealed partial class EventHaCommand : IRCONCommand
         message = MyRegex2().Replace(message, "<u>$1</u>");
 
         var alertMessage = message + "\r\n- " + client.User.Username;
-        WibboEnvironment.GetGame().GetGameClientManager().SendSuperNotif("Message des Staffs", alertMessage, "game_promo_small", "event:navigator/goto/" + client.User.CurrentRoom.Id, "Je veux y accéder!");
-        client.User.CurrentRoom.CloseFullRoom = true;
+        GameClientManager.SendSuperNotification("Message des Staffs", alertMessage, "game_promo_small", "event:navigator/goto/" + client.User.Room.Id, "Je veux y accéder!");
+        client.User.Room.CloseFullRoom = true;
 
         return true;
     }

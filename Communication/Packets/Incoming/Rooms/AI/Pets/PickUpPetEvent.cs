@@ -2,8 +2,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Pets;
 using System.Drawing;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class PickUpPetEvent : IPacketEvent
 {
@@ -22,7 +24,7 @@ internal sealed class PickUpPetEvent : IPacketEvent
         }
 
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -36,7 +38,7 @@ internal sealed class PickUpPetEvent : IPacketEvent
                 return;
             }
 
-            var targetUser = session.User.CurrentRoom.RoomUserManager.GetRoomUserByUserId(petId);
+            var targetUser = session.User.Room.RoomUserManager.GetRoomUserByUserId(petId);
             if (targetUser == null)
             {
                 return;
@@ -80,20 +82,20 @@ internal sealed class PickUpPetEvent : IPacketEvent
         pet.RoomId = 0;
         petData.PlacedInRoom = false;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             BotPetDao.UpdateRoomId(dbClient, petData.PetId, 0);
         }
 
         if (petData.OwnerId != session.User.Id)
         {
-            var target = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(petData.OwnerId);
+            var target = GameClientManager.GetClientByUserID(petData.OwnerId);
             if (target != null)
             {
                 _ = target.User.InventoryComponent.TryAddPet(pet.PetData);
                 room.RoomUserManager.RemoveBot(pet.VirtualId, false);
 
-                target.SendPacket(new PetInventoryComposer(target.User.InventoryComponent.GetPets()));
+                target.SendPacket(new PetInventoryComposer(target.User.InventoryComponent.Pets));
                 return;
             }
         }
@@ -101,7 +103,7 @@ internal sealed class PickUpPetEvent : IPacketEvent
         {
             _ = session.User.InventoryComponent.TryAddPet(pet.PetData);
             room.RoomUserManager.RemoveBot(pet.VirtualId, false);
-            session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.GetPets()));
+            session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.Pets));
         }
     }
 }

@@ -1,12 +1,14 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 
+using WibboEmulator.Games.Catalogs.Marketplace;
+
 internal sealed class MarketplaceItemStatsComposer : ServerPacket
 {
     public MarketplaceItemStatsComposer(int itemId, int spriteId, int averagePrice)
         : base(ServerPacketHeader.MARKETPLACE_ITEM_STATS)
     {
         this.WriteInteger(averagePrice);//Avg price in last 7 days.
-        this.WriteInteger(WibboEnvironment.GetGame().GetCatalog().GetMarketplace().OfferCountForSprite(spriteId));
+        this.WriteInteger(MarketplaceManager.OfferCountForSprite(spriteId));
         this.WriteInteger(7);//Day
 
         this.WriteInteger(4);//Count

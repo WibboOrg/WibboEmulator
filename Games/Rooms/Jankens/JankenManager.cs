@@ -6,13 +6,13 @@ public class JankenManager
 {
     private readonly ConcurrentDictionary<int, Janken> _party;
     private readonly List<Janken> _remove;
-    private readonly Room _roomInstance;
+    private readonly Room _room;
 
     public JankenManager(Room room)
     {
         this._party = new ConcurrentDictionary<int, Janken>();
-        this._remove = new List<Janken>();
-        this._roomInstance = room;
+        this._remove = [];
+        this._room = room;
     }
 
     public void Start(RoomUser user, RoomUser duelUser)
@@ -47,12 +47,12 @@ public class JankenManager
                 party.Started = true;
                 user.PartyId = party.UserOne;
 
-                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.start", user.Client.Langue));
-                duelUser.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.start", duelUser.Client.Langue));
+                user.SendWhisperChat(LanguageManager.TryGetValue("janken.start", user.Client.Language));
+                duelUser.SendWhisperChat(LanguageManager.TryGetValue("janken.start", duelUser.Client.Language));
             }
             else
             {
-                user.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("janken.notwork", user.Client.Langue), duelUser.GetUsername()));
+                user.SendWhisperChat(string.Format(LanguageManager.TryGetValue("janken.notwork", user.Client.Language), duelUser.Username));
             }
         }
         else
@@ -60,8 +60,8 @@ public class JankenManager
             user.PartyId = user.UserId;
             _ = this._party.TryAdd(user.PartyId, new Janken(user.UserId, duelUser.UserId));
 
-            user.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("janken.wait", user.Client.Langue), duelUser.GetUsername()));
-            duelUser.SendWhisperChat(user.GetUsername() + " vous défie au JanKen! Utilisez la commande :janken " + user.GetUsername() + " pour accepter le défie");
+            user.SendWhisperChat(string.Format(LanguageManager.TryGetValue("janken.wait", user.Client.Language), duelUser.Username));
+            duelUser.SendWhisperChat(user.Username + " vous défie au JanKen! Utilisez la commande :janken " + user.Username + " pour accepter le défie");
         }
     }
 
@@ -87,8 +87,8 @@ public class JankenManager
                 {
                     party.Started = false;
 
-                    var roomuserOne = this._roomInstance.RoomUserManager.GetRoomUserByUserId(party.UserOne);
-                    var roomuserTwo = this._roomInstance.RoomUserManager.GetRoomUserByUserId(party.UserTwo);
+                    var roomuserOne = this._room.RoomUserManager.GetRoomUserByUserId(party.UserOne);
+                    var roomuserTwo = this._room.RoomUserManager.GetRoomUserByUserId(party.UserTwo);
 
                     if (roomuserOne != null)
                     {
@@ -175,7 +175,7 @@ public class JankenManager
 
         if (user.Client != null)
         {
-            user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.confirmechoice", user.Client.Langue) + GetStringChoix(choice, user.Client.Langue));
+            user.SendWhisperChat(LanguageManager.TryGetValue("janken.confirmechoice", user.Client.Language) + GetStringChoix(choice, user.Client.Language));
         }
 
         return true;
@@ -183,8 +183,8 @@ public class JankenManager
 
     private bool EndGame(Janken party)
     {
-        var roomuserOne = this._roomInstance.RoomUserManager.GetRoomUserByUserId(party.UserOne);
-        var roomuserTwo = this._roomInstance.RoomUserManager.GetRoomUserByUserId(party.UserTwo);
+        var roomuserOne = this._room.RoomUserManager.GetRoomUserByUserId(party.UserOne);
+        var roomuserTwo = this._room.RoomUserManager.GetRoomUserByUserId(party.UserTwo);
         if (roomuserOne == null && roomuserTwo == null)
         {
             return true;
@@ -192,30 +192,30 @@ public class JankenManager
 
         if (roomuserOne == null)
         {
-            roomuserTwo.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.forfait", roomuserTwo.Client.Langue));
+            roomuserTwo.SendWhisperChat(LanguageManager.TryGetValue("janken.forfait", roomuserTwo.Client.Language));
             return true;
         }
         else if (roomuserTwo == null)
         {
-            roomuserOne.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.forfait", roomuserOne.Client.Langue));
+            roomuserOne.SendWhisperChat(LanguageManager.TryGetValue("janken.forfait", roomuserOne.Client.Language));
             return true;
         }
 
         if (party.ChoiceOne == JankenType.None && party.ChoiceTwo == JankenType.None)
         {
-            roomuserTwo.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.annule", roomuserTwo.Client.Langue));
-            roomuserOne.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.annule", roomuserOne.Client.Langue));
+            roomuserTwo.SendWhisperChat(LanguageManager.TryGetValue("janken.annule", roomuserTwo.Client.Language));
+            roomuserOne.SendWhisperChat(LanguageManager.TryGetValue("janken.annule", roomuserOne.Client.Language));
             return true;
         }
 
         if (party.ChoiceOne == JankenType.None)
         {
-            roomuserTwo.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.forfait", roomuserTwo.Client.Langue));
+            roomuserTwo.SendWhisperChat(LanguageManager.TryGetValue("janken.forfait", roomuserTwo.Client.Language));
             return true;
         }
         else if (party.ChoiceTwo == JankenType.None)
         {
-            roomuserOne.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.forfait", roomuserOne.Client.Langue));
+            roomuserOne.SendWhisperChat(LanguageManager.TryGetValue("janken.forfait", roomuserOne.Client.Language));
             return true;
         }
 
@@ -226,8 +226,8 @@ public class JankenManager
 
             party.Timer = 0;
 
-            roomuserOne.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.nul", roomuserOne.Client.Langue));
-            roomuserTwo.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.nul", roomuserTwo.Client.Langue));
+            roomuserOne.SendWhisperChat(LanguageManager.TryGetValue("janken.nul", roomuserOne.Client.Language));
+            roomuserTwo.SendWhisperChat(LanguageManager.TryGetValue("janken.nul", roomuserTwo.Client.Language));
 
             EnableEffet(roomuserOne, party.ChoiceOne);
             EnableEffet(roomuserTwo, party.ChoiceTwo);
@@ -239,8 +239,8 @@ public class JankenManager
             (party.ChoiceOne == JankenType.Paper && party.ChoiceTwo == JankenType.Rock) ||
             (party.ChoiceOne == JankenType.Rock && party.ChoiceTwo == JankenType.Scissors))
         {
-            roomuserOne.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("janken.win", roomuserOne.Client.Langue), GetStringChoix(party.ChoiceOne, roomuserOne.Client.Langue), GetStringChoix(party.ChoiceTwo, roomuserOne.Client.Langue), roomuserTwo.GetUsername()));
-            roomuserTwo.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("janken.loose", roomuserTwo.Client.Langue), GetStringChoix(party.ChoiceOne, roomuserTwo.Client.Langue), GetStringChoix(party.ChoiceTwo, roomuserTwo.Client.Langue), roomuserOne.GetUsername()));
+            roomuserOne.SendWhisperChat(string.Format(LanguageManager.TryGetValue("janken.win", roomuserOne.Client.Language), GetStringChoix(party.ChoiceOne, roomuserOne.Client.Language), GetStringChoix(party.ChoiceTwo, roomuserOne.Client.Language), roomuserTwo.Username));
+            roomuserTwo.SendWhisperChat(string.Format(LanguageManager.TryGetValue("janken.loose", roomuserTwo.Client.Language), GetStringChoix(party.ChoiceOne, roomuserTwo.Client.Language), GetStringChoix(party.ChoiceTwo, roomuserTwo.Client.Language), roomuserOne.Username));
 
             EnableEffet(roomuserOne, party.ChoiceOne);
             EnableEffet(roomuserTwo, party.ChoiceTwo);
@@ -252,8 +252,8 @@ public class JankenManager
             (party.ChoiceOne == JankenType.Paper && party.ChoiceTwo == JankenType.Scissors) ||
             (party.ChoiceOne == JankenType.Rock && party.ChoiceTwo == JankenType.Paper))
         {
-            roomuserTwo.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("janken.win", roomuserTwo.Client.Langue), GetStringChoix(party.ChoiceTwo, roomuserTwo.Client.Langue), GetStringChoix(party.ChoiceOne, roomuserTwo.Client.Langue), roomuserOne.GetUsername()));
-            roomuserOne.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("janken.loose", roomuserOne.Client.Langue), GetStringChoix(party.ChoiceTwo, roomuserOne.Client.Langue), GetStringChoix(party.ChoiceOne, roomuserOne.Client.Langue), roomuserTwo.GetUsername()));
+            roomuserTwo.SendWhisperChat(string.Format(LanguageManager.TryGetValue("janken.win", roomuserTwo.Client.Language), GetStringChoix(party.ChoiceTwo, roomuserTwo.Client.Language), GetStringChoix(party.ChoiceOne, roomuserTwo.Client.Language), roomuserOne.Username));
+            roomuserOne.SendWhisperChat(string.Format(LanguageManager.TryGetValue("janken.loose", roomuserOne.Client.Language), GetStringChoix(party.ChoiceTwo, roomuserOne.Client.Language), GetStringChoix(party.ChoiceOne, roomuserOne.Client.Language), roomuserTwo.Username));
 
             EnableEffet(roomuserOne, party.ChoiceOne);
             EnableEffet(roomuserTwo, party.ChoiceTwo);
@@ -265,9 +265,9 @@ public class JankenManager
 
     private static string GetStringChoix(JankenType choix, Language langue) => choix switch
     {
-        JankenType.Scissors => WibboEnvironment.GetLanguageManager().TryGetValue("janken.ciseaux", langue),
-        JankenType.Paper => WibboEnvironment.GetLanguageManager().TryGetValue("janken.feuille", langue),
-        JankenType.Rock => WibboEnvironment.GetLanguageManager().TryGetValue("janken.pierre", langue),
+        JankenType.Scissors => LanguageManager.TryGetValue("janken.ciseaux", langue),
+        JankenType.Paper => LanguageManager.TryGetValue("janken.feuille", langue),
+        JankenType.Rock => LanguageManager.TryGetValue("janken.pierre", langue),
         _ => "",
     };
 
@@ -304,8 +304,8 @@ public class JankenManager
 
         if (!party.Started)
         {
-            var roomuserOne = this._roomInstance.RoomUserManager.GetRoomUserByUserId(party.UserOne);
-            var roomuserTwo = this._roomInstance.RoomUserManager.GetRoomUserByUserId(party.UserTwo);
+            var roomuserOne = this._room.RoomUserManager.GetRoomUserByUserId(party.UserOne);
+            var roomuserTwo = this._room.RoomUserManager.GetRoomUserByUserId(party.UserTwo);
 
             if (roomuserOne != null)
             {

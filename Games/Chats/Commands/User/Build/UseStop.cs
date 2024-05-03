@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Build;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -8,6 +10,6 @@ internal sealed class UseStop : IChatCommand
     {
         session.User.ForceUse = -1;
 
-        session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.use.disabled", session.Langue));
+        session.SendWhisper(LanguageManager.TryGetValue("cmd.use.disabled", session.Language));
     }
 }

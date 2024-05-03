@@ -1,5 +1,8 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Chat;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Games.Chats.Filter;
+using WibboEmulator.Games.Chats.Styles;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
 
@@ -14,7 +17,7 @@ internal sealed class WhisperEvent : IPacketEvent
             return;
         }
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null)
         {
             return;
@@ -36,14 +39,14 @@ internal sealed class WhisperEvent : IPacketEvent
         var message = parameters[(toUser.Length + 1)..];
         var color = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(color, out var style) || (style.RequiredRight.Length > 0 && !session.User.HasPermission(style.RequiredRight)))
+        if (!ChatStyleManager.TryGetStyle(color, out var style) || (style.RequiredRight.Length > 0 && !session.User.HasPermission(style.RequiredRight)))
         {
             color = 0;
         }
 
         if (color == 23)
         {
-            color = session.User.BadgeComponent.GetStaffBulleId();
+            color = session.User.BadgeComponent.StaffBulleId;
         }
 
         if (session.User.CheckChatMessage(message, "<MP>", room.Id))
@@ -53,7 +56,7 @@ internal sealed class WhisperEvent : IPacketEvent
 
         if (!session.User.HasPermission("word_filter_override"))
         {
-            message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(message);
+            message = WordFilterManager.CheckMessage(message);
         }
 
         var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
@@ -63,7 +66,7 @@ internal sealed class WhisperEvent : IPacketEvent
             return;
         }
 
-        if (!session.User.HasPermission("mod") && !user.IsOwner() && !room.CheckRights(session) && room.UserIsMuted(session.User.Id))
+        if (!session.User.HasPermission("mod") && !user.IsOwner && !room.CheckRights(session) && room.UserIsMuted(session.User.Id))
         {
             if (!room.HasMuteExpired(session.User.Id))
             {
@@ -167,17 +170,17 @@ internal sealed class WhisperEvent : IPacketEvent
                     userWhiper.Client.SendPacket(new WhisperComposer(user.VirtualId, message, color));
                 }
 
-                var roomUserByRank = room.RoomUserManager.GetStaffRoomUser();
+                var roomUserByRank = room.RoomUserManager.StaffRoomUsers;
                 if (roomUserByRank.Count <= 0)
                 {
                     return;
                 }
 
-                var messageWhipser = new WhisperComposer(user.VirtualId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", session.Langue) + toUser + ": " + message, color);
+                var messageWhipser = new WhisperComposer(user.VirtualId, LanguageManager.TryGetValue("moderation.whisper", session.Language) + toUser + ": " + message, color);
 
                 foreach (var roomUser in roomUserByRank)
                 {
-                    if (roomUser != null && roomUser.UserId != user.UserId && roomUser.Client != null && roomUser.Client.User.ViewMurmur && !user.WhiperGroupUsers.Contains(roomUser.GetUsername()))
+                    if (roomUser != null && roomUser.UserId != user.UserId && roomUser.Client != null && roomUser.Client.User.ViewMurmur && !user.WhiperGroupUsers.Contains(roomUser.Username))
                     {
                         roomUser.Client.SendPacket(messageWhipser);
                     }
@@ -206,13 +209,13 @@ internal sealed class WhisperEvent : IPacketEvent
 
                 userWhiper.Client.SendPacket(new WhisperComposer(user.VirtualId, message, color));
 
-                var roomUserByRank = room.RoomUserManager.GetStaffRoomUser();
+                var roomUserByRank = room.RoomUserManager.StaffRoomUsers;
                 if (roomUserByRank.Count <= 0)
                 {
                     return;
                 }
 
-                var messageWhipserStaff = new WhisperComposer(user.VirtualId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", session.Langue) + toUser + ": " + message, color);
+                var messageWhipserStaff = new WhisperComposer(user.VirtualId, LanguageManager.TryGetValue("moderation.whisper", session.Language) + toUser + ": " + message, color);
                 foreach (var roomUser in roomUserByRank)
                 {
                     if (roomUser != null && roomUser.Client != null && roomUser.Client.User != null && roomUser.UserId != user.UserId && roomUser.Client != null && roomUser.Client.User.ViewMurmur && userWhiper.UserId != roomUser.UserId)
@@ -222,8 +225,8 @@ internal sealed class WhisperEvent : IPacketEvent
                 }
             }
 
-            session.User.ChatMessageManager.AddMessage(user.UserId, user.GetUsername(), user.RoomId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", session.Langue) + toUser + ": " + message, UnixTimestamp.GetNow());
-            room.ChatlogManager.AddMessage(user.UserId, user.GetUsername(), user.RoomId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", session.Langue) + toUser + ": " + message, UnixTimestamp.GetNow());
+            session.User.ChatMessageManager.AddMessage(user.UserId, user.Username, user.RoomId, LanguageManager.TryGetValue("moderation.whisper", session.Language) + toUser + ": " + message, UnixTimestamp.GetNow());
+            room.ChatlogManager.AddMessage(user.UserId, user.Username, user.RoomId, LanguageManager.TryGetValue("moderation.whisper", session.Language) + toUser + ": " + message, UnixTimestamp.GetNow());
         }
     }
 }

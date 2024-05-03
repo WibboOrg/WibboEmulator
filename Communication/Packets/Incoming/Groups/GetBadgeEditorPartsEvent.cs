@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Groups;
 
 internal sealed class GetBadgeEditorPartsEvent : IPacketEvent
 {
@@ -14,10 +15,10 @@ internal sealed class GetBadgeEditorPartsEvent : IPacketEvent
         }
 
         session.SendPacket(new BadgeEditorPartsComposer(
-            WibboEnvironment.GetGame().GetGroupManager().BadgeBases,
-            WibboEnvironment.GetGame().GetGroupManager().BadgeSymbols,
-            WibboEnvironment.GetGame().GetGroupManager().BadgeBaseColours,
-            WibboEnvironment.GetGame().GetGroupManager().BadgeSymbolColours,
-            WibboEnvironment.GetGame().GetGroupManager().BadgeBackColours));
+            GroupManager.BadgeBases,
+            GroupManager.BadgeSymbols,
+            GroupManager.BadgeBaseColours,
+            GroupManager.BadgeSymbolColours,
+            GroupManager.BadgeBackColours));
     }
 }

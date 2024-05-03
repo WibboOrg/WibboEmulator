@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
 {
-    public ExecutePile(Item item, Room room) : base(item, room, (int)WiredActionType.CALL_ANOTHER_STACK) => this.DefaultIntParams(new int[] { 0 });
+    public ExecutePile(Item item, Room room) : base(item, room, (int)WiredActionType.CALL_ANOTHER_STACK) => this.DefaultIntParams(0);
 
     public override bool OnCycle(RoomUser user, Item item)
     {
@@ -16,12 +16,12 @@ public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
         {
             foreach (var coord in roomItem.GetAffectedTiles)
             {
-                if (coord == this.ItemInstance.Coordinate && this.RoomInstance.WiredHandler.SecurityEnabled)
+                if (coord == this.Item.Coordinate && this.Room.WiredHandler.SecurityEnabled)
                 {
                     continue;
                 }
 
-                this.RoomInstance.WiredHandler.ExecutePile(coord, user, item, ignoreCondition);
+                this.Room.WiredHandler.ExecutePile(coord, user, item, ignoreCondition);
             }
         }
 

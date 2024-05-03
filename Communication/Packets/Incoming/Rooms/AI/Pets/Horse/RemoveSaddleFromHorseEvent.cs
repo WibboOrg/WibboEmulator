@@ -2,10 +2,12 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Pets.Horse;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class RemoveSaddleFromHorseEvent : IPacketEvent
 {
@@ -18,7 +20,7 @@ internal sealed class RemoveSaddleFromHorseEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -37,11 +39,11 @@ internal sealed class RemoveSaddleFromHorseEvent : IPacketEvent
 
         petUser.PetData.Saddle = 0;
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         BotPetDao.UpdateHaveSaddle(dbClient, petUser.PetData.PetId, 0);
 
-        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(saddleId, out var itemData))
+        if (!ItemManager.GetItem(saddleId, out var itemData))
         {
             return;
         }

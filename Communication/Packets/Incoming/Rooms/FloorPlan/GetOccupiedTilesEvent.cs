@@ -1,6 +1,7 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Rooms.FloorPlan;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.FloorPlan;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.FloorPlan;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class GetOccupiedTilesEvent : IPacketEvent
 {
@@ -8,7 +9,7 @@ internal sealed class GetOccupiedTilesEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }

@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class GetModeratorUserInfoEvent : IPacketEvent
@@ -19,7 +20,7 @@ internal sealed class GetModeratorUserInfoEvent : IPacketEvent
 
         if (user == null)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.loadusererror", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("user.loadusererror", session.Language));
             return;
         }
 

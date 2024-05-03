@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
@@ -17,7 +18,7 @@ internal sealed class CancelOfferEvent : IPacketEvent
 
         var offerId = packet.PopInt();
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         var offer = CatalogMarketplaceOfferDao.GetByOfferId(dbClient, offerId);
 
@@ -39,7 +40,7 @@ internal sealed class CancelOfferEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(offer.ItemId, out var item))
+        if (!ItemManager.GetItem(offer.ItemId, out var item))
         {
             session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
             return;

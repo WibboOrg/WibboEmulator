@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Games.Catalogs.Marketplace;
 using WibboEmulator.Games.GameClients;
@@ -16,20 +17,20 @@ internal sealed class GetOffersEvent : IPacketEvent
         var searchQuery = packet.PopString();
         var filterMode = packet.PopInt();
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         var offerList = CatalogMarketplaceOfferDao.GetAll(dbClient, searchQuery, minCost, maxCost, filterMode);
 
-        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Clear();
-        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Clear();
+        MarketplaceManager.MarketItems.Clear();
+        MarketplaceManager.MarketItemKeys.Clear();
         if (offerList.Count != 0)
         {
             foreach (var offer in offerList)
             {
-                if (!WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Contains(offer.OfferId))
+                if (!MarketplaceManager.MarketItemKeys.Contains(offer.OfferId))
                 {
-                    WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Add(offer.OfferId);
-                    WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Add(new MarketOffer(offer.OfferId, offer.SpriteId, offer.TotalPrice, offer.ItemType, offer.LimitedNumber, offer.LimitedStack));
+                    MarketplaceManager.MarketItemKeys.Add(offer.OfferId);
+                    MarketplaceManager.MarketItems.Add(new MarketOffer(offer.OfferId, offer.SpriteId, offer.TotalPrice, offer.ItemType, offer.LimitedNumber, offer.LimitedStack));
                 }
             }
         }
@@ -37,7 +38,7 @@ internal sealed class GetOffersEvent : IPacketEvent
         var dictionary = new Dictionary<int, MarketOffer>();
         var dictionary2 = new Dictionary<int, int>();
 
-        foreach (var item in WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems)
+        foreach (var item in MarketplaceManager.MarketItems)
         {
             if (dictionary.TryGetValue(item.SpriteId, out var spriteOffer))
             {

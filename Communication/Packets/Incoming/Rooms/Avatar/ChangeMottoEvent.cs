@@ -1,6 +1,9 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Games.Achievements;
+using WibboEmulator.Games.Chats.Filter;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
@@ -18,7 +21,7 @@ internal sealed class ChangeMottoEvent : IPacketEvent
 
         if (!session.User.HasPermission("word_filter_override"))
         {
-            newMotto = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(newMotto);
+            newMotto = WordFilterManager.CheckMessage(newMotto);
         }
 
         if (session.User.IgnoreAll)
@@ -33,16 +36,16 @@ internal sealed class ChangeMottoEvent : IPacketEvent
 
         session.User.Motto = newMotto;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             UserDao.UpdateMotto(dbClient, session.User.Id, newMotto);
         }
 
-        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ProfileChangeMotto, 0);
+        QuestManager.ProgressUserQuest(session, QuestType.ProfileChangeMotto, 0);
 
         if (session.User.InRoom)
         {
-            var currentRoom = session.User.CurrentRoom;
+            var currentRoom = session.User.Room;
             if (currentRoom == null)
             {
                 return;
@@ -62,6 +65,6 @@ internal sealed class ChangeMottoEvent : IPacketEvent
             currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
         }
 
-        _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_Motto", 1);
+        _ = AchievementManager.ProgressAchievement(session, "ACH_Motto", 1);
     }
 }

@@ -70,7 +70,7 @@ internal sealed class HttpResponse : HttpBase
           code,
           reason,
           HttpVersion.Version11,
-          new NameValueCollection()
+          []
         ) => this.Headers["Server"] = "websocket-sharp/1.0";
 
     internal HttpResponse(HttpStatusCode code, string reason)

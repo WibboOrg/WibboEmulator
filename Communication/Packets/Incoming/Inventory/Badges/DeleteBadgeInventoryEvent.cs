@@ -1,5 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Badges;
 
+using WibboEmulator.Core.Language;
+using WibboEmulator.Games.Badges;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class DeleteBadgeInventoryEvent : IPacketEvent
@@ -15,9 +17,9 @@ internal sealed class DeleteBadgeInventoryEvent : IPacketEvent
 
         var badgeCode = packet.PopString();
 
-        if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(badgeCode) || !session.User.BadgeComponent.HasBadge(badgeCode))
+        if (BadgeManager.HaveNotAllowed(badgeCode) || !session.User.BadgeComponent.HasBadge(badgeCode))
         {
-            session.SendHugeNotif(WibboEnvironment.GetLanguageManager().TryGetValue("notif.badge.removed.error", session.Langue));
+            session.SendHugeNotification(LanguageManager.TryGetValue("notif.badge.removed.error", session.Language));
             return;
         }
 

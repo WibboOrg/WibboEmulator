@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.RolePlay;
 
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
@@ -17,7 +18,7 @@ internal sealed class RpBotChooseEvent : IPacketEvent
             return;
         }
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null)
         {
             return;
@@ -31,7 +32,7 @@ internal sealed class RpBotChooseEvent : IPacketEvent
 
         if (message == "play_slot" && user.IsSlot && !user.IsSlotSpin && session.User.WibboPoints >= user.SlotAmount)
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+            using var dbClient = DatabaseManager.Connection;
 
             user.IsSlotSpin = true;
             user.IsSlot = false;

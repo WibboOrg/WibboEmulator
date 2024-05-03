@@ -1,7 +1,9 @@
 namespace WibboEmulator.Games.Items.Interactors;
 
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Games.Banners;
 using WibboEmulator.Games.GameClients;
 
 public class InteractorBannerTroc : FurniInteractor
@@ -23,7 +25,7 @@ public class InteractorBannerTroc : FurniInteractor
             return;
         }
 
-        var room = item.GetRoom();
+        var room = item.Room;
 
         if (room == null || !room.CheckRights(session, true))
         {
@@ -35,7 +37,7 @@ public class InteractorBannerTroc : FurniInteractor
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(bannerId, out var banner) || session.User.Banner.BannerList.Contains(banner))
+        if (!BannerManager.TryGetBannerById(bannerId, out var banner) || session.User.BannerComponent.BannerList.Contains(banner))
         {
             //session.SendNotification("Vous possédez déjà cette bannière !");
             session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous possèdez déjà cette bannière."));
@@ -44,12 +46,12 @@ public class InteractorBannerTroc : FurniInteractor
 
         this._haveReward = true;
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         ItemDao.DeleteById(dbClient, item.Id);
 
         room.RoomItemHandling.RemoveFurniture(null, item.Id);
 
-        session.User.Banner.AddBanner(dbClient, bannerId);
+        session.User.BannerComponent.AddBanner(dbClient, bannerId);
 
         session.SendNotification("Vous avez reçu la bannière : " + bannerId + " !");
     }

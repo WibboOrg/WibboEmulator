@@ -3,6 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+using WibboEmulator.Core.Settings;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -22,7 +23,7 @@ internal sealed class OpenFlatConnectionEvent : IPacketEvent
 
         if (session.User.InRoom)
         {
-            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var oldRoom))
+            if (RoomManager.TryGetRoom(session.User.RoomId, out var oldRoom))
             {
                 oldRoom.RoomUserManager.RemoveUserFromRoom(session, false, false);
             }
@@ -38,7 +39,7 @@ internal sealed class OpenFlatConnectionEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out _))
+        if (!RoomManager.TryGetRoom(roomId, out _))
         {
             if (session.User.LastLoadedRoomTime.CheckIsBlocked())
             {
@@ -47,7 +48,7 @@ internal sealed class OpenFlatConnectionEvent : IPacketEvent
             }
         }
 
-        var room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(roomId);
+        var room = RoomManager.LoadRoom(roomId);
         if (room == null)
         {
             session.SendPacket(new CloseConnectionComposer());
@@ -86,7 +87,7 @@ internal sealed class OpenFlatConnectionEvent : IPacketEvent
             }
         }
 
-        var ownerEnterNotAllowed = WibboEnvironment.GetSettings().GetData<string>("room.owner.enter.not.allowed").Split(',');
+        var ownerEnterNotAllowed = SettingsManager.GetData<string>("room.owner.enter.not.allowed").Split(',');
 
         if (!session.User.HasPermission("access_apartments_all"))
         {
@@ -116,7 +117,7 @@ internal sealed class OpenFlatConnectionEvent : IPacketEvent
             }
         }
 
-        if (room.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner") || room.CloseFullRoom)
+        if (room.RoomData.OwnerName == SettingsManager.GetData<string>("autogame.owner") || room.CloseFullRoom)
         {
             if (room.RoomUserManager.GetUserByTracker(session.User.IP) != null)
             {

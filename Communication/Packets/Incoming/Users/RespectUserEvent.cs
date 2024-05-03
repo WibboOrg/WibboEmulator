@@ -1,8 +1,10 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
+using WibboEmulator.Games.Achievements;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class RespectUserEvent : IPacketEvent
 {
@@ -15,7 +17,7 @@ internal sealed class RespectUserEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -31,9 +33,9 @@ internal sealed class RespectUserEvent : IPacketEvent
             return;
         }
 
-        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialRespect, 0);
-        _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByUserIdTarget.Client, "ACH_RespectEarned", 1);
-        _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RespectGiven", 1);
+        QuestManager.ProgressUserQuest(session, QuestType.SocialRespect, 0);
+        _ = AchievementManager.ProgressAchievement(roomUserByUserIdTarget.Client, "ACH_RespectEarned", 1);
+        _ = AchievementManager.ProgressAchievement(session, "ACH_RespectGiven", 1);
         session.User.DailyRespectPoints--;
         roomUserByUserIdTarget.Client.User.Respect++;
 

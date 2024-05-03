@@ -1,5 +1,7 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
+using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class SendUserCommand : IRCONCommand
 {
@@ -30,13 +32,13 @@ internal sealed class SendUserCommand : IRCONCommand
             return false;
         }
 
-        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        var client = GameClientManager.GetClientByUserID(userId);
         if (client == null || client.User == null)
         {
             return true;
         }
 
-        var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+        var roomData = RoomManager.GenerateRoomData(roomId);
         if (roomData == null)
         {
             return true;

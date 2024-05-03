@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
+using WibboEmulator.Games.GameClients;
 
 internal sealed class UpdateWibboPointsCommand : IRCONCommand
 {
@@ -30,7 +31,7 @@ internal sealed class UpdateWibboPointsCommand : IRCONCommand
             return false;
         }
 
-        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userid);
+        var client = GameClientManager.GetClientByUserID(userid);
         if (client == null)
         {
             return true;

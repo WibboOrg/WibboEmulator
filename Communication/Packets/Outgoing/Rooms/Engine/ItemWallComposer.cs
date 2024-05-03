@@ -22,13 +22,13 @@ internal sealed class ItemWallComposer : ServerPacket
     private void WriteWallItem(Item item, int userId)
     {
         this.WriteString(item.Id.ToString());
-        this.WriteInteger(item.GetBaseItem().SpriteId);
+        this.WriteInteger(item.ItemData.SpriteId);
         this.WriteString(item.WallCoord ?? string.Empty);
 
         ItemBehaviourUtility.GenerateWallExtradata(item, this);
 
         this.WriteInteger(-1);
-        this.WriteInteger((item.GetBaseItem().Modes > 1) ? 1 : 0);
+        this.WriteInteger((item.ItemData.Modes > 1) ? 1 : 0);
         this.WriteInteger(userId);
     }
 }

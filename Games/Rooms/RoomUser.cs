@@ -4,6 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Roleplays;
 using WibboEmulator.Games.Roleplays.Player;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Rooms.Games.Freeze;
@@ -144,7 +145,7 @@ public class RoomUser : IEquatable<RoomUser>
     {
         get
         {
-            var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this.Room.RoomData.OwnerId);
+            var rpManager = RoleplayManager.GetRolePlay(this.Room.RoomData.OwnerId);
             if (rpManager == null)
             {
                 return null;
@@ -173,55 +174,61 @@ public class RoomUser : IEquatable<RoomUser>
         this.RotHead = 0;
         this.RotBody = 0;
         this.UpdateNeeded = true;
-        this.Statusses = new Dictionary<string, string>();
+        this.Statusses = [];
         this.Room = room;
         this.AllowOverride = false;
         this.CanWalk = true;
         this.CurrentItemEffect = ItemEffectType.None;
         this.BreakWalkEnable = false;
         this.AllowShoot = false;
-        this.AllowBuyItems = new List<int>();
+        this.AllowBuyItems = [];
         this.IsDispose = false;
         this.AllowMoveTo = true;
         this.AllowArrowMove = true;
         this.AllowMouseMove = true;
-        this.WhiperGroupUsers = new List<string>();
+        this.WhiperGroupUsers = [];
 
         if (!this.IsBot)
         {
-            this.Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this.UserId);
+            this.Client = GameClientManager.GetClientByUserID(this.UserId);
         }
     }
 
-    public string GetUsername()
+    public string Username
     {
-        if (this.IsBot)
+        get
         {
-            return this.BotData.Name;
-        }
-        else if (this.IsPet)
-        {
-            return this.PetData.Name;
-        }
-        else if (this.Client != null && this.Client.User != null)
-        {
-            return this.Client.User.Username;
-        }
-        else
-        {
-            return string.Empty;
+            if (this.IsBot)
+            {
+                return this.BotData.Name;
+            }
+            else if (this.IsPet)
+            {
+                return this.PetData.Name;
+            }
+            else if (this.Client != null && this.Client.User != null)
+            {
+                return this.Client.User.Username;
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
     }
 
-    public bool IsOwner()
+    public bool IsOwner
     {
-        if (this.IsBot)
+        get
         {
-            return false;
-        }
-        else
-        {
-            return this.GetUsername() == this.Room.RoomData.OwnerName;
+            if (this.IsBot)
+            {
+                return false;
+            }
+            else
+            {
+                return this.Username == this.Room.RoomData.OwnerName;
+            }
         }
     }
 

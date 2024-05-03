@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Avatar;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class ApplySignEvent : IPacketEvent
 {
@@ -7,7 +8,7 @@ internal sealed class ApplySignEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }

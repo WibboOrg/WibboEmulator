@@ -1,7 +1,10 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
 
 internal sealed class PlaceBotEvent : IPacketEvent
@@ -15,7 +18,7 @@ internal sealed class PlaceBotEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -41,11 +44,11 @@ internal sealed class PlaceBotEvent : IPacketEvent
 
         if (room.RoomUserManager.BotPetCount >= 30)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.placebot.error", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.placebot.error", session.Language));
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             BotUserDao.UpdatePosition(dbClient, bot.Id, room.Id, x, y);
         }

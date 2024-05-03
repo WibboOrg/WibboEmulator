@@ -93,7 +93,7 @@ public sealed class HttpListenerRequest
 
         this._connection = context.Connection;
         this.ContentLength64 = -1;
-        this._headers = new WebHeaderCollection();
+        this._headers = [];
         this.RequestTraceIdentifier = Guid.NewGuid();
     }
 

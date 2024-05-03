@@ -3,8 +3,11 @@ using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+using WibboEmulator.Games.Chats;
+using WibboEmulator.Games.Chats.Filter;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class PurchaseGroupEvent : IPacketEvent
 {
@@ -12,8 +15,8 @@ internal sealed class PurchaseGroupEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var name = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString(16));
-        var description = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+        var name = WordFilterManager.CheckMessage(packet.PopString(16));
+        var description = WordFilterManager.CheckMessage(packet.PopString());
         var roomId = packet.PopInt();
         var colour1 = packet.PopInt();
         var colour2 = packet.PopInt();
@@ -40,7 +43,7 @@ internal sealed class PurchaseGroupEvent : IPacketEvent
             return;
         }
 
-        var room = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+        var room = RoomManager.GenerateRoomData(roomId);
         if (room == null || room.OwnerId != session.User.Id || room.Group != null)
         {
             return;
@@ -53,7 +56,7 @@ internal sealed class PurchaseGroupEvent : IPacketEvent
             badge += BadgePartUtility.WorkBadgeParts(i == 0, packet.PopInt().ToString(), packet.PopInt().ToString(), packet.PopInt().ToString());
         }
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryCreateGroup(session.User, name, description, roomId, badge, colour1, colour2, out var group))
+        if (!GroupManager.TryCreateGroup(session.User, name, description, roomId, badge, colour1, colour2, out var group))
         {
             return;
         }
@@ -72,7 +75,7 @@ internal sealed class PurchaseGroupEvent : IPacketEvent
         session.User.Credits -= groupCost;
         session.SendPacket(new CreditBalanceComposer(session.User.Credits));
 
-        if (session.User.CurrentRoomId != room.Id)
+        if (session.User.RoomId != room.Id)
         {
             session.SendPacket(new RoomForwardComposer(room.Id));
         }

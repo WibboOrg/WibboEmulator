@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Administration;
+
+using WibboEmulator.Games.Effects;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -11,12 +13,12 @@ internal sealed class RoomEnable : IChatCommand
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetEffectManager().HasEffect(effectId, session.User.HasPermission("god")))
+        if (!EffectManager.HasEffect(effectId, session.User.HasPermission("god")))
         {
             return;
         }
 
-        foreach (var user in room.RoomUserManager.GetUserList().ToList())
+        foreach (var user in room.RoomUserManager.UserList.ToList())
         {
             if (!user.IsBot)
             {

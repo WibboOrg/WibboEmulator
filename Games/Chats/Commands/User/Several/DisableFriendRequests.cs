@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Several;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -9,12 +11,12 @@ internal sealed class DisableFriendRequests : IChatCommand
         if (session.User.HasFriendRequestsDisabled)
         {
             session.User.HasFriendRequestsDisabled = false;
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.textamigo.true", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.textamigo.true", session.Language));
         }
         else
         {
             session.User.HasFriendRequestsDisabled = true;
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.textamigo.false", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.textamigo.false", session.Language));
         }
     }
 }

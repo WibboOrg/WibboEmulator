@@ -39,7 +39,7 @@ public class InteractorSwitch : FurniInteractor
     {
         if (session != null)
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FurniSwitch, 0);
+            QuestManager.ProgressUserQuest(session, QuestType.FurniSwitch, 0);
         }
 
         if (this._modes == 0)
@@ -50,7 +50,7 @@ public class InteractorSwitch : FurniInteractor
         RoomUser roomUser = null;
         if (session != null)
         {
-            roomUser = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.User.Id);
+            roomUser = item.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         }
 
         if (roomUser == null)

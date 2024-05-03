@@ -27,7 +27,7 @@ public class BotClothes : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
             return false;
         }
 
-        var bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName(nameBot);
+        var bot = this.Room.RoomUserManager.GetBotOrPetByName(nameBot);
         if (bot == null)
         {
             return false;
@@ -35,7 +35,7 @@ public class BotClothes : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
 
         bot.BotData.Look = look;
 
-        this.RoomInstance.SendPacket(new UserChangeComposer(bot));
+        this.Room.SendPacket(new UserChangeComposer(bot));
 
         return false;
     }

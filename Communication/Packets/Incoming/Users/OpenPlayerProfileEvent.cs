@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Groups;
 
 internal sealed class OpenPlayerProfileEvent : IPacketEvent
 {
@@ -18,7 +19,7 @@ internal sealed class OpenPlayerProfileEvent : IPacketEvent
             return;
         }
 
-        var groups = WibboEnvironment.GetGame().GetGroupManager().GetGroupsForUser(targetData.MyGroups);
+        var groups = GroupManager.GetGroupsForUser(targetData.MyGroups);
 
         var friendCount = 0;
 

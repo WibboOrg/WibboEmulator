@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class HasFurniOnFurni : WiredConditionBase, IWiredCondition, IWired
 {
-    public HasFurniOnFurni(Item item, Room room) : base(item, room, (int)WiredConditionType.HAS_STACKED_FURNIS) => this.DefaultIntParams(new int[] { 0 });
+    public HasFurniOnFurni(Item item, Room room) : base(item, room, (int)WiredConditionType.HAS_STACKED_FURNIS) => this.DefaultIntParams(0);
 
     public bool AllowsExecution(RoomUser user, Item item)
     {
@@ -21,7 +21,7 @@ public class HasFurniOnFurni : WiredConditionBase, IWiredCondition, IWired
         {
             foreach (var coord in roomItem.GetAffectedTiles)
             {
-                var totalFloorHeight = this.RoomInstance.GameMap.Model.SqFloorHeight[coord.X, coord.Y] + this.RoomInstance.GameMap.ItemHeightMap[coord.X, coord.Y];
+                var totalFloorHeight = this.Room.GameMap.Model.SqFloorHeight[coord.X, coord.Y] + this.Room.GameMap.ItemHeightMap[coord.X, coord.Y];
                 if (totalFloorHeight > roomItem.TotalHeight)
                 {
                     if (!requireAll)

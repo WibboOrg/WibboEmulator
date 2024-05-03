@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Premium;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -6,15 +8,15 @@ internal sealed class VipProtect : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        session.User.PremiumProtect = !session.User.PremiumProtect;
+        session.User.HasPremiumProtect = !session.User.HasPremiumProtect;
 
-        if (session.User.PremiumProtect)
+        if (session.User.HasPremiumProtect)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.premium.true", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.premium.true", session.Language));
         }
         else
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.premium.false", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.premium.false", session.Language));
         }
     }
 }

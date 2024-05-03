@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Items.Wired.Bases;
 
+using WibboEmulator.Core.Settings;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
@@ -18,8 +19,8 @@ public class WiredBase
     internal List<int> Conflicting { get; set; }
     internal int Delay { get; set; }
 
-    internal Item ItemInstance { get; set; }
-    internal Room RoomInstance { get; set; }
+    internal Item Item { get; set; }
+    internal Room Room { get; set; }
     internal List<Item> Items { get; set; }
 
     internal bool IsStaff { get; set; }
@@ -28,21 +29,21 @@ public class WiredBase
 
     internal WiredBase(Item item, Room room, int type)
     {
-        this.Items = new List<Item>();
-        this.ItemInstance = item;
-        this.RoomInstance = room;
+        this.Items = [];
+        this.Item = item;
+        this.Room = room;
         this.Type = type;
 
         this.Id = item.Id;
-        this.StuffTypeId = item.GetBaseItem().SpriteId;
+        this.StuffTypeId = item.ItemData.SpriteId;
 
         this.StuffTypeSelectionEnabled = false;
-        this.FurniLimit = WibboEnvironment.GetSettings().GetData<int>("wired.furni.limit");
-        this.StuffIds = new List<int>();
+        this.FurniLimit = SettingsManager.GetData<int>("wired.furni.limit");
+        this.StuffIds = [];
         this.StringParam = "";
-        this.IntParams = new List<int>();
+        this.IntParams = [];
         this.StuffTypeSelectionCode = 0;
-        this.Conflicting = new List<int>();
+        this.Conflicting = [];
         this.Delay = 0;
 
         this.IsStaff = false;
@@ -61,7 +62,7 @@ public class WiredBase
         this.IsGod = isGod;
     }
 
-    public void DefaultIntParams(int[] intParams) => this.IntParams = intParams.ToList();
+    public void DefaultIntParams(params int[] intParams) => this.IntParams = intParams.ToList();
 
     public void SetIntParam(int index, int value)
     {
@@ -144,8 +145,8 @@ public class WiredBase
         var listItem = new List<Item>();
         foreach (var itemId in this.StuffIds)
         {
-            var item = this.RoomInstance.RoomItemHandling.GetItem(itemId);
-            if (item != null && item.GetBaseItem().Type == ItemType.S)
+            var item = this.Room.RoomItemHandling.GetItem(itemId);
+            if (item != null && item.ItemData.Type == ItemType.S)
             {
                 listItem.Add(item);
             }

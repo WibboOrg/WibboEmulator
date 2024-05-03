@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.Stickys;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class UpdateStickyNoteEvent : IPacketEvent
 {
@@ -8,7 +9,7 @@ internal sealed class UpdateStickyNoteEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -23,7 +24,7 @@ internal sealed class UpdateStickyNoteEvent : IPacketEvent
         var message = packet.PopString();
 
         var roomItem = room.RoomItemHandling.GetItem(itemId);
-        if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.POSTIT)
+        if (roomItem == null || roomItem.ItemData.InteractionType != InteractionType.POSTIT)
         {
             return;
         }

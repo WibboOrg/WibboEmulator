@@ -2,6 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator.New;
 
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Navigators;
 using WibboEmulator.Utilities;
 
 internal sealed class InitializeNewNavigatorEvent : IPacketEvent
@@ -10,7 +11,7 @@ internal sealed class InitializeNewNavigatorEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var topLevelItems = WibboEnvironment.GetGame().GetNavigator().GetTopLevelItems();
+        var topLevelItems = NavigatorManager.TopLevelItems;
 
         var packetList = new ServerPacketList();
         packetList.Add(new NavigatorMetaDataParserComposer(topLevelItems));

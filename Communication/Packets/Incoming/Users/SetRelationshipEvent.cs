@@ -1,4 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Users;
+
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Messenger;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Messenger;
@@ -46,7 +48,7 @@ internal sealed class SetRelationshipEvent : IPacketEvent
             }
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             MessengerFriendshipDao.UpdateRelation(dbClient, type, session.User.Id, user);
         }

@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.Moodlight;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class MoodlightUpdateEvent : IPacketEvent
 {
@@ -8,7 +9,7 @@ internal sealed class MoodlightUpdateEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -19,7 +20,7 @@ internal sealed class MoodlightUpdateEvent : IPacketEvent
         }
 
         var roomItem = room.RoomItemHandling.GetItem(room.MoodlightData.ItemId);
-        if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.MOODLIGHT)
+        if (roomItem == null || roomItem.ItemData.InteractionType != InteractionType.MOODLIGHT)
         {
             return;
         }

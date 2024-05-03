@@ -1,4 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+
+using WibboEmulator.Core.Settings;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 
@@ -8,7 +10,7 @@ internal sealed class ObjectUpdateComposer : ServerPacket
         : base(ServerPacketHeader.FURNITURE_FLOOR_UPDATE)
     {
         this.WriteInteger(item.Id);
-        this.WriteInteger(hideWired && WiredUtillity.AllowHideWiredType(item.GetBaseItem().InteractionType) ? WibboEnvironment.GetSettings().GetData<int>("wired.hide.item.id") : item.GetBaseItem().SpriteId);
+        this.WriteInteger(hideWired && WiredUtillity.AllowHideWiredType(item.ItemData.InteractionType) ? SettingsManager.GetData<int>("wired.hide.item.id") : item.ItemData.SpriteId);
         this.WriteInteger(item.X);
         this.WriteInteger(item.Y);
         this.WriteInteger(item.Rotation);

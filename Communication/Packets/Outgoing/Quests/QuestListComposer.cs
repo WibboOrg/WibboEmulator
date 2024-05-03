@@ -29,7 +29,7 @@ internal sealed class QuestListComposer : ServerPacket
 
     private void SerializeQuest(GameClient session, Quest quest, string category)
     {
-        var questsInCategory = WibboEnvironment.GetGame().GetQuestManager().GetAmountOfQuestsInCategory(category);
+        var questsInCategory = QuestManager.GetAmountOfQuestsInCategory(category);
         var i = quest == null ? questsInCategory : quest.Number - 1;
         var num = quest == null ? 0 : session.User.GetQuestProgress(quest.Id);
         if (quest != null && quest.IsCompleted(num))
@@ -42,7 +42,7 @@ internal sealed class QuestListComposer : ServerPacket
         this.WriteInteger(questsInCategory);
         this.WriteInteger(0);
         this.WriteInteger(quest == null ? 0 : quest.Id);
-        this.WriteBoolean(quest != null && session.User.CurrentQuestId == quest.Id);
+        this.WriteBoolean(quest != null && session.User.QuestId == quest.Id);
         this.WriteString(quest == null ? string.Empty : quest.ActionName);
         this.WriteString(quest == null ? string.Empty : quest.DataBit);
         this.WriteInteger(quest == null ? 0 : quest.Reward);

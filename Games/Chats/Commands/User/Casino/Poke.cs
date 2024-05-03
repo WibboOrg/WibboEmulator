@@ -17,7 +17,7 @@ internal sealed class Poke : IChatCommand
             return;
         }
 
-        if (session.User.SpectatorMode)
+        if (session.User.IsSpectator)
         {
             return;
         }

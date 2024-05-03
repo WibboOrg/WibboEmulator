@@ -6,19 +6,19 @@ using WibboEmulator.Games.Rooms;
 
 public class RoomUserNotCount : WiredConditionBase, IWiredCondition, IWired
 {
-    public RoomUserNotCount(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_USER_COUNT_IN) => this.DefaultIntParams(new int[] { 0, 0 });
+    public RoomUserNotCount(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_USER_COUNT_IN) => this.DefaultIntParams(0, 0);
 
     public bool AllowsExecution(RoomUser user, Item item)
     {
         var minUsers = this.GetIntParam(0);
         var maxUsers = this.GetIntParam(1);
 
-        if (this.RoomInstance.UserCount > minUsers)
+        if (this.Room.UserCount > minUsers)
         {
             return false;
         }
 
-        if (this.RoomInstance.UserCount < maxUsers)
+        if (this.Room.UserCount < maxUsers)
         {
             return false;
         }

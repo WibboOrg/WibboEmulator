@@ -12,7 +12,7 @@ public class CalendarManager
 
     public void Initialize()
     {
-        this._calendarItem = new Dictionary<int, CalendarItem>();
+        this._calendarItem = [];
         this._currentDay = 0;
         this._campaignDays = 0;
     }

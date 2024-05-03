@@ -1,4 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+
+using WibboEmulator.Core.Settings;
 using WibboEmulator.Games.Items;
 
 internal sealed class ObjectAddComposer : ServerPacket
@@ -7,7 +9,7 @@ internal sealed class ObjectAddComposer : ServerPacket
         : base(ServerPacketHeader.FURNITURE_FLOOR_ADD)
     {
         this.WriteInteger(item.Id);
-        this.WriteInteger(item.GetBaseItem().SpriteId);
+        this.WriteInteger(item.ItemData.SpriteId);
         this.WriteInteger(item.X);
         this.WriteInteger(item.Y);
         this.WriteInteger(item.Rotation);
@@ -44,7 +46,7 @@ internal sealed class ObjectAddComposer : ServerPacket
             this.WriteString("state");
             this.WriteString("0");
             this.WriteString("imageUrl");
-            this.WriteString("https://" + WibboEnvironment.GetSettings().GetData<string>("cdn.url") + "/items/" + item.ExtraData + ".png");
+            this.WriteString("https://" + SettingsManager.GetData<string>("cdn.url") + "/items/" + item.ExtraData + ".png");
             this.WriteString("offsetX");
             this.WriteString("-20");
             this.WriteString("offsetY");

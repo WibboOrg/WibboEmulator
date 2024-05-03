@@ -1,4 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Inventory.AvatarEffects;
+
+using WibboEmulator.Games.Effects;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.Games.Teams;
 
@@ -15,12 +17,12 @@ internal sealed class AvatarEffectSelectedEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetEffectManager().HasEffect(effectId, session.User.HasPermission("god")))
+        if (!EffectManager.HasEffect(effectId, session.User.HasPermission("god")))
         {
             return;
         }
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null)
         {
             return;

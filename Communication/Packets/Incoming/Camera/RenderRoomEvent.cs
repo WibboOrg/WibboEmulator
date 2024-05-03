@@ -1,6 +1,8 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Camera;
 using WibboEmulator.Communication.Packets.Outgoing.Camera;
 using WibboEmulator.Core;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
@@ -24,7 +26,7 @@ internal sealed class RenderRoomEvent : IPacketEvent
 
         var photoBinary = packet.ReadBytes(photoLength);
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null)
         {
             return;
@@ -37,7 +39,7 @@ internal sealed class RenderRoomEvent : IPacketEvent
 
         if (string.IsNullOrEmpty(photoId) || pictureName != photoId)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
@@ -50,7 +52,7 @@ internal sealed class RenderRoomEvent : IPacketEvent
 
         session.User.LastPhotoId = photoId;
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         UserPhotoDao.Insert(dbClient, session.User.Id, photoId, time);
     }
 }

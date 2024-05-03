@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
@@ -18,7 +19,7 @@ internal sealed class OpenGiftEvent : IPacketEvent
             return;
         }
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null)
         {
             return;
@@ -36,13 +37,13 @@ internal sealed class OpenGiftEvent : IPacketEvent
             return;
         }
 
-        if (present.GetBaseItem().InteractionType is InteractionType.GIFT_BANNER or InteractionType.PREMIUM_CLASSIC or InteractionType.PREMIUM_EPIC or InteractionType.PREMIUM_LEGEND)
+        if (present.ItemData.InteractionType is InteractionType.GIFT_BANNER or InteractionType.PREMIUM_CLASSIC or InteractionType.PREMIUM_EPIC or InteractionType.PREMIUM_LEGEND)
         {
             present.Interactor.OnTrigger(session, present, -1, true, false);
         }
-        else if (present.GetBaseItem().InteractionType == InteractionType.GIFT)
+        else if (present.ItemData.InteractionType == InteractionType.GIFT)
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+            using var dbClient = DatabaseManager.Connection;
 
             var itemPresent = ItemPresentDao.GetOne(dbClient, present.Id);
 
@@ -57,7 +58,7 @@ internal sealed class OpenGiftEvent : IPacketEvent
                 return;
             }
 
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(itemPresent.BaseId, out _))
+            if (!ItemManager.GetItem(itemPresent.BaseId, out _))
             {
                 room.RoomItemHandling.RemoveFurniture(null, present.Id);
 
@@ -70,23 +71,23 @@ internal sealed class OpenGiftEvent : IPacketEvent
 
             FinishOpenGift(dbClient, session, present, room, itemPresent);
         }
-        else if (present.GetBaseItem().InteractionType == InteractionType.EXTRA_BOX)
+        else if (present.ItemData.InteractionType == InteractionType.EXTRA_BOX)
         {
             ItemLootBox.OpenExtrabox(session, present, room);
         }
-        else if (present.GetBaseItem().InteractionType == InteractionType.DELUXE_BOX)
+        else if (present.ItemData.InteractionType == InteractionType.DELUXE_BOX)
         {
             ItemLootBox.OpenDeluxeBox(session, present, room);
         }
-        else if (present.GetBaseItem().InteractionType == InteractionType.LOOTBOX_2022)
+        else if (present.ItemData.InteractionType == InteractionType.LOOTBOX_2022)
         {
             ItemLootBox.OpenLootBox2022(session, present, room);
         }
-        else if (present.GetBaseItem().InteractionType == InteractionType.LEGEND_BOX)
+        else if (present.ItemData.InteractionType == InteractionType.LEGEND_BOX)
         {
             ItemLootBox.OpenLegendBox(session, present, room);
         }
-        else if (present.GetBaseItem().InteractionType == InteractionType.BADGE_BOX)
+        else if (present.ItemData.InteractionType == InteractionType.BADGE_BOX)
         {
             ItemLootBox.OpenBadgeBox(session, present, room);
         }
@@ -102,7 +103,7 @@ internal sealed class OpenGiftEvent : IPacketEvent
 
         ItemPresentDao.Delete(dbClient, present.Id);
 
-        present.BaseItem = itemPresent.BaseId;
+        present.BaseItemId = itemPresent.BaseId;
         present.ResetBaseItem(room);
         present.ExtraData = !string.IsNullOrEmpty(itemPresent.ExtraData) ? itemPresent.ExtraData : "";
 

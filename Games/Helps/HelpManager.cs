@@ -1,28 +1,30 @@
 namespace WibboEmulator.Games.Helps;
 
-public class HelpManager
+using WibboEmulator.Utilities;
+
+public static class HelpManager
 {
-    public Dictionary<int, bool> GuidesOnDuty { get; set; } = new();
+    public static Dictionary<int, bool> GuidesOnDuty { get; set; } = [];
 
-    public int Count => this.GuidesOnDuty.Count;
+    public static int Count => GuidesOnDuty.Count;
 
-    public int RandomAvailableGuide()
+    public static int RandomAvailableGuide()
     {
-        if (this.Count == 0)
+        if (Count == 0)
         {
             return 0;
         }
 
-        var availableGuideIds = this.SelectAvailableGuides();
+        var availableGuideIds = SelectAvailableGuides();
 
-        return availableGuideIds[WibboEnvironment.GetRandomNumber(0, availableGuideIds.Length - 1)];
+        return availableGuideIds.GetRandomElement();
     }
 
-    public void GuideLeftService(int id) => this.MarkAsAvailable(id);
+    public static void GuideLeftService(int id) => MarkAsAvailable(id);
 
-    private void MarkAsAvailable(int id)
+    private static void MarkAsAvailable(int id)
     {
-        if (!this.GuidesOnDuty.TryGetValue(id, out var onDuty))
+        if (!GuidesOnDuty.TryGetValue(id, out var onDuty))
         {
             return;
         }
@@ -32,14 +34,14 @@ public class HelpManager
             return;
         }
 
-        this.GuidesOnDuty[id] = true;
+        GuidesOnDuty[id] = true;
     }
 
-    private int[] SelectAvailableGuides() => this.GuidesOnDuty.Where(g => !g.Value).Select(g => g.Key).ToArray();
+    private static int[] SelectAvailableGuides() => GuidesOnDuty.Where(g => !g.Value).Select(g => g.Key).ToArray();
 
-    public void MarkAsOffDuty(int id)
+    public static void MarkAsOffDuty(int id)
     {
-        if (!this.GuidesOnDuty.TryGetValue(id, out var onDuty))
+        if (!GuidesOnDuty.TryGetValue(id, out var onDuty))
         {
             return;
         }
@@ -49,19 +51,19 @@ public class HelpManager
             return;
         }
 
-        this.GuidesOnDuty[id] = false;
+        GuidesOnDuty[id] = false;
     }
 
-    public bool TryAddGuide(int guide)
+    public static bool TryAddGuide(int guide)
     {
-        if (!this.GuidesOnDuty.ContainsKey(guide))
+        if (!GuidesOnDuty.ContainsKey(guide))
         {
-            this.GuidesOnDuty.Add(guide, false);
+            GuidesOnDuty.Add(guide, false);
             return true;
         }
 
         return false;
     }
 
-    public void TryRemoveGuide(int guide) => _ = this.GuidesOnDuty.Remove(guide);
+    public static void TryRemoveGuide(int guide) => _ = GuidesOnDuty.Remove(guide);
 }

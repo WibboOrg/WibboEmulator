@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class BotGiveHanditem : WiredActionBase, IWired, IWiredEffect
 {
-    public BotGiveHanditem(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_GIVE_HAND_ITEM) => this.DefaultIntParams(new int[] { 0 });
+    public BotGiveHanditem(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_GIVE_HAND_ITEM) => this.DefaultIntParams(0);
 
     public override bool OnCycle(RoomUser user, Item item) => false;
 

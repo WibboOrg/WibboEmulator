@@ -2,38 +2,27 @@ namespace WibboEmulator.Games.Permissions;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
 
-public class PermissionManager
+public static class PermissionManager
 {
-    private readonly Dictionary<string, int> _rights;
-    private readonly Dictionary<string, PermissionCommand> _commands;
+    private static readonly Dictionary<string, int> Rights = [];
+    private static readonly Dictionary<string, PermissionCommand> Commands = [];
 
-    public PermissionManager()
+    public static void Initialize(IDbConnection dbClient)
     {
-        this._rights = new Dictionary<string, int>();
-        this._commands = new Dictionary<string, PermissionCommand>();
-    }
-
-    public void Initialize(IDbConnection dbClient)
-    {
-        this._rights.Clear();
-        this._commands.Clear();
+        Rights.Clear();
+        Commands.Clear();
 
         var emulatorPermissionList = EmulatorPermissionDao.GetAll(dbClient);
 
-        if (emulatorPermissionList.Count == 0)
-        {
-            return;
-        }
-
         foreach (var emulatorPermission in emulatorPermissionList)
         {
-            this._rights.Add(emulatorPermission.Permission, emulatorPermission.Rank);
+            Rights.Add(emulatorPermission.Permission, emulatorPermission.Rank);
         }
     }
 
-    public bool RankHasRight(int rankId, string fuse)
+    public static bool RankHasRight(int rankId, string fuse)
     {
-        if (!this._rights.TryGetValue(fuse, out var minRank))
+        if (!Rights.TryGetValue(fuse, out var minRank))
         {
             return false;
         }

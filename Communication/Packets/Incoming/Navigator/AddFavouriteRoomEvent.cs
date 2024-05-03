@@ -1,7 +1,9 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class AddFavouriteRoomEvent : IPacketEvent
 {
@@ -16,7 +18,7 @@ internal sealed class AddFavouriteRoomEvent : IPacketEvent
 
         var roomId = packet.PopInt();
 
-        var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+        var roomData = RoomManager.GenerateRoomData(roomId);
         if (roomData == null || session.User.FavoriteRooms.Count >= 30 || session.User.FavoriteRooms.Contains(roomId))
         {
             return;
@@ -27,7 +29,7 @@ internal sealed class AddFavouriteRoomEvent : IPacketEvent
 
             session.User.FavoriteRooms.Add(roomId);
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+            using var dbClient = DatabaseManager.Connection;
             UserFavoriteDao.Insert(dbClient, session.User.Id, roomId);
         }
     }

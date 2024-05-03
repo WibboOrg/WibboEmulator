@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Premium;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games.Teams;
@@ -28,23 +30,23 @@ internal sealed class Slime : IChatCommand
             return;
         }
 
-        if (targetUser.Client.User.PremiumProtect && !session.User.HasPermission("mod"))
+        if (targetUser.Client.User.HasPremiumProtect && !session.User.HasPermission("mod"))
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("premium.notallowed", session.Language));
             return;
         }
 
         var timeSpan = DateTime.Now - session.User.CommandFunTimer;
         if (timeSpan.TotalSeconds < 10)
         {
-            userRoom.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.fun.timeout", session.Langue), 10 - (int)timeSpan.TotalSeconds));
+            userRoom.SendWhisperChat(string.Format(LanguageManager.TryGetValue("cmd.fun.timeout", session.Language), 10 - (int)timeSpan.TotalSeconds));
             return;
         }
 
         session.User.CommandFunTimer = DateTime.Now;
 
-        userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.slime.chat", session.Langue), targetUser.GetUsername()));
-        targetUser.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.slime.chat.target", session.Langue), userRoom.GetUsername()));
+        userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.slime.chat", session.Language), targetUser.Username));
+        targetUser.OnChat(string.Format(LanguageManager.TryGetValue("cmd.slime.chat.target", session.Language), userRoom.Username));
 
         targetUser.ApplyEffect(169, true);
         targetUser.TimerResetEffect = 6;

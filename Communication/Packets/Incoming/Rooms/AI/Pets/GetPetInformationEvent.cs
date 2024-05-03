@@ -8,16 +8,16 @@ internal sealed class GetPetInformationEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.User == null || session.User.CurrentRoom == null)
+        if (session.User == null || session.User.Room == null)
         {
             return;
         }
 
         var petId = packet.PopInt();
 
-        if (!session.User.CurrentRoom.RoomUserManager.TryGetPet(petId, out var pet))
+        if (!session.User.Room.RoomUserManager.TryGetPet(petId, out var pet))
         {
-            var user = session.User.CurrentRoom.RoomUserManager.GetRoomUserByUserId(petId);
+            var user = session.User.Room.RoomUserManager.GetRoomUserByUserId(petId);
             if (user == null)
             {
                 return;
@@ -32,7 +32,7 @@ internal sealed class GetPetInformationEvent : IPacketEvent
             return;
         }
 
-        if (pet.RoomId != session.User.CurrentRoomId || pet.PetData == null)
+        if (pet.RoomId != session.User.RoomId || pet.PetData == null)
         {
             return;
         }

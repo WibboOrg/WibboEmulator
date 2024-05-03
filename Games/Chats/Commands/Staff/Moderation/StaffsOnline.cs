@@ -8,7 +8,7 @@ internal sealed class StaffsOnline : IChatCommand
     {
         var output = "Les Staffs en ligne: \n\n";
 
-        var staffs = WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers();
+        var staffs = GameClientManager.StaffUsers;
 
         if (staffs.Count > 0)
         {

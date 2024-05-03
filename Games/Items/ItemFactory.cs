@@ -82,7 +82,7 @@ public class ItemFactory
         return items;
     }
 
-    public static FurniInteractor CreateInteractor(Item item) => item.GetBaseItem().InteractionType switch
+    public static FurniInteractor CreateInteractor(Item item) => item.ItemData.InteractionType switch
     {
         InteractionType.GATE or InteractionType.BANZAI_PYRAMID => new InteractorGate(),
         InteractionType.SCORE_BOARD => new InteractorScoreboard(),
@@ -108,8 +108,8 @@ public class ItemFactory
         InteractionType.MANNEQUIN => new InteractorManiqui(),
         InteractionType.TONER => new InteractorChangeBackgrounds(),
         InteractionType.PUZZLE_BOX => new InteractorPuzzleBox(),
-        InteractionType.FLOOR_SWITCH => new InteractorSwitch(item.GetBaseItem().Modes),
-        InteractionType.CRACKABLE => new InteractorCrackable(item.GetBaseItem().Modes),
+        InteractionType.FLOOR_SWITCH => new InteractorSwitch(item.ItemData.Modes),
+        InteractionType.CRACKABLE => new InteractorCrackable(item.ItemData.Modes),
         InteractionType.TV_YOUTUBE => new InteractorTvYoutube(),
         InteractionType.LOVELOCK => new InteractorLoveLock(),
         InteractionType.PHOTO => new InteractorIgnore(),
@@ -120,6 +120,6 @@ public class ItemFactory
         InteractionType.TROC_BANNER => new InteractorBannerTroc(),
         InteractionType.GIFT_BANNER => new InteractorBannerGift(),
         InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS => new InteractorGenericSwitch(2),
-        _ => new InteractorGenericSwitch(item.GetBaseItem().Modes),
+        _ => new InteractorGenericSwitch(item.ItemData.Modes),
     };
 }

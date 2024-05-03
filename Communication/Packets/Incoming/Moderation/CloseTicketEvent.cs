@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Moderations;
 
 internal sealed class CloseTicketEvent : IPacketEvent
 {
@@ -16,6 +17,6 @@ internal sealed class CloseTicketEvent : IPacketEvent
         _ = packet.PopInt();
         var ticketId = packet.PopInt();
 
-        WibboEnvironment.GetGame().GetModerationManager().CloseTicket(session, ticketId, result);
+        ModerationManager.CloseTicket(session, ticketId, result);
     }
 }

@@ -2,32 +2,24 @@ namespace WibboEmulator.Games.Chats.Styles;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
 
-public sealed class ChatStyleManager
+public static class ChatStyleManager
 {
-    private readonly Dictionary<int, ChatStyle> _styles;
+    private static readonly Dictionary<int, ChatStyle> Styles = [];
 
-    public ChatStyleManager() => this._styles = new Dictionary<int, ChatStyle>();
-
-    public void Initialize(IDbConnection dbClient)
+    public static void Initialize(IDbConnection dbClient)
     {
-        if (this._styles.Count > 0)
-        {
-            this._styles.Clear();
-        }
+        Styles.Clear();
 
         var emulatorChatStyleList = EmulatorChatStyleDao.GetAll(dbClient);
 
-        if (emulatorChatStyleList.Count != 0)
+        foreach (var emulatorChatStyle in emulatorChatStyleList)
         {
-            foreach (var emulatorChatStyle in emulatorChatStyleList)
+            if (!Styles.ContainsKey(emulatorChatStyle.Id))
             {
-                if (!this._styles.ContainsKey(emulatorChatStyle.Id))
-                {
-                    this._styles.Add(emulatorChatStyle.Id, new ChatStyle(emulatorChatStyle.Id, emulatorChatStyle.Name, emulatorChatStyle.RequiredRight));
-                }
+                Styles.Add(emulatorChatStyle.Id, new ChatStyle(emulatorChatStyle.Id, emulatorChatStyle.Name, emulatorChatStyle.RequiredRight));
             }
         }
     }
 
-    public bool TryGetStyle(int id, out ChatStyle style) => this._styles.TryGetValue(id, out style);
+    public static bool TryGetStyle(int id, out ChatStyle style) => Styles.TryGetValue(id, out style);
 }

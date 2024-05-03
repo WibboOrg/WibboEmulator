@@ -1,4 +1,7 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Gestion;
+
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
@@ -9,55 +12,55 @@ internal sealed class RoomSell : IChatCommand
     {
         if (parameters.Length != 2)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.1", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("roomsell.error.1", session.Language));
             return;
         }
 
         if (!int.TryParse(parameters[1], out var price))
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.2", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("roomsell.error.2", session.Language));
             return;
         }
         if (price < 1)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.3", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("roomsell.error.3", session.Language));
             return;
         }
         if (price > 99999999)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.4", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("roomsell.error.4", session.Language));
             return;
         }
 
         if (room.RoomData.Group != null)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.5", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("roomsell.error.5", session.Language));
             return;
         }
 
         if (room.RoomData.SellPrice > 0)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.6", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("roomsell.error.6", session.Language));
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             RoomDao.UpdatePrice(dbClient, room.Id, price);
         }
 
         room.RoomData.SellPrice = price;
 
-        session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.valide", session.Langue), price));
+        session.SendWhisper(string.Format(LanguageManager.TryGetValue("roomsell.valide", session.Language), price));
 
-        foreach (var user in room.RoomUserManager.GetUserList().ToList())
+        foreach (var user in room.RoomUserManager.UserList.ToList())
         {
             if (user == null || user.IsBot)
             {
                 continue;
             }
 
-            user.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.warn", session.Langue), price));
+            user.SendWhisperChat(string.Format(LanguageManager.TryGetValue("roomsell.warn", session.Language), price));
         }
     }
 }

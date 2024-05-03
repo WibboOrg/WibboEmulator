@@ -1,6 +1,9 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Chat;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Core;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Core.Settings;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
@@ -16,7 +19,7 @@ internal sealed partial class ChatAudioEvent : IPacketEvent
             return;
         }
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null)
         {
             return;
@@ -30,17 +33,17 @@ internal sealed partial class ChatAudioEvent : IPacketEvent
 
         user.Unidle();
 
-        if (!session.User.HasPermission("no_mute") && !user.IsOwner() && !room.CheckRights(session) && room.RoomMuted)
+        if (!session.User.HasPermission("no_mute") && !user.IsOwner && !room.CheckRights(session) && room.RoomMuted)
         {
-            user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("room.muted", session.Langue));
+            user.SendWhisperChat(LanguageManager.TryGetValue("room.muted", session.Language));
             return;
         }
 
-        if (!session.User.HasPermission("mod") && !user.IsOwner() && !room.CheckRights(session) && room.UserIsMuted(session.User.Id))
+        if (!session.User.HasPermission("mod") && !user.IsOwner && !room.CheckRights(session) && room.UserIsMuted(session.User.Id))
         {
             if (!room.HasMuteExpired(session.User.Id))
             {
-                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("user.muted", session.Langue));
+                user.SendWhisperChat(LanguageManager.TryGetValue("user.muted", session.Language));
                 return;
             }
             else
@@ -83,7 +86,7 @@ internal sealed partial class ChatAudioEvent : IPacketEvent
 
         if (audioLength > 250_000)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
@@ -95,13 +98,13 @@ internal sealed partial class ChatAudioEvent : IPacketEvent
 
         if (string.IsNullOrEmpty(audioId) || audioName != audioId)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
         var audioPath = $"/chat-audio/{audioName}.webm";
 
-        var audioUploadUrl = WibboEnvironment.GetSettings().GetData<string>("audio.upload.url");
+        var audioUploadUrl = SettingsManager.GetData<string>("audio.upload.url");
         var basePath = new Uri(audioUploadUrl).GetLeftPart(UriPartial.Authority);
 
         var audioUrl = $"{basePath}{audioPath}";
@@ -109,7 +112,7 @@ internal sealed partial class ChatAudioEvent : IPacketEvent
         session.User.ChatMessageManager.AddMessage(session.User.Id, session.User.Username, room.Id, audioUrl, UnixTimestamp.GetNow());
         room.ChatlogManager.AddMessage(session.User.Id, session.User.Username, room.Id, audioUrl, UnixTimestamp.GetNow());
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         LogChatDao.Insert(dbClient, session.User.Id, room.Id, audioUrl, "audio", session.User.Username);
 
         user.OnChatAudio(audioPath);

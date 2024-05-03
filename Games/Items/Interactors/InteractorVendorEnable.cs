@@ -2,6 +2,7 @@ namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.Map;
 using WibboEmulator.Games.Rooms.PathFinding;
+using WibboEmulator.Utilities;
 
 public class InteractorVendorEnable : FurniInteractor
 {
@@ -29,12 +30,12 @@ public class InteractorVendorEnable : FurniInteractor
 
     public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (!(item.ExtraData != "1") || item.GetBaseItem().VendingIds.Count < 1 || item.InteractingUser != 0 || session == null)
+        if (!(item.ExtraData != "1") || item.ItemData.VendingIds.Count < 1 || item.InteractingUser != 0 || session == null)
         {
             return;
         }
 
-        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (roomUserByUserId == null)
         {
             return;
@@ -61,10 +62,10 @@ public class InteractorVendorEnable : FurniInteractor
             return;
         }
 
-        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
+        var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
         if (roomUserByUserId != null)
         {
-            var vendingId = item.GetBaseItem().VendingIds[WibboEnvironment.GetRandomNumber(0, item.GetBaseItem().VendingIds.Count - 1)];
+            var vendingId = item.ItemData.VendingIds.GetRandomElement();
             roomUserByUserId.ApplyEffect(vendingId);
         }
 

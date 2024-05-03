@@ -1,5 +1,10 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
+
+using WibboEmulator.Core.Language;
+using WibboEmulator.Core.Settings;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
 internal sealed class AddPhotoCommand : IRCONCommand
@@ -21,7 +26,7 @@ internal sealed class AddPhotoCommand : IRCONCommand
             return false;
         }
 
-        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        var client = GameClientManager.GetClientByUserID(userId);
         if (client == null)
         {
             return true;
@@ -29,8 +34,8 @@ internal sealed class AddPhotoCommand : IRCONCommand
 
         var photoId = parameters[2];
 
-        var photoItemId = WibboEnvironment.GetSettings().GetData<int>("photo.item.id");
-        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(photoItemId, out var itemData))
+        var photoItemId = SettingsManager.GetData<int>("photo.item.id");
+        if (!ItemManager.GetItem(photoItemId, out var itemData))
         {
             return true;
         }
@@ -38,14 +43,14 @@ internal sealed class AddPhotoCommand : IRCONCommand
         var time = WibboEnvironment.GetUnixTimestamp();
         var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + client.User.Username + "\", \"s\":\"" + client.User.Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         var item = ItemFactory.CreateSingleItemNullable(dbClient, itemData, client.User, extraData);
         client.User.InventoryComponent.TryAddItem(item);
 
         UserPhotoDao.Insert(dbClient, client.User.Id, photoId, time);
 
-        client.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.valide", client.Langue));
+        client.SendNotification(LanguageManager.TryGetValue("notif.buyphoto.valide", client.Language));
 
         return true;
     }

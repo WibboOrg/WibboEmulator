@@ -65,7 +65,7 @@ public class HttpListenerPrefixCollection : ICollection<string>
     internal HttpListenerPrefixCollection(HttpListener listener)
     {
         this._listener = listener;
-        this._prefixes = new List<string>();
+        this._prefixes = [];
     }
 
     #endregion

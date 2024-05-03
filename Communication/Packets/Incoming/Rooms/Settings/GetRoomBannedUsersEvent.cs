@@ -13,13 +13,13 @@ internal sealed class GetRoomBannedUsersEvent : IPacketEvent
             return;
         }
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null || !room.CheckRights(session, true))
         {
             return;
         }
 
-        if (room.GetBans().Count > 0)
+        if (room.Bans.Count > 0)
         {
             session.SendPacket(new GetRoomBannedUsersComposer(room));
         }

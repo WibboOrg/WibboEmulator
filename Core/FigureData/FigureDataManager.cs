@@ -2,41 +2,22 @@ namespace WibboEmulator.Core.FigureData;
 using System.Text.Json;
 using WibboEmulator.Core.FigureData.JsonObject;
 using WibboEmulator.Core.FigureData.Types;
+using WibboEmulator.Core.Settings;
 
-public class FigureDataManager
+public static class FigureDataManager
 {
-    private readonly List<string> _requirements;
-    private readonly Dictionary<int, Palette> _palettes;
-    private readonly Dictionary<string, FigureSet> _setTypes;
+    private static readonly List<string> Requirements = ["hd", "ch", "lg"];
+    private static readonly Dictionary<int, Palette> Palettes = [];
+    private static readonly Dictionary<string, FigureSet> SetTypes = [];
 
-    public FigureDataManager()
+    public static void Initialize()
     {
-        this._palettes = new Dictionary<int, Palette>();
-        this._setTypes = new Dictionary<string, FigureSet>();
+        Palettes.Clear();
+        SetTypes.Clear();
 
-        this._requirements = new List<string>
-        {
-            "hd",
-            "ch",
-            "lg"
-        };
-    }
+        var figureUrl = SettingsManager.GetData<string>("figuredata.url") + "?cache=" + WibboEnvironment.GetUnixTimestamp();
 
-    public void Initialize()
-    {
-        if (this._palettes.Count > 0)
-        {
-            this._palettes.Clear();
-        }
-
-        if (this._setTypes.Count > 0)
-        {
-            this._setTypes.Clear();
-        }
-
-        var figureUrl = WibboEnvironment.GetSettings().GetData<string>("figuredata.url") + "?cache=" + WibboEnvironment.GetUnixTimestamp();
-
-        var response = WibboEnvironment.GetHttpClient().GetAsync(figureUrl).GetAwaiter().GetResult();
+        var response = WibboEnvironment.HttpClient.GetAsync(figureUrl).GetAwaiter().GetResult();
 
         if (!response.IsSuccessStatusCode)
         {
@@ -61,23 +42,23 @@ public class FigureDataManager
 
         foreach (var palette in figureData.Palettes)
         {
-            this._palettes.Add(palette.Id, new Palette(palette.Id));
+            Palettes.Add(palette.Id, new Palette(palette.Id));
 
             foreach (var color in palette.Colors)
             {
-                this._palettes[palette.Id].Colors.Add(Convert.ToInt32(color.Id), new Color(color.Id, color.Index, color.Club, color.Selectable));
+                Palettes[palette.Id].Colors.Add(Convert.ToInt32(color.Id), new Color(color.Id, color.Index, color.Club, color.Selectable));
             }
         }
 
         foreach (var child in figureData.SetTypes)
         {
-            this._setTypes.Add(child.Type, new FigureSet(SetTypeUtility.GetSetType(child.Type), child.PaletteId));
+            SetTypes.Add(child.Type, new FigureSet(SetTypeUtility.GetSetType(child.Type), child.PaletteId));
 
             foreach (var set in child.Sets)
             {
-                if (!this._setTypes[child.Type].Sets.TryGetValue(set.Id, out var sets))
+                if (!SetTypes[child.Type].Sets.TryGetValue(set.Id, out var sets))
                 {
-                    this._setTypes[child.Type].Sets.Add(set.Id, new Set(set.Id, set.Gender, set.Club, set.Colorable));
+                    SetTypes[child.Type].Sets.Add(set.Id, new Set(set.Id, set.Gender, set.Club, set.Colorable));
                 }
 
                 foreach (var part in set.Parts)
@@ -86,8 +67,8 @@ public class FigureDataManager
                     {
                         if (sets != null && !sets.Parts.ContainsKey(part.Id + "-" + part.Type))
                         {
-                            this._setTypes[child.Type].Sets[set.Id].Parts.Add(part.Id + "-" + part.Type,
-                                new Part(part.Id, SetTypeUtility.GetSetType(child.Type), part.Colorable, part.Index, part.Colorindex));
+                            SetTypes[child.Type].Sets[set.Id].Parts.Add(part.Id + "-" + part.Type,
+                               new Part(part.Id, SetTypeUtility.GetSetType(child.Type), part.Colorable, part.Index, part.Colorindex));
                         }
                     }
                 }
@@ -95,10 +76,10 @@ public class FigureDataManager
         }
 
         //Faceless.
-        this._setTypes["hd"].Sets.Add(99999, new Set(99999, "U", 0, true));
+        SetTypes["hd"].Sets.Add(99999, new Set(99999, "U", 0, true));
     }
 
-    public string ProcessFigure(string figure, string gender, bool hasClub)
+    public static string ProcessFigure(string figure, string gender, bool hasClub)
     {
         if (figure == string.Empty || gender == string.Empty)
         {
@@ -122,7 +103,7 @@ public class FigureDataManager
 
                 var type = part.Split('-')[0];
 
-                if (this._setTypes.TryGetValue(type, out var figureSet))
+                if (SetTypes.TryGetValue(type, out var figureSet))
                 {
                     var splitpart = part.Split('-');
                     if (splitpart.Length < 2)
@@ -149,7 +130,7 @@ public class FigureDataManager
                                 //Fetch the new set.
                                 _ = figureSet.Sets.TryGetValue(partId, out set);
 
-                                colorId = this.GetRandomColor(figureSet.PalletId);
+                                colorId = GetRandomColor(figureSet.PalletId);
                             }
                             else
                             {
@@ -173,17 +154,17 @@ public class FigureDataManager
                                 {
                                     if (int.TryParse(part.Split('-')[2], out colorId))
                                     {
-                                        var palette = this.GetPalette(colorId);
+                                        var palette = GetPalette(colorId);
                                         if (palette != null && colorId != 0)
                                         {
                                             if (figureSet.PalletId != palette.Id)
                                             {
-                                                colorId = this.GetRandomColor(figureSet.PalletId);
+                                                colorId = GetRandomColor(figureSet.PalletId);
                                             }
                                         }
                                         else if (palette == null && colorId != 0)
                                         {
-                                            colorId = this.GetRandomColor(figureSet.PalletId);
+                                            colorId = GetRandomColor(figureSet.PalletId);
                                         }
                                     }
                                     else
@@ -203,17 +184,17 @@ public class FigureDataManager
                                 {
                                     if (int.TryParse(part.Split('-')[3], out secondColorId))
                                     {
-                                        var palette = this.GetPalette(secondColorId);
+                                        var palette = GetPalette(secondColorId);
                                         if (palette != null && secondColorId != 0)
                                         {
                                             if (figureSet.PalletId != palette.Id)
                                             {
-                                                secondColorId = this.GetRandomColor(figureSet.PalletId);
+                                                secondColorId = GetRandomColor(figureSet.PalletId);
                                             }
                                         }
                                         else if (palette == null && secondColorId != 0)
                                         {
-                                            secondColorId = this.GetRandomColor(figureSet.PalletId);
+                                            secondColorId = GetRandomColor(figureSet.PalletId);
                                         }
                                     }
                                     else
@@ -250,7 +231,7 @@ public class FigureDataManager
 
                             _ = figureSet.Sets.TryGetValue(partId, out set);
 
-                            colorId = this.GetRandomColor(figureSet.PalletId);
+                            colorId = GetRandomColor(figureSet.PalletId);
                         }
 
                         if (secondColorId == 0)
@@ -265,7 +246,7 @@ public class FigureDataManager
                 }
             }
 
-            foreach (var requirement in this._requirements)
+            foreach (var requirement in Requirements)
             {
                 if (!rebuildFigure.Contains(requirement))
                 {
@@ -274,13 +255,13 @@ public class FigureDataManager
                         continue;
                     }
 
-                    if (this._setTypes.TryGetValue(requirement, out var figureSet))
+                    if (SetTypes.TryGetValue(requirement, out var figureSet))
                     {
                         var set = figureSet.Sets.FirstOrDefault(x => x.Value.Gender == gender || x.Value.Gender == "U").Value;
                         if (set != null)
                         {
                             var partId = figureSet.Sets.FirstOrDefault(x => x.Value.Gender == gender || x.Value.Gender == "U").Value.Id;
-                            var colorId = this.GetRandomColor(figureSet.PalletId);
+                            var colorId = GetRandomColor(figureSet.PalletId);
 
                             rebuildFigure = rebuildFigure + requirement + "-" + partId + "-" + colorId + ".";
                         }
@@ -298,9 +279,9 @@ public class FigureDataManager
         return "hd-180-1.lg-270-1408";
     }
 
-    public Palette GetPalette(int colorId) => this._palettes.FirstOrDefault(x => x.Value.Colors.ContainsKey(colorId)).Value;
+    public static Palette GetPalette(int colorId) => Palettes.FirstOrDefault(x => x.Value.Colors.ContainsKey(colorId)).Value;
 
-    public bool TryGetPalette(int palletId, out Palette palette) => this._palettes.TryGetValue(palletId, out palette);
+    public static bool TryGetPalette(int palletId, out Palette palette) => Palettes.TryGetValue(palletId, out palette);
 
-    public int GetRandomColor(int palletId) => this._palettes[palletId].Colors.FirstOrDefault().Value.Id;
+    public static int GetRandomColor(int palletId) => Palettes[palletId].Colors.FirstOrDefault().Value.Id;
 }

@@ -4,46 +4,35 @@ using System.Data;
 using System.Diagnostics;
 using WibboEmulator.Core;
 using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Room;
 
-public class RoomManager
+public static class RoomManager
 {
-    private readonly object _roomLoadingSync;
+    private static readonly object RoomLoadingSync = new();
 
-    private readonly ConcurrentDictionary<int, Room> _rooms;
-    private readonly Dictionary<string, RoomModel> _roomModels;
-    private readonly ConcurrentDictionary<int, RoomData> _roomsData;
+    private static readonly ConcurrentDictionary<int, Room> Rooms = new();
+    private static readonly Dictionary<string, RoomModel> RoomModels = [];
+    private static readonly ConcurrentDictionary<int, RoomData> RoomsData = new();
 
-    public int Count => this._rooms.Count;
-
-    public RoomManager()
-    {
-        this._roomLoadingSync = new object();
-
-        this._rooms = new ConcurrentDictionary<int, Room>();
-        this._roomModels = new Dictionary<string, RoomModel>();
-        this._roomsData = new ConcurrentDictionary<int, RoomData>();
-
-        this._roomCycleStopwatch = new Stopwatch();
-        this._roomCycleStopwatch.Start();
-    }
+    public static int Count => Rooms.Count;
 
     private static RoomModel GetCustomData(int roomID)
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         var modelCustom = RoomModelCustomDao.GetOne(dbClient, roomID) ?? throw new ArgumentNullException("The custom room model for room " + roomID + " was not found");
 
         return new RoomModel(roomID.ToString(), modelCustom.DoorX, modelCustom.DoorY, modelCustom.DoorZ, modelCustom.DoorDir, modelCustom.Heightmap, modelCustom.WallHeight);
     }
 
-    public RoomModel GetModel(string model, int roomID)
+    public static RoomModel GetModel(string model, int roomID)
     {
         if (model == "model_custom")
         {
             return GetCustomData(roomID);
         }
 
-        if (this._roomModels.TryGetValue(model, out var value))
+        if (RoomModels.TryGetValue(model, out var value))
         {
             return value;
         }
@@ -53,11 +42,11 @@ public class RoomManager
         }
     }
 
-    public RoomData GenerateNullableRoomData(int roomId)
+    public static RoomData GenerateNullableRoomData(int roomId)
     {
-        if (this.GenerateRoomData(roomId) != null)
+        if (GenerateRoomData(roomId) != null)
         {
-            return this.GenerateRoomData(roomId);
+            return GenerateRoomData(roomId);
         }
 
         var roomData = new RoomData();
@@ -65,19 +54,19 @@ public class RoomManager
         return roomData;
     }
 
-    public RoomData GenerateRoomData(int roomId)
+    public static RoomData GenerateRoomData(int roomId)
     {
-        if (this.TryGetRoom(roomId, out var room))
+        if (TryGetRoom(roomId, out var room))
         {
             return room.RoomData;
         }
 
-        if (this.TryGetRoomData(roomId, out var roomData))
+        if (TryGetRoomData(roomId, out var roomData))
         {
             return roomData;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         var roomEntity = RoomDao.GetOne(dbClient, roomId);
 
         if (roomEntity == null)
@@ -88,24 +77,24 @@ public class RoomManager
         roomData = new RoomData();
         roomData.Fill(roomEntity);
 
-        if (!this._roomsData.ContainsKey(roomId))
+        if (!RoomsData.ContainsKey(roomId))
         {
-            _ = this._roomsData.TryAdd(roomId, roomData);
+            _ = RoomsData.TryAdd(roomId, roomData);
         }
 
         return roomData;
     }
 
-    public Room LoadRoom(int id)
+    public static Room LoadRoom(int id)
     {
-        if (this.TryGetRoom(id, out var room))
+        if (TryGetRoom(id, out var room))
         {
             return room;
         }
 
-        lock (this._roomLoadingSync)
+        lock (RoomLoadingSync)
         {
-            var data = this.GenerateRoomData(id);
+            var data = GenerateRoomData(id);
             if (data == null)
             {
                 return null;
@@ -113,37 +102,37 @@ public class RoomManager
 
             room = new Room(data);
 
-            if (!this._rooms.ContainsKey(room.Id))
+            if (!Rooms.ContainsKey(room.Id))
             {
-                _ = this._rooms.TryAdd(room.Id, room);
+                _ = Rooms.TryAdd(room.Id, room);
             }
 
-            if (this._roomsData.ContainsKey(room.Id))
+            if (RoomsData.ContainsKey(room.Id))
             {
-                _ = this._roomsData.TryRemove(room.Id, out data);
+                _ = RoomsData.TryRemove(room.Id, out data);
             }
 
             return room;
         }
     }
 
-    public void RoomDataRemove(int id)
+    public static void RoomDataRemove(int id)
     {
-        if (this._roomsData.ContainsKey(id))
+        if (RoomsData.ContainsKey(id))
         {
-            _ = this._roomsData.TryRemove(id, out _);
+            _ = RoomsData.TryRemove(id, out _);
         }
     }
 
-    public bool TryGetRoom(int roomId, out Room room) => this._rooms.TryGetValue(roomId, out room);
+    public static bool TryGetRoom(int roomId, out Room room) => Rooms.TryGetValue(roomId, out room);
 
-    public bool TryGetRoomModels(string model, out RoomModel roomModel) => this._roomModels.TryGetValue(model, out roomModel);
+    public static bool TryGetRoomModels(string model, out RoomModel roomModel) => RoomModels.TryGetValue(model, out roomModel);
 
-    public bool TryGetRoomData(int roomId, out RoomData roomData) => this._roomsData.TryGetValue(roomId, out roomData);
+    public static bool TryGetRoomData(int roomId, out RoomData roomData) => RoomsData.TryGetValue(roomId, out roomData);
 
-    public RoomData FetchRoomData(int roomID, RoomEntity roomEntity)
+    public static RoomData FetchRoomData(int roomID, RoomEntity roomEntity)
     {
-        if (this.TryGetRoom(roomID, out var room))
+        if (TryGetRoom(roomID, out var room))
         {
             return room.RoomData;
         }
@@ -155,9 +144,11 @@ public class RoomManager
         }
     }
 
-    public void Initialize(IDbConnection dbClient)
+    public static void Initialize(IDbConnection dbClient)
     {
-        this._roomModels.Clear();
+        RoomCycleStopwatch.Start();
+
+        RoomModels.Clear();
 
         var roomMoodelList = RoomModelDao.GetAll(dbClient);
         if (roomMoodelList.Count == 0)
@@ -167,13 +158,13 @@ public class RoomManager
 
         foreach (var roomMoodel in roomMoodelList)
         {
-            this._roomModels.Add(roomMoodel.Id, new RoomModel(roomMoodel.Id, roomMoodel.DoorX, roomMoodel.DoorY, roomMoodel.DoorZ, roomMoodel.DoorDir, roomMoodel.Heightmap, 0));
+            RoomModels.Add(roomMoodel.Id, new RoomModel(roomMoodel.Id, roomMoodel.DoorX, roomMoodel.DoorY, roomMoodel.DoorZ, roomMoodel.DoorDir, roomMoodel.Heightmap, 0));
         }
     }
 
-    public void OnCycle(Stopwatch moduleWatch)
+    public static void OnCycle(Stopwatch moduleWatch)
     {
-        this.RoomCycleTask();
+        RoomCycleTask();
         HandleFunctionReset(moduleWatch, "RoomCycleTask");
     }
 
@@ -194,10 +185,10 @@ public class RoomManager
         watch.Restart();
     }
 
-    public List<RoomData> SearchGroupRooms(string query, int amount = 20)
+    public static List<RoomData> SearchGroupRooms(string query, int amount = 20)
     {
         var instanceMatches =
-            (from RoomInstance in this._rooms.ToList()
+            (from RoomInstance in Rooms.ToList()
              where RoomInstance.Value.RoomData.UsersNow >= 0 &&
              RoomInstance.Value.RoomData.Access != RoomAccess.Invisible &&
              RoomInstance.Value.RoomData.Group != null &&
@@ -209,10 +200,10 @@ public class RoomManager
         return instanceMatches.ToList();
     }
 
-    public List<RoomData> SearchTaggedRooms(string query)
+    public static List<RoomData> SearchTaggedRooms(string query)
     {
         var instanceMatches =
-            (from RoomInstance in this._rooms.ToList()
+            (from RoomInstance in Rooms.ToList()
              where RoomInstance.Value.RoomData.UsersNow >= 0 &&
              RoomInstance.Value.RoomData.Access != RoomAccess.Invisible &&
              RoomInstance.Value.RoomData.Tags.Contains(query)
@@ -221,24 +212,24 @@ public class RoomManager
         return instanceMatches.ToList();
     }
 
-    public List<RoomData> GetPopularRooms(int category, int amount = 20, Language langue = Language.French)
+    public static List<RoomData> GetPopularRooms(int category, int amount = 20, Language langue = Language.French)
     {
         var rooms =
-            (from RoomInstance in this._rooms.ToList()
+            (from RoomInstance in Rooms.ToList()
              where RoomInstance.Value != null && RoomInstance.Value.RoomData != null &&
              RoomInstance.Value.RoomData.UsersNow > 0 &&
              (category == -1 || RoomInstance.Value.RoomData.Category == category) &&
-             RoomInstance.Value.RoomData.Access != RoomAccess.Invisible && RoomInstance.Value.RoomData.Langue == langue
+             RoomInstance.Value.RoomData.Access != RoomAccess.Invisible && RoomInstance.Value.RoomData.Language == langue
              orderby RoomInstance.Value.RoomData.Score descending
              orderby RoomInstance.Value.RoomData.UsersNow descending
              select RoomInstance.Value.RoomData).Take(amount);
         return rooms.ToList();
     }
 
-    public List<RoomData> GetRecommendedRooms(int amount = 20, int currentRoomId = 0)
+    public static List<RoomData> GetRecommendedRooms(int amount = 20, int currentRoomId = 0)
     {
         var rooms =
-            (from RoomInstance in this._rooms.ToList()
+            (from RoomInstance in Rooms.ToList()
              where RoomInstance.Value.RoomData.UsersNow >= 0 &&
              RoomInstance.Value.RoomData.Score >= 0 &&
              RoomInstance.Value.RoomData.Access != RoomAccess.Invisible &&
@@ -249,20 +240,20 @@ public class RoomManager
         return rooms.ToList();
     }
 
-    public List<RoomData> GetPopularRatedRooms(int amount = 20)
+    public static List<RoomData> GetPopularRatedRooms(int amount = 20)
     {
         var rooms =
-            (from RoomInstance in this._rooms.ToList()
+            (from RoomInstance in Rooms.ToList()
              where RoomInstance.Value.RoomData.Access != RoomAccess.Invisible
              orderby RoomInstance.Value.RoomData.Score descending
              select RoomInstance.Value.RoomData).Take(amount);
         return rooms.ToList();
     }
 
-    public List<RoomData> GetRoomsByCategory(int category, int amount = 20)
+    public static List<RoomData> GetRoomsByCategory(int category, int amount = 20)
     {
         var rooms =
-            (from RoomInstance in this._rooms.ToList()
+            (from RoomInstance in Rooms.ToList()
              where RoomInstance.Value.RoomData.Category == category &&
              RoomInstance.Value.RoomData.UsersNow > 0 &&
              RoomInstance.Value.RoomData.Access != RoomAccess.Invisible
@@ -271,10 +262,10 @@ public class RoomManager
         return rooms.ToList();
     }
 
-    public List<KeyValuePair<string, int>> GetPopularRoomTags(int amount = 20)
+    public static List<KeyValuePair<string, int>> GetPopularRoomTags(int amount = 20)
     {
         var tags =
-            (from RoomInstance in this._rooms.ToList()
+            (from RoomInstance in Rooms.ToList()
              where RoomInstance.Value.RoomData.UsersNow >= 0 &&
              RoomInstance.Value.RoomData.Access != RoomAccess.Invisible
              orderby RoomInstance.Value.RoomData.UsersNow descending
@@ -305,10 +296,10 @@ public class RoomManager
         return sortedTags;
     }
 
-    public List<RoomData> GetGroupRooms(int amount = 20)
+    public static List<RoomData> GetGroupRooms(int amount = 20)
     {
         var rooms =
-            (from RoomInstance in this._rooms.ToList()
+            (from RoomInstance in Rooms.ToList()
              where RoomInstance.Value.RoomData.Group != null &&
              RoomInstance.Value.RoomData.Access != RoomAccess.Invisible
              orderby RoomInstance.Value.RoomData.Score descending
@@ -316,14 +307,14 @@ public class RoomManager
         return rooms.ToList();
     }
 
-    private readonly Stopwatch _roomCycleStopwatch;
-    public void RoomCycleTask()
+    private static readonly Stopwatch RoomCycleStopwatch = new();
+    public static void RoomCycleTask()
     {
-        if (this._roomCycleStopwatch.ElapsedMilliseconds >= 500)
+        if (RoomCycleStopwatch.ElapsedMilliseconds >= 500)
         {
-            this._roomCycleStopwatch.Restart();
+            RoomCycleStopwatch.Restart();
 
-            foreach (var room in this._rooms)
+            foreach (var room in Rooms)
             {
                 if (room.Value == null)
                 {
@@ -343,26 +334,26 @@ public class RoomManager
                     {
                         ExceptionLogger.LogThreadException("Room lagging", "Room cycle task for room " + room.Value.Id);
 
-                        this.UnloadRoom(room.Value);
+                        UnloadRoom(room.Value);
                     }
                 }
             }
         }
     }
 
-    public void RemoveAllRooms()
+    public static void RemoveAllRooms()
     {
-        var count = this._rooms.Count;
+        var count = Rooms.Count;
         var num = 0;
 
-        foreach (var room in this._rooms.Values)
+        foreach (var room in Rooms.Values)
         {
             if (room == null)
             {
                 continue;
             }
 
-            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
+            UnloadRoom(room);
             Console.Clear();
             Console.WriteLine("<<- SERVER SHUTDOWN ->> ROOM ITEM SAVE: " + string.Format("{0:0.##}", num / (double)count * 100.0) + "%");
             num++;
@@ -371,9 +362,9 @@ public class RoomManager
         Console.WriteLine("Done disposing rooms!");
     }
 
-    public void UnloadEmptyRooms()
+    public static void UnloadEmptyRooms()
     {
-        foreach (var room in this._rooms.Values)
+        foreach (var room in Rooms.Values)
         {
             if (room == null)
             {
@@ -385,18 +376,18 @@ public class RoomManager
                 continue;
             }
 
-            this.UnloadRoom(room);
+            UnloadRoom(room);
         }
     }
 
-    public void UnloadRoom(Room room)
+    public static void UnloadRoom(Room room)
     {
         if (room == null)
         {
             return;
         }
 
-        if (this._rooms.TryRemove(room.Id, out _))
+        if (Rooms.TryRemove(room.Id, out _))
         {
             ((IDisposable)room).Dispose();
         }

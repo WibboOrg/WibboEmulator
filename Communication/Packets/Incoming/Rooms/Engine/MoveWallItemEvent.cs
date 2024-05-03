@@ -2,6 +2,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class MoveWallItemEvent : IPacketEvent
 {
@@ -9,7 +11,7 @@ internal sealed class MoveWallItemEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -30,7 +32,7 @@ internal sealed class MoveWallItemEvent : IPacketEvent
 
         if (room.RoomData.SellPrice > 0)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("roomsell.error.7", session.Language));
             return;
         }
 

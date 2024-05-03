@@ -19,13 +19,14 @@ public class InteractorFreezeTile : FurniInteractor
         }
 
         var pName = session.User.Username;
-        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByName(pName);
+        var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByName(pName);
         if (roomUserByUserId == null || roomUserByUserId.CountFreezeBall == 0 || roomUserByUserId.Freezed)
         {
             return;
         }
 
-        item.GetRoom().Freeze.ThrowBall(item, roomUserByUserId);
+        item.
+        Room.Freeze.ThrowBall(item, roomUserByUserId);
     }
 
     public override void OnTick(Item item)
@@ -35,7 +36,7 @@ public class InteractorFreezeTile : FurniInteractor
             return;
         }
 
-        var roomUserTarget = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
+        var roomUserTarget = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
         if (roomUserTarget != null)
         {
             roomUserTarget.CountFreezeBall = 1;
@@ -43,7 +44,7 @@ public class InteractorFreezeTile : FurniInteractor
 
         item.ExtraData = "11000";
         item.UpdateState(false);
-        item.GetRoom().Freeze.OnFreezeTiles(item, item.FreezePowerUp, item.InteractingUser);
+        item.        Room.Freeze.OnFreezeTiles(item, item.FreezePowerUp, item.InteractingUser);
         item.InteractingUser = 0;
         item.InteractionCountHelper = 0;
     }

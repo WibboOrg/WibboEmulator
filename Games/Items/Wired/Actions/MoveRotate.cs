@@ -8,15 +8,15 @@ using WibboEmulator.Games.Rooms.Map.Movement;
 
 public class MoveRotate : WiredActionBase, IWiredEffect, IWired
 {
-    public MoveRotate(Item item, Room room) : base(item, room, (int)WiredActionType.MOVE_FURNI) => this.DefaultIntParams(new int[] { 0, 0 });
+    public MoveRotate(Item item, Room room) : base(item, room, (int)WiredActionType.MOVE_FURNI) => this.DefaultIntParams(0, 0);
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        var disableAnimation = this.RoomInstance.WiredHandler.DisableAnimate(this.ItemInstance.Coordinate);
+        var disableAnimation = this.Room.WiredHandler.DisableAnimate(this.Item.Coordinate);
 
         foreach (var roomItem in this.Items.ToList())
         {
-            if (this.RoomInstance.RoomItemHandling.GetItem(roomItem.Id) == null)
+            if (this.Room.RoomItemHandling.GetItem(roomItem.Id) == null)
             {
                 continue;
             }
@@ -32,9 +32,9 @@ public class MoveRotate : WiredActionBase, IWiredEffect, IWired
                 var oldX = disableAnimation ? newPoint.X : roomItem.X;
                 var oldY = disableAnimation ? newPoint.Y : roomItem.Y;
                 var oldZ = roomItem.Z;
-                if (this.RoomInstance.RoomItemHandling.SetFloorItem(null, roomItem, newPoint.X, newPoint.Y, newRot, false, false, newRot != roomItem.Rotation))
+                if (this.Room.RoomItemHandling.SetFloorItem(null, roomItem, newPoint.X, newPoint.Y, newRot, false, false, newRot != roomItem.Rotation))
                 {
-                    this.RoomInstance.SendPacket(new SlideObjectBundleComposer(oldX, oldY, disableAnimation ? roomItem.Z : oldZ, newPoint.X, newPoint.Y, roomItem.Z, roomItem.Id));
+                    this.Room.SendPacket(new SlideObjectBundleComposer(oldX, oldY, disableAnimation ? roomItem.Z : oldZ, newPoint.X, newPoint.Y, roomItem.Z, roomItem.Id));
                 }
             }
         }

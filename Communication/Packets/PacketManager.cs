@@ -47,60 +47,59 @@ using WibboEmulator.Communication.Packets.Incoming.Televisions;
 using WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Communication.Packets.Incoming.WibboTool;
 using WibboEmulator.Core;
+using WibboEmulator.Core.Settings;
 using WibboEmulator.Games.GameClients;
 
-public sealed class PacketManager
+public static class PacketManager
 {
-    private readonly Dictionary<int, IPacketEvent> _incomingPackets;
-    private readonly List<int> _handshakePacketIds = new() { ClientPacketHeader.RELEASE_VERSION, ClientPacketHeader.SECURITY_TICKET, ClientPacketHeader.CLIENT_PONG };
+    private static readonly Dictionary<int, IPacketEvent> IncomingPackets = [];
+    private static readonly List<int> HandshakePacketIds = [ClientPacketHeader.RELEASE_VERSION, ClientPacketHeader.SECURITY_TICKET, ClientPacketHeader.CLIENT_PONG];
 
-    private readonly TimeSpan _maximumRunTimeInSec = TimeSpan.FromSeconds(5);
+    private static readonly TimeSpan MaximumRunTimeInSec = TimeSpan.FromSeconds(5);
 
-    public PacketManager() => this._incomingPackets = new Dictionary<int, IPacketEvent>();
-
-    public void Initialize()
+    public static void Initialize()
     {
-        this.UnregisterAll();
+        UnregisterAll();
 
-        this.RegisterHandshake();
-        this.RegisterLandingView();
-        this.RegisterCatalog();
-        this.RegisterNavigator();
-        this.RegisterMarketplace();
-        this.RegisterRoomAction();
-        this.RegisterQuests();
-        this.RegisterRoomConnection();
-        this.RegisterRoomChat();
-        this.RegisterRoomEngine();
-        this.RegisterFurni();
-        this.RegisterUsers();
-        this.RegisterSettings();
-        this.RegisterMisc();
-        this.RegisterInventory();
-        this.RegisterPurse();
-        this.RegisterRoomAvatar();
-        this.RegisterAvatar();
-        this.RegisterMessenger();
-        this.RegisterGroups();
-        this.RegisterRoomSettings();
-        this.RegisterPets();
-        this.RegisterBots();
-        this.FloorPlanEditor();
-        this.RegisterModeration();
-        this.RegisterGuide();
-        this.RegisterNux();
-        this.RegisterCamera();
-        this.RegisterCampaign();
-        this.RegisterCustom();
+        RegisterHandshake();
+        RegisterLandingView();
+        RegisterCatalog();
+        RegisterNavigator();
+        RegisterMarketplace();
+        RegisterRoomAction();
+        RegisterQuests();
+        RegisterRoomConnection();
+        RegisterRoomChat();
+        RegisterRoomEngine();
+        RegisterFurni();
+        RegisterUsers();
+        RegisterSettings();
+        RegisterMisc();
+        RegisterInventory();
+        RegisterPurse();
+        RegisterRoomAvatar();
+        RegisterAvatar();
+        RegisterMessenger();
+        RegisterGroups();
+        RegisterRoomSettings();
+        RegisterPets();
+        RegisterBots();
+        RegisterFloorPlanEditor();
+        RegisterModeration();
+        RegisterGuide();
+        RegisterNux();
+        RegisterCamera();
+        RegisterCampaign();
+        RegisterCustom();
 
-        Console.WriteLine("Logged " + this._incomingPackets.Count + " packet handler(s)!");
+        Console.WriteLine("Logged " + IncomingPackets.Count + " packet handler(s)!");
     }
 
-    public void TryExecutePacket(GameClient session, ClientPacket packet)
+    public static void TryExecutePacket(GameClient session, ClientPacket packet)
     {
         var timeStarted = DateTime.Now;
 
-        if (session.User == null && !this._handshakePacketIds.Contains(packet.Id))
+        if (session.User == null && !HandshakePacketIds.Contains(packet.Id))
         {
             if (Debugger.IsAttached)
             {
@@ -111,7 +110,7 @@ public sealed class PacketManager
             return;
         }
 
-        if (!this._incomingPackets.TryGetValue(packet.Id, out var pak))
+        if (!IncomingPackets.TryGetValue(packet.Id, out var pak))
         {
             if (Debugger.IsAttached)
             {
@@ -138,9 +137,9 @@ public sealed class PacketManager
                 Console.ResetColor();
             }
 
-            if (WibboEnvironment.GetSettings().GetData<bool>("packet.log.lantency.enable"))
+            if (SettingsManager.GetData<bool>("packet.log.lantency.enable"))
             {
-                ExceptionLogger.LogPacketException(packet.ToString(), string.Format("Spam detected in {0}: {1}ms", session.User?.Username ?? session.Connection.GetIp(), pak.Delay));
+                ExceptionLogger.LogPacketException(packet.ToString(), string.Format("Spam detected in {0}: {1}ms", session.User?.Username ?? session.Connection.Ip, pak.Delay));
             }
             return;
         }
@@ -148,15 +147,15 @@ public sealed class PacketManager
         pak.Parse(session, packet);
 
         var timeExecution = DateTime.Now - timeStarted;
-        if (timeExecution > this._maximumRunTimeInSec)
+        if (timeExecution > MaximumRunTimeInSec)
         {
-            ExceptionLogger.LogPacketException(packet.ToString(), string.Format("High latency in {0}: {1}ms", session.User?.Username ?? session.Connection.GetIp(), timeExecution.TotalMilliseconds));
+            ExceptionLogger.LogPacketException(packet.ToString(), string.Format("High latency in {0}: {1}ms", session.User?.Username ?? session.Connection.Ip, timeExecution.TotalMilliseconds));
         }
     }
 
     /*private async Task ExecutePacketAsync(GameClient session, ClientPacket packet, IPacketEvent pak)
     {
-        if (this._cancellationTokenSource.IsCancellationRequested)
+        if ( _cancellationTokenSource.IsCancellationRequested)
         {
             return;
         }
@@ -164,7 +163,7 @@ public sealed class PacketManager
         var task = new Task(() => pak.Parse(session, packet));
         task.Start();
 
-        await task.WaitAsync(this._maximumRunTimeInSec, this._cancellationTokenSource.Token).ContinueWith(t =>
+        await task.WaitAsync( _maximumRunTimeInSec,  _cancellationTokenSource.Token).ContinueWith(t =>
         {
             if (t.IsFaulted && t.Exception != null)
             {
@@ -177,377 +176,377 @@ public sealed class PacketManager
         });
     }*/
 
-    public void UnregisterAll() => this._incomingPackets.Clear();
+    public static void UnregisterAll() => IncomingPackets.Clear();
 
-    private void RegisterCustom()
+    private static void RegisterCustom()
     {
-        this._incomingPackets.Add(ClientPacketHeader.SEND_ALERT, new SendHotelAlertEvent());
-        this._incomingPackets.Add(ClientPacketHeader.EDIT_TV, new EditTvYoutubeEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MOVE_AVATAR_KEYBOARD, new MoveAvatarKeyboardEvent());
-        this._incomingPackets.Add(ClientPacketHeader.RP_BUY_ITEMS, new RpBuyItemsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.RP_USE_ITEMS, new RpUseItemsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.RP_TROC_ADD_ITEM, new RpTrocAddItemEvent());
-        this._incomingPackets.Add(ClientPacketHeader.RP_TROC_REMOVE_ITEM, new RpTrocRemoveItemEvent());
-        this._incomingPackets.Add(ClientPacketHeader.RP_TROC_ACCEPTE, new RpTrocAccepteEvent());
-        this._incomingPackets.Add(ClientPacketHeader.RP_TROC_CONFIRME, new RpTrocConfirmeEvent());
-        this._incomingPackets.Add(ClientPacketHeader.RP_TROC_STOP, new RpTrocStopEvent());
-        this._incomingPackets.Add(ClientPacketHeader.BOT_CHOOSE, new RpBotChooseEvent());
+        IncomingPackets.Add(ClientPacketHeader.SEND_ALERT, new SendHotelAlertEvent());
+        IncomingPackets.Add(ClientPacketHeader.EDIT_TV, new EditTvYoutubeEvent());
+        IncomingPackets.Add(ClientPacketHeader.MOVE_AVATAR_KEYBOARD, new MoveAvatarKeyboardEvent());
+        IncomingPackets.Add(ClientPacketHeader.RP_BUY_ITEMS, new RpBuyItemsEvent());
+        IncomingPackets.Add(ClientPacketHeader.RP_USE_ITEMS, new RpUseItemsEvent());
+        IncomingPackets.Add(ClientPacketHeader.RP_TROC_ADD_ITEM, new RpTrocAddItemEvent());
+        IncomingPackets.Add(ClientPacketHeader.RP_TROC_REMOVE_ITEM, new RpTrocRemoveItemEvent());
+        IncomingPackets.Add(ClientPacketHeader.RP_TROC_ACCEPTE, new RpTrocAccepteEvent());
+        IncomingPackets.Add(ClientPacketHeader.RP_TROC_CONFIRME, new RpTrocConfirmeEvent());
+        IncomingPackets.Add(ClientPacketHeader.RP_TROC_STOP, new RpTrocStopEvent());
+        IncomingPackets.Add(ClientPacketHeader.BOT_CHOOSE, new RpBotChooseEvent());
     }
 
-    private void RegisterCampaign()
+    private static void RegisterCampaign()
     {
-        this._incomingPackets.Add(ClientPacketHeader.OPEN_CAMPAIGN_CALENDAR_DOOR, new OpenCampaignCalendarDoorEvent());
-        this._incomingPackets.Add(ClientPacketHeader.OPEN_CAMPAIGN_CALENDAR_DOOR_STAFF, new OpenCampaignCalendarDoorAsStaffEvent());
+        IncomingPackets.Add(ClientPacketHeader.OPEN_CAMPAIGN_CALENDAR_DOOR, new OpenCampaignCalendarDoorEvent());
+        IncomingPackets.Add(ClientPacketHeader.OPEN_CAMPAIGN_CALENDAR_DOOR_STAFF, new OpenCampaignCalendarDoorAsStaffEvent());
     }
 
-    private void RegisterHandshake()
+    private static void RegisterHandshake()
     {
-        this._incomingPackets.Add(ClientPacketHeader.RELEASE_VERSION, new GetClientVersionEvent());
-        this._incomingPackets.Add(ClientPacketHeader.SECURITY_TICKET, new SSOTicketEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_INFO, new InfoRetrieveEvent());
-        this._incomingPackets.Add(ClientPacketHeader.CLIENT_PONG, new PingEvent());
+        IncomingPackets.Add(ClientPacketHeader.RELEASE_VERSION, new GetClientVersionEvent());
+        IncomingPackets.Add(ClientPacketHeader.SECURITY_TICKET, new SSOTicketEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_INFO, new InfoRetrieveEvent());
+        IncomingPackets.Add(ClientPacketHeader.CLIENT_PONG, new PingEvent());
     }
 
-    private void RegisterLandingView()
+    private static void RegisterLandingView()
     {
-        this._incomingPackets.Add(ClientPacketHeader.GET_CURRENT_TIMING_CODE, new RefreshCampaignEvent());
-        this._incomingPackets.Add(ClientPacketHeader.DESKTOP_NEWS, new GetPromoArticlesEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GET_COMMUNITY_GOAL_HALL_OF_FAME, new GetCommunityGoalHallOfFameEvent());
+        IncomingPackets.Add(ClientPacketHeader.GET_CURRENT_TIMING_CODE, new RefreshCampaignEvent());
+        IncomingPackets.Add(ClientPacketHeader.DESKTOP_NEWS, new GetPromoArticlesEvent());
+        IncomingPackets.Add(ClientPacketHeader.GET_COMMUNITY_GOAL_HALL_OF_FAME, new GetCommunityGoalHallOfFameEvent());
     }
 
-    private void RegisterNux() => this._incomingPackets.Add(ClientPacketHeader.USER_NUX_EVENT, new RoomNuxAlertEvent());
+    private static void RegisterNux() => IncomingPackets.Add(ClientPacketHeader.USER_NUX_EVENT, new RoomNuxAlertEvent());
 
-    private void RegisterCatalog()
+    private static void RegisterCatalog()
     {
-        this._incomingPackets.Add(ClientPacketHeader.GET_CATALOG_INDEX, new GetCatalogIndexEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GET_CATALOG_PAGE, new GetCatalogPageEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GET_PRODUCT_OFFER, new GetCatalogOfferEvent());
-        this._incomingPackets.Add(ClientPacketHeader.CATALOG_PURCHASE, new PurchaseFromCatalogEvent());
-        this._incomingPackets.Add(ClientPacketHeader.CATALOG_PURCHASE_GIFT, new PurchaseFromCatalogAsGiftEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GET_GIFT_WRAPPING_CONFIG, new GetGiftWrappingConfigurationEvent());
-        this._incomingPackets.Add(ClientPacketHeader.APPROVE_NAME, new CheckPetNameEvent());
-        this._incomingPackets.Add(ClientPacketHeader.CATALOG_REDEEM_VOUCHER, new RedeemVoucherEvent());
-        this._incomingPackets.Add(ClientPacketHeader.CATALOG_REQUESET_PET_BREEDS, new GetSellablePetBreedsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_MEMBERSHIPS, new GetGroupFurniConfigEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_CONFIG, new GetMarketplaceConfigurationEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GET_CLUB_OFFERS, new GetClubOffersEvent());
-        this._incomingPackets.Add(ClientPacketHeader.CATALOG_SELECT_VIP_GIFT, new SelectVipGiftEvent());
+        IncomingPackets.Add(ClientPacketHeader.GET_CATALOG_INDEX, new GetCatalogIndexEvent());
+        IncomingPackets.Add(ClientPacketHeader.GET_CATALOG_PAGE, new GetCatalogPageEvent());
+        IncomingPackets.Add(ClientPacketHeader.GET_PRODUCT_OFFER, new GetCatalogOfferEvent());
+        IncomingPackets.Add(ClientPacketHeader.CATALOG_PURCHASE, new PurchaseFromCatalogEvent());
+        IncomingPackets.Add(ClientPacketHeader.CATALOG_PURCHASE_GIFT, new PurchaseFromCatalogAsGiftEvent());
+        IncomingPackets.Add(ClientPacketHeader.GET_GIFT_WRAPPING_CONFIG, new GetGiftWrappingConfigurationEvent());
+        IncomingPackets.Add(ClientPacketHeader.APPROVE_NAME, new CheckPetNameEvent());
+        IncomingPackets.Add(ClientPacketHeader.CATALOG_REDEEM_VOUCHER, new RedeemVoucherEvent());
+        IncomingPackets.Add(ClientPacketHeader.CATALOG_REQUESET_PET_BREEDS, new GetSellablePetBreedsEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_MEMBERSHIPS, new GetGroupFurniConfigEvent());
+        IncomingPackets.Add(ClientPacketHeader.MARKETPLACE_CONFIG, new GetMarketplaceConfigurationEvent());
+        IncomingPackets.Add(ClientPacketHeader.GET_CLUB_OFFERS, new GetClubOffersEvent());
+        IncomingPackets.Add(ClientPacketHeader.CATALOG_SELECT_VIP_GIFT, new SelectVipGiftEvent());
     }
 
-    private void RegisterCamera()
+    private static void RegisterCamera()
     {
-        this._incomingPackets.Add(ClientPacketHeader.REQUEST_CAMERA_CONFIGURATION, new RequestCameraConfigurationEvent());
-        this._incomingPackets.Add(ClientPacketHeader.RENDER_ROOM_THUMBNAIL, new RenderRoomThumbnailEvent());
-        this._incomingPackets.Add(ClientPacketHeader.RENDER_ROOM, new RenderRoomEvent());
-        this._incomingPackets.Add(ClientPacketHeader.PURCHASE_PHOTO, new PurchasePhotoEvent());
-        this._incomingPackets.Add(ClientPacketHeader.PUBLISH_PHOTO, new PublishPhotoEvent());
-        this._incomingPackets.Add(ClientPacketHeader.PHOTO_COMPETITION, new PhotoCompetitionEvent());
+        IncomingPackets.Add(ClientPacketHeader.REQUEST_CAMERA_CONFIGURATION, new RequestCameraConfigurationEvent());
+        IncomingPackets.Add(ClientPacketHeader.RENDER_ROOM_THUMBNAIL, new RenderRoomThumbnailEvent());
+        IncomingPackets.Add(ClientPacketHeader.RENDER_ROOM, new RenderRoomEvent());
+        IncomingPackets.Add(ClientPacketHeader.PURCHASE_PHOTO, new PurchasePhotoEvent());
+        IncomingPackets.Add(ClientPacketHeader.PUBLISH_PHOTO, new PublishPhotoEvent());
+        IncomingPackets.Add(ClientPacketHeader.PHOTO_COMPETITION, new PhotoCompetitionEvent());
     }
 
-    private void RegisterMarketplace()
+    private static void RegisterMarketplace()
     {
-        this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_REQUEST_OFFERS, new GetOffersEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_REQUEST_OWN_ITEMS, new GetOwnOffersEvent());
-        this._incomingPackets.Add(ClientPacketHeader.REQUEST_SELL_ITEM, new GetMarketplaceCanMakeOfferEvent());
-        this._incomingPackets.Add(ClientPacketHeader.REQUEST_MARKETPLACE_ITEM_STATS, new GetMarketplaceItemStatsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_SELL_ITEM, new MakeOfferEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_TAKE_BACK_ITEM, new CancelOfferEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_BUY_OFFER, new BuyOfferEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_REDEEM_CREDITS, new RedeemOfferCreditsEvent());
+        IncomingPackets.Add(ClientPacketHeader.MARKETPLACE_REQUEST_OFFERS, new GetOffersEvent());
+        IncomingPackets.Add(ClientPacketHeader.MARKETPLACE_REQUEST_OWN_ITEMS, new GetOwnOffersEvent());
+        IncomingPackets.Add(ClientPacketHeader.REQUEST_SELL_ITEM, new GetMarketplaceCanMakeOfferEvent());
+        IncomingPackets.Add(ClientPacketHeader.REQUEST_MARKETPLACE_ITEM_STATS, new GetMarketplaceItemStatsEvent());
+        IncomingPackets.Add(ClientPacketHeader.MARKETPLACE_SELL_ITEM, new MakeOfferEvent());
+        IncomingPackets.Add(ClientPacketHeader.MARKETPLACE_TAKE_BACK_ITEM, new CancelOfferEvent());
+        IncomingPackets.Add(ClientPacketHeader.MARKETPLACE_BUY_OFFER, new BuyOfferEvent());
+        IncomingPackets.Add(ClientPacketHeader.MARKETPLACE_REDEEM_CREDITS, new RedeemOfferCreditsEvent());
     }
 
-    private void RegisterNavigator()
+    private static void RegisterNavigator()
     {
-        this._incomingPackets.Add(ClientPacketHeader.NAVIGATOR_INIT, new InitializeNewNavigatorEvent());
-        this._incomingPackets.Add(ClientPacketHeader.NAVIGATOR_SEARCH, new NavigatorSearchEvent());
-        this._incomingPackets.Add(ClientPacketHeader.NAVIGATOR_SETTINGS, new NavigatorSettingsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.NAVIGATOR_CATEGORIES, new GetUserFlatCatsEvent());
+        IncomingPackets.Add(ClientPacketHeader.NAVIGATOR_INIT, new InitializeNewNavigatorEvent());
+        IncomingPackets.Add(ClientPacketHeader.NAVIGATOR_SEARCH, new NavigatorSearchEvent());
+        IncomingPackets.Add(ClientPacketHeader.NAVIGATOR_SETTINGS, new NavigatorSettingsEvent());
+        IncomingPackets.Add(ClientPacketHeader.NAVIGATOR_CATEGORIES, new GetUserFlatCatsEvent());
     }
 
-    private void RegisterRoomConnection()
+    private static void RegisterRoomConnection()
     {
-        this._incomingPackets.Add(ClientPacketHeader.DESKTOP_VIEW, new GoToHotelViewEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_ENTER, new OpenFlatConnectionEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GO_TO_FLAT, new GoToFlatEvent());
+        IncomingPackets.Add(ClientPacketHeader.DESKTOP_VIEW, new GoToHotelViewEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_ENTER, new OpenFlatConnectionEvent());
+        IncomingPackets.Add(ClientPacketHeader.GO_TO_FLAT, new GoToFlatEvent());
     }
 
-    private void RegisterRoomSettings()
+    private static void RegisterRoomSettings()
     {
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_SETTINGS, new GetRoomSettingsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_SETTINGS_SAVE, new SaveRoomSettingsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_DELETE, new DeleteRoomEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_MUTE, new ToggleMuteToolEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_SETTINGS, new GetRoomSettingsEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_SETTINGS_SAVE, new SaveRoomSettingsEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_DELETE, new DeleteRoomEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_MUTE, new ToggleMuteToolEvent());
 
 
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_RIGHTS_LIST, new GetRoomRightsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_BAN_LIST, new GetRoomBannedUsersEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_BAN_REMOVE, new UnbanUserFromRoomEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_RIGHTS_LIST, new GetRoomRightsEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_BAN_LIST, new GetRoomBannedUsersEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_BAN_REMOVE, new UnbanUserFromRoomEvent());
 
     }
 
-    private void FloorPlanEditor()
+    private static void RegisterFloorPlanEditor()
     {
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_MODEL_SAVE, new SaveFloorPlanModelEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GET_ROOM_ENTRY_TILE, new InitializeFloorPlanSessionEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GET_OCCUPIED_TILES, new GetOccupiedTilesEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_MODEL_SAVE, new SaveFloorPlanModelEvent());
+        IncomingPackets.Add(ClientPacketHeader.GET_ROOM_ENTRY_TILE, new InitializeFloorPlanSessionEvent());
+        IncomingPackets.Add(ClientPacketHeader.GET_OCCUPIED_TILES, new GetOccupiedTilesEvent());
     }
 
-    private void RegisterAvatar()
+    private static void RegisterAvatar()
     {
-        this._incomingPackets.Add(ClientPacketHeader.GET_WARDROBE, new GetWardrobeEvent());
-        this._incomingPackets.Add(ClientPacketHeader.SAVE_WARDROBE_OUTFIT, new SaveWardrobeOutfitEvent());
+        IncomingPackets.Add(ClientPacketHeader.GET_WARDROBE, new GetWardrobeEvent());
+        IncomingPackets.Add(ClientPacketHeader.SAVE_WARDROBE_OUTFIT, new SaveWardrobeOutfitEvent());
     }
 
-    private void RegisterRoomAction()
+    private static void RegisterRoomAction()
     {
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_DOORBELL, new LetUserInEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_BAN_GIVE, new BanUserEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_KICK, new KickUserEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_RIGHTS_GIVE, new AssignRightsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_RIGHTS_REMOVE, new RemoveRightsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_RIGHTS_REMOVE_ALL, new RemoveAllRightsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_MUTE_USER, new MuteUserEvent());
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_GIVE_HANDITEM, new GiveHandItemEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_RIGHTS_REMOVE_OWN, new RemoveMyRightsEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_DOORBELL, new LetUserInEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_BAN_GIVE, new BanUserEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_KICK, new KickUserEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_RIGHTS_GIVE, new AssignRightsEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_RIGHTS_REMOVE, new RemoveRightsEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_RIGHTS_REMOVE_ALL, new RemoveAllRightsEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_MUTE_USER, new MuteUserEvent());
+        IncomingPackets.Add(ClientPacketHeader.UNIT_GIVE_HANDITEM, new GiveHandItemEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_RIGHTS_REMOVE_OWN, new RemoveMyRightsEvent());
     }
 
-    private void RegisterRoomEngine()
+    private static void RegisterRoomEngine()
     {
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_MODEL, new GetRoomEntryDataEvent());
-        this._incomingPackets.Add(ClientPacketHeader.FURNITURE_ALIASES, new GetFurnitureAliasesMessageEvent());
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_WALK, new MoveAvatarEvent());
-        this._incomingPackets.Add(ClientPacketHeader.FURNITURE_FLOOR_UPDATE, new MoveObjectEvent());
-        this._incomingPackets.Add(ClientPacketHeader.FURNITURE_PICKUP, new PickupObjectEvent());
-        this._incomingPackets.Add(ClientPacketHeader.FURNITURE_PICKUP_ALL, new PickupObjectAllEvent());
-        this._incomingPackets.Add(ClientPacketHeader.FURNITURE_WALL_UPDATE, new MoveWallItemEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ITEM_PAINT, new ApplyDecorationEvent());
-        this._incomingPackets.Add(ClientPacketHeader.FURNITURE_PLACE, new PlaceObjectEvent());
-        this._incomingPackets.Add(ClientPacketHeader.FURNITURE_MULTISTATE, new UseFurnitureEvent());
-        this._incomingPackets.Add(ClientPacketHeader.FURNITURE_WALL_MULTISTATE, new UseFurnitureEvent());
-        this._incomingPackets.Add(ClientPacketHeader.FURNITURE_RANDOMSTATE, new UseFurnitureEvent());
-        this._incomingPackets.Add(ClientPacketHeader.POLL_ANSWER, new AnswerPollEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_FAVORITE, new AddFavouriteRoomEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_FAVORITE_REMOVE, new RemoveFavouriteRoomEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_HOME_ROOM, new NavigatorHomeRoomEvent());
-        this._incomingPackets.Add(ClientPacketHeader.CAN_CREATE_ROOM_MESSAGE_EVENT, new CanCreateRoomEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_CREATE, new CreateFlatEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_INFO, new GetGuestRoomEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_MODEL, new GetRoomEntryDataEvent());
+        IncomingPackets.Add(ClientPacketHeader.FURNITURE_ALIASES, new GetFurnitureAliasesMessageEvent());
+        IncomingPackets.Add(ClientPacketHeader.UNIT_WALK, new MoveAvatarEvent());
+        IncomingPackets.Add(ClientPacketHeader.FURNITURE_FLOOR_UPDATE, new MoveObjectEvent());
+        IncomingPackets.Add(ClientPacketHeader.FURNITURE_PICKUP, new PickupObjectEvent());
+        IncomingPackets.Add(ClientPacketHeader.FURNITURE_PICKUP_ALL, new PickupObjectAllEvent());
+        IncomingPackets.Add(ClientPacketHeader.FURNITURE_WALL_UPDATE, new MoveWallItemEvent());
+        IncomingPackets.Add(ClientPacketHeader.ITEM_PAINT, new ApplyDecorationEvent());
+        IncomingPackets.Add(ClientPacketHeader.FURNITURE_PLACE, new PlaceObjectEvent());
+        IncomingPackets.Add(ClientPacketHeader.FURNITURE_MULTISTATE, new UseFurnitureEvent());
+        IncomingPackets.Add(ClientPacketHeader.FURNITURE_WALL_MULTISTATE, new UseFurnitureEvent());
+        IncomingPackets.Add(ClientPacketHeader.FURNITURE_RANDOMSTATE, new UseFurnitureEvent());
+        IncomingPackets.Add(ClientPacketHeader.POLL_ANSWER, new AnswerPollEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_FAVORITE, new AddFavouriteRoomEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_FAVORITE_REMOVE, new RemoveFavouriteRoomEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_HOME_ROOM, new NavigatorHomeRoomEvent());
+        IncomingPackets.Add(ClientPacketHeader.CAN_CREATE_ROOM_MESSAGE_EVENT, new CanCreateRoomEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_CREATE, new CreateFlatEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_INFO, new GetGuestRoomEvent());
     }
 
-    private void RegisterRoomChat()
+    private static void RegisterRoomChat()
     {
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_CHAT, new ChatEvent());
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_CHAT_SHOUT, new ChatEvent(true));
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_CHAT_WHISPER, new WhisperEvent());
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_CHAT_AUDIO, new ChatAudioEvent());
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_TYPING, new StartTypingEvent());
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_TYPING_STOP, new CancelTypingEvent());
+        IncomingPackets.Add(ClientPacketHeader.UNIT_CHAT, new ChatEvent());
+        IncomingPackets.Add(ClientPacketHeader.UNIT_CHAT_SHOUT, new ChatEvent(true));
+        IncomingPackets.Add(ClientPacketHeader.UNIT_CHAT_WHISPER, new WhisperEvent());
+        IncomingPackets.Add(ClientPacketHeader.UNIT_CHAT_AUDIO, new ChatAudioEvent());
+        IncomingPackets.Add(ClientPacketHeader.UNIT_TYPING, new StartTypingEvent());
+        IncomingPackets.Add(ClientPacketHeader.UNIT_TYPING_STOP, new CancelTypingEvent());
     }
 
-    private void RegisterInventory()
+    private static void RegisterInventory()
     {
-        this._incomingPackets.Add(ClientPacketHeader.TRADE, new InitTradeEvent());
-        this._incomingPackets.Add(ClientPacketHeader.TRADE_ITEM, new TradingOfferItemEvent());
-        this._incomingPackets.Add(ClientPacketHeader.TRADE_ITEMS, new TradeOfferMultipleItemsEvent());
+        IncomingPackets.Add(ClientPacketHeader.TRADE, new InitTradeEvent());
+        IncomingPackets.Add(ClientPacketHeader.TRADE_ITEM, new TradingOfferItemEvent());
+        IncomingPackets.Add(ClientPacketHeader.TRADE_ITEMS, new TradeOfferMultipleItemsEvent());
 
-        this._incomingPackets.Add(ClientPacketHeader.TRADE_ITEM_REMOVE, new TradingRemoveItemEvent());
-        this._incomingPackets.Add(ClientPacketHeader.TRADE_ACCEPT, new TradingAcceptEvent());
-        this._incomingPackets.Add(ClientPacketHeader.TRADE_CLOSE, new TradingCancelEvent());
-        this._incomingPackets.Add(ClientPacketHeader.TRADE_CONFIRM, new TradingConfirmEvent());
-        this._incomingPackets.Add(ClientPacketHeader.TRADE_UNACCEPT, new TradingModifyEvent());
-        this._incomingPackets.Add(ClientPacketHeader.TRADE_CANCEL, new TradingCancelConfirmEvent());
+        IncomingPackets.Add(ClientPacketHeader.TRADE_ITEM_REMOVE, new TradingRemoveItemEvent());
+        IncomingPackets.Add(ClientPacketHeader.TRADE_ACCEPT, new TradingAcceptEvent());
+        IncomingPackets.Add(ClientPacketHeader.TRADE_CLOSE, new TradingCancelEvent());
+        IncomingPackets.Add(ClientPacketHeader.TRADE_CONFIRM, new TradingConfirmEvent());
+        IncomingPackets.Add(ClientPacketHeader.TRADE_UNACCEPT, new TradingModifyEvent());
+        IncomingPackets.Add(ClientPacketHeader.TRADE_CANCEL, new TradingCancelConfirmEvent());
 
-        this._incomingPackets.Add(ClientPacketHeader.USER_FURNITURE, new RequestFurniInventoryEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_BADGES, new GetBadgesEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ACHIEVEMENT_LIST, new GetAchievementsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_BADGES_CURRENT_UPDATE, new SetActivatedBadgesEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_BOTS, new GetBotInventoryEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_PETS, new GetPetInventoryEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_EFFECT_ACTIVATE, new AvatarEffectActivatedEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_EFFECT_ENABLE, new AvatarEffectSelectedEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_FURNITURE, new RequestFurniInventoryEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_BADGES, new GetBadgesEvent());
+        IncomingPackets.Add(ClientPacketHeader.ACHIEVEMENT_LIST, new GetAchievementsEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_BADGES_CURRENT_UPDATE, new SetActivatedBadgesEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_BOTS, new GetBotInventoryEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_PETS, new GetPetInventoryEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_EFFECT_ACTIVATE, new AvatarEffectActivatedEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_EFFECT_ENABLE, new AvatarEffectSelectedEvent());
 
-        this._incomingPackets.Add(ClientPacketHeader.DELETE_BADGE_INVENTORY, new DeleteBadgeInventoryEvent());
-        this._incomingPackets.Add(ClientPacketHeader.DELETE_FURNITURE_TYPE_INVENTORY, new DeleteFurniTypeInventoryEvent());
+        IncomingPackets.Add(ClientPacketHeader.DELETE_BADGE_INVENTORY, new DeleteBadgeInventoryEvent());
+        IncomingPackets.Add(ClientPacketHeader.DELETE_FURNITURE_TYPE_INVENTORY, new DeleteFurniTypeInventoryEvent());
     }
 
-    private void RegisterPurse() => this._incomingPackets.Add(ClientPacketHeader.USER_CURRENCY, new GetCreditsInfoEvent());
+    private static void RegisterPurse() => IncomingPackets.Add(ClientPacketHeader.USER_CURRENCY, new GetCreditsInfoEvent());
 
-    private void RegisterMessenger()
+    private static void RegisterMessenger()
     {
-        this._incomingPackets.Add(ClientPacketHeader.MESSENGER_INIT, new MessengerInitEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GET_FRIEND_REQUESTS, new GetBuddyRequestsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.FOLLOW_FRIEND, new FollowFriendEvent());
-        this._incomingPackets.Add(ClientPacketHeader.FIND_NEW_FRIENDS, new FindNewFriendsEvent());
+        IncomingPackets.Add(ClientPacketHeader.MESSENGER_INIT, new MessengerInitEvent());
+        IncomingPackets.Add(ClientPacketHeader.GET_FRIEND_REQUESTS, new GetBuddyRequestsEvent());
+        IncomingPackets.Add(ClientPacketHeader.FOLLOW_FRIEND, new FollowFriendEvent());
+        IncomingPackets.Add(ClientPacketHeader.FIND_NEW_FRIENDS, new FindNewFriendsEvent());
 
-        this._incomingPackets.Add(ClientPacketHeader.REMOVE_FRIEND, new RemoveBuddyEvent());
-        this._incomingPackets.Add(ClientPacketHeader.REQUEST_FRIEND, new RequestBuddyEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MESSENGER_CHAT, new SendMsgEvent());
-        this._incomingPackets.Add(ClientPacketHeader.SEND_ROOM_INVITE, new SendRoomInviteEvent());
-        this._incomingPackets.Add(ClientPacketHeader.HABBO_SEARCH, new UserSearchEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ACCEPT_FRIEND, new AcceptBuddyEvent());
-        this._incomingPackets.Add(ClientPacketHeader.DECLINE_FRIEND, new DeclineBuddyEvent());
+        IncomingPackets.Add(ClientPacketHeader.REMOVE_FRIEND, new RemoveBuddyEvent());
+        IncomingPackets.Add(ClientPacketHeader.REQUEST_FRIEND, new RequestBuddyEvent());
+        IncomingPackets.Add(ClientPacketHeader.MESSENGER_CHAT, new SendMsgEvent());
+        IncomingPackets.Add(ClientPacketHeader.SEND_ROOM_INVITE, new SendRoomInviteEvent());
+        IncomingPackets.Add(ClientPacketHeader.HABBO_SEARCH, new UserSearchEvent());
+        IncomingPackets.Add(ClientPacketHeader.ACCEPT_FRIEND, new AcceptBuddyEvent());
+        IncomingPackets.Add(ClientPacketHeader.DECLINE_FRIEND, new DeclineBuddyEvent());
     }
 
-    private void RegisterGroups()
+    private static void RegisterGroups()
     {
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_REQUEST, new JoinGroupEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_UNFAVORITE, new RemoveGroupFavouriteEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_FAVORITE, new SetGroupFavouriteEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_INFO, new GetGroupInfoEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_MEMBERS, new GetGroupMembersEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_CREATE_OPTIONS, new GetGroupCreationWindowEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_PARTS, new GetBadgeEditorPartsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_BUY, new PurchaseGroupEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_SAVE_INFORMATION, new UpdateGroupIdentityEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_SAVE_BADGE, new UpdateGroupBadgeEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_SAVE_COLORS, new UpdateGroupColoursEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_SAVE_PREFERENCES, new UpdateGroupSettingsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_SETTINGS, new ManageGroupEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_ADMIN_ADD, new GiveAdminRightsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_ADMIN_REMOVE, new TakeAdminRightsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_MEMBER_REMOVE_CONFIRM, new RemoveGroupMemberEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_MEMBER_REMOVE, new RemoveGroupMemberEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_REQUEST_ACCEPT, new AcceptGroupMembershipEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_REQUEST_DECLINE, new DeclineGroupMembershipEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_DELETE, new DeleteGroupEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_REQUEST, new JoinGroupEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_UNFAVORITE, new RemoveGroupFavouriteEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_FAVORITE, new SetGroupFavouriteEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_INFO, new GetGroupInfoEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_MEMBERS, new GetGroupMembersEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_CREATE_OPTIONS, new GetGroupCreationWindowEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_PARTS, new GetBadgeEditorPartsEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_BUY, new PurchaseGroupEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_SAVE_INFORMATION, new UpdateGroupIdentityEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_SAVE_BADGE, new UpdateGroupBadgeEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_SAVE_COLORS, new UpdateGroupColoursEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_SAVE_PREFERENCES, new UpdateGroupSettingsEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_SETTINGS, new ManageGroupEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_ADMIN_ADD, new GiveAdminRightsEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_ADMIN_REMOVE, new TakeAdminRightsEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_MEMBER_REMOVE_CONFIRM, new RemoveGroupMemberEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_MEMBER_REMOVE, new RemoveGroupMemberEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_REQUEST_ACCEPT, new AcceptGroupMembershipEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_REQUEST_DECLINE, new DeclineGroupMembershipEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_DELETE, new DeleteGroupEvent());
     }
 
-    private void RegisterPets()
+    private static void RegisterPets()
     {
-        this._incomingPackets.Add(ClientPacketHeader.PET_RESPECT, new RespectPetEvent());
-        this._incomingPackets.Add(ClientPacketHeader.PET_INFO, new GetPetInformationEvent());
-        this._incomingPackets.Add(ClientPacketHeader.PET_PICKUP, new PickUpPetEvent());
-        this._incomingPackets.Add(ClientPacketHeader.PET_PLACE, new PlacePetEvent());
-        this._incomingPackets.Add(ClientPacketHeader.PET_RIDE, new RideHorseEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USE_PET_PRODUCT, new ApplyHorseEffectEvent());
-        this._incomingPackets.Add(ClientPacketHeader.REMOVE_PET_SADDLE, new RemoveSaddleFromHorseEvent());
-        this._incomingPackets.Add(ClientPacketHeader.TOGGLE_PET_RIDING, new ModifyWhoCanRideHorseEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GET_PET_TRAINING_PANEL_MESSAGE_EVENT, new GetPetTrainingPanelEvent());
-        this._incomingPackets.Add(ClientPacketHeader.PET_MOVE, new MoveMonsterPlanteEvent());
+        IncomingPackets.Add(ClientPacketHeader.PET_RESPECT, new RespectPetEvent());
+        IncomingPackets.Add(ClientPacketHeader.PET_INFO, new GetPetInformationEvent());
+        IncomingPackets.Add(ClientPacketHeader.PET_PICKUP, new PickUpPetEvent());
+        IncomingPackets.Add(ClientPacketHeader.PET_PLACE, new PlacePetEvent());
+        IncomingPackets.Add(ClientPacketHeader.PET_RIDE, new RideHorseEvent());
+        IncomingPackets.Add(ClientPacketHeader.USE_PET_PRODUCT, new ApplyHorseEffectEvent());
+        IncomingPackets.Add(ClientPacketHeader.REMOVE_PET_SADDLE, new RemoveSaddleFromHorseEvent());
+        IncomingPackets.Add(ClientPacketHeader.TOGGLE_PET_RIDING, new ModifyWhoCanRideHorseEvent());
+        IncomingPackets.Add(ClientPacketHeader.GET_PET_TRAINING_PANEL_MESSAGE_EVENT, new GetPetTrainingPanelEvent());
+        IncomingPackets.Add(ClientPacketHeader.PET_MOVE, new MoveMonsterPlanteEvent());
     }
 
-    private void RegisterQuests()
+    private static void RegisterQuests()
     {
-        this._incomingPackets.Add(ClientPacketHeader.GET_QUESTS, new GetQuestListEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ACCEPT_QUEST, new StartQuestEvent());
-        this._incomingPackets.Add(ClientPacketHeader.REJECT_QUEST, new CancelQuestEvent());
-        this._incomingPackets.Add(ClientPacketHeader.OPEN_QUEST_TRACKER, new GetCurrentQuestEvent());
+        IncomingPackets.Add(ClientPacketHeader.GET_QUESTS, new GetQuestListEvent());
+        IncomingPackets.Add(ClientPacketHeader.ACCEPT_QUEST, new StartQuestEvent());
+        IncomingPackets.Add(ClientPacketHeader.REJECT_QUEST, new CancelQuestEvent());
+        IncomingPackets.Add(ClientPacketHeader.OPEN_QUEST_TRACKER, new GetCurrentQuestEvent());
     }
 
-    private void RegisterFurni()
+    private static void RegisterFurni()
     {
-        this._incomingPackets.Add(ClientPacketHeader.ITEM_STACK_HELPER, new UpdateMagicTileEvent());
-        this._incomingPackets.Add(ClientPacketHeader.WIRED_TRIGGER_SAVE, new UpdateTriggerEvent());
-        this._incomingPackets.Add(ClientPacketHeader.WIRED_ACTION_SAVE, new UpdateActionEvent());
-        this._incomingPackets.Add(ClientPacketHeader.WIRED_CONDITION_SAVE, new UpdateConditionEvent());
-        this._incomingPackets.Add(ClientPacketHeader.SET_OBJECT_DATA, new SaveBrandingItemEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_TONER_APPLY, new SetTonerEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ITEM_DICE_CLOSE, new UseFurnitureEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ITEM_DICE_CLICK, new UseFurnitureEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MANNEQUIN_SAVE_NAME, new SetMannequinNameEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MANNEQUIN_SAVE_LOOK, new SetMannequinFigureEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ITEM_EXCHANGE_REDEEM, new CreditFurniRedeemEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GET_ITEM_DATA, new GetStickyNoteEvent());
-        this._incomingPackets.Add(ClientPacketHeader.FURNITURE_POSTIT_PLACE, new AddStickyNoteEvent());
-        this._incomingPackets.Add(ClientPacketHeader.SET_ITEM_DATA, new UpdateStickyNoteEvent());
-        this._incomingPackets.Add(ClientPacketHeader.REMOVE_WALL_ITEM, new DeleteStickyNoteEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ITEM_DIMMER_SETTINGS, new GetMoodlightConfigEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ITEM_DIMMER_SAVE, new MoodlightUpdateEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ITEM_DIMMER_TOGGLE, new ToggleMoodlightEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ONE_WAY_DOOR_CLICK, new UseFurnitureEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ITEM_COLOR_WHEEL_CLICK, new UseFurnitureEvent());
-        this._incomingPackets.Add(ClientPacketHeader.FOOTBALL_GATE_SAVE_LOOK_EVENT, new ChangeFootGate());
-        this._incomingPackets.Add(ClientPacketHeader.PRESENT_OPEN_PRESENT, new OpenGiftEvent());
-        this._incomingPackets.Add(ClientPacketHeader.FURNITURE_GROUP_INFO, new GetGroupFurniSettingsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.FRIEND_FURNI_CONFIRM_LOCK, new ConfirmLoveLockEvent());
+        IncomingPackets.Add(ClientPacketHeader.ITEM_STACK_HELPER, new UpdateMagicTileEvent());
+        IncomingPackets.Add(ClientPacketHeader.WIRED_TRIGGER_SAVE, new UpdateTriggerEvent());
+        IncomingPackets.Add(ClientPacketHeader.WIRED_ACTION_SAVE, new UpdateActionEvent());
+        IncomingPackets.Add(ClientPacketHeader.WIRED_CONDITION_SAVE, new UpdateConditionEvent());
+        IncomingPackets.Add(ClientPacketHeader.SET_OBJECT_DATA, new SaveBrandingItemEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_TONER_APPLY, new SetTonerEvent());
+        IncomingPackets.Add(ClientPacketHeader.ITEM_DICE_CLOSE, new UseFurnitureEvent());
+        IncomingPackets.Add(ClientPacketHeader.ITEM_DICE_CLICK, new UseFurnitureEvent());
+        IncomingPackets.Add(ClientPacketHeader.MANNEQUIN_SAVE_NAME, new SetMannequinNameEvent());
+        IncomingPackets.Add(ClientPacketHeader.MANNEQUIN_SAVE_LOOK, new SetMannequinFigureEvent());
+        IncomingPackets.Add(ClientPacketHeader.ITEM_EXCHANGE_REDEEM, new CreditFurniRedeemEvent());
+        IncomingPackets.Add(ClientPacketHeader.GET_ITEM_DATA, new GetStickyNoteEvent());
+        IncomingPackets.Add(ClientPacketHeader.FURNITURE_POSTIT_PLACE, new AddStickyNoteEvent());
+        IncomingPackets.Add(ClientPacketHeader.SET_ITEM_DATA, new UpdateStickyNoteEvent());
+        IncomingPackets.Add(ClientPacketHeader.REMOVE_WALL_ITEM, new DeleteStickyNoteEvent());
+        IncomingPackets.Add(ClientPacketHeader.ITEM_DIMMER_SETTINGS, new GetMoodlightConfigEvent());
+        IncomingPackets.Add(ClientPacketHeader.ITEM_DIMMER_SAVE, new MoodlightUpdateEvent());
+        IncomingPackets.Add(ClientPacketHeader.ITEM_DIMMER_TOGGLE, new ToggleMoodlightEvent());
+        IncomingPackets.Add(ClientPacketHeader.ONE_WAY_DOOR_CLICK, new UseFurnitureEvent());
+        IncomingPackets.Add(ClientPacketHeader.ITEM_COLOR_WHEEL_CLICK, new UseFurnitureEvent());
+        IncomingPackets.Add(ClientPacketHeader.FOOTBALL_GATE_SAVE_LOOK_EVENT, new ChangeFootGate());
+        IncomingPackets.Add(ClientPacketHeader.PRESENT_OPEN_PRESENT, new OpenGiftEvent());
+        IncomingPackets.Add(ClientPacketHeader.FURNITURE_GROUP_INFO, new GetGroupFurniSettingsEvent());
+        IncomingPackets.Add(ClientPacketHeader.FRIEND_FURNI_CONFIRM_LOCK, new ConfirmLoveLockEvent());
     }
 
-    private void RegisterUsers()
+    private static void RegisterUsers()
     {
-        this._incomingPackets.Add(ClientPacketHeader.USER_SUBSCRIPTION, new ScrGetUserInfoMessageEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_RESPECT, new RespectUserEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_FIGURE, new UpdateFigureDataEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_PROFILE, new OpenPlayerProfileEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_BADGES_CURRENT, new GetSelectedBadgesEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MESSENGER_RELATIONSHIPS, new GetRelationshipsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.SET_RELATIONSHIP_STATUS, new SetRelationshipEvent());
-        this._incomingPackets.Add(ClientPacketHeader.CHECK_USERNAME, new CheckValidNameEvent());
-        this._incomingPackets.Add(ClientPacketHeader.CHANGE_USERNAME, new ChangeNameEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_BADGES, new GetUserGroupBadgesEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_BANNER, new UserBannerEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_BANNER_SELECT, new UserBannerSelectEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_SUBSCRIPTION, new ScrGetUserInfoMessageEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_RESPECT, new RespectUserEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_FIGURE, new UpdateFigureDataEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_PROFILE, new OpenPlayerProfileEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_BADGES_CURRENT, new GetSelectedBadgesEvent());
+        IncomingPackets.Add(ClientPacketHeader.MESSENGER_RELATIONSHIPS, new GetRelationshipsEvent());
+        IncomingPackets.Add(ClientPacketHeader.SET_RELATIONSHIP_STATUS, new SetRelationshipEvent());
+        IncomingPackets.Add(ClientPacketHeader.CHECK_USERNAME, new CheckValidNameEvent());
+        IncomingPackets.Add(ClientPacketHeader.CHANGE_USERNAME, new ChangeNameEvent());
+        IncomingPackets.Add(ClientPacketHeader.GROUP_BADGES, new GetUserGroupBadgesEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_BANNER, new UserBannerEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_BANNER_SELECT, new UserBannerSelectEvent());
     }
 
-    private void RegisterSettings()
+    private static void RegisterSettings()
     {
-        this._incomingPackets.Add(ClientPacketHeader.USER_SETTINGS_OLD_CHAT, new UserSettingsOldChatEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_SETTINGS_INVITES, new UserSettingsRoomInvitesEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_SETTINGS_CAMERA, new UserSettingsCameraFollowEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_SETTINGS_VOLUME, new UserSettingsSoundEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_SETTINGS_OLD_CHAT, new UserSettingsOldChatEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_SETTINGS_INVITES, new UserSettingsRoomInvitesEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_SETTINGS_CAMERA, new UserSettingsCameraFollowEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_SETTINGS_VOLUME, new UserSettingsSoundEvent());
     }
 
-    private void RegisterMisc()
+    private static void RegisterMisc()
     {
-        this._incomingPackets.Add(ClientPacketHeader.CLIENT_LATENCY, new LatencyTestEvent());
-        this._incomingPackets.Add(ClientPacketHeader.CLIENT_TOOLBAR_TOGGLE, new SetFriendBarStateEvent());
+        IncomingPackets.Add(ClientPacketHeader.CLIENT_LATENCY, new LatencyTestEvent());
+        IncomingPackets.Add(ClientPacketHeader.CLIENT_TOOLBAR_TOGGLE, new SetFriendBarStateEvent());
     }
 
-    private void RegisterRoomAvatar()
+    private static void RegisterRoomAvatar()
     {
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_ACTION, new ActionEvent());
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_SIGN, new ApplySignEvent());
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_DANCE, new DanceEvent());
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_POSTURE, new SitEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_MOTTO, new ChangeMottoEvent());
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_LOOK, new LookToEvent());
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_DROP_HAND_ITEM, new DropHandItemEvent());
-        this._incomingPackets.Add(ClientPacketHeader.ROOM_LIKE, new GiveRoomScoreEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_IGNORE, new IgnoreUserEvent());
-        this._incomingPackets.Add(ClientPacketHeader.USER_UNIGNORE, new UnIgnoreUserEvent());
-        this._incomingPackets.Add(ClientPacketHeader.UNIT_CHAT_WHISPER_GROUP, new WhiperGroupEvent());
+        IncomingPackets.Add(ClientPacketHeader.UNIT_ACTION, new ActionEvent());
+        IncomingPackets.Add(ClientPacketHeader.UNIT_SIGN, new ApplySignEvent());
+        IncomingPackets.Add(ClientPacketHeader.UNIT_DANCE, new DanceEvent());
+        IncomingPackets.Add(ClientPacketHeader.UNIT_POSTURE, new SitEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_MOTTO, new ChangeMottoEvent());
+        IncomingPackets.Add(ClientPacketHeader.UNIT_LOOK, new LookToEvent());
+        IncomingPackets.Add(ClientPacketHeader.UNIT_DROP_HAND_ITEM, new DropHandItemEvent());
+        IncomingPackets.Add(ClientPacketHeader.ROOM_LIKE, new GiveRoomScoreEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_IGNORE, new IgnoreUserEvent());
+        IncomingPackets.Add(ClientPacketHeader.USER_UNIGNORE, new UnIgnoreUserEvent());
+        IncomingPackets.Add(ClientPacketHeader.UNIT_CHAT_WHISPER_GROUP, new WhiperGroupEvent());
     }
 
-    private void RegisterBots()
+    private static void RegisterBots()
     {
-        this._incomingPackets.Add(ClientPacketHeader.BOT_PLACE, new PlaceBotEvent());
-        this._incomingPackets.Add(ClientPacketHeader.BOT_PICKUP, new PickUpBotEvent());
-        this._incomingPackets.Add(ClientPacketHeader.BOT_CONFIGURATION, new OpenBotActionEvent());
-        this._incomingPackets.Add(ClientPacketHeader.BOT_SKILL_SAVE, new SaveBotActionEvent());
+        IncomingPackets.Add(ClientPacketHeader.BOT_PLACE, new PlaceBotEvent());
+        IncomingPackets.Add(ClientPacketHeader.BOT_PICKUP, new PickUpBotEvent());
+        IncomingPackets.Add(ClientPacketHeader.BOT_CONFIGURATION, new OpenBotActionEvent());
+        IncomingPackets.Add(ClientPacketHeader.BOT_SKILL_SAVE, new SaveBotActionEvent());
     }
 
-    private void RegisterModeration()
+    private static void RegisterModeration()
     {
-        this._incomingPackets.Add(ClientPacketHeader.GET_PENDING_CALLS_FOR_HELP, new OpenHelpToolEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MODTOOL_REQUEST_ROOM_INFO, new GetModeratorRoomInfoEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MOD_TOOL_USER_INFO, new GetModeratorUserInfoEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MODTOOL_REQUEST_USER_ROOMS, new GetModeratorUserRoomVisitsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MODTOOL_CHANGE_ROOM_SETTINGS, new ModerateRoomEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MODTOOL_ROOM_ALERT, new ModeratorActionEvent());
-        this._incomingPackets.Add(ClientPacketHeader.CALL_FOR_HELP, new SubmitNewTicketEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MODTOOL_REQUEST_ROOM_CHATLOG, new GetModeratorRoomChatlogEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MODTOOL_REQUEST_USER_CHATLOG, new GetModeratorUserChatlogEvent());
+        IncomingPackets.Add(ClientPacketHeader.GET_PENDING_CALLS_FOR_HELP, new OpenHelpToolEvent());
+        IncomingPackets.Add(ClientPacketHeader.MODTOOL_REQUEST_ROOM_INFO, new GetModeratorRoomInfoEvent());
+        IncomingPackets.Add(ClientPacketHeader.MOD_TOOL_USER_INFO, new GetModeratorUserInfoEvent());
+        IncomingPackets.Add(ClientPacketHeader.MODTOOL_REQUEST_USER_ROOMS, new GetModeratorUserRoomVisitsEvent());
+        IncomingPackets.Add(ClientPacketHeader.MODTOOL_CHANGE_ROOM_SETTINGS, new ModerateRoomEvent());
+        IncomingPackets.Add(ClientPacketHeader.MODTOOL_ROOM_ALERT, new ModeratorActionEvent());
+        IncomingPackets.Add(ClientPacketHeader.CALL_FOR_HELP, new SubmitNewTicketEvent());
+        IncomingPackets.Add(ClientPacketHeader.MODTOOL_REQUEST_ROOM_CHATLOG, new GetModeratorRoomChatlogEvent());
+        IncomingPackets.Add(ClientPacketHeader.MODTOOL_REQUEST_USER_CHATLOG, new GetModeratorUserChatlogEvent());
 
-        this._incomingPackets.Add(ClientPacketHeader.PICK_ISSUES, new PickTicketEvent());
-        this._incomingPackets.Add(ClientPacketHeader.RELEASE_ISSUES, new ReleaseTicketEvent());
-        this._incomingPackets.Add(ClientPacketHeader.CLOSE_ISSUES, new CloseTicketEvent());
+        IncomingPackets.Add(ClientPacketHeader.PICK_ISSUES, new PickTicketEvent());
+        IncomingPackets.Add(ClientPacketHeader.RELEASE_ISSUES, new ReleaseTicketEvent());
+        IncomingPackets.Add(ClientPacketHeader.CLOSE_ISSUES, new CloseTicketEvent());
 
-        this._incomingPackets.Add(ClientPacketHeader.MODTOOL_SANCTION_MUTE, new ModerationMuteEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MODTOOL_SANCTION_KICK, new ModerationMuteEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MODTOOL_SANCTION_BAN, new ModerationBanEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MODTOOL_ALERTEVENT, new ModerationMsgEvent());
-        this._incomingPackets.Add(ClientPacketHeader.MODTOOL_SANCTION_ALERT, new ModerationMsgEvent());
+        IncomingPackets.Add(ClientPacketHeader.MODTOOL_SANCTION_MUTE, new ModerationMuteEvent());
+        IncomingPackets.Add(ClientPacketHeader.MODTOOL_SANCTION_KICK, new ModerationMuteEvent());
+        IncomingPackets.Add(ClientPacketHeader.MODTOOL_SANCTION_BAN, new ModerationBanEvent());
+        IncomingPackets.Add(ClientPacketHeader.MODTOOL_ALERTEVENT, new ModerationMsgEvent());
+        IncomingPackets.Add(ClientPacketHeader.MODTOOL_SANCTION_ALERT, new ModerationMsgEvent());
     }
 
-    private void RegisterGuide()
+    private static void RegisterGuide()
     {
-        this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_ON_DUTY_UPDATE, new GetHelperToolConfigurationEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_GUIDE_DECIDES, new OnGuideSessionDetachedEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_CREATE, new OnGuideEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_FEEDBACK, new RecomendHelpersEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_MESSAGE, new GuideToolMessageNewEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_INVITE_REQUESTER, new GuideInviteToRoomEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_GET_REQUESTER_ROOM, new VisitRoomGuidesEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_RESOLVED, new GuideEndSessionEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_REQUESTER_CANCELS, new CancellInviteGuideEvent());
+        IncomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_ON_DUTY_UPDATE, new GetHelperToolConfigurationEvent());
+        IncomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_GUIDE_DECIDES, new OnGuideSessionDetachedEvent());
+        IncomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_CREATE, new OnGuideEvent());
+        IncomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_FEEDBACK, new RecomendHelpersEvent());
+        IncomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_MESSAGE, new GuideToolMessageNewEvent());
+        IncomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_INVITE_REQUESTER, new GuideInviteToRoomEvent());
+        IncomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_GET_REQUESTER_ROOM, new VisitRoomGuidesEvent());
+        IncomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_RESOLVED, new GuideEndSessionEvent());
+        IncomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_REQUESTER_CANCELS, new CancellInviteGuideEvent());
     }
 }

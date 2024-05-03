@@ -26,6 +26,6 @@ internal sealed class ModeratorActionEvent : IPacketEvent
 
         ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, alertMessage.Split(' ')[0].Replace(":", ""), string.Format("Modtool Roomalert: {0}", alertMessage));
 
-        session.User.CurrentRoom.SendPacket(new BroadcastMessageAlertComposer(alertMessage));
+        session.User.Room.SendPacket(new BroadcastMessageAlertComposer(alertMessage));
     }
 }

@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Guide;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Helps;
 
 internal sealed class GetHelperToolConfigurationEvent : IPacketEvent
 {
@@ -13,7 +14,6 @@ internal sealed class GetHelperToolConfigurationEvent : IPacketEvent
             return;
         }
 
-        var guideManager = WibboEnvironment.GetGame().GetHelpManager();
         var onDuty = packet.PopBoolean();
         _ = packet.PopBoolean();
         _ = packet.PopBoolean();
@@ -21,15 +21,15 @@ internal sealed class GetHelperToolConfigurationEvent : IPacketEvent
 
         if (onDuty && !session.User.OnDuty)
         {
-            guideManager.TryAddGuide(session.User.Id);
+            HelpManager.TryAddGuide(session.User.Id);
             session.User.OnDuty = true;
         }
         else
         {
-            guideManager.TryRemoveGuide(session.User.Id);
+            HelpManager.TryRemoveGuide(session.User.Id);
             session.User.OnDuty = false;
         }
 
-        session.SendPacket(new HelperToolComposer(session.User.OnDuty, guideManager.Count));
+        session.SendPacket(new HelperToolComposer(session.User.OnDuty, HelpManager.Count));
     }
 }

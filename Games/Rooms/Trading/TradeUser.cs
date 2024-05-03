@@ -16,18 +16,21 @@ public class TradeUser
 
         this.UserId = userId;
         this.HasAccepted = false;
-        this.OfferedItems = new List<Item>();
+        this.OfferedItems = [];
     }
 
-    public RoomUser GetRoomUser()
+    public RoomUser RoomUser
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this._roomId, out var room))
+        get
         {
-            return null;
-        }
+            if (!RoomManager.TryGetRoom(this._roomId, out var room))
+            {
+                return null;
+            }
 
-        return room.RoomUserManager.GetRoomUserByUserId(this.UserId);
+            return room.RoomUserManager.GetRoomUserByUserId(this.UserId);
+        }
     }
 
-    public GameClient GetClient() => WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this.UserId);
+    public GameClient Client => GameClientManager.GetClientByUserID(this.UserId);
 }

@@ -131,7 +131,7 @@ internal sealed class HttpConnection : IDisposable
         this._localEndPoint = socket.LocalEndPoint;
         this._remoteEndPoint = socket.RemoteEndPoint;
         this._sync = new object();
-        this._timeoutCanceled = new Dictionary<int, bool>();
+        this._timeoutCanceled = [];
         this._timer = new Timer(OnTimeout, this, Timeout.Infinite, Timeout.Infinite);
 
         // 90k ms for first request, 15k ms from then on.

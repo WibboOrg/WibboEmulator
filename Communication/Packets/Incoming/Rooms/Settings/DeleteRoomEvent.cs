@@ -1,9 +1,12 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Settings;
+
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class DeleteRoomEvent : IPacketEvent
 {
@@ -18,7 +21,7 @@ internal sealed class DeleteRoomEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out var room))
+        if (!RoomManager.TryGetRoom(roomId, out var room))
         {
             return;
         }
@@ -30,9 +33,9 @@ internal sealed class DeleteRoomEvent : IPacketEvent
 
         session.User.InventoryComponent?.AddItemArray(room.RoomItemHandling.RemoveAllFurnitureToInventory(session));
 
-        WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
+        RoomManager.UnloadRoom(room);
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             RoomDao.Delete(dbClient, roomId);
             UserFavoriteDao.Delete(dbClient, roomId);

@@ -18,6 +18,14 @@ using WibboEmulator.Games.Roleplays.Item;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Rooms.Games.Teams;
+using WibboEmulator.Database;
+using WibboEmulator.Core.Settings;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Games.Roleplays.Weapon;
+using WibboEmulator.Games.LandingView;
+using WibboEmulator.Games.Effects;
+using WibboEmulator.Games.Achievements;
+using WibboEmulator.Utilities;
 
 public class SuperWired : WiredActionBase, IWired, IWiredEffect
 {
@@ -94,7 +102,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             case "stopsounduser":
             case "stopsoundroom":
             case "forcesound":
-                if (this.RoomInstance.IsRoleplay)
+                if (this.Room.IsRoleplay)
                 {
                     return;
                 }
@@ -237,12 +245,12 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                if (item.GetBaseItem().Modes <= 1)
+                if (item.ItemData.Modes <= 1)
                 {
                     break;
                 }
 
-                if (count > item.GetBaseItem().Modes - 1)
+                if (count > item.ItemData.Modes - 1)
                 {
                     break;
                 }
@@ -254,7 +262,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 item.ExtraData = count.ToString();
                 item.UpdateState();
-                this.RoomInstance.GameMap.UpdateMapForItem(item);
+                this.Room.GameMap.UpdateMapForItem(item);
 
                 break;
             }
@@ -266,7 +274,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                if (item.GetBaseItem().Modes <= 1)
+                if (item.ItemData.Modes <= 1)
                 {
                     break;
                 }
@@ -281,11 +289,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                var newCount = (itemCount + count < item.GetBaseItem().Modes) ? itemCount + count : 0;
+                var newCount = (itemCount + count < item.ItemData.Modes) ? itemCount + count : 0;
 
                 item.ExtraData = newCount.ToString();
                 item.UpdateState();
-                this.RoomInstance.GameMap.UpdateMapForItem(item);
+                this.Room.GameMap.UpdateMapForItem(item);
 
                 break;
             }
@@ -294,7 +302,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
     private void RpCommand(string command, string value, RoomUser user)
     {
-        if (!this.RoomInstance.IsRoleplay)
+        if (!this.Room.IsRoleplay)
         {
             return;
         }
@@ -314,7 +322,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
         {
             case "rpsendtimeuser":
             {
-                user.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.useitem.showtime", user.Client.Langue), this.RoomInstance.RoomRoleplay.Hour, this.RoomInstance.RoomRoleplay.Minute));
+                user.SendWhisperChat(string.Format(LanguageManager.TryGetValue("rp.useitem.showtime", user.Client.Language), this.Room.RoomRoleplay.Hour, this.Room.RoomRoleplay.Minute));
                 break;
             }
             case "setenemy":
@@ -325,7 +333,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                var botOrPet = this.RoomInstance.RoomUserManager.GetBotOrPetByName(parameters[0]);
+                var botOrPet = this.Room.RoomUserManager.GetBotOrPetByName(parameters[0]);
                 if (botOrPet == null || botOrPet.BotData == null || botOrPet.BotData.RoleBot == null)
                 {
                     break;
@@ -334,11 +342,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 RPEnemy rpEnemyConfig;
                 if (!botOrPet.IsPet)
                 {
-                    rpEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.GetEnemyBot(botOrPet.BotData.Id);
+                    rpEnemyConfig = RPEnemyManager.GetEnemyBot(botOrPet.BotData.Id);
                 }
                 else
                 {
-                    rpEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.GetEnemyPet(botOrPet.BotData.Id);
+                    rpEnemyConfig = RPEnemyManager.GetEnemyPet(botOrPet.BotData.Id);
                 }
 
                 if (rpEnemyConfig == null)
@@ -368,7 +376,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.Health = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                        using var dbClient = DatabaseManager.Connection;
                         RoleplayEnemyDao.UpdateHealth(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -393,7 +401,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.WeaponGunId = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                        using var dbClient = DatabaseManager.Connection;
                         RoleplayEnemyDao.UpdateWeaponFarId(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -418,7 +426,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.WeaponCacId = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                        using var dbClient = DatabaseManager.Connection;
                         RoleplayEnemyDao.UpdateWeaponCacId(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -443,7 +451,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.DeadTimer = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                        using var dbClient = DatabaseManager.Connection;
                         RoleplayEnemyDao.UpdateDeadTimer(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -468,7 +476,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.LootItemId = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                        using var dbClient = DatabaseManager.Connection;
                         RoleplayEnemyDao.UpdateLootItemId(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -493,7 +501,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.MoneyDrop = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                        using var dbClient = DatabaseManager.Connection;
                         RoleplayEnemyDao.UpdateMoneyDrop(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -518,7 +526,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.TeamId = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                        using var dbClient = DatabaseManager.Connection;
                         RoleplayEnemyDao.UpdateTeamId(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -543,7 +551,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.AggroDistance = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                        using var dbClient = DatabaseManager.Connection;
                         RoleplayEnemyDao.UpdateAggroDistance(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -568,7 +576,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.ZoneDistance = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                        using var dbClient = DatabaseManager.Connection;
                         RoleplayEnemyDao.UpdateZoneDistance(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -578,7 +586,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.ResetPosition = parameters[2] == "true";
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                        using var dbClient = DatabaseManager.Connection;
                         RoleplayEnemyDao.UpdateResetPosition(dbClient, rpEnemyConfig.Id, rpEnemyConfig.ResetPosition);
 
                         break;
@@ -603,7 +611,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.LostAggroDistance = paramInt;
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                        using var dbClient = DatabaseManager.Connection;
                         RoleplayEnemyDao.UpdateLostAggroDistance(dbClient, rpEnemyConfig.Id, paramInt);
 
                         break;
@@ -613,7 +621,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         rpEnemyConfig.ZombieMode = parameters[2] == "true";
                         botOrPet.BotData.RoleBot.SetConfig(rpEnemyConfig);
 
-                        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                        using var dbClient = DatabaseManager.Connection;
                         RoleplayEnemyDao.UpdateZombieMode(dbClient, rpEnemyConfig.Id, rpEnemyConfig.ZombieMode);
 
                         break;
@@ -623,7 +631,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "removeenemy":
             {
-                var botOrPet = this.RoomInstance.RoomUserManager.GetBotOrPetByName(value);
+                var botOrPet = this.Room.RoomUserManager.GetBotOrPetByName(value);
                 if (botOrPet == null || botOrPet.BotData == null || botOrPet.BotData.RoleBot == null)
                 {
                     break;
@@ -631,7 +639,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 if (!botOrPet.IsPet)
                 {
-                    WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.RemoveEnemyBot(botOrPet.BotData.Id);
+                    RPEnemyManager.RemoveEnemyBot(botOrPet.BotData.Id);
                     botOrPet.BotData.RoleBot = null;
                     botOrPet.BotData.AiType = BotAIType.Generic;
                     botOrPet.BotAI = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
@@ -639,7 +647,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 }
                 else
                 {
-                    WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.RemoveEnemyPet(botOrPet.BotData.Id);
+                    RPEnemyManager.RemoveEnemyPet(botOrPet.BotData.Id);
                     botOrPet.BotData.RoleBot = null;
                     botOrPet.BotData.AiType = BotAIType.Pet;
                     botOrPet.BotAI = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
@@ -649,7 +657,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "addenemy":
             {
-                var botOrPet = this.RoomInstance.RoomUserManager.GetBotOrPetByName(value);
+                var botOrPet = this.Room.RoomUserManager.GetBotOrPetByName(value);
                 if (botOrPet == null || botOrPet.BotData == null || botOrPet.BotData.RoleBot != null)
                 {
                     break;
@@ -657,7 +665,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 if (!botOrPet.IsPet)
                 {
-                    var rpEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.AddEnemyBot(botOrPet.BotData.Id);
+                    var rpEnemyConfig = RPEnemyManager.AddEnemyBot(botOrPet.BotData.Id);
                     if (rpEnemyConfig != null)
                     {
                         botOrPet.BotData.RoleBot = new RoleBot(rpEnemyConfig);
@@ -668,7 +676,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 }
                 else
                 {
-                    var rpEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.AddEnemyPet(botOrPet.BotData.Id);
+                    var rpEnemyConfig = RPEnemyManager.AddEnemyPet(botOrPet.BotData.Id);
                     if (rpEnemyConfig != null)
                     {
                         botOrPet.BotData.RoleBot = new RoleBot(rpEnemyConfig);
@@ -681,7 +689,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "enemyaggrostop":
             {
-                var botOrPet = this.RoomInstance.RoomUserManager.GetBotOrPetByName(value);
+                var botOrPet = this.Room.RoomUserManager.GetBotOrPetByName(value);
                 if (botOrPet == null || botOrPet.BotData == null || botOrPet.BotData.RoleBot == null)
                 {
                     break;
@@ -693,7 +701,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "enemyaggrostart":
             {
-                var botOrPet = this.RoomInstance.RoomUserManager.GetBotOrPetByName(value);
+                var botOrPet = this.Room.RoomUserManager.GetBotOrPetByName(value);
                 if (botOrPet == null || botOrPet.BotData == null || botOrPet.BotData.RoleBot == null)
                 {
                     break;
@@ -708,10 +716,10 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 if (int.TryParse(value, out var roomId))
                 {
-                    var roomDataTarget = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
-                    if (roomDataTarget != null && roomDataTarget.OwnerId == this.RoomInstance.RoomData.OwnerId && !user.Client.User.IsTeleporting)
+                    var roomDataTarget = RoomManager.GenerateRoomData(roomId);
+                    if (roomDataTarget != null && roomDataTarget.OwnerId == this.Room.RoomData.OwnerId && !user.Client.User.IsTeleporting)
                     {
-                        this.RoomInstance.RoomUserManager.RemoveUserFromRoom(user.Client, true, false);
+                        this.Room.RoomUserManager.RemoveUserFromRoom(user.Client, true, false);
 
                         user.Client.User.IsTeleporting = true;
                         user.Client.User.TeleportingRoomID = roomId;
@@ -724,7 +732,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 _ = int.TryParse(value, out var itemId);
 
-                var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(itemId);
+                var rpItem = RPItemManager.GetItem(itemId);
                 if (rpItem == null)
                 {
                     break;
@@ -737,7 +745,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 _ = int.TryParse(value, out var itemId);
 
-                var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(itemId);
+                var rpItem = RPItemManager.GetItem(itemId);
                 if (rpItem == null)
                 {
                     break;
@@ -791,7 +799,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                             continue;
                         }
 
-                        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(id);
+                        var rpItem = RPItemManager.GetItem(id);
                         if (rpItem == null)
                         {
                             continue;
@@ -808,7 +816,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         break;
                     }
 
-                    var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(id);
+                    var rpItem = RPItemManager.GetItem(id);
                     if (rpItem == null)
                     {
                         break;
@@ -848,7 +856,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     count = 0;
                 }
 
-                rp.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponGun(count);
+                rp.WeaponGun = RPWeaponManager.GetWeaponGun(count);
 
                 break;
             }
@@ -861,12 +869,12 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     count = 0;
                 }
 
-                rp.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponCac(count);
+                rp.WeaponCac = RPWeaponManager.GetWeaponCac(count);
                 break;
             }
             case "pvp":
             {
-                this.RoomInstance.RoomRoleplay.Pvp = value == "true";
+                this.Room.RoomRoleplay.Pvp = value == "true";
 
                 break;
             }
@@ -1008,7 +1016,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                rp.Hit(user, nb, this.RoomInstance, false, true);
+                rp.Hit(user, nb, this.Room, false, true);
                 rp.SendUpdate();
                 break;
             }
@@ -1030,7 +1038,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                _ = this.RoomInstance.RoomItemHandling.AddTempItem(user.VirtualId, valueNumber, user.SetX, user.SetY, user.Z, "1", 0, InteractionTypeTemp.RpItem);
+                _ = this.Room.RoomItemHandling.AddTempItem(user.VirtualId, valueNumber, user.SetX, user.SetY, user.Z, "1", 0, InteractionTypeTemp.RpItem);
                 break;
             }
         }
@@ -1060,7 +1068,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
 
                     user.DanceId = danceId;
-                    this.RoomInstance.SendPacket(new DanceComposer(user.VirtualId, danceId));
+                    this.Room.SendPacket(new DanceComposer(user.VirtualId, danceId));
                 }
 
                 break;
@@ -1127,7 +1135,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     return;
                 }
 
-                if (!WibboEnvironment.GetGame().GetEffectManager().HasEffect(numEnable, false))
+                if (!EffectManager.HasEffect(numEnable, false))
                 {
                     return;
                 }
@@ -1166,7 +1174,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
         {
             case "resetclassement":
             {
-                var itemHighScore = this.RoomInstance.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = this.Room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
@@ -1178,7 +1186,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "addclassement":
             {
-                var itemHighScore = this.RoomInstance.RoomItemHandling.GetFloor.FirstOrDefault(x => x.GetBaseItem().InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = this.Room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null || user == null)
                 {
                     break;
@@ -1189,16 +1197,16 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                if (itemHighScore.Scores.TryGetValue(user.GetUsername(), out var score))
+                if (itemHighScore.Scores.TryGetValue(user.Username, out var score))
                 {
-                    itemHighScore.Scores[user.GetUsername()] = score + valueInt;
+                    itemHighScore.Scores[user.Username] = score + valueInt;
                 }
                 else
                 {
-                    itemHighScore.Scores.Add(user.GetUsername(), valueInt);
+                    itemHighScore.Scores.Add(user.Username, valueInt);
                 }
 
-                this.ItemInstance.UpdateState(false);
+                this.Item.UpdateState(false);
 
                 itemHighScore.UpdateState(false);
                 break;
@@ -1206,16 +1214,16 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
             case "roomfreeze":
             {
-                this.RoomInstance.FreezeRoom = value == "true";
+                this.Room.FreezeRoom = value == "true";
                 break;
             }
             case "roomkick":
             {
-                foreach (var rUser in this.RoomInstance.RoomUserManager.GetUserList().ToList())
+                foreach (var rUser in this.Room.RoomUserManager.UserList.ToList())
                 {
-                    if (rUser != null && rUser.Client != null && !rUser.Client.User.HasPermission("no_kick") && this.RoomInstance.RoomData.OwnerId != rUser.UserId)
+                    if (rUser != null && rUser.Client != null && !rUser.Client.User.HasPermission("no_kick") && this.Room.RoomData.OwnerId != rUser.UserId)
                     {
-                        this.RoomInstance.RoomUserManager.RemoveUserFromRoom(rUser.Client, true, false);
+                        this.Room.RoomUserManager.RemoveUserFromRoom(rUser.Client, true, false);
                     }
                 }
                 break;
@@ -1227,7 +1235,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                foreach (var rUser in this.RoomInstance.RoomUserManager.GetUserList().ToList())
+                foreach (var rUser in this.Room.RoomUserManager.UserList.ToList())
                 {
                     if (rUser != null && !rUser.IsBot)
                     {
@@ -1238,17 +1246,17 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "stopsoundroom":
             {
-                this.RoomInstance.SendPacket(new StopSoundComposer(value));
+                this.Room.SendPacket(new StopSoundComposer(value));
                 break;
             }
             case "playsoundroom":
             {
-                this.RoomInstance.SendPacket(new PlaySoundComposer(value, 1)); //Type = Trax
+                this.Room.SendPacket(new PlaySoundComposer(value, 1)); //Type = Trax
                 break;
             }
             case "playmusicroom":
             {
-                this.RoomInstance.SendPacket(new PlaySoundComposer(value, 2, true)); //Type = Trax
+                this.Room.SendPacket(new PlaySoundComposer(value, 2, true)); //Type = Trax
                 break;
             }
             case "configbot":
@@ -1260,7 +1268,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                var bot = this.RoomInstance.RoomUserManager.GetBotByName(parameters[0]);
+                var bot = this.Room.RoomUserManager.GetBotByName(parameters[0]);
                 if (bot == null)
                 {
                     return;
@@ -1277,7 +1285,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                         _ = int.TryParse(parameters[2], out var intValue);
 
-                        if (!WibboEnvironment.GetGame().GetEffectManager().HasEffect(intValue, false))
+                        if (!EffectManager.HasEffect(intValue, false))
                         {
                             return;
                         }
@@ -1392,23 +1400,23 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "timespeed":
             {
-                if (!this.RoomInstance.IsRoleplay)
+                if (!this.Room.IsRoleplay)
                 {
                     break;
                 }
 
-                this.RoomInstance.RoomRoleplay.TimeSpeed = value == "true";
+                this.Room.RoomRoleplay.TimeSpeed = value == "true";
 
                 break;
             }
             case "cyclehoureffect":
             {
-                if (!this.RoomInstance.IsRoleplay)
+                if (!this.Room.IsRoleplay)
                 {
                     break;
                 }
 
-                this.RoomInstance.RoomRoleplay.CycleHourEffect = value == "true";
+                this.Room.RoomRoleplay.CycleHourEffect = value == "true";
 
                 break;
             }
@@ -1421,7 +1429,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     botName = "Jack";
                 }
 
-                var bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName(botName);
+                var bot = this.Room.RoomUserManager.GetBotOrPetByName(botName);
 
                 if (bot == null)
                 {
@@ -1508,10 +1516,10 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
                 }
 
-                var textMessage = phrases[WibboEnvironment.GetRandomNumber(0, phrases.Count - 1)];
+                var textMessage = phrases.GetRandomElement();
                 if (user != null)
                 {
-                    textMessage = textMessage.Replace("#username#", user.GetUsername());
+                    textMessage = textMessage.Replace("#username#", user.Username);
                 }
 
                 bot.OnChat(textMessage, 2, true);
@@ -1520,7 +1528,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "roomingamechat":
             {
-                this.RoomInstance.IngameChat = value == "true";
+                this.Room.IngameChat = value == "true";
 
                 break;
             }
@@ -1528,18 +1536,18 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 if (value == "close")
                 {
-                    this.RoomInstance.RoomData.Access = RoomAccess.Doorbell;
+                    this.Room.RoomData.Access = RoomAccess.Doorbell;
                 }
                 else
                 {
-                    this.RoomInstance.RoomData.Access = RoomAccess.Open;
+                    this.Room.RoomData.Access = RoomAccess.Open;
                 }
 
                 break;
             }
             case "roommute":
             {
-                this.RoomInstance.RoomMuted = value == "true";
+                this.Room.RoomMuted = value == "true";
 
                 break;
             }
@@ -1550,30 +1558,30 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                this.RoomInstance.RoomItemHandling.SetSpeed(speed);
+                this.Room.RoomItemHandling.SetSpeed(speed);
                 break;
             }
             case "roomdiagonal":
             {
-                this.RoomInstance.GameMap.DiagonalEnabled = value == "true";
+                this.Room.GameMap.DiagonalEnabled = value == "true";
 
                 break;
             }
             case "roomoblique":
             {
-                this.RoomInstance.GameMap.ObliqueDisable = value == "true";
+                this.Room.GameMap.ObliqueDisable = value == "true";
 
                 break;
             }
             case "pushpull":
             {
-                this.RoomInstance.PushPullAllowed = value == "true";
+                this.Room.PushPullAllowed = value == "true";
 
                 break;
             }
             case "roomgame":
             {
-                this.RoomInstance.IsGameMode = value == "true";
+                this.Room.IsGameMode = value == "true";
 
                 break;
             }
@@ -1593,11 +1601,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 if (value == "true")
                 {
-                    this.RoomInstance.AddMute(roomUser.UserId, 24 * 60 * 60);
+                    this.Room.AddMute(roomUser.UserId, 24 * 60 * 60);
                 }
                 else
                 {
-                    this.RoomInstance.RemoveMute(roomUser.UserId);
+                    this.Room.RemoveMute(roomUser.UserId);
                 }
 
                 break;
@@ -1619,7 +1627,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         continue;
                     }
 
-                    var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+                    var roomData = RoomManager.GenerateRoomData(roomId);
 
                     if (roomData == null)
                     {
@@ -1660,7 +1668,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 var chooseList = new List<string[]>
                 {
-                    new string[] { "", "play_slot", string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("startslot.botchoose", roomUser.Client.Langue), roomUser.SlotAmount), "" },
+                    new string[] { "", "play_slot", string.Format(LanguageManager.TryGetValue("startslot.botchoose", roomUser.Client.Language), roomUser.SlotAmount), "" },
                 };
 
                 roomUser.Client.SendPacket(new BotChooseComposer(chooseList));
@@ -1672,11 +1680,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 if (roomUser.IsSlotWinner)
                 {
-                    roomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("endslot.winner", roomUser.Client.Langue), roomUser.SlotAmount), true);
+                    roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("endslot.winner", roomUser.Client.Language), roomUser.SlotAmount), true);
                 }
                 else
                 {
-                    roomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("endslot.looser", roomUser.Client.Langue), roomUser.SlotAmount), true);
+                    roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("endslot.looser", roomUser.Client.Language), roomUser.SlotAmount), true);
                 }
 
                 roomUser.Client.SendPacket(new ActivityPointNotificationComposer(roomUser.Client.User.WibboPoints, 0, 105));
@@ -1698,7 +1706,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         var list = pChoose.Split(';').ToList();
                         if (list.Count == 3)
                         {
-                            var botOrPet = this.RoomInstance.RoomUserManager.GetBotByName(list[0]);
+                            var botOrPet = this.Room.RoomUserManager.GetBotByName(list[0]);
                             if (botOrPet != null && botOrPet.BotData != null)
                             {
                                 list.Add(botOrPet.BotData.Look);
@@ -1717,7 +1725,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     var list = value.Split(';').ToList();
                     if (list.Count == 3)
                     {
-                        var botOrPet = this.RoomInstance.RoomUserManager.GetBotByName(list[0]);
+                        var botOrPet = this.Room.RoomUserManager.GetBotByName(list[0]);
                         if (botOrPet != null && botOrPet.BotData != null)
                         {
                             list.Add(botOrPet.BotData.Look);
@@ -1844,12 +1852,12 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 _ = int.TryParse(value, out var count);
 
-                if (this.RoomInstance == null)
+                if (this.Room == null)
                 {
                     break;
                 }
 
-                this.RoomInstance.GameManager.AddPointToTeam(roomUser.Team, count, roomUser);
+                this.Room.GameManager.AddPointToTeam(roomUser.Team, count, roomUser);
                 break;
             }
             case "ingame":
@@ -1959,7 +1967,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     return;
                 }
 
-                if (!WibboEnvironment.GetGame().GetEffectManager().HasEffect(numEnable, false))
+                if (!EffectManager.HasEffect(numEnable, false))
                 {
                     return;
                 }
@@ -1974,7 +1982,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     return;
                 }
 
-                if (!WibboEnvironment.GetGame().GetEffectManager().HasEffect(numEnable, true))
+                if (!EffectManager.HasEffect(numEnable, true))
                 {
                     return;
                 }
@@ -1984,7 +1992,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "dance":
             {
-                if (this.RoomInstance == null)
+                if (this.Room == null)
                 {
                     break;
                 }
@@ -2003,7 +2011,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                     roomUser.DanceId = danceId;
 
-                    this.RoomInstance.SendPacket(new DanceComposer(roomUser.VirtualId, danceId));
+                    this.Room.SendPacket(new DanceComposer(roomUser.VirtualId, danceId));
                 }
                 break;
             }
@@ -2074,8 +2082,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 {
                     roomUser.IsTransf = true;
 
-                    this.RoomInstance.SendPacket(new UserRemoveComposer(roomUser.VirtualId));
-                    this.RoomInstance.SendPacket(new UsersComposer(roomUser));
+                    this.Room.SendPacket(new UserRemoveComposer(roomUser.VirtualId));
+                    this.Room.SendPacket(new UsersComposer(roomUser));
                 }
                 break;
             }
@@ -2083,8 +2091,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 roomUser.IsTransf = false;
 
-                this.RoomInstance.SendPacket(new UserRemoveComposer(roomUser.VirtualId));
-                this.RoomInstance.SendPacket(new UsersComposer(roomUser));
+                this.Room.SendPacket(new UserRemoveComposer(roomUser.VirtualId));
+                this.Room.SendPacket(new UsersComposer(roomUser));
                 break;
             }
             case "badge":
@@ -2102,7 +2110,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 if (int.TryParse(value, out var roomId) && !roomUser.Client.User.IsTeleporting)
                 {
-                    this.RoomInstance.RoomUserManager.RemoveUserFromRoom(roomUser.Client, true, false);
+                    this.Room.RoomUserManager.RemoveUserFromRoom(roomUser.Client, true, false);
 
                     roomUser.Client.User.IsTeleporting = true;
                     roomUser.Client.User.TeleportingRoomID = roomId;
@@ -2117,7 +2125,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "achievement":
             {
-                _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUser.Client, value, 1);
+                _ = AchievementManager.ProgressAchievement(roomUser.Client, value, 1);
                 break;
             }
             case "winmovierun":
@@ -2128,19 +2136,19 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 }
 
 
-                if (roomUser.GetUsername() == this.RoomInstance.RoomData.OwnerName)
+                if (roomUser.Username == this.Room.RoomData.OwnerName)
                 {
                     break;
                 }
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                using var dbClient = DatabaseManager.Connection;
                 UserDao.UpdateAddRunPoints(dbClient, roomUser.Client.User.Id);
 
                 break;
             }
             case "givebanner":
             {
-                if (roomUser.IsBot || roomUser.Client == null || roomUser.Client.User == null || roomUser.Client.User.Banner == null)
+                if (roomUser.IsBot || roomUser.Client == null || roomUser.Client.User == null || roomUser.Client.User.BannerComponent == null)
                 {
                     break;
                 }
@@ -2150,8 +2158,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
-                roomUser.Client.User.Banner.AddBanner(dbClient, valueInt);
+                using var dbClient = DatabaseManager.Connection;
+                roomUser.Client.User.BannerComponent.AddBanner(dbClient, valueInt);
                 break;
             }
             case "givelot":
@@ -2161,14 +2169,14 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                if (roomUser.GetUsername() == this.RoomInstance.RoomData.OwnerName)
+                if (roomUser.Username == this.Room.RoomData.OwnerName)
                 {
                     break;
                 }
 
-                var allowedOwner = WibboEnvironment.GetSettings().GetData<string>("givelot.allowed.owner").Split(',');
+                var allowedOwner = SettingsManager.GetData<string>("givelot.allowed.owner").Split(',');
 
-                if (!allowedOwner.Contains(this.RoomInstance.RoomData.OwnerName))
+                if (!allowedOwner.Contains(this.Room.RoomData.OwnerName))
                 {
                     break;
                 }
@@ -2180,9 +2188,9 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 roomUser.WiredGivelot = true;
 
-                var lootboxId = WibboEnvironment.GetSettings().GetData<int>("givelot.lootbox.id");
+                var lootboxId = SettingsManager.GetData<int>("givelot.lootbox.id");
 
-                if (!WibboEnvironment.GetGame().GetItemManager().GetItem(lootboxId, out var itemData))
+                if (!ItemManager.GetItem(lootboxId, out var itemData))
                 {
                     break;
                 }
@@ -2206,7 +2214,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     nbLot = WibboEnvironment.GetRandomNumber(1, 2);
                 }
 
-                using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+                using var dbClient = DatabaseManager.Connection;
 
                 var items = ItemFactory.CreateMultipleItems(dbClient, itemData, roomUser.Client.User, "", nbLot);
 
@@ -2215,17 +2223,17 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     roomUser.Client.User.InventoryComponent.TryAddItem(purchasedItem);
                 }
 
-                roomUser.Client.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUser.Client.Langue), nbLot));
+                roomUser.Client.SendNotification(string.Format(LanguageManager.TryGetValue("notif.givelot.sucess", roomUser.Client.Language), nbLot));
 
-                if (this.RoomInstance.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
+                if (this.Room.RoomData.OwnerName == SettingsManager.GetData<string>("autogame.owner"))
                 {
                     roomUser.Client.User.GamePointsMonth += 1;
-                    WibboEnvironment.GetGame().GetHallOFFame().UpdateRakings(roomUser.Client.User);
+                    HallOfFameManager.UpdateRakings(roomUser.Client.User);
                     UserDao.UpdateAddGamePoints(dbClient, roomUser.Client.User.Id);
                 }
 
-                _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUser.Client, "ACH_Extrabox", 1);
-                ModerationManager.LogStaffEntry(1953042, this.RoomInstance.RoomData.OwnerName, roomUser.RoomId, string.Empty, "givelot", "SuperWired givelot: " + roomUser.GetUsername());
+                _ = AchievementManager.ProgressAchievement(roomUser.Client, "ACH_Extrabox", 1);
+                ModerationManager.LogStaffEntry(1953042, this.Room.RoomData.OwnerName, roomUser.RoomId, string.Empty, "givelot", "SuperWired givelot: " + roomUser.Username);
 
                 break;
             }

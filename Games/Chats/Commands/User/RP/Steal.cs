@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.RP;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -65,10 +67,10 @@ internal sealed class Steal : IChatCommand
             rp.SendUpdate();
             rpTwo.SendUpdate();
 
-            targetRoomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.receive", targetRoomUser.Client.Langue), numberMoney, userRoom.GetUsername()));
+            targetRoomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("rp.vole.receive", targetRoomUser.Client.Language), numberMoney, userRoom.Username));
 
-            session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.send", session.Langue), numberMoney, targetRoomUser.GetUsername()));
-            userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.send.chat", session.Langue), targetRoomUser.GetUsername()), 0, true);
+            session.SendWhisper(string.Format(LanguageManager.TryGetValue("rp.vole.send", session.Language), numberMoney, targetRoomUser.Username));
+            userRoom.OnChat(string.Format(LanguageManager.TryGetValue("rp.vole.send.chat", session.Language), targetRoomUser.Username), 0, true);
         }
     }
 }

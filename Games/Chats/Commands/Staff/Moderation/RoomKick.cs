@@ -17,7 +17,7 @@ internal sealed class RoomKick : IChatCommand
         _ = room.RunTask(async () =>
         {
             var userKick = new List<RoomUser>();
-            foreach (var user in room.RoomUserManager.GetUserList().ToList())
+            foreach (var user in room.RoomUserManager.UserList.ToList())
             {
                 if (user != null && user.Client != null && !user.Client.User.HasPermission("mod") && user.Client.User.Id != session.User.Id)
                 {
@@ -52,7 +52,7 @@ internal sealed class RoomKick : IChatCommand
 
                 if (user.Client.User.HomeRoom > 0)
                 {
-                    if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoomData(user.Client.User.HomeRoom, out var roomHome))
+                    if (RoomManager.TryGetRoomData(user.Client.User.HomeRoom, out var roomHome))
                     {
                         user.Client.SendPacket(new GetGuestRoomResultComposer(user.Client, roomHome, false, true));
                     }

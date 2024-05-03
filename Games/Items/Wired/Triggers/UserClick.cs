@@ -9,7 +9,7 @@ public class UserClick : WiredTriggerBase, IWired
 {
     public UserClick(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_CLICK)
     {
-        this.DefaultIntParams(new int[] { 1 });
+        this.DefaultIntParams(1);
 
         room.OnUserClick += this.OnUserClick;
     }
@@ -38,14 +38,14 @@ public class UserClick : WiredTriggerBase, IWired
             return;
         }
 
-        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, userTarget, null);
+        this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, userTarget, null);
     }
 
     public override void Dispose()
     {
         base.Dispose();
 
-        this.RoomInstance.OnUserClick -= this.OnUserClick;
+        this.Room.OnUserClick -= this.OnUserClick;
     }
 
     public void SaveToDatabase(IDbConnection dbClient)

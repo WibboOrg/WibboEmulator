@@ -1,7 +1,9 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
 
 internal sealed class UpdateGroupColoursEvent : IPacketEvent
@@ -24,7 +26,7 @@ internal sealed class UpdateGroupColoursEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
+        if (!GroupManager.TryGetGroup(groupId, out var group))
         {
             return;
         }
@@ -34,7 +36,7 @@ internal sealed class UpdateGroupColoursEvent : IPacketEvent
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             GuildDao.UpdateColors(dbClient, colour1, colour2, group.Id);
         }
@@ -43,16 +45,16 @@ internal sealed class UpdateGroupColoursEvent : IPacketEvent
         group.Colour2 = colour2;
 
         session.SendPacket(new GroupInfoComposer(group, session));
-        if (session.User.CurrentRoom != null)
+        if (session.User.Room != null)
         {
-            foreach (var item in session.User.CurrentRoom.RoomItemHandling.GetFloor.ToList())
+            foreach (var item in session.User.Room.RoomItemHandling.FloorItems.ToList())
             {
-                if (item == null || item.GetBaseItem() == null)
+                if (item == null || item.ItemData == null)
                 {
                     continue;
                 }
 
-                if (item.GetBaseItem().InteractionType is not InteractionType.GUILD_ITEM and not InteractionType.GUILD_GATE)
+                if (item.ItemData.InteractionType is not InteractionType.GUILD_ITEM and not InteractionType.GUILD_GATE)
                 {
                     continue;
                 }

@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
+using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class GetClubOffersEvent : IPacketEvent
@@ -10,7 +11,7 @@ internal sealed class GetClubOffersEvent : IPacketEvent
     {
         var offerId = packet.PopInt();
 
-        var pagePremium = WibboEnvironment.GetGame().GetCatalog().GetPages().FirstOrDefault(x => x.Template == "vip_buy");
+        var pagePremium = CatalogManager.Pages.FirstOrDefault(x => x.Template == "vip_buy");
 
         if (pagePremium == null)
         {

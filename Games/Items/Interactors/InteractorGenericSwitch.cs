@@ -1,6 +1,7 @@
 namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
+using WibboEmulator.Games.Rooms;
 
 public class InteractorGenericSwitch : FurniInteractor
 {
@@ -21,7 +22,7 @@ public class InteractorGenericSwitch : FurniInteractor
     {
         if (item.InteractingUser != 0)
         {
-            var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
+            var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
             if (roomUserByUserId != null)
             {
                 roomUserByUserId.CanWalk = true;
@@ -31,7 +32,7 @@ public class InteractorGenericSwitch : FurniInteractor
         }
         if (item.InteractingUser2 != 0)
         {
-            var roomUserByUserIdTwo = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser2);
+            var roomUserByUserIdTwo = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser2);
             if (roomUserByUserIdTwo != null)
             {
                 roomUserByUserIdTwo.CanWalk = true;
@@ -42,7 +43,7 @@ public class InteractorGenericSwitch : FurniInteractor
 
         if (string.IsNullOrEmpty(item.ExtraData) && this._modes > 0)
         {
-            if (item.GetBaseItem().InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
+            if (item.ItemData.InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
             {
                 item.ExtraData = "0;" + item.GroupId;
             }
@@ -57,7 +58,7 @@ public class InteractorGenericSwitch : FurniInteractor
     {
         if (item.InteractingUser != 0)
         {
-            var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
+            var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
             if (roomUserByUserId != null)
             {
                 roomUserByUserId.CanWalk = true;
@@ -67,7 +68,7 @@ public class InteractorGenericSwitch : FurniInteractor
         }
         if (item.InteractingUser2 != 0)
         {
-            var roomUserByUserIdTwo = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser2);
+            var roomUserByUserIdTwo = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser2);
             if (roomUserByUserIdTwo != null)
             {
                 roomUserByUserIdTwo.CanWalk = true;
@@ -77,7 +78,7 @@ public class InteractorGenericSwitch : FurniInteractor
         }
         if (string.IsNullOrEmpty(item.ExtraData) && this._modes > 0)
         {
-            if (item.GetBaseItem().InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
+            if (item.ItemData.InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
             {
                 item.ExtraData = "0;" + item.GroupId;
             }
@@ -92,7 +93,7 @@ public class InteractorGenericSwitch : FurniInteractor
     {
         if (session != null)
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FurniSwitch, 0);
+            QuestManager.ProgressUserQuest(session, QuestType.FurniSwitch, 0);
         }
 
         if (!userHasRights || this._modes == 0)
@@ -101,7 +102,7 @@ public class InteractorGenericSwitch : FurniInteractor
         }
 
         int state;
-        if (item.GetBaseItem().InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
+        if (item.ItemData.InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
         {
             _ = int.TryParse(item.ExtraData.Split(';')[0], out state);
         }
@@ -126,7 +127,7 @@ public class InteractorGenericSwitch : FurniInteractor
             newState = (session.User.ForceUse <= this._modes) ? session.User.ForceUse : 0;
         }
 
-        if (item.GetBaseItem().InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
+        if (item.ItemData.InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
         {
             item.ExtraData = newState.ToString() + ";" + item.GroupId;
         }
@@ -137,14 +138,14 @@ public class InteractorGenericSwitch : FurniInteractor
 
         item.UpdateState();
 
-        if (item.GetBaseItem().AdjustableHeights.Count > 1)
+        if (item.ItemData.AdjustableHeights.Count > 1)
         {
             if (session == null || session.User == null)
             {
                 return;
             }
 
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+            if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
             {
                 return;
             }
@@ -152,7 +153,7 @@ public class InteractorGenericSwitch : FurniInteractor
             var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
             if (roomUserByUserId != null)
             {
-                item.GetRoom().RoomUserManager.UpdateUserStatus(roomUserByUserId, false);
+                item.                Room.RoomUserManager.UpdateUserStatus(roomUserByUserId, false);
             }
         }
     }

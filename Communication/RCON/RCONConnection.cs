@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.RCON;
 using System.Net.Sockets;
 using System.Text;
+using WibboEmulator.Communication.RCON.Commands;
 using WibboEmulator.Core;
 
 public class RCONConnection
@@ -8,7 +9,7 @@ public class RCONConnection
     private byte[] _buffer = new byte[1024];
     private Socket _socket;
 
-    private readonly Encoding _encoding = Encoding.UTF8;
+    private static readonly Encoding Encoding = Encoding.UTF8;
 
     public RCONConnection(Socket socket)
     {
@@ -33,9 +34,9 @@ public class RCONConnection
                 return;
             }
 
-            var data = this._encoding.GetString(this._buffer, 0, bytes);
+            var data = Encoding.GetString(this._buffer, 0, bytes);
 
-            if (!WibboEnvironment.GetRCONSocket().GetCommands().Parse(data))
+            if (!RCONCommandManager.Parse(data))
             {
                 ExceptionLogger.WriteLine("Failed to execute a MUS command. Raw data: " + data);
             }

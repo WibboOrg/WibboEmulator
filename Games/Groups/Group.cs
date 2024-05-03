@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Groups;
 
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Guild;
 
 public class Group
@@ -52,16 +53,16 @@ public class Group
         this.AdminOnlyDeco = adminOnlyDeco;
         this.ForumEnabled = false;
 
-        this._members = new List<int>();
-        this._requests = new List<int>();
-        this._administrators = new List<int>();
+        this._members = [];
+        this._requests = [];
+        this._administrators = [];
 
         this.InitMembers();
     }
 
     public void InitMembers()
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         var guildMembershipList = GuildMembershipDao.GetAll(dbClient, this.Id);
 
@@ -148,7 +149,7 @@ public class Group
 
         this._administrators.Add(userId);
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 1);
     }
 
@@ -166,13 +167,13 @@ public class Group
             this._members.Add(userId);
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 0);
     }
 
     public void AddMember(int userId)
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         if (this.IsAdmin(userId))
         {
             GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 0);
@@ -218,13 +219,13 @@ public class Group
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         GuildMembershipDao.Delete(dbClient, this.Id, userId);
     }
 
     public void HandleRequest(int userId, bool accepted)
     {
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             if (accepted)
             {

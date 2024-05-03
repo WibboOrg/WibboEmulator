@@ -15,7 +15,7 @@ public class ServerPacketList
 
     public void Add(IServerPacket packet)
     {
-        var toAdd = packet.GetBytes();
+        var toAdd = packet.Bytes;
 
         var newLen = this._totalBytes.Length + toAdd.Length;
 
@@ -39,5 +39,5 @@ public class ServerPacketList
 
     public int Count { get; private set; }
 
-    public byte[] GetBytes => this._totalBytes;
+    public byte[] Bytes => this._totalBytes;
 }

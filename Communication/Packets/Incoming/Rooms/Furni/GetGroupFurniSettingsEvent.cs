@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
 
 internal sealed class GetGroupFurniSettingsEvent : IPacketEvent
@@ -17,7 +18,7 @@ internal sealed class GetGroupFurniSettingsEvent : IPacketEvent
         var itemId = packet.PopInt();
         var groupId = packet.PopInt();
 
-        var item = session.User.CurrentRoom.RoomItemHandling.GetItem(itemId);
+        var item = session.User.Room.RoomItemHandling.GetItem(itemId);
         if (item == null)
         {
             return;
@@ -28,7 +29,7 @@ internal sealed class GetGroupFurniSettingsEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
+        if (!GroupManager.TryGetGroup(groupId, out var group))
         {
             return;
         }

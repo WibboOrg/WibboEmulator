@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Administration;
 
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
@@ -22,7 +23,7 @@ internal sealed class MassBadge : IChatCommand
 
         var userIds = new List<int>();
 
-        foreach (var client in WibboEnvironment.GetGame().GetGameClientManager().GetClients.ToList())
+        foreach (var client in GameClientManager.Clients.ToList())
         {
             if (client.User != null)
             {
@@ -33,7 +34,7 @@ internal sealed class MassBadge : IChatCommand
             }
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         UserBadgeDao.InsertAll(dbClient, userIds, badge);
     }
 }

@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms;
 
 public class ToggleItemState : WiredActionBase, IWired, IWiredEffect
 {
-    public ToggleItemState(Item item, Room room) : base(item, room, (int)WiredActionType.TOGGLE_FURNI_STATE) => this.DefaultIntParams(new int[] { 0 });
+    public ToggleItemState(Item item, Room room) : base(item, room, (int)WiredActionType.TOGGLE_FURNI_STATE) => this.DefaultIntParams(0);
 
     public override bool OnCycle(RoomUser user, Item item)
     {

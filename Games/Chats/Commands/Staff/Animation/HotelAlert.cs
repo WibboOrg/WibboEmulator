@@ -12,6 +12,6 @@ internal sealed class HotelAlert : IChatCommand
         {
             return;
         }
-        WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new BroadcastMessageAlertComposer(message + "\r\n" + "- " + session.User.Username));
+        GameClientManager.SendMessage(new BroadcastMessageAlertComposer(message + "\r\n" + "- " + session.User.Username));
     }
 }

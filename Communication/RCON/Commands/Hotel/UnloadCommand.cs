@@ -1,4 +1,7 @@
 namespace WibboEmulator.Communication.RCON.Commands.Hotel;
+
+using WibboEmulator.Games.Rooms;
+
 internal sealed class UnloadCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
@@ -18,12 +21,12 @@ internal sealed class UnloadCommand : IRCONCommand
             return false;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out var room))
+        if (!RoomManager.TryGetRoom(roomId, out var room))
         {
             return true;
         }
 
-        WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
+        RoomManager.UnloadRoom(room);
         return true;
     }
 }

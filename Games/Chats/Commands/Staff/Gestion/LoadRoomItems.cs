@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Gestion;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
+using WibboEmulator.Database;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -22,7 +23,7 @@ internal sealed class LoadRoomItems : IChatCommand
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         room.RoomItemHandling.LoadFurniture(dbClient, roomId);
         room.GameMap.GenerateMaps(true);

@@ -7,11 +7,11 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
 {
-    public CollisionTeam(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM) => this.DefaultIntParams(new int[] { (int)TeamType.Red });
+    public CollisionTeam(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM) => this.DefaultIntParams((int)TeamType.Red);
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        var managerForBanzai = this.RoomInstance.TeamManager;
+        var managerForBanzai = this.Room.TeamManager;
 
         var listTeam = new List<RoomUser>();
 
@@ -50,7 +50,7 @@ public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
                 continue;
             }
 
-            this.RoomInstance.WiredHandler.TriggerCollision(teamUser, null);
+            this.Room.WiredHandler.TriggerCollision(teamUser, null);
         }
 
         return false;

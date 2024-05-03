@@ -8,6 +8,6 @@ public class Palette
     public Palette(int id)
     {
         this.Id = id;
-        this.Colors = new Dictionary<int, Color>();
+        this.Colors = [];
     }
 }

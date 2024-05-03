@@ -6,15 +6,15 @@ using WibboEmulator.Games.Rooms;
 
 public class GameStarts : WiredTriggerBase, IWired
 {
-    public GameStarts(Item item, Room room) : base(item, room, (int)WiredTriggerType.GAME_STARTS) => this.RoomInstance.GameManager.OnGameStart += this.OnGameStart;
+    public GameStarts(Item item, Room room) : base(item, room, (int)WiredTriggerType.GAME_STARTS) => this.Room.GameManager.OnGameStart += this.OnGameStart;
 
-    private void OnGameStart(object sender, EventArgs e) => this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, null, null);
+    private void OnGameStart(object sender, EventArgs e) => this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, null, null);
 
     public override void Dispose()
     {
         base.Dispose();
 
-        this.RoomInstance.GameManager.OnGameStart -= this.OnGameStart;
+        this.Room.GameManager.OnGameStart -= this.OnGameStart;
     }
 
     public void SaveToDatabase(IDbConnection dbClient)

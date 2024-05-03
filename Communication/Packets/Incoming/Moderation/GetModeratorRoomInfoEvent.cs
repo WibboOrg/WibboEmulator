@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class GetModeratorRoomInfoEvent : IPacketEvent
 {
@@ -15,10 +16,10 @@ internal sealed class GetModeratorRoomInfoEvent : IPacketEvent
 
         var roomId = packet.PopInt();
 
-        var data = WibboEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(roomId);
+        var data = RoomManager.GenerateNullableRoomData(roomId);
 
         var ownerInRoom = false;
-        if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(data.Id, out var room))
+        if (RoomManager.TryGetRoom(data.Id, out var room))
         {
             if (room.RoomUserManager.GetRoomUserByName(data.OwnerName) != null)
             {

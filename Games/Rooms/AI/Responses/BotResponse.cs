@@ -13,7 +13,7 @@ public class BotResponse
     {
         this.AiType = BotUtility.GetAIFromString(botAi);
 
-        this.Keywords = new List<string>();
+        this.Keywords = [];
         foreach (var keyword in keywords.Split(','))
         {
             this.Keywords.Add(keyword.ToLower());
@@ -22,7 +22,7 @@ public class BotResponse
         this.ResponseText = responseText;
         this.ResponseType = responseMode;
 
-        this.BeverageIds = new List<int>();
+        this.BeverageIds = [];
         if (responseBeverages.Contains(','))
         {
             foreach (var vendingId in responseBeverages.Split(','))

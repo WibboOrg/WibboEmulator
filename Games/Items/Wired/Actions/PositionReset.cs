@@ -11,9 +11,9 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
 
     public PositionReset(Item item, Room room) : base(item, room, (int)WiredActionType.SET_FURNI_STATE)
     {
-        this._itemsData = new Dictionary<int, ItemsPosReset>();
+        this._itemsData = [];
 
-        this.DefaultIntParams(new int[] { 0, 0, 0 });
+        this.DefaultIntParams(0, 0, 0);
     }
 
     public override void LoadItems(bool inDatabase = false)
@@ -29,7 +29,7 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
 
         foreach (var roomItem in this.Items.ToList())
         {
-            var isDice = roomItem.GetBaseItem().InteractionType == InteractionType.DICE;
+            var isDice = roomItem.ItemData.InteractionType == InteractionType.DICE;
 
             if (!this._itemsData.ContainsKey(roomItem.Id))
             {
@@ -51,7 +51,7 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
 
     private void HandleItems()
     {
-        var disableAnimation = this.RoomInstance.WiredHandler.DisableAnimate(this.ItemInstance.Coordinate);
+        var disableAnimation = this.Room.WiredHandler.DisableAnimate(this.Item.Coordinate);
 
         var state = this.GetIntParam(0) == 1;
         var direction = this.GetIntParam(1) == 1;
@@ -77,7 +77,7 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
                     {
                         roomItem.ExtraData = itemPosReset.ExtraData;
                         roomItem.UpdateState();
-                        this.RoomInstance.GameMap.UpdateMapForItem(roomItem);
+                        this.Room.GameMap.UpdateMapForItem(roomItem);
                     }
                 }
             }
@@ -96,7 +96,7 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
             {
                 if (itemPosReset.X != roomItem.X || itemPosReset.Y != roomItem.Y || itemPosReset.Z != roomItem.Z)
                 {
-                    this.RoomInstance.RoomItemHandling.PositionReset(roomItem, itemPosReset.X, itemPosReset.Y, itemPosReset.Z, disableAnimation);
+                    this.Room.RoomItemHandling.PositionReset(roomItem, itemPosReset.X, itemPosReset.Y, itemPosReset.Z, disableAnimation);
                 }
             }
         }
@@ -119,7 +119,7 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
 
         var triggerData2 = state + ";" + direction + ";" + position;
 
-        ItemWiredDao.Replace(dbClient, this.ItemInstance.Id, "", triggerData2, false, triggerItems, this.Delay);
+        ItemWiredDao.Replace(dbClient, this.Item.Id, "", triggerData2, false, triggerItems, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

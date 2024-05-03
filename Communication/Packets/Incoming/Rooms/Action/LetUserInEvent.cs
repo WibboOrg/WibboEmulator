@@ -2,6 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Action;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class LetUserInEvent : IPacketEvent
 {
@@ -14,7 +15,7 @@ internal sealed class LetUserInEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -27,7 +28,7 @@ internal sealed class LetUserInEvent : IPacketEvent
         var username = packet.PopString(16);
         var allowUserToEnter = packet.PopBoolean();
 
-        var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
+        var clientByUsername = GameClientManager.GetClientByUsername(username);
         if (clientByUsername == null || clientByUsername.User == null)
         {
             return;

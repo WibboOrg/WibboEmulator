@@ -13,7 +13,7 @@ internal sealed class AllEyesOnMe : IChatCommand
             return;
         }
 
-        var users = room.RoomUserManager.GetRoomUsers();
+        var users = room.RoomUserManager.RoomUsers;
         foreach (var u in users.ToList())
         {
             if (u == null || session.User.Id == u.UserId)

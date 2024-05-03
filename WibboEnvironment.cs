@@ -19,22 +19,13 @@ using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games;
 using WibboEmulator.Games.Users;
 using WibboEmulator.Games.Users.Authentificator;
+using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Communication.Packets;
 
 public static class WibboEnvironment
 {
-    private static Game _game;
-    private static WebSocketManager _webSocketManager;
-    private static DatabaseManager _datebaseManager;
-    private static RCONSocket _rcon;
-    private static FigureDataManager _figureManager;
-    private static LanguageManager _languageManager;
-    private static SettingsManager _settingsManager;
-    private static OpenAIProxy _chatOpenAI;
-    private static ElevenLabsProxy _elevenLabs;
-
     private static readonly Random RandomNumber = new();
-
-    private static readonly HttpClient HttpClient = new();
     private static readonly ConcurrentDictionary<int, User> UsersCached = new();
     private static readonly List<char> Allowedchars = new(new[]
         {
@@ -46,6 +37,7 @@ public static class WibboEnvironment
             '-', '.', '=', '!', ':', '@'
         });
 
+    public static HttpClient HttpClient { get; } = new();
     public static DateTime ServerStarted { get; private set; }
     public static string PatchDir { get; private set; }
 
@@ -72,9 +64,9 @@ public static class WibboEnvironment
                 return;
             }
 
-            _datebaseManager = new DatabaseManager(databaseConfiguration);
+            DatabaseManager.Initialize(databaseConfiguration);
 
-            if (!_datebaseManager.IsConnected())
+            if (!DatabaseManager.IsConnected)
             {
                 ExceptionLogger.WriteLine("Failed to connect to the specified MySQL server.");
                 _ = Console.ReadKey(true);
@@ -82,30 +74,23 @@ public static class WibboEnvironment
                 return;
             }
 
-            using var dbClient = GetDatabaseManager().Connection();
+            using var dbClient = DatabaseManager.Connection;
 
-            _settingsManager = new SettingsManager();
-            _settingsManager.Initialize(dbClient);
+            SettingsManager.Initialize(dbClient);
+            LanguageManager.Initialize(dbClient);
+            FigureDataManager.Initialize();
+            OpenAIProxy.Initialize(SettingsManager.GetData<string>("openia.api.key"));
+            ElevenLabsProxy.Initialize(SettingsManager.GetData<string>("elevenlabs.api.key"));
 
-            _languageManager = new LanguageManager();
-            _languageManager.Initialize(dbClient);
+            Game.Initialize(dbClient);
+            Game.StartGameLoop();
 
-            _figureManager = new FigureDataManager();
-            _figureManager.Initialize();
+            var webSocketOrigins = SettingsManager.GetData<string>("game.ws.origins").Split(',').ToList();
+            WebSocketManager.Initialize(SettingsManager.GetData<int>("game.ws.port"), SettingsManager.GetData<bool>("game.ssl.enable"), webSocketOrigins);
 
-            _chatOpenAI = new OpenAIProxy(_settingsManager.GetData<string>("openia.api.key"));
-            _elevenLabs = new ElevenLabsProxy(_settingsManager.GetData<string>("elevenlabs.api.key"));
-
-            _game = new Game();
-            _game.Initialize(dbClient);
-            _game.StartGameLoop();
-
-            var webSocketOrigins = _settingsManager.GetData<string>("game.ws.origins").Split(',').ToList();
-            _webSocketManager = new WebSocketManager(_settingsManager.GetData<int>("game.ws.port"), _settingsManager.GetData<bool>("game.ssl.enable"), webSocketOrigins);
-
-            if (_settingsManager.GetData<bool>("mus.tcp.enable"))
+            if (SettingsManager.GetData<bool>("mus.tcp.enable"))
             {
-                _rcon = new RCONSocket(_settingsManager.GetData<int>("mus.tcp.port"), _settingsManager.GetData<string>("mus.tcp.allowedaddr").Split(','));
+                RCONSocket.Initialize(SettingsManager.GetData<int>("mus.tcp.port"), SettingsManager.GetData<string>("mus.tcp.allowedaddr").Split(',').ToList());
             }
 
             HttpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Wibbo", "1.0"));
@@ -179,7 +164,7 @@ public static class WibboEnvironment
 
     public static bool UsernameExists(string username)
     {
-        using var dbClient = GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         var integer = UserDao.GetIdByName(dbClient, username);
         if (integer <= 0)
         {
@@ -198,7 +183,7 @@ public static class WibboEnvironment
             return clientByUserId.Username;
         }
 
-        using var dbClient = GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         return UserDao.GetNameById(dbClient, id);
     }
@@ -212,7 +197,7 @@ public static class WibboEnvironment
 
         try
         {
-            var client = GetGame().GetGameClientManager().GetClientByUserID(userId);
+            var client = GameClientManager.GetClientByUserID(userId);
             if (client != null)
             {
                 var user = client.User;
@@ -230,12 +215,12 @@ public static class WibboEnvironment
                 }
                 else
                 {
-                    using var dbClient = GetDatabaseManager().Connection();
+                    using var dbClient = DatabaseManager.Connection;
                     var user = UserFactory.GetUserData(dbClient, userId);
 
                     if (user != null)
                     {
-                        user.InitializeProfil(dbClient);
+                        user.InitializeProfile(dbClient);
                         _ = UsersCached.TryAdd(userId, user);
                         return user;
                     }
@@ -250,38 +235,17 @@ public static class WibboEnvironment
         }
     }
 
-    public static FigureDataManager GetFigureManager() => _figureManager;
-
-    public static LanguageManager GetLanguageManager() => _languageManager;
-
-    public static SettingsManager GetSettings() => _settingsManager;
-
-    public static WebSocketManager GetWebSocketManager() => _webSocketManager;
-
-    public static RCONSocket GetRCONSocket() => _rcon;
-
-    public static Game GetGame() => _game;
-
-    public static DatabaseManager GetDatabaseManager() => _datebaseManager;
-
-    public static HttpClient GetHttpClient() => HttpClient;
-
-    public static OpenAIProxy GetChatOpenAI() => _chatOpenAI;
-
-    public static ElevenLabsProxy GetElevenLabs() => _elevenLabs;
-
-    public static void PreformShutDown()
+    public static void PerformShutDown()
     {
         Console.Clear();
         Console.WriteLine("Extinction de l'émulateur.");
 
-        GetGame().GetGameClientManager().SendMessage(new BroadcastMessageAlertComposer("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 3 minutes."));
+        GameClientManager.SendMessage(new BroadcastMessageAlertComposer("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 3 minutes."));
         Thread.Sleep(20 * 1000);
-        GetWebSocketManager().Destroy();
-        GetGame().GetPacketManager().UnregisterAll();
-        GetGame().GetGameClientManager().CloseAll();
-        GetGame().GetRoomManager().RemoveAllRooms();
-        GetGame().Dispose();
+        WebSocketManager.Destroy();
+        PacketManager.UnregisterAll();
+        GameClientManager.CloseAll();
+        RoomManager.RemoveAllRooms();
 
         Console.WriteLine("L'émulateur s'est parfaitement éteinte.");
         Environment.Exit(0);

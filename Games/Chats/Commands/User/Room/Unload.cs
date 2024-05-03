@@ -8,9 +8,9 @@ internal sealed class Unload : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var usersToReturn = room.RoomUserManager.GetRoomUsers().ToList();
+        var usersToReturn = room.RoomUserManager.RoomUsers.ToList();
 
-        WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
+        RoomManager.UnloadRoom(room);
 
         foreach (var user in usersToReturn)
         {

@@ -4,7 +4,7 @@ using WibboEmulator.Games.Items;
 
 public class RoomRoleplay
 {
-    private readonly Room _roomInstance;
+    private readonly Room _room;
     public bool Pvp { get; set; }
     public int Hour { get; set; }
     public int Minute { get; set; }
@@ -14,7 +14,7 @@ public class RoomRoleplay
 
     public RoomRoleplay(Room room)
     {
-        this._roomInstance = room;
+        this._room = room;
 
         this.Pvp = true;
         this.CycleHourEffect = true;
@@ -26,7 +26,7 @@ public class RoomRoleplay
 
     public void OnCycle()
     {
-        if (this._roomInstance.RoomData.OwnerName == "WibboParty")
+        if (this._room.RoomData.OwnerName == "WibboParty")
         {
             return;
         }
@@ -126,7 +126,7 @@ public class RoomRoleplay
 
     private void UpdateRpBlock()
     {
-        var roomItems = this._roomInstance.RoomItemHandling.GetFloor.Where(i => i.GetBaseItem().Id == 99138022).ToList();
+        var roomItems = this._room.RoomItemHandling.FloorItems.Where(i => i.ItemData.Id == 99138022).ToList();
         if (roomItems == null)
         {
             return;
@@ -167,27 +167,27 @@ public class RoomRoleplay
 
     private void UpdateRpMoodLight()
     {
-        if (this._roomInstance.MoodlightData == null)
+        if (this._room.MoodlightData == null)
         {
             return;
         }
 
-        var roomItem = this._roomInstance.RoomItemHandling.GetItem(this._roomInstance.MoodlightData.ItemId);
-        if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.MOODLIGHT)
+        var roomItem = this._room.RoomItemHandling.GetItem(this._room.MoodlightData.ItemId);
+        if (roomItem == null || roomItem.ItemData.InteractionType != InteractionType.MOODLIGHT)
         {
             return;
         }
 
-        this._roomInstance.MoodlightData.Enabled = true;
-        this._roomInstance.MoodlightData.CurrentPreset = 1;
-        this._roomInstance.MoodlightData.UpdatePreset(1, "#000000", this.Intensity, false, false);
-        roomItem.ExtraData = this._roomInstance.MoodlightData.GenerateExtraData();
+        this._room.MoodlightData.Enabled = true;
+        this._room.MoodlightData.CurrentPreset = 1;
+        this._room.MoodlightData.UpdatePreset(1, "#000000", this.Intensity, false, false);
+        roomItem.ExtraData = this._room.MoodlightData.GenerateExtraData();
         roomItem.UpdateState();
     }
 
     private void UpdateRpToner()
     {
-        var roomItem = this._roomInstance.RoomItemHandling.GetFloor.FirstOrDefault(i => i.GetBaseItem().InteractionType == InteractionType.TONER);
+        var roomItem = this._room.RoomItemHandling.FloorItems.FirstOrDefault(i => i.ItemData.InteractionType == InteractionType.TONER);
         if (roomItem == null)
         {
             return;

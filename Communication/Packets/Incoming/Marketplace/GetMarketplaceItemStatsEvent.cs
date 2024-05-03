@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Games.GameClients;
 
@@ -13,7 +14,7 @@ internal sealed class GetMarketplaceItemStatsEvent : IPacketEvent
         var spriteId = packet.PopInt();
 
         var avgprice = 0;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             avgprice = CatalogMarketplaceDataDao.GetPriceBySprite(dbClient, spriteId);
         }

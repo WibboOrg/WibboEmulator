@@ -1,6 +1,10 @@
 namespace WibboEmulator.Games.Catalogs.Utilities;
 
+using WibboEmulator.Core.Language;
 using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Games.Achievements;
+using WibboEmulator.Games.Badges;
+using WibboEmulator.Games.Banners;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
@@ -80,7 +84,7 @@ public static class ItemUtility
                     return false;
                 }
 
-                if (!WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(bannerId, out var banner))
+                if (!BannerManager.TryGetBannerById(bannerId, out var banner))
                 {
                     return false;
                 }
@@ -107,7 +111,7 @@ public static class ItemUtility
                 }
 
                 Group group;
-                if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out group))
+                if (!GroupManager.TryGetGroup(groupId, out group))
                 {
                     return false;
                 }
@@ -137,7 +141,7 @@ public static class ItemUtility
                     return false;
                 }
 
-                _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_PetLover", 1);
+                _ = AchievementManager.ProgressAchievement(session, "ACH_PetLover", 1);
 
                 break;
 
@@ -168,9 +172,9 @@ public static class ItemUtility
 
             case InteractionType.BADGE_TROC:
             {
-                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(extraData) || !WibboEnvironment.GetGame().GetCatalog().HasBadge(extraData) || !session.User.BadgeComponent.HasBadge(extraData))
+                if (BadgeManager.HaveNotAllowed(extraData) || !CatalogManager.HasBadge(extraData) || !session.User.BadgeComponent.HasBadge(extraData))
                 {
-                    session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", session.Langue));
+                    session.SendNotification(LanguageManager.TryGetValue("notif.buybadgedisplay.error", session.Language));
                     return false;
                 }
 
@@ -185,7 +189,7 @@ public static class ItemUtility
             case InteractionType.BADGE_DISPLAY:
                 if (!session.User.BadgeComponent.HasBadge(extraData))
                 {
-                    session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", session.Langue));
+                    session.SendNotification(LanguageManager.TryGetValue("notif.buybadgedisplay.error", session.Language));
                     return false;
                 }
 
@@ -196,7 +200,7 @@ public static class ItemUtility
             {
                 if (session.User.BadgeComponent.HasBadge(item.Badge))
                 {
-                    session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadge.error", session.Langue));
+                    session.SendNotification(LanguageManager.TryGetValue("notif.buybadge.error", session.Language));
                     return false;
                 }
                 break;

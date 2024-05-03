@@ -1,10 +1,13 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Moderation;
 
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Rooms;
 
 internal sealed class DeleteGroup : IChatCommand
@@ -13,26 +16,26 @@ internal sealed class DeleteGroup : IChatCommand
     {
         var groupId = int.TryParse(parameters[1], out var id) ? id : 0;
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
+        if (!GroupManager.TryGetGroup(groupId, out var group))
         {
             return;
         }
 
         if (group.CreatorId != session.User.Id && !session.User.HasPermission("delete_group"))
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.1", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.groupdelete.error.1", session.Language));
             return;
         }
 
         if (group.MemberCount >= 100 && !session.User.HasPermission("delete_group_limit"))
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.2", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.groupdelete.error.2", session.Language));
             return;
         }
 
-        WibboEnvironment.GetGame().GetGroupManager().DeleteGroup(group.Id);
+        GroupManager.DeleteGroup(group.Id);
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             GuildDao.Delete(dbClient, group.Id);
             GuildMembershipDao.Delete(dbClient, group.Id);
@@ -46,12 +49,12 @@ internal sealed class DeleteGroup : IChatCommand
             }
         }
 
-        session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.succes", session.Langue));
+        session.SendNotification(LanguageManager.TryGetValue("notif.groupdelete.succes", session.Language));
 
-        if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var roomGroup))
+        if (RoomManager.TryGetRoom(group.RoomId, out var roomGroup))
         {
             roomGroup.RoomData.Group = null;
-            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(roomGroup);
+            RoomManager.UnloadRoom(roomGroup);
         }
 
     }

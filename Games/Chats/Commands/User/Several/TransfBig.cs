@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Several;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games.Teams;
@@ -18,14 +19,14 @@ internal sealed class TransfBig : IChatCommand
             return;
         }
 
-        if (session.User.SpectatorMode)
+        if (session.User.IsSpectator)
         {
             return;
         }
 
         if (!userRoom.SetPetTransformation("big" + parameters[1], 0))
         {
-            session.SendHugeNotif(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.littleorbig.help", session.Langue));
+            session.SendHugeNotification(LanguageManager.TryGetValue("cmd.littleorbig.help", session.Language));
             return;
         }
 

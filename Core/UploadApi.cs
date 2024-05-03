@@ -1,6 +1,8 @@
 namespace WibboEmulator.Core;
 
-public class UploadApi
+using WibboEmulator.Core.Settings;
+
+public static class UploadApi
 {
     public static string ChatAudio(byte[] audioBinary, string audioName)
     {
@@ -9,9 +11,9 @@ public class UploadApi
             { new StreamContent(new MemoryStream(audioBinary)), "audio", audioName }
         };
 
-        var audioUploadUrl = WibboEnvironment.GetSettings().GetData<string>("audio.upload.url");
+        var audioUploadUrl = SettingsManager.GetData<string>("audio.upload.url");
 
-        var response = WibboEnvironment.GetHttpClient().PostAsync(audioUploadUrl, content).GetAwaiter().GetResult();
+        var response = WibboEnvironment.HttpClient.PostAsync(audioUploadUrl, content).GetAwaiter().GetResult();
 
         if (!response.IsSuccessStatusCode)
         {
@@ -30,7 +32,7 @@ public class UploadApi
             { new StreamContent(new MemoryStream(photoBinary)), "photo", pictureName }
         };
 
-        var response = WibboEnvironment.GetHttpClient().PostAsync(WibboEnvironment.GetSettings().GetData<string>("camera.thubmail.upload.url"), content).GetAwaiter().GetResult();
+        var response = WibboEnvironment.HttpClient.PostAsync(SettingsManager.GetData<string>("camera.thubmail.upload.url"), content).GetAwaiter().GetResult();
 
         if (!response.IsSuccessStatusCode)
         {
@@ -49,7 +51,7 @@ public class UploadApi
             { new StreamContent(new MemoryStream(photoBinary)), "photo", pictureName }
         };
 
-        var response = WibboEnvironment.GetHttpClient().PostAsync(WibboEnvironment.GetSettings().GetData<string>("camera.upload.url"), content).GetAwaiter().GetResult();
+        var response = WibboEnvironment.HttpClient.PostAsync(SettingsManager.GetData<string>("camera.upload.url"), content).GetAwaiter().GetResult();
 
         if (!response.IsSuccessStatusCode)
         {

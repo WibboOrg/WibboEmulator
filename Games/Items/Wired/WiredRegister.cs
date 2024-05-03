@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Items.Wired;
+
+using WibboEmulator.Database;
 using WibboEmulator.Games.Items.Wired.Actions;
 using WibboEmulator.Games.Items.Wired.Conditions;
 using WibboEmulator.Games.Items.Wired.Interfaces;
@@ -10,7 +12,7 @@ public class WiredRegister
     private static IWired GetWiredHandler(Item item, Room room)
     {
         IWired handler = null;
-        switch (item.GetBaseItem().InteractionType)
+        switch (item.ItemData.InteractionType)
         {
             case InteractionType.TRIGGER_ONCE:
                 handler = new TimerTrigger(item, room);
@@ -263,7 +265,7 @@ public class WiredRegister
             handler.Initialize(intParams, stringParam, stuffIds, selectionCode, delay, isStaff, isGod);
             handler.LoadItems();
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+            using (var dbClient = DatabaseManager.Connection)
             {
                 handler.SaveToDatabase(dbClient);
             }

@@ -1,5 +1,7 @@
 namespace WibboEmulator.Games.Items.Interactors;
 
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Premium;
@@ -23,7 +25,7 @@ public class InteractorPremiumBox : FurniInteractor
             return;
         }
 
-        var room = item.GetRoom();
+        var room = item.Room;
 
         if (room == null || !room.CheckRights(session, true))
         {
@@ -39,7 +41,7 @@ public class InteractorPremiumBox : FurniInteractor
 
         this._haveReward = true;
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         ItemDao.DeleteById(dbClient, item.Id);
 
         room.RoomItemHandling.RemoveFurniture(null, item.Id);
@@ -47,12 +49,12 @@ public class InteractorPremiumBox : FurniInteractor
         var premiumClubLevel = PremiumClubLevel.CLASSIC;
         var badgeCode = "WC_CLASSIC";
 
-        if (item.GetBaseItem().InteractionType == InteractionType.PREMIUM_LEGEND)
+        if (item.ItemData.InteractionType == InteractionType.PREMIUM_LEGEND)
         {
             badgeCode = "WC_LEGEND";
             premiumClubLevel = PremiumClubLevel.LEGEND;
         }
-        else if (item.GetBaseItem().InteractionType == InteractionType.PREMIUM_EPIC)
+        else if (item.ItemData.InteractionType == InteractionType.PREMIUM_EPIC)
         {
             badgeCode = "WC_EPIC";
             premiumClubLevel = PremiumClubLevel.EPIC;
@@ -62,15 +64,15 @@ public class InteractorPremiumBox : FurniInteractor
 
         if (premiumClubLevel == PremiumClubLevel.LEGEND)
         {
-            roomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("premiumbox.legend.convert", session.Langue)));
+            roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("premiumbox.legend.convert", session.Language)));
         }
         else if (premiumClubLevel == PremiumClubLevel.EPIC)
         {
-            roomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("premiumbox.epic.convert", session.Langue)));
+            roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("premiumbox.epic.convert", session.Language)));
         }
         else
         {
-            roomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("premiumbox.classic.convert", session.Langue)));
+            roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("premiumbox.classic.convert", session.Language)));
         }
 
         session.User.BadgeComponent.GiveBadge(badgeCode);

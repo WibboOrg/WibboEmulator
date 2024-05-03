@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class UseFurnitureEvent : IPacketEvent
 {
@@ -8,7 +9,7 @@ internal sealed class UseFurnitureEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -21,57 +22,57 @@ internal sealed class UseFurnitureEvent : IPacketEvent
             return;
         }
 
-        if (roomItem.GetBaseItem().ItemName == "bw_lgchair")
+        if (roomItem.ItemData.ItemName == "bw_lgchair")
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ExploreFindItem, 1936);
+            QuestManager.ProgressUserQuest(session, QuestType.ExploreFindItem, 1936);
         }
-        else if (roomItem.GetBaseItem().ItemName.Contains("bw_sboard"))
+        else if (roomItem.ItemData.ItemName.Contains("bw_sboard"))
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ExploreFindItem, 1969);
+            QuestManager.ProgressUserQuest(session, QuestType.ExploreFindItem, 1969);
         }
-        else if (roomItem.GetBaseItem().ItemName.Contains("bw_van"))
+        else if (roomItem.ItemData.ItemName.Contains("bw_van"))
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ExploreFindItem, 1956);
+            QuestManager.ProgressUserQuest(session, QuestType.ExploreFindItem, 1956);
         }
-        else if (roomItem.GetBaseItem().ItemName.Contains("party_floor"))
+        else if (roomItem.ItemData.ItemName.Contains("party_floor"))
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ExploreFindItem, 1369);
+            QuestManager.ProgressUserQuest(session, QuestType.ExploreFindItem, 1369);
         }
-        else if (roomItem.GetBaseItem().ItemName.Contains("party_ball"))
+        else if (roomItem.ItemData.ItemName.Contains("party_ball"))
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ExploreFindItem, 1375);
+            QuestManager.ProgressUserQuest(session, QuestType.ExploreFindItem, 1375);
         }
-        else if (roomItem.GetBaseItem().ItemName.Contains("jukebox"))
+        else if (roomItem.ItemData.ItemName.Contains("jukebox"))
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ExploreFindItem, 1019);
+            QuestManager.ProgressUserQuest(session, QuestType.ExploreFindItem, 1019);
         }
-        else if (roomItem.GetBaseItem().ItemName.Contains("bb_gate"))
+        else if (roomItem.ItemData.ItemName.Contains("bb_gate"))
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ExploreFindItem, 2050);
+            QuestManager.ProgressUserQuest(session, QuestType.ExploreFindItem, 2050);
         }
-        else if (roomItem.GetBaseItem().ItemName == "bb_patch1")
+        else if (roomItem.ItemData.ItemName == "bb_patch1")
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ExploreFindItem, 2040);
+            QuestManager.ProgressUserQuest(session, QuestType.ExploreFindItem, 2040);
         }
-        else if (roomItem.GetBaseItem().ItemName == "bb_rnd_tele")
+        else if (roomItem.ItemData.ItemName == "bb_rnd_tele")
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ExploreFindItem, 2049);
+            QuestManager.ProgressUserQuest(session, QuestType.ExploreFindItem, 2049);
         }
-        else if (roomItem.GetBaseItem().ItemName.Contains("es_gate_"))
+        else if (roomItem.ItemData.ItemName.Contains("es_gate_"))
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ExploreFindItem, 2167);
+            QuestManager.ProgressUserQuest(session, QuestType.ExploreFindItem, 2167);
         }
-        else if (roomItem.GetBaseItem().ItemName.Contains("es_score_"))
+        else if (roomItem.ItemData.ItemName.Contains("es_score_"))
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ExploreFindItem, 2172);
+            QuestManager.ProgressUserQuest(session, QuestType.ExploreFindItem, 2172);
         }
-        else if (roomItem.GetBaseItem().ItemName.Contains("es_exit"))
+        else if (roomItem.ItemData.ItemName.Contains("es_exit"))
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ExploreFindItem, 2166);
+            QuestManager.ProgressUserQuest(session, QuestType.ExploreFindItem, 2166);
         }
-        else if (roomItem.GetBaseItem().ItemName == "es_tagging")
+        else if (roomItem.ItemData.ItemName == "es_tagging")
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ExploreFindItem, 2148);
+            QuestManager.ProgressUserQuest(session, QuestType.ExploreFindItem, 2148);
         }
 
         var userHasRights = false;

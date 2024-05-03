@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Quests;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Quests;
 
 internal sealed class StartQuestEvent : IPacketEvent
 {
@@ -9,6 +10,6 @@ internal sealed class StartQuestEvent : IPacketEvent
     {
         var questId = packet.PopInt();
 
-        WibboEnvironment.GetGame().GetQuestManager().ActivateQuest(session, questId);
+        QuestManager.ActivateQuest(session, questId);
     }
 }

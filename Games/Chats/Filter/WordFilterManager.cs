@@ -1,62 +1,44 @@
 namespace WibboEmulator.Games.Chats.Filter;
 using System.Data;
 using System.Text.RegularExpressions;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Daos.Room;
 
-public sealed partial class WordFilterManager
+public static partial class WordFilterManager
 {
-    private readonly List<string> _filteredWords;
-    private readonly List<string> _pubWords;
+    private static readonly List<string> FilteredWords = [];
+    private static readonly List<string> PubWords = [];
 
-    public WordFilterManager()
+    public static void Initialize(IDbConnection dbClient)
     {
-        this._filteredWords = new List<string>();
-        this._pubWords = new List<string>();
-    }
-
-    public void Initialize(IDbConnection dbClient)
-    {
-        if (this._filteredWords.Count > 0)
-        {
-            this._filteredWords.Clear();
-        }
-
-        if (this._pubWords.Count > 0)
-        {
-            this._pubWords.Clear();
-        }
+        FilteredWords.Clear();
+        PubWords.Clear();
 
         var worlds = RoomSwearwordFilterDao.GetAll(dbClient);
 
-        if (worlds.Count != 0)
+        foreach (var world in worlds)
         {
-            foreach (var world in worlds)
-            {
-                this._filteredWords.Add(world);
-            }
+            FilteredWords.Add(world);
         }
 
         var worldFilterRetros = WordFilterRetroDao.GetAll(dbClient);
 
-        if (worldFilterRetros.Count != 0)
-        {
-            this._pubWords.AddRange(worldFilterRetros);
-        }
+        PubWords.AddRange(worldFilterRetros);
     }
 
-    public void AddFilterPub(string word)
+    public static void AddFilterPub(string word)
     {
-        if (!this._pubWords.Contains(word))
+        if (!PubWords.Contains(word))
         {
-            this._pubWords.Add(word);
+            PubWords.Add(word);
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+            using var dbClient = DatabaseManager.Connection;
             WordFilterRetroDao.Insert(dbClient, word);
         }
     }
 
-    public string CheckMessage(string message)
+    public static string CheckMessage(string message)
     {
         var patternEmail = @"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b";
         message = Regex.Replace(message, patternEmail, "*****");
@@ -64,7 +46,7 @@ public sealed partial class WordFilterManager
         var patternIP = @"\b(?:\d{1,3}\.){3}\d{1,3}\b";
         message = Regex.Replace(message, patternIP, "*****");
 
-        foreach (var filter in this._filteredWords.ToList())
+        foreach (var filter in FilteredWords.ToList())
         {
             message = Regex.Replace(message, filter, "*****", RegexOptions.IgnoreCase);
         }
@@ -117,7 +99,7 @@ public sealed partial class WordFilterManager
         message = message.ToLower();
     }
 
-    public bool Ispub(string message)
+    public static bool Ispub(string message)
     {
         if (message.Length <= 3)
         {
@@ -126,7 +108,7 @@ public sealed partial class WordFilterManager
 
         ClearMessage(ref message);
 
-        foreach (var pattern in this._pubWords)
+        foreach (var pattern in PubWords)
         {
             if (message.Contains(pattern))
             {
@@ -137,7 +119,7 @@ public sealed partial class WordFilterManager
         return false;
     }
 
-    public bool CheckMessageWord(string message)
+    public static bool CheckMessageWord(string message)
     {
         if (ContainsIPAddress(message))
         {
@@ -195,7 +177,7 @@ public sealed partial class WordFilterManager
             return true;
         }
 
-        return this._filteredWords.Any(filter => message.Contains(filter));
+        return FilteredWords.Any(filter => message.Contains(filter));
     }
 
     private static bool ContainsIPAddress(string message)

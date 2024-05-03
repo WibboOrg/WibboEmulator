@@ -1,5 +1,8 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Camera;
 using WibboEmulator.Communication.Packets.Outgoing.Camera;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Core.Settings;
+using WibboEmulator.Database;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
@@ -13,18 +16,18 @@ internal sealed class PurchasePhotoEvent : IPacketEvent
 
         if (string.IsNullOrEmpty(photoId))
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
-        var photoItemId = WibboEnvironment.GetSettings().GetData<int>("photo.item.id");
-        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(photoItemId, out var itemData))
+        var photoItemId = SettingsManager.GetData<int>("photo.item.id");
+        if (!ItemManager.GetItem(photoItemId, out var itemData))
         {
             return;
         }
 
-        var photoSmallItemId = WibboEnvironment.GetSettings().GetData<int>("photo.small.item.id");
-        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(photoSmallItemId, out var itemDataSmall))
+        var photoSmallItemId = SettingsManager.GetData<int>("photo.small.item.id");
+        if (!ItemManager.GetItem(photoSmallItemId, out var itemDataSmall))
         {
             return;
         }
@@ -32,7 +35,7 @@ internal sealed class PurchasePhotoEvent : IPacketEvent
         var time = WibboEnvironment.GetUnixTimestamp();
         var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + session.User.Username + "\", \"s\":\"" + session.User.Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         var itemSmall = ItemFactory.CreateSingleItemNullable(dbClient, itemDataSmall, session.User, extraData);
         session.User.InventoryComponent.TryAddItem(itemSmall);
 

@@ -1,7 +1,10 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class CreateFlatEvent : IPacketEvent
 {
@@ -52,24 +55,24 @@ internal sealed class CreateFlatEvent : IPacketEvent
             tradeSettings = 0;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoomModels(model, out _))
+        if (!RoomManager.TryGetRoomModels(model, out _))
         {
             return;
         }
         else if (name.Length < 3)
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("room.namelengthshort", session.Language));
             return;
         }
 
         var roomId = 0;
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             roomId = RoomDao.Insert(dbClient, name, description, session.User.Username, model, category, maxVisitors, tradeSettings);
         }
         session.User.UsersRooms.Add(roomId);
 
-        var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+        var roomData = RoomManager.GenerateRoomData(roomId);
 
         session.SendPacket(new FlatCreatedComposer(roomData.Id, name));
     }

@@ -3,6 +3,7 @@ using System.Data;
 using WibboEmulator.Core.Language;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Games.GameClients;
 
 public class UserFactory
 {
@@ -25,7 +26,7 @@ public class UserFactory
 
         var userId = user.Id;
 
-        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        var client = GameClientManager.GetClientByUserID(userId);
 
         if (client != null)
         {
@@ -64,7 +65,7 @@ public class UserFactory
 
     public static User GetUserData(IDbConnection dbClient, int userId)
     {
-        if (WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId) != null)
+        if (GameClientManager.GetClientByUserID(userId) != null)
         {
             return null;
         }

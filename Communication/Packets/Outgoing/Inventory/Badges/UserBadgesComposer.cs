@@ -9,7 +9,7 @@ internal sealed class UserBadgesComposer : ServerPacket
     {
 
         var badgeList = new List<Badge>();
-        foreach (var badge in user.BadgeComponent.GetBadges().ToList())
+        foreach (var badge in user.BadgeComponent.Badges.ToList())
         {
             if (badge.Slot == 0)
             {

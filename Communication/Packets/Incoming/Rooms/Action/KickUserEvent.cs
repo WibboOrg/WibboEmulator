@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Action;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class KickUserEvent : IPacketEvent
 {
@@ -12,7 +13,7 @@ internal sealed class KickUserEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }

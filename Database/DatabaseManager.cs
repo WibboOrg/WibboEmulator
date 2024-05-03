@@ -1,13 +1,14 @@
 namespace WibboEmulator.Database;
 
 using System.Data;
+using Dapper;
 using MySqlConnector;
 
-public sealed class DatabaseManager
+public static class DatabaseManager
 {
-    private readonly string _connectionStr;
+    private static string _connectionString;
 
-    public DatabaseManager(DatabaseConfiguration databaseConfiguration)
+    public static void Initialize(DatabaseConfiguration databaseConfiguration)
     {
         var connectionStringBuilder = new MySqlConnectionStringBuilder
         {
@@ -24,30 +25,28 @@ public sealed class DatabaseManager
             AllowZeroDateTime = true
         };
 
-        this._connectionStr = connectionStringBuilder.ToString();
+        _connectionString = connectionStringBuilder.ToString();
 
-        Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+        DefaultTypeMap.MatchNamesWithUnderscores = true;
     }
 
-    public bool IsConnected()
+    public static bool IsConnected
     {
-        try
+        get
         {
-            using var con = this.Connection();
-            con.Open();
-            using var cmd = con.CreateCommand();
-            cmd.CommandText = "SELECT 1+1";
-            _ = cmd.ExecuteNonQuery();
-            cmd.Dispose();
-            con.Close();
-        }
-        catch (MySqlException)
-        {
-            return false;
-        }
+            try
+            {
+                using var con = Connection;
+                _ = con.Execute("SELECT 1+1");
+            }
+            catch (MySqlException)
+            {
+                return false;
+            }
 
-        return true;
+            return true;
+        }
     }
 
-    public IDbConnection Connection() => new MySqlConnection(this._connectionStr);
+    public static IDbConnection Connection => new MySqlConnection(_connectionString);
 }

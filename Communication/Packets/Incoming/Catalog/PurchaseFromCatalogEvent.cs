@@ -15,6 +15,9 @@ using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Users.Premium;
+using WibboEmulator.Database;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Games.Catalogs;
 
 internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 {
@@ -27,7 +30,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
         var extraData = packet.PopString(512);
         var amount = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out var page))
+        if (!CatalogManager.TryGetPage(pageId, out var page))
         {
             return;
         }
@@ -102,12 +105,12 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 
         if (session.User.InventoryComponent.IsOverlowLimit(amountPurchase, item.Data.Type))
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("catalog.purchase.limit", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("catalog.purchase.limit", session.Language));
             session.SendPacket(new PurchaseErrorComposer());
             return;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         var limitedEditionSells = 0;
         var limitedEditionStack = 0;
@@ -116,7 +119,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
         {
             if (item.LimitedEditionStack <= item.LimitedEditionSells)
             {
-                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyltd.error", session.Langue));
+                session.SendNotification(LanguageManager.TryGetValue("notif.buyltd.error", session.Language));
                 session.SendPacket(new PurchaseErrorComposer());
                 return;
             }
@@ -253,7 +256,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                     }
 
                     session.SendPacket(new UnseenItemsComposer(bot.Id, UnseenItemsType.Bot));
-                    session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.GetBots()));
+                    session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.Bots));
                 }
                 break;
 
@@ -274,7 +277,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                     }
 
                     session.SendPacket(new UnseenItemsComposer(generatedPet.PetId, UnseenItemsType.Pet));
-                    session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.GetPets()));
+                    session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.Pets));
                 }
                 break;
             }

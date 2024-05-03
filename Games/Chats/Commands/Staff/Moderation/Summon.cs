@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -12,13 +13,13 @@ internal sealed class Summon : IChatCommand
             return;
         }
 
-        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
         if (targetUser == null || targetUser.User == null)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.useroffline", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("input.useroffline", session.Language));
             return;
         }
-        else if (targetUser.User.CurrentRoom != null && targetUser.User.CurrentRoom.Id == session.User.CurrentRoom.Id)
+        else if (targetUser.User.Room != null && targetUser.User.Room.Id == session.User.Room.Id)
         {
             return;
         }

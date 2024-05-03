@@ -76,7 +76,7 @@ public class InteractorTimer : FurniInteractor
             this._chronoStarter = true;
             this._pendingReset = true;
             item.ReqUpdate(1);
-            item.GetRoom().GameManager.StartGame();
+            item.            Room.GameManager.StartGame();
         }
 
         item.ExtraData = time.ToString();
@@ -126,7 +126,7 @@ public class InteractorTimer : FurniInteractor
         else
         {
             this._chronoStarter = false;
-            item.GetRoom().GameManager.StopGame();
+            item.            Room.GameManager.StopGame();
             return;
         }
     }

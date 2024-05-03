@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
@@ -11,7 +12,7 @@ internal sealed class RedeemOfferCreditsEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
 
         var creditsOwed = CatalogMarketplaceOfferDao.GetSunPrice(dbClient, session.User.Id);
 

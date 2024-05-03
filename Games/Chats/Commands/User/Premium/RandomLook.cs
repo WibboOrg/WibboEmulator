@@ -1,6 +1,7 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Premium;
 using WibboEmulator.Communication.Packets.Outgoing.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
@@ -25,7 +26,7 @@ internal sealed class RandomLook : IChatCommand
             return;
         }
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             session.User.Look = UserWardrobeDao.GetOneRandomLook(dbClient);
         }

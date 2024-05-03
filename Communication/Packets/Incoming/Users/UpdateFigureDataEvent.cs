@@ -2,7 +2,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Communication.Packets.Outgoing.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Core.FigureData;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Games.Achievements;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
@@ -25,26 +28,26 @@ internal sealed class UpdateFigureDataEvent : IPacketEvent
             return;
         }
 
-        look = WibboEnvironment.GetFigureManager().ProcessFigure(look, gender, true);
+        look = FigureDataManager.ProcessFigure(look, gender, true);
 
-        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ProfileChangeLook, 0);
+        QuestManager.ProgressUserQuest(session, QuestType.ProfileChangeLook, 0);
 
         session.User.Look = look;
         session.User.Gender = gender;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             UserDao.UpdateLookAndGender(dbClient, session.User.Id, look, gender);
         }
 
-        _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_AvatarLooks", 1);
+        _ = AchievementManager.ProgressAchievement(session, "ACH_AvatarLooks", 1);
 
         if (!session.User.InRoom)
         {
             return;
         }
 
-        var currentRoom = session.User.CurrentRoom;
+        var currentRoom = session.User.Room;
 
         if (currentRoom == null)
         {

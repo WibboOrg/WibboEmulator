@@ -11,7 +11,7 @@ internal sealed class RemoveGroupFavouriteEvent : IPacketEvent
     {
         session.User.FavouriteGroupId = 0;
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room != null)
         {
             var userRoom = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);

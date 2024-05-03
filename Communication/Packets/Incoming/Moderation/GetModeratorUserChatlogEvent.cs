@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Games.Chats.Logs;
 using WibboEmulator.Games.GameClients;
@@ -18,12 +19,12 @@ internal sealed class GetModeratorUserChatlogEvent : IPacketEvent
 
         var userId = packet.PopInt();
 
-        var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        var clientByUserId = GameClientManager.GetClientByUserID(userId);
         if (clientByUserId == null || clientByUserId.User == null)
         {
             var sortedMessages = new List<ChatlogEntry>();
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+            using var dbClient = DatabaseManager.Connection;
             var logChatList = LogChatDao.GetAllByUserId(dbClient, userId);
             if (logChatList.Count != 0)
             {
@@ -35,13 +36,13 @@ internal sealed class GetModeratorUserChatlogEvent : IPacketEvent
 
             sortedMessages.Reverse();
 
-            session.SendPacket(new ModeratorUserChatlogComposer(userId, "User not online", session.User.CurrentRoomId, sortedMessages));
+            session.SendPacket(new ModeratorUserChatlogComposer(userId, "User not online", session.User.RoomId, sortedMessages));
         }
         else
         {
             var sortedMessages = clientByUserId.User.ChatMessageManager.GetSortedMessages(0);
 
-            session.SendPacket(new ModeratorUserChatlogComposer(userId, clientByUserId.User.Username, session.User.CurrentRoomId, sortedMessages));
+            session.SendPacket(new ModeratorUserChatlogComposer(userId, clientByUserId.User.Username, session.User.RoomId, sortedMessages));
         }
     }
 }

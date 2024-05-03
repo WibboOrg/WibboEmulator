@@ -1,8 +1,8 @@
 namespace WibboEmulator.Games.Chats.Emotions;
 
-public sealed class ChatEmotionsManager
+public static class ChatEmotionsManager
 {
-    private readonly Dictionary<string, ChatEmotions> _emotions = new()
+    private static readonly Dictionary<string, ChatEmotions> Emotions = new()
         {
             // Smile
             { ":)", ChatEmotions.SMILE },
@@ -49,9 +49,9 @@ public sealed class ChatEmotionsManager
     /// </summary>
     /// <param name="text">The text to search through</param>
     /// <returns></returns>
-    public int GetEmotionsForText(string text)
+    public static int GetEmotionsForText(string text)
     {
-        foreach (var kvp in this._emotions)
+        foreach (var kvp in Emotions)
         {
             if (text.ToLower().Contains(kvp.Key.ToLower()))
             {

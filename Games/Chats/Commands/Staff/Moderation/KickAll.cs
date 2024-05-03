@@ -7,7 +7,7 @@ internal sealed class KickAll : IChatCommand
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var roomUserList = new List<RoomUser>();
-        foreach (var user in room.RoomUserManager.GetUserList().ToList())
+        foreach (var user in room.RoomUserManager.UserList.ToList())
         {
             if (!user.IsBot && !user.Client.User.HasPermission("no_kick") && session.User.Id != user.Client.User.Id)
             {

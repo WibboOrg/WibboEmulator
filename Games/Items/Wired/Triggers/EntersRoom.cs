@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 public class EntersRoom : WiredTriggerBase, IWired
 {
-    public EntersRoom(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_ENTERS_ROOM) => this.RoomInstance.RoomUserManager.OnUserEnter += this.OnUserEnter;
+    public EntersRoom(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_ENTERS_ROOM) => this.Room.RoomUserManager.OnUserEnter += this.OnUserEnter;
 
     private void OnUserEnter(object sender, EventArgs e)
     {
@@ -16,19 +16,19 @@ public class EntersRoom : WiredTriggerBase, IWired
             return;
         }
 
-        if ((user.IsBot || string.IsNullOrEmpty(this.StringParam) || string.IsNullOrEmpty(this.StringParam) || !(user.GetUsername() == this.StringParam)) && !string.IsNullOrEmpty(this.StringParam))
+        if ((user.IsBot || string.IsNullOrEmpty(this.StringParam) || string.IsNullOrEmpty(this.StringParam) || !(user.Username == this.StringParam)) && !string.IsNullOrEmpty(this.StringParam))
         {
             return;
         }
 
-        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, null);
+        this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, user, null);
     }
 
     public override void Dispose()
     {
         base.Dispose();
 
-        this.RoomInstance.RoomUserManager.OnUserEnter -= this.OnUserEnter;
+        this.Room.RoomUserManager.OnUserEnter -= this.OnUserEnter;
     }
 
     public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, this.StringParam);

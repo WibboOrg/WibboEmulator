@@ -8,12 +8,12 @@ internal sealed class VisitRoomGuidesEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.User.GuideOtherUserId);
+        var requester = GameClientManager.GetClientByUserID(session.User.GuideOtherUserId);
         if (requester == null)
         {
             return;
         }
 
-        session.SendPacket(new OnGuideSessionRequesterRoomComposer(requester.User.CurrentRoomId));
+        session.SendPacket(new OnGuideSessionRequesterRoomComposer(requester.User.RoomId));
     }
 }

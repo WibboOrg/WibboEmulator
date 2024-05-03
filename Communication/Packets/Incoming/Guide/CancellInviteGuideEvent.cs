@@ -8,7 +8,7 @@ internal sealed class CancellInviteGuideEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.User.GuideOtherUserId);
+        var requester = GameClientManager.GetClientByUserID(session.User.GuideOtherUserId);
 
         session.SendPacket(new OnGuideSessionDetachedComposer());
 

@@ -1,8 +1,11 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Action;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 internal sealed class AssignRightsEvent : IPacketEvent
 {
@@ -17,7 +20,7 @@ internal sealed class AssignRightsEvent : IPacketEvent
 
         var userId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.CurrentRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -29,7 +32,7 @@ internal sealed class AssignRightsEvent : IPacketEvent
 
         if (room.UsersWithRights.Contains(userId))
         {
-            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.giverights.error", session.Langue));
+            session.SendNotification(LanguageManager.TryGetValue("user.giverights.error", session.Language));
         }
         else
         {
@@ -41,7 +44,7 @@ internal sealed class AssignRightsEvent : IPacketEvent
 
             room.UsersWithRights.Add(userId);
 
-            using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+            using (var dbClient = DatabaseManager.Connection)
             {
                 RoomRightDao.Insert(dbClient, room.Id, userId);
             }

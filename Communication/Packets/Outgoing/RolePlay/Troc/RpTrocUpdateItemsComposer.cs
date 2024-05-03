@@ -1,4 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay.Troc;
+
+using WibboEmulator.Games.Roleplays.Item;
+
 internal sealed class RpTrocUpdateItemsComposer : ServerPacket
 {
     public RpTrocUpdateItemsComposer(int userId, Dictionary<int, int> items)
@@ -9,7 +12,7 @@ internal sealed class RpTrocUpdateItemsComposer : ServerPacket
 
         foreach (var item in items)
         {
-            var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(item.Key);
+            var rpItem = RPItemManager.GetItem(item.Key);
 
             this.WriteInteger(item.Key);
             this.WriteString((rpItem == null) ? "" : rpItem.Name);

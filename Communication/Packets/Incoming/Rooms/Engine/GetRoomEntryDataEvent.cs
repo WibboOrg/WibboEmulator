@@ -3,6 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Misc;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Games.Achievements;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Utilities;
@@ -23,7 +24,7 @@ internal sealed class GetRoomEntryDataEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.User.LoadingRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.LoadingRoomId, out var room))
         {
             return;
         }
@@ -83,7 +84,7 @@ internal sealed class GetRoomEntryDataEvent : IPacketEvent
 
         if (room.RoomData.OwnerId != session.User.Id)
         {
-            _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RoomEntry", 1);
+            _ = AchievementManager.ProgressAchievement(session, "ACH_RoomEntry", 1);
         }
 
         var timeStampNow = UnixTimestamp.GetNow();

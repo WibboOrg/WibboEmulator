@@ -1,6 +1,8 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Games.GameClients;
 
 internal sealed class UpdateCreditsCommand : IRCONCommand
 {
@@ -21,13 +23,13 @@ internal sealed class UpdateCreditsCommand : IRCONCommand
             return false;
         }
 
-        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        var client = GameClientManager.GetClientByUserID(userId);
         if (client == null)
         {
             return true;
         }
 
-        using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        using var dbClient = DatabaseManager.Connection;
         var credits = UserDao.GetCredits(dbClient, client.User.Id);
 
         client.User.Credits = credits;

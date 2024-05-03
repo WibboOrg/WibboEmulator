@@ -4,5 +4,5 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class UnloadEmptyRooms : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters) => WibboEnvironment.GetGame().GetRoomManager().UnloadEmptyRooms();
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters) => RoomManager.UnloadEmptyRooms();
 }

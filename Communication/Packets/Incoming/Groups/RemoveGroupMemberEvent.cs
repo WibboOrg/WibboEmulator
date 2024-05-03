@@ -1,9 +1,13 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Groups;
+using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Users;
 
 internal sealed class RemoveGroupMemberEvent : IPacketEvent
@@ -15,7 +19,7 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
         var groupId = packet.PopInt();
         var userId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
+        if (!GroupManager.TryGetGroup(groupId, out var group))
         {
             return;
         }
@@ -36,7 +40,7 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
                     group.TakeAdmin(userId);
                 }
 
-                if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var roomGroup))
+                if (!RoomManager.TryGetRoom(group.RoomId, out var roomGroup))
                 {
                     return;
                 }
@@ -51,7 +55,7 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
                 }
             }
 
-            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+            using var dbClient = DatabaseManager.Connection;
 
             GuildMembershipDao.Delete(dbClient, groupId, userId);
 
@@ -63,7 +67,7 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
 
                 if (group.AdminOnlyDeco == false)
                 {
-                    if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var roomGroup))
+                    if (!RoomManager.TryGetRoom(group.RoomId, out var roomGroup))
                     {
                         return;
                     }
@@ -78,7 +82,7 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
                     }
                 }
 
-                var room = session.User.CurrentRoom;
+                var room = session.User.Room;
                 if (room != null)
                 {
                     var userRoom = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
@@ -107,7 +111,7 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
 
                 if (group.IsAdmin(userId) && group.CreatorId != session.User.Id)
                 {
-                    session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupremoveuser.error", session.Langue));
+                    session.SendNotification(LanguageManager.TryGetValue("notif.groupremoveuser.error", session.Language));
                     return;
                 }
 

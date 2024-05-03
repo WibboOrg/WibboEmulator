@@ -19,7 +19,7 @@ internal sealed class StaffAlert : IChatCommand
             return;
         }
 
-        foreach (var staff in WibboEnvironment.GetGame().GetGameClientManager().GetClients.ToList())
+        foreach (var staff in GameClientManager.Clients.ToList())
         {
             if (staff == null)
             {
@@ -31,7 +31,7 @@ internal sealed class StaffAlert : IChatCommand
                 continue;
             }
 
-            if (staff.User.CurrentRoom == null)
+            if (staff.User.Room == null)
             {
                 continue;
             }
@@ -41,14 +41,14 @@ internal sealed class StaffAlert : IChatCommand
                 continue;
             }
 
-            var user = staff.User.CurrentRoom.RoomUserManager.GetRoomUserByUserId(staff.User.Id);
+            var user = staff.User.Room.RoomUserManager.GetRoomUserByUserId(staff.User.Id);
 
             if (user == null)
             {
                 continue;
             }
 
-            user.Client?.SendPacket(new WhisperComposer(user.VirtualId, "[STAFF ALERT] " + messageTxt + " - " + roomUser.GetUsername(), 23));
+            user.Client?.SendPacket(new WhisperComposer(user.VirtualId, "[STAFF ALERT] " + messageTxt + " - " + roomUser.Username, 23));
         }
     }
 }

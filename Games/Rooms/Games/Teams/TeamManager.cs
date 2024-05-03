@@ -8,22 +8,25 @@ public class TeamManager
 
     public TeamManager()
     {
-        this.BlueTeam = new List<RoomUser>();
-        this.RedTeam = new List<RoomUser>();
-        this.GreenTeam = new List<RoomUser>();
-        this.YellowTeam = new List<RoomUser>();
+        this.BlueTeam = [];
+        this.RedTeam = [];
+        this.GreenTeam = [];
+        this.YellowTeam = [];
     }
 
-    public List<RoomUser> GetAllPlayer()
+    public List<RoomUser> AllPlayers
     {
-        var players = new List<RoomUser>();
+        get
+        {
+            var players = new List<RoomUser>();
 
-        players.AddRange(this.BlueTeam);
-        players.AddRange(this.RedTeam);
-        players.AddRange(this.GreenTeam);
-        players.AddRange(this.YellowTeam);
+            players.AddRange(this.BlueTeam);
+            players.AddRange(this.RedTeam);
+            players.AddRange(this.GreenTeam);
+            players.AddRange(this.YellowTeam);
 
-        return players;
+            return players;
+        }
     }
 
     public bool CanEnterOnTeam(TeamType t)

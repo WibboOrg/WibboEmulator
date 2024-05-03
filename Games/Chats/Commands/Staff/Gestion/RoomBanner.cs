@@ -1,5 +1,7 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Gestion;
 
+using WibboEmulator.Database;
+using WibboEmulator.Games.Banners;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -17,21 +19,21 @@ internal sealed class RoomBanner : IChatCommand
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetBannerManager().TryGetBannerById(bannerId, out var banner))
+        if (!BannerManager.TryGetBannerById(bannerId, out var banner))
         {
             return;
         }
 
-        var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+        var dbClient = DatabaseManager.Connection;
 
-        foreach (var targetUser in room.RoomUserManager.GetUserList().ToList())
+        foreach (var targetUser in room.RoomUserManager.UserList.ToList())
         {
-            if (targetUser == null || targetUser.IsBot || targetUser.Client == null || targetUser.Client.User.Banner == null)
+            if (targetUser == null || targetUser.IsBot || targetUser.Client == null || targetUser.Client.User.BannerComponent == null)
             {
                 continue;
             }
 
-            targetUser.Client.User.Banner.AddBanner(dbClient, bannerId);
+            targetUser.Client.User.BannerComponent.AddBanner(dbClient, bannerId);
         }
     }
 }

@@ -9,7 +9,7 @@ public class UserSays : WiredTriggerBase, IWired
 {
     public UserSays(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_SAYS_SOMETHING)
     {
-        this.DefaultIntParams(new int[] { 0, 0 });
+        this.DefaultIntParams(0, 0);
 
         room.OnUserSays += this.OnUserSays;
     }
@@ -27,9 +27,9 @@ public class UserSays : WiredTriggerBase, IWired
             return;
         }
 
-        if ((!isOwnerOnly && this.CanBeTriggered(message, isContains) && !string.IsNullOrEmpty(message)) || (isOwnerOnly && user.IsOwner() && this.CanBeTriggered(message, isContains) && !string.IsNullOrEmpty(message)))
+        if ((!isOwnerOnly && this.CanBeTriggered(message, isContains) && !string.IsNullOrEmpty(message)) || (isOwnerOnly && user.IsOwner && this.CanBeTriggered(message, isContains) && !string.IsNullOrEmpty(message)))
         {
-            this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, null);
+            this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, user, null);
             args.Result = true;
         }
     }
@@ -53,7 +53,7 @@ public class UserSays : WiredTriggerBase, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.OnUserSays -= this.OnUserSays;
+        this.Room.OnUserSays -= this.OnUserSays;
     }
 
     public void SaveToDatabase(IDbConnection dbClient)

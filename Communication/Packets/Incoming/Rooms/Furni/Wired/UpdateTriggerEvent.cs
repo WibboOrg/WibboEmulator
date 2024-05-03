@@ -9,7 +9,7 @@ internal sealed class UpdateTriggerEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null)
         {
             return;

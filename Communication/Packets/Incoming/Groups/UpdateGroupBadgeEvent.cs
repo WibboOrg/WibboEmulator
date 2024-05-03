@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
@@ -12,7 +13,7 @@ internal sealed class UpdateGroupBadgeEvent : IPacketEvent
     {
         var groupId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
+        if (!GroupManager.TryGetGroup(groupId, out var group))
         {
             return;
         }
@@ -32,7 +33,7 @@ internal sealed class UpdateGroupBadgeEvent : IPacketEvent
 
         group.Badge = string.IsNullOrWhiteSpace(badge) ? "b05114s06114" : badge;
 
-        using (var dbClient = WibboEnvironment.GetDatabaseManager().Connection())
+        using (var dbClient = DatabaseManager.Connection)
         {
             GuildDao.UpdateBadge(dbClient, group.Id, group.Badge);
         }

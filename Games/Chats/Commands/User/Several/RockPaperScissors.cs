@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Several;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games.Teams;
@@ -17,7 +19,7 @@ internal sealed class RockPaperScissors : IChatCommand
             return;
         }
 
-        if (session.User.SpectatorMode)
+        if (session.User.IsSpectator)
         {
             return;
         }
@@ -32,7 +34,7 @@ internal sealed class RockPaperScissors : IChatCommand
         var roomUserTarget = room.RoomUserManager.GetRoomUserByName(username);
         if (roomUserTarget == null)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
+            session.SendWhisper(LanguageManager.TryGetValue("input.usernotfound", session.Language));
             return;
         }
 

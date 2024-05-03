@@ -12,8 +12,8 @@ internal sealed class GroupFurniConfigComposer : ServerPacket
             this.WriteInteger(group.Id);
             this.WriteString(group.Name);
             this.WriteString(group.Badge);
-            this.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour1, true));
-            this.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour2, false));
+            this.WriteString(GroupManager.GetColourCode(group.Colour1, true));
+            this.WriteString(GroupManager.GetColourCode(group.Colour2, false));
             this.WriteBoolean(false);
             this.WriteInteger(group.CreatorId);
             this.WriteBoolean(group.ForumEnabled);

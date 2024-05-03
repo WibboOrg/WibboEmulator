@@ -13,9 +13,9 @@ public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
 
     public FurniStatePosMatch(Item item, Room room) : base(item, room, (int)WiredConditionType.STATES_MATCH)
     {
-        this._itemsData = new Dictionary<int, ItemsPosReset>();
+        this._itemsData = [];
 
-        this.DefaultIntParams(new int[] { 0, 0, 0, 0, 1 });
+        this.DefaultIntParams(0, 0, 0, 0, 1);
     }
     public bool AllowsExecution(RoomUser user, Item item)
     {
@@ -135,7 +135,7 @@ public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
 
         var triggerData2 = string.Join(";", new int[] { state, direction, position, height, requireAll });
 
-        ItemWiredDao.Replace(dbClient, this.ItemInstance.Id, string.Empty, triggerData2, false, triggerItems, this.Delay);
+        ItemWiredDao.Replace(dbClient, this.Item.Id, string.Empty, triggerData2, false, triggerItems, this.Delay);
     }
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)

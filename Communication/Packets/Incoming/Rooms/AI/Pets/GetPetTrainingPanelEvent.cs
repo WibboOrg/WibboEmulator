@@ -15,13 +15,13 @@ internal sealed class GetPetTrainingPanelEvent : IPacketEvent
 
         var petId = packet.PopInt();
 
-        if (!session.User.CurrentRoom.RoomUserManager.TryGetPet(petId, out var pet))
+        if (!session.User.Room.RoomUserManager.TryGetPet(petId, out var pet))
         {
             return;
         }
 
         //Continue as a regular pet..
-        if (pet.RoomId != session.User.CurrentRoomId || pet.PetData == null)
+        if (pet.RoomId != session.User.RoomId || pet.PetData == null)
         {
             return;
         }

@@ -15,7 +15,7 @@ internal sealed class GetModeratorUserRoomVisitsEvent : IPacketEvent
 
         var userId = packet.PopInt();
 
-        var clientTarget = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        var clientTarget = GameClientManager.GetClientByUserID(userId);
 
         if (clientTarget == null)
         {

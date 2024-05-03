@@ -1,6 +1,7 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Several;
 using WibboEmulator.Communication.Packets.Outgoing.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -20,7 +21,7 @@ internal sealed class Mimic : IChatCommand
 
         var username = parameters[1];
 
-        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
+        var targetUser = GameClientManager.GetClientByUsername(username);
         if (targetUser == null || targetUser.User == null)
         {
             var bot = room.RoomUserManager.GetBotByName(username);
@@ -35,9 +36,9 @@ internal sealed class Mimic : IChatCommand
         else
         {
 
-            if (targetUser.User.PremiumProtect && !session.User.HasPermission("mod"))
+            if (targetUser.User.HasPremiumProtect && !session.User.HasPermission("mod"))
             {
-                session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
+                session.SendWhisper(LanguageManager.TryGetValue("premium.notallowed", session.Language));
                 return;
             }
 

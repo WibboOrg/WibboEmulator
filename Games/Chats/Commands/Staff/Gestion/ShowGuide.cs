@@ -1,25 +1,25 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Gestion;
 using System.Text;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Helps;
 using WibboEmulator.Games.Rooms;
 
 internal sealed class ShowGuide : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var guideManager = WibboEnvironment.GetGame().GetHelpManager();
-        if (guideManager.Count <= 0)
+        if (HelpManager.Count <= 0)
         {
-            session.SendHugeNotif("Aucun guide n'utilise la Guide tool");
+            session.SendHugeNotification("Aucun guide n'utilise la Guide tool");
         }
         else
         {
             var stringBuilder = new StringBuilder();
 
-            _ = stringBuilder.Append("Guide en service (" + guideManager.Count + "):\r\r");
-            foreach (var entry in guideManager.GuidesOnDuty)
+            _ = stringBuilder.Append("Guide en service (" + HelpManager.Count + "):\r\r");
+            foreach (var entry in HelpManager.GuidesOnDuty)
             {
-                var guide = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(entry.Key);
+                var guide = GameClientManager.GetClientByUserID(entry.Key);
                 if (guide == null)
                 {
                     continue;
@@ -36,7 +36,7 @@ internal sealed class ShowGuide : IChatCommand
             }
 
             _ = stringBuilder.Append('\r');
-            session.SendHugeNotif(stringBuilder.ToString());
+            session.SendHugeNotification(stringBuilder.ToString());
         }
     }
 }

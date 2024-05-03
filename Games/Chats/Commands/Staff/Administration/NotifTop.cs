@@ -14,6 +14,6 @@ internal sealed class NotifTop : IChatCommand
             return;
         }
 
-        WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifTopComposer(message));
+        GameClientManager.SendMessage(new NotifTopComposer(message));
     }
 }

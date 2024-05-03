@@ -23,7 +23,7 @@ internal sealed class RenderRoomThumbnailEvent : IPacketEvent
             return;
         }
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null)
         {
             return;

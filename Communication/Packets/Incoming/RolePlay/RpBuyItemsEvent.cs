@@ -1,5 +1,8 @@
 namespace WibboEmulator.Communication.Packets.Incoming.RolePlay;
+
+using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Roleplays.Item;
 
 internal sealed class RpBuyItemsEvent : IPacketEvent
 {
@@ -25,7 +28,7 @@ internal sealed class RpBuyItemsEvent : IPacketEvent
             count = 1;
         }
 
-        var room = session.User.CurrentRoom;
+        var room = session.User.Room;
         if (room == null || !room.IsRoleplay)
         {
             return;
@@ -48,7 +51,7 @@ internal sealed class RpBuyItemsEvent : IPacketEvent
             return;
         }
 
-        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(itemId);
+        var rpItem = RPItemManager.GetItem(itemId);
         if (rpItem == null)
         {
             return;
@@ -56,7 +59,7 @@ internal sealed class RpBuyItemsEvent : IPacketEvent
 
         if (!rpItem.AllowStack && rp.GetInventoryItem(rpItem.Id) != null)
         {
-            user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itemown", session.Langue));
+            user.SendWhisperChat(LanguageManager.TryGetValue("rp.itemown", session.Language));
             return;
         }
 
@@ -74,11 +77,11 @@ internal sealed class RpBuyItemsEvent : IPacketEvent
 
         if (rpItem.Price == 0)
         {
-            user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itempick", session.Langue));
+            user.SendWhisperChat(LanguageManager.TryGetValue("rp.itempick", session.Language));
         }
         else
         {
-            user.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itembuy", session.Langue), rpItem.Price));
+            user.SendWhisperChat(string.Format(LanguageManager.TryGetValue("rp.itembuy", session.Language), rpItem.Price));
         }
 
         rp.Money -= rpItem.Price * count;

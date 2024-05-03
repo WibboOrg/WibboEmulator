@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
+using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class GetCatalogOfferEvent : IPacketEvent
@@ -10,13 +11,13 @@ internal sealed class GetCatalogOfferEvent : IPacketEvent
     {
         var id = packet.PopInt();
 
-        var item = WibboEnvironment.GetGame().GetCatalog().FindItem(id, session.User);
+        var item = CatalogManager.FindItem(id, session.User);
         if (item == null)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(item.PageID, out var page))
+        if (!CatalogManager.TryGetPage(item.PageID, out var page))
         {
             return;
         }

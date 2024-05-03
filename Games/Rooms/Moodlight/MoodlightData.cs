@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Rooms.Moodlight;
 using System.Text;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 
 public class MoodlightData
@@ -16,12 +17,12 @@ public class MoodlightData
 
         this.Enabled = enabled;
         this.CurrentPreset = currentPreset;
-        this.Presets = new List<MoodlightPreset>
-        {
+        this.Presets =
+        [
             GeneratePreset(presetOne),
             GeneratePreset(presetTwo),
             GeneratePreset(presetThree)
-        };
+        ];
     }
 
     public void Enable() => this.Enabled = true;
@@ -44,7 +45,7 @@ public class MoodlightData
 
         if (inDb)
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().Connection();
+            using var dbClient = DatabaseManager.Connection;
             ItemMoodlightDao.Update(dbClient, this.ItemId, color, pr, intensity, bgOnly, preset);
         }
 

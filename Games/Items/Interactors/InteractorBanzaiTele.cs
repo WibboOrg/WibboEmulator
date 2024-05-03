@@ -30,7 +30,7 @@ public class InteractorBanzaiTele : FurniInteractor
 
         item.UpdateCounter = 1;
 
-        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
+        var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
         if (roomUserByUserId != null)
         {
             GameMap.TeleportToItem(roomUserByUserId, item);

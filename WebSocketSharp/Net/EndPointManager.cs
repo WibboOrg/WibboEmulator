@@ -61,7 +61,7 @@ internal sealed class EndPointManager
 
     #region Static Constructor
 
-    static EndPointManager() => Endpoints = new Dictionary<IPEndPoint, EndPointListener>();
+    static EndPointManager() => Endpoints = [];
 
     #endregion
 

@@ -11,7 +11,7 @@ public class InteractorTeleport : FurniInteractor
 
         if (item.InteractingUser != 0)
         {
-            var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
+            var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
             if (roomUserByUserId != null)
             {
                 roomUserByUserId.AllowOverride = false;
@@ -25,7 +25,7 @@ public class InteractorTeleport : FurniInteractor
             return;
         }
 
-        var roomUserByUserIdTwo = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser2);
+        var roomUserByUserIdTwo = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser2);
         if (roomUserByUserIdTwo != null)
         {
             roomUserByUserIdTwo.AllowOverride = false;
@@ -41,7 +41,7 @@ public class InteractorTeleport : FurniInteractor
 
         if (item.InteractingUser != 0)
         {
-            var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
+            var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
             roomUserByUserId?.UnlockWalking();
 
             item.InteractingUser = 0;
@@ -52,7 +52,7 @@ public class InteractorTeleport : FurniInteractor
             return;
         }
 
-        var roomUserByUserIdTwo = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser2);
+        var roomUserByUserIdTwo = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser2);
         roomUserByUserIdTwo?.UnlockWalking();
 
         item.InteractingUser2 = 0;
@@ -60,12 +60,12 @@ public class InteractorTeleport : FurniInteractor
 
     public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (item == null || item.GetRoom() == null || session == null || session.User == null)
+        if (item == null || item.Room == null || session == null || session.User == null)
         {
             return;
         }
 
-        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (roomUserByUserId == null)
         {
             return;
@@ -99,20 +99,20 @@ public class InteractorTeleport : FurniInteractor
 
         if (item.InteractingUser > 0)
         {
-            var roomUserTarget = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
+            var roomUserTarget = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
             if (roomUserTarget != null)
             {
                 if (roomUserTarget.Coordinate == item.Coordinate)
                 {
                     roomUserTarget.AllowOverride = false;
 
-                    var (isLinked, linkedTele, teleRoomId) = ItemTeleporterFinder.IsTeleLinked(item.Id, item.GetRoom());
+                    var (isLinked, linkedTele, teleRoomId) = ItemTeleporterFinder.IsTeleLinked(item.Id, item.Room);
                     if (isLinked)
                     {
                         showTeleEffect = true;
                         if (teleRoomId == item.RoomId)
                         {
-                            var roomItem = item.GetRoom().RoomItemHandling.GetItem(linkedTele);
+                            var roomItem = item.Room.RoomItemHandling.GetItem(linkedTele);
                             if (roomItem == null)
                             {
                                 roomUserTarget.UnlockWalking();
@@ -168,7 +168,7 @@ public class InteractorTeleport : FurniInteractor
 
         if (item.InteractingUser2 > 0)
         {
-            var roomUserTarget = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser2);
+            var roomUserTarget = item.Room.RoomUserManager.GetRoomUserByUserId(item.InteractingUser2);
             if (roomUserTarget != null)
             {
                 keepDoorOpen = true;

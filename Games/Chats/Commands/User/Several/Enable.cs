@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Several;
+
+using WibboEmulator.Games.Effects;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games.Teams;
@@ -17,7 +19,7 @@ internal sealed class Enable : IChatCommand
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetEffectManager().HasEffect(numEnable, session.User.HasPermission("god")))
+        if (!EffectManager.HasEffect(numEnable, session.User.HasPermission("god")))
         {
             return;
         }

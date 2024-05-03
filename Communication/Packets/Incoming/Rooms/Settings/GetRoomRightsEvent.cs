@@ -13,7 +13,7 @@ internal sealed class GetRoomRightsEvent : IPacketEvent
             return;
         }
 
-        var rooom = session.User.CurrentRoom;
+        var rooom = session.User.Room;
         if (rooom == null)
         {
             return;

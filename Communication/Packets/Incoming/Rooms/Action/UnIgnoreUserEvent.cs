@@ -13,14 +13,14 @@ internal sealed class UnIgnoreUserEvent : IPacketEvent
             return;
         }
 
-        if (session.User.CurrentRoom == null)
+        if (session.User.Room == null)
         {
             return;
         }
 
         var str = packet.PopString();
 
-        var user = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(str).User;
+        var user = GameClientManager.GetClientByUsername(str).User;
         if (user == null || !session.User.MutedUsers.Contains(user.Id))
         {
             return;
