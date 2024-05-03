@@ -1,7 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Chat;
 using System.Text.RegularExpressions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
-using WibboEmulator.Communication.RCON.Commands;
 using WibboEmulator.Core.Language;
 using WibboEmulator.Games.Chats.Commands;
 using WibboEmulator.Games.Chats.Filter;

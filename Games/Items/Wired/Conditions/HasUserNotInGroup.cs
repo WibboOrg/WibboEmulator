@@ -4,12 +4,8 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-public class HasUserNotInGroup : WiredConditionBase, IWiredCondition, IWired
+public class HasUserNotInGroup(Item item, Room room) : WiredConditionBase(item, room, (int)WiredConditionType.NOT_ACTOR_IN_GROUP), IWiredCondition, IWired
 {
-    public HasUserNotInGroup(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_ACTOR_IN_GROUP)
-    {
-    }
-
     public bool AllowsExecution(RoomUser user, Item item)
     {
         if (user == null || user.IsBot || user.Client == null || user.Client.User == null)

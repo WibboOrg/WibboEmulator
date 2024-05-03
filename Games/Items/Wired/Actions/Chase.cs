@@ -6,12 +6,8 @@ using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map.Movement;
 
-public class Chase : WiredActionBase, IWiredEffect, IWired
+public class Chase(Item item, Room room) : WiredActionBase(item, room, (int)WiredActionType.CHASE), IWiredEffect, IWired
 {
-    public Chase(Item item, Room room) : base(item, room, (int)WiredActionType.CHASE)
-    {
-    }
-
     public override bool OnCycle(RoomUser user, Item item)
     {
         var disableAnimation = this.Room.WiredHandler.DisableAnimate(this.Item.Coordinate);

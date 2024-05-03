@@ -90,7 +90,7 @@ public static class WibboEnvironment
 
             if (SettingsManager.GetData<bool>("mus.tcp.enable"))
             {
-                RCONSocket.Initialize(SettingsManager.GetData<int>("mus.tcp.port"), SettingsManager.GetData<string>("mus.tcp.allowedaddr").Split(',').ToList());
+                RCONSocket.Initialize(SettingsManager.GetData<int>("mus.tcp.port"), [.. SettingsManager.GetData<string>("mus.tcp.allowedaddr").Split(',')]);
             }
 
             HttpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Wibbo", "1.0"));

@@ -302,7 +302,7 @@ internal static class ItemBehaviourUtility
                 {
                     var stuff = item.ExtraData.Split(';');
                     message.WriteString("GENDER");
-                    message.WriteString(stuff[0].ToUpper() == "M" ? "M" : "F");
+                    message.WriteString(stuff[0].Equals("M", StringComparison.CurrentCultureIgnoreCase) ? "M" : "F");
                     message.WriteString("FIGURE");
                     message.WriteString(stuff[1]);
                     message.WriteString("OUTFIT_NAME");

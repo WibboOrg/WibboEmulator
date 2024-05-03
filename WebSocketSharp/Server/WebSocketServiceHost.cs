@@ -47,34 +47,22 @@ using WibboEmulator.WebSocketSharp.Net.WebSockets;
 /// <remarks>
 /// This class is an abstract class.
 /// </remarks>
-public abstract class WebSocketServiceHost
+/// <remarks>
+/// Initializes a new instance of the <see cref="WebSocketServiceHost"/>
+/// class with the specified path and logging function.
+/// </remarks>
+/// <param name="path">
+/// A <see cref="string"/> that specifies the absolute path to
+/// the service.
+/// </param>
+/// <param name="log">
+/// A <see cref="Logger"/> that specifies the logging function for
+/// the service.
+/// </param>
+public abstract class WebSocketServiceHost(string path, Logger log)
 {
-    #region Private Fields
-
-
-    #endregion
 
     #region Protected Constructors
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="WebSocketServiceHost"/>
-    /// class with the specified path and logging function.
-    /// </summary>
-    /// <param name="path">
-    /// A <see cref="string"/> that specifies the absolute path to
-    /// the service.
-    /// </param>
-    /// <param name="log">
-    /// A <see cref="Logger"/> that specifies the logging function for
-    /// the service.
-    /// </param>
-    protected WebSocketServiceHost(string path, Logger log)
-    {
-        this.Path = path;
-        this.Log = log;
-
-        this.Sessions = new WebSocketSessionManager(log);
-    }
 
     #endregion
 
@@ -92,7 +80,7 @@ public abstract class WebSocketServiceHost
     /// <value>
     /// A <see cref="Logger"/> that provides the logging function.
     /// </value>
-    protected Logger Log { get; }
+    protected Logger Log { get; } = log;
 
     #endregion
 
@@ -124,7 +112,7 @@ public abstract class WebSocketServiceHost
     /// A <see cref="string"/> that represents the absolute path to
     /// the service.
     /// </value>
-    public string Path { get; }
+    public string Path { get; } = path;
 
     /// <summary>
     /// Gets the management function for the sessions in the service.
@@ -133,7 +121,7 @@ public abstract class WebSocketServiceHost
     /// A <see cref="WebSocketSessionManager"/> that manages the sessions in
     /// the service.
     /// </value>
-    public WebSocketSessionManager Sessions { get; }
+    public WebSocketSessionManager Sessions { get; } = new WebSocketSessionManager(log);
 
     /// <summary>
     /// Gets the type of the behavior of the service.

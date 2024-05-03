@@ -5,12 +5,8 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-public class BotClothes : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
+public class BotClothes(Item item, Room room) : WiredActionBase(item, room, (int)WiredActionType.BOT_CHANGE_FIGURE), IWired, IWiredEffect, IWiredCycleable
 {
-    public BotClothes(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_CHANGE_FIGURE)
-    {
-    }
-
     public override bool OnCycle(RoomUser user, Item item)
     {
         if (string.IsNullOrWhiteSpace(this.StringParam) || !this.StringParam.Contains('\t'))

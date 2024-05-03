@@ -22,7 +22,7 @@ internal sealed class HidePyramide : IChatCommand
 
             item.ExtraData = item.ExtraData == "0" ? "1" : "0";
             item.UpdateState();
-            item.            Room.GameMap.UpdateMapForItem(item);
+            item.Room.GameMap.UpdateMapForItem(item);
         }
 
         session.SendWhisper(LanguageManager.TryGetValue("cmd.pyramide", session.Language));

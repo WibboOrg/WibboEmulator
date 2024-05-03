@@ -4,12 +4,8 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-public class FurniHasNoUser : WiredConditionBase, IWiredCondition, IWired
+public class FurniHasNoUser(Item item, Room room) : WiredConditionBase(item, room, (int)WiredConditionType.FURNI_NOT_HAVE_HABBO), IWiredCondition, IWired
 {
-    public FurniHasNoUser(Item item, Room room) : base(item, room, (int)WiredConditionType.FURNI_NOT_HAVE_HABBO)
-    {
-    }
-
     public bool AllowsExecution(RoomUser user, Item item)
     {
         foreach (var itemList in this.Items.ToList())

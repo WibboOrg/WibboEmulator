@@ -1,19 +1,11 @@
 namespace WibboEmulator.Games.Achievements;
 
-public class AchievementData
+public class AchievementData(int id, string groupName, string category)
 {
-    public int Id { get; }
-    public string GroupName { get; }
-    public string Category { get; }
-    public Dictionary<int, AchievementLevel> Levels { get; }
-
-    public AchievementData(int id, string groupName, string category)
-    {
-        this.Id = id;
-        this.GroupName = groupName;
-        this.Category = category;
-        this.Levels = [];
-    }
+    public int Id { get; } = id;
+    public string GroupName { get; } = groupName;
+    public string Category { get; } = category;
+    public Dictionary<int, AchievementLevel> Levels { get; } = [];
 
     public void AddLevel(AchievementLevel level) => this.Levels.Add(level.Level, level);
 }

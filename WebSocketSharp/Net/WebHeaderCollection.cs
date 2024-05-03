@@ -579,10 +579,7 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
       SerializationInfo serializationInfo, StreamingContext streamingContext
     )
     {
-        if (serializationInfo == null)
-        {
-            throw new ArgumentNullException(nameof(serializationInfo));
-        }
+        ArgumentNullException.ThrowIfNull(serializationInfo);
 
         try
         {
@@ -1145,10 +1142,7 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
     /// </exception>
     public void Add(string header)
     {
-        if (header == null)
-        {
-            throw new ArgumentNullException(nameof(header));
-        }
+        ArgumentNullException.ThrowIfNull(header);
 
         var len = header.Length;
 
@@ -1466,10 +1460,7 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
       SerializationInfo info, StreamingContext context
     )
     {
-        if (info == null)
-        {
-            throw new ArgumentNullException(nameof(info));
-        }
+        ArgumentNullException.ThrowIfNull(info);
 
         info.AddValue("InternallyUsed", this._internallyUsed);
         info.AddValue("State", (int)this._state);

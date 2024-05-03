@@ -5,10 +5,8 @@ using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Events;
 
-public class WalksOffFurni : WiredTriggerBase, IWired
+public class WalksOffFurni(Item item, Room room) : WiredTriggerBase(item, room, (int)WiredTriggerType.AVATAR_WALKS_OFF_FURNI), IWired
 {
-    public WalksOffFurni(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_WALKS_OFF_FURNI) { }
-
     private void OnUserWalksOffFurni(object obj, ItemTriggeredEventArgs args) => this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, args.User, args.Item);
 
     public override void LoadItems(bool inDatabase = false)

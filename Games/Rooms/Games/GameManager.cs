@@ -3,14 +3,14 @@ using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.Events;
 using WibboEmulator.Games.Rooms.Games.Teams;
 
-public class GameManager
+public class GameManager(Room room)
 {
-    public int[] TeamPoints { get; set; }
+    public int[] TeamPoints { get; set; } = new int[5];
 
-    private Dictionary<int, Item> _redTeamItems;
-    private Dictionary<int, Item> _blueTeamItems;
-    private Dictionary<int, Item> _greenTeamItems;
-    private Dictionary<int, Item> _yellowTeamItems;
+    private Dictionary<int, Item> _redTeamItems = [];
+    private Dictionary<int, Item> _blueTeamItems = [];
+    private Dictionary<int, Item> _greenTeamItems = [];
+    private Dictionary<int, Item> _yellowTeamItems = [];
 
     public int[] Points
     {
@@ -21,17 +21,6 @@ public class GameManager
     public event EventHandler<TeamScoreChangedEventArgs> OnScoreChanged;
     public event EventHandler OnGameStart;
     public event EventHandler OnGameEnd;
-
-    public GameManager(Room room)
-    {
-        this.TeamPoints = new int[5];
-
-        this._redTeamItems = [];
-        this._blueTeamItems = [];
-        this._greenTeamItems = [];
-        this._yellowTeamItems = [];
-        this.Room = room;
-    }
 
     public Dictionary<int, Item> GetItems(TeamType team) => team switch
     {
@@ -321,7 +310,7 @@ public class GameManager
         this.Room.LastTimerReset = DateTime.Now;
     }
 
-    public Room Room { get; private set; }
+    public Room Room { get; private set; } = room;
 
     public void Destroy()
     {

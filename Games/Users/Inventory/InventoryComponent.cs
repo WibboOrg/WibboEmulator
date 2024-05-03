@@ -19,9 +19,9 @@ using WibboEmulator.Utilities;
 
 public class InventoryComponent(User user) : IDisposable
 {
-    private readonly ConcurrentDictionary<int, Item> _userItems = new ConcurrentDictionary<int, Item>();
-    private readonly ConcurrentDictionary<int, Pet> _petItems = new ConcurrentDictionary<int, Pet>();
-    private readonly ConcurrentDictionary<int, Bot> _botItems = new ConcurrentDictionary<int, Bot>();
+    private readonly ConcurrentDictionary<int, Item> _userItems = new();
+    private readonly ConcurrentDictionary<int, Pet> _petItems = new();
+    private readonly ConcurrentDictionary<int, Bot> _botItems = new();
     private readonly int _furniLimit = SettingsManager.GetData<int>("inventory.furni.limit");
     private readonly int _petLimit = SettingsManager.GetData<int>("inventory.pet.limit");
     private readonly int _botLimit = SettingsManager.GetData<int>("inventory.bot.limit");

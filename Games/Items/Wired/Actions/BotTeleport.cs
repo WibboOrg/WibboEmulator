@@ -6,13 +6,9 @@ using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map;
 using WibboEmulator.Utilities;
 
-public class BotTeleport : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
+public class BotTeleport(Item item, Room room) : WiredActionBase(item, room, (int)WiredActionType.BOT_TELEPORT), IWired, IWiredEffect, IWiredCycleable
 {
     public new bool IsTeleport => true;
-
-    public BotTeleport(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_TELEPORT)
-    {
-    }
 
     public override bool OnCycle(RoomUser user, Item item)
     {

@@ -153,7 +153,7 @@ public class InteractorGenericSwitch : FurniInteractor
             var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
             if (roomUserByUserId != null)
             {
-                item.                Room.RoomUserManager.UpdateUserStatus(roomUserByUserId, false);
+                item.Room.RoomUserManager.UpdateUserStatus(roomUserByUserId, false);
             }
         }
     }

@@ -46,31 +46,21 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-internal sealed class ChunkStream
+internal sealed class ChunkStream(WebHeaderCollection headers)
 {
     #region Private Fields
 
     private int _chunkRead;
-    private int _chunkSize;
-    private readonly List<Chunk> _chunks;
+    private int _chunkSize = -1;
+    private readonly List<Chunk> _chunks = [];
     private bool _gotIt;
-    private readonly StringBuilder _saved;
+    private readonly StringBuilder _saved = new();
     private bool _sawCr;
     private InputChunkState _state;
     private int _trailerState;
 
     #endregion
-
     #region Public Constructors
-
-    public ChunkStream(WebHeaderCollection headers)
-    {
-        this.Headers = headers;
-
-        this._chunkSize = -1;
-        this._chunks = [];
-        this._saved = new StringBuilder();
-    }
 
     #endregion
 
@@ -86,7 +76,7 @@ internal sealed class ChunkStream
 
     #region Public Properties
 
-    public WebHeaderCollection Headers { get; }
+    public WebHeaderCollection Headers { get; } = headers;
 
     public bool WantsMore => this._state < InputChunkState.End;
 

@@ -12,17 +12,17 @@ using WibboEmulator.Utilities;
 
 public class WiredHandler(Room room)
 {
-    private readonly ConcurrentDictionary<Point, List<Item>> _actionStacks = new ConcurrentDictionary<Point, List<Item>>();
-    private readonly ConcurrentDictionary<Point, List<Item>> _conditionStacks = new ConcurrentDictionary<Point, List<Item>>();
+    private readonly ConcurrentDictionary<Point, List<Item>> _actionStacks = new();
+    private readonly ConcurrentDictionary<Point, List<Item>> _conditionStacks = new();
 
-    private readonly ConcurrentDictionary<Point, List<int>> _wiredUsed = new ConcurrentDictionary<Point, List<int>>();
+    private readonly ConcurrentDictionary<Point, List<int>> _wiredUsed = new();
 
     private readonly List<Point> _specialRandom = [];
     private readonly List<Point> _specialAnimate = [];
     private readonly List<Point> _specialOrEval = [];
     private readonly Dictionary<Point, int> _specialUnseen = [];
 
-    private readonly ConcurrentQueue<WiredCycle> _requestingUpdates = new ConcurrentQueue<WiredCycle>();
+    private readonly ConcurrentQueue<WiredCycle> _requestingUpdates = new();
     private int _tickCounter = 0;
     private bool _doCleanup;
     private DateTime _blockWiredDateTime;

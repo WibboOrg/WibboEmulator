@@ -4,12 +4,8 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-public class CollisionItem : WiredActionBase, IWiredEffect, IWired
+public class CollisionItem(Item item, Room room) : WiredActionBase(item, room, (int)WiredActionType.CHASE), IWiredEffect, IWired
 {
-    public CollisionItem(Item item, Room room) : base(item, room, (int)WiredActionType.CHASE)
-    {
-    }
-
     public override bool OnCycle(RoomUser user, Item item)
     {
         foreach (var roomItem in this.Items.ToList())

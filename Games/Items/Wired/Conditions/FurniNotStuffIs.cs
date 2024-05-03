@@ -4,12 +4,8 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-public class FurniNotStuffIs : WiredConditionBase, IWiredCondition, IWired
+public class FurniNotStuffIs(Item item, Room room) : WiredConditionBase(item, room, (int)WiredConditionType.NOT_FURNI_IS_OF_TYPE), IWiredCondition, IWired
 {
-    public FurniNotStuffIs(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_FURNI_IS_OF_TYPE)
-    {
-    }
-
     public bool AllowsExecution(RoomUser user, Item item)
     {
         if (item == null)

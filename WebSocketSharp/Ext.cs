@@ -212,7 +212,7 @@ public static class Ext
 
         buff.AddRange(reasonAsBytes);
 
-        return buff.ToArray();
+        return [.. buff];
     }
 
     internal static byte[] Compress(

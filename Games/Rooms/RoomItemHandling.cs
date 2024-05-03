@@ -18,21 +18,21 @@ using WibboEmulator.Utilities;
 
 public class RoomItemHandling(Room room)
 {
-    private readonly ConcurrentDictionary<int, Item> _floorItems = new ConcurrentDictionary<int, Item>();
-    private readonly ConcurrentDictionary<int, Item> _wallItems = new ConcurrentDictionary<int, Item>();
-    private readonly ConcurrentDictionary<int, Item> _rollers = new ConcurrentDictionary<int, Item>();
+    private readonly ConcurrentDictionary<int, Item> _floorItems = new();
+    private readonly ConcurrentDictionary<int, Item> _wallItems = new();
+    private readonly ConcurrentDictionary<int, Item> _rollers = new();
 
-    private readonly ConcurrentDictionary<int, ItemTemp> _itemsTemp = new ConcurrentDictionary<int, ItemTemp>();
+    private readonly ConcurrentDictionary<int, ItemTemp> _itemsTemp = new();
 
-    private readonly ConcurrentDictionary<int, Item> _updateItems = new ConcurrentDictionary<int, Item>();
+    private readonly ConcurrentDictionary<int, Item> _updateItems = new();
 
     private readonly List<int> _rollerItemsMoved = [];
     private readonly List<int> _rollerUsersMoved = [];
-    private readonly ServerPacketList _rollerMessages = new ServerPacketList();
+    private readonly ServerPacketList _rollerMessages = new();
 
     private int _rollerSpeed = 4;
     private int _rollerCycle = 0;
-    private readonly ConcurrentQueue<Item> _roomItemUpdateQueue = new ConcurrentQueue<Item>();
+    private readonly ConcurrentQueue<Item> _roomItemUpdateQueue = new();
     private int _itemTempoId = 0;
 
     public void QueueRoomItemUpdate(Item item) => this._roomItemUpdateQueue.Enqueue(item);

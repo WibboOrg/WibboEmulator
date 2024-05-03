@@ -5,12 +5,8 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-public class TriggerUserIsOnFurni : WiredConditionBase, IWiredCondition, IWired
+public class TriggerUserIsOnFurni(Item item, Room room) : WiredConditionBase(item, room, (int)WiredConditionType.TRIGGERER_IS_ON_FURNI), IWiredCondition, IWired
 {
-    public TriggerUserIsOnFurni(Item item, Room room) : base(item, room, (int)WiredConditionType.TRIGGERER_IS_ON_FURNI)
-    {
-    }
-
     public bool AllowsExecution(RoomUser user, Item item)
     {
         if (user == null)

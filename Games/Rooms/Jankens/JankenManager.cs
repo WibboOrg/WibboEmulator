@@ -4,7 +4,7 @@ using WibboEmulator.Core.Language;
 
 public class JankenManager(Room room)
 {
-    private readonly ConcurrentDictionary<int, Janken> _party = new ConcurrentDictionary<int, Janken>();
+    private readonly ConcurrentDictionary<int, Janken> _party = new();
     private readonly List<Janken> _remove = [];
 
     public void Start(RoomUser user, RoomUser duelUser)

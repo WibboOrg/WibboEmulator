@@ -1,13 +1,7 @@
 namespace WibboEmulator.Games.Permissions;
 
-internal sealed class PermissionCommand
+internal sealed class PermissionCommand(string command, int rank)
 {
-    public string Input { get; private set; }
-    public int MinRank { get; private set; }
-
-    public PermissionCommand(string command, int rank)
-    {
-        this.Input = command;
-        this.MinRank = rank;
-    }
+    public string Input { get; private set; } = command;
+    public int MinRank { get; private set; } = rank;
 }

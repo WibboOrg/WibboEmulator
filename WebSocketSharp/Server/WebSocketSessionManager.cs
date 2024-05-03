@@ -59,9 +59,7 @@ public class WebSocketSessionManager : IDisposable
 
     #region Static Constructor
 
-    static WebSocketSessionManager() => EmptyPingFrameAsBytes = WebSocketFrame
-                                 .CreatePingFrame(false)
-                                 .ToArray();
+    static WebSocketSessionManager() => EmptyPingFrameAsBytes = [.. WebSocketFrame.CreatePingFrame(false)];
 
     #endregion
 

@@ -2,22 +2,14 @@ namespace WibboEmulator.Games.Users.Messenger;
 
 using WibboEmulator.Games.GameClients;
 
-public class MessengerBuddy
+public class MessengerBuddy(int userId, string username, string look, int relation)
 {
-    public int UserId { get; }
-    public string Username { get; }
-    public string Look { get; private set; }
-    public int Relation { get; private set; }
+    public int UserId { get; } = userId;
+    public string Username { get; } = username;
+    public string Look { get; private set; } = look;
+    public int Relation { get; private set; } = relation;
     public bool IsOnline { get; private set; }
     public bool HideInRoom { get; private set; }
-
-    public MessengerBuddy(int userId, string username, string look, int relation)
-    {
-        this.UserId = userId;
-        this.Username = username;
-        this.Look = look;
-        this.Relation = relation;
-    }
 
     public void UpdateRelation(int type) => this.Relation = type;
 

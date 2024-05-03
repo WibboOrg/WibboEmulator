@@ -4,12 +4,8 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-public class UserMove : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
+public class UserMove(Item item, Room room) : WiredActionBase(item, room, (int)WiredActionType.TELEPORT), IWired, IWiredEffect, IWiredCycleable
 {
-    public UserMove(Item item, Room room) : base(item, room, (int)WiredActionType.TELEPORT)
-    {
-    }
-
     public override bool OnCycle(RoomUser user, Item item)
     {
         if (this.Items.Count == 0 || user == null)

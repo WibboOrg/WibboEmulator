@@ -4,12 +4,8 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-public class ShowMessageRoom : WiredActionBase, IWired, IWiredEffect
+public class ShowMessageRoom(Item item, Room room) : WiredActionBase(item, room, (int)WiredActionType.CHAT), IWired, IWiredEffect
 {
-    public ShowMessageRoom(Item item, Room room) : base(item, room, (int)WiredActionType.CHAT)
-    {
-    }
-
     public override bool OnCycle(RoomUser user, Item item)
     {
         if (this.StringParam == "")

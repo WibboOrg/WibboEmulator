@@ -4,11 +4,8 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-public class TeleportFurniToUser : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
+public class TeleportFurniToUser(Item item, Room room) : WiredActionBase(item, room, (int)WiredActionType.TELEPORT), IWired, IWiredCycleable, IWiredEffect
 {
-    public TeleportFurniToUser(Item item, Room room) : base(item, room, (int)WiredActionType.TELEPORT)
-    { }
-
     public override bool OnCycle(RoomUser user, Item item)
     {
         if (user == null)

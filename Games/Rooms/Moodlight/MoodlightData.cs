@@ -3,27 +3,18 @@ using System.Text;
 using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 
-public class MoodlightData
+public class MoodlightData(int itemId, bool enabled, int currentPreset, string presetOne, string presetTwo, string presetThree)
 {
-    public int ItemId { get; set; }
-    public int CurrentPreset { get; set; }
-    public bool Enabled { get; set; }
+    public int ItemId { get; set; } = itemId;
+    public int CurrentPreset { get; set; } = currentPreset;
+    public bool Enabled { get; set; } = enabled;
 
-    public List<MoodlightPreset> Presets { get; set; }
-
-    public MoodlightData(int itemId, bool enabled, int currentPreset, string presetOne, string presetTwo, string presetThree)
-    {
-        this.ItemId = itemId;
-
-        this.Enabled = enabled;
-        this.CurrentPreset = currentPreset;
-        this.Presets =
+    public List<MoodlightPreset> Presets { get; set; } =
         [
             GeneratePreset(presetOne),
             GeneratePreset(presetTwo),
             GeneratePreset(presetThree)
         ];
-    }
 
     public void Enable() => this.Enabled = true;
 

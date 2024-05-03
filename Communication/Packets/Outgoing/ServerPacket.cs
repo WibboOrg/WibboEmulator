@@ -57,7 +57,7 @@ public class ServerPacket : IServerPacket
             final.AddRange(BitConverter.GetBytes(this._body.Count));
             final.Reverse();
             final.AddRange(this._body);
-            return final.ToArray();
+            return [.. final];
         }
     }
 }

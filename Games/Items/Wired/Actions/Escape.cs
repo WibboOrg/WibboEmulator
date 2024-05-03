@@ -6,12 +6,8 @@ using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map.Movement;
 
-public class Escape : WiredActionBase, IWiredEffect, IWired
+public class Escape(Item item, Room room) : WiredActionBase(item, room, (int)WiredActionType.FLEE), IWiredEffect, IWired
 {
-    public Escape(Item item, Room room) : base(item, room, (int)WiredActionType.FLEE)
-    {
-    }
-
     public override bool OnCycle(RoomUser user, Item item)
     {
         var disableAnimation = this.Room.WiredHandler.DisableAnimate(this.Item.Coordinate);

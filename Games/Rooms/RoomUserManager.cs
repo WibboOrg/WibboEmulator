@@ -26,12 +26,12 @@ using WibboEmulator.Games.Roleplays.Troc;
 
 public class RoomUserManager(Room room)
 {
-    private readonly ConcurrentDictionary<string, RoomUser> _usersByUsername = new ConcurrentDictionary<string, RoomUser>();
-    private readonly ConcurrentDictionary<int, RoomUser> _usersByUserID = new ConcurrentDictionary<int, RoomUser>();
+    private readonly ConcurrentDictionary<string, RoomUser> _usersByUsername = new();
+    private readonly ConcurrentDictionary<int, RoomUser> _usersByUserID = new();
 
-    private readonly ConcurrentDictionary<int, RoomUser> _users = new ConcurrentDictionary<int, RoomUser>();
-    private readonly ConcurrentDictionary<int, RoomUser> _pets = new ConcurrentDictionary<int, RoomUser>();
-    private readonly ConcurrentDictionary<int, RoomUser> _bots = new ConcurrentDictionary<int, RoomUser>();
+    private readonly ConcurrentDictionary<int, RoomUser> _users = new();
+    private readonly ConcurrentDictionary<int, RoomUser> _pets = new();
+    private readonly ConcurrentDictionary<int, RoomUser> _bots = new();
 
     private readonly List<int> _staffIds = [];
 
@@ -353,7 +353,7 @@ public class RoomUserManager(Room room)
         }
     }
 
-    public List<RoomUser> GetUsersForSquare(int x, int y) => room.GameMap.GetRoomUsers(new Point(x, y)).OrderBy(u => u.IsBot).ToList();
+    public List<RoomUser> GetUsersForSquare(int x, int y) => [.. room.GameMap.GetRoomUsers(new Point(x, y)).OrderBy(u => u.IsBot)];
 
     public RoomUser GetUserForSquare(int x, int y) => Enumerable.FirstOrDefault(room.GameMap.GetRoomUsers(new Point(x, y)).OrderBy(u => u.IsBot));
 

@@ -1,17 +1,10 @@
 namespace WibboEmulator.Utilities.Enclosure.Algorithm;
 
-public class GametileUpdate
+public class GametileUpdate(int x, int y, byte value)
 {
-    public byte Value { get; private set; }
+    public byte Value { get; private set; } = value;
 
-    public int Y { get; private set; }
+    public int Y { get; private set; } = y;
 
-    public int X { get; private set; }
-
-    public GametileUpdate(int x, int y, byte value)
-    {
-        this.X = x;
-        this.Y = y;
-        this.Value = value;
-    }
+    public int X { get; private set; } = x;
 }

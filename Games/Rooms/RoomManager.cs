@@ -278,13 +278,13 @@ public static class RoomManager
         {
             foreach (var tag in tagList)
             {
-                if (!tagValues.ContainsKey(tag))
+                if (!tagValues.TryGetValue(tag, out var value))
                 {
                     tagValues.Add(tag, 1);
                 }
                 else
                 {
-                    tagValues[tag]++;
+                    tagValues[tag] = ++value;
                 }
             }
         }

@@ -83,7 +83,7 @@ public static class CatalogManager
                     Badges.Add(catalogItem.Badge);
                 }
 
-                if (!Items.TryGetValue(pageId, out var items))
+                if (!Items.TryGetValue(pageId, out var _))
                 {
                     Items.Add(pageId, []);
                 }

@@ -208,6 +208,7 @@ public class Item : IEquatable<Item>
             if (this.ItemData == null)
             {
                 ExceptionLogger.LogException("Unknown baseID: " + baseItemId);
+                return;
             }
 
             switch (this.ItemData.InteractionType)
@@ -541,7 +542,7 @@ public class Item : IEquatable<Item>
         }
 
         this.UpdateCounter = cycles;
-        this.        Room.RoomItemHandling.QueueRoomItemUpdate(this);
+        this.Room.RoomItemHandling.QueueRoomItemUpdate(this);
     }
 
     public void UpdateState(bool inDb = true)
@@ -553,16 +554,16 @@ public class Item : IEquatable<Item>
 
         if (inDb)
         {
-            this.            Room.RoomItemHandling.UpdateItem(this);
+            this.Room.RoomItemHandling.UpdateItem(this);
         }
 
         if (this.IsFloorItem)
         {
-            this.            Room.SendPacket(new ObjectUpdateComposer(this, this.Room.RoomData.OwnerId));
+            this.Room.SendPacket(new ObjectUpdateComposer(this, this.Room.RoomData.OwnerId));
         }
         else
         {
-            this.            Room.SendPacket(new ItemUpdateComposer(this, this.Room.RoomData.OwnerId));
+            this.Room.SendPacket(new ItemUpdateComposer(this, this.Room.RoomData.OwnerId));
         }
     }
 

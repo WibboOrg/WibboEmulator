@@ -1,19 +1,11 @@
 namespace WibboEmulator.Games.Roleplays.Troc;
 
-public class RPTrocUser
+public class RPTrocUser(int userId)
 {
-    public int UserId { get; set; }
-    public Dictionary<int, int> ItemIds { get; set; }
-    public bool Accepted { get; set; }
-    public bool Confirmed { get; set; }
-
-    public RPTrocUser(int userId)
-    {
-        this.UserId = userId;
-        this.ItemIds = [];
-        this.Accepted = false;
-        this.Confirmed = false;
-    }
+    public int UserId { get; set; } = userId;
+    public Dictionary<int, int> ItemIds { get; set; } = [];
+    public bool Accepted { get; set; } = false;
+    public bool Confirmed { get; set; } = false;
 
     public int GetCountItem(int itemId)
     {

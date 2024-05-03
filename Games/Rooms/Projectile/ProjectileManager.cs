@@ -11,8 +11,8 @@ public class ProjectileManager(Room room)
     private readonly object _projectileSync = new();
 
     private readonly List<ItemTemp> _projectile = [];
-    private readonly ConcurrentQueue<ItemTemp> _queueProjectile = new ConcurrentQueue<ItemTemp>();
-    private readonly ServerPacketList _messages = new ServerPacketList();
+    private readonly ConcurrentQueue<ItemTemp> _queueProjectile = new();
+    private readonly ServerPacketList _messages = new();
 
     public void OnCycle()
     {

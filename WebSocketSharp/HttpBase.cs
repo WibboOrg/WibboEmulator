@@ -37,7 +37,7 @@ using System.Text;
 using System.Threading;
 using WibboEmulator.WebSocketSharp.Net;
 
-internal abstract class HttpBase
+internal abstract class HttpBase(Version version, NameValueCollection headers)
 {
     #region Private Fields
 
@@ -66,14 +66,7 @@ internal abstract class HttpBase
     }
 
     #endregion
-
     #region Protected Constructors
-
-    protected HttpBase(Version version, NameValueCollection headers)
-    {
-        this.ProtocolVersion = version;
-        this.Headers = headers;
-    }
 
     #endregion
 
@@ -108,7 +101,7 @@ internal abstract class HttpBase
 
     public bool HasMessageBody => this.MessageBodyData != null;
 
-    public NameValueCollection Headers { get; }
+    public NameValueCollection Headers { get; } = headers;
 
     public string MessageBody
     {
@@ -122,7 +115,7 @@ internal abstract class HttpBase
 
     public abstract string MessageHeader { get; }
 
-    public Version ProtocolVersion { get; }
+    public Version ProtocolVersion { get; } = version;
 
     #endregion
 
@@ -296,7 +289,7 @@ internal abstract class HttpBase
         var headerData = Encoding.UTF8.GetBytes(this.MessageHeader);
 
         return this.MessageBodyData != null
-               ? headerData.Concat(this.MessageBodyData).ToArray()
+               ? [.. headerData, .. this.MessageBodyData]
                : headerData;
     }
 

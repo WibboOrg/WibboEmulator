@@ -5,12 +5,8 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-public class KickUser : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
+public class KickUser(Item item, Room room) : WiredActionBase(item, room, (int)WiredActionType.KICK_FROM_ROOM), IWired, IWiredCycleable, IWiredEffect
 {
-    public KickUser(Item item, Room room) : base(item, room, (int)WiredActionType.KICK_FROM_ROOM)
-    {
-    }
-
     public override bool OnCycle(RoomUser user, Item item)
     {
         if (user != null && user.Client != null)

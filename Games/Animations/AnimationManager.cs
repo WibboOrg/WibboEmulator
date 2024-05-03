@@ -179,7 +179,7 @@ public static class AnimationManager
         if (_roomIdIndex >= _roomId.Count)
         {
             _roomIdIndex = 0;
-            _roomId = _roomId.OrderBy(a => Guid.NewGuid()).ToList();
+            _roomId = [.. _roomId.OrderBy(a => Guid.NewGuid())];
         }
 
         var roomId = forceRoomId != 0 ? forceRoomId : _roomId[_roomIdIndex++];

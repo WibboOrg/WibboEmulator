@@ -39,7 +39,7 @@ public static class BannerManager
         return allBannerTrade.GetRandomElement();
     }
 
-    public static List<Banner> Banners => BannerList.Values.ToList();
+    public static List<Banner> Banners => [.. BannerList.Values];
 
     public static bool TryGetBannerById(int id, out Banner banner) => BannerList.TryGetValue(id, out banner);
 }

@@ -1,13 +1,7 @@
 ﻿namespace WibboEmulator.Games.Groups;
 
-public class GroupColours
+public class GroupColours(int id, string colour)
 {
-    public int Id { get; private set; }
-    public string Colour { get; private set; }
-
-    public GroupColours(int id, string colour)
-    {
-        this.Id = id;
-        this.Colour = colour;
-    }
+    public int Id { get; private set; } = id;
+    public string Colour { get; private set; } = colour;
 }

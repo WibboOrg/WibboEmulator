@@ -1,17 +1,9 @@
 namespace WibboEmulator.Core.FigureData.Types;
 
-internal sealed class FigureSet
+internal sealed class FigureSet(SetType type, int palletId)
 {
-    public SetType Type { get; private set; }
-    public int PalletId { get; private set; }
+    public SetType Type { get; private set; } = type;
+    public int PalletId { get; private set; } = palletId;
 
-    public FigureSet(SetType type, int palletId)
-    {
-        this.Type = type;
-        this.PalletId = palletId;
-
-        this.Sets = [];
-    }
-
-    public Dictionary<int, Set> Sets { get; set; }
+    public Dictionary<int, Set> Sets { get; set; } = [];
 }

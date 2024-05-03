@@ -6,12 +6,8 @@ using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games.Teams;
 
-public class TeamLeave : WiredActionBase, IWired, IWiredEffect
+public class TeamLeave(Item item, Room room) : WiredActionBase(item, room, (int)WiredActionType.LEAVE_TEAM), IWired, IWiredEffect
 {
-    public TeamLeave(Item item, Room room) : base(item, room, (int)WiredActionType.LEAVE_TEAM)
-    {
-    }
-
     public override bool OnCycle(RoomUser user, Item item)
     {
         if (user != null && !user.IsBot && user.Client != null && user.Team != TeamType.None && user.Room != null)

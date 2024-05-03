@@ -62,7 +62,7 @@ public class WiredBase
         this.IsGod = isGod;
     }
 
-    public void DefaultIntParams(params int[] intParams) => this.IntParams = intParams.ToList();
+    public void DefaultIntParams(params int[] intParams) => this.IntParams = [.. intParams];
 
     public void SetIntParam(int index, int value)
     {

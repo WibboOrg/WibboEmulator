@@ -1,9 +1,7 @@
 namespace WibboEmulator.Games.Rooms.Events;
 using WibboEmulator.Games.Rooms;
 
-public class UserTargetEventArgs : EventArgs
+public class UserTargetEventArgs(RoomUser user) : EventArgs
 {
-    public RoomUser UserTarget { get; private set; }
-
-    public UserTargetEventArgs(RoomUser user) => this.UserTarget = user;
+    public RoomUser UserTarget { get; private set; } = user;
 }

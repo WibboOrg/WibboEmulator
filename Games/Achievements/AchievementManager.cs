@@ -44,7 +44,7 @@ public static class AchievementManager
         }
     }
 
-    public static void GetList(GameClient session) => session.SendPacket(new AchievementsComposer(session, Achievements.Values.ToList()));
+    public static void GetList(GameClient session) => session.SendPacket(new AchievementsComposer(session, [.. Achievements.Values]));
 
     public static bool ProgressAchievement(GameClient session, string achievementGroup, int progressAmount)
     {

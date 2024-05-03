@@ -4,12 +4,8 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-public class TimerReset : WiredActionBase, IWiredEffect, IWired
+public class TimerReset(Item item, Room room) : WiredActionBase(item, room, (int)WiredActionType.RESET), IWiredEffect, IWired
 {
-    public TimerReset(Item item, Room room) : base(item, room, (int)WiredActionType.RESET)
-    {
-    }
-
     public override bool OnCycle(RoomUser user, Item item)
     {
         this.Room.WiredHandler.TriggerTimer();

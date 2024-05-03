@@ -5,10 +5,8 @@ using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Events;
 
-public class SateChanged : WiredTriggerBase, IWired
+public class SateChanged(Item item, Room room) : WiredTriggerBase(item, room, (int)WiredTriggerType.TOGGLE_FURNI), IWired
 {
-    public SateChanged(Item item, Room room) : base(item, room, (int)WiredTriggerType.TOGGLE_FURNI) { }
-
     private void OnTriggered(object sender, ItemTriggeredEventArgs e) => this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, e.User, e.Item);
 
     public override void LoadItems(bool inDatabase = false)

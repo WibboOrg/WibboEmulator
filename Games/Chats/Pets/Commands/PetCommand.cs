@@ -1,14 +1,8 @@
 namespace WibboEmulator.Games.Chats.Pets.Commands;
 
-public struct PetCommand
+public struct PetCommand(int commandID, string commandInput)
 {
-    public PetCommand(int commandID, string commandInput)
-    {
-        this.CommandID = commandID;
-        this.CommandInput = commandInput;
-    }
+    public int CommandID { get; set; } = commandID;
 
-    public int CommandID { get; set; }
-
-    public string CommandInput { get; set; }
+    public string CommandInput { get; set; } = commandInput;
 }

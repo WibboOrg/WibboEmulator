@@ -2,20 +2,12 @@ namespace WibboEmulator.Games.Rooms.Wired;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 
-public class WiredCycle
+public class WiredCycle(IWiredCycleable wiredCycleable, RoomUser user, Item item)
 {
-    public RoomUser User { get; set; }
-    public Item Item { get; set; }
-    public IWiredCycleable WiredCycleable { get; set; }
-    public int Cycle { get; set; }
-
-    public WiredCycle(IWiredCycleable wiredCycleable, RoomUser user, Item item)
-    {
-        this.WiredCycleable = wiredCycleable;
-        this.User = user;
-        this.Item = item;
-        this.Cycle = 0;
-    }
+    public RoomUser User { get; set; } = user;
+    public Item Item { get; set; } = item;
+    public IWiredCycleable WiredCycleable { get; set; } = wiredCycleable;
+    public int Cycle { get; set; } = 0;
 
     public bool OnCycle()
     {

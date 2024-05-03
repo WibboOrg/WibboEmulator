@@ -85,7 +85,7 @@ public class BannerComponent(User user) : IDisposable
     {
         if (BannerManager.TryGetBannerById(id, out var banner) && this.BannerList.Contains(banner))
         {
-            this.BannerList.Remove(banner);
+            _ = this.BannerList.Remove(banner);
 
             UserBannerDao.Delete(dbClient, user.Id, id);
 

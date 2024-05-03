@@ -22,7 +22,7 @@ internal sealed class GetCatalogPageEvent : IPacketEvent
 
         if (page.Template == "club_gifts")
         {
-            session.SendPacket(new ClubGiftInfoComposer(page.Items.Values.ToList()));
+            session.SendPacket(new ClubGiftInfoComposer([.. page.Items.Values]));
         }
 
         session.SendPacket(new CatalogPageComposer(page, cataMode, session.Language, offerId));

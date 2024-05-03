@@ -1,15 +1,9 @@
 namespace WibboEmulator.Games.Rooms.Events;
 using WibboEmulator.Games.Rooms;
 
-public class UserSaysEventArgs : EventArgs
+public class UserSaysEventArgs(RoomUser user, string message) : EventArgs
 {
-    public RoomUser User { get; private set; }
-    public string Message { get; private set; }
+    public RoomUser User { get; private set; } = user;
+    public string Message { get; private set; } = message;
     public bool Result { get; set; }
-
-    public UserSaysEventArgs(RoomUser user, string message)
-    {
-        this.User = user;
-        this.Message = message;
-    }
 }

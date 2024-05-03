@@ -5,7 +5,7 @@ using WibboEmulator.Database.Daos.User;
 
 public class RolePlayerManager(int id, int hopitalId, int prisonId)
 {
-    private readonly ConcurrentDictionary<int, RolePlayer> _player = new ConcurrentDictionary<int, RolePlayer>();
+    private readonly ConcurrentDictionary<int, RolePlayer> _player = new();
     public int PrisonId { get; set; } = prisonId;
     public int HopitalId { get; set; } = hopitalId;
 

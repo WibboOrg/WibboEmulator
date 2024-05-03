@@ -6,12 +6,8 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-public class HighScorePoints : WiredActionBase, IWired, IWiredEffect
+public class HighScorePoints(Item item, Room room) : WiredActionBase(item, room, -1), IWired, IWiredEffect
 {
-    public HighScorePoints(Item item, Room room) : base(item, room, -1)
-    {
-    }
-
     public override bool OnCycle(RoomUser user, Item item)
     {
         if (user == null || user.IsBot || user.Client == null)

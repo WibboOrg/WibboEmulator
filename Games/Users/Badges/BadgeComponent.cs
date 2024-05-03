@@ -9,7 +9,7 @@ using WibboEmulator.Games.Users;
 
 public class BadgeComponent(User user) : IDisposable
 {
-    private int _virtualBadgeId = 0;
+    private int _virtualBadgeId;
 
     public Dictionary<string, Badge> BadgeList { get; } = [];
 

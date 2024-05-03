@@ -10,6 +10,8 @@ public static class FigureDataManager
     private static readonly Dictionary<int, Palette> Palettes = [];
     private static readonly Dictionary<string, FigureSet> SetTypes = [];
 
+    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
+
     public static void Initialize()
     {
         Palettes.Clear();
@@ -27,12 +29,7 @@ public static class FigureDataManager
 
         var jsonString = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
-        var options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-        };
-
-        var figureData = JsonSerializer.Deserialize<FigureDataRoot>(jsonString, options);
+        var figureData = JsonSerializer.Deserialize<FigureDataRoot>(jsonString, JsonOptions);
 
         if (figureData == null)
         {

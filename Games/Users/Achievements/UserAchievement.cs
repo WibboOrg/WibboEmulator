@@ -1,15 +1,8 @@
 namespace WibboEmulator.Games.Users.Achievements;
 
-public class UserAchievement
+public class UserAchievement(string achievementGroup, int level, int progress)
 {
-    public string Group { get; set; }
-    public int Level { get; set; }
-    public int Progress { get; set; }
-
-    public UserAchievement(string achievementGroup, int level, int progress)
-    {
-        this.Group = achievementGroup;
-        this.Level = level;
-        this.Progress = progress;
-    }
+    public string Group { get; set; } = achievementGroup;
+    public int Level { get; set; } = level;
+    public int Progress { get; set; } = progress;
 }

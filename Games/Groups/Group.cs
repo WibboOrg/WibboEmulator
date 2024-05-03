@@ -108,11 +108,11 @@ public class Group
         }
     }
 
-    public List<int> GetMembers => this._members.ToList();
+    public List<int> GetMembers => [.. this._members];
 
-    public List<int> GetRequests => this._requests.ToList();
+    public List<int> GetRequests => [.. this._requests];
 
-    public List<int> GetAdministrators => this._administrators.ToList();
+    public List<int> GetAdministrators => [.. this._administrators];
 
     public List<int> GetAllMembers
     {

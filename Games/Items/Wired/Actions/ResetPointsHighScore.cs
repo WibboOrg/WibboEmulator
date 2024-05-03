@@ -4,12 +4,8 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-public class ResetPointsHighScore : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
+public class ResetPointsHighScore(Item item, Room room) : WiredActionBase(item, room, (int)WiredActionType.CHASE), IWired, IWiredEffect, IWiredCycleable
 {
-    public ResetPointsHighScore(Item item, Room room) : base(item, room, (int)WiredActionType.CHASE)
-    {
-    }
-
     public override bool OnCycle(RoomUser user, Item item)
     {
         if (this.Items.Count == 0)

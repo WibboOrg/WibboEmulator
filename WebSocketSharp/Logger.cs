@@ -71,7 +71,7 @@ public class Logger(LogLevel level, string file, Action<LogData, string> output)
     #region Private Fields
     private volatile LogLevel _level = level;
     private Action<LogData, string> _output = output ?? DefaultOutput;
-    private readonly object _sync = new object();
+    private readonly object _sync = new();
 
     #endregion
 

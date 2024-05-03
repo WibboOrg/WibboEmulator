@@ -2,40 +2,21 @@ namespace WibboEmulator.Games.Users.Inventory.Bots;
 
 using WibboEmulator.Games.Rooms.AI;
 
-public class Bot
+public class Bot(int id, int ownerId, string name, string motto, string figure, string gender, bool walkingEnabled, bool chatEnabled, string chatText, int chatSeconds, bool isDancing, int enable, int handitem, int status, BotAIType aiType)
 {
-    public int Id { get; set; }
-    public int OwnerId { get; set; }
-    public string Name { get; set; }
-    public string Motto { get; set; }
-    public string Figure { get; set; }
-    public string Gender { get; set; }
-    public bool WalkingEnabled { get; set; }
-    public bool ChatEnabled { get; set; }
-    public string ChatText { get; set; }
-    public int ChatSeconds { get; set; }
-    public bool IsDancing { get; set; }
-    public int Enable { get; set; }
-    public int Handitem { get; set; }
-    public int Status { get; set; }
-    public BotAIType AIType { get; set; }
-
-    public Bot(int id, int ownerId, string name, string motto, string figure, string gender, bool walkingEnabled, bool chatEnabled, string chatText, int chatSeconds, bool isDancing, int enable, int handitem, int status, BotAIType aiType)
-    {
-        this.Id = id;
-        this.OwnerId = ownerId;
-        this.Name = name;
-        this.Motto = motto;
-        this.Figure = figure;
-        this.Gender = gender;
-        this.WalkingEnabled = walkingEnabled;
-        this.ChatEnabled = chatEnabled;
-        this.ChatText = chatText;
-        this.ChatSeconds = chatSeconds;
-        this.IsDancing = isDancing;
-        this.Enable = enable;
-        this.Handitem = handitem;
-        this.Status = status;
-        this.AIType = aiType;
-    }
+    public int Id { get; set; } = id;
+    public int OwnerId { get; set; } = ownerId;
+    public string Name { get; set; } = name;
+    public string Motto { get; set; } = motto;
+    public string Figure { get; set; } = figure;
+    public string Gender { get; set; } = gender;
+    public bool WalkingEnabled { get; set; } = walkingEnabled;
+    public bool ChatEnabled { get; set; } = chatEnabled;
+    public string ChatText { get; set; } = chatText;
+    public int ChatSeconds { get; set; } = chatSeconds;
+    public bool IsDancing { get; set; } = isDancing;
+    public int Enable { get; set; } = enable;
+    public int Handitem { get; set; } = handitem;
+    public int Status { get; set; } = status;
+    public BotAIType AIType { get; set; } = aiType;
 }

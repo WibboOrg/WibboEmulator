@@ -1,13 +1,7 @@
 namespace WibboEmulator.Games.Users.Messenger;
 
-public class Relationship
+public class Relationship(int user, int type)
 {
-    public int UserId { get; private set; }
-    public int Type { get; set; }
-
-    public Relationship(int user, int type)
-    {
-        this.UserId = user;
-        this.Type = type;
-    }
+    public int UserId { get; private set; } = user;
+    public int Type { get; set; } = type;
 }

@@ -6,12 +6,8 @@ using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games.Teams;
 
-public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
+public class SuperWiredCondition(Item item, Room room) : WiredConditionBase(item, room, (int)WiredConditionType.ACTOR_IS_WEARING_BADGE), IWiredCondition, IWired
 {
-    public SuperWiredCondition(Item item, Room room) : base(item, room, (int)WiredConditionType.ACTOR_IS_WEARING_BADGE)
-    {
-    }
-
     public override void LoadItems(bool inDatabase = false)
     {
         base.LoadItems(inDatabase);

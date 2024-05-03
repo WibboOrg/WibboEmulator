@@ -110,22 +110,12 @@ public class WiredUtillity
     }
 }
 
-public class ItemsPosReset
+public class ItemsPosReset(int id, int x, int y, double z, int rot, string extraData)
 {
-    public int Id { get; set; }
-    public int X { get; set; }
-    public int Y { get; set; }
-    public double Z { get; set; }
-    public int Rot { get; set; }
-    public string ExtraData { get; set; }
-
-    public ItemsPosReset(int id, int x, int y, double z, int rot, string extraData)
-    {
-        this.Id = id;
-        this.X = x;
-        this.Y = y;
-        this.Z = z;
-        this.Rot = rot;
-        this.ExtraData = extraData;
-    }
+    public int Id { get; set; } = id;
+    public int X { get; set; } = x;
+    public int Y { get; set; } = y;
+    public double Z { get; set; } = z;
+    public int Rot { get; set; } = rot;
+    public string ExtraData { get; set; } = extraData;
 }

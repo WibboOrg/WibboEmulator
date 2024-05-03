@@ -27,12 +27,8 @@ using WibboEmulator.Games.Effects;
 using WibboEmulator.Games.Achievements;
 using WibboEmulator.Utilities;
 
-public class SuperWired : WiredActionBase, IWired, IWiredEffect
+public class SuperWired(Item item, Room room) : WiredActionBase(item, room, (int)WiredActionType.CHAT), IWired, IWiredEffect
 {
-    public SuperWired(Item item, Room room) : base(item, room, (int)WiredActionType.CHAT)
-    {
-    }
-
     public override void LoadItems(bool inDatabase = false)
     {
         base.LoadItems();
@@ -1642,7 +1638,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                             "" //Look
                         };
 
-                    chooseList.Add(list.ToArray());
+                    chooseList.Add([.. list]);
                 }
 
                 roomUser.Client.SendPacket(new BotChooseComposer(chooseList));
@@ -1716,7 +1712,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                                 list.Add("");
                             }
 
-                            chooseList.Add(list.ToArray());
+                            chooseList.Add([.. list]);
                         }
                     }
                 }
@@ -1735,7 +1731,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                             list.Add("");
                         }
 
-                        chooseList.Add(list.ToArray());
+                        chooseList.Add([.. list]);
                     }
                 }
 

@@ -1,17 +1,10 @@
 namespace WibboEmulator.Games.Chats.Styles;
 
-public sealed class ChatStyle
+public sealed class ChatStyle(int id, string name, string requiredRight)
 {
-    public ChatStyle(int id, string name, string requiredRight)
-    {
-        this.Id = id;
-        this.Name = name;
-        this.RequiredRight = requiredRight;
-    }
+    public int Id { get; set; } = id;
 
-    public int Id { get; set; }
+    public string Name { get; set; } = name;
 
-    public string Name { get; set; }
-
-    public string RequiredRight { get; set; }
+    public string RequiredRight { get; set; } = requiredRight;
 }

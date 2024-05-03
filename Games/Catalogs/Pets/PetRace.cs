@@ -1,19 +1,10 @@
 namespace WibboEmulator.Games.Catalogs.Pets;
 
-public class PetRace
+public class PetRace(int raceId, int primaryColour, int secondaryColour, bool hasPrimaryColour, bool hasSecondaryColour)
 {
-    public PetRace(int raceId, int primaryColour, int secondaryColour, bool hasPrimaryColour, bool hasSecondaryColour)
-    {
-        this.RaceId = raceId;
-        this.PrimaryColour = primaryColour;
-        this.SecondaryColour = secondaryColour;
-        this.HasPrimaryColour = hasPrimaryColour;
-        this.HasSecondaryColour = hasSecondaryColour;
-    }
-
-    public int RaceId { get; set; }
-    public int PrimaryColour { get; set; }
-    public int SecondaryColour { get; set; }
-    public bool HasPrimaryColour { get; set; }
-    public bool HasSecondaryColour { get; set; }
+    public int RaceId { get; set; } = raceId;
+    public int PrimaryColour { get; set; } = primaryColour;
+    public int SecondaryColour { get; set; } = secondaryColour;
+    public bool HasPrimaryColour { get; set; } = hasPrimaryColour;
+    public bool HasSecondaryColour { get; set; } = hasSecondaryColour;
 }

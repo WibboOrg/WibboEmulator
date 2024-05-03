@@ -1,7 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.Stickys;
 
-using System.Drawing;
-using WibboEmulator.Core;
 using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;

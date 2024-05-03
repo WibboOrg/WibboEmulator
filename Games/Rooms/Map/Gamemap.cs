@@ -66,8 +66,8 @@ public class GameMap
         {
             user.RemoveStatus("mv");
             user.UpdateNeeded = true;
-            item.            Room.SendPacket(RoomItemHandling.TeleportUser(user, item.Coordinate, 0, item.Z, true));
-            item.            Room.RoomUserManager.UpdateUserStatus(user, false);
+            item.Room.SendPacket(RoomItemHandling.TeleportUser(user, item.Coordinate, 0, item.Z, true));
+            item.Room.RoomUserManager.UpdateUserStatus(user, false);
         }
     }
 
@@ -143,7 +143,7 @@ public class GameMap
     {
         if (this._userMap.TryGetValue(coord, out var value))
         {
-            return value.ToList();
+            return [.. value];
         }
         else
         {
@@ -165,7 +165,7 @@ public class GameMap
             usersNear.AddRange(users.Value);
         }
 
-        return usersNear.OrderBy(u => !u.IsBot).ToList();
+        return [.. usersNear.OrderBy(u => !u.IsBot)];
     }
 
     public Point GetRandomWalkableSquare(int x, int y)
@@ -807,7 +807,7 @@ public class GameMap
             }
         }
 
-        return pointList.OrderBy(x => x.X + x.Y).ToList();
+        return [.. pointList.OrderBy(x => x.X + x.Y)];
     }
 
     public List<Item> GetRoomItemForSquare(int pX, int pY, double minZ)

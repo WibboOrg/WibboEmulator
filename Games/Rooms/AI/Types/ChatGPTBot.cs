@@ -310,7 +310,7 @@ public partial class ChatGPTBot : BotAI
                     Content = firstPrompt,
                     Role = "system"
                 };
-                var messagesSend = new List<ChatCompletionMessage>(new[] { prePrompt });
+                var messagesSend = new List<ChatCompletionMessage>([prePrompt]);
                 messagesSend.AddRange(this._userMessages.TryGetValue(userId, out var userMessages) ? userMessages : []);
 
                 var messagesGtp = await OpenAIProxy.SendChatMessage(messagesSend);

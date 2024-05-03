@@ -71,13 +71,8 @@ public static class HallOfFameManager
             return;
         }
 
-        if (UserRanking.Contains(user))
-        {
-            UserRanking.Remove(user);
-        }
-
+        _ = UserRanking.Remove(user);
         UserRanking.Add(user);
-
         UserRanking = UserRanking.OrderByDescending(x => x.GamePointsMonth).Take(MAX_USERS).ToList();
     }
 }

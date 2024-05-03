@@ -39,40 +39,26 @@ namespace WibboEmulator.WebSocketSharp.Net;
 #endregion
 
 
-internal sealed class ReadBufferState
+internal sealed class ReadBufferState(
+  byte[] buffer, int offset, int count, HttpStreamAsyncResult asyncResult
+    )
 {
-    #region Private Fields
-
-
-    #endregion
 
     #region Public Constructors
-
-    public ReadBufferState(
-      byte[] buffer, int offset, int count, HttpStreamAsyncResult asyncResult
-    )
-    {
-        this.Buffer = buffer;
-        this.Offset = offset;
-        this.Count = count;
-        this.AsyncResult = asyncResult;
-
-        this.InitialCount = count;
-    }
 
     #endregion
 
     #region Public Properties
 
-    public HttpStreamAsyncResult AsyncResult { get; set; }
+    public HttpStreamAsyncResult AsyncResult { get; set; } = asyncResult;
 
-    public byte[] Buffer { get; set; }
+    public byte[] Buffer { get; set; } = buffer;
 
-    public int Count { get; set; }
+    public int Count { get; set; } = count;
 
-    public int InitialCount { get; set; }
+    public int InitialCount { get; set; } = count;
 
-    public int Offset { get; set; }
+    public int Offset { get; set; } = offset;
 
     #endregion
 }

@@ -1,21 +1,11 @@
 namespace WibboEmulator.Games.Catalogs;
 
-public class CatalogBot
+public class CatalogBot(int id, string name, string figure, string motto, string gender, string aiType)
 {
-    public int Id { get; private set; }
-    public string Figure { get; private set; }
-    public string Gender { get; private set; }
-    public string Motto { get; private set; }
-    public string Name { get; private set; }
-    public string AIType { get; private set; }
-
-    public CatalogBot(int id, string name, string figure, string motto, string gender, string aiType)
-    {
-        this.Id = id;
-        this.Name = name;
-        this.Figure = figure;
-        this.Motto = motto;
-        this.Gender = gender;
-        this.AIType = aiType;
-    }
+    public int Id { get; private set; } = id;
+    public string Figure { get; private set; } = figure;
+    public string Gender { get; private set; } = gender;
+    public string Motto { get; private set; } = motto;
+    public string Name { get; private set; } = name;
+    public string AIType { get; private set; } = aiType;
 }

@@ -1,25 +1,19 @@
 namespace WibboEmulator.Utilities.Enclosure;
 using System.Drawing;
 
-public class PointField
+public class PointField(byte forValue)
 {
     private static readonly Point BadPoint = new(-1, -1);
     private Point _mostLeft = BadPoint;
     private Point _mostTop = BadPoint;
     private Point _mostRight = BadPoint;
     private Point _mostDown = BadPoint;
-    private readonly List<Point> _pointList;
+    private readonly List<Point> _pointList = [];
 
-    public byte ForValue { get; private set; }
+    public byte ForValue { get; private set; } = forValue;
 
     static PointField()
     {
-    }
-
-    public PointField(byte forValue)
-    {
-        this._pointList = [];
-        this.ForValue = forValue;
     }
 
     public List<Point> Points => this._pointList;

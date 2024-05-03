@@ -254,7 +254,7 @@ public class PetBot : BotAI
             {
                 this.RemovePetStatus();
                 var randomWalkableSquare = this.Room.GameMap.GetRandomWalkableSquare(this.BotData.X, this.BotData.Y);
-                this.                RoomUser.MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
+                this.RoomUser.MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
             }
         }
         else
@@ -265,7 +265,7 @@ public class PetBot : BotAI
         if (this._energyTimer <= 0)
         {
             this.RemovePetStatus();
-            this.            RoomUser.PetData.PetEnergy(true);
+            this.RoomUser.PetData.PetEnergy(true);
             this._energyTimer = WibboEnvironment.GetRandomNumber(30, 120);
         }
         else
@@ -278,13 +278,13 @@ public class PetBot : BotAI
             var user = this.Room.RoomUserManager.GetRoomUserByVirtualId(this.BotData.FollowUser);
             if (user == null)
             {
-                this.                BotData.FollowUser = 0;
+                this.BotData.FollowUser = 0;
             }
             else
             {
                 if (!GameMap.TilesTouching(this.RoomUser.X, this.RoomUser.Y, user.X, user.Y))
                 {
-                    this.                    RoomUser.MoveTo(user.X, user.Y, true);
+                    this.RoomUser.MoveTo(user.X, user.Y, true);
                 }
             }
         }

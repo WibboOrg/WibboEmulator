@@ -397,11 +397,11 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
         }
     }
 
-    public class PathNode : IPathNode, IComparer<PathNode>, IWeightAddable<double>
+    public class PathNode(int inX, int inY, TPathNode inUserContext) : IPathNode, IComparer<PathNode>, IWeightAddable<double>
     {
         public static readonly PathNode Comparer = new(0, 0, default);
 
-        public TPathNode UserItem { get; internal set; }
+        public TPathNode UserItem { get; internal set; } = inUserContext;
         public double G { get; internal set; }
         public double Optimal { get; internal set; }
         public double F { get; internal set; }
@@ -410,8 +410,8 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
 
         public bool IsBlocked(int x, int y, bool lastTile) => this.UserItem.IsBlocked(x, y, lastTile);
 
-        public int X { get; internal set; }
-        public int Y { get; internal set; }
+        public int X { get; internal set; } = inX;
+        public int Y { get; internal set; } = inY;
         public int ExtraWeight { get; set; }
         public int Compare(PathNode x, PathNode y)
         {
@@ -426,14 +426,6 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
 
             return 0;
         }
-
-        public PathNode(int inX, int inY, TPathNode inUserContext)
-        {
-            this.X = inX;
-            this.Y = inY;
-            this.UserItem = inUserContext;
-        }
-
 
         public double WeightChange
         {

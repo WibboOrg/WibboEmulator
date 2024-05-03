@@ -3,17 +3,8 @@ namespace WibboEmulator.Games.Catalogs.Vouchers;
 using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Catalog;
 
-public class Voucher
+public class Voucher(string code, string type, int value, int currentUses, int maxUses)
 {
-    public Voucher(string code, string type, int value, int currentUses, int maxUses)
-    {
-        this.Code = code;
-        this.Type = VoucherUtility.GetType(type);
-        this.Value = value;
-        this.CurrentUses = currentUses;
-        this.MaxUses = maxUses;
-    }
-
     public void UpdateUses()
     {
         this.CurrentUses += 1;
@@ -22,9 +13,9 @@ public class Voucher
         CatalogVoucherDao.Update(dbClient, this.Code);
     }
 
-    public string Code { get; set; }
-    public VoucherType Type { get; set; }
-    public int Value { get; set; }
-    public int CurrentUses { get; set; }
-    public int MaxUses { get; set; }
+    public string Code { get; set; } = code;
+    public VoucherType Type { get; set; } = VoucherUtility.GetType(type);
+    public int Value { get; set; } = value;
+    public int CurrentUses { get; set; } = currentUses;
+    public int MaxUses { get; set; } = maxUses;
 }

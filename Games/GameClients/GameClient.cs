@@ -9,29 +9,18 @@ using WibboEmulator.Core.Language;
 using WibboEmulator.Games.Users;
 using WibboEmulator.Utilities;
 
-public class GameClient
+public class GameClient(string clientId, GameWebSocket connection)
 {
-    private readonly Dictionary<int, double> _packetTimeout;
-    private int _packetCount;
-    private double _packetLastTimestamp;
+    private readonly Dictionary<int, double> _packetTimeout = [];
+    private int _packetCount = 0;
+    private double _packetLastTimestamp = UnixTimestamp.GetNow();
 
     public string SSOTicket { get; set; }
-    public Language Language { get; set; }
-    public string ConnectionID { get; set; }
+    public Language Language { get; set; } = Language.French;
+    public string ConnectionID { get; set; } = clientId;
     public bool IsDisconnected { get; set; }
-    public GameWebSocket Connection { get; private set; }
+    public GameWebSocket Connection { get; private set; } = connection;
     public User User { get; set; }
-
-    public GameClient(string clientId, GameWebSocket connection)
-    {
-        this.ConnectionID = clientId;
-        this.Connection = connection;
-        this.Language = Language.French;
-
-        this._packetTimeout = [];
-        this._packetCount = 0;
-        this._packetLastTimestamp = UnixTimestamp.GetNow();
-    }
 
     public void UpdateClient(GameClient oldClient)
     {

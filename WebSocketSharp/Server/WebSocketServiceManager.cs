@@ -491,7 +491,7 @@ public class WebSocketServiceManager
 
         lock (this._sync)
         {
-            hosts = this._hosts.Values.ToList();
+            hosts = [.. this._hosts.Values];
 
             this._hosts.Clear();
         }

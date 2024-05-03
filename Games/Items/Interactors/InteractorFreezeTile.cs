@@ -44,7 +44,7 @@ public class InteractorFreezeTile : FurniInteractor
 
         item.ExtraData = "11000";
         item.UpdateState(false);
-        item.        Room.Freeze.OnFreezeTiles(item, item.FreezePowerUp, item.InteractingUser);
+        item.Room.Freeze.OnFreezeTiles(item, item.FreezePowerUp, item.InteractingUser);
         item.InteractingUser = 0;
         item.InteractionCountHelper = 0;
     }

@@ -33,7 +33,7 @@ using System.Collections.Specialized;
 using System.Text;
 using WibboEmulator.WebSocketSharp;
 
-internal abstract class AuthenticationBase
+internal abstract class AuthenticationBase(AuthenticationSchemes scheme, NameValueCollection parameters)
 {
     #region Private Fields
 
@@ -42,17 +42,10 @@ internal abstract class AuthenticationBase
 
     #region Internal Fields
 
-    internal NameValueCollection Parameters { get; set; }
+    internal NameValueCollection Parameters { get; set; } = parameters;
 
     #endregion
-
     #region Protected Constructors
-
-    protected AuthenticationBase(AuthenticationSchemes scheme, NameValueCollection parameters)
-    {
-        this.Scheme = scheme;
-        this.Parameters = parameters;
-    }
 
     #endregion
 
@@ -68,7 +61,7 @@ internal abstract class AuthenticationBase
 
     public string Realm => this.Parameters["realm"];
 
-    public AuthenticationSchemes Scheme { get; }
+    public AuthenticationSchemes Scheme { get; } = scheme;
 
     #endregion
 
