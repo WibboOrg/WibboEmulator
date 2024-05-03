@@ -374,7 +374,7 @@ public class MessengerComponent(User user) : IDisposable
         }
     }
 
-    public List<Relationship> Relationships => this.Friends.Values.Select(c => new Relationship(c.UserId, c.Relation)).ToList();
+    public List<Relationship> Relationships => [.. this.Relation.Values];
 
     private GameClient Client => GameClientManager.GetClientByUserID(user.Id);
 }
