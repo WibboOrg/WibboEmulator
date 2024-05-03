@@ -8,7 +8,7 @@ internal sealed class ConstruitStop : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        userRoom.ConstruitEnable = false;
+        userRoom.BuildToolEnable = false;
 
         session.SendWhisper(LanguageManager.TryGetValue("cmd.construit.disabled", session.Language));
     }

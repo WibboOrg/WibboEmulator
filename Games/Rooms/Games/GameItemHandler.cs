@@ -3,22 +3,12 @@ using System.Drawing;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
 
-public class GameItemHandler
+public class GameItemHandler(Room room)
 {
-    private Dictionary<int, Item> _banzaiTeleports;
-    private Dictionary<int, Item> _banzaiPyramids;
-    private readonly Dictionary<Point, List<Item>> _groupGate;
-    private readonly Dictionary<int, Item> _banzaiBlobs;
-    private Room _room;
-
-    public GameItemHandler(Room room)
-    {
-        this._room = room;
-        this._banzaiPyramids = [];
-        this._banzaiTeleports = [];
-        this._groupGate = [];
-        this._banzaiBlobs = [];
-    }
+    private Dictionary<int, Item> _banzaiTeleports = [];
+    private Dictionary<int, Item> _banzaiPyramids = [];
+    private readonly Dictionary<Point, List<Item>> _groupGate = [];
+    private readonly Dictionary<int, Item> _banzaiBlobs = [];
 
     public void OnCycle() => this.CyclePyramids();
 
@@ -46,13 +36,13 @@ public class GameItemHandler
                 {
                     roomItem.ExtraData = "1";
                     roomItem.UpdateState();
-                    this._room.GameMap.UpdateMapForItem(roomItem);
+                    room.GameMap.UpdateMapForItem(roomItem);
                 }
-                else if (this._room.GameMap.CanStackItem(roomItem.X, roomItem.Y))
+                else if (room.GameMap.CanStackItem(roomItem.X, roomItem.Y))
                 {
                     roomItem.ExtraData = "0";
                     roomItem.UpdateState();
-                    this._room.GameMap.UpdateMapForItem(roomItem);
+                    room.GameMap.UpdateMapForItem(roomItem);
                 }
             }
         }
@@ -107,7 +97,7 @@ public class GameItemHandler
             return;
         }
 
-        this._room.
+        room.
         GameManager.AddPointToTeam(user.Team, user);
         item.ExtraData = "1";
         item.UpdateState();
@@ -120,7 +110,7 @@ public class GameItemHandler
             return;
         }
 
-        this._room.
+        room.
         GameManager.AddPointToTeam(user.Team, 5, user);
         item.ExtraData = "1";
         item.UpdateState();
@@ -271,6 +261,6 @@ public class GameItemHandler
 
         this._banzaiPyramids = null;
         this._banzaiTeleports = null;
-        this._room = null;
+        room = null;
     }
 }

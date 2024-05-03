@@ -16,8 +16,8 @@ internal sealed class Construit : IChatCommand
         {
             if (result is >= 0.01 and <= 10)
             {
-                userRoom.ConstruitEnable = true;
-                userRoom.ConstruitHeigth = result;
+                userRoom.BuildToolEnable = true;
+                userRoom.BuildToolHeight = result;
             }
         }
 

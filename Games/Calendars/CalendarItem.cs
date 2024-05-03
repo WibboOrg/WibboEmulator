@@ -1,17 +1,8 @@
 ﻿namespace WibboEmulator.Games.Calendars;
 
-public class CalendarItem
+public class CalendarItem(string campaignName, string campaignImage)
 {
-    private readonly string _campaignName;
-    private readonly string _campaignImage;
+    public string CampaignName() => campaignName;
 
-    public CalendarItem(string campaignName, string campaignImage)
-    {
-        this._campaignName = campaignName;
-        this._campaignImage = campaignImage;
-    }
-
-    public string CampaignName() => this._campaignName;
-
-    public string CampaignImage() => this._campaignImage;
+    public string CampaignImage() => campaignImage;
 }

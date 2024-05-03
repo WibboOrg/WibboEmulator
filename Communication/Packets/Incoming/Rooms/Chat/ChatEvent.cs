@@ -11,12 +11,9 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 using WibboEmulator.Utilities;
 
-internal sealed partial class ChatEvent : IPacketEvent
+internal sealed partial class ChatEvent(bool isShout = false) : IPacketEvent
 {
     public double Delay => 100;
-    private readonly bool _isShout;
-
-    public ChatEvent(bool isShout = false) => this._isShout = isShout;
 
     public void Parse(GameClient session, ClientPacket packet)
     {
@@ -180,7 +177,7 @@ internal sealed partial class ChatEvent : IPacketEvent
             return;
         }
 
-        room.OnUserSay(user, message, this._isShout);
+        room.OnUserSay(user, message, isShout);
 
         if (user.IsSpectator)
         {
@@ -192,7 +189,7 @@ internal sealed partial class ChatEvent : IPacketEvent
             message = MentionManager.Parse(session, message);
         }
 
-        user.OnChat(message, color, this._isShout, chatColour);
+        user.OnChat(message, color, isShout, chatColour);
     }
 
     [GeneratedRegex("\\[tag\\](.*?)\\[\\/tag\\]")]

@@ -6,23 +6,13 @@ using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Utilities;
 
-public class ProjectileManager
+public class ProjectileManager(Room room)
 {
     private readonly object _projectileSync = new();
 
-    private readonly List<ItemTemp> _projectile;
-    private readonly ConcurrentQueue<ItemTemp> _queueProjectile;
-    private readonly Room _room;
-
-    private readonly ServerPacketList _messages;
-
-    public ProjectileManager(Room room)
-    {
-        this._projectile = [];
-        this._queueProjectile = new ConcurrentQueue<ItemTemp>();
-        this._room = room;
-        this._messages = new ServerPacketList();
-    }
+    private readonly List<ItemTemp> _projectile = [];
+    private readonly ConcurrentQueue<ItemTemp> _queueProjectile = new ConcurrentQueue<ItemTemp>();
+    private readonly ServerPacketList _messages = new ServerPacketList();
 
     public void OnCycle()
     {
@@ -65,7 +55,7 @@ public class ProjectileManager
 
                 if (item.Distance <= 0)
                 {
-                    usersTouch = this._room.GameMap.GetNearUsers(new Point(newPoint.X, newPoint.Y), 2);
+                    usersTouch = room.GameMap.GetNearUsers(new Point(newPoint.X, newPoint.Y), 2);
 
                     endProjectile = true;
                 }
@@ -78,7 +68,7 @@ public class ProjectileManager
                 {
                     newPoint = MovementUtility.GetMoveCoord(item.X, item.Y, i, item.Movement);
 
-                    usersTouch = this._room.GameMap.GetRoomUsers(newPoint);
+                    usersTouch = room.GameMap.GetRoomUsers(newPoint);
 
                     foreach (var userTouch in usersTouch)
                     {
@@ -88,7 +78,7 @@ public class ProjectileManager
                         }
                     }
 
-                    if (this._room.GameMap.CanStackItem(newPoint.X, newPoint.Y, true) && (this._room.GameMap.SqAbsoluteHeight(newPoint.X, newPoint.Y) <= item.Z + 0.5))
+                    if (room.GameMap.CanStackItem(newPoint.X, newPoint.Y, true) && (room.GameMap.SqAbsoluteHeight(newPoint.X, newPoint.Y) <= item.Z + 0.5))
                     {
                         newX = newPoint.X;
                         newY = newPoint.Y;
@@ -168,7 +158,7 @@ public class ProjectileManager
 
         bulletUser.Clear();
 
-        this._room.SendMessage(this._messages);
+        room.SendMessage(this._messages);
         this._messages.Clear();
     }
 
@@ -179,7 +169,7 @@ public class ProjectileManager
             return;
         }
 
-        if (this._room.IsRoleplay)
+        if (room.IsRoleplay)
         {
             if (userTouch.VirtualId == item.VirtualUserId)
             {
@@ -193,7 +183,7 @@ public class ProjectileManager
                     return;
                 }
 
-                userTouch.BotData.RoleBot.Hit(userTouch, item.Value, this._room, item.VirtualUserId, item.TeamId);
+                userTouch.BotData.RoleBot.Hit(userTouch, item.Value, room, item.VirtualUserId, item.TeamId);
             }
             else
             {
@@ -209,12 +199,12 @@ public class ProjectileManager
                     return;
                 }
 
-                rp.Hit(userTouch, item.Value, this._room, true, item.InteractionType == InteractionTypeTemp.ProjectileBot);
+                rp.Hit(userTouch, item.Value, room, true, item.InteractionType == InteractionTypeTemp.ProjectileBot);
             }
         }
         else
         {
-            this._room.WiredHandler.TriggerCollision(userTouch, null);
+            room.WiredHandler.TriggerCollision(userTouch, null);
         }
     }
 
@@ -225,7 +215,7 @@ public class ProjectileManager
             return false;
         }
 
-        if (!this._room.IsRoleplay)
+        if (!room.IsRoleplay)
         {
             return true;
         }
@@ -277,12 +267,12 @@ public class ProjectileManager
 
         _ = this._projectile.Remove(item);
 
-        this._room.RoomItemHandling.RemoveTempItem(item.Id);
+        room.RoomItemHandling.RemoveTempItem(item.Id);
     }
 
     public void AddProjectile(int id, int x, int y, double z, MovementDirection movement, int dmg = 0, int distance = 10, int teamId = -1, bool isBot = false)
     {
-        var item = this._room.RoomItemHandling.AddTempItem(id, 77151726, x, y, z, "1", dmg, isBot ? InteractionTypeTemp.ProjectileBot : InteractionTypeTemp.Projectile, movement, distance, teamId);
+        var item = room.RoomItemHandling.AddTempItem(id, 77151726, x, y, z, "1", dmg, isBot ? InteractionTypeTemp.ProjectileBot : InteractionTypeTemp.Projectile, movement, distance, teamId);
 
         lock (this._projectileSync)
         {

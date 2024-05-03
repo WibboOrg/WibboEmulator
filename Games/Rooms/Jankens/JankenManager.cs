@@ -2,18 +2,10 @@ namespace WibboEmulator.Games.Rooms.Jankens;
 using System.Collections.Concurrent;
 using WibboEmulator.Core.Language;
 
-public class JankenManager
+public class JankenManager(Room room)
 {
-    private readonly ConcurrentDictionary<int, Janken> _party;
-    private readonly List<Janken> _remove;
-    private readonly Room _room;
-
-    public JankenManager(Room room)
-    {
-        this._party = new ConcurrentDictionary<int, Janken>();
-        this._remove = [];
-        this._room = room;
-    }
+    private readonly ConcurrentDictionary<int, Janken> _party = new ConcurrentDictionary<int, Janken>();
+    private readonly List<Janken> _remove = [];
 
     public void Start(RoomUser user, RoomUser duelUser)
     {
@@ -87,8 +79,8 @@ public class JankenManager
                 {
                     party.Started = false;
 
-                    var roomuserOne = this._room.RoomUserManager.GetRoomUserByUserId(party.UserOne);
-                    var roomuserTwo = this._room.RoomUserManager.GetRoomUserByUserId(party.UserTwo);
+                    var roomuserOne = room.RoomUserManager.GetRoomUserByUserId(party.UserOne);
+                    var roomuserTwo = room.RoomUserManager.GetRoomUserByUserId(party.UserTwo);
 
                     if (roomuserOne != null)
                     {
@@ -183,8 +175,8 @@ public class JankenManager
 
     private bool EndGame(Janken party)
     {
-        var roomuserOne = this._room.RoomUserManager.GetRoomUserByUserId(party.UserOne);
-        var roomuserTwo = this._room.RoomUserManager.GetRoomUserByUserId(party.UserTwo);
+        var roomuserOne = room.RoomUserManager.GetRoomUserByUserId(party.UserOne);
+        var roomuserTwo = room.RoomUserManager.GetRoomUserByUserId(party.UserTwo);
         if (roomuserOne == null && roomuserTwo == null)
         {
             return true;
@@ -304,8 +296,8 @@ public class JankenManager
 
         if (!party.Started)
         {
-            var roomuserOne = this._room.RoomUserManager.GetRoomUserByUserId(party.UserOne);
-            var roomuserTwo = this._room.RoomUserManager.GetRoomUserByUserId(party.UserTwo);
+            var roomuserOne = room.RoomUserManager.GetRoomUserByUserId(party.UserOne);
+            var roomuserTwo = room.RoomUserManager.GetRoomUserByUserId(party.UserTwo);
 
             if (roomuserOne != null)
             {

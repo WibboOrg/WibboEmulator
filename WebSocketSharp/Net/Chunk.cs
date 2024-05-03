@@ -41,24 +41,20 @@ namespace WibboEmulator.WebSocketSharp.Net;
 
 using System;
 
-internal sealed class Chunk
+internal sealed class Chunk(byte[] data)
 {
-    #region Private Fields
 
-    private readonly byte[] _data;
+    #region Private Fields
     private int _offset;
 
     #endregion
-
     #region Public Constructors
-
-    public Chunk(byte[] data) => this._data = data;
 
     #endregion
 
     #region Public Properties
 
-    public int ReadLeft => this._data.Length - this._offset;
+    public int ReadLeft => data.Length - this._offset;
 
     #endregion
 
@@ -66,7 +62,7 @@ internal sealed class Chunk
 
     public int Read(byte[] buffer, int offset, int count)
     {
-        var left = this._data.Length - this._offset;
+        var left = data.Length - this._offset;
 
         if (left == 0)
         {
@@ -78,7 +74,7 @@ internal sealed class Chunk
             count = left;
         }
 
-        Buffer.BlockCopy(this._data, this._offset, buffer, offset, count);
+        Buffer.BlockCopy(data, this._offset, buffer, offset, count);
 
         this._offset += count;
 

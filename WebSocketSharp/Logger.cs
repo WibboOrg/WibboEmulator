@@ -50,14 +50,28 @@ using System.IO;
 ///   property.
 ///   </para>
 /// </remarks>
-public class Logger
+/// <remarks>
+/// Initializes a new instance of the <see cref="Logger"/> class with
+/// the specified logging level, path to the log file, and delegate
+/// used to output a log.
+/// </remarks>
+/// <param name="level">
+/// One of the <see cref="LogLevel"/> enum values that specifies
+/// the logging level.
+/// </param>
+/// <param name="file">
+/// A <see cref="string"/> that specifies the path to the log file.
+/// </param>
+/// <param name="output">
+/// the delegate used to output a log.
+/// </param>
+public class Logger(LogLevel level, string file, Action<LogData, string> output)
 {
-    #region Private Fields
 
-    private volatile string _file;
-    private volatile LogLevel _level;
-    private Action<LogData, string> _output;
-    private readonly object _sync;
+    #region Private Fields
+    private volatile LogLevel _level = level;
+    private Action<LogData, string> _output = output ?? DefaultOutput;
+    private readonly object _sync = new object();
 
     #endregion
 
@@ -87,30 +101,6 @@ public class Logger
     {
     }
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Logger"/> class with
-    /// the specified logging level, path to the log file, and delegate
-    /// used to output a log.
-    /// </summary>
-    /// <param name="level">
-    /// One of the <see cref="LogLevel"/> enum values that specifies
-    /// the logging level.
-    /// </param>
-    /// <param name="file">
-    /// A <see cref="string"/> that specifies the path to the log file.
-    /// </param>
-    /// <param name="output">
-    /// the delegate used to output a log.
-    /// </param>
-    public Logger(LogLevel level, string file, Action<LogData, string> output)
-    {
-        this._level = level;
-        this._file = file;
-        this._output = output ?? DefaultOutput;
-
-        this._sync = new object();
-    }
-
     #endregion
 
     #region Public Properties
@@ -123,13 +113,13 @@ public class Logger
     /// </value>
     public string File
     {
-        get => this._file;
+        get => file;
 
         set
         {
             lock (this._sync)
             {
-                this._file = value;
+                file = value;
             }
         }
     }
@@ -221,7 +211,7 @@ public class Logger
             {
                 var data = new LogData(level, new StackFrame(2, true), message);
 
-                this._output(data, this._file);
+                this._output(data, file);
             }
             catch (Exception ex)
             {

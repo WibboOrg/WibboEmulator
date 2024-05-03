@@ -2,21 +2,14 @@ namespace WibboEmulator.Games.Users.Achievements;
 using System.Data;
 using WibboEmulator.Database.Daos.User;
 
-public class AchievementComponent : IDisposable
+public class AchievementComponent(User user) : IDisposable
 {
-    private readonly User _user;
 
-    public Dictionary<string, UserAchievement> Achievements { get; }
-
-    public AchievementComponent(User user)
-    {
-        this._user = user;
-        this.Achievements = [];
-    }
+    public Dictionary<string, UserAchievement> Achievements { get; } = [];
 
     public void Initialize(IDbConnection dbClient)
     {
-        var achievementList = UserAchievementDao.GetAll(dbClient, this._user.Id);
+        var achievementList = UserAchievementDao.GetAll(dbClient, user.Id);
 
         foreach (var achievement in achievementList)
         {

@@ -7,24 +7,15 @@ using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.Users;
 
-public class BadgeComponent : IDisposable
+public class BadgeComponent(User user) : IDisposable
 {
-    private readonly User _user;
-    private int _virtualBadgeId;
+    private int _virtualBadgeId = 0;
 
-    public Dictionary<string, Badge> BadgeList { get; }
-
-    public BadgeComponent(User user)
-    {
-        this._user = user;
-        this.BadgeMaxCount = SettingsManager.GetData<int>("badge.max.count");
-        this._virtualBadgeId = 0;
-        this.BadgeList = [];
-    }
+    public Dictionary<string, Badge> BadgeList { get; } = [];
 
     public void Initialize(IDbConnection dbClient, bool onlyProfil = false)
     {
-        var userBadgeList = onlyProfil ? UserBadgeDao.GetAllProfil(dbClient, this._user.Id) : UserBadgeDao.GetAll(dbClient, this._user.Id);
+        var userBadgeList = onlyProfil ? UserBadgeDao.GetAllProfil(dbClient, user.Id) : UserBadgeDao.GetAll(dbClient, user.Id);
 
         foreach (var userBadge in userBadgeList)
         {
@@ -74,15 +65,15 @@ public class BadgeComponent : IDisposable
         if (inDatabase)
         {
             using var dbClient = DatabaseManager.Connection;
-            UserBadgeDao.Insert(dbClient, this._user.Id, 0, badge);
+            UserBadgeDao.Insert(dbClient, user.Id, 0, badge);
         }
 
         this.BadgeList.Add(badge, new Badge(badge, 0));
 
         this._virtualBadgeId++;
 
-        this._user.Client?.SendPacket(new UnseenItemsComposer(this._virtualBadgeId, UnseenItemsType.Badge));
-        this._user.Client?.SendPacket(new ReceiveBadgeComposer(this._virtualBadgeId, badge));
+        user.Client?.SendPacket(new UnseenItemsComposer(this._virtualBadgeId, UnseenItemsType.Badge));
+        user.Client?.SendPacket(new ReceiveBadgeComposer(this._virtualBadgeId, badge));
     }
 
     public void ResetSlots()
@@ -102,11 +93,11 @@ public class BadgeComponent : IDisposable
 
         using (var dbClient = DatabaseManager.Connection)
         {
-            UserBadgeDao.Delete(dbClient, this._user.Id, badge);
+            UserBadgeDao.Delete(dbClient, user.Id, badge);
         }
 
         _ = this.BadgeList.Remove(badge);
-        this._user.Client?.SendPacket(new RemovedBadgeComposer(badge));
+        user.Client?.SendPacket(new RemovedBadgeComposer(badge));
     }
 
     public int EmblemId
@@ -185,7 +176,7 @@ public class BadgeComponent : IDisposable
         }
     }
 
-    public int BadgeMaxCount { get; }
+    public int BadgeMaxCount { get; } = SettingsManager.GetData<int>("badge.max.count");
 
     public void Dispose()
     {

@@ -3,20 +3,11 @@ using System.Collections.Concurrent;
 using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 
-public class RolePlayerManager
+public class RolePlayerManager(int id, int hopitalId, int prisonId)
 {
-    private readonly ConcurrentDictionary<int, RolePlayer> _player;
-    private readonly int _id;
-    public int PrisonId { get; set; }
-    public int HopitalId { get; set; }
-
-    public RolePlayerManager(int id, int hopitalId, int prisonId)
-    {
-        this._id = id;
-        this.PrisonId = prisonId;
-        this.HopitalId = hopitalId;
-        this._player = new ConcurrentDictionary<int, RolePlayer>();
-    }
+    private readonly ConcurrentDictionary<int, RolePlayer> _player = new ConcurrentDictionary<int, RolePlayer>();
+    public int PrisonId { get; set; } = prisonId;
+    public int HopitalId { get; set; } = hopitalId;
 
     public void Update(int hopitalId, int prisonId)
     {
@@ -35,15 +26,15 @@ public class RolePlayerManager
 
         using (var dbClient = DatabaseManager.Connection)
         {
-            var rpUser = UserRoleplayDao.GetOne(dbClient, userId, this._id);
+            var rpUser = UserRoleplayDao.GetOne(dbClient, userId, id);
             if (rpUser == null)
             {
-                UserRoleplayDao.Insert(dbClient, userId, this._id);
-                player = new RolePlayer(this._id, userId, 100, 0, 0, 0, 100, 0, 0);
+                UserRoleplayDao.Insert(dbClient, userId, id);
+                player = new RolePlayer(id, userId, 100, 0, 0, 0, 100, 0, 0);
             }
             else
             {
-                player = new RolePlayer(this._id, userId, rpUser.Health, rpUser.Money, rpUser.Munition, rpUser.Exp, rpUser.Energy, rpUser.WeaponFar, rpUser.WeaponCac);
+                player = new RolePlayer(id, userId, rpUser.Health, rpUser.Money, rpUser.Munition, rpUser.Exp, rpUser.Energy, rpUser.WeaponFar, rpUser.WeaponCac);
             }
         }
 

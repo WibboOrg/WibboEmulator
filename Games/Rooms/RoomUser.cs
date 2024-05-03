@@ -70,9 +70,9 @@ public class RoomUser : IEquatable<RoomUser>
     public int DiceCounterAmount { get; set; }
     public int DiceCounter { get; set; }
 
-    public bool ConstruitEnable { get; set; }
-    public bool ConstruitZMode { get; set; }
-    public double ConstruitHeigth { get; set; }
+    public bool BuildToolEnable { get; set; }
+    public bool BuildToolStackHeight { get; set; }
+    public double BuildToolHeight { get; set; }
 
     public bool PendingTeleport { get; set; }
     public bool Freeze { get; set; }

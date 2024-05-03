@@ -27,8 +27,8 @@ internal sealed class SetZ : IChatCommand
             result = 100;
         }
 
-        userRoom.ConstruitZMode = true;
-        userRoom.ConstruitHeigth = result;
+        userRoom.BuildToolStackHeight = true;
+        userRoom.BuildToolHeight = result;
 
         session.SendWhisper("SetZ: " + result);
 

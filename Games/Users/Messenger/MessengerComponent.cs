@@ -8,37 +8,27 @@ using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
 
-public class MessengerComponent : IDisposable
+public class MessengerComponent(User user) : IDisposable
 {
-    private readonly User _user;
 
-    public Dictionary<int, MessengerRequest> Requests { get; private set; }
-    public Dictionary<int, MessengerBuddy> Friends { get; private set; }
-    public Dictionary<int, Relationship> Relation { get; private set; }
+    public Dictionary<int, MessengerRequest> Requests { get; private set; } = [];
+    public Dictionary<int, MessengerBuddy> Friends { get; private set; } = [];
+    public Dictionary<int, Relationship> Relation { get; private set; } = [];
     public bool AppearOffline { get; set; }
 
     public int Count => this._profilFriendCount > -1 ? this._profilFriendCount : this.Friends.Count;
 
     private int _profilFriendCount;
 
-    public MessengerComponent(User user)
-    {
-        this._user = user;
-
-        this.Requests = [];
-        this.Friends = [];
-        this.Relation = [];
-    }
-
     public void Initialize(IDbConnection dbClient, bool appearOffline, bool onlyProfil = false)
     {
-        var frienShips = onlyProfil ? MessengerFriendshipDao.GetAllFriendRelations(dbClient, this._user.Id) : MessengerFriendshipDao.GetAllFriendShips(dbClient, this._user.Id);
+        var frienShips = onlyProfil ? MessengerFriendshipDao.GetAllFriendRelations(dbClient, user.Id) : MessengerFriendshipDao.GetAllFriendShips(dbClient, user.Id);
 
-        var requests = onlyProfil ? [] : MessengerRequestDao.GetAllFriendRequests(dbClient, this._user.Id);
+        var requests = onlyProfil ? [] : MessengerRequestDao.GetAllFriendRequests(dbClient, user.Id);
 
         foreach (var friend in frienShips)
         {
-            if (friend.Id != this._user.Id)
+            if (friend.Id != user.Id)
             {
                 if (!this.Friends.ContainsKey(friend.Id))
                 {
@@ -53,20 +43,20 @@ public class MessengerComponent : IDisposable
 
         foreach (var request in requests)
         {
-            if (request.FromId != this._user.Id)
+            if (request.FromId != user.Id)
             {
                 if (!this.Requests.ContainsKey(request.FromId))
                 {
-                    this.Requests.Add(request.FromId, new MessengerRequest(this._user.Id, request.FromId, request.UserName));
+                    this.Requests.Add(request.FromId, new MessengerRequest(user.Id, request.FromId, request.UserName));
                 }
             }
             else if (!this.Requests.ContainsKey(request.ToId))
             {
-                this.Requests.Add(request.ToId, new MessengerRequest(this._user.Id, request.ToId, request.UserName));
+                this.Requests.Add(request.ToId, new MessengerRequest(user.Id, request.ToId, request.UserName));
             }
         }
 
-        this._profilFriendCount = onlyProfil ? MessengerFriendshipDao.GetCount(dbClient, this._user.Id) : -1;
+        this._profilFriendCount = onlyProfil ? MessengerFriendshipDao.GetCount(dbClient, user.Id) : -1;
         this.AppearOffline = appearOffline;
     }
 
@@ -90,9 +80,9 @@ public class MessengerComponent : IDisposable
 
         foreach (var gameClient in onlineUsers)
         {
-            if (gameClient != null && gameClient.User != null && gameClient.User.Messenger != null && gameClient.User.Messenger.FriendshipExists(this._user.Id))
+            if (gameClient != null && gameClient.User != null && gameClient.User.Messenger != null && gameClient.User.Messenger.FriendshipExists(user.Id))
             {
-                gameClient.User.Messenger.UpdateFriend(this._user.Id, true);
+                gameClient.User.Messenger.UpdateFriend(user.Id, true);
             }
         }
 
@@ -123,9 +113,9 @@ public class MessengerComponent : IDisposable
         {
             if (client != null && client.User != null && client.User.Messenger != null)
             {
-                if (client.User.Messenger.FriendshipExists(this._user.Id))
+                if (client.User.Messenger.FriendshipExists(user.Id))
                 {
-                    client.User.Messenger.UpdateFriend(this._user.Id, true);
+                    client.User.Messenger.UpdateFriend(user.Id, true);
                     this.UpdateFriend(client.User.Id, false);
                 }
             }
@@ -159,7 +149,7 @@ public class MessengerComponent : IDisposable
     {
         using (var dbClient = DatabaseManager.Connection)
         {
-            MessengerRequestDao.Delete(dbClient, this._user.Id);
+            MessengerRequestDao.Delete(dbClient, user.Id);
         }
 
         this.ClearRequests();
@@ -169,7 +159,7 @@ public class MessengerComponent : IDisposable
     {
         using (var dbClient = DatabaseManager.Connection)
         {
-            MessengerRequestDao.Delete(dbClient, this._user.Id, sender);
+            MessengerRequestDao.Delete(dbClient, user.Id, sender);
         }
 
         _ = this.Requests.Remove(sender);
@@ -179,8 +169,8 @@ public class MessengerComponent : IDisposable
     {
         using (var dbClient = DatabaseManager.Connection)
         {
-            MessengerFriendshipDao.Replace(dbClient, this._user.Id, friendID);
-            MessengerFriendshipDao.Replace(dbClient, friendID, this._user.Id);
+            MessengerFriendshipDao.Replace(dbClient, user.Id, friendID);
+            MessengerFriendshipDao.Replace(dbClient, friendID, user.Id);
         }
 
         this.OnNewFriendship(friendID);
@@ -190,7 +180,7 @@ public class MessengerComponent : IDisposable
             return;
         }
 
-        clientByUserId.User.Messenger.OnNewFriendship(this._user.Id);
+        clientByUserId.User.Messenger.OnNewFriendship(user.Id);
     }
 
     public void DestroyFriendship(int friendID)
@@ -202,7 +192,7 @@ public class MessengerComponent : IDisposable
 
         using (var dbClient = DatabaseManager.Connection)
         {
-            MessengerFriendshipDao.Delete(dbClient, this._user.Id, friendID);
+            MessengerFriendshipDao.Delete(dbClient, user.Id, friendID);
         }
 
         this.OnDestroyFriendship(friendID);
@@ -212,7 +202,7 @@ public class MessengerComponent : IDisposable
             return;
         }
 
-        clientByUserId.User.Messenger.OnDestroyFriendship(this._user.Id);
+        clientByUserId.User.Messenger.OnDestroyFriendship(user.Id);
     }
 
     public void OnNewFriendship(int friendID)
@@ -254,7 +244,7 @@ public class MessengerComponent : IDisposable
         }
 
         using var dbClient = DatabaseManager.Connection;
-        return MessengerFriendshipDao.HaveFriend(dbClient, this._user.Id, requestID);
+        return MessengerFriendshipDao.HaveFriend(dbClient, user.Id, requestID);
     }
 
     public bool FriendshipExists(int friendID) => this.Friends.ContainsKey(friendID);
@@ -313,7 +303,7 @@ public class MessengerComponent : IDisposable
 
             using (var dbClient = DatabaseManager.Connection)
             {
-                MessengerRequestDao.Replace(dbClient, this._user.Id, sender);
+                MessengerRequestDao.Replace(dbClient, user.Id, sender);
             }
 
             var clientByUserId = GameClientManager.GetClientByUserID(sender);
@@ -322,8 +312,8 @@ public class MessengerComponent : IDisposable
                 return false;
             }
 
-            var request = new MessengerRequest(sender, this._user.Id, WibboEnvironment.GetNameById(this._user.Id));
-            clientByUserId.User.Messenger.OnNewRequest(this._user.Id);
+            var request = new MessengerRequest(sender, user.Id, WibboEnvironment.GetNameById(user.Id));
+            clientByUserId.User.Messenger.OnNewRequest(user.Id);
 
             clientByUserId.SendPacket(new NewBuddyRequestComposer(request));
 
@@ -343,7 +333,7 @@ public class MessengerComponent : IDisposable
             return;
         }
 
-        this.Requests.Add(friendID, new MessengerRequest(this._user.Id, friendID, WibboEnvironment.GetNameById(friendID)));
+        this.Requests.Add(friendID, new MessengerRequest(user.Id, friendID, WibboEnvironment.GetNameById(friendID)));
     }
 
     public void SendInstantMessage(int toId, string message)
@@ -363,18 +353,18 @@ public class MessengerComponent : IDisposable
             return;
         }
 
-        client.SendPacket(new NewConsoleComposer(this._user.Id, message));
+        client.SendPacket(new NewConsoleComposer(user.Id, message));
     }
 
     public void ProcessOfflineMessages()
     {
         using var dbClient = DatabaseManager.Connection;
 
-        var messageList = MessengerOfflineMessageDao.GetAll(dbClient, this._user.Id);
+        var messageList = MessengerOfflineMessageDao.GetAll(dbClient, user.Id);
 
         if (messageList.Count != 0)
         {
-            var client = GameClientManager.GetClientByUserID(this._user.Id);
+            var client = GameClientManager.GetClientByUserID(user.Id);
             if (client == null)
             {
                 return;
@@ -389,11 +379,11 @@ public class MessengerComponent : IDisposable
 
             client.SendPacket(packetList);
 
-            MessengerOfflineMessageDao.Delete(dbClient, this._user.Id);
+            MessengerOfflineMessageDao.Delete(dbClient, user.Id);
         }
     }
 
     public List<Relationship> Relationships => this.Friends.Values.Select(c => new Relationship(c.UserId, c.Relation)).ToList();
 
-    private GameClient Client => GameClientManager.GetClientByUserID(this._user.Id);
+    private GameClient Client => GameClientManager.GetClientByUserID(user.Id);
 }

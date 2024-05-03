@@ -2,28 +2,17 @@ namespace WibboEmulator.Games.Rooms.Trading;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-public class TradeUser
+public class TradeUser(int userId, int roomId)
 {
-    public int UserId { get; set; }
-    public List<Item> OfferedItems { get; set; }
-    public bool HasAccepted { get; set; }
-
-    private readonly int _roomId;
-
-    public TradeUser(int userId, int roomId)
-    {
-        this._roomId = roomId;
-
-        this.UserId = userId;
-        this.HasAccepted = false;
-        this.OfferedItems = [];
-    }
+    public int UserId { get; set; } = userId;
+    public List<Item> OfferedItems { get; set; } = [];
+    public bool HasAccepted { get; set; } = false;
 
     public RoomUser RoomUser
     {
         get
         {
-            if (!RoomManager.TryGetRoom(this._roomId, out var room))
+            if (!RoomManager.TryGetRoom(roomId, out var room))
             {
                 return null;
             }

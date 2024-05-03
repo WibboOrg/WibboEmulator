@@ -4,22 +4,15 @@ using WibboEmulator.Core.FigureData;
 using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 
-public class WardrobeComponent : IDisposable
+public class WardrobeComponent(User user) : IDisposable
 {
     private static readonly int MAX_SLOT = 24;
-    private readonly User _user;
-
-    public WardrobeComponent(User user)
-    {
-        this._user = user;
-        this.Wardrobes = [];
-    }
 
     public void Initialize(IDbConnection dbClient)
     {
         this.Wardrobes.Clear();
 
-        var userWardrobeList = UserWardrobeDao.GetAll(dbClient, this._user.Id);
+        var userWardrobeList = UserWardrobeDao.GetAll(dbClient, user.Id);
 
         foreach (var userWardrobe in userWardrobeList)
         {
@@ -65,10 +58,10 @@ public class WardrobeComponent : IDisposable
         this.Wardrobes.Add(slotId, wardrobe);
 
         using var dbClient = DatabaseManager.Connection;
-        UserWardrobeDao.Insert(dbClient, this._user.Id, slotId, look, gender);
+        UserWardrobeDao.Insert(dbClient, user.Id, slotId, look, gender);
     }
 
-    public Dictionary<int, Wardrobe> Wardrobes { get; }
+    public Dictionary<int, Wardrobe> Wardrobes { get; } = [];
 
     public void Dispose()
     {

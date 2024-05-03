@@ -6,28 +6,17 @@ using WibboEmulator.Database.Daos.User;
 using System.Data;
 using WibboEmulator.Database;
 
-public class PremiumComponent : IDisposable
+public class PremiumComponent(User user) : IDisposable
 {
-    private readonly User _user;
     private bool _hasEverBeenMember;
-    private DateTime _activated;
-    private DateTime _expireClassic;
-    private DateTime _expireEpic;
-    private DateTime _expireLegend;
-
-    public PremiumComponent(User user)
-    {
-        this._user = user;
-
-        this._activated = DateTime.UtcNow;
-        this._expireClassic = DateTime.UtcNow;
-        this._expireEpic = DateTime.UtcNow;
-        this._expireLegend = DateTime.UtcNow;
-    }
+    private DateTime _activated = DateTime.UtcNow;
+    private DateTime _expireClassic = DateTime.UtcNow;
+    private DateTime _expireEpic = DateTime.UtcNow;
+    private DateTime _expireLegend = DateTime.UtcNow;
 
     public void Initialize(IDbConnection dbClient)
     {
-        var userPremium = UserPremiumDao.GetOne(dbClient, this._user.Id);
+        var userPremium = UserPremiumDao.GetOne(dbClient, user.Id);
 
         if (userPremium != null)
         {
@@ -44,51 +33,51 @@ public class PremiumComponent : IDisposable
 
     public void CheckPremiumTimeout(IDbConnection dbClient = null)
     {
-        if (this.IsPremiumLegend == false && this._user.BadgeComponent.HasBadge("WC_LEGEND"))
+        if (this.IsPremiumLegend == false && user.BadgeComponent.HasBadge("WC_LEGEND"))
         {
-            this._user.BadgeComponent.RemoveBadge("WC_LEGEND");
+            user.BadgeComponent.RemoveBadge("WC_LEGEND");
         }
-        else if (this.IsPremiumLegend && this._user.BadgeComponent.HasBadge("WC_LEGEND") == false)
+        else if (this.IsPremiumLegend && user.BadgeComponent.HasBadge("WC_LEGEND") == false)
         {
-            this._user.BadgeComponent.GiveBadge("WC_LEGEND");
-        }
-
-        if (this.IsPremiumEpic == false && this._user.BadgeComponent.HasBadge("WC_EPIC"))
-        {
-            this._user.BadgeComponent.RemoveBadge("WC_EPIC");
-        }
-        else if (this.IsPremiumEpic && this._user.BadgeComponent.HasBadge("WC_EPIC") == false)
-        {
-            this._user.BadgeComponent.GiveBadge("WC_EPIC");
+            user.BadgeComponent.GiveBadge("WC_LEGEND");
         }
 
-        if (this.IsPremiumClassic == false && this._user.BadgeComponent.HasBadge("WC_CLASSIC"))
+        if (this.IsPremiumEpic == false && user.BadgeComponent.HasBadge("WC_EPIC"))
         {
-            this._user.BadgeComponent.RemoveBadge("WC_CLASSIC");
+            user.BadgeComponent.RemoveBadge("WC_EPIC");
         }
-        else if (this.IsPremiumClassic && this._user.BadgeComponent.HasBadge("WC_CLASSIC") == false)
+        else if (this.IsPremiumEpic && user.BadgeComponent.HasBadge("WC_EPIC") == false)
         {
-            this._user.BadgeComponent.GiveBadge("WC_CLASSIC");
+            user.BadgeComponent.GiveBadge("WC_EPIC");
+        }
+
+        if (this.IsPremiumClassic == false && user.BadgeComponent.HasBadge("WC_CLASSIC"))
+        {
+            user.BadgeComponent.RemoveBadge("WC_CLASSIC");
+        }
+        else if (this.IsPremiumClassic && user.BadgeComponent.HasBadge("WC_CLASSIC") == false)
+        {
+            user.BadgeComponent.GiveBadge("WC_CLASSIC");
         }
 
         if (this.IsPremiumLegend == false && this.IsPremiumEpic == false && this.IsPremiumClassic == false)
         {
-            if (this._user.Rank == 2)
+            if (user.Rank == 2)
             {
-                this._user.Rank = 1;
+                user.Rank = 1;
 
                 dbClient ??= DatabaseManager.Connection;
-                UserDao.UpdateRank(dbClient, this._user.Id, 1);
+                UserDao.UpdateRank(dbClient, user.Id, 1);
             }
         }
         else if (this.IsPremiumLegend || this.IsPremiumEpic || this.IsPremiumClassic)
         {
-            if (this._user.Rank == 1)
+            if (user.Rank == 1)
             {
-                this._user.Rank = 2;
+                user.Rank = 2;
 
                 dbClient ??= DatabaseManager.Connection;
-                UserDao.UpdateRank(dbClient, this._user.Id, 2);
+                UserDao.UpdateRank(dbClient, user.Id, 2);
             }
         }
     }
@@ -97,13 +86,13 @@ public class PremiumComponent : IDisposable
     {
         var now = WibboEnvironment.GetUnixTimestamp();
 
-        UserDao.UpdateAddMonthPremium(dbClient, this._user.Id);
+        UserDao.UpdateAddMonthPremium(dbClient, user.Id);
 
         if (this._hasEverBeenMember == false)
         {
             this._hasEverBeenMember = true;
             this._activated = DateTime.UnixEpoch.AddSeconds(now);
-            UserPremiumDao.Insert(dbClient, this._user.Id);
+            UserPremiumDao.Insert(dbClient, user.Id);
         }
 
         if (this.IsPremiumLegend == false)
@@ -137,21 +126,21 @@ public class PremiumComponent : IDisposable
         var expireEpic = (int)((DateTimeOffset)this._expireEpic).ToUnixTimeSeconds();
         var expireLegend = (int)((DateTimeOffset)this._expireLegend).ToUnixTimeSeconds();
 
-        UserPremiumDao.UpdateExpired(dbClient, this._user.Id, activated, expireClassic, expireEpic, expireLegend);
+        UserPremiumDao.UpdateExpired(dbClient, user.Id, activated, expireClassic, expireEpic, expireLegend);
 
-        if (this._user.Rank == 1)
+        if (user.Rank == 1)
         {
-            this._user.Rank = 2;
-            UserDao.UpdateRank(dbClient, this._user.Id, 2);
+            user.Rank = 2;
+            UserDao.UpdateRank(dbClient, user.Id, 2);
 
-            this._user.Client.SendPacket(new UserRightsComposer(this._user.Rank < 2 ? 2 : this._user.Rank, this._user.Rank > 1));
+            user.Client.SendPacket(new UserRightsComposer(user.Rank < 2 ? 2 : user.Rank, user.Rank > 1));
         }
     }
 
     public void SendPackets(bool isLogin = false)
     {
-        this._user.Client.SendPacket(new ScrSendUserInfoComposer(this.ExpireTime(), isLogin, this._hasEverBeenMember));
-        this._user.Client.SendPacket(new ScrSendKickbackInfoComposer(this._activated));
+        user.Client.SendPacket(new ScrSendUserInfoComposer(this.ExpireTime(), isLogin, this._hasEverBeenMember));
+        user.Client.SendPacket(new ScrSendKickbackInfoComposer(this._activated));
     }
 
     public bool IsPremiumClassic => (this._expireClassic - DateTimeOffset.UtcNow).TotalSeconds > 0;

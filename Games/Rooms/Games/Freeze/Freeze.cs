@@ -8,19 +8,11 @@ using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.Games.Teams;
 using WibboEmulator.Games.Rooms.Map;
 
-public class Freeze
+public class Freeze(Room room)
 {
-    private Room _room;
-    private readonly Dictionary<int, Item> _freezeBlocks;
+    private readonly Dictionary<int, Item> _freezeBlocks = [];
 
-    public Freeze(Room room)
-    {
-        this._room = room;
-        this._freezeBlocks = [];
-        this.IsGameActive = false;
-    }
-
-    public bool IsGameActive { get; private set; }
+    public bool IsGameActive { get; private set; } = false;
 
     public void StartGame()
     {
@@ -43,9 +35,9 @@ public class Freeze
 
         this.IsGameActive = false;
 
-        var winningTeam = this._room.GameManager.WinningTeam;
+        var winningTeam = room.GameManager.WinningTeam;
 
-        foreach (var user in this._room.TeamManager.AllPlayers)
+        foreach (var user in room.TeamManager.AllPlayers)
         {
             this.EndGame(user, winningTeam);
         }
@@ -55,7 +47,7 @@ public class Freeze
     {
         if (roomUser.Team == winningTeam && winningTeam != TeamType.None)
         {
-            this._room.SendPacket(new ActionComposer(roomUser.VirtualId, 1));
+            room.SendPacket(new ActionComposer(roomUser.VirtualId, 1));
         }
         else if (roomUser.Team != TeamType.None)
         {
@@ -66,19 +58,19 @@ public class Freeze
                 return;
             }
             roomUser.ApplyEffect(0);
-            var managerForFreeze = this._room.TeamManager;
+            var managerForFreeze = room.TeamManager;
             managerForFreeze.OnUserLeave(roomUser);
 
             roomUser.Client.SendPacket(new IsPlayingComposer(false));
 
-            this._room.
+            room.
             GameManager.UpdateGatesTeamCounts();
 
             roomUser.Team = TeamType.None;
 
-            if (this._room.GameItemHandler.ExitTeleport != null)
+            if (room.GameItemHandler.ExitTeleport != null)
             {
-                GameMap.TeleportToItem(roomUser, this._room.GameItemHandler.ExitTeleport);
+                GameMap.TeleportToItem(roomUser, room.GameItemHandler.ExitTeleport);
             }
 
             roomUser.Freezed = false;
@@ -128,7 +120,7 @@ public class Freeze
             {
                 roomItem.ExtraData = "";
                 roomItem.UpdateState(false);
-                this._room.GameMap.UpdateMapForItem(roomItem);
+                room.GameMap.UpdateMapForItem(roomItem);
             }
         }
     }
@@ -148,7 +140,7 @@ public class Freeze
 
     private void CountTeamPoints()
     {
-        foreach (var user in this._room.TeamManager.AllPlayers)
+        foreach (var user in room.TeamManager.AllPlayers)
         {
             this.CountTeamPoint(user);
         }
@@ -174,7 +166,7 @@ public class Freeze
         roomUser.ShieldActive = false;
         roomUser.ShieldCounter = 11;
 
-        this._room.
+        room.
         GameManager.AddPointToTeam(roomUser.Team, 40, null);
 
         roomUser.Client.SendPacket(new UpdateFreezeLivesComposer(roomUser.VirtualId, roomUser.FreezeLives));
@@ -221,7 +213,7 @@ public class Freeze
 
     private Item GetFirstTile(int x, int y)
     {
-        foreach (var roomItem in this._room.GameMap.GetCoordinatedItems(new Point(x, y)))
+        foreach (var roomItem in room.GameMap.GetCoordinatedItems(new Point(x, y)))
         {
             if (roomItem.ItemData.InteractionType == InteractionType.FREEZE_TILE)
             {
@@ -233,7 +225,7 @@ public class Freeze
 
     public void OnFreezeTiles(Item item, FreezePowerUp powerUp, int userID)
     {
-        if (this._room.RoomUserManager.GetRoomUserByUserId(userID) == null)
+        if (room.RoomUserManager.GetRoomUserByUserId(userID) == null)
         {
             return;
         }
@@ -323,7 +315,7 @@ public class Freeze
                 item.FreezePowerUp = FreezePowerUp.None;
                 break;
         }
-        this._room.GameMap.UpdateMapForItem(item);
+        room.GameMap.UpdateMapForItem(item);
         item.UpdateState(false);
     }
 
@@ -343,7 +335,7 @@ public class Freeze
                 if (user.FreezeLives < 3)
                 {
                     user.FreezeLives++;
-                    this._room.GameManager.AddPointToTeam(user.Team, 10, user);
+                    room.GameManager.AddPointToTeam(user.Team, 10, user);
                 }
 
                 user.Client.SendPacket(new UpdateFreezeLivesComposer(user.VirtualId, user.FreezeLives));
@@ -371,7 +363,7 @@ public class Freeze
 
     private void HandleUserFreeze(Point point)
     {
-        var user = this._room.RoomUserManager.GetUserForSquare(point.X, point.Y);
+        var user = room.RoomUserManager.GetUserForSquare(point.X, point.Y);
         if (user == null || (user.IsWalking && user.SetX != point.X && user.SetY != point.Y))
         {
             return;
@@ -403,21 +395,21 @@ public class Freeze
 
                 user.ApplyEffect(0);
 
-                this._room.
+                room.
                 GameManager.AddPointToTeam(user.Team, -20, user);
 
-                var managerForFreeze = this._room.TeamManager;
+                var managerForFreeze = room.TeamManager;
                 managerForFreeze.OnUserLeave(user);
 
                 user.Client.SendPacket(new IsPlayingComposer(false));
 
-                this._room.
+                room.
                 GameManager.UpdateGatesTeamCounts();
                 user.Team = TeamType.None;
 
-                if (this._room.GameItemHandler.ExitTeleport != null)
+                if (room.GameItemHandler.ExitTeleport != null)
                 {
-                    GameMap.TeleportToItem(user, this._room.GameItemHandler.ExitTeleport);
+                    GameMap.TeleportToItem(user, room.GameItemHandler.ExitTeleport);
                 }
 
                 user.Freezed = false;
@@ -449,7 +441,7 @@ public class Freeze
             }
             else
             {
-                this._room.GameManager.AddPointToTeam(user.Team, -10, user);
+                room.GameManager.AddPointToTeam(user.Team, -10, user);
                 user.ApplyEffect(12);
 
                 user.Client.SendPacket(new UpdateFreezeLivesComposer(user.VirtualId, user.FreezeLives));
@@ -613,7 +605,7 @@ public class Freeze
         return list;
     }
 
-    private List<Item> GetItemsForSquare(Point point) => this._room.GameMap.GetCoordinatedItems(point);
+    private List<Item> GetItemsForSquare(Point point) => room.GameMap.GetCoordinatedItems(point);
 
     private static bool SquareGotFreezeTile(List<Item> items)
     {
@@ -642,6 +634,6 @@ public class Freeze
     public void Destroy()
     {
         this._freezeBlocks.Clear();
-        this._room = null;
+        room = null;
     }
 }

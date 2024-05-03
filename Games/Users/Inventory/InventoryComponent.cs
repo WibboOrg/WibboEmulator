@@ -17,30 +17,16 @@ using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Users.Inventory.Bots;
 using WibboEmulator.Utilities;
 
-public class InventoryComponent : IDisposable
+public class InventoryComponent(User user) : IDisposable
 {
-    private readonly ConcurrentDictionary<int, Item> _userItems;
-    private readonly ConcurrentDictionary<int, Pet> _petItems;
-    private readonly ConcurrentDictionary<int, Bot> _botItems;
-    private readonly int _furniLimit;
-    private readonly int _petLimit;
-    private readonly int _botLimit;
-    private readonly User _user;
+    private readonly ConcurrentDictionary<int, Item> _userItems = new ConcurrentDictionary<int, Item>();
+    private readonly ConcurrentDictionary<int, Pet> _petItems = new ConcurrentDictionary<int, Pet>();
+    private readonly ConcurrentDictionary<int, Bot> _botItems = new ConcurrentDictionary<int, Bot>();
+    private readonly int _furniLimit = SettingsManager.GetData<int>("inventory.furni.limit");
+    private readonly int _petLimit = SettingsManager.GetData<int>("inventory.pet.limit");
+    private readonly int _botLimit = SettingsManager.GetData<int>("inventory.bot.limit");
     private int _inventoryPoints;
     private bool _inventoryDefined;
-
-    public InventoryComponent(User user)
-    {
-        this._user = user;
-
-        this._userItems = new ConcurrentDictionary<int, Item>();
-        this._petItems = new ConcurrentDictionary<int, Pet>();
-        this._botItems = new ConcurrentDictionary<int, Bot>();
-
-        this._furniLimit = SettingsManager.GetData<int>("inventory.furni.limit");
-        this._petLimit = SettingsManager.GetData<int>("inventory.pet.limit");
-        this._botLimit = SettingsManager.GetData<int>("inventory.bot.limit");
-    }
 
     public void ClearItems(bool all = false)
     {
@@ -48,7 +34,7 @@ public class InventoryComponent : IDisposable
         {
             using var dbClient = DatabaseManager.Connection;
 
-            ItemDao.DeleteAll(dbClient, this._user.Id);
+            ItemDao.DeleteAll(dbClient, user.Id);
 
             var rareAmounts = new Dictionary<int, int>();
             foreach (var roomItem in this.GetWallAndFloor)
@@ -80,11 +66,11 @@ public class InventoryComponent : IDisposable
         {
             using var dbClient = DatabaseManager.Connection;
 
-            ItemDao.DeleteAllWithoutRare(dbClient, this._user.Id);
+            ItemDao.DeleteAllWithoutRare(dbClient, user.Id);
 
             this._userItems.Clear();
 
-            var itemList = ItemDao.GetAllByUserId(dbClient, this._user.Id, this._furniLimit);
+            var itemList = ItemDao.GetAllByUserId(dbClient, user.Id, this._furniLimit);
 
             foreach (var item in itemList)
             {
@@ -99,7 +85,7 @@ public class InventoryComponent : IDisposable
             }
         }
 
-        this._user.Client.SendPacket(new FurniListUpdateComposer());
+        user.Client.SendPacket(new FurniListUpdateComposer());
     }
 
     public List<Item> GetItemsByType(int baseItemId, int amount = 10000) => this.GetWallAndFloor.Where(x => x.BaseItemId == baseItemId).Take(amount).ToList();
@@ -145,7 +131,7 @@ public class InventoryComponent : IDisposable
 
         if (baseItem > 0)
         {
-            ItemDao.DeleteAllByRoomIdAndBaseItem(dbClient, 0, this._user.Id, baseItem);
+            ItemDao.DeleteAllByRoomIdAndBaseItem(dbClient, 0, user.Id, baseItem);
         }
         else
         {
@@ -154,7 +140,7 @@ public class InventoryComponent : IDisposable
 
         ItemStatDao.UpdateRemove(dbClient, rareAmounts);
 
-        this._user.Client.SendPacket(listMessage);
+        user.Client.SendPacket(listMessage);
     }
 
     public void ConvertMagot()
@@ -202,34 +188,34 @@ public class InventoryComponent : IDisposable
 
         if (creditCount > 0)
         {
-            this._user.Credits += creditCount;
-            this._user.Client.SendPacket(new CreditBalanceComposer(this._user.Credits));
+            user.Credits += creditCount;
+            user.Client.SendPacket(new CreditBalanceComposer(user.Credits));
         }
 
         if (wibboPointsCount > 0)
         {
             this._inventoryPoints = 0;
-            this._user.WibboPoints += wibboPointsCount;
-            this._user.Client.SendPacket(new ActivityPointNotificationComposer(this._user.WibboPoints, 0, 105));
+            user.WibboPoints += wibboPointsCount;
+            user.Client.SendPacket(new ActivityPointNotificationComposer(user.WibboPoints, 0, 105));
 
-            UserDao.UpdateAddPoints(dbClient, this._user.Id, wibboPointsCount);
+            UserDao.UpdateAddPoints(dbClient, user.Id, wibboPointsCount);
         }
 
         if (winwinCount > 0)
         {
-            UserStatsDao.UpdateAchievementScore(dbClient, this._user.Id, winwinCount);
+            UserStatsDao.UpdateAchievementScore(dbClient, user.Id, winwinCount);
 
-            this._user.AchievementPoints += winwinCount;
-            this._user.Client.SendPacket(new AchievementScoreComposer(this._user.AchievementPoints));
+            user.AchievementPoints += winwinCount;
+            user.Client.SendPacket(new AchievementScoreComposer(user.AchievementPoints));
 
-            var room = this._user.Room;
+            var room = user.Room;
 
             if (room != null)
             {
-                var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(this._user.Id);
+                var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(user.Id);
                 if (roomUserByUserId != null)
                 {
-                    this._user.Client.SendPacket(new UserChangeComposer(roomUserByUserId, true));
+                    user.Client.SendPacket(new UserChangeComposer(roomUserByUserId, true));
                     room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
                 }
             }
@@ -240,7 +226,7 @@ public class InventoryComponent : IDisposable
     {
         using (var dbClient = DatabaseManager.Connection)
         {
-            BotPetDao.Delete(dbClient, this._user.Id);
+            BotPetDao.Delete(dbClient, user.Id);
         }
 
         this._petItems.Clear();
@@ -250,7 +236,7 @@ public class InventoryComponent : IDisposable
     {
         using (var dbClient = DatabaseManager.Connection)
         {
-            BotUserDao.Delete(dbClient, this._user.Id);
+            BotUserDao.Delete(dbClient, user.Id);
         }
 
         this._botItems.Clear();
@@ -337,8 +323,8 @@ public class InventoryComponent : IDisposable
         {
             this.AddInventoryPoint(item);
 
-            this._user.Client.SendPacket(new UnseenItemsComposer(item.Id, UnseenItemsType.Furni));
-            this._user.Client.SendPacket(new FurniListAddComposer(item));
+            user.Client.SendPacket(new UnseenItemsComposer(item.Id, UnseenItemsType.Furni));
+            user.Client.SendPacket(new FurniListAddComposer(item));
         }
     }
 
@@ -356,7 +342,7 @@ public class InventoryComponent : IDisposable
         this._petItems.Clear();
 
         using var dbClient = DatabaseManager.Connection;
-        var itemList = ItemDao.GetAllByUserId(dbClient, this._user.Id, this._furniLimit);
+        var itemList = ItemDao.GetAllByUserId(dbClient, user.Id, this._furniLimit);
 
         foreach (var item in itemList)
         {
@@ -374,10 +360,10 @@ public class InventoryComponent : IDisposable
 
         if (this._userItems.Count >= this._furniLimit)
         {
-            this._user.Client.SendHugeNotification(string.Format(LanguageManager.TryGetValue("inventory.limit.furni", this._user.Client.Language), this._furniLimit));
+            user.Client.SendHugeNotification(string.Format(LanguageManager.TryGetValue("inventory.limit.furni", user.Client.Language), this._furniLimit));
         }
 
-        var botPetList = BotPetDao.GetAllByUserId(dbClient, this._user.Id, this._petLimit);
+        var botPetList = BotPetDao.GetAllByUserId(dbClient, user.Id, this._petLimit);
         if (botPetList.Count != 0)
         {
             foreach (var botPet in botPetList)
@@ -391,10 +377,10 @@ public class InventoryComponent : IDisposable
 
         if (this._petItems.Count >= this._petLimit)
         {
-            this._user.Client.SendHugeNotification(string.Format(LanguageManager.TryGetValue("inventory.limit.pet", this._user.Client.Language), this._petLimit));
+            user.Client.SendHugeNotification(string.Format(LanguageManager.TryGetValue("inventory.limit.pet", user.Client.Language), this._petLimit));
         }
 
-        var botUserList = BotUserDao.GetAllByUserId(dbClient, this._user.Id, this._botLimit);
+        var botUserList = BotUserDao.GetAllByUserId(dbClient, user.Id, this._botLimit);
         if (botUserList.Count != 0)
         {
             foreach (var botUser in botUserList)
@@ -408,7 +394,7 @@ public class InventoryComponent : IDisposable
 
         if (this._botItems.Count >= this._botLimit)
         {
-            this._user.Client.SendHugeNotification(string.Format(LanguageManager.TryGetValue("inventory.limit.bot", this._user.Client.Language), this._botLimit));
+            user.Client.SendHugeNotification(string.Format(LanguageManager.TryGetValue("inventory.limit.bot", user.Client.Language), this._botLimit));
         }
     }
 
@@ -472,7 +458,7 @@ public class InventoryComponent : IDisposable
 
         if (sendComposed)
         {
-            this._user.Client.SendPacket(new FurniListRemoveComposer(id));
+            user.Client.SendPacket(new FurniListRemoveComposer(id));
         }
     }
 
@@ -489,7 +475,7 @@ public class InventoryComponent : IDisposable
 
     public void AddItem(IDbConnection dbClient, Item item)
     {
-        ItemDao.UpdateRoomIdAndUserId(dbClient, item.Id, 0, this._user.Id);
+        ItemDao.UpdateRoomIdAndUserId(dbClient, item.Id, 0, user.Id);
 
         var userItem = new Item(item.Id, 0, item.BaseItemId, item.ExtraData, item.Limited, item.LimitedStack, 0, 0, 0.0, 0, "", null);
         if (this.UserHoldsItem(item.Id))
@@ -501,7 +487,7 @@ public class InventoryComponent : IDisposable
 
         this.AddInventoryPoint(userItem);
 
-        this._user.Client.SendPacket(new FurniListAddComposer(userItem));
+        user.Client.SendPacket(new FurniListAddComposer(userItem));
     }
 
     public bool IsOverlowLimit(int amountPurchase, ItemType type)

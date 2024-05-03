@@ -2,31 +2,18 @@ namespace WibboEmulator.Games.Rooms;
 
 using WibboEmulator.Games.Items;
 
-public class RoomRoleplay
+public class RoomRoleplay(Room room)
 {
-    private readonly Room _room;
-    public bool Pvp { get; set; }
-    public int Hour { get; set; }
-    public int Minute { get; set; }
-    public int Intensity { get; set; }
-    public bool CycleHourEffect { get; set; }
-    public bool TimeSpeed { get; set; }
-
-    public RoomRoleplay(Room room)
-    {
-        this._room = room;
-
-        this.Pvp = true;
-        this.CycleHourEffect = true;
-        this.TimeSpeed = false;
-        this.Hour = -1;
-        this.Minute = -1;
-        this.Intensity = -1;
-    }
+    public bool Pvp { get; set; } = true;
+    public int Hour { get; set; } = -1;
+    public int Minute { get; set; } = -1;
+    public int Intensity { get; set; } = -1;
+    public bool CycleHourEffect { get; set; } = true;
+    public bool TimeSpeed { get; set; } = false;
 
     public void OnCycle()
     {
-        if (this._room.RoomData.OwnerName == "WibboParty")
+        if (room.RoomData.OwnerName == "WibboParty")
         {
             return;
         }
@@ -126,7 +113,7 @@ public class RoomRoleplay
 
     private void UpdateRpBlock()
     {
-        var roomItems = this._room.RoomItemHandling.FloorItems.Where(i => i.ItemData.Id == 99138022).ToList();
+        var roomItems = room.RoomItemHandling.FloorItems.Where(i => i.ItemData.Id == 99138022).ToList();
         if (roomItems == null)
         {
             return;
@@ -167,27 +154,27 @@ public class RoomRoleplay
 
     private void UpdateRpMoodLight()
     {
-        if (this._room.MoodlightData == null)
+        if (room.MoodlightData == null)
         {
             return;
         }
 
-        var roomItem = this._room.RoomItemHandling.GetItem(this._room.MoodlightData.ItemId);
+        var roomItem = room.RoomItemHandling.GetItem(room.MoodlightData.ItemId);
         if (roomItem == null || roomItem.ItemData.InteractionType != InteractionType.MOODLIGHT)
         {
             return;
         }
 
-        this._room.MoodlightData.Enabled = true;
-        this._room.MoodlightData.CurrentPreset = 1;
-        this._room.MoodlightData.UpdatePreset(1, "#000000", this.Intensity, false, false);
-        roomItem.ExtraData = this._room.MoodlightData.GenerateExtraData();
+        room.MoodlightData.Enabled = true;
+        room.MoodlightData.CurrentPreset = 1;
+        room.MoodlightData.UpdatePreset(1, "#000000", this.Intensity, false, false);
+        roomItem.ExtraData = room.MoodlightData.GenerateExtraData();
         roomItem.UpdateState();
     }
 
     private void UpdateRpToner()
     {
-        var roomItem = this._room.RoomItemHandling.FloorItems.FirstOrDefault(i => i.ItemData.InteractionType == InteractionType.TONER);
+        var roomItem = room.RoomItemHandling.FloorItems.FirstOrDefault(i => i.ItemData.InteractionType == InteractionType.TONER);
         if (roomItem == null)
         {
             return;

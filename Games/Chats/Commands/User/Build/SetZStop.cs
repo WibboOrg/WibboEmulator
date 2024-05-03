@@ -8,7 +8,7 @@ internal sealed class SetZStop : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        userRoom.ConstruitZMode = false;
+        userRoom.BuildToolStackHeight = false;
         session.SendPacket(room.GameMap.Model.SerializeRelativeHeightmap());
 
         session.SendWhisper(LanguageManager.TryGetValue("cmd.setz.disabled", session.Language));
