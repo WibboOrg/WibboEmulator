@@ -139,15 +139,15 @@ public class JankenManager(Room room)
         var party = this.GetParty(user.PartyId);
 
         JankenType choice;
-        if (message.ToLower().StartsWith("p"))
+        if (message.StartsWith("p", StringComparison.CurrentCultureIgnoreCase))
         {
             choice = JankenType.Rock;
         }
-        else if (message.ToLower().StartsWith("f"))
+        else if (message.StartsWith("f", StringComparison.CurrentCultureIgnoreCase))
         {
             choice = JankenType.Paper;
         }
-        else if (message.ToLower().StartsWith("c"))
+        else if (message.StartsWith("c", StringComparison.CurrentCultureIgnoreCase))
         {
             choice = JankenType.Scissors;
         }

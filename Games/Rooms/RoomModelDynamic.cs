@@ -91,7 +91,7 @@ public class RoomModelDynamic
         }
     }
 
-    private ServerPacket SerializeHeightmap()
+    private FloorHeightMapComposer SerializeHeightmap()
     {
         var thatMessage = new StringBuilder();
 

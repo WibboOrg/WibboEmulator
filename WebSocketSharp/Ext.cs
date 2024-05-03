@@ -63,7 +63,7 @@ public static class Ext
 {
     #region Private Fields
 
-    private static readonly byte[] Last = new byte[] { 0x00 };
+    private static readonly byte[] Last = [0x00];
     private static readonly int MaxRetry = 5;
     private const string TSPECIALS = "()<>@,;:\\\"/[]?={} \t";
 
@@ -438,7 +438,7 @@ public static class Ext
             return null;
         }
 
-        var idx = original.IndexOfAny(new[] { '?', '#' });
+        var idx = original.IndexOfAny(['?', '#']);
 
         return idx > 0 ? original[..idx] : original;
     }
@@ -690,7 +690,7 @@ public static class Ext
 
         if (stream == null)
         {
-            return Array.Empty<byte>();
+            return [];
         }
 
         using var dest = new MemoryStream();
@@ -1312,7 +1312,7 @@ public static class Ext
                && headers.Contains("Connection", "Upgrade", compType);
     }
 
-    internal static string UrlDecode(this string value, Encoding encoding) => value.IndexOfAny(new[] { '%', '+' }) > -1
+    internal static string UrlDecode(this string value, Encoding encoding) => value.IndexOfAny(['%', '+']) > -1
                ? HttpUtility.UrlDecode(value, encoding)
                : value;
 
@@ -1538,10 +1538,7 @@ public static class Ext
     /// </exception>
     public static bool IsLocal(this System.Net.IPAddress address)
     {
-        if (address == null)
-        {
-            throw new ArgumentNullException(nameof(address));
-        }
+        ArgumentNullException.ThrowIfNull(address);
 
         if (address.Equals(System.Net.IPAddress.Any))
         {
@@ -1642,24 +1639,15 @@ public static class Ext
     /// </exception>
     public static T[] SubArray<T>(this T[] array, int startIndex, int length)
     {
-        if (array == null)
-        {
-            throw new ArgumentNullException(nameof(array));
-        }
+        ArgumentNullException.ThrowIfNull(array);
 
         var len = array.Length;
 
         if (len == 0)
         {
-            if (startIndex != 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfNotEqual(startIndex, 0);
 
-            if (length != 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(length));
-            }
+            ArgumentOutOfRangeException.ThrowIfNotEqual(length, 0);
 
             return array;
         }
@@ -1676,7 +1664,7 @@ public static class Ext
 
         if (length == 0)
         {
-            return Array.Empty<T>();
+            return [];
         }
 
         if (length == len)
@@ -1740,24 +1728,15 @@ public static class Ext
     /// </exception>
     public static T[] SubArray<T>(this T[] array, long startIndex, long length)
     {
-        if (array == null)
-        {
-            throw new ArgumentNullException(nameof(array));
-        }
+        ArgumentNullException.ThrowIfNull(array);
 
         var len = array.LongLength;
 
         if (len == 0)
         {
-            if (startIndex != 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfNotEqual(startIndex, 0);
 
-            if (length != 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(length));
-            }
+            ArgumentOutOfRangeException.ThrowIfNotEqual(length, 0);
 
             return array;
         }
@@ -1774,7 +1753,7 @@ public static class Ext
 
         if (length == 0)
         {
-            return Array.Empty<T>();
+            return [];
         }
 
         if (length == len)
@@ -1884,10 +1863,7 @@ public static class Ext
     /// </exception>
     public static byte[] ToHostOrder(this byte[] source, ByteOrder sourceOrder)
     {
-        if (source == null)
-        {
-            throw new ArgumentNullException(nameof(source));
-        }
+        ArgumentNullException.ThrowIfNull(source);
 
         if (source.Length < 2)
         {
@@ -1929,10 +1905,7 @@ public static class Ext
     /// </exception>
     public static string ToString<T>(this T[] array, string separator)
     {
-        if (array == null)
-        {
-            throw new ArgumentNullException(nameof(array));
-        }
+        ArgumentNullException.ThrowIfNull(array);
 
         var len = array.Length;
 

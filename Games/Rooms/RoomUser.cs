@@ -415,13 +415,9 @@ public class RoomUser : IEquatable<RoomUser>
 
     public void SetStatus(string key, string value)
     {
-        if (this.Statusses.ContainsKey(key))
+        if (!this.Statusses.TryAdd(key, value))
         {
             this.Statusses[key] = value;
-        }
-        else
-        {
-            this.Statusses.Add(key, value);
         }
     }
 

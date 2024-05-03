@@ -43,10 +43,10 @@ public class UserSays : WiredTriggerBase, IWired
 
         if (isContains)
         {
-            return message.ToLower().Contains(this.StringParam.ToLower());
+            return message.Contains(this.StringParam, StringComparison.CurrentCultureIgnoreCase);
         }
 
-        return message.ToLower() == this.StringParam.ToLower();
+        return message.Equals(this.StringParam, StringComparison.CurrentCultureIgnoreCase);
     }
 
     public override void Dispose()

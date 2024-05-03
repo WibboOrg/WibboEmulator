@@ -74,12 +74,13 @@ public static class ModerationManager
         {
             foreach (var topicAction in topicActionList)
             {
-                if (!ModerationCFHTopicActions.ContainsKey(topicAction.ParentId))
+                if (!ModerationCFHTopicActions.TryGetValue(topicAction.ParentId, out var value))
                 {
-                    ModerationCFHTopicActions.Add(topicAction.ParentId, []);
+                    value = ([]);
+                    ModerationCFHTopicActions.Add(topicAction.ParentId, value);
                 }
 
-                ModerationCFHTopicActions[topicAction.ParentId].Add(new ModerationPresetActions(topicAction.Id, topicAction.ParentId, topicAction.Type, topicAction.Caption, topicAction.MessageText,
+                value.Add(new ModerationPresetActions(topicAction.Id, topicAction.ParentId, topicAction.Type, topicAction.Caption, topicAction.MessageText,
                    topicAction.MuteTime, topicAction.BanTime, topicAction.IpTime, topicAction.TradeLockTime, topicAction.DefaultSanction));
             }
         }
@@ -149,7 +150,7 @@ public static class ModerationManager
         {
             var moderationTicket = new ModerationTicket(ticket.Id, ticket.Score, ticket.Type, ticket.SenderId, ticket.ReportedId, ticket.Message, ticket.RoomId, ticket.RoomName, ticket.Timestamp);
 
-            if (ticket.Status.ToLower() == "picked")
+            if (ticket.Status.Equals("picked", StringComparison.CurrentCultureIgnoreCase))
             {
                 moderationTicket.Pick(ticket.ModeratorId, false);
             }

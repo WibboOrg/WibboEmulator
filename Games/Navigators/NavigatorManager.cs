@@ -6,19 +6,19 @@ using WibboEmulator.Database.Daos.Navigator;
 public static class NavigatorManager
 {
     private static readonly Dictionary<int, FeaturedRoom> FeaturedRooms = [];
-    private static readonly Dictionary<int, TopLevelItem> _TopLevelItems = [];
-    private static readonly Dictionary<int, SearchResultList> _SearchResultLists = [];
+    private static readonly Dictionary<int, TopLevelItem> TopLevelItemsDefault = [];
+    private static readonly Dictionary<int, SearchResultList> SearchResultListsDefault = [];
 
     public static void Initialize(IDbConnection dbClient)
     {
-        _TopLevelItems.Add(1, new(1, "official_view", "", ""));
-        _TopLevelItems.Add(2, new(2, "hotel_view", "", ""));
-        _TopLevelItems.Add(3, new(3, "rooms_game", "", ""));
-        _TopLevelItems.Add(4, new(4, "myworld_view", "", ""));
+        TopLevelItemsDefault.Add(1, new(1, "official_view", "", ""));
+        TopLevelItemsDefault.Add(2, new(2, "hotel_view", "", ""));
+        TopLevelItemsDefault.Add(3, new(3, "rooms_game", "", ""));
+        TopLevelItemsDefault.Add(4, new(4, "myworld_view", "", ""));
 
-        if (_SearchResultLists.Count > 0)
+        if (SearchResultListsDefault.Count > 0)
         {
-            _SearchResultLists.Clear();
+            SearchResultListsDefault.Clear();
         }
 
         if (FeaturedRooms.Count > 0)
@@ -32,9 +32,9 @@ public static class NavigatorManager
         {
             foreach (var category in categoryList)
             {
-                if (!_SearchResultLists.ContainsKey(category.Id))
+                if (!SearchResultListsDefault.ContainsKey(category.Id))
                 {
-                    _SearchResultLists.Add(category.Id, new SearchResultList(category.Id, category.Category, category.CategoryIdentifier, category.PublicName, true, -1, category.RequiredRank, category.Minimized, NavigatorViewModeUtility.GetViewModeByString(category.ViewMode), category.CategoryType, category.SearchAllowance, category.OrderId));
+                    SearchResultListsDefault.Add(category.Id, new SearchResultList(category.Id, category.Category, category.CategoryIdentifier, category.PublicName, true, -1, category.RequiredRank, category.Minimized, NavigatorViewModeUtility.GetViewModeByString(category.ViewMode), category.CategoryType, category.SearchAllowance, category.OrderId));
                 }
             }
         }
@@ -56,7 +56,7 @@ public static class NavigatorManager
     public static List<SearchResultList> GetCategorysForSearch(string category)
     {
         var categorys =
-            from Cat in _SearchResultLists
+            from Cat in SearchResultListsDefault
             where Cat.Value.Category == category
             orderby Cat.Value.OrderId ascending
             select Cat.Value;
@@ -66,7 +66,7 @@ public static class NavigatorManager
     public static ICollection<SearchResultList> GetResultByIdentifier(string category)
     {
         var categorys =
-            from Cat in _SearchResultLists
+            from Cat in SearchResultListsDefault
             where Cat.Value.CategoryIdentifier == category
             orderby Cat.Value.OrderId ascending
             select Cat.Value;
@@ -78,7 +78,7 @@ public static class NavigatorManager
         get
         {
             var categorys =
-                from Cat in _SearchResultLists
+                from Cat in SearchResultListsDefault
                 where Cat.Value.CategoryType == NavigatorCategoryType.Category
                 orderby Cat.Value.OrderId ascending
                 select Cat.Value;
@@ -91,7 +91,7 @@ public static class NavigatorManager
         get
         {
             var categorys =
-                from Cat in _SearchResultLists
+                from Cat in SearchResultListsDefault
                 where Cat.Value.CategoryType == NavigatorCategoryType.PromotionCategory
                 orderby Cat.Value.OrderId ascending
                 select Cat.Value;
@@ -99,13 +99,13 @@ public static class NavigatorManager
         }
     }
 
-    public static ICollection<TopLevelItem> TopLevelItems => _TopLevelItems.Values;
+    public static ICollection<TopLevelItem> TopLevelItems => TopLevelItemsDefault.Values;
 
-    public static ICollection<SearchResultList> SearchResultLists => _SearchResultLists.Values;
+    public static ICollection<SearchResultList> SearchResultLists => SearchResultListsDefault.Values;
 
-    public static bool TryGetTopLevelItem(int id, out TopLevelItem topLevelItem) => _TopLevelItems.TryGetValue(id, out topLevelItem);
+    public static bool TryGetTopLevelItem(int id, out TopLevelItem topLevelItem) => TopLevelItemsDefault.TryGetValue(id, out topLevelItem);
 
-    public static bool TryGetSearchResultList(int id, out SearchResultList searchResultList) => _SearchResultLists.TryGetValue(id, out searchResultList);
+    public static bool TryGetSearchResultList(int id, out SearchResultList searchResultList) => SearchResultListsDefault.TryGetValue(id, out searchResultList);
 
     public static bool TryGetFeaturedRoom(int roomId, out FeaturedRoom publicRoom) => FeaturedRooms.TryGetValue(roomId, out publicRoom);
 

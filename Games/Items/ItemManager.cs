@@ -47,10 +47,7 @@ public static class ItemManager
                 Gifts.Add(spriteID, itemData);
             }
 
-            if (!Items.ContainsKey(id))
-            {
-                Items.Add(id, itemData);
-            }
+            _ = Items.TryAdd(id, itemData);
         }
 
         Console.WriteLine("Item Manager -> LOADED");

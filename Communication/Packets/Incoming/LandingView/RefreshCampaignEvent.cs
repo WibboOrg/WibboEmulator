@@ -19,7 +19,7 @@ internal sealed class RefreshCampaignEvent : IPacketEvent
 
         for (var i = 0; i < parser.Length; i++)
         {
-            if (string.IsNullOrEmpty(parser[i]) || parser[i].EndsWith(","))
+            if (string.IsNullOrEmpty(parser[i]) || parser[i].EndsWith(','))
             {
                 continue;
             }

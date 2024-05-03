@@ -130,14 +130,14 @@ public class ProjectileManager(Room room)
                 {
                     if (this._queueProjectile.TryDequeue(out var item))
                     {
-                        if (!bulletUser.ContainsKey(item.VirtualUserId))
+                        if (!bulletUser.TryGetValue(item.VirtualUserId, out var value))
                         {
                             bulletUser.Add(item.VirtualUserId, 1);
                             this._projectile.Add(item);
                         }
                         else
                         {
-                            bulletUser[item.VirtualUserId]++;
+                            bulletUser[item.VirtualUserId] = ++value;
 
                             toAdd.Add(item);
                         }

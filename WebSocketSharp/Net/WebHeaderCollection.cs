@@ -1443,52 +1443,6 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
     }
 
     /// <summary>
-    /// Populates a <see cref="SerializationInfo"/> instance with the data
-    /// needed to serialize this instance.
-    /// </summary>
-    /// <param name="info">
-    /// A <see cref="SerializationInfo"/> to populate with the data.
-    /// </param>
-    /// <param name="context">
-    /// A <see cref="StreamingContext"/> that specifies the destination for
-    /// the serialization.
-    /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="info"/> is <see langword="null"/>.
-    /// </exception>
-    public override void GetObjectData(
-      SerializationInfo info, StreamingContext context
-    )
-    {
-        ArgumentNullException.ThrowIfNull(info);
-
-        info.AddValue("InternallyUsed", this._internallyUsed);
-        info.AddValue("State", (int)this._state);
-
-        var cnt = this.Count;
-
-        info.AddValue("Count", cnt);
-
-        for (var i = 0; i < cnt; i++)
-        {
-            info.AddValue(i.ToString(), this.GetKey(i));
-            info.AddValue((cnt + i).ToString(), this.Get(i));
-        }
-    }
-
-    /// <summary>
-    /// Implements the <see cref="ISerializable"/> interface and raises
-    /// the deserialization event when the deserialization is complete.
-    /// </summary>
-    /// <param name="sender">
-    /// An <see cref="object"/> instance that represents the source of
-    /// the deserialization event.
-    /// </param>
-    public override void OnDeserialization(object sender)
-    {
-    }
-
-    /// <summary>
     /// Removes the specified request header from the collection.
     /// </summary>
     /// <param name="header">
@@ -1773,28 +1727,6 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
 
         return buff.ToString();
     }
-
-    #endregion
-
-    #region Explicit Interface Implementations
-
-    /// <summary>
-    /// Populates a <see cref="SerializationInfo"/> instance with the data
-    /// needed to serialize this instance.
-    /// </summary>
-    /// <param name="serializationInfo">
-    /// A <see cref="SerializationInfo"/> to populate with the data.
-    /// </param>
-    /// <param name="streamingContext">
-    /// A <see cref="StreamingContext"/> that specifies the destination for
-    /// the serialization.
-    /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="serializationInfo"/> is <see langword="null"/>.
-    /// </exception>
-    void ISerializable.GetObjectData(
-      SerializationInfo serializationInfo, StreamingContext streamingContext
-    ) => this.GetObjectData(serializationInfo, streamingContext);
 
     #endregion
 }

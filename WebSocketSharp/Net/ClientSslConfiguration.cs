@@ -70,10 +70,7 @@ public class ClientSslConfiguration
     /// </exception>
     public ClientSslConfiguration(string targetHost)
     {
-        if (targetHost == null)
-        {
-            throw new ArgumentNullException(nameof(targetHost));
-        }
+        ArgumentNullException.ThrowIfNull(targetHost);
 
         if (targetHost.Length == 0)
         {
@@ -97,10 +94,7 @@ public class ClientSslConfiguration
     /// </exception>
     public ClientSslConfiguration(ClientSslConfiguration configuration)
     {
-        if (configuration == null)
-        {
-            throw new ArgumentNullException(nameof(configuration));
-        }
+        ArgumentNullException.ThrowIfNull(configuration);
 
         this.CheckCertificateRevocation = configuration.CheckCertificateRevocation;
         this._clientCertSelectionCallback = configuration._clientCertSelectionCallback;
@@ -229,10 +223,7 @@ public class ClientSslConfiguration
 
         set
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             if (value.Length == 0)
             {

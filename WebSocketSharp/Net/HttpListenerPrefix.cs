@@ -134,10 +134,7 @@ internal sealed class HttpListenerPrefix
 
     public static void CheckPrefix(string uriPrefix)
     {
-        if (uriPrefix == null)
-        {
-            throw new ArgumentNullException(nameof(uriPrefix));
-        }
+        ArgumentNullException.ThrowIfNull(uriPrefix);
 
         var len = uriPrefix.Length;
 

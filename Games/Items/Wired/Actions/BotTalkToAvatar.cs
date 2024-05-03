@@ -58,7 +58,8 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
 
     private static void SendBotChoose(string textMessage, RoomUser user, RoomBot botData)
     {
-        var splitText = textMessage.Split(new[] { " : " }, StringSplitOptions.None);
+        var separator = new[] { " : " };
+        var splitText = textMessage.Split(separator, StringSplitOptions.None);
         if (splitText.Length != 2)
         {
             return;

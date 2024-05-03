@@ -169,7 +169,7 @@ internal sealed class HttpResponse : HttpBase
             throw new ArgumentException(msg);
         }
 
-        var slParts = messageHeader[0].Split(new[] { ' ' }, 3);
+        var slParts = messageHeader[0].Split([' '], 3);
         var plen = slParts.Length;
 
         if (plen < 2)

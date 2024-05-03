@@ -58,7 +58,7 @@ public class PetBot : BotAI
             return;
         }
 
-        if (!message.ToLower().StartsWith(roomUser.PetData.Name.ToLower() + " "))
+        if (!message.StartsWith(roomUser.PetData.Name.ToLower() + " ", StringComparison.CurrentCultureIgnoreCase))
         {
             return;
         }

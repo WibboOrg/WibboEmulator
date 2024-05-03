@@ -31,9 +31,9 @@ public class RoomItemHandling(Room room)
     private readonly ServerPacketList _rollerMessages = new();
 
     private int _rollerSpeed = 4;
-    private int _rollerCycle = 0;
+    private int _rollerCycle;
     private readonly ConcurrentQueue<Item> _roomItemUpdateQueue = new();
-    private int _itemTempoId = 0;
+    private int _itemTempoId;
 
     public void QueueRoomItemUpdate(Item item) => this._roomItemUpdateQueue.Enqueue(item);
 

@@ -74,7 +74,7 @@ internal sealed class AuthenticationChallenge : AuthenticationBase
 
     internal static AuthenticationChallenge Parse(string value)
     {
-        var chal = value.Split(new[] { ' ' }, 2);
+        var chal = value.Split([' '], 2);
         if (chal.Length != 2)
         {
             return null;

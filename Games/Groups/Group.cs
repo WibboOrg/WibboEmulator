@@ -118,8 +118,8 @@ public class Group
     {
         get
         {
-            var members = new List<int>(this._administrators.ToList());
-            members.AddRange(this._members.ToList());
+            var members = new List<int>([.. this._administrators]);
+            members.AddRange([.. this._members]);
 
             return members;
         }

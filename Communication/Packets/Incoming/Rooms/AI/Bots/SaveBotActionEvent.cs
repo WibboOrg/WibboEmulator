@@ -9,6 +9,12 @@ internal sealed class SaveBotActionEvent : IPacketEvent
 {
     public double Delay => 250;
 
+    internal static readonly char[] Separator =
+                [
+                        '\r',
+                        '\n'
+                ];
+
     public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.User == null || !session.User.InRoom)
@@ -74,11 +80,7 @@ internal sealed class SaveBotActionEvent : IPacketEvent
                     return;
                 }
 
-                var speechData = configData[0].Split(new char[]
-                {
-                        '\r',
-                        '\n'
-                }, StringSplitOptions.RemoveEmptyEntries);
+                var speechData = configData[0].Split(Separator, StringSplitOptions.RemoveEmptyEntries);
 
                 var automaticChat = Convert.ToString(configData[1]);
                 var speakingIntervalIsInt = int.TryParse(configData[2], out var speakingInterval);

@@ -113,32 +113,16 @@ public class GameManager(Room room)
         switch (team)
         {
             case TeamType.Red:
-                if (!this._redTeamItems.ContainsKey(item.Id))
-                {
-                    this._redTeamItems.Add(item.Id, item);
-                }
-
+                _ = this._redTeamItems.TryAdd(item.Id, item);
                 break;
             case TeamType.Green:
-                if (!this._greenTeamItems.ContainsKey(item.Id))
-                {
-                    this._greenTeamItems.Add(item.Id, item);
-                }
-
+                _ = this._greenTeamItems.TryAdd(item.Id, item);
                 break;
             case TeamType.Blue:
-                if (!this._blueTeamItems.ContainsKey(item.Id))
-                {
-                    this._blueTeamItems.Add(item.Id, item);
-                }
-
+                _ = this._blueTeamItems.TryAdd(item.Id, item);
                 break;
             case TeamType.Yellow:
-                if (!this._yellowTeamItems.ContainsKey(item.Id))
-                {
-                    this._yellowTeamItems.Add(item.Id, item);
-                }
-
+                _ = this._yellowTeamItems.TryAdd(item.Id, item);
                 break;
         }
     }

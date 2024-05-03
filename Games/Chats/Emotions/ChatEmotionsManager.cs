@@ -53,7 +53,7 @@ public static class ChatEmotionsManager
     {
         foreach (var kvp in Emotions)
         {
-            if (text.ToLower().Contains(kvp.Key.ToLower()))
+            if (text.Contains(kvp.Key, StringComparison.CurrentCultureIgnoreCase))
             {
                 return GetEmoticonPacketNum(kvp.Value);
             }

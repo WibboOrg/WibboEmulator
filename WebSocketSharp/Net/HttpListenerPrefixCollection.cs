@@ -184,10 +184,7 @@ public class HttpListenerPrefixCollection : ICollection<string>
     {
         this._listener.CheckDisposed();
 
-        if (item == null)
-        {
-            throw new ArgumentNullException(nameof(item));
-        }
+        ArgumentNullException.ThrowIfNull(item);
 
         return this._prefixes.Contains(item);
     }
@@ -253,10 +250,7 @@ public class HttpListenerPrefixCollection : ICollection<string>
     {
         this._listener.CheckDisposed();
 
-        if (item == null)
-        {
-            throw new ArgumentNullException(nameof(item));
-        }
+        ArgumentNullException.ThrowIfNull(item);
 
         if (!this._prefixes.Contains(item))
         {

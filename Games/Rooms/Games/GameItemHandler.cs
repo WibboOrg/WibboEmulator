@@ -51,13 +51,9 @@ public class GameItemHandler(Room room)
 
     public void AddPyramid(Item item, int itemID)
     {
-        if (this._banzaiPyramids.ContainsKey(itemID))
+        if (!this._banzaiPyramids.TryAdd(itemID, item))
         {
             this._banzaiPyramids[itemID] = item;
-        }
-        else
-        {
-            this._banzaiPyramids.Add(itemID, item);
         }
     }
 
@@ -80,13 +76,9 @@ public class GameItemHandler(Room room)
 
     public void AddBlob(Item item, int itemID)
     {
-        if (this._banzaiBlobs.ContainsKey(itemID))
+        if (!this._banzaiBlobs.TryAdd(itemID, item))
         {
             this._banzaiBlobs[itemID] = item;
-        }
-        else
-        {
-            this._banzaiBlobs.Add(itemID, item);
         }
     }
 
@@ -157,14 +149,9 @@ public class GameItemHandler(Room room)
 
     public void AddTeleport(Item item, int itemID)
     {
-        if (this._banzaiTeleports.ContainsKey(itemID))
+        if (!this._banzaiTeleports.TryAdd(itemID, item))
         {
-            //this.banzaiTeleports.Inner[itemID] = item;
             _ = this._banzaiTeleports.Remove(itemID);
-            this._banzaiTeleports.Add(itemID, item);
-        }
-        else
-        {
             this._banzaiTeleports.Add(itemID, item);
         }
     }

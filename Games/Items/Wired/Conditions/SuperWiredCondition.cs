@@ -1271,7 +1271,7 @@ public class SuperWiredCondition(Item item, Room room) : WiredConditionBase(item
             case "username":
             case "notusername":
             {
-                if (user.Username.ToLower() == value.ToLower())
+                if (user.Username.Equals(value, StringComparison.CurrentCultureIgnoreCase))
                 {
                     result = true;
                 }

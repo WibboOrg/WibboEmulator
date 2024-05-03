@@ -5,6 +5,8 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class FaceLess : IChatCommand
 {
+    internal static readonly string[] Separator = ["hd-"];
+
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (userRoom.IsTransf || userRoom.IsSpectator)
@@ -16,8 +18,8 @@ internal sealed class FaceLess : IChatCommand
 
         if (look.Contains("hd-"))
         {
-            var hdlook = look.Split(new string[] { "hd-" }, StringSplitOptions.None)[1];
-            var hdcode = "hd-" + hdlook.Split(new char[] { '.' })[0]; //ex : hd-180-22
+            var hdlook = look.Split(Separator, StringSplitOptions.None)[1];
+            var hdcode = "hd-" + hdlook.Split(['.'])[0]; //ex : hd-180-22
             var hdcodecolor = "";
             if (hdcode.Split('-').Length == 3)
             {

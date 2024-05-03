@@ -20,14 +20,14 @@ internal static class NavigatorHandler
 
             case NavigatorCategoryType.Query:
             {
-                if (searchData.ToLower().StartsWith("owner:"))
+                if (searchData.StartsWith("owner:", StringComparison.CurrentCultureIgnoreCase))
                 {
                     if (searchData.Length > 0)
                     {
                         List<RoomEntity> roomList = null;
                         using (var dbClient = DatabaseManager.Connection)
                         {
-                            if (searchData.ToLower().StartsWith("owner:"))
+                            if (searchData.StartsWith("owner:", StringComparison.CurrentCultureIgnoreCase))
                             {
                                 roomList = RoomDao.GetAllSearchByUsername(dbClient, searchData.Remove(0, 6));
                             }
@@ -53,7 +53,7 @@ internal static class NavigatorHandler
                         }
                     }
                 }
-                else if (searchData.ToLower().StartsWith("tag:"))
+                else if (searchData.StartsWith("tag:", StringComparison.CurrentCultureIgnoreCase))
                 {
                     searchData = searchData.Remove(0, 4);
                     ICollection<RoomData> tagMatches = RoomManager.SearchTaggedRooms(searchData);
@@ -64,7 +64,7 @@ internal static class NavigatorHandler
                         RoomAppender.WriteRoom(message, data);
                     }
                 }
-                else if (searchData.ToLower().StartsWith("group:"))
+                else if (searchData.StartsWith("group:", StringComparison.CurrentCultureIgnoreCase))
                 {
                     searchData = searchData.Remove(0, 6);
                     ICollection<RoomData> groupRooms = RoomManager.SearchGroupRooms(searchData);

@@ -133,7 +133,7 @@ public class WebSocket : IDisposable
 
     static WebSocket()
     {
-        EmptyBytes = Array.Empty<byte>();
+        EmptyBytes = [];
         FragmentLength = 1016;
         RandomNumber = RandomNumberGenerator.Create();
     }
@@ -1387,10 +1387,7 @@ public class WebSocket : IDisposable
 
     private bool ProcessPongFrame(WebSocketFrame frame)
     {
-        if (frame is null)
-        {
-            throw new ArgumentNullException(nameof(frame));
-        }
+        ArgumentNullException.ThrowIfNull(frame);
 
         this._logger.Trace("A pong was received.");
 
@@ -2797,10 +2794,7 @@ public class WebSocket : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (data == null)
-        {
-            throw new ArgumentNullException(nameof(data));
-        }
+        ArgumentNullException.ThrowIfNull(data);
 
         _ = this.Send(Opcode.Binary, new MemoryStream(data));
     }
@@ -2841,10 +2835,7 @@ public class WebSocket : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (fileInfo == null)
-        {
-            throw new ArgumentNullException(nameof(fileInfo));
-        }
+        ArgumentNullException.ThrowIfNull(fileInfo);
 
         if (!fileInfo.Exists)
         {
@@ -2884,10 +2875,7 @@ public class WebSocket : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (data == null)
-        {
-            throw new ArgumentNullException(nameof(data));
-        }
+        ArgumentNullException.ThrowIfNull(data);
 
         if (!data.TryGetUTF8EncodedBytes(out var bytes))
         {
@@ -2943,10 +2931,7 @@ public class WebSocket : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (stream == null)
-        {
-            throw new ArgumentNullException(nameof(stream));
-        }
+        ArgumentNullException.ThrowIfNull(stream);
 
         if (!stream.CanRead)
         {
@@ -3018,10 +3003,7 @@ public class WebSocket : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (data == null)
-        {
-            throw new ArgumentNullException(nameof(data));
-        }
+        ArgumentNullException.ThrowIfNull(data);
 
         this.SendAsync(Opcode.Binary, new MemoryStream(data), completed);
     }
@@ -3078,10 +3060,7 @@ public class WebSocket : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (fileInfo == null)
-        {
-            throw new ArgumentNullException(nameof(fileInfo));
-        }
+        ArgumentNullException.ThrowIfNull(fileInfo);
 
         if (!fileInfo.Exists)
         {
@@ -3137,10 +3116,7 @@ public class WebSocket : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (data == null)
-        {
-            throw new ArgumentNullException(nameof(data));
-        }
+        ArgumentNullException.ThrowIfNull(data);
 
         if (!data.TryGetUTF8EncodedBytes(out var bytes))
         {
@@ -3213,10 +3189,7 @@ public class WebSocket : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (stream == null)
-        {
-            throw new ArgumentNullException(nameof(stream));
-        }
+        ArgumentNullException.ThrowIfNull(stream);
 
         if (!stream.CanRead)
         {

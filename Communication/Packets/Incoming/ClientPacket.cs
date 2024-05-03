@@ -3,7 +3,7 @@ using System.Text;
 
 public class ClientPacket(int messageID, byte[] body)
 {
-    private int _pointer = 0;
+    private int _pointer;
     private readonly Encoding _encoding = Encoding.UTF8;
 
     public int Id { get; private set; } = messageID;

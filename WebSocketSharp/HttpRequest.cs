@@ -170,7 +170,7 @@ internal sealed class HttpRequest : HttpBase
             throw new ArgumentException(msg);
         }
 
-        var rlParts = messageHeader[0].Split(new[] { ' ' }, 3);
+        var rlParts = messageHeader[0].Split([' '], 3);
 
         if (rlParts.Length != 3)
         {

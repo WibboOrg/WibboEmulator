@@ -150,20 +150,14 @@ public sealed class HttpListener : IDisposable
     {
         get
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             return this._authSchemes;
         }
 
         set
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             this._authSchemes = value;
         }
@@ -205,20 +199,14 @@ public sealed class HttpListener : IDisposable
     {
         get
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             return this._authSchemeSelector;
         }
 
         set
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             this._authSchemeSelector = value;
         }
@@ -261,20 +249,14 @@ public sealed class HttpListener : IDisposable
     {
         get
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             return this._certFolderPath;
         }
 
         set
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             this._certFolderPath = value;
         }
@@ -300,20 +282,14 @@ public sealed class HttpListener : IDisposable
     {
         get
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             return this._ignoreWriteExceptions;
         }
 
         set
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             this._ignoreWriteExceptions = value;
         }
@@ -367,10 +343,7 @@ public sealed class HttpListener : IDisposable
     {
         get
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             return this._prefixes;
         }
@@ -398,20 +371,14 @@ public sealed class HttpListener : IDisposable
     {
         get
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             return this._realm;
         }
 
         set
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             this._realm = value;
         }
@@ -432,10 +399,7 @@ public sealed class HttpListener : IDisposable
     {
         get
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             this._sslConfig ??= new ServerSslConfiguration();
 
@@ -490,20 +454,14 @@ public sealed class HttpListener : IDisposable
     {
         get
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             return this._userCredFinder;
         }
 
         set
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             this._userCredFinder = value;
         }
@@ -733,13 +691,7 @@ public sealed class HttpListener : IDisposable
 
     #region Internal Methods
 
-    internal void CheckDisposed()
-    {
-        if (this._disposed)
-        {
-            throw new ObjectDisposedException(this._objectName);
-        }
-    }
+    internal void CheckDisposed() => ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
     internal bool RegisterContext(HttpListenerContext context)
     {
@@ -827,10 +779,7 @@ public sealed class HttpListener : IDisposable
     /// </exception>
     public IAsyncResult BeginGetContext(AsyncCallback callback, object state)
     {
-        if (this._disposed)
-        {
-            throw new ObjectDisposedException(this._objectName);
-        }
+        ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
         if (!this._listening)
         {
@@ -902,10 +851,7 @@ public sealed class HttpListener : IDisposable
     /// </exception>
     public HttpListenerContext EndGetContext(IAsyncResult asyncResult)
     {
-        if (this._disposed)
-        {
-            throw new ObjectDisposedException(this._objectName);
-        }
+        ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
         if (!this._listening)
         {
@@ -914,10 +860,7 @@ public sealed class HttpListener : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (asyncResult == null)
-        {
-            throw new ArgumentNullException(nameof(asyncResult));
-        }
+        ArgumentNullException.ThrowIfNull(asyncResult);
 
 
         if (asyncResult is not HttpListenerAsyncResult ares)
@@ -976,10 +919,7 @@ public sealed class HttpListener : IDisposable
     /// </exception>
     public HttpListenerContext GetContext()
     {
-        if (this._disposed)
-        {
-            throw new ObjectDisposedException(this._objectName);
-        }
+        ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
         if (!this._listening)
         {
@@ -1014,17 +954,11 @@ public sealed class HttpListener : IDisposable
     /// </exception>
     public void Start()
     {
-        if (this._disposed)
-        {
-            throw new ObjectDisposedException(this._objectName);
-        }
+        ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
         lock (this._sync)
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             lock (this._contextRegistrySync)
             {
@@ -1048,17 +982,11 @@ public sealed class HttpListener : IDisposable
     /// </exception>
     public void Stop()
     {
-        if (this._disposed)
-        {
-            throw new ObjectDisposedException(this._objectName);
-        }
+        ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
         lock (this._sync)
         {
-            if (this._disposed)
-            {
-                throw new ObjectDisposedException(this._objectName);
-            }
+            ObjectDisposedException.ThrowIf(this._disposed, this._objectName);
 
             lock (this._contextRegistrySync)
             {

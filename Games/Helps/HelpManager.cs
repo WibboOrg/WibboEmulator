@@ -54,16 +54,7 @@ public static class HelpManager
         GuidesOnDuty[id] = false;
     }
 
-    public static bool TryAddGuide(int guide)
-    {
-        if (!GuidesOnDuty.ContainsKey(guide))
-        {
-            GuidesOnDuty.Add(guide, false);
-            return true;
-        }
-
-        return false;
-    }
+    public static bool TryAddGuide(int guide) => GuidesOnDuty.TryAdd(guide, false);
 
     public static void TryRemoveGuide(int guide) => _ = GuidesOnDuty.Remove(guide);
 }

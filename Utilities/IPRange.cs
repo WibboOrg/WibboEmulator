@@ -7,7 +7,7 @@ public class IPRange
 {
     public static bool IsInSubnet(IPAddress address, string subnetMask)
     {
-        var slashIdx = subnetMask.IndexOf("/");
+        var slashIdx = subnetMask.IndexOf('/');
         if (slashIdx == -1)
         { // We only handle netmasks in format "IP/PrefixLength".
             return false;

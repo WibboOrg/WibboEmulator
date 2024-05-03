@@ -109,8 +109,8 @@ public sealed class Cookie
 
     static Cookie()
     {
-        EmptyPorts = Array.Empty<int>();
-        ReservedCharsForValue = new[] { ';', ',' };
+        EmptyPorts = [];
+        ReservedCharsForValue = [';', ','];
     }
 
     #endregion
@@ -282,10 +282,7 @@ public sealed class Cookie
     /// </exception>
     public Cookie(string name, string value, string path, string domain)
     {
-        if (name == null)
-        {
-            throw new ArgumentNullException(nameof(name));
-        }
+        ArgumentNullException.ThrowIfNull(name);
 
         if (name.Length == 0)
         {
@@ -543,10 +540,7 @@ public sealed class Cookie
 
         set
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             if (value.Length == 0)
             {

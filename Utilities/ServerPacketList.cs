@@ -8,7 +8,7 @@ public class ServerPacketList
 
     public ServerPacketList()
     {
-        this._totalBytes = Array.Empty<byte>();
+        this._totalBytes = [];
         this._current = 0;
         this.Count = 0;
     }
@@ -32,7 +32,7 @@ public class ServerPacketList
 
     public void Clear()
     {
-        this._totalBytes = Array.Empty<byte>();
+        this._totalBytes = [];
         this._current = 0;
         this.Count = 0;
     }

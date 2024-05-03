@@ -19,22 +19,13 @@ public class AchievementComponent(User user) : IDisposable
 
             var userAchievement = new UserAchievement(group, level, progress);
 
-            if (!this.Achievements.ContainsKey(group))
-            {
-                this.Achievements.Add(group, userAchievement);
-            }
+            _ = this.Achievements.TryAdd(group, userAchievement);
         }
 
         this.AddAchievement(new UserAchievement("ACH_CameraPhotoCount", 10, 0));
     }
 
-    public void AddAchievement(UserAchievement userAchivement)
-    {
-        if (!this.Achievements.ContainsKey(userAchivement.Group))
-        {
-            this.Achievements.Add(userAchivement.Group, userAchivement);
-        }
-    }
+    public void AddAchievement(UserAchievement userAchivement) => _ = this.Achievements.TryAdd(userAchivement.Group, userAchivement);
 
     public UserAchievement GetAchievementData(string p)
     {

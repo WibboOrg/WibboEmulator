@@ -143,7 +143,7 @@ internal sealed class AuthenticationResponse : AuthenticationBase
         var qops = this.Parameters["qop"];
         if (qops != null)
         {
-            if (qops.Split(',').Contains(qop => qop.Trim().ToLower() == "auth"))
+            if (qops.Split(',').Contains(qop => qop.Trim().Equals("auth", StringComparison.CurrentCultureIgnoreCase)))
             {
                 this.Parameters["qop"] = "auth";
                 this.Parameters["cnonce"] = CreateNonceValue();
@@ -176,11 +176,13 @@ internal sealed class AuthenticationResponse : AuthenticationBase
         var nc = parameters["nc"];
         var method = parameters["method"];
 
-        var a1 = algo != null && algo.ToLower() == "md5-sess"
+        var a1 = algo != null && algo.Equals("md5-sess"
+, StringComparison.CurrentCultureIgnoreCase)
                  ? CreateA1(user, pass, realm, nonce, cnonce)
                  : CreateA1(user, pass, realm);
 
-        var a2 = qop != null && qop.ToLower() == "auth-int"
+        var a2 = qop != null && qop.Equals("auth-int"
+, StringComparison.CurrentCultureIgnoreCase)
                  ? CreateA2(method, uri, parameters["entity"])
                  : CreateA2(method, uri);
 
@@ -196,7 +198,7 @@ internal sealed class AuthenticationResponse : AuthenticationBase
     {
         try
         {
-            var cred = value.Split(new[] { ' ' }, 2);
+            var cred = value.Split([' '], 2);
             if (cred.Length != 2)
             {
                 return null;

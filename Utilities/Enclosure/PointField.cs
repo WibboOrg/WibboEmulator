@@ -8,7 +8,6 @@ public class PointField(byte forValue)
     private Point _mostTop = BadPoint;
     private Point _mostRight = BadPoint;
     private Point _mostDown = BadPoint;
-    private readonly List<Point> _pointList = [];
 
     public byte ForValue { get; private set; } = forValue;
 
@@ -16,7 +15,7 @@ public class PointField(byte forValue)
     {
     }
 
-    public List<Point> Points => this._pointList;
+    public List<Point> Points { get; } = [];
 
     public void Add(Point p)
     {
@@ -60,6 +59,6 @@ public class PointField(byte forValue)
             this._mostDown = p;
         }
 
-        this._pointList.Add(p);
+        this.Points.Add(p);
     }
 }

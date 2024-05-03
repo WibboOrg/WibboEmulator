@@ -401,7 +401,7 @@ public class Room : IDisposable
             }
         }
 
-        packetList.Add(new UserUpdateComposer(this.RoomUserManager.UserList.ToList()));
+        packetList.Add(new UserUpdateComposer([.. this.RoomUserManager.UserList]));
         packetList.Add(new ObjectsComposer(this.RoomItemHandling.FloorItems.ToArray(), this));
         packetList.Add(new ObjectsComposer(this.RoomItemHandling.TempItems.ToArray(), this));
         packetList.Add(new ItemWallComposer([.. this.RoomItemHandling.WallItems], this));

@@ -46,7 +46,7 @@ public class NetworkCredential
 
     #region Static Constructor
 
-    static NetworkCredential() => NoRoles = Array.Empty<string>();
+    static NetworkCredential() => NoRoles = [];
 
     #endregion
 
@@ -106,10 +106,7 @@ public class NetworkCredential
       string username, string password, string domain, params string[] roles
     )
     {
-        if (username == null)
-        {
-            throw new ArgumentNullException(nameof(username));
-        }
+        ArgumentNullException.ThrowIfNull(username);
 
         if (username.Length == 0)
         {

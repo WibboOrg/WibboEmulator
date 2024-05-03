@@ -227,13 +227,8 @@ public class MessengerComponent(User user) : IDisposable
             friend.UpdateUser();
         }
 
-        if (!this.Friends.ContainsKey(friendID))
-        {
-            this.Friends.Add(friendID, friend);
-        }
-
-        this.
-        Client.SendPacket(new FriendListUpdateComposer(friend));
+        _ = this.Friends.TryAdd(friendID, friend);
+        this.Client.SendPacket(new FriendListUpdateComposer(friend));
     }
 
     public bool RequestExists(int requestID)
@@ -317,11 +312,7 @@ public class MessengerComponent(User user) : IDisposable
 
             clientByUserId.SendPacket(new NewBuddyRequestComposer(request));
 
-            if (!this.Requests.ContainsKey(sender))
-            {
-                this.Requests.Add(sender, request);
-            }
-
+            _ = this.Requests.TryAdd(sender, request);
             return true;
         }
     }

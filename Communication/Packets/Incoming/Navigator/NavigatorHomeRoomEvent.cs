@@ -14,7 +14,7 @@ internal sealed class NavigatorHomeRoomEvent : IPacketEvent
         var roomId = packet.PopInt();
 
         var roomData = RoomManager.GenerateRoomData(roomId);
-        if (roomId != 0 && (roomData == null || roomData.OwnerName.ToLower() != session.User.Username.ToLower()))
+        if (roomId != 0 && (roomData == null || !roomData.OwnerName.ToLower().Equals(session.User.Username, StringComparison.CurrentCultureIgnoreCase)))
         {
             return;
         }

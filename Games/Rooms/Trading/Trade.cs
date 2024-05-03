@@ -279,25 +279,25 @@ public class Trade
 
         foreach (var userItem in this.GetTradeUser(this._oneId).OfferedItems)
         {
-            if (!itemsOneCounter.ContainsKey(userItem.ItemData.ItemName))
+            if (!itemsOneCounter.TryGetValue(userItem.ItemData.ItemName, out var value))
             {
                 itemsOneCounter.Add(userItem.ItemData.ItemName, 1);
             }
             else
             {
-                itemsOneCounter[userItem.ItemData.ItemName]++;
+                itemsOneCounter[userItem.ItemData.ItemName] = ++value;
             }
         }
 
         foreach (var userItem in this.GetTradeUser(this._twoId).OfferedItems)
         {
-            if (!itemsTwoCounter.ContainsKey(userItem.ItemData.ItemName))
+            if (!itemsTwoCounter.TryGetValue(userItem.ItemData.ItemName, out var value))
             {
                 itemsTwoCounter.Add(userItem.ItemData.ItemName, 1);
             }
             else
             {
-                itemsTwoCounter[userItem.ItemData.ItemName]++;
+                itemsTwoCounter[userItem.ItemData.ItemName] = ++value;
             }
         }
 

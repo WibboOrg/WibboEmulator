@@ -53,7 +53,7 @@ using WibboEmulator.WebSocketSharp.Net.WebSockets;
 /// <remarks>
 /// This class can provide multiple WebSocket services.
 /// </remarks>
-public class WebSocketServer
+public class WebSocketServer : IDisposable
 {
     #region Private Fields
 
@@ -160,10 +160,7 @@ public class WebSocketServer
     /// </exception>
     public WebSocketServer(string url)
     {
-        if (url == null)
-        {
-            throw new ArgumentNullException(nameof(url));
-        }
+        ArgumentNullException.ThrowIfNull(url);
 
         if (url.Length == 0)
         {
@@ -295,10 +292,7 @@ public class WebSocketServer
     /// </exception>
     public WebSocketServer(System.Net.IPAddress address, int port, bool secure)
     {
-        if (address == null)
-        {
-            throw new ArgumentNullException(nameof(address));
-        }
+        ArgumentNullException.ThrowIfNull(address);
 
         if (!address.IsLocal())
         {
@@ -807,7 +801,7 @@ public class WebSocketServer
 
         var path = uri.AbsolutePath;
 
-        if (path.IndexOfAny(new[] { '%', '+' }) > -1)
+        if (path.IndexOfAny(['%', '+']) > -1)
         {
             path = HttpUtility.UrlDecode(path, Encoding.UTF8);
         }
@@ -1216,6 +1210,12 @@ public class WebSocketServer
         }
 
         this.Stop(1001, string.Empty);
+    }
+
+    public void Dispose()
+    {
+        this._listener.Dispose();
+        GC.SuppressFinalize(this);
     }
 
     #endregion

@@ -14,10 +14,10 @@ public class BattleBanzai(Room room)
 {
     public Dictionary<int, Item> BanzaiTiles { get; set; } = [];
 
-    private bool _banzaiStarted = false;
+    private bool _banzaiStarted;
     private byte[,] _floorMap;
     private GameField _field;
-    private int _tilesUsed = 0;
+    private int _tilesUsed;
 
     public void AddTile(Item item, int itemID)
     {

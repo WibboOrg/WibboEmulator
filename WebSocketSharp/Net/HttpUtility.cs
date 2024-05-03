@@ -632,7 +632,7 @@ internal static class HttpUtility
         return buff.ToArray();
     }
 
-    private static void UrlEncode(byte b, Stream output)
+    private static void UrlEncode(byte b, MemoryStream output)
     {
         if (b is > 31 and < 127)
         {
@@ -706,7 +706,7 @@ internal static class HttpUtility
         string schm = null;
         string path = null;
 
-        if (requestUri.IndexOf('/') == 0)
+        if (requestUri.StartsWith('/'))
         {
             path = requestUri;
         }
@@ -794,7 +794,7 @@ internal static class HttpUtility
         }
 
         var compType = StringComparison.OrdinalIgnoreCase;
-        if (response.IndexOf(scheme.ToString(), compType) != 0)
+        if (!response.StartsWith(scheme.ToString(), compType))
         {
             return null;
         }
@@ -890,25 +890,16 @@ internal static class HttpUtility
 
     public static string HtmlAttributeEncode(string s)
     {
-        if (s == null)
-        {
-            throw new ArgumentNullException(nameof(s));
-        }
+        ArgumentNullException.ThrowIfNull(s);
 
         return s.Length > 0 ? HtmlEncode(s, true) : s;
     }
 
     public static void HtmlAttributeEncode(string s, TextWriter output)
     {
-        if (s == null)
-        {
-            throw new ArgumentNullException(nameof(s));
-        }
+        ArgumentNullException.ThrowIfNull(s);
 
-        if (output == null)
-        {
-            throw new ArgumentNullException(nameof(output));
-        }
+        ArgumentNullException.ThrowIfNull(output);
 
         if (s.Length == 0)
         {
@@ -920,25 +911,16 @@ internal static class HttpUtility
 
     public static string HtmlDecode(string s)
     {
-        if (s == null)
-        {
-            throw new ArgumentNullException(nameof(s));
-        }
+        ArgumentNullException.ThrowIfNull(s);
 
         return s.Length > 0 ? HtmlDecodeHttp(s) : s;
     }
 
     public static void HtmlDecode(string s, TextWriter output)
     {
-        if (s == null)
-        {
-            throw new ArgumentNullException(nameof(s));
-        }
+        ArgumentNullException.ThrowIfNull(s);
 
-        if (output == null)
-        {
-            throw new ArgumentNullException(nameof(output));
-        }
+        ArgumentNullException.ThrowIfNull(output);
 
         if (s.Length == 0)
         {
@@ -950,25 +932,16 @@ internal static class HttpUtility
 
     public static string HtmlEncode(string s)
     {
-        if (s == null)
-        {
-            throw new ArgumentNullException(nameof(s));
-        }
+        ArgumentNullException.ThrowIfNull(s);
 
         return s.Length > 0 ? HtmlEncode(s, false) : s;
     }
 
     public static void HtmlEncode(string s, TextWriter output)
     {
-        if (s == null)
-        {
-            throw new ArgumentNullException(nameof(s));
-        }
+        ArgumentNullException.ThrowIfNull(s);
 
-        if (output == null)
-        {
-            throw new ArgumentNullException(nameof(output));
-        }
+        ArgumentNullException.ThrowIfNull(output);
 
         if (s.Length == 0)
         {
@@ -982,10 +955,7 @@ internal static class HttpUtility
 
     public static string UrlDecode(byte[] bytes, Encoding encoding)
     {
-        if (bytes == null)
-        {
-            throw new ArgumentNullException(nameof(bytes));
-        }
+        ArgumentNullException.ThrowIfNull(bytes);
 
         var len = bytes.Length;
         return len > 0
@@ -997,10 +967,7 @@ internal static class HttpUtility
 
     public static string UrlDecode(string s, Encoding encoding)
     {
-        if (s == null)
-        {
-            throw new ArgumentNullException(nameof(s));
-        }
+        ArgumentNullException.ThrowIfNull(s);
 
         if (s.Length == 0)
         {
@@ -1017,23 +984,14 @@ internal static class HttpUtility
       byte[] bytes, int offset, int count, Encoding encoding
     )
     {
-        if (bytes == null)
-        {
-            throw new ArgumentNullException(nameof(bytes));
-        }
+        ArgumentNullException.ThrowIfNull(bytes);
 
         var len = bytes.Length;
         if (len == 0)
         {
-            if (offset != 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(offset));
-            }
+            ArgumentOutOfRangeException.ThrowIfNotEqual(offset, 0);
 
-            if (count != 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(count));
-            }
+            ArgumentOutOfRangeException.ThrowIfNotEqual(count, 0);
 
             return string.Empty;
         }
@@ -1057,10 +1015,7 @@ internal static class HttpUtility
 
     public static byte[] UrlDecodeToBytes(byte[] bytes)
     {
-        if (bytes == null)
-        {
-            throw new ArgumentNullException(nameof(bytes));
-        }
+        ArgumentNullException.ThrowIfNull(bytes);
 
         var len = bytes.Length;
         return len > 0
@@ -1070,14 +1025,11 @@ internal static class HttpUtility
 
     public static byte[] UrlDecodeToBytes(string s)
     {
-        if (s == null)
-        {
-            throw new ArgumentNullException(nameof(s));
-        }
+        ArgumentNullException.ThrowIfNull(s);
 
         if (s.Length == 0)
         {
-            return Array.Empty<byte>();
+            return [];
         }
 
         var bytes = Encoding.ASCII.GetBytes(s);
@@ -1086,23 +1038,14 @@ internal static class HttpUtility
 
     public static byte[] UrlDecodeToBytes(byte[] bytes, int offset, int count)
     {
-        if (bytes == null)
-        {
-            throw new ArgumentNullException(nameof(bytes));
-        }
+        ArgumentNullException.ThrowIfNull(bytes);
 
         var len = bytes.Length;
         if (len == 0)
         {
-            if (offset != 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(offset));
-            }
+            ArgumentOutOfRangeException.ThrowIfNotEqual(offset, 0);
 
-            if (count != 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(count));
-            }
+            ArgumentOutOfRangeException.ThrowIfNotEqual(count, 0);
 
             return bytes;
         }
@@ -1119,15 +1062,12 @@ internal static class HttpUtility
 
         return count > 0
                ? UrlDecodeToBytesHttp(bytes, offset, count)
-               : Array.Empty<byte>();
+               : [];
     }
 
     public static string UrlEncode(byte[] bytes)
     {
-        if (bytes == null)
-        {
-            throw new ArgumentNullException(nameof(bytes));
-        }
+        ArgumentNullException.ThrowIfNull(bytes);
 
         var len = bytes.Length;
         return len > 0
@@ -1139,10 +1079,7 @@ internal static class HttpUtility
 
     public static string UrlEncode(string s, Encoding encoding)
     {
-        if (s == null)
-        {
-            throw new ArgumentNullException(nameof(s));
-        }
+        ArgumentNullException.ThrowIfNull(s);
 
         var len = s.Length;
         if (len == 0)
@@ -1160,23 +1097,14 @@ internal static class HttpUtility
 
     public static string UrlEncode(byte[] bytes, int offset, int count)
     {
-        if (bytes == null)
-        {
-            throw new ArgumentNullException(nameof(bytes));
-        }
+        ArgumentNullException.ThrowIfNull(bytes);
 
         var len = bytes.Length;
         if (len == 0)
         {
-            if (offset != 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(offset));
-            }
+            ArgumentOutOfRangeException.ThrowIfNotEqual(offset, 0);
 
-            if (count != 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(count));
-            }
+            ArgumentOutOfRangeException.ThrowIfNotEqual(count, 0);
 
             return string.Empty;
         }
@@ -1200,10 +1128,7 @@ internal static class HttpUtility
 
     public static byte[] UrlEncodeToBytes(byte[] bytes)
     {
-        if (bytes == null)
-        {
-            throw new ArgumentNullException(nameof(bytes));
-        }
+        ArgumentNullException.ThrowIfNull(bytes);
 
         var len = bytes.Length;
         return len > 0 ? UrlEncodeToBytes(bytes, 0, len) : bytes;
@@ -1213,14 +1138,11 @@ internal static class HttpUtility
 
     public static byte[] UrlEncodeToBytes(string s, Encoding encoding)
     {
-        if (s == null)
-        {
-            throw new ArgumentNullException(nameof(s));
-        }
+        ArgumentNullException.ThrowIfNull(s);
 
         if (s.Length == 0)
         {
-            return Array.Empty<byte>();
+            return [];
         }
 
         var bytes = (encoding ?? Encoding.UTF8).GetBytes(s);

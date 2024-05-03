@@ -12,7 +12,7 @@ public class Freeze(Room room)
 {
     private readonly Dictionary<int, Item> _freezeBlocks = [];
 
-    public bool IsGameActive { get; private set; } = false;
+    public bool IsGameActive { get; private set; }
 
     public void StartGame()
     {

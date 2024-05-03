@@ -23,7 +23,7 @@ public class WiredHandler(Room room)
     private readonly Dictionary<Point, int> _specialUnseen = [];
 
     private readonly ConcurrentQueue<WiredCycle> _requestingUpdates = new();
-    private int _tickCounter = 0;
+    private int _tickCounter;
     private bool _doCleanup;
     private DateTime _blockWiredDateTime;
     private bool _blockWired;
@@ -39,7 +39,7 @@ public class WiredHandler(Room room)
         var itemCoord = item.Coordinate;
         if (WiredUtillity.TypeIsWiredAction(item.ItemData.InteractionType))
         {
-            this._actionStacks.AddOrUpdate(itemCoord, _ => new List<Item> { item }, (_, existingValue) =>
+            this._actionStacks.AddOrUpdate(itemCoord, _ => [item], (_, existingValue) =>
             {
                 existingValue.Add(item);
                 return existingValue;
@@ -47,7 +47,7 @@ public class WiredHandler(Room room)
         }
         else if (WiredUtillity.TypeIsWiredCondition(item.ItemData.InteractionType))
         {
-            this._conditionStacks.AddOrUpdate(itemCoord, _ => new List<Item> { item }, (_, existingValue) =>
+            this._conditionStacks.AddOrUpdate(itemCoord, _ => [item], (_, existingValue) =>
             {
                 existingValue.Add(item);
                 return existingValue;

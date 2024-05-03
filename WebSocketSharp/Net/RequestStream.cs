@@ -157,10 +157,7 @@ internal class RequestStream : Stream
             throw new ObjectDisposedException(name);
         }
 
-        if (buffer == null)
-        {
-            throw new ArgumentNullException(nameof(buffer));
-        }
+        ArgumentNullException.ThrowIfNull(buffer);
 
         if (offset < 0)
         {
@@ -230,10 +227,7 @@ internal class RequestStream : Stream
             throw new ObjectDisposedException(name);
         }
 
-        if (asyncResult == null)
-        {
-            throw new ArgumentNullException(nameof(asyncResult));
-        }
+        ArgumentNullException.ThrowIfNull(asyncResult);
 
         if (asyncResult is HttpStreamAsyncResult ares)
         {
@@ -270,10 +264,7 @@ internal class RequestStream : Stream
             throw new ObjectDisposedException(name);
         }
 
-        if (buffer == null)
-        {
-            throw new ArgumentNullException(nameof(buffer));
-        }
+        ArgumentNullException.ThrowIfNull(buffer);
 
         if (offset < 0)
         {

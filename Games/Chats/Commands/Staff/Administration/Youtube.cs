@@ -7,6 +7,9 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Youtube : IChatCommand
 {
+    internal static readonly string[] Separator = ["?v="];
+    internal static readonly string[] SeparatorArray = ["youtu.be/"];
+
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 3)
@@ -26,11 +29,11 @@ internal sealed class Youtube : IChatCommand
 
         if (url.Contains("?v="))
         {
-            split = url.Split(new string[] { "?v=" }, StringSplitOptions.None)[1];
+            split = url.Split(Separator, StringSplitOptions.None)[1];
         }
         else if (url.Contains("youtu.be/"))
         {
-            split = url.Split(new string[] { "youtu.be/" }, StringSplitOptions.None)[1];
+            split = url.Split(SeparatorArray, StringSplitOptions.None)[1];
         }
 
         if (split.Length < 11)

@@ -84,10 +84,7 @@ public class HighScorePoints(Item item, Room room) : WiredActionBase(item, room,
                 }
             }
 
-            if (!this.Item.Scores.ContainsKey(username))
-            {
-                this.Item.Scores.Add(username, score);
-            }
+            _ = this.Item.Scores.TryAdd(username, score);
         }
     }
 

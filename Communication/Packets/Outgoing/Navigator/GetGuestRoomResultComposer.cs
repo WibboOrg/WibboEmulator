@@ -49,7 +49,7 @@ internal sealed class GetGuestRoomResultComposer : ServerPacket
         this.WriteInteger(data.WhoCanKick);
         this.WriteInteger(data.BanFuse);
 
-        this.WriteBoolean((session != null) && data.OwnerName.ToLower() != session.User.Username.ToLower());
+        this.WriteBoolean((session != null) && !data.OwnerName.Equals(session.User.Username, StringComparison.CurrentCultureIgnoreCase));
         this.WriteInteger(data.ChatType);
         this.WriteInteger(data.ChatBalloon);
         this.WriteInteger(data.ChatSpeed);

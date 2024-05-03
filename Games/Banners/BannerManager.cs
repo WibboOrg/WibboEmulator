@@ -22,7 +22,7 @@ public static class BannerManager
 
     public static Banner GetOneRandomBanner()
     {
-        if (!BannerList.Any())
+        if (BannerList.Count == 0)
         {
             return null;
         }
@@ -31,7 +31,7 @@ public static class BannerManager
 
         var allBannerTrade = BannerList.Values.Where(x => (x.CanTrade && !x.HaveLayer) || (x.CanTrade && x.HaveLayer && addBannerLayer)).ToList();
 
-        if (!allBannerTrade.Any())
+        if (allBannerTrade.Count == 0)
         {
             return null;
         }

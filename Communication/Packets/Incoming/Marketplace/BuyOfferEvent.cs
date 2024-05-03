@@ -96,10 +96,7 @@ internal sealed class BuyOfferEvent : IPacketEvent
                     MarketplaceManager.MarketAverages.Add(item.SpriteId, offer.TotalPrice);
                 }
 
-                if (!MarketplaceManager.MarketCounts.ContainsKey(item.SpriteId))
-                {
-                    MarketplaceManager.MarketCounts.Add(item.SpriteId, 1);
-                }
+                _ = MarketplaceManager.MarketCounts.TryAdd(item.SpriteId, 1);
             }
         }
 
@@ -135,7 +132,7 @@ internal sealed class BuyOfferEvent : IPacketEvent
 
         foreach (var item in MarketplaceManager.MarketItems)
         {
-            if (dictionary.TryGetValue(item.SpriteId, out var marketOffer))
+            if (dictionary.TryGetValue(item.SpriteId, out var _))
             {
                 if (dictionary[item.SpriteId].TotalPrice > item.TotalPrice)
                 {

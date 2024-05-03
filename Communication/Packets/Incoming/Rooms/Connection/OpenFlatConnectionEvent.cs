@@ -108,7 +108,7 @@ internal sealed class OpenFlatConnectionEvent : IPacketEvent
                     }
                     return;
                 }
-                else if (room.RoomData.Access == RoomAccess.Password && password.ToLower() != room.RoomData.Password.ToLower())
+                else if (room.RoomData.Access == RoomAccess.Password && !password.Equals(room.RoomData.Password.ToLower(), StringComparison.CurrentCultureIgnoreCase))
                 {
                     session.SendPacket(new GenericErrorComposer(-100002));
                     session.SendPacket(new CloseConnectionComposer());

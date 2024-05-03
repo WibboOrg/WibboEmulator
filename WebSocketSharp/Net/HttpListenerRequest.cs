@@ -760,7 +760,7 @@ public sealed class HttpListenerRequest
 
     internal void SetRequestLine(string requestLine)
     {
-        var parts = requestLine.Split(new[] { ' ' }, 3);
+        var parts = requestLine.Split([' '], 3);
 
         if (parts.Length < 3)
         {

@@ -24,7 +24,7 @@ internal sealed class ChangeFootGate : IPacketEvent
             return;
         }
 
-        if (gender.ToUpper() == "M")
+        if (gender.Equals("M", StringComparison.CurrentCultureIgnoreCase))
         {
             var figures = item.ExtraData.Split(',');
             var newFigures = new string[2];
@@ -41,7 +41,7 @@ internal sealed class ChangeFootGate : IPacketEvent
 
             item.ExtraData = string.Join(",", newFigures);
         }
-        else if (gender.ToUpper() == "F")
+        else if (gender.Equals("F", StringComparison.CurrentCultureIgnoreCase))
         {
             var figures = item.ExtraData.Split(',');
             var newFigures = new string[2];

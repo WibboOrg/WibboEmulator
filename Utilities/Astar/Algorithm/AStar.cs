@@ -147,7 +147,7 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
 
         if (this._startNode == this._endNode)
         {
-            return new LinkedList<PathNode>(new PathNode[] { this._startNode });
+            return new LinkedList<PathNode>([this._startNode]);
         }
 
         PathNode[] neighborNodes;

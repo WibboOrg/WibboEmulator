@@ -7,7 +7,7 @@ public class WiredCycle(IWiredCycleable wiredCycleable, RoomUser user, Item item
     public RoomUser User { get; set; } = user;
     public Item Item { get; set; } = item;
     public IWiredCycleable WiredCycleable { get; set; } = wiredCycleable;
-    public int Cycle { get; set; } = 0;
+    public int Cycle { get; set; }
 
     public bool OnCycle()
     {

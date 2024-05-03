@@ -44,15 +44,8 @@ internal sealed class GetOffersEvent : IPacketEvent
             {
                 if (item.LimitedNumber > 0)
                 {
-                    if (!dictionary.ContainsKey(item.OfferID))
-                    {
-                        dictionary.Add(item.OfferID, item);
-                    }
-
-                    if (!dictionary2.ContainsKey(item.OfferID))
-                    {
-                        dictionary2.Add(item.OfferID, 1);
-                    }
+                    _ = dictionary.TryAdd(item.OfferID, item);
+                    _ = dictionary2.TryAdd(item.OfferID, 1);
                 }
                 else
                 {
@@ -69,15 +62,8 @@ internal sealed class GetOffersEvent : IPacketEvent
             }
             else
             {
-                if (!dictionary.ContainsKey(item.SpriteId))
-                {
-                    dictionary.Add(item.SpriteId, item);
-                }
-
-                if (!dictionary2.ContainsKey(item.SpriteId))
-                {
-                    dictionary2.Add(item.SpriteId, 1);
-                }
+                _ = dictionary.TryAdd(item.SpriteId, item);
+                _ = dictionary2.TryAdd(item.SpriteId, 1);
             }
         }
 

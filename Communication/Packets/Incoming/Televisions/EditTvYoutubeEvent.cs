@@ -6,6 +6,9 @@ internal sealed class EditTvYoutubeEvent : IPacketEvent
 {
     public double Delay => 500;
 
+    internal static readonly string[] Separator = ["?v="];
+    internal static readonly string[] SeparatorArray = ["youtu.be/"];
+
     public void Parse(GameClient session, ClientPacket packet)
     {
         var itemId = packet.PopInt();
@@ -37,11 +40,11 @@ internal sealed class EditTvYoutubeEvent : IPacketEvent
 
         if (url.Contains("?v="))
         {
-            split = url.Split(new string[] { "?v=" }, StringSplitOptions.None)[1];
+            split = url.Split(Separator, StringSplitOptions.None)[1];
         }
         else if (url.Contains("youtu.be/"))
         {
-            split = url.Split(new string[] { "youtu.be/" }, StringSplitOptions.None)[1];
+            split = url.Split(SeparatorArray, StringSplitOptions.None)[1];
         }
 
         if (split.Length < 11)

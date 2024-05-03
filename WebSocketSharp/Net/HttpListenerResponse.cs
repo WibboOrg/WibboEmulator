@@ -751,10 +751,7 @@ public sealed class HttpListenerResponse : IDisposable
                 throw new InvalidOperationException(msg);
             }
 
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             if (value.Length == 0)
             {
@@ -1018,10 +1015,7 @@ public sealed class HttpListenerResponse : IDisposable
             throw new ObjectDisposedException(name);
         }
 
-        if (responseEntity == null)
-        {
-            throw new ArgumentNullException(nameof(responseEntity));
-        }
+        ArgumentNullException.ThrowIfNull(responseEntity);
 
         var len = responseEntity.LongLength;
 
@@ -1066,10 +1060,7 @@ public sealed class HttpListenerResponse : IDisposable
     /// </exception>
     public void CopyFrom(HttpListenerResponse templateResponse)
     {
-        if (templateResponse == null)
-        {
-            throw new ArgumentNullException(nameof(templateResponse));
-        }
+        ArgumentNullException.ThrowIfNull(templateResponse);
 
         var headers = templateResponse._headers;
 
@@ -1138,10 +1129,7 @@ public sealed class HttpListenerResponse : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (url == null)
-        {
-            throw new ArgumentNullException(nameof(url));
-        }
+        ArgumentNullException.ThrowIfNull(url);
 
         if (url.Length == 0)
         {
@@ -1175,10 +1163,7 @@ public sealed class HttpListenerResponse : IDisposable
     /// </exception>
     public void SetCookie(Cookie cookie)
     {
-        if (cookie == null)
-        {
-            throw new ArgumentNullException(nameof(cookie));
-        }
+        ArgumentNullException.ThrowIfNull(cookie);
 
         if (!this.CanSetCookie(cookie))
         {

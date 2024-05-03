@@ -105,7 +105,7 @@ public class WebSocketServiceManager
         {
             lock (this._sync)
             {
-                return this._hosts.Values.ToList();
+                return [.. this._hosts.Values];
             }
         }
     }
@@ -158,10 +158,7 @@ public class WebSocketServiceManager
     {
         get
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             if (path.Length == 0)
             {
@@ -175,7 +172,7 @@ public class WebSocketServiceManager
                 throw new ArgumentException(msg, nameof(path));
             }
 
-            if (path.IndexOfAny(new[] { '?', '#' }) > -1)
+            if (path.IndexOfAny(['?', '#']) > -1)
             {
                 var msg = "It includes either or both query and fragment components.";
 
@@ -247,7 +244,7 @@ public class WebSocketServiceManager
         {
             lock (this._sync)
             {
-                return this._hosts.Keys.ToList();
+                return [.. this._hosts.Keys];
             }
         }
     }
@@ -421,10 +418,7 @@ public class WebSocketServiceManager
     )
       where TBehavior : WebSocketBehavior, new()
     {
-        if (path == null)
-        {
-            throw new ArgumentNullException(nameof(path));
-        }
+        ArgumentNullException.ThrowIfNull(path);
 
         if (path.Length == 0)
         {
@@ -438,7 +432,7 @@ public class WebSocketServiceManager
             throw new ArgumentException(msg, nameof(path));
         }
 
-        if (path.IndexOfAny(new[] { '?', '#' }) > -1)
+        if (path.IndexOfAny(['?', '#']) > -1)
         {
             var msg = "It includes either or both query and fragment components.";
 
@@ -548,10 +542,7 @@ public class WebSocketServiceManager
     /// </exception>
     public bool RemoveService(string path)
     {
-        if (path == null)
-        {
-            throw new ArgumentNullException(nameof(path));
-        }
+        ArgumentNullException.ThrowIfNull(path);
 
         if (path.Length == 0)
         {
@@ -565,7 +556,7 @@ public class WebSocketServiceManager
             throw new ArgumentException(msg, nameof(path));
         }
 
-        if (path.IndexOfAny(new[] { '?', '#' }) > -1)
+        if (path.IndexOfAny(['?', '#']) > -1)
         {
             var msg = "It includes either or both query and fragment components.";
 
@@ -643,10 +634,7 @@ public class WebSocketServiceManager
     /// </exception>
     public bool TryGetServiceHost(string path, out WebSocketServiceHost host)
     {
-        if (path == null)
-        {
-            throw new ArgumentNullException(nameof(path));
-        }
+        ArgumentNullException.ThrowIfNull(path);
 
         if (path.Length == 0)
         {
@@ -660,7 +648,7 @@ public class WebSocketServiceManager
             throw new ArgumentException(msg, nameof(path));
         }
 
-        if (path.IndexOfAny(new[] { '?', '#' }) > -1)
+        if (path.IndexOfAny(['?', '#']) > -1)
         {
             var msg = "It includes either or both query and fragment components.";
 

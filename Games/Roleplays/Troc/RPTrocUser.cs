@@ -4,8 +4,8 @@ public class RPTrocUser(int userId)
 {
     public int UserId { get; set; } = userId;
     public Dictionary<int, int> ItemIds { get; set; } = [];
-    public bool Accepted { get; set; } = false;
-    public bool Confirmed { get; set; } = false;
+    public bool Accepted { get; set; }
+    public bool Confirmed { get; set; }
 
     public int GetCountItem(int itemId)
     {
@@ -21,13 +21,13 @@ public class RPTrocUser(int userId)
 
     public void AddItemId(int itemId)
     {
-        if (!this.ItemIds.ContainsKey(itemId))
+        if (!this.ItemIds.TryGetValue(itemId, out var value))
         {
             this.ItemIds.Add(itemId, 1);
         }
         else
         {
-            this.ItemIds[itemId]++;
+            this.ItemIds[itemId] = ++value;
         }
     }
 

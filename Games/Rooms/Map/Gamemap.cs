@@ -529,10 +529,7 @@ public class GameMap
             if (this.CoordinatedItems.TryGetValue(tile, out var value))
             {
                 var list = value;
-                if (!noDoublons.ContainsKey(tile))
-                {
-                    noDoublons.Add(tile, list);
-                }
+                _ = noDoublons.TryAdd(tile, list);
             }
             this.SetDefaultValue(tile.X, tile.Y);
         }

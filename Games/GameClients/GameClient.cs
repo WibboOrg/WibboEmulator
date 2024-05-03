@@ -12,7 +12,7 @@ using WibboEmulator.Utilities;
 public class GameClient(string clientId, GameWebSocket connection)
 {
     private readonly Dictionary<int, double> _packetTimeout = [];
-    private int _packetCount = 0;
+    private int _packetCount;
     private double _packetLastTimestamp = UnixTimestamp.GetNow();
 
     public string SSOTicket { get; set; }

@@ -9,7 +9,7 @@ public class RoomRoleplay(Room room)
     public int Minute { get; set; } = -1;
     public int Intensity { get; set; } = -1;
     public bool CycleHourEffect { get; set; } = true;
-    public bool TimeSpeed { get; set; } = false;
+    public bool TimeSpeed { get; set; }
 
     public void OnCycle()
     {

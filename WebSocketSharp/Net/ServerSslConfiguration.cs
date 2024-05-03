@@ -71,10 +71,7 @@ public class ServerSslConfiguration
     /// </exception>
     public ServerSslConfiguration(ServerSslConfiguration configuration)
     {
-        if (configuration == null)
-        {
-            throw new ArgumentNullException(nameof(configuration));
-        }
+        ArgumentNullException.ThrowIfNull(configuration);
 
         this.CheckCertificateRevocation = configuration.CheckCertificateRevocation;
         this.ClientCertificateRequired = configuration.ClientCertificateRequired;

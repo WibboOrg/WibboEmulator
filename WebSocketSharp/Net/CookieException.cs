@@ -97,46 +97,4 @@ public class CookieException : FormatException, ISerializable
     }
 
     #endregion
-
-    #region Public Methods
-
-    /// <summary>
-    /// Populates the specified <see cref="SerializationInfo"/> instance with
-    /// the data needed to serialize the current instance.
-    /// </summary>
-    /// <param name="info">
-    /// </param>
-    /// <param name="context">
-    /// A <see cref="StreamingContext"/> that specifies the destination for
-    /// the serialization.
-    /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="info"/> is <see langword="null"/>.
-    /// </exception>
-    public override void GetObjectData(
-      SerializationInfo info, StreamingContext context
-    ) => base.GetObjectData(info, context);
-
-    #endregion
-
-    #region Explicit Interface Implementation
-
-    /// <summary>
-    /// Populates the specified <see cref="SerializationInfo"/> instance with
-    /// the data needed to serialize the current instance.
-    /// </summary>
-    /// <param name="serializationInfo">
-    /// </param>
-    /// <param name="streamingContext">
-    /// A <see cref="StreamingContext"/> that specifies the destination for
-    /// the serialization.
-    /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="serializationInfo"/> is <see langword="null"/>.
-    /// </exception>
-    void ISerializable.GetObjectData(
-      SerializationInfo serializationInfo, StreamingContext streamingContext
-    ) => base.GetObjectData(serializationInfo, streamingContext);
-
-    #endregion
 }

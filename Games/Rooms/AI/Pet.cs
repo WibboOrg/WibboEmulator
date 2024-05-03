@@ -5,8 +5,8 @@ using WibboEmulator.Games.Rooms;
 
 public class Pet
 {
-    private readonly int[] _experienceLevels = new int[19]
-    {
+    private readonly int[] _experienceLevels =
+    [
         100,
         200,
         400,
@@ -26,7 +26,7 @@ public class Pet
         51900,
         120000,
         240000
-    };
+    ];
     public int PetId { get; set; }
     public int OwnerId { get; set; }
     public int VirtualId { get; set; }

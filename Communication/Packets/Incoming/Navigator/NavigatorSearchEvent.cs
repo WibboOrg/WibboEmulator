@@ -13,7 +13,7 @@ internal sealed class NavigatorSearchEvent : IPacketEvent
         var category = packet.PopString();
         var search = packet.PopString();
 
-        ICollection<SearchResultList> categories = new List<SearchResultList>();
+        ICollection<SearchResultList> categories = [];
 
         if (!string.IsNullOrEmpty(search))
         {

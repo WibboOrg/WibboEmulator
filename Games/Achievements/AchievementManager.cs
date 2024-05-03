@@ -31,7 +31,7 @@ public static class AchievementManager
             }
 
             var level = new AchievementLevel(emulatorAchievement.Level, emulatorAchievement.RewardPixels, emulatorAchievement.RewardPoints, emulatorAchievement.ProgressNeeded);
-            if (!Achievements.ContainsKey(groupName))
+            if (!Achievements.TryGetValue(groupName, out var value))
             {
                 var achievement = new AchievementData(id, groupName, category);
                 achievement.AddLevel(level);
@@ -39,7 +39,7 @@ public static class AchievementManager
             }
             else
             {
-                Achievements[groupName].AddLevel(level);
+                value.AddLevel(level);
             }
         }
     }

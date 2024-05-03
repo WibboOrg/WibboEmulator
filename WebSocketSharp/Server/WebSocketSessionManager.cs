@@ -150,17 +150,17 @@ public class WebSocketSessionManager : IDisposable
         {
             if (this._state != ServerState.Start)
             {
-                return Enumerable.Empty<string>();
+                return [];
             }
 
             lock (this._sync)
             {
                 if (this._state != ServerState.Start)
                 {
-                    return Enumerable.Empty<string>();
+                    return [];
                 }
 
-                return this._sessions.Keys.ToList();
+                return [.. this._sessions.Keys];
             }
         }
     }
@@ -216,10 +216,7 @@ public class WebSocketSessionManager : IDisposable
     {
         get
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
+            ArgumentNullException.ThrowIfNull(id);
 
             if (id.Length == 0)
             {
@@ -281,17 +278,17 @@ public class WebSocketSessionManager : IDisposable
         {
             if (this._state != ServerState.Start)
             {
-                return Enumerable.Empty<IWebSocketSession>();
+                return [];
             }
 
             lock (this._sync)
             {
                 if (this._state != ServerState.Start)
                 {
-                    return Enumerable.Empty<IWebSocketSession>();
+                    return [];
                 }
 
-                return this._sessions.Values.ToList();
+                return [.. this._sessions.Values];
             }
         }
     }
@@ -568,10 +565,7 @@ public class WebSocketSessionManager : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (data == null)
-        {
-            throw new ArgumentNullException(nameof(data));
-        }
+        ArgumentNullException.ThrowIfNull(data);
 
         if (data.LongLength <= WebSocket.FragmentLength)
         {
@@ -607,10 +601,7 @@ public class WebSocketSessionManager : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (data == null)
-        {
-            throw new ArgumentNullException(nameof(data));
-        }
+        ArgumentNullException.ThrowIfNull(data);
 
 
         if (!data.TryGetUTF8EncodedBytes(out var bytes))
@@ -677,10 +668,7 @@ public class WebSocketSessionManager : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (stream == null)
-        {
-            throw new ArgumentNullException(nameof(stream));
-        }
+        ArgumentNullException.ThrowIfNull(stream);
 
         if (!stream.CanRead)
         {
@@ -758,10 +746,7 @@ public class WebSocketSessionManager : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (data == null)
-        {
-            throw new ArgumentNullException(nameof(data));
-        }
+        ArgumentNullException.ThrowIfNull(data);
 
         if (data.LongLength <= WebSocket.FragmentLength)
         {
@@ -810,10 +795,7 @@ public class WebSocketSessionManager : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (data == null)
-        {
-            throw new ArgumentNullException(nameof(data));
-        }
+        ArgumentNullException.ThrowIfNull(data);
 
 
         if (!data.TryGetUTF8EncodedBytes(out var bytes))
@@ -892,10 +874,7 @@ public class WebSocketSessionManager : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (stream == null)
-        {
-            throw new ArgumentNullException(nameof(stream));
-        }
+        ArgumentNullException.ThrowIfNull(stream);
 
         if (!stream.CanRead)
         {

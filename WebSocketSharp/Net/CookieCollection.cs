@@ -185,10 +185,7 @@ public class CookieCollection : ICollection<Cookie>
     {
         get
         {
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(name);
 
             var caseInsensitive = StringComparison.InvariantCultureIgnoreCase;
 
@@ -211,6 +208,8 @@ public class CookieCollection : ICollection<Cookie>
     /// An <see cref="object"/> used to synchronize access to the collection.
     /// </value>
     public object SyncRoot => this._sync;
+
+    private static readonly string[] Formats = ["ddd, dd'-'MMM'-'yyyy HH':'mm':'ss 'GMT'", "r"];
 
     #endregion
 
@@ -499,7 +498,7 @@ public class CookieCollection : ICollection<Cookie>
                 if (
                   !DateTime.TryParseExact(
                     buff.ToString(),
-                    new[] { "ddd, dd'-'MMM'-'yyyy HH':'mm':'ss 'GMT'", "r" },
+                    Formats,
                     CultureInfo.CreateSpecificCulture("en-US"),
                     DateTimeStyles.AdjustToUniversal
                     | DateTimeStyles.AssumeUniversal,
@@ -662,7 +661,7 @@ public class CookieCollection : ICollection<Cookie>
 
     private static string UrlDecode(string s, Encoding encoding)
     {
-        if (s.IndexOfAny(new[] { '%', '+' }) == -1)
+        if (s.IndexOfAny(['%', '+']) == -1)
         {
             return s;
         }
@@ -757,10 +756,7 @@ public class CookieCollection : ICollection<Cookie>
             throw new InvalidOperationException(msg);
         }
 
-        if (cookies == null)
-        {
-            throw new ArgumentNullException(nameof(cookies));
-        }
+        ArgumentNullException.ThrowIfNull(cookies);
 
         foreach (var cookie in cookies._list)
         {
@@ -800,10 +796,7 @@ public class CookieCollection : ICollection<Cookie>
     /// </exception>
     public bool Contains(Cookie item)
     {
-        if (item == null)
-        {
-            throw new ArgumentNullException(nameof(item));
-        }
+        ArgumentNullException.ThrowIfNull(item);
 
         return this.Search(item) > -1;
     }
@@ -832,10 +825,7 @@ public class CookieCollection : ICollection<Cookie>
     /// </exception>
     public void CopyTo(Cookie[] array, int arrayIndex)
     {
-        if (array == null)
-        {
-            throw new ArgumentNullException(nameof(array));
-        }
+        ArgumentNullException.ThrowIfNull(array);
 
         if (arrayIndex < 0)
         {
@@ -888,10 +878,7 @@ public class CookieCollection : ICollection<Cookie>
             throw new InvalidOperationException(msg);
         }
 
-        if (item == null)
-        {
-            throw new ArgumentNullException(nameof(item));
-        }
+        ArgumentNullException.ThrowIfNull(item);
 
         var idx = this.Search(item);
         if (idx == -1)

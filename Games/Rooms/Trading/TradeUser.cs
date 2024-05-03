@@ -6,7 +6,7 @@ public class TradeUser(int userId, int roomId)
 {
     public int UserId { get; set; } = userId;
     public List<Item> OfferedItems { get; set; } = [];
-    public bool HasAccepted { get; set; } = false;
+    public bool HasAccepted { get; set; }
 
     public RoomUser RoomUser
     {

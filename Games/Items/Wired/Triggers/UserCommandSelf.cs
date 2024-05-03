@@ -50,7 +50,7 @@ public class UserCommandSelf : WiredTriggerBase, IWired
         var messageCommand = messageParts[0];
         var messageUserName = messageParts[1];
 
-        if (messageCommand.ToLower() != commandName.ToLower())
+        if (!messageCommand.Equals(commandName, StringComparison.CurrentCultureIgnoreCase))
         {
             return;
         }
