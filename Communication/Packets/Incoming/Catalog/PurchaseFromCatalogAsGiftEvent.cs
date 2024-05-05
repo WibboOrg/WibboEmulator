@@ -10,6 +10,7 @@ using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Users;
 using WibboEmulator.Utilities;
 
 internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
@@ -94,7 +95,7 @@ internal sealed class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             return;
         }
 
-        var user = WibboEnvironment.GetUserById(id);
+        var user = UserManager.GetUserById(id);
         if (user == null)
         {
             session.SendPacket(new GiftReceiverNotFoundComposer());

@@ -10,6 +10,7 @@ using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 
 internal sealed class ChangeNameEvent : IPacketEvent
 {
@@ -47,7 +48,7 @@ internal sealed class ChangeNameEvent : IPacketEvent
             return;
         }
 
-        if (WibboEnvironment.NameAvailable(newUsername) != 1)
+        if (UserManager.UsernameAvailable(newUsername) != 1)
         {
             session.SendNotification(LanguageManager.TryGetValue("notif.changename.error.2", session.Language));
             return;

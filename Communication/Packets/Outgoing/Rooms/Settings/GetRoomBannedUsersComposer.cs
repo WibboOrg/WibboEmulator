@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 
 internal sealed class GetRoomBannedUsersComposer : ServerPacket
 {
@@ -11,7 +12,7 @@ internal sealed class GetRoomBannedUsersComposer : ServerPacket
         this.WriteInteger(instance.Bans.Count);//Count
         foreach (var id in instance.Bans.Keys)
         {
-            var data = WibboEnvironment.GetUserById(id);
+            var data = UserManager.GetUserById(id);
 
             if (data == null)
             {

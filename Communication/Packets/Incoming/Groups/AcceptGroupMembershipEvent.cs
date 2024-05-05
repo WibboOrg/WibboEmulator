@@ -3,6 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Groups;
 
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
+using WibboEmulator.Games.Users;
 
 internal sealed class AcceptGroupMembershipEvent : IPacketEvent
 {
@@ -28,7 +29,7 @@ internal sealed class AcceptGroupMembershipEvent : IPacketEvent
             return;
         }
 
-        var user = WibboEnvironment.GetUserById(userId);
+        var user = UserManager.GetUserById(userId);
         if (user == null)
         {
             return;

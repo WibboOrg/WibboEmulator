@@ -3,6 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Core.Settings;
 using WibboEmulator.Games.Banners;
 using WibboEmulator.Games.Groups;
+using WibboEmulator.Games.Users;
 
 internal static class ItemBehaviourUtility
 {
@@ -282,7 +283,7 @@ internal static class ItemBehaviourUtility
                     var giftExtraData = giftData[1].Split(Convert.ToChar(5));
                     var giftMessage = giftExtraData[0];
 
-                    var giftPurchaser = WibboEnvironment.GetUserById(giftUserId);
+                    var giftPurchaser = UserManager.GetUserById(giftUserId);
                     message.WriteInteger((int)ObjectDataKey.MAP_KEY);
                     message.WriteInteger(3); // Count
                     message.WriteString("MESSAGE");

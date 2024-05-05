@@ -6,6 +6,7 @@ using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 
 internal sealed class TransfertRoom : IChatCommand
 {
@@ -31,7 +32,7 @@ internal sealed class TransfertRoom : IChatCommand
             return;
         }
 
-        var userTarget = WibboEnvironment.GetUserById(userId);
+        var userTarget = UserManager.GetUserById(userId);
 
         RoomDao.UpdateOwnerByRoomId(dbClient, userTarget.Username, room.Id);
 

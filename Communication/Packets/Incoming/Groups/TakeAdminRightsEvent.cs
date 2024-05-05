@@ -3,6 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 
 internal sealed class TakeAdminRightsEvent : IPacketEvent{
     public double Delay => 100;
@@ -20,7 +21,7 @@ internal sealed class TakeAdminRightsEvent : IPacketEvent{
             return;
         }
 
-        var user = WibboEnvironment.GetUserById(userId);
+        var user = UserManager.GetUserById(userId);
         if (user == null)
         {
             return;

@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Users;
 
 internal sealed class GetRelationshipsEvent : IPacketEvent
 {
@@ -10,7 +11,7 @@ internal sealed class GetRelationshipsEvent : IPacketEvent
     {
         var userId = packet.PopInt();
 
-        var user = WibboEnvironment.GetUserById(userId);
+        var user = UserManager.GetUserById(userId);
         if (user == null)
         {
             return;

@@ -2,6 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Users;
 
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Users;
 
 internal sealed class UserBannerEvent : IPacketEvent
 {
@@ -12,7 +13,7 @@ internal sealed class UserBannerEvent : IPacketEvent
         var userId = packet.PopInt();
         var all = packet.PopBoolean();
 
-        var user = WibboEnvironment.GetUserById(userId);
+        var user = UserManager.GetUserById(userId);
         if (user == null)
         {
             return;

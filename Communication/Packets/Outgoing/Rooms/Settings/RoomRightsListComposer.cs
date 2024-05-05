@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 
 internal sealed class RoomRightsListComposer : ServerPacket
 {
@@ -11,7 +12,7 @@ internal sealed class RoomRightsListComposer : ServerPacket
         this.WriteInteger(instance.UsersWithRights.Count);
         foreach (var id in instance.UsersWithRights.ToList())
         {
-            var data = WibboEnvironment.GetUserById(id);
+            var data = UserManager.GetUserById(id);
             if (data == null)
             {
                 this.WriteInteger(0);

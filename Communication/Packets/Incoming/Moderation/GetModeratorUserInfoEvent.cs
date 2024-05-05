@@ -2,6 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Core.Language;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Users;
 
 internal sealed class GetModeratorUserInfoEvent : IPacketEvent
 {
@@ -16,7 +17,7 @@ internal sealed class GetModeratorUserInfoEvent : IPacketEvent
 
         var userId = packet.PopInt();
 
-        var user = WibboEnvironment.GetUserById(userId);
+        var user = UserManager.GetUserById(userId);
 
         if (user == null)
         {

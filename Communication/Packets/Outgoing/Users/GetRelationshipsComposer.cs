@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Users;
 
+using WibboEmulator.Games.Users;
 using WibboEmulator.Games.Users.Messenger;
 
 internal sealed class GetRelationshipsComposer : ServerPacket
@@ -26,7 +27,7 @@ internal sealed class GetRelationshipsComposer : ServerPacket
         var hates = relationRandom.Count(x => x.Value.Type == 3);
         foreach (var rel in relationRandom.Values)
         {
-            var hHab = WibboEnvironment.GetUserById(rel.UserId);
+            var hHab = UserManager.GetUserById(rel.UserId);
             if (hHab == null)
             {
                 this.WriteInteger(0);
