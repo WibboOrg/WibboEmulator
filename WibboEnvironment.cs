@@ -22,16 +22,6 @@ using WibboEmulator.Communication.Packets;
 public static class WibboEnvironment
 {
     private static readonly Random RandomNumber = new();
-    private static readonly List<char> Allowedchars = new(
-        [
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-            '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-            '-', '.', '=', '!', ':', '@'
-        ]);
-
     public static HttpClient HttpClient { get; } = new();
     public static DateTime ServerStarted { get; private set; }
     public static string PatchDir { get; private set; }
@@ -136,16 +126,6 @@ public static class WibboEnvironment
     }
 
     public static int GetUnixTimestamp() => (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-
-    public static bool IsValidAlphaNumeric(string input)
-    {
-        if (string.IsNullOrEmpty(input))
-        {
-            return false;
-        }
-
-        return input.All(Allowedchars.Contains);
-    }
 
     public static void PerformShutDown()
     {

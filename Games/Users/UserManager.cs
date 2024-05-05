@@ -5,6 +5,7 @@ using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Authentificator;
+using WibboEmulator.Utilities;
 
 public static class UserManager
 {
@@ -12,7 +13,7 @@ public static class UserManager
 
     public static int UsernameAvailable(string username)
     {
-        if (username.Length is < 3 or > 15 || !WibboEnvironment.IsValidAlphaNumeric(username))
+        if (username.Length is < 3 or > 15 || !username.IsValidAlphaNumeric())
         {
             return -1;
         }
