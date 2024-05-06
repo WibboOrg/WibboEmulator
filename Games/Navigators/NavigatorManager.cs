@@ -11,15 +11,15 @@ public static class NavigatorManager
 
     public static void Initialize(IDbConnection dbClient)
     {
-        TopLevelItemsDefault.Add(1, new(1, "official_view", "", ""));
-        TopLevelItemsDefault.Add(2, new(2, "hotel_view", "", ""));
-        TopLevelItemsDefault.Add(3, new(3, "rooms_game", "", ""));
-        TopLevelItemsDefault.Add(4, new(4, "myworld_view", "", ""));
-
         if (SearchResultListsDefault.Count > 0)
         {
             SearchResultListsDefault.Clear();
         }
+
+        TopLevelItemsDefault.Add(1, new(1, "official_view", "", ""));
+        TopLevelItemsDefault.Add(2, new(2, "hotel_view", "", ""));
+        TopLevelItemsDefault.Add(3, new(3, "rooms_game", "", ""));
+        TopLevelItemsDefault.Add(4, new(4, "myworld_view", "", ""));
 
         if (FeaturedRooms.Count > 0)
         {
