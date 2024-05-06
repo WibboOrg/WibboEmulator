@@ -1,14 +1,15 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Moderations;
+using WibboEmulator.Games.Users;
 
 internal sealed class ModeratorSupportTicketComposer : ServerPacket
 {
     public ModeratorSupportTicketComposer(ModerationTicket ticket)
         : base(ServerPacketHeader.ISSUE_INFO)
     {
-        var userReported = WibboEnvironment.GetNameById(ticket.ReportedId);
-        var userSender = WibboEnvironment.GetNameById(ticket.SenderId);
-        var userModerator = WibboEnvironment.GetNameById(ticket.ModeratorId);
+        var userReported = UserManager.GetUsernameById(ticket.ReportedId);
+        var userSender = UserManager.GetUsernameById(ticket.SenderId);
+        var userModerator = UserManager.GetUsernameById(ticket.ModeratorId);
 
         this.WriteInteger(ticket.Id);
         this.WriteInteger(ticket.TabId);

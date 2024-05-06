@@ -125,7 +125,7 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
                     group.DeleteMember(userId);
                 }
 
-                var user = WibboEnvironment.GetUserById(userId);
+                var user = UserManager.GetUserById(userId);
                 if (user != null)
                 {
                     _ = user.MyGroups.Remove(group.Id);
@@ -137,7 +137,7 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
                 var memberIds = group.GetMembers.Skip(startIndex).Take(14).ToList();
                 foreach (var id in memberIds.ToList())
                 {
-                    var groupMember = WibboEnvironment.GetUserById(id);
+                    var groupMember = UserManager.GetUserById(id);
                     if (groupMember == null)
                     {
                         continue;

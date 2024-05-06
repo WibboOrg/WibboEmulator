@@ -10,6 +10,7 @@ using WibboEmulator.Database.Daos.Moderation;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 
 public static class ModerationManager
 {
@@ -183,7 +184,7 @@ public static class ModerationManager
             return;
         }
 
-        var userReport = WibboEnvironment.GetUserById(reportedUser);
+        var userReport = UserManager.GetUserById(reportedUser);
         if (userReport == null)
         {
             return;

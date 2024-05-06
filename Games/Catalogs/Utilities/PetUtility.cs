@@ -3,6 +3,7 @@ namespace WibboEmulator.Games.Catalogs.Utilities;
 using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.Rooms.AI;
+using WibboEmulator.Utilities;
 
 public static class PetUtility
 {
@@ -13,7 +14,7 @@ public static class PetUtility
             return false;
         }
 
-        if (!WibboEnvironment.IsValidAlphaNumeric(petName))
+        if (!petName.IsValidAlphaNumeric())
         {
             return false;
         }

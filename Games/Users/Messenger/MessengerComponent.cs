@@ -211,7 +211,7 @@ public class MessengerComponent(User user) : IDisposable
         MessengerBuddy friend;
         if (clientByUserId == null || clientByUserId.User == null)
         {
-            var username = WibboEnvironment.GetNameById(friendID);
+            var username = UserManager.GetUsernameById(friendID);
 
             if (username == "")
             {
@@ -307,7 +307,7 @@ public class MessengerComponent(User user) : IDisposable
                 return false;
             }
 
-            var request = new MessengerRequest(sender, user.Id, WibboEnvironment.GetNameById(user.Id));
+            var request = new MessengerRequest(sender, user.Id, UserManager.GetUsernameById(user.Id));
             clientByUserId.User.Messenger.OnNewRequest(user.Id);
 
             clientByUserId.SendPacket(new NewBuddyRequestComposer(request));
@@ -324,7 +324,7 @@ public class MessengerComponent(User user) : IDisposable
             return;
         }
 
-        this.Requests.Add(friendID, new MessengerRequest(user.Id, friendID, WibboEnvironment.GetNameById(friendID)));
+        this.Requests.Add(friendID, new MessengerRequest(user.Id, friendID, UserManager.GetUsernameById(friendID)));
     }
 
     public void SendInstantMessage(int toId, string message)

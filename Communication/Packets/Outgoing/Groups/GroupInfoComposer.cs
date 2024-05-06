@@ -2,6 +2,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 
 internal sealed class GroupInfoComposer : ServerPacket
 {
@@ -10,7 +11,7 @@ internal sealed class GroupInfoComposer : ServerPacket
     {
         var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(group.CreateTime);
 
-        var userCreator = WibboEnvironment.GetUserById(group.CreatorId);
+        var userCreator = UserManager.GetUserById(group.CreatorId);
 
         this.WriteInteger(group.Id);
         this.WriteBoolean(true);

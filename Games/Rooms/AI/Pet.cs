@@ -2,6 +2,7 @@ namespace WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Communication.Packets.Outgoing.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 
 public class Pet
 {
@@ -109,7 +110,7 @@ public class Pet
 
     public string Look => this.Type + " " + this.Race + " " + this.Color;
 
-    public string OwnerName => WibboEnvironment.GetNameById(this.OwnerId);
+    public string OwnerName => UserManager.GetUsernameById(this.OwnerId);
 
     public Pet(int petId, int ownerId, int roomId, string name, int type, string race, string color, int expirience, int energy, int nutrition, int respect, int creationStamp, int x, int y, double z, int havesaddle, int hairdye, int petHair, bool canMountAllPeople)
     {

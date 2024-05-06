@@ -1,11 +1,13 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Users;
 
+using WibboEmulator.Games.Users;
+
 internal sealed class NameChangeUpdateComposer : ServerPacket
 {
     public NameChangeUpdateComposer(string name)
         : base(ServerPacketHeader.CHECK_USER_NAME)
     {
-        switch (WibboEnvironment.NameAvailable(name))
+        switch (UserManager.UsernameAvailable(name))
         {
             case -1:
                 this.WriteInteger(4);

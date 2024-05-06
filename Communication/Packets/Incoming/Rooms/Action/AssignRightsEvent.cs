@@ -6,6 +6,7 @@ using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 
 internal sealed class AssignRightsEvent : IPacketEvent
 {
@@ -36,7 +37,7 @@ internal sealed class AssignRightsEvent : IPacketEvent
         }
         else
         {
-            var userRight = WibboEnvironment.GetUserById(userId);
+            var userRight = UserManager.GetUserById(userId);
             if (userRight == null)
             {
                 return;

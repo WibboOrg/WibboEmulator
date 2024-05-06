@@ -2,6 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
+using WibboEmulator.Games.Users;
 
 internal sealed class OpenPlayerProfileEvent : IPacketEvent
 {
@@ -13,7 +14,7 @@ internal sealed class OpenPlayerProfileEvent : IPacketEvent
 
         _ = packet.PopBoolean();
 
-        var targetData = WibboEnvironment.GetUserById(userId);
+        var targetData = UserManager.GetUserById(userId);
         if (targetData == null)
         {
             return;

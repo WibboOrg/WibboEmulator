@@ -24,7 +24,7 @@ public static class HallOfFameManager
 
         foreach (var userId in userIds)
         {
-            var user = WibboEnvironment.GetUserById(userId);
+            var user = UserManager.GetUserById(userId);
 
             if (user != null)
             {

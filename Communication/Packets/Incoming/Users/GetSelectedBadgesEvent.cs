@@ -2,6 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Users;
 
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Users;
 
 internal sealed class GetSelectedBadgesEvent : IPacketEvent
 {
@@ -11,7 +12,7 @@ internal sealed class GetSelectedBadgesEvent : IPacketEvent
     {
         var userId = packet.PopInt();
 
-        var user = WibboEnvironment.GetUserById(userId);
+        var user = UserManager.GetUserById(userId);
         if (user == null)
         {
             return;

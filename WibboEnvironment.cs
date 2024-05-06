@@ -1,6 +1,5 @@
 namespace WibboEmulator;
 
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -15,10 +14,7 @@ using WibboEmulator.Core.OpenIA;
 using WibboEmulator.Core.ElevenLabs;
 using WibboEmulator.Core.Settings;
 using WibboEmulator.Database;
-using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games;
-using WibboEmulator.Games.Users;
-using WibboEmulator.Games.Users.Authentificator;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Communication.Packets;
@@ -26,17 +22,6 @@ using WibboEmulator.Communication.Packets;
 public static class WibboEnvironment
 {
     private static readonly Random RandomNumber = new();
-    private static readonly ConcurrentDictionary<int, User> UsersCached = new();
-    private static readonly List<char> Allowedchars = new(
-        [
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-            '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-            '-', '.', '=', '!', ':', '@'
-        ]);
-
     public static HttpClient HttpClient { get; } = new();
     public static DateTime ServerStarted { get; private set; }
     public static string PatchDir { get; private set; }
@@ -119,7 +104,7 @@ public static class WibboEnvironment
         }
         catch (InvalidOperationException ex)
         {
-            ExceptionLogger.WriteLine("Failed to initialize ButterflyEmulator: " + ex.Message);
+            ExceptionLogger.WriteLine("Failed to initialize WibboEmulator: " + ex.Message);
             ExceptionLogger.WriteLine("Press any key to shut down ...");
             _ = Console.ReadKey(true);
         }
@@ -141,99 +126,6 @@ public static class WibboEnvironment
     }
 
     public static int GetUnixTimestamp() => (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-
-    public static bool IsValidAlphaNumeric(string input)
-    {
-        if (string.IsNullOrEmpty(input))
-        {
-            return false;
-        }
-
-        return input.All(Allowedchars.Contains);
-    }
-
-    public static int NameAvailable(string username)
-    {
-        if (username.Length is < 3 or > 15 || !IsValidAlphaNumeric(username))
-        {
-            return -1;
-        }
-
-        return UsernameExists(username) ? 0 : 1;
-    }
-
-    public static bool UsernameExists(string username)
-    {
-        using var dbClient = DatabaseManager.Connection;
-        var integer = UserDao.GetIdByName(dbClient, username);
-        if (integer <= 0)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static string GetNameById(int id)
-    {
-        var clientByUserId = GetUserById(id);
-
-        if (clientByUserId != null)
-        {
-            return clientByUserId.Username;
-        }
-
-        using var dbClient = DatabaseManager.Connection;
-
-        return UserDao.GetNameById(dbClient, id);
-    }
-
-    public static User GetUserById(int userId)
-    {
-        if (userId <= 0)
-        {
-            return null;
-        }
-
-        try
-        {
-            var client = GameClientManager.GetClientByUserID(userId);
-            if (client != null)
-            {
-                var user = client.User;
-                if (user != null && user.Id > 0)
-                {
-                    _ = UsersCached.TryRemove(userId, out _);
-                    return user;
-                }
-            }
-            else
-            {
-                if (UsersCached.TryGetValue(userId, out var cachedUser))
-                {
-                    return cachedUser;
-                }
-                else
-                {
-                    using var dbClient = DatabaseManager.Connection;
-                    var user = UserFactory.GetUserData(dbClient, userId);
-
-                    if (user != null)
-                    {
-                        user.InitializeProfile(dbClient);
-                        _ = UsersCached.TryAdd(userId, user);
-                        return user;
-                    }
-                }
-            }
-
-            return null;
-        }
-        catch
-        {
-            return null;
-        }
-    }
 
     public static void PerformShutDown()
     {

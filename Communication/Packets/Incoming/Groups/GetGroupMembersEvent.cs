@@ -48,7 +48,7 @@ internal sealed class GetGroupMembersEvent : IPacketEvent
 
                 foreach (var id in memberIds.ToList())
                 {
-                    var groupMember = WibboEnvironment.GetUserById(id);
+                    var groupMember = UserManager.GetUserById(id);
                     if (groupMember == null)
                     {
                         continue;
@@ -74,7 +74,7 @@ internal sealed class GetGroupMembersEvent : IPacketEvent
 
                 foreach (var user in adminIds.ToList())
                 {
-                    var groupMember = WibboEnvironment.GetUserById(user);
+                    var groupMember = UserManager.GetUserById(user);
                     if (groupMember == null)
                     {
                         continue;
@@ -100,7 +100,7 @@ internal sealed class GetGroupMembersEvent : IPacketEvent
 
                 foreach (var id in requestIds.ToList())
                 {
-                    var groupMember = WibboEnvironment.GetUserById(id);
+                    var groupMember = UserManager.GetUserById(id);
                     if (groupMember == null)
                     {
                         continue;
