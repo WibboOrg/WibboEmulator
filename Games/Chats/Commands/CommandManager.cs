@@ -357,5 +357,6 @@ public static class CommandManager
         Register(176, new ChatAudio());
         Register(177, new ChatToSpeech());
         Register(178, new ChatToSpeechElevenlabs());
+        Register(179, new GiveBannerTroc());
     }
 }
