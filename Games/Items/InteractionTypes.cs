@@ -131,6 +131,7 @@ public class InteractionTypes
         "gift" => InteractionType.GIFT,
         "gift_banner" => InteractionType.GIFT_BANNER,
         "troc_banner" => InteractionType.TROC_BANNER,
+        "ltd_birthday_2024" => InteractionType.LTD_BIRTHDAY_2024,
         "extrabox" => InteractionType.EXTRA_BOX,
         "deluxebox" => InteractionType.DELUXE_BOX,
         "legendbox" => InteractionType.LEGEND_BOX,

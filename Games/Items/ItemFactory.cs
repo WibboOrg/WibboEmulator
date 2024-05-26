@@ -119,6 +119,7 @@ public class ItemFactory
         InteractionType.BADGE_TROC => new InteractorBadgeTroc(),
         InteractionType.TROC_BANNER => new InteractorBannerTroc(),
         InteractionType.GIFT_BANNER => new InteractorBannerGift(),
+        InteractionType.LTD_BIRTHDAY_2024 => new InteractorLtdBirthday2024(),
         InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS => new InteractorGenericSwitch(2),
         _ => new InteractorGenericSwitch(item.ItemData.Modes),
     };

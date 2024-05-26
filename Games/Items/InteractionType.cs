@@ -178,6 +178,7 @@ public enum InteractionType
     GIFT,
     GIFT_BANNER,
     TROC_BANNER,
+    LTD_BIRTHDAY_2024,
 
     HABBOWHEEL,
 
