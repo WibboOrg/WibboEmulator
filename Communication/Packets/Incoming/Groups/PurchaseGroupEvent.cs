@@ -3,7 +3,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
-using WibboEmulator.Games.Chats;
 using WibboEmulator.Games.Chats.Filter;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
@@ -50,8 +49,8 @@ internal sealed class PurchaseGroupEvent : IPacketEvent
             return;
         }
 
-        var room = RoomManager.GenerateRoomData(roomId);
-        if (room == null || room.OwnerId != session.User.Id || room.Group != null)
+        var roomData = RoomManager.GenerateRoomData(roomId);
+        if (roomData == null || roomData.OwnerId != session.User.Id || roomData.Group != null)
         {
             return;
         }
@@ -70,14 +69,14 @@ internal sealed class PurchaseGroupEvent : IPacketEvent
 
         session.SendPacket(new PurchaseOKComposer());
 
-        room.Group = group;
+        roomData.Group = group;
 
         session.User.Credits -= groupCost;
         session.SendPacket(new CreditBalanceComposer(session.User.Credits));
 
-        if (session.User.RoomId != room.Id)
+        if (session.User.RoomId != roomData.Id)
         {
-            session.SendPacket(new RoomForwardComposer(room.Id));
+            session.SendPacket(new RoomForwardComposer(roomData.Id));
         }
 
         session.SendPacket(new NewGroupInfoComposer(roomId, group.Id));

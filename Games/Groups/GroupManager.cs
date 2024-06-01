@@ -4,6 +4,7 @@ using System.Data;
 using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Database.Daos.Room;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.Users;
 
 public static class GroupManager
@@ -142,12 +143,20 @@ public static class GroupManager
 
     public static void DeleteGroup(int id)
     {
-        if (Groups.TryGetValue(id, out var group))
+        if (!Groups.TryRemove(id, out var group))
         {
-            group.Dispose();
-            _ = Groups.TryRemove(id, out _);
+            return;
         }
 
+        group.Dispose();
+
+        using var dbClient = DatabaseManager.Connection;
+
+        GuildDao.Delete(dbClient, group.Id);
+        GuildMembershipDao.Delete(dbClient, group.Id);
+        GuildRequestDao.Delete(dbClient, group.Id);
+        RoomDao.UpdateResetGroupId(dbClient, group.RoomId);
+        UserStatsDao.UpdateRemoveAllGroupId(dbClient, group.Id);
     }
 
     public static List<Group> GetGroupsForUser(List<int> groupIds)
