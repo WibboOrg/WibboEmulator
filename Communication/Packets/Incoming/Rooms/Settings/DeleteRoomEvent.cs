@@ -31,6 +31,12 @@ internal sealed class DeleteRoomEvent : IPacketEvent
             return;
         }
 
+        if (room.RoomData.Group != null)
+        {
+            return;
+            // TODO: a notification like "you must first delete the group of this room" 
+        }
+
         session.User.InventoryComponent?.AddItemArray(room.RoomItemHandling.RemoveAllFurnitureToInventory(session));
 
         RoomManager.UnloadRoom(room);
