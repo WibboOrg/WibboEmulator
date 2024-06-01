@@ -23,6 +23,13 @@ internal sealed class PurchaseGroupEvent : IPacketEvent
 
         _ = packet.PopInt();
 
+        var groupCost = 20;
+
+        if (session.User.Credits < groupCost)
+        {
+            return;
+        }
+
         if (name.Length > 50)
         {
             return;
@@ -64,13 +71,6 @@ internal sealed class PurchaseGroupEvent : IPacketEvent
         session.SendPacket(new PurchaseOKComposer());
 
         room.Group = group;
-
-        var groupCost = 20;
-
-        if (session.User.Credits < groupCost)
-        {
-            return;
-        }
 
         session.User.Credits -= groupCost;
         session.SendPacket(new CreditBalanceComposer(session.User.Credits));
