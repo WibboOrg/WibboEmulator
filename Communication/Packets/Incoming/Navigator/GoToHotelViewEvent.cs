@@ -1,4 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Navigator;
+
+using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
@@ -10,6 +12,7 @@ internal sealed class GoToHotelViewEvent : IPacketEvent
     public void Parse(GameClient session, ClientPacket packet)
     {
         session.SendPacket(new CloseConnectionComposer());
+        session.User.TryRemoveFromDoorBellList();
         session.User.LoadingRoomId = 0;
 
         if (session.User == null || !session.User.InRoom)

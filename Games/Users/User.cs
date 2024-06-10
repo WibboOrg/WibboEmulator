@@ -125,6 +125,7 @@ public class User : IDisposable, IEquatable<User>
     public bool Nuxenable { get; set; }
     public int PassedNuxCount { get; set; }
     public bool AllowDoorBell { get; set; }
+    public bool IsRingingDoorBell { get; set; }
     public bool CanChangeName { get; set; }
     public bool IsFirstConnexionToday { get; set; }
     public int GiftPurchasingWarnings { get; set; }
@@ -314,6 +315,19 @@ public class User : IDisposable, IEquatable<User>
         }
     }
 
+    public void TryRemoveFromDoorBellList()
+    {
+        if (this.IsRingingDoorBell)
+        {
+            if (RoomManager.TryGetRoom(this.LoadingRoomId, out var loadingRoom))
+            {
+                loadingRoom.SendPacket(new FlatAccessDeniedComposer(this.Username), true);
+            }
+
+            this.IsRingingDoorBell = false;
+        }
+    }
+
     public bool CheckChatMessage(string message, string type, int roomId = 0)
     {
         if (message.Length <= 3 || this.HasPermission("god"))
@@ -383,6 +397,8 @@ public class User : IDisposable, IEquatable<User>
             return false;
         }
 
+        this.TryRemoveFromDoorBellList();
+
         this.Client.SendPacket(new RoomReadyComposer(room.Id, room.RoomData.ModelName));
 
         if (room.RoomData.Wallpaper != "0.0")
@@ -440,6 +456,7 @@ public class User : IDisposable, IEquatable<User>
         ExceptionLogger.WriteLine(this.Username + " has logged out.");
 
         this.SaveInfo();
+        this.TryRemoveFromDoorBellList();
 
         if (this.InRoom && this.Room != null)
         {

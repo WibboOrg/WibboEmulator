@@ -29,6 +29,8 @@ internal sealed class OpenFlatConnectionEvent : IPacketEvent
             }
         }
 
+        session.User.TryRemoveFromDoorBellList();
+
         if (session.User.IsTeleporting && session.User.TeleportingRoomID != roomId)
         {
             session.User.TeleportingRoomID = 0;
@@ -104,6 +106,7 @@ internal sealed class OpenFlatConnectionEvent : IPacketEvent
                         session.SendPacket(new DoorbellComposer(""));
                         room.SendPacket(new DoorbellComposer(session.User.Username), true);
                         session.User.LoadingRoomId = roomId;
+                        session.User.IsRingingDoorBell = true;
                         session.User.AllowDoorBell = false;
                     }
                     return;
