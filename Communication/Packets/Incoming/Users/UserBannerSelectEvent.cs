@@ -17,7 +17,7 @@ internal sealed class UserBannerSelectEvent : IPacketEvent
             return;
         }
 
-        if (!BannerManager.TryGetBannerById(bannerId, out var banner))
+        if (!BannerManager.TryGetBannerById(bannerId, out var banner) && bannerId != -1)
         {
             return;
         }
