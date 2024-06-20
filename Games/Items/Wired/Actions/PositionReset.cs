@@ -161,11 +161,14 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
 
         foreach (var item in wiredTriggersItem.Split(';'))
         {
-            var itemData = item.Split(':');
-            if (itemData.Length != 6)
+            var splitData = item.Split(':');
+            if (splitData.Length < 6)
             {
                 continue;
             }
+
+            var itemData = splitData.Take(5).ToArray();
+            var itemExtraData = string.Join(":", itemData.Skip(5).ToArray());
 
             if (!int.TryParse(itemData[0], out var id))
             {
@@ -177,7 +180,7 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
                 this.StuffIds.Add(id);
             }
 
-            this._itemsData.Add(Convert.ToInt32(itemData[0]), new ItemsPosReset(Convert.ToInt32(itemData[0]), Convert.ToInt32(itemData[1]), Convert.ToInt32(itemData[2]), Convert.ToDouble(itemData[3]), Convert.ToInt32(itemData[4]), itemData[5]));
+            this._itemsData.Add(Convert.ToInt32(itemData[0]), new ItemsPosReset(Convert.ToInt32(itemData[0]), Convert.ToInt32(itemData[1]), Convert.ToInt32(itemData[2]), Convert.ToDouble(itemData[3]), Convert.ToInt32(itemData[4]), itemExtraData));
         }
     }
 }
