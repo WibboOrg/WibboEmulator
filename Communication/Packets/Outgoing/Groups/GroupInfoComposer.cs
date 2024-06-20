@@ -29,7 +29,7 @@ internal sealed class GroupInfoComposer : ServerPacket
         this.WriteBoolean(group.IsAdmin(session.User.Id));
         this.WriteString(userCreator != null ? userCreator.Username : "");
         this.WriteBoolean(newWindow);
-        this.WriteBoolean(group.AdminOnlyDeco == false);
+        this.WriteBoolean(!group.AdminOnlyDeco);
         this.WriteInteger(group.CreatorId == session.User.Id ? group.RequestCount : group.IsAdmin(session.User.Id) ? group.RequestCount : group.IsMember(session.User.Id) ? 0 : 0);
         this.WriteBoolean(group == null || group.ForumEnabled);
     }

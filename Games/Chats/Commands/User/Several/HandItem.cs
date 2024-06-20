@@ -17,12 +17,12 @@ internal sealed class HandItem : IChatCommand
             return;
         }
 
-        _ = int.TryParse(parameters[1], out var handitemid);
-        if (handitemid < 0)
+        _ = int.TryParse(parameters[1], out var handitemId);
+        if (handitemId < 0)
         {
             return;
         }
 
-        userRoom.CarryItem(handitemid);
+        userRoom.CarryItem(handitemId);
     }
 }

@@ -65,7 +65,7 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
                 session.User.FavouriteGroupId = 0;
                 UserStatsDao.UpdateRemoveGroupId(dbClient, userId);
 
-                if (group.AdminOnlyDeco == false)
+                if (!group.AdminOnlyDeco)
                 {
                     if (!RoomManager.TryGetRoom(group.RoomId, out var roomGroup))
                     {

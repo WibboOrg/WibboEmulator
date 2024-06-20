@@ -68,7 +68,7 @@ public partial class ChatGPTBot : BotAI
 
     public override void OnUserEnterRoom(RoomUser user)
     {
-        if (this._listUserName.Contains(user.Username) == false)
+        if (!this._listUserName.Contains(user.Username))
         {
             this._listUserName.Add(user.Username);
         }
@@ -76,7 +76,7 @@ public partial class ChatGPTBot : BotAI
 
     public override void OnUserLeaveRoom(GameClient client)
     {
-        if (this._listUserName.Contains(client.User.Username) == false)
+        if (!this._listUserName.Contains(client.User.Username))
         {
             this._listUserName.Add(client.User.Username);
         }
@@ -119,7 +119,7 @@ public partial class ChatGPTBot : BotAI
     {
         var regexMatch = MyRegex().Match(messageText);
         if (!regexMatch.Success || !regexMatch.Groups[1].Success ||
-        int.TryParse(regexMatch.Groups[1].Value, out var actionId) == false)
+!int.TryParse(regexMatch.Groups[1].Value, out var actionId))
         {
             return;
         }
@@ -328,7 +328,7 @@ public partial class ChatGPTBot : BotAI
 
                     foreach (var chatText in chatTexts.Take(4))
                     {
-                        if (string.IsNullOrWhiteSpace(chatText) == false)
+                        if (!string.IsNullOrWhiteSpace(chatText))
                         {
                             this.RoomUser.OnChat(chatText.Length > 150 ? chatText[..150] + "..." : chatText);
                         }

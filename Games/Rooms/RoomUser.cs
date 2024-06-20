@@ -358,10 +358,10 @@ public class RoomUser : IEquatable<RoomUser>
 
     public void CarryItem(int itemId, bool notTimer = false)
     {
-        this.CarryItemID = itemId;
+        this.CarryItemID = itemId == 145 ? 2 : itemId;
         this.CarryTimer = itemId <= 0 || notTimer ? 0 : 240;
 
-        this.Room.SendPacket(new CarryObjectComposer(this.VirtualId, itemId));
+        this.Room.SendPacket(new CarryObjectComposer(this.VirtualId, this.CarryItemID));
     }
 
     public void SetRot(int rotation, bool headOnly, bool ignoreWalk = false)

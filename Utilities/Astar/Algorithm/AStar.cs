@@ -217,7 +217,7 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
                 trailScore = y.G + 1;
                 wasAdded = false;
 
-                if (this._openSet[y.Y, y.X] == false)
+                if (!this._openSet[y.Y, y.X])
                 {
                     this._openSet[y.Y, y.X] = true;
                     scoreResultBetter = true;

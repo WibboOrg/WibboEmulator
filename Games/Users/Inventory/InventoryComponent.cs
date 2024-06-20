@@ -405,7 +405,7 @@ public class InventoryComponent(User user) : IDisposable
             return;
         }
 
-        if (roomItem.ItemData.ItemName.StartsWith("PntEx_") == false)
+        if (!roomItem.ItemData.ItemName.StartsWith("PntEx_"))
         {
             return;
         }
@@ -422,7 +422,7 @@ public class InventoryComponent(User user) : IDisposable
             return;
         }
 
-        if (roomItem.ItemData.ItemName.StartsWith("PntEx_") == false)
+        if (!roomItem.ItemData.ItemName.StartsWith("PntEx_"))
         {
             return;
         }

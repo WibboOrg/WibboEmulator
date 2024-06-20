@@ -35,7 +35,7 @@ public class Tridimension : WiredActionBase, IWiredEffect, IWired
             return;
         }
 
-        if (this.StringParam.Contains(';') == false)
+        if (!this.StringParam.Contains(';'))
         {
             return;
         }

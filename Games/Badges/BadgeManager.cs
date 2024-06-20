@@ -21,7 +21,7 @@ public static class BadgeManager
     private static void AddDisallowedFromConfig(string configString = "badge.not.allowed")
     {
         var badgeNotAllowed = SettingsManager.GetData<string>(configString);
-        NotAllowed.AddRange(badgeNotAllowed?.Split(',') ?? Array.Empty<string>());
+        NotAllowed.AddRange(badgeNotAllowed?.Split(',') ?? []);
     }
 
     public static bool HaveNotAllowed(string badgeId) => NotAllowed.Contains(badgeId) || IsDisallowedByType(badgeId);

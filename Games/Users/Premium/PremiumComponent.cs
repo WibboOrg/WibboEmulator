@@ -33,34 +33,34 @@ public class PremiumComponent(User user) : IDisposable
 
     public void CheckPremiumTimeout(IDbConnection dbClient = null)
     {
-        if (this.IsPremiumLegend == false && user.BadgeComponent.HasBadge("WC_LEGEND"))
+        if (!this.IsPremiumLegend && user.BadgeComponent.HasBadge("WC_LEGEND"))
         {
             user.BadgeComponent.RemoveBadge("WC_LEGEND");
         }
-        else if (this.IsPremiumLegend && user.BadgeComponent.HasBadge("WC_LEGEND") == false)
+        else if (this.IsPremiumLegend && !user.BadgeComponent.HasBadge("WC_LEGEND"))
         {
             user.BadgeComponent.GiveBadge("WC_LEGEND");
         }
 
-        if (this.IsPremiumEpic == false && user.BadgeComponent.HasBadge("WC_EPIC"))
+        if (!this.IsPremiumEpic && user.BadgeComponent.HasBadge("WC_EPIC"))
         {
             user.BadgeComponent.RemoveBadge("WC_EPIC");
         }
-        else if (this.IsPremiumEpic && user.BadgeComponent.HasBadge("WC_EPIC") == false)
+        else if (this.IsPremiumEpic && !user.BadgeComponent.HasBadge("WC_EPIC"))
         {
             user.BadgeComponent.GiveBadge("WC_EPIC");
         }
 
-        if (this.IsPremiumClassic == false && user.BadgeComponent.HasBadge("WC_CLASSIC"))
+        if (!this.IsPremiumClassic && user.BadgeComponent.HasBadge("WC_CLASSIC"))
         {
             user.BadgeComponent.RemoveBadge("WC_CLASSIC");
         }
-        else if (this.IsPremiumClassic && user.BadgeComponent.HasBadge("WC_CLASSIC") == false)
+        else if (this.IsPremiumClassic && !user.BadgeComponent.HasBadge("WC_CLASSIC"))
         {
             user.BadgeComponent.GiveBadge("WC_CLASSIC");
         }
 
-        if (this.IsPremiumLegend == false && this.IsPremiumEpic == false && this.IsPremiumClassic == false)
+        if (!this.IsPremiumLegend && !this.IsPremiumEpic && !this.IsPremiumClassic)
         {
             if (user.Rank == 2)
             {
@@ -88,22 +88,22 @@ public class PremiumComponent(User user) : IDisposable
 
         UserDao.UpdateAddMonthPremium(dbClient, user.Id);
 
-        if (this._hasEverBeenMember == false)
+        if (!this._hasEverBeenMember)
         {
             this._hasEverBeenMember = true;
             this._activated = DateTime.UnixEpoch.AddSeconds(now);
             UserPremiumDao.Insert(dbClient, user.Id);
         }
 
-        if (this.IsPremiumLegend == false)
+        if (!this.IsPremiumLegend)
         {
             this._expireLegend = DateTime.UtcNow;
         }
-        if (this.IsPremiumEpic == false)
+        if (!this.IsPremiumEpic)
         {
             this._expireEpic = DateTime.UtcNow;
         }
-        if (this.IsPremiumClassic == false)
+        if (!this.IsPremiumClassic)
         {
             this._expireClassic = DateTime.UtcNow;
         }

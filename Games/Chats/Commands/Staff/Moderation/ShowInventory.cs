@@ -26,7 +26,7 @@ internal sealed class ShowInventory : IChatCommand
         var itemRareCount = new Dictionary<string, int>();
         foreach (var item in targetUser.User.InventoryComponent.GetWallAndFloor)
         {
-            if (item.ItemData.IsRare == false)
+            if (!item.ItemData.IsRare)
             {
                 continue;
             }

@@ -341,7 +341,7 @@ public class Room : IDisposable
                 return true;
             }
 
-            if (this.RoomData.Group.AdminOnlyDeco == false)
+            if (!this.RoomData.Group.AdminOnlyDeco)
             {
                 if (this.RoomData.Group.IsMember(session.User.Id))
                 {

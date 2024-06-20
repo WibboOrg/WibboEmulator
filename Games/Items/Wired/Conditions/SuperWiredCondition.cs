@@ -209,22 +209,22 @@ public class SuperWiredCondition(Item item, Room room) : WiredConditionBase(item
             result = UserCommand(user, this.Room, effect, value);
         }
 
-        if (result == false)
+        if (!result)
         {
             result = RoomCommand(this.Room, effect, value);
         }
 
-        if (result == false)
+        if (!result)
         {
             result = RpUserCommand(this.Room, user, effect, value);
         }
 
-        if (result == false)
+        if (!result)
         {
             result = RpGlobalCommand(this.Room, effect, value);
         }
 
-        if (result == false && item != null)
+        if (!result && item != null)
         {
             result = ItemCommand(this.Room, item, user, effect, value);
         }
