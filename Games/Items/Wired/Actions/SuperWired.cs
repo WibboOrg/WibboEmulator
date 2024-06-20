@@ -1918,7 +1918,7 @@ public class SuperWired(Item item, Room room) : WiredActionBase(item, room, (int
             {
                 _ = int.TryParse(value, out var points);
 
-                if (points > 0 && roomUser.WiredPoints <= int.MaxValue - points)
+                if (roomUser.WiredPoints <= int.MaxValue - points && roomUser.WiredPoints >= int.MinValue + points)
                 {
                     roomUser.WiredPoints += points;
                 }
@@ -1929,7 +1929,7 @@ public class SuperWired(Item item, Room room) : WiredActionBase(item, room, (int
             {
                 _ = int.TryParse(value, out var points);
 
-                if (points > 0 && roomUser.WiredPoints >= int.MinValue + points)
+                if (roomUser.WiredPoints <= int.MaxValue - points && roomUser.WiredPoints >= int.MinValue + points)
                 {
                     roomUser.WiredPoints -= points;
                 }
