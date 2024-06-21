@@ -27,8 +27,10 @@ using WibboEmulator.Games.Effects;
 using WibboEmulator.Games.Achievements;
 using WibboEmulator.Utilities;
 
-public class SuperWired(Item item, Room room) : WiredActionBase(item, room, (int)WiredActionType.CHAT), IWired, IWiredEffect
+public class SuperWired : WiredActionBase, IWired, IWiredEffect
 {
+    public SuperWired(Item item, Room room) : base(item, room, (int)WiredActionType.SUPER_WIRED) => this.FurniLimit = 1;
+
     public override void LoadItems(bool inDatabase = false)
     {
         base.LoadItems();
@@ -189,6 +191,7 @@ public class SuperWired(Item item, Room room) : WiredActionBase(item, room, (int
             case "resetclassement":
             case "addclassement":
             case "roomgame":
+            case "classementtopoint":
                 return;
         }
 
@@ -215,8 +218,10 @@ public class SuperWired(Item item, Room room) : WiredActionBase(item, room, (int
             value = string.Empty;
         }
 
+        item ??= this.Items.FirstOrDefault();
+
         this.ItemCommand(command, value, item);
-        this.RoomCommand(command, value, user);
+        this.RoomCommand(command, value, user, item);
         this.RpCommand(command, value, user);
         this.UserCommand(command, value, user);
         this.BotCommand(command, value, user);
@@ -1164,14 +1169,15 @@ public class SuperWired(Item item, Room room) : WiredActionBase(item, room, (int
         }
     }
 
-    private void RoomCommand(string command, string value, RoomUser user)
+    private void RoomCommand(string command, string value, RoomUser user, Item item)
     {
         switch (command)
         {
             case "resetclassement":
             {
-                var itemHighScore = this.Room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
-                if (itemHighScore == null)
+                var itemHighScore = item;
+                itemHighScore ??= this.Room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                if (itemHighScore == null || !(itemHighScore.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS))
                 {
                     break;
                 }
@@ -1182,8 +1188,9 @@ public class SuperWired(Item item, Room room) : WiredActionBase(item, room, (int
             }
             case "addclassement":
             {
-                var itemHighScore = this.Room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
-                if (itemHighScore == null || user == null)
+                var itemHighScore = item;
+                itemHighScore ??= this.Room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                if (itemHighScore == null || !(itemHighScore.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS))
                 {
                     break;
                 }
@@ -1205,6 +1212,22 @@ public class SuperWired(Item item, Room room) : WiredActionBase(item, room, (int
                 this.Item.UpdateState(false);
 
                 itemHighScore.UpdateState(false);
+                break;
+            }
+
+            case "classementtopoint":
+            {
+                var itemHighScore = item;
+                itemHighScore ??= this.Room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                if (itemHighScore == null || !(itemHighScore.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS))
+                {
+                    break;
+                }
+
+                if (itemHighScore.Scores.TryGetValue(user.Username, out var score))
+                {
+                    user.WiredPoints = score;
+                }
                 break;
             }
 
@@ -2236,7 +2259,7 @@ public class SuperWired(Item item, Room room) : WiredActionBase(item, room, (int
         }
     }
 
-    public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, this.StringParam, false, null, this.Delay);
+    public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, this.StringParam, false, this.Items, this.Delay);
 
     public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
     {
@@ -2248,5 +2271,7 @@ public class SuperWired(Item item, Room room) : WiredActionBase(item, room, (int
         }
 
         this.StringParam = wiredTriggerData;
+
+        this.LoadStuffIds(wiredTriggersItem);
     }
 }

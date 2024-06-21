@@ -62,6 +62,7 @@ public enum WiredActionType
     TRI_DIMENSION = 28,
     COLLISION_CASE = 29,
     GIVE_POINTS_HIGHSCORE = 30,
+    SUPER_WIRED = 31,
 }
 
 public enum WiredTriggerType
