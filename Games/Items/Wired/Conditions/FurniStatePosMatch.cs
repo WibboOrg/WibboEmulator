@@ -168,7 +168,7 @@ public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
             }
 
             var itemData = splitData.Take(5).ToArray();
-            var itemExtraData = string.Join(":", itemData.Skip(5).ToArray());
+            var itemExtraData = string.Join(":", splitData.Skip(5).ToArray());
 
             if (!int.TryParse(itemData[0], out var id))
             {
