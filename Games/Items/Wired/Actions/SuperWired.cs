@@ -218,7 +218,10 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             value = string.Empty;
         }
 
-        item ??= this.Items.FirstOrDefault();
+        if (this.Items.Count == 1)
+        {
+            item = this.Items.FirstOrDefault();
+        }
 
         this.ItemCommand(command, value, item);
         this.RoomCommand(command, value, user, item);
