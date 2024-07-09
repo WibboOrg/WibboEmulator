@@ -23,6 +23,7 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Helps;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Moderations;
+using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Users.Authentificator;
 using WibboEmulator.Utilities;
 
@@ -218,7 +219,11 @@ internal sealed class SSOTicketEvent : IPacketEvent
             session.User.AchievementPoints += winwinCount;
         }
 
-        session.User.Credits += creditCount;
+        if (session.User.Credits <= int.MaxValue - creditCount)
+        {
+            session.User.Credits += creditCount;
+        }
+
         session.User.DailyRespectPoints = respectCount;
         session.User.DailyPetRespectPoints = respectCount;
 
