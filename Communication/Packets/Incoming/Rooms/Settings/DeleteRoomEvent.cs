@@ -46,6 +46,7 @@ internal sealed class DeleteRoomEvent : IPacketEvent
             RoomDao.Delete(dbClient, roomId);
             UserFavoriteDao.Delete(dbClient, roomId);
             RoomRightDao.Delete(dbClient, roomId);
+            RoomBanDao.Delete(dbClient, roomId);
             ItemDao.DeleteAllByRoomId(dbClient, roomId);
             UserDao.UpdateHomeRoom(dbClient, session.User.Id, 0);
             BotUserDao.UpdateRoomBot(dbClient, roomId);

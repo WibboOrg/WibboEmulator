@@ -77,10 +77,10 @@ public class SuperBot : BotAI
             this.RoomUser.IsAsleep = ownerUser.IsAsleep;
             this.Room.SendPacket(new SleepComposer(this.RoomUser.VirtualId, this.RoomUser.IsAsleep));
         }
-        else if (ownerUser.CarryItemID != this.RoomUser.CarryItemID)
+        else if (ownerUser.CarryItemId != this.RoomUser.CarryItemId)
         {
-            this.RoomUser.CarryItemID = ownerUser.CarryItemID;
-            this.Room.SendPacket(new CarryObjectComposer(this.RoomUser.VirtualId, this.RoomUser.CarryItemID));
+            this.RoomUser.CarryItemId = ownerUser.CarryItemId;
+            this.Room.SendPacket(new CarryObjectComposer(this.RoomUser.VirtualId, this.RoomUser.CarryItemId));
         }
         else if (ownerUser.CurrentEffect != this.RoomUser.CurrentEffect)
         {

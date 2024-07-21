@@ -168,6 +168,12 @@ public class WiredRegister
             case InteractionType.ACTION_TRIDIMENSION:
                 handler = new Tridimension(item, room);
                 break;
+            case InteractionType.ACTION_COLLISION_ROOM:
+                handler = new CollisionRoom(item, room);
+                break;
+            case InteractionType.ACTION_RANDOM_STATE_FURNI:
+                handler = new RandomStateFurni(item, room);
+                break;
             case InteractionType.ACTION_GIVE_POINTS_HIGHSCORE:
                 handler = new GivePointsHighScore(item, room);
                 break;

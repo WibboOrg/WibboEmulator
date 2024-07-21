@@ -150,7 +150,7 @@ public partial class ChatGPTBot : BotAI
             case 3: //Give the user an ice cream
             {
                 const int iceCreamId = 4;
-                if (targetUser.CarryItemID != iceCreamId)
+                if (targetUser.CarryItemId != iceCreamId)
                 {
                     targetUser.CarryItem(iceCreamId);
                 }
@@ -208,7 +208,7 @@ public partial class ChatGPTBot : BotAI
             case 10: //Danse
             {
                 var danceId = WibboEnvironment.GetRandomNumber(1, 4);
-                if (danceId > 0 && this.RoomUser.CarryItemID > 0)
+                if (danceId > 0 && this.RoomUser.CarryItemId > 0)
                 {
                     this.RoomUser.CarryItem(0);
                 }

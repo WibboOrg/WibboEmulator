@@ -1,5 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Settings;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
+using WibboEmulator.Database.Daos.Room;
+using WibboEmulator.Database;
 using WibboEmulator.Games.GameClients;
 
 internal sealed class UnbanUserFromRoomEvent : IPacketEvent
@@ -24,6 +26,11 @@ internal sealed class UnbanUserFromRoomEvent : IPacketEvent
 
         if (!instance.HasBanExpired(userId))
         {
+            using (var dbClient = DatabaseManager.Connection)
+            {
+                RoomBanDao.Delete(dbClient, instance.Id, session.User.Id);
+            }
+
             instance.RemoveBan(userId);
 
             session.SendPacket(new UnbanUserFromRoomComposer(roomId, userId));

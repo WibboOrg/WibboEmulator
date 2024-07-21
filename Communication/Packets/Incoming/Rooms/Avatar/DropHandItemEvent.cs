@@ -14,7 +14,7 @@ internal sealed class DropHandItemEvent : IPacketEvent
         }
 
         var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
-        if (roomUserByUserId == null || roomUserByUserId.CarryItemID <= 0 || roomUserByUserId.CarryTimer <= 0)
+        if (roomUserByUserId == null || roomUserByUserId.CarryItemId <= 0 || roomUserByUserId.CarryTimer <= 0)
         {
             return;
         }

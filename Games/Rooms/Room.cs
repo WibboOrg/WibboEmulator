@@ -27,6 +27,7 @@ using WibboEmulator.Games.Rooms.Moodlight;
 using WibboEmulator.Games.Rooms.Projectile;
 using WibboEmulator.Games.Rooms.Trading;
 using WibboEmulator.Games.Rooms.Wired;
+using WibboEmulator.Games.Users;
 using WibboEmulator.Utilities;
 
 public class Room : IDisposable
@@ -130,6 +131,7 @@ public class Room : IDisposable
 
         this.GameMap.GenerateMaps(true);
         this.LoadRights(dbClient);
+        this.LoadBans(dbClient);
         this.LoadBots(dbClient);
         this.LoadPets(dbClient);
 
@@ -307,6 +309,26 @@ public class Room : IDisposable
         }
     }
 
+    public void LoadBans(IDbConnection dbClient)
+    {
+        this.Bans.Clear();
+
+        var roomBanIdList = RoomBanDao.GetAllByRoomId(dbClient, this.RoomData.Id);
+
+        if (roomBanIdList.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var roomRightId in roomBanIdList)
+        {
+            if (!this.Bans.ContainsKey(roomRightId.UserId))
+            {
+                this.Bans.Add(roomRightId.UserId, roomRightId.Expire);
+            }
+        }
+    }
+
     public bool CheckRights(GameClient session, bool requireOwnership = false)
     {
         if (session == null || session.User == null)
@@ -390,9 +412,9 @@ public class Room : IDisposable
                 packetList.Add(new SleepComposer(roomUser.VirtualId, true));
             }
 
-            if (roomUser.CarryItemID > 0 && roomUser.CarryTimer > 0)
+            if (roomUser.CarryItemId > 0 && roomUser.CarryTimer > 0)
             {
-                packetList.Add(new CarryObjectComposer(roomUser.VirtualId, roomUser.CarryItemID));
+                packetList.Add(new CarryObjectComposer(roomUser.VirtualId, roomUser.CarryItemId));
             }
 
             if (roomUser.CurrentEffect > 0)
@@ -653,14 +675,19 @@ public class Room : IDisposable
 
     public void RemoveBan(int id) => this.Bans.Remove(id);
 
-    public void AddBan(int id, int time)
+    public void AddBan(int userId, int expireTime)
     {
-        if (this.Bans.ContainsKey(id))
+        if (this.Bans.ContainsKey(userId))
         {
             return;
         }
 
-        this.Bans.Add(id, WibboEnvironment.GetUnixTimestamp() + time);
+        using (var dbClient = DatabaseManager.Connection)
+        {
+            RoomBanDao.Insert(dbClient, this.Id, userId, expireTime);
+        }
+
+        this.Bans.Add(userId, expireTime);
     }
 
     public bool HasBanExpired(int id) => !this.UserIsBanned(id) || this.Bans[id] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
@@ -671,14 +698,14 @@ public class Room : IDisposable
 
     public void RemoveMute(int id) => this.Mutes.Remove(id);
 
-    public void AddMute(int id, int time)
+    public void AddMute(int id, int expireTime)
     {
         if (this.Mutes.ContainsKey(id))
         {
             this.RemoveMute(id);
         }
 
-        this.Mutes.Add(id, WibboEnvironment.GetUnixTimestamp() + time);
+        this.Mutes.Add(id, expireTime);
     }
 
     public bool HasMuteExpired(int id) => !this.UserIsMuted(id) || this.Mutes[id] - WibboEnvironment.GetUnixTimestamp() <= 0.0;

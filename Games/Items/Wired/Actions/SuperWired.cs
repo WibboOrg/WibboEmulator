@@ -1066,7 +1066,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         danceId = 0;
                     }
 
-                    if (danceId > 0 && user.CarryItemID > 0)
+                    if (danceId > 0 && user.CarryItemId > 0)
                     {
                         user.CarryItem(0);
                     }
@@ -1080,13 +1080,23 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
             case "handitem":
             {
-                if (int.TryParse(value, out var carryid))
+                if (int.TryParse(value, out var valueInt))
                 {
-                    user.CarryItem(carryid, true);
+                    user.CarryItem(valueInt, true);
                 }
 
                 break;
             }
+            case "updatehanditem":
+            {
+                if (int.TryParse(value, out var valueInt))
+                {
+                    user.CarryItem(user.CarryItemId + valueInt, true);
+                }
+
+                break;
+            }
+
             case "sit":
             {
                 if (user.RotBody % 2 == 0)
@@ -1129,6 +1139,24 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 }
 
                 user.UpdateNeeded = true;
+                break;
+            }
+
+            case "updateenable":
+            {
+                if (!int.TryParse(value, out var valueInt))
+                {
+                    return;
+                }
+
+                var newEffectId = user.CurrentEffect + valueInt;
+
+                if (!EffectManager.HasEffect(newEffectId, false))
+                {
+                    return;
+                }
+
+                user.ApplyEffect(newEffectId);
                 break;
             }
 
@@ -1333,7 +1361,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                         _ = int.TryParse(parameters[2], out var intValue);
 
-                        if (bot.CarryItemID != intValue)
+                        if (bot.CarryItemId != intValue)
                         {
                             bot.CarryItem(intValue, true);
                         }
@@ -1623,7 +1651,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 if (value == "true")
                 {
-                    this.Room.AddMute(roomUser.UserId, 24 * 60 * 60);
+                    var expireTime = WibboEnvironment.GetUnixTimestamp() + (24 * 60 * 60);
+                    this.Room.AddMute(roomUser.UserId, expireTime);
                 }
                 else
                 {
@@ -2026,7 +2055,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         danceId = 0;
                     }
 
-                    if (danceId > 0 && roomUser.CarryItemID > 0)
+                    if (danceId > 0 && roomUser.CarryItemId > 0)
                     {
                         roomUser.CarryItem(0);
                     }

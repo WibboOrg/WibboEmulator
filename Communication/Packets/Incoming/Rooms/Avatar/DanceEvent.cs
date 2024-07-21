@@ -28,7 +28,7 @@ internal sealed class DanceEvent : IPacketEvent
             danceId = 0;
         }
 
-        if (danceId > 0 && roomUserByUserId.CarryItemID > 0)
+        if (danceId > 0 && roomUserByUserId.CarryItemId > 0)
         {
             roomUserByUserId.CarryItem(0);
         }

@@ -206,7 +206,7 @@ public class SuperWiredCondition(Item item, Room room) : WiredConditionBase(item
         var result = false;
         if (user != null)
         {
-            result = UserCommand(user, this.Room, effect, value);
+            result = UserCommand(user, this.Room, item, effect, value);
         }
 
         if (!result)
@@ -858,7 +858,7 @@ public class SuperWiredCondition(Item item, Room room) : WiredConditionBase(item
         return result;
     }
 
-    private static bool UserCommand(RoomUser user, Room room, string effect, string value)
+    private static bool UserCommand(RoomUser user, Room room, Item item, string effect, string value)
     {
         var result = false;
         switch (effect)
@@ -866,7 +866,7 @@ public class SuperWiredCondition(Item item, Room room) : WiredConditionBase(item
             case "classement":
             case "notclassement":
             {
-                var itemHighScore = room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = item ?? room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
@@ -884,7 +884,7 @@ public class SuperWiredCondition(Item item, Room room) : WiredConditionBase(item
             {
                 _ = int.TryParse(value, out var valueInt);
 
-                var itemHighScore = room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = item ?? room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
@@ -901,7 +901,7 @@ public class SuperWiredCondition(Item item, Room room) : WiredConditionBase(item
             }
             case "ptsclassementplus":
             {
-                var itemHighScore = room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = item ?? room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
@@ -918,7 +918,7 @@ public class SuperWiredCondition(Item item, Room room) : WiredConditionBase(item
             }
             case "ptsclassementmoins":
             {
-                var itemHighScore = room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = item ?? room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
@@ -936,7 +936,7 @@ public class SuperWiredCondition(Item item, Room room) : WiredConditionBase(item
             case "ptsclassement":
             case "notptsclassement":
             {
-                var itemHighScore = room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = item ?? room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
@@ -953,7 +953,7 @@ public class SuperWiredCondition(Item item, Room room) : WiredConditionBase(item
             case "winclassement":
             case "notwinclassement":
             {
-                var itemHighScore = room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
+                var itemHighScore = item ?? room.RoomItemHandling.FloorItems.FirstOrDefault(x => x.ItemData.InteractionType is InteractionType.HIGH_SCORE or InteractionType.HIGH_SCORE_POINTS);
                 if (itemHighScore == null)
                 {
                     break;
@@ -1281,7 +1281,7 @@ public class SuperWiredCondition(Item item, Room room) : WiredConditionBase(item
             case "handitem":
             case "nothanditem":
             {
-                if (user.CarryItemID.ToString() == value)
+                if (user.CarryItemId.ToString() == value)
                 {
                     result = true;
                 }

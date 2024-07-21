@@ -59,12 +59,12 @@ internal sealed class RespectPetEvent : IPacketEvent
             targetUser.Client.User.Respect += 1;
 
             //Apply the effect.
-            thisUser.CarryItemID = 999999999;
+            thisUser.CarryItemId = 999999999;
             thisUser.CarryTimer = 5;
 
             //Send the magic out.
             room.SendPacket(new RespectPetNotificationComposer(targetUser.Client.User, targetUser));
-            room.SendPacket(new CarryObjectComposer(thisUser.VirtualId, thisUser.CarryItemID));
+            room.SendPacket(new CarryObjectComposer(thisUser.VirtualId, thisUser.CarryItemId));
             return;
         }
 
@@ -76,9 +76,9 @@ internal sealed class RespectPetEvent : IPacketEvent
         session.User.DailyPetRespectPoints -= 1;
         _ = AchievementManager.ProgressAchievement(session, "ACH_PetRespectGiver", 1);
 
-        thisUser.CarryItemID = 999999999;
+        thisUser.CarryItemId = 999999999;
         thisUser.CarryTimer = 5;
         pet.PetData.OnRespect();
-        room.SendPacket(new CarryObjectComposer(thisUser.VirtualId, thisUser.CarryItemID));
+        room.SendPacket(new CarryObjectComposer(thisUser.VirtualId, thisUser.CarryItemId));
     }
 }

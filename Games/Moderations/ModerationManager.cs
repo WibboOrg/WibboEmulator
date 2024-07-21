@@ -210,7 +210,9 @@ public static class ModerationManager
             return;
         }
 
-        room.AddBan(userReport.Id, 429496729);
+        var expireTime = WibboEnvironment.GetUnixTimestamp() + 429496729;
+
+        room.AddBan(userReport.Id, expireTime);
         room.RoomUserManager.RemoveUserFromRoom(roomUserByUserId.Client, true, true);
     }
 

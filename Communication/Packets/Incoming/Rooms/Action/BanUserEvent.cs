@@ -23,12 +23,12 @@ internal sealed class BanUserEvent : IPacketEvent
             return;
         }
 
-        var pId = packet.PopInt();
+        var userId = packet.PopInt();
 
         _ = packet.PopInt();
         var str = packet.PopString();
 
-        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(pId);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(userId);
         int time;
         if (str.Equals("RWUAM_BAN_USER_HOUR"))
         {
@@ -47,12 +47,15 @@ internal sealed class BanUserEvent : IPacketEvent
 
             time = 429496729;
         }
+
         if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.User.HasPermission("kick") || roomUserByUserId.Client.User.HasPermission("no_kick"))
         {
             return;
         }
 
-        room.AddBan(pId, time);
+        var expireTime = WibboEnvironment.GetUnixTimestamp() + time;
+
+        room.AddBan(userId, expireTime);
         room.RoomUserManager.RemoveUserFromRoom(roomUserByUserId.Client, true, true);
     }
 }

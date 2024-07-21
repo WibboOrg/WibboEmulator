@@ -107,6 +107,8 @@ public class InteractionTypes
         "wf_act_room_message" => InteractionType.ACTION_ROOM_MESSAGE,
         "wf_act_teleport_furni" => InteractionType.ACTION_TELEPORT_FURNI,
         "wf_act_tridimension" => InteractionType.ACTION_TRIDIMENSION,
+        "wf_act_coli_room" => InteractionType.ACTION_COLLISION_ROOM,
+        "wf_act_random_state_furni" => InteractionType.ACTION_RANDOM_STATE_FURNI,
         "wf_cnd_furnis_hv_avtrs" => InteractionType.CONDITION_FURNIS_HAVE_USERS,
         "wf_cnd_furnis_hv_prson" or "wf_cnd_not_hv_avtrs" => InteractionType.CONDITION_FURNIS_HAVE_NO_USERS,
         "conditionstatepos" => InteractionType.CONDITION_STATE_POS,

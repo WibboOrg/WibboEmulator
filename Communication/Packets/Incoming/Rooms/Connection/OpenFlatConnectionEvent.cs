@@ -4,6 +4,8 @@ using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Core.Settings;
+using WibboEmulator.Database.Daos.Room;
+using WibboEmulator.Database;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -61,6 +63,11 @@ internal sealed class OpenFlatConnectionEvent : IPacketEvent
         {
             if (room.HasBanExpired(session.User.Id))
             {
+                using (var dbClient = DatabaseManager.Connection)
+                {
+                    RoomBanDao.Delete(dbClient, room.Id, session.User.Id);
+                }
+
                 room.RemoveBan(session.User.Id);
             }
             else

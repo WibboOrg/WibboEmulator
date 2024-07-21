@@ -36,6 +36,8 @@ internal sealed class MuteUserEvent : IPacketEvent
             return;
         }
 
-        room.AddMute(id, time);
+        var expireTime = WibboEnvironment.GetUnixTimestamp() + time;
+
+        room.AddMute(id, expireTime);
     }
 }

@@ -60,7 +60,7 @@ internal sealed class ConfigBot : IChatCommand
 
                 _ = int.TryParse(parameters[3], out var intValue);
 
-                if (bot.CarryItemID != intValue)
+                if (bot.CarryItemId != intValue)
                 {
                     bot.CarryItem(intValue, true);
                 }

@@ -11,7 +11,7 @@ internal sealed class GiveItem : IChatCommand
             return;
         }
 
-        if (userRoom.CarryItemID <= 0 || userRoom.CarryTimer <= 0)
+        if (userRoom.CarryItemId <= 0 || userRoom.CarryTimer <= 0)
         {
             return;
         }
@@ -27,7 +27,7 @@ internal sealed class GiveItem : IChatCommand
             return;
         }
 
-        roomUserByUserIdTarget.CarryItem(userRoom.CarryItemID);
+        roomUserByUserIdTarget.CarryItem(userRoom.CarryItemId);
         userRoom.CarryItem(0);
     }
 }

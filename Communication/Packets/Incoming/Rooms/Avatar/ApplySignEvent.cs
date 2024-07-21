@@ -21,13 +21,13 @@ internal sealed class ApplySignEvent : IPacketEvent
 
         roomUserByUserId.Unidle();
 
-        var num = packet.PopInt();
-        if (roomUserByUserId.ContainStatus("sign"))
+        var signId = packet.PopInt();
+
+        if (signId is < 1 or > 16)
         {
-            roomUserByUserId.RemoveStatus("sign");
+            return;
         }
 
-        roomUserByUserId.SetStatus("sign", Convert.ToString(num));
-        roomUserByUserId.UpdateNeeded = true;
+        roomUserByUserId.Sign(signId);
     }
 }

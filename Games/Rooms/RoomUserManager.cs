@@ -725,17 +725,7 @@ public class RoomUserManager(Room room)
         return null;
     }
 
-    public List<RoomUser> RoomUsers
-    {
-        get
-        {
-            var list = new List<RoomUser>();
-
-            list = this.UserList.Where(x => !x.IsBot).ToList();
-
-            return list;
-        }
-    }
+    public List<RoomUser> RoomUsers => this.UserList.Where(x => !x.IsBot).ToList();
 
     public ICollection<RoomUser> UserList => this._users.Values;
 
@@ -1256,12 +1246,21 @@ public class RoomUserManager(Room room)
                 room.SendPacket(new SleepComposer(user.VirtualId, true));
             }
 
-            if (user.CarryItemID > 0 && user.CarryTimer > 0)
+            if (user.CarryItemId > 0 && user.CarryTimer > 0)
             {
                 user.CarryTimer--;
                 if (user.CarryTimer <= 0)
                 {
                     user.CarryItem(0);
+                }
+            }
+
+            if (user.SignId > 0 && user.SignTimer > 0)
+            {
+                user.SignTimer--;
+                if (user.SignTimer <= 0)
+                {
+                    user.Sign(0);
                 }
             }
 

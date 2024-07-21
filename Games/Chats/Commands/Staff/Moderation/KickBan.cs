@@ -40,7 +40,9 @@ internal sealed class KickBan : IChatCommand
                 banMinutes = 2;
             }
 
-            room.AddBan(targetUser.User.Id, banMinutes * 60);
+            var expireTime = WibboEnvironment.GetUnixTimestamp() + (banMinutes * 60);
+
+            room.AddBan(targetUser.User.Id, expireTime);
             room.RoomUserManager.RemoveUserFromRoom(targetUser, true, true);
         }
     }

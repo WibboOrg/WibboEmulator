@@ -30,9 +30,9 @@ internal sealed class RoomDance : IChatCommand
                     continue;
                 }
 
-                if (user.CarryItemID > 0)
+                if (user.CarryItemId > 0)
                 {
-                    user.CarryItemID = 0;
+                    user.CarryItemId = 0;
                 }
 
                 user.DanceId = danceId;

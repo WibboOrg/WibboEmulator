@@ -27,8 +27,10 @@ public class RoomUser : IEquatable<RoomUser>
     public int SetX { get; set; }
     public int SetY { get; set; }
     public double SetZ { get; set; }
-    public int CarryItemID { get; set; }
+    public int CarryItemId { get; set; }
     public int CarryTimer { get; set; }
+    public int SignId { get; set; }
+    public int SignTimer { get; set; }
     public int RotHead { get; set; }
     public int RotBody { get; set; }
     public bool CanWalk { get; set; }
@@ -358,10 +360,27 @@ public class RoomUser : IEquatable<RoomUser>
 
     public void CarryItem(int itemId, bool notTimer = false)
     {
-        this.CarryItemID = itemId == 145 ? 2 : itemId;
+        this.CarryItemId = itemId == 145 ? 2 : itemId;
         this.CarryTimer = itemId <= 0 || notTimer ? 0 : 240;
 
-        this.Room.SendPacket(new CarryObjectComposer(this.VirtualId, this.CarryItemID));
+        this.Room.SendPacket(new CarryObjectComposer(this.VirtualId, this.CarryItemId));
+    }
+
+    public void Sign(int id, bool notTimer = false)
+    {
+        this.SignId = id;
+        this.SignTimer = id <= 0 || notTimer ? 0 : 10;
+
+        if (this.ContainStatus("sign"))
+        {
+            this.RemoveStatus("sign");
+        }
+
+        if (id >= 1)
+        {
+            this.SetStatus("sign", Convert.ToString(id));
+            this.UpdateNeeded = true;
+        }
     }
 
     public void SetRot(int rotation, bool headOnly, bool ignoreWalk = false)
