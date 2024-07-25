@@ -29,6 +29,7 @@ public enum WiredConditionType
     DATE_RANGE_ACTIVE = 24,
     ACTOR_HAS_HANDITEM = 25,
     ACTOR_COMPARE_HIGHSCORE = 26,
+    SUPERWIRED_CONDITION = 27,
 }
 
 public enum WiredActionType

@@ -6,8 +6,10 @@ using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games.Teams;
 
-public class SuperWiredCondition(Item item, Room room) : WiredConditionBase(item, room, (int)WiredConditionType.ACTOR_IS_WEARING_BADGE), IWiredCondition, IWired
+public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
 {
+    public SuperWiredCondition(Item item, Room room) : base(item, room, (int)WiredConditionType.SUPERWIRED_CONDITION) => this.FurniLimit = 1;
+
     public override void LoadItems(bool inDatabase = false)
     {
         base.LoadItems(inDatabase);
@@ -201,6 +203,11 @@ public class SuperWiredCondition(Item item, Room room) : WiredConditionBase(item
         {
             effect = this.StringParam;
             value = string.Empty;
+        }
+
+        if (this.Items.Count == 1)
+        {
+            item = this.Items.FirstOrDefault();
         }
 
         var result = false;
@@ -1401,7 +1408,12 @@ public class SuperWiredCondition(Item item, Room room) : WiredConditionBase(item
         return result;
     }
 
-    public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, this.StringParam);
+    public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, this.StringParam, false, this.Items);
 
-    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay) => this.StringParam = wiredTriggerData;
+    public void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay)
+    {
+        this.StringParam = wiredTriggerData;
+
+        this.LoadStuffIds(wiredTriggersItem);
+    }
 }
