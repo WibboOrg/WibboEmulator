@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Database.Daos.Emulator;
+namespace WibboEmulator.Database.Daos.Emulator;
 using System.Data;
 using Dapper;
 
@@ -25,5 +25,5 @@ public enum LootboxCategory
     Furni,
     Badge,
     WinWin,
-    Credits
+    Banner
 }

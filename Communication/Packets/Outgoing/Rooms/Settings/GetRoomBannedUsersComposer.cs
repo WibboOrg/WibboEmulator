@@ -14,16 +14,8 @@ internal sealed class GetRoomBannedUsersComposer : ServerPacket
         {
             var data = UserManager.GetUserById(id);
 
-            if (data == null)
-            {
-                this.WriteInteger(0);
-                this.WriteString("Unknown Error");
-            }
-            else
-            {
-                this.WriteInteger(data.Id);
-                this.WriteString(data.Username);
-            }
+            this.WriteInteger(data?.Id ?? 0);
+            this.WriteString(data?.Username ?? "Inconnu");
         }
     }
 }
