@@ -1260,7 +1260,7 @@ public class RoomUserManager(Room room)
                 user.SignTimer--;
                 if (user.SignTimer <= 0)
                 {
-                    user.Sign(0);
+                    user.Sign(-1);
                 }
             }
 

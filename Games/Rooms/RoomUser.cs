@@ -369,14 +369,14 @@ public class RoomUser : IEquatable<RoomUser>
     public void Sign(int id, bool notTimer = false)
     {
         this.SignId = id;
-        this.SignTimer = id <= 0 || notTimer ? 0 : 10;
+        this.SignTimer = id < 0 || notTimer ? 0 : 10;
 
         if (this.ContainStatus("sign"))
         {
             this.RemoveStatus("sign");
         }
 
-        if (id >= 1)
+        if (id >= 0)
         {
             this.SetStatus("sign", Convert.ToString(id));
             this.UpdateNeeded = true;

@@ -23,7 +23,7 @@ internal sealed class ApplySignEvent : IPacketEvent
 
         var signId = packet.PopInt();
 
-        if (signId is < 1 or > 16)
+        if (signId is < 0 or > 16)
         {
             return;
         }
