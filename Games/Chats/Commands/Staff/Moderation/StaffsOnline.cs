@@ -6,6 +6,7 @@ internal sealed class StaffsOnline : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
+
         var output = "Les Staffs en ligne: \n\n";
 
         var staffs = GameClientManager.StaffUsers;
@@ -14,6 +15,11 @@ internal sealed class StaffsOnline : IChatCommand
         {
             foreach (var client in staffs)
             {
+                if (client.User.Rank > 12 && !client.User.HasPermission("god"))
+                {
+                    continue;
+                }
+
                 if (client != null && client.User != null)
                 {
                     output += $"{client.User.Username} (Rank: {client.User.Rank})\n";

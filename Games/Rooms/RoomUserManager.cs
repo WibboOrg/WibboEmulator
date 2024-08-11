@@ -449,7 +449,7 @@ public class RoomUserManager(Room room)
                 {
                     if (staffUser != null && staffUser.Client != null && staffUser.Client.User != null && staffUser.Client.User.HasPermission("show_invisible"))
                     {
-                        staffUser.SendWhisperChat(user.Username + " est entré dans l'appart en mode invisible !", true);
+                        staffUser.SendWhisperChat(user.Username + " est entré dans l'appart en invisible !", true);
                     }
                 }
             }
@@ -627,7 +627,7 @@ public class RoomUserManager(Room room)
                 {
                     if (staffUser != null && staffUser.Client != null && staffUser.Client.User != null && staffUser.Client.User.HasPermission("show_invisible"))
                     {
-                        staffUser.SendWhisperChat(user.Username + " était en mode invisible. Il vient de partir de l'appartement.", true);
+                        staffUser.SendWhisperChat(user.Username + " était invisible. Il vient de sortir de l'appartement.", true);
                     }
                 }
             }
