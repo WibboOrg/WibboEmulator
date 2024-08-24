@@ -1,17 +1,17 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Catalog;
+namespace WibboEmulator.Communication.Packets.Outgoing.Catalog;
 
 internal sealed class MarketplaceConfigurationComposer : ServerPacket
 {
-    public MarketplaceConfigurationComposer()
+    public MarketplaceConfigurationComposer(bool enabled = true, int commission = 0, int credits = 0, int advertisements = 0, int minimumPrice = 1, int maximumPrice = 99999, int offerTime = 48, int displayTime = 7)
         : base(ServerPacketHeader.MARKETPLACE_CONFIG)
     {
-        this.WriteBoolean(true);
-        this.WriteInteger(0);//Min price.
-        this.WriteInteger(0);//1?
-        this.WriteInteger(0);//5?
-        this.WriteInteger(1);// Prix Minimum
-        this.WriteInteger(9999);//Max price.
-        this.WriteInteger(48);
-        this.WriteInteger(7);//Days.
+        this.WriteBoolean(enabled);
+        this.WriteInteger(commission);
+        this.WriteInteger(credits);
+        this.WriteInteger(advertisements);
+        this.WriteInteger(minimumPrice);
+        this.WriteInteger(maximumPrice);
+        this.WriteInteger(offerTime);
+        this.WriteInteger(displayTime);
     }
 }

@@ -28,7 +28,7 @@ internal sealed class MakeOfferEvent : IPacketEvent
             return;
         }
 
-        if (sellingPrice is > 999999 or <= 0)
+        if (sellingPrice is > 99999 or <= 0)
         {
             session.SendPacket(new MarketplaceMakeOfferResultComposer(0));
             return;

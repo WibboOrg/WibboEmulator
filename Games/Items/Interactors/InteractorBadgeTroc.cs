@@ -33,7 +33,6 @@ public class InteractorBadgeTroc : FurniInteractor
 
         if (session.User.BadgeComponent.HasBadge(item.ExtraData))
         {
-            //session.SendNotification("Vous posséder déjà ce badge !");
             session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous possèdez déjà ce badge."));
             return;
         }

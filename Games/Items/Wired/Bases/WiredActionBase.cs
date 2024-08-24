@@ -24,6 +24,10 @@ public class WiredActionBase : WiredBase, IWiredCycleable
 
     public virtual bool OnCycle(RoomUser user, Item item) => false;
 
+    public virtual void OnUpdate(RoomUser user, Item item)
+    {
+    }
+
     internal WiredActionBase(Item item, Room room, int type) : base(item, room, type)
     {
     }

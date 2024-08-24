@@ -4,9 +4,12 @@ using System.Data;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Utilities;
 
 public class BotClothes(Item item, Room room) : WiredActionBase(item, room, (int)WiredActionType.BOT_CHANGE_FIGURE), IWired, IWiredEffect, IWiredCycleable
 {
+    private readonly Dictionary<string, string> _updatedBots = [];
+
     public override bool OnCycle(RoomUser user, Item item)
     {
         if (string.IsNullOrWhiteSpace(this.StringParam) || !this.StringParam.Contains('\t'))
@@ -15,25 +18,46 @@ public class BotClothes(Item item, Room room) : WiredActionBase(item, room, (int
         }
 
         var nameAndLook = this.StringParam.Split('\t');
-        var nameBot = (nameAndLook.Length == 2) ? nameAndLook[0] : "";
-        var look = (nameAndLook.Length == 2) ? nameAndLook[1] : "";
+        var botName = (nameAndLook.Length == 2) ? nameAndLook[0] : "";
+        var botLook = (nameAndLook.Length == 2) ? nameAndLook[1] : "";
 
-        if (nameBot == "" || look == "")
+        if (string.IsNullOrEmpty(botName) || string.IsNullOrEmpty(botLook))
         {
             return false;
         }
 
-        var bot = this.Room.RoomUserManager.GetBotOrPetByName(nameBot);
-        if (bot == null)
-        {
-            return false;
-        }
+        this._updatedBots.Remove(botName);
+        this._updatedBots.TryAdd(botName, botLook);
 
-        bot.BotData.Look = look;
-
-        this.Room.SendPacket(new UserChangeComposer(bot));
+        this.OnUpdate();
 
         return false;
+    }
+
+    public void OnUpdate()
+    {
+        if (this._updatedBots.Count > 0)
+        {
+            var packets = new ServerPacketList();
+            foreach (var updateBot in this._updatedBots)
+            {
+                var botName = updateBot.Key;
+                var botLook = updateBot.Value;
+
+                var bot = this.Room.RoomUserManager.GetBotOrPetByName(botName);
+                if (bot == null)
+                {
+                    continue;
+                }
+
+                bot.BotData.Look = botLook;
+
+                packets.Add(new UserChangeComposer(bot));
+            }
+            this._updatedBots.Clear();
+
+            this.Room.SendPackets(packets);
+        }
     }
 
     public void SaveToDatabase(IDbConnection dbClient) => WiredUtillity.SaveInDatabase(dbClient, this.Id, string.Empty, this.StringParam, false, null, this.Delay);

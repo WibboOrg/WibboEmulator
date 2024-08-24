@@ -6,7 +6,7 @@ internal sealed class BanUserEvent : IPacketEvent
 {
     private const int BAN_HOUR = 3600;
     private const int BAN_DAY = 86400;
-    private const int BAN_PERMANENT = 429496729;
+    private const int BAN_PERMANENT = -1;
 
     public double Delay => 250;
 
@@ -43,7 +43,7 @@ internal sealed class BanUserEvent : IPacketEvent
             return;
         }
 
-        var expireTime = WibboEnvironment.GetUnixTimestamp() + banDuration;
+        var expireTime = banDuration == -1 ? int.MaxValue : WibboEnvironment.GetUnixTimestamp() + banDuration;
         room.AddBan(userId, expireTime);
         room.RoomUserManager.RemoveUserFromRoom(roomUserByUserId.Client, true, true);
     }

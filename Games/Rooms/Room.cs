@@ -593,7 +593,7 @@ public class Room : IDisposable
         }
     }
 
-    public void SendMessage(ServerPacketList messages)
+    public void SendPackets(ServerPacketList messages)
     {
         if (messages.Count == 0)
         {

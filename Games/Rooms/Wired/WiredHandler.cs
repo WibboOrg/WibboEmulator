@@ -12,6 +12,8 @@ using WibboEmulator.Utilities;
 
 public class WiredHandler(Room room)
 {
+    private const int MAX_TICKS = 1024;
+
     private readonly ConcurrentDictionary<Point, List<Item>> _actionStacks = new();
     private readonly ConcurrentDictionary<Point, List<Item>> _conditionStacks = new();
 
@@ -27,6 +29,7 @@ public class WiredHandler(Room room)
     private bool _doCleanup;
     private DateTime _blockWiredDateTime;
     private bool _blockWired;
+    private bool _inRuningWired;
 
     public bool SecurityEnabled { get; set; } = SettingsManager.GetData<bool>("wired.security.enable");
 
@@ -62,10 +65,7 @@ public class WiredHandler(Room room)
         }
         else if (item.ItemData.InteractionType == InteractionType.SPECIAL_UNSEEN)
         {
-            if (!this._specialUnseen.ContainsKey(itemCoord))
-            {
-                this._specialUnseen.Add(itemCoord, 0);
-            }
+            this._specialUnseen.TryAdd(itemCoord, 0);
         }
         else if (item.ItemData.InteractionType == InteractionType.SPECIAL_ANIMATE)
         {
@@ -133,23 +133,35 @@ public class WiredHandler(Room room)
 
     public void OnCycle()
     {
-        if (this._doCleanup)
+        if (this._inRuningWired)
+        {
+            return;
+        }
+        else if (this._doCleanup)
         {
             this.ClearWired();
         }
         else if (this._blockWired)
         {
             var wiredDateTime = DateTime.Now - this._blockWiredDateTime;
-            if (wiredDateTime > TimeSpan.FromSeconds(5))
+            if (wiredDateTime > TimeSpan.FromSeconds(30))
             {
                 this._blockWired = false;
             }
         }
         else if (!this._requestingUpdates.IsEmpty)
         {
+            var wiredCounter = 0;
             var toAdd = new List<WiredCycle>();
             while (this._requestingUpdates.TryDequeue(out var handler))
             {
+                wiredCounter = Interlocked.Increment(ref wiredCounter);
+
+                if (wiredCounter > MAX_TICKS)
+                {
+                    break;
+                }
+
                 if (handler.WiredCycleable.Disposed())
                 {
                     continue;
@@ -236,22 +248,26 @@ public class WiredHandler(Room room)
             }
         }
 
-        if (this._tickCounter > 1024)
+        this._tickCounter = Interlocked.Increment(ref this._tickCounter);
+
+        if (this._tickCounter > MAX_TICKS)
         {
             this._blockWired = true;
             this._blockWiredDateTime = DateTime.Now;
-            room.SendPacket(new BroadcastMessageAlertComposer("Attention la limite d'effets wired est dépassée, ils sont par conséquent désactivés durant 5 secondes"));
+            room.SendPacket(new BroadcastMessageAlertComposer("Attention la limite d'effets Wired est dépassée, ils sont par conséquent désactivés durant 30 secondes"));
             return;
         }
-
-        this._tickCounter++;
 
         if (this._conditionStacks.TryGetValue(coordinate, out var conditionStack) && !ignoreCondition)
         {
             var isOrVal = this._specialOrEval.Contains(coordinate);
             var hasValidCondition = !isOrVal;
 
-            foreach (var roomItem in conditionStack.Take(this.SecurityEnabled ? 20 : 1024).Where(roomItem => roomItem != null && roomItem.WiredHandler != null).ToList())
+            var filteredItems = conditionStack.Take(48)
+                .Where(roomItem => roomItem != null && roomItem.WiredHandler != null)
+                .ToList();
+
+            foreach (var roomItem in filteredItems)
             {
                 var isValidCondition = ((IWiredCondition)roomItem.WiredHandler).AllowsExecution(user, item);
 
@@ -295,17 +311,24 @@ public class WiredHandler(Room room)
         }
         else
         {
-            var filteredItems = actionStack.Take(this.SecurityEnabled ? 20 : 1024)
+            var filteredItems = actionStack.Take(48)
                 .Where(roomItem => roomItem != null && roomItem.WiredHandler != null)
                 .ToList();
 
+            this._inRuningWired = true;
             foreach (var roomItem in filteredItems)
             {
+                if (this._tickCounter > MAX_TICKS)
+                {
+                    break;
+                }
+
                 if (roomItem.WiredHandler is IWiredEffect wiredHandler)
                 {
                     wiredHandler.Handle(user, item);
                 }
             }
+            this._inRuningWired = false;
         }
     }
 

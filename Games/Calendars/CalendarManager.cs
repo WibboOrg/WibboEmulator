@@ -1,25 +1,21 @@
 namespace WibboEmulator.Games.Calendars;
 
-public class CalendarManager
+public static class CalendarManager
 {
-    private Dictionary<int, CalendarItem> _calendarItem;
-    private int _currentDay;
-    private int _campaignDays;
+    private static Dictionary<int, CalendarItem> _calendarItem;
+    private static int _currentDay;
+    private static int _campaignDays;
 
-    public CalendarManager()
+    public static void Initialize()
     {
+        _calendarItem = [];
+        _currentDay = 0;
+        _campaignDays = 0;
     }
 
-    public void Initialize()
-    {
-        this._calendarItem = [];
-        this._currentDay = 0;
-        this._campaignDays = 0;
-    }
+    public static Dictionary<int, CalendarItem> CalendarItem() => _calendarItem;
 
-    public Dictionary<int, CalendarItem> CalendarItem() => this._calendarItem;
+    public static int CurrentDay() => _currentDay;
 
-    public int CurrentDay() => this._currentDay;
-
-    public int CampaignDays() => this._campaignDays;
+    public static int CampaignDays() => _campaignDays;
 }

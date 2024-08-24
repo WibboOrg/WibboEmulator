@@ -39,7 +39,6 @@ public class InteractorBannerTroc : FurniInteractor
 
         if (!BannerManager.TryGetBannerById(bannerId, out var banner) || session.User.BannerComponent.BannerList.Contains(banner))
         {
-            //session.SendNotification("Vous possédez déjà cette bannière !");
             session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous possèdez déjà cette bannière."));
             return;
         }

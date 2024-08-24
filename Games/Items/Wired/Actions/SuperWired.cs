@@ -1752,9 +1752,9 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 if (value.Contains(','))
                 {
-                    foreach (var pChoose in value.Split(','))
+                    foreach (var choose in value.Split(','))
                     {
-                        var list = pChoose.Split(';').ToList();
+                        var list = choose.Split(';').ToList();
                         if (list.Count == 3)
                         {
                             var botOrPet = this.Room.RoomUserManager.GetBotByName(list[0]);
@@ -2215,7 +2215,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "givelot":
             {
-                if (roomUser.IsBot || roomUser.Client == null || roomUser.Client.User == null || roomUser.Client.User.Rank > 4)
+                if (roomUser.IsBot || roomUser.Client == null || roomUser.Client.User == null)
                 {
                     break;
                 }
@@ -2237,6 +2237,12 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
+                var gameOwner = SettingsManager.GetData<string>("autogame.owner");
+                if (roomUser.Client.User.Rank > 4 && this.Room.RoomData.OwnerName != gameOwner)
+                {
+                    break;
+                }
+
                 roomUser.WiredGivelot = true;
 
                 var lootboxId = SettingsManager.GetData<int>("givelot.lootbox.id");
@@ -2248,21 +2254,28 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 int nbLot;
 
-                if (roomUser.Client.User.HasPermission("premium_legend"))
+                if (this.Room.RoomData.OwnerName == gameOwner)
                 {
-                    nbLot = 5;
-                }
-                else if (roomUser.Client.User.HasPermission("premium_epic"))
-                {
-                    nbLot = WibboEnvironment.GetRandomNumber(3, 5);
-                }
-                else if (roomUser.Client.User.HasPermission("premium_classic"))
-                {
-                    nbLot = WibboEnvironment.GetRandomNumber(2, 3);
+                    if (roomUser.Client.User.HasPermission("premium_legend"))
+                    {
+                        nbLot = 5;
+                    }
+                    else if (roomUser.Client.User.HasPermission("premium_epic"))
+                    {
+                        nbLot = WibboEnvironment.GetRandomNumber(3, 5);
+                    }
+                    else if (roomUser.Client.User.HasPermission("premium_classic"))
+                    {
+                        nbLot = WibboEnvironment.GetRandomNumber(2, 3);
+                    }
+                    else
+                    {
+                        nbLot = WibboEnvironment.GetRandomNumber(1, 2);
+                    }
                 }
                 else
                 {
-                    nbLot = WibboEnvironment.GetRandomNumber(1, 2);
+                    nbLot = 1;
                 }
 
                 using var dbClient = DatabaseManager.Connection;
@@ -2276,7 +2289,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 roomUser.Client.SendNotification(string.Format(LanguageManager.TryGetValue("notif.givelot.sucess", roomUser.Client.Language), nbLot));
 
-                if (this.Room.RoomData.OwnerName == SettingsManager.GetData<string>("autogame.owner"))
+                if (this.Room.RoomData.OwnerName == gameOwner)
                 {
                     roomUser.Client.User.GamePointsMonth += 1;
                     HallOfFameManager.UpdateRakings(roomUser.Client.User);

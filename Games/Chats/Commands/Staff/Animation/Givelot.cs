@@ -62,15 +62,34 @@ internal sealed class GiveLot : IChatCommand
 
         using var dbClient = DatabaseManager.Connection;
 
-        var items = ItemFactory.CreateMultipleItems(dbClient, itemData, targetRoomUser.Client.User, "", lotCount);
+        var items = ItemFactory.CreateMultipleItems(dbClient, itemData, targetRoomUser.Client.User, string.Empty, lotCount);
 
         foreach (var purchasedItem in items)
         {
             targetRoomUser.Client.User.InventoryComponent.TryAddItem(purchasedItem);
         }
 
-        targetRoomUser.Client.SendNotification(string.Format(LanguageManager.TryGetValue("notif.givelot.sucess", targetRoomUser.Client.Language), lotCount));
-        session.SendWhisper(targetRoomUser.Username + " à reçu " + lotCount + " LootBox!");
+        var haveWinBag = false;
+
+        if (WibboEnvironment.GetRandomNumber(1, 20001) <= 333)
+        {
+            var bagItemId = WibboEnvironment.GetRandomNumber(0, 1) == 1 ? 1000011466 : 1000011467;
+
+            if (ItemManager.GetItem(bagItemId, out var bagData))
+            {
+                var itemsBag = ItemFactory.CreateMultipleItems(dbClient, bagData, targetRoomUser.Client.User, string.Empty, 1);
+
+                foreach (var purchasedItem in itemsBag)
+                {
+                    targetRoomUser.Client.User.InventoryComponent.TryAddItem(purchasedItem);
+                }
+
+                haveWinBag = true;
+            }
+        }
+
+        targetRoomUser.Client.SendNotification(string.Format(LanguageManager.TryGetValue("notif.givelot.sucess", targetRoomUser.Client.Language), lotCount) + (haveWinBag ? " Et 1 <b>Sachet Rare</b> !" : ""));
+        session.SendWhisper(targetRoomUser.Username + " à reçu " + lotCount + " LootBox !" + (haveWinBag ? " Et 1 Sachet Rare !" : ""));
 
         targetRoomUser.Client.User.GamePointsMonth += 1;
         HallOfFameManager.UpdateRakings(targetRoomUser.Client.User);

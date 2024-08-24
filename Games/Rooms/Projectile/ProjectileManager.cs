@@ -158,7 +158,7 @@ public class ProjectileManager(Room room)
 
         bulletUser.Clear();
 
-        room.SendMessage(this._messages);
+        room.SendPackets(this._messages);
         this._messages.Clear();
     }
 

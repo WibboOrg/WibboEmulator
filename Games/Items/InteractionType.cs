@@ -155,6 +155,10 @@ public enum InteractionType
     DELUXE_BOX,
     EXTRA_BOX,
     BADGE_BOX,
+    CASE_MIEL,
+    CASE_ATHENA,
+    BAG_SAKURA,
+    BAG_ATLANTA,
 
     TELEPORT,
     TELEPORT_ARROW,

@@ -204,29 +204,45 @@ internal static class ItemBehaviourUtility
             case InteractionType.EXTRA_BOX:
             case InteractionType.LOOTBOX_2022:
             case InteractionType.BADGE_BOX:
+            case InteractionType.CASE_MIEL:
+            case InteractionType.CASE_ATHENA:
+            case InteractionType.BAG_SAKURA:
+            case InteractionType.BAG_ATLANTA:
             {
-                var lotName = "LootBox";
+                var lotName = "une LootBox";
                 switch (itemData.InteractionType)
                 {
                     case InteractionType.LEGEND_BOX:
-                        lotName = "LegendBox";
+                        lotName = "une LegendBox";
                         break;
                     case InteractionType.DELUXE_BOX:
-                        lotName = "LootBox Deluxe";
+                        lotName = "une LootBox Deluxe";
                         break;
                     case InteractionType.BADGE_BOX:
-                        lotName = "BadgeBox";
+                        lotName = "une BadgeBox";
+                        break;
+                    case InteractionType.CASE_MIEL:
+                        lotName = "une caisse Miel";
+                        break;
+                    case InteractionType.CASE_ATHENA:
+                        lotName = "une caisse d'Athènes";
+                        break;
+                    case InteractionType.BAG_SAKURA:
+                        lotName = "un sachet Sakura";
+                        break;
+                    case InteractionType.BAG_ATLANTA:
+                        lotName = "un sachet Atlanta";
                         break;
                 }
 
                 message.WriteInteger((int)ObjectDataKey.MAP_KEY);
                 message.WriteInteger(3);
                 message.WriteString("MESSAGE");
-                message.WriteString($"Bravo tu as reçu une {lotName} ! Ouvre-là pour y découvrir ton lot");
+                message.WriteString($"Bravo tu as reçu {lotName} ! Ouvre-là pour y découvrir ton lot");
                 message.WriteString("PURCHASER_NAME");
-                message.WriteString("");
+                message.WriteString("Wibbo hôtel");
                 message.WriteString("PURCHASER_FIGURE");
-                message.WriteString("");
+                message.WriteString("hr-998762937-42.hd-787589-1.lg-4082-0.sh-5128982-64-1408.ea-4212-0.ha-3758649-1408-91.ch-4248-0.wa-3661-1408-1408");
             }
             break;
 

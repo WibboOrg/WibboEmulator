@@ -59,7 +59,7 @@ public class RoomItemHandling(Room room)
             listMessage.Add(new ItemRemoveComposer(roomItem.Id, room.RoomData.OwnerId));
             items.Add(roomItem);
         }
-        room.SendMessage(listMessage);
+        room.SendPackets(listMessage);
 
         this._wallItems.Clear();
         this._floorItems.Clear();
@@ -102,7 +102,7 @@ public class RoomItemHandling(Room room)
         using var dbClient = DatabaseManager.Connection;
         ItemDao.UpdateItems(dbClient, items, session.User.Id);
 
-        room.SendMessage(listMessage);
+        room.SendPackets(listMessage);
 
         return items;
     }
@@ -777,7 +777,7 @@ public class RoomItemHandling(Room room)
 
     public void OnCycle()
     {
-        room.SendMessage(this.CycleRollers());
+        room.SendPackets(this.CycleRollers());
 
         if (!this._roomItemUpdateQueue.IsEmpty)
         {

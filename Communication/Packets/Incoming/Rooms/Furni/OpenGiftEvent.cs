@@ -91,6 +91,10 @@ internal sealed class OpenGiftEvent : IPacketEvent
         {
             ItemLootBox.OpenBadgeBox(session, present, room);
         }
+        else if (present.ItemData.InteractionType is InteractionType.CASE_MIEL or InteractionType.CASE_ATHENA or InteractionType.BAG_SAKURA or InteractionType.BAG_ATLANTA)
+        {
+            ItemLootBox.OpenCaseOrBag(session, present, room);
+        }
     }
 
     private static void FinishOpenGift(IDbConnection dbClient, GameClient session, Item present, Room room, ItemPresentEntity itemPresent)

@@ -30,7 +30,7 @@ public class InteractorDice : FurniInteractor
 
         if (GameMap.TilesTouching(item.X, item.Y, roomUser.X, roomUser.Y))
         {
-            if (!(item.ExtraData != "-1"))
+            if (item.ExtraData == "-1")
             {
                 return;
             }

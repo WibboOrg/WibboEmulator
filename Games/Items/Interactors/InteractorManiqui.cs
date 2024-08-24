@@ -28,24 +28,12 @@ public class InteractorManiqui : FurniInteractor
             return;
         }
 
-        var lookSplit = session.User.Look.Split('.');
-        var lookCode = "";
-        foreach (var part in lookSplit)
-        {
-            if (!part.StartsWith("ch") && !part.StartsWith("lg") && !part.StartsWith("cc") && !part.StartsWith("ca") && !part.StartsWith("sh") && !part.StartsWith("wa"))
-            {
-                lookCode = lookCode + part + ".";
-            }
-        }
+        var allowedParts = new List<string> { "ha", "he", "ea", "ch", "fa", "cp", "lg", "cc", "ca", "sh", "wa" };
+        var look = string.Join(".", session.User.Look.Split('.').Where(part => !allowedParts.Contains(part.Split('-')[0])));
+        var stuff = item.ExtraData.Split(';');
 
-        var look = lookCode + item.ExtraData.Split(';')[1];
-        session.User.Look = look;
-
-        using (var dbClient = DatabaseManager.Connection)
-        {
-            UserDao.UpdateLook(dbClient, session.User.Id, look);
-        }
-
+        var newLook = look + stuff[1];
+        session.User.Look = newLook;
 
         if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {

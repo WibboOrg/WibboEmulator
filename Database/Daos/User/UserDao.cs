@@ -79,10 +79,6 @@ internal sealed class UserDao
         "UPDATE user SET look = @Look, gender = @Gender WHERE id = @UserId",
         new { Look = look, Gender = gender, UserId = userId });
 
-    internal static void UpdateLook(IDbConnection dbClient, int userId, string look) => dbClient.Execute(
-        "UPDATE user SET look = @Look WHERE id = @UserId",
-        new { Look = look, UserId = userId });
-
     internal static void UpdateAllOnline(IDbConnection dbClient) => dbClient.Execute(
         "UPDATE `user` SET `online` = '0' WHERE `online` = '1'");
 
@@ -101,8 +97,9 @@ internal sealed class UserDao
     internal static void UpdateAddRunPoints(IDbConnection dbClient, int userId) => dbClient.Execute(
         "UPDATE `user` SET `run_points` = `run_points` + 1, `run_points_month` = `run_points_month` + 1 WHERE `id` = '" + userId + "'");
 
-    internal static void UpdateOffline(IDbConnection dbClient, int userId, int duckets, int credits, int bannerId) => dbClient.Execute(
-        "UPDATE `user` SET `online` = '0', `last_online` = '" + WibboEnvironment.GetUnixTimestamp() + "', `activity_points` = '" + duckets + "', `credits` = '" + credits + "', `banner_id` = '" + bannerId + "' WHERE `id` = '" + userId + "'");
+    internal static void UpdateOffline(IDbConnection dbClient, int userId, int duckets, int credits, string look, int bannerId) => dbClient.Execute(
+        "UPDATE `user` SET `online` = '0', `last_online` = '" + WibboEnvironment.GetUnixTimestamp() + "', `activity_points` = '" + duckets + "', `credits` = '" + credits + "', `look` = @Look, `banner_id` = '" + bannerId + "' WHERE `id` = '" + userId + "'",
+        new { Look = look });
 
     internal static void UpdateLastDailyCredits(IDbConnection dbClient, int userId, string lastDailyCredits) => dbClient.Execute(
         "UPDATE `user` SET `lastdailycredits` = '" + lastDailyCredits + "' WHERE `id` = '" + userId + "'");

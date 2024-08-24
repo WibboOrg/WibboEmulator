@@ -526,7 +526,7 @@ public class User : IDisposable, IEquatable<User>
         var timeOnline = DateTime.Now - this.OnlineTime;
         var timeOnlineSec = (int)timeOnline.TotalSeconds;
 
-        UserDao.UpdateOffline(dbClient, this.Id, this.Duckets, this.Credits, this.BannerSelected != null ? this.BannerSelected.Id : -1);
+        UserDao.UpdateOffline(dbClient, this.Id, this.Duckets, this.Credits, this.Look, this.BannerSelected != null ? this.BannerSelected.Id : -1);
         UserStatsDao.UpdateAll(dbClient, this.Id, this.FavouriteGroupId, timeOnlineSec, this.QuestId, this.Respect, this.DailyRespectPoints, this.DailyPetRespectPoints);
     }
 

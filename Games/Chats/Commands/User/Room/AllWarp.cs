@@ -19,6 +19,6 @@ internal sealed class AllWarp : IChatCommand
             messageList.Add(RoomItemHandling.TeleportUser(user, userRoom.Coordinate, 0, room.GameMap.SqAbsoluteHeight(userRoom.X, userRoom.Y)));
         }
 
-        room.SendMessage(messageList);
+        room.SendPackets(messageList);
     }
 }

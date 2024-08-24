@@ -18,13 +18,25 @@ using WibboEmulator.Games;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Communication.Packets;
+using System.Security.Cryptography;
 
 public static class WibboEnvironment
 {
-    private static readonly Random RandomNumber = new();
+    private static readonly Random RandomNumber = new(GenerateSecureSeed());
     public static HttpClient HttpClient { get; } = new();
     public static DateTime ServerStarted { get; private set; }
     public static string PatchDir { get; private set; }
+
+    private static int GenerateSecureSeed()
+    {
+        var seedBytes = new byte[4];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(seedBytes);
+        }
+
+        return BitConverter.ToInt32(seedBytes, 0);
+    }
 
     public static void Initialize()
     {

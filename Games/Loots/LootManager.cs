@@ -7,7 +7,7 @@ using WibboEmulator.Games.Items;
 public static class LootManager
 {
     private static readonly Dictionary<InteractionType, List<Loot>> LootItem = [];
-    private static readonly Dictionary<int, int> RarityCounter = [];
+    private static readonly Dictionary<RaretyLevelType, int> RarityCounter = [];
 
     public static void Initialize(IDbConnection dbClient)
     {
@@ -24,10 +24,10 @@ public static class LootManager
         var epicCounter = LogLootBoxDao.GetCount(dbClient, "LOOTBOX_2022", timestampStartMounth, 3);
         var legendaryCounter = LogLootBoxDao.GetCount(dbClient, "LOOTBOX_2022", timestampStartMounth, 4);
 
-        RarityCounter.Add(1, basicCounter);
-        RarityCounter.Add(2, commmCounter);
-        RarityCounter.Add(3, epicCounter);
-        RarityCounter.Add(4, legendaryCounter);
+        RarityCounter.Add(RaretyLevelType.Basic, basicCounter);
+        RarityCounter.Add(RaretyLevelType.Commun, commmCounter);
+        RarityCounter.Add(RaretyLevelType.Epic, epicCounter);
+        RarityCounter.Add(RaretyLevelType.Legendary, legendaryCounter);
 
         var emulatorLootBoxList = EmulatorLootBoxDao.GetAll(dbClient);
 
@@ -48,14 +48,14 @@ public static class LootManager
         }
     }
 
-    public static int GetRarityCounter(int rarityLevel)
+    public static int GetRarityCounter(RaretyLevelType rarityLevel)
     {
         _ = RarityCounter.TryGetValue(rarityLevel, out var count);
 
         return count;
     }
 
-    public static void IncrementeRarityCounter(int rarityLevel) => RarityCounter[rarityLevel] += 1;
+    public static void IncrementeRarityCounter(RaretyLevelType rarityLevel) => RarityCounter[rarityLevel] += 1;
 
     public static List<Loot> GetLoots(InteractionType interactionType)
     {

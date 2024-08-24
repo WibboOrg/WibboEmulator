@@ -23,38 +23,112 @@ internal static class ItemLootBox
 
         var probab = WibboEnvironment.GetRandomNumber(1, 20001);
 
-        _ = LootManager.GetRarityCounter(1);
-        var communCount = LootManager.GetRarityCounter(2);
-        var epicCount = LootManager.GetRarityCounter(3);
-        var legendaryCount = LootManager.GetRarityCounter(4);
-
-        if (probab <= 3 && legendaryCount <= 3)
+        if (probab <= 3)
         {
-            pageId = 1635463734; // Legendaires
-            LootManager.IncrementeRarityCounter(4);
+            pageId = 1635463734; // Legendary
+            LootManager.IncrementeRarityCounter(RaretyLevelType.Legendary);
         }
-        else if (probab <= 33 && epicCount <= 35)
+        else if (probab <= 33)
         {
             pageId = 1635463733; // Epic
-            LootManager.IncrementeRarityCounter(3);
+            LootManager.IncrementeRarityCounter(RaretyLevelType.Epic);
         }
-        else if (probab <= 333 && communCount <= 350)
+        else if (probab <= 333)
         {
             pageId = 1635463732; // Commun
-            LootManager.IncrementeRarityCounter(2);
+            LootManager.IncrementeRarityCounter(RaretyLevelType.Commun);
         }
         else if (probab <= 10933)
         {
-            pageId = 15987; // 1wp
+            pageId = 15987; // 1 WP
             forceItem = 23584;
         }
         else
         {
-            pageId = 1635463731; // Basique
-            LootManager.IncrementeRarityCounter(1);
+            pageId = 1635463731; // Basic
+            LootManager.IncrementeRarityCounter(RaretyLevelType.Basic);
         }
 
         EndOpenBox(session, present, room, pageId, forceItem);
+    }
+
+    public static void OpenCaseOrBag(GameClient session, Item present, Room room)
+    {
+        int pageId;
+        int bannerId;
+        var isCase = false;
+        var extraData = string.Empty;
+        var forceItem = 0;
+
+        var probab = WibboEnvironment.GetRandomNumber(1, 20001);
+
+        var isEpic = probab <= 1883;
+
+        switch (present.Data.InteractionType)
+        {
+            case InteractionType.CASE_MIEL:
+                pageId = 1635463905;
+                bannerId = 188;
+                isCase = true;
+                break;
+
+            case InteractionType.CASE_ATHENA:
+                pageId = 1635463903;
+                bannerId = 187;
+                isCase = true;
+                break;
+
+            case InteractionType.BAG_SAKURA:
+                pageId = 1635464079;
+                bannerId = 186;
+                break;
+
+            case InteractionType.BAG_ATLANTA:
+                pageId = 1635464080;
+                bannerId = 185;
+                break;
+
+            default:
+                session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
+                return;
+        }
+
+        _ = CatalogManager.TryGetPage(pageId, out var page);
+        if (page == null)
+        {
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
+            return;
+        }
+
+        var rareItems = page.Items.Values.Where(x => isEpic || x.Data.RarityLevel != RaretyLevelType.Epic);
+
+        var probabilityWps = isCase ? 1 : 2;
+        if (WibboEnvironment.GetRandomNumber(0, probabilityWps) == probabilityWps) // WPs
+        {
+            pageId = 15987; // WPs
+            if (isCase)
+            {
+                forceItem = isEpic ? 1635472902 : 1635470362;
+            }
+            else
+            {
+                forceItem = isEpic ? 4082 : 4089;
+            }
+        }
+        else if (WibboEnvironment.GetRandomNumber(0, rareItems.Count() + 1) == rareItems.Count() + 1)  // Banner
+        {
+            pageId = 1635464230;  // Banner
+            forceItem = 1000009301;
+            extraData = bannerId.ToString();
+        }
+        else
+        {
+            var randomRare = rareItems.GetRandomElement();
+            forceItem = randomRare.Id;
+            LootManager.IncrementeRarityCounter(randomRare.Data.RarityLevel);
+        }
+
+        EndOpenBox(session, present, room, pageId, forceItem, extraData);
     }
 
     public static void OpenLootBox(GameClient session, Item present, Room room)
@@ -289,20 +363,11 @@ internal static class ItemLootBox
             lotData.Amount += 1;
         }
 
-        ItemDao.UpdateBaseItem(dbClient, present.Id, lotData.Id);
-
-        if (!string.IsNullOrEmpty(extraData))
-        {
-            ItemDao.UpdateExtradata(dbClient, present.Id, extraData);
-        }
-
-        if (!string.IsNullOrEmpty(extraData))
-        {
-            present.ExtraData = extraData;
-        }
-
+        present.ExtraData = !string.IsNullOrEmpty(extraData) ? extraData : "";
         present.BaseItemId = lotData.Id;
         present.ResetBaseItem(room);
+
+        ItemDao.UpdateBaseItemAndExtraData(dbClient, present.Id, lotData.Id, present.ExtraData);
 
         var itemIsInRoom = true;
 

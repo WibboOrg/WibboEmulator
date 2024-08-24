@@ -897,7 +897,16 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                var postClassement = itemHighScore.Scores.Keys.ToList().IndexOf(user.Username) + 1;
+                var postClassement = 1;
+                foreach (var score in itemHighScore.Scores.OrderByDescending(x => x.Value))
+                {
+                    if (score.Key == user.Username)
+                    {
+                        break;
+                    }
+
+                    postClassement++;
+                }
 
                 if (postClassement == valueInt)
                 {
