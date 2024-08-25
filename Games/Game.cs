@@ -52,7 +52,7 @@ public static class Game
         HallOfFameManager.Initialize(dbClient);
         ChatManager.Initialize(dbClient);
         EffectManager.Initialize(dbClient);
-        BadgeManager.Initialize();
+        BadgeManager.Initialize(dbClient);
         AchievementManager.Initialize(dbClient);
         AnimationManager.Initialize(dbClient);
         LootManager.Initialize(dbClient);
