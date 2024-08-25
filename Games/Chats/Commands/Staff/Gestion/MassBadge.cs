@@ -2,6 +2,7 @@ namespace WibboEmulator.Games.Chats.Commands.Staff.Administration;
 
 using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Games.Badges;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -14,10 +15,16 @@ internal sealed class MassBadge : IChatCommand
             return;
         }
 
-        var badge = parameters[1];
+        var badgeCode = parameters[1];
 
-        if (string.IsNullOrEmpty(badge))
+        if (string.IsNullOrEmpty(badgeCode))
         {
+            return;
+        }
+
+        if (!BadgeManager.CanGiveBadge(badgeCode))
+        {
+            userRoom.SendWhisperChat("Action non autorisé");
             return;
         }
 
@@ -27,14 +34,14 @@ internal sealed class MassBadge : IChatCommand
         {
             if (client.User != null)
             {
-                client.User.BadgeComponent.GiveBadge(badge, false);
-                client.SendNotification($"Vous venez de recevoir le badge : {badge} !");
+                client.User.BadgeComponent.GiveBadge(badgeCode, false);
+                client.SendNotification($"Vous venez de recevoir le badge : {badgeCode} !");
 
                 userIds.Add(client.User.Id);
             }
         }
 
         using var dbClient = DatabaseManager.Connection;
-        UserBadgeDao.InsertAll(dbClient, userIds, badge);
+        UserBadgeDao.InsertAll(dbClient, userIds, badgeCode);
     }
 }

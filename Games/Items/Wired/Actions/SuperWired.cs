@@ -26,6 +26,7 @@ using WibboEmulator.Games.LandingView;
 using WibboEmulator.Games.Effects;
 using WibboEmulator.Games.Achievements;
 using WibboEmulator.Utilities;
+using WibboEmulator.Games.Badges;
 
 public class SuperWired : WiredActionBase, IWired, IWiredEffect
 {
@@ -2148,6 +2149,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "badge":
             {
+                if (!BadgeManager.CanGiveBadge(value))
+                {
+                    break;
+                }
+
                 roomUser.Client.User.BadgeComponent.GiveBadge(value);
                 break;
             }

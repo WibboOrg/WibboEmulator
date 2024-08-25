@@ -1,30 +1,33 @@
 namespace WibboEmulator.Games.Badges;
 
-using WibboEmulator.Core.Settings;
+using System.Data;
+using WibboEmulator.Database.Daos.Emulator;
 
 public static class BadgeManager
 {
-    private static readonly List<string> DisallowedBadgePrefixes =
-    [
-        "MRUN",
-        "WORLDRUNSAVE",
-        "ACH_"
-    ];
-    private static readonly List<string> NotAllowed = [];
+    private static readonly Dictionary<string, Badge> BadgeList = [];
 
-    public static void Initialize()
+    public static void Initialize(IDbConnection dbClient)
     {
-        NotAllowed.Clear();
-        AddDisallowedFromConfig();
+        BadgeList.Clear();
+
+        var emulatorBadgeList = EmulatorBadgeDao.GetAll(dbClient);
+
+        foreach (var emulatorBadge in emulatorBadgeList)
+        {
+            BadgeList.Add(emulatorBadge.Code, new Badge(emulatorBadge.Code, emulatorBadge.CanTrade, emulatorBadge.CanDelete, emulatorBadge.CanGive, emulatorBadge.AmountWinwins));
+        }
     }
 
-    private static void AddDisallowedFromConfig(string configString = "badge.not.allowed")
-    {
-        var badgeNotAllowed = SettingsManager.GetData<string>(configString);
-        NotAllowed.AddRange(badgeNotAllowed?.Split(',') ?? []);
-    }
+    public static bool TryGetBadgeByCode(string code, out Badge badge) => BadgeList.TryGetValue(code, out badge);
 
-    public static bool HaveNotAllowed(string badgeId) => NotAllowed.Contains(badgeId) || IsDisallowedByType(badgeId);
+    public static bool CanGiveBadge(string badgeId) => TryGetBadgeByCode(badgeId, out var badge) && badge.CanGive;
 
-    private static bool IsDisallowedByType(string badgeId) => DisallowedBadgePrefixes.Exists(badgeId.StartsWith);
+    public static bool CanTradeBadge(string badgeId) => TryGetBadgeByCode(badgeId, out var badge) && badge.CanTrade;
+
+    public static bool CanDeleteBadge(string badgeId) => TryGetBadgeByCode(badgeId, out var badge) && badge.CanDelete;
+
+    public static int AmountWinwinsBadge(string badgeId) => TryGetBadgeByCode(badgeId, out var badge) ? badge.AmountWinwins : 0;
+
+    public static List<Badge> Badges => [.. BadgeList.Values];
 }

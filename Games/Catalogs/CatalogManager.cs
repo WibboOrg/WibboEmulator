@@ -15,7 +15,6 @@ public static class CatalogManager
     private static readonly Dictionary<int, Dictionary<int, CatalogItem>> Items = [];
     private static readonly Dictionary<int, CatalogPromotion> CatalogPromotions = [];
     private static readonly Dictionary<int, int> ItemsPage = [];
-    private static readonly List<string> Badges = [];
     private static readonly List<PetRace> Races = [];
 
     public static void Initialize(IDbConnection dbClient)
@@ -45,11 +44,6 @@ public static class CatalogManager
             ItemsPage.Clear();
         }
 
-        if (Badges.Count > 0)
-        {
-            Badges.Clear();
-        }
-
         if (Races.Count > 0)
         {
             Races.Clear();
@@ -76,11 +70,6 @@ public static class CatalogManager
                 {
                     Console.WriteLine("Couldn't load Catalog Item " + itemId + ", no furniture record found.");
                     continue;
-                }
-
-                if (!Badges.Contains(catalogItem.Badge))
-                {
-                    Badges.Add(catalogItem.Badge);
                 }
 
                 if (!Items.TryGetValue(pageId, out var _))
@@ -154,8 +143,6 @@ public static class CatalogManager
     }
 
     public static List<PetRace> GetRacesForRaceId(int raceId) => Races.Where(race => race.RaceId == raceId).ToList();
-
-    public static bool HasBadge(string code) => Badges.Contains(code);
 
     public static CatalogItem FindItem(int itemId, User user)
     {

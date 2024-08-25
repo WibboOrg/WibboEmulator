@@ -172,7 +172,7 @@ public static class ItemUtility
 
             case InteractionType.BADGE_TROC:
             {
-                if (BadgeManager.HaveNotAllowed(extraData) || !CatalogManager.HasBadge(extraData) || !session.User.BadgeComponent.HasBadge(extraData))
+                if (!BadgeManager.CanGiveBadge(extraData) || !session.User.BadgeComponent.HasBadge(extraData))
                 {
                     session.SendNotification(LanguageManager.TryGetValue("notif.buybadgedisplay.error", session.Language));
                     return false;

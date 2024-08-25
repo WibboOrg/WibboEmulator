@@ -17,7 +17,7 @@ internal sealed class DeleteBadgeInventoryEvent : IPacketEvent
 
         var badgeCode = packet.PopString();
 
-        if (BadgeManager.HaveNotAllowed(badgeCode) || !session.User.BadgeComponent.HasBadge(badgeCode))
+        if (!BadgeManager.CanDeleteBadge(badgeCode) || !session.User.BadgeComponent.HasBadge(badgeCode))
         {
             session.SendHugeNotification(LanguageManager.TryGetValue("notif.badge.removed.error", session.Language));
             return;

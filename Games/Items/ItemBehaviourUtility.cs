@@ -1,6 +1,7 @@
 namespace WibboEmulator.Games.Items;
 using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Core.Settings;
+using WibboEmulator.Games.Badges;
 using WibboEmulator.Games.Banners;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Users;
@@ -79,9 +80,15 @@ internal static class ItemBehaviourUtility
 
             case InteractionType.TROPHY:
             case InteractionType.PHOTO:
-            case InteractionType.BADGE_TROC:
                 message.WriteInteger(item.Limited > 0 ? (int)ObjectDataKey.UNIQUE_SET : (int)ObjectDataKey.LEGACY_KEY);
                 message.WriteString((itemData.InteractionType is not InteractionType.TONER and not InteractionType.FOOTBALL_GATE) ? item.ExtraData : string.Empty);
+                break;
+
+            case InteractionType.BADGE_TROC:
+                message.WriteInteger((int)ObjectDataKey.STRING_KEY);
+                message.WriteInteger(2);
+                message.WriteString(item.ExtraData);
+                message.WriteString(BadgeManager.AmountWinwinsBadge(item.ExtraData).ToString());
                 break;
 
             case InteractionType.TROC_BANNER:

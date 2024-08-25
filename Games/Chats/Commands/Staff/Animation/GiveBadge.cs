@@ -1,6 +1,7 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Animation;
 
 using WibboEmulator.Core.Language;
+using WibboEmulator.Games.Badges;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -20,6 +21,12 @@ internal sealed class GiveBadge : IChatCommand
         if (clientByUsername == null)
         {
             userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
+            return;
+        }
+
+        if (!BadgeManager.CanGiveBadge(badgeCode))
+        {
+            userRoom.SendWhisperChat("Action non autorisé");
             return;
         }
 
