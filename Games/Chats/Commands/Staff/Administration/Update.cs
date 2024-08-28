@@ -7,6 +7,7 @@ using WibboEmulator.Core.Language;
 using WibboEmulator.Core.Settings;
 using WibboEmulator.Database;
 using WibboEmulator.Games.Animations;
+using WibboEmulator.Games.Badges;
 using WibboEmulator.Games.Banners;
 using WibboEmulator.Games.Catalogs;
 using WibboEmulator.Games.Chats.Filter;
@@ -85,10 +86,16 @@ internal sealed class Update : IChatCommand
                 session.SendWhisper("Lootbox mis à jour");
                 break;
             }
+            case "badge":
+            {
+                BadgeManager.Initialize(dbClient);
+                session.SendWhisper("RP Items mis à jour");
+                break;
+            }
             case "rpitems":
             {
                 RPItemManager.Initialize(dbClient);
-                session.SendWhisper("RP Items mis à jour");
+                session.SendWhisper("Badges mis à jour");
                 break;
             }
             case "rpweapon":
