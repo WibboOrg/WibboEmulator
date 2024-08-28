@@ -38,7 +38,12 @@ internal sealed class DuplicateRoom : IChatCommand
                 var oldItemId = item.Id;
                 var baseID = item.BaseItemId;
 
-                if (!furniIdAllow.Contains(baseID) || item.Data == null)
+                if (item.Data == null)
+                {
+                    continue;
+                }
+
+                if (!furniIdAllow.Contains(baseID) && item.Data.InteractionType != InteractionType.ADS_BACKGROUND)
                 {
                     continue;
                 }
