@@ -21,7 +21,7 @@ public class RandomStateFurni : WiredActionBase, IWired, IWiredEffect
                 {
                     if (int.TryParse(roomItem.ExtraData, out var stateItem))
                     {
-                        var newState = WibboEnvironment.GetRandomNumber(0, roomItem.ItemData.Modes);
+                        var newState = WibboEnvironment.GetRandomNumber(0, roomItem.ItemData.Modes - 1);
 
                         if (newState != stateItem)
                         {
