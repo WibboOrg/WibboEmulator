@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Handshake;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.BuildersClub;
+using WibboEmulator.Communication.Packets.Outgoing.Economy;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
@@ -19,6 +20,7 @@ using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Games.Banners;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Helps;
 using WibboEmulator.Games.Items;
@@ -86,6 +88,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
 
             session.SendPacket(new AuthenticationOKComposer());
 
+            packetList.Add(new EconomyCenterComposer(EconomyCenterManager.EconomyItem));
             packetList.Add(new NavigatorHomeRoomComposer(session.User.HomeRoom, session.User.HomeRoom));
             packetList.Add(new FavouritesComposer(session.User.FavoriteRooms));
             packetList.Add(new FigureSetIdsComposer());

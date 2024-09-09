@@ -2,8 +2,6 @@ namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Communication.Packets.Outgoing.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Core.FigureData;
-using WibboEmulator.Database;
-using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 

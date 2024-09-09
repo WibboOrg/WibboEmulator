@@ -57,6 +57,7 @@ public static class Game
         AnimationManager.Initialize(dbClient);
         LootManager.Initialize(dbClient);
         BannerManager.Initialize(dbClient);
+        EconomyCenterManager.Initialize(dbClient);
         PacketManager.Initialize();
 
         ServerStatusUpdater.Initialize(dbClient);

@@ -1,5 +1,7 @@
 namespace WibboEmulator.Games.Chats.Commands.Staff.Administration;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
+using WibboEmulator.Communication.Packets.Outgoing.Economy;
+using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Communication.WebSocket;
 using WibboEmulator.Core.FigureData;
@@ -207,6 +209,11 @@ internal sealed class Update : IChatCommand
                 session.SendWhisper("Bannière mises à jour");
                 break;
             }
+            case "economy":
+                EconomyCenterManager.Initialize(dbClient);
+                GameClientManager.SendMessage(new EconomyCenterComposer(EconomyCenterManager.EconomyItem));
+                session.SendWhisper("Economie centre mises à jour");
+                break;
             default:
             {
                 session.SendWhisper(LanguageManager.TryGetValue("cmd.notfound", session.Language));
