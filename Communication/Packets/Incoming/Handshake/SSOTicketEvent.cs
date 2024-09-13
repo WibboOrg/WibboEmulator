@@ -88,7 +88,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
 
             session.SendPacket(new AuthenticationOKComposer());
 
-            packetList.Add(new EconomyCenterComposer(EconomyCenterManager.EconomyItem));
+            packetList.Add(new EconomyCenterComposer(EconomyCenterManager.EconomyCategory, EconomyCenterManager.EconomyItem));
             packetList.Add(new NavigatorHomeRoomComposer(session.User.HomeRoom, session.User.HomeRoom));
             packetList.Add(new FavouritesComposer(session.User.FavoriteRooms));
             packetList.Add(new FigureSetIdsComposer());

@@ -211,7 +211,7 @@ internal sealed class Update : IChatCommand
             }
             case "economy":
                 EconomyCenterManager.Initialize(dbClient);
-                GameClientManager.SendMessage(new EconomyCenterComposer(EconomyCenterManager.EconomyItem));
+                GameClientManager.SendMessage(new EconomyCenterComposer(EconomyCenterManager.EconomyCategory, EconomyCenterManager.EconomyItem));
                 session.SendWhisper("Economie centre mises à jour");
                 break;
             default:

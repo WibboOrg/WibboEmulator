@@ -19,12 +19,7 @@ internal sealed class UserBannerEvent : IPacketEvent
             return;
         }
 
-        if (user.BannerComponent == null)
-        {
-            return;
-        }
-
-        if (all)
+        if (all && user.BannerComponent != null)
         {
             session.SendPacket(new UserBannerListComposer(user.BannerComponent.BannerList));
         }

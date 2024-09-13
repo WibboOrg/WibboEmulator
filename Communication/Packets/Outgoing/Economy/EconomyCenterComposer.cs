@@ -7,14 +7,27 @@ using WibboEmulator.Games.Items;
 
 internal sealed class EconomyCenterComposer : ServerPacket
 {
-    public EconomyCenterComposer(List<EmulatorEconomyEntity> economyItemList)
+    public EconomyCenterComposer(List<EmulatorEconomyCategoryEntity> economyCategoryList, List<EmulatorEconomyEntity> economyItemList)
          : base(ServerPacketHeader.ECONOMY_CENTER)
     {
-        this.WriteInteger(4);
-        this.WriteString("Édition limitée");
-        this.WriteString("Mobilier");
-        this.WriteString("Badge");
-        this.WriteString("Bannière");
+        var tabCategories = economyCategoryList.FindAll(x => x.ParentId == 0);
+        this.WriteInteger(tabCategories.Count);
+
+        foreach (var tabCategory in tabCategories)
+        {
+            this.WriteInteger(tabCategory.Id);
+            this.WriteString(tabCategory.Caption);
+
+            var subCategories = economyCategoryList.FindAll(x => x.ParentId == tabCategory.Id);
+            this.WriteInteger(subCategories.Count);
+
+            foreach (var subCategory in subCategories)
+            {
+                this.WriteInteger(subCategory.Id);
+                this.WriteInteger(subCategory.IconImage);
+                this.WriteString(subCategory.Caption);
+            }
+        }
 
         this.WriteInteger(economyItemList.Count);
         foreach (var item in economyItemList)
@@ -29,6 +42,7 @@ internal sealed class EconomyCenterComposer : ServerPacket
                 switch (itemData.InteractionType)
                 {
                     default:
+                        this.WriteInteger(0);
                         this.WriteInteger((int)ObjectDataKey.MAP_KEY);
 
                         var totalSets = 1;
@@ -60,6 +74,7 @@ internal sealed class EconomyCenterComposer : ServerPacket
                         this.WriteString(item.ExtraData);
                         break;
                     case InteractionType.BADGE_TROC:
+                        this.WriteInteger(1);
                         this.WriteInteger((int)ObjectDataKey.STRING_KEY);
                         this.WriteInteger(2);
                         this.WriteString(item.ExtraData);
@@ -67,6 +82,7 @@ internal sealed class EconomyCenterComposer : ServerPacket
                         break;
 
                     case InteractionType.TROC_BANNER:
+                        this.WriteInteger(2);
                         if (!int.TryParse(item.ExtraData, out var bannerId) ||
                         !BannerManager.TryGetBannerById(bannerId, out var banner))
                         {
