@@ -159,6 +159,7 @@ public enum InteractionType
     CASE_ATHENA,
     BAG_SAKURA,
     BAG_ATLANTA,
+    BAG_KYOTO,
 
     TELEPORT,
     TELEPORT_ARROW,

@@ -88,6 +88,11 @@ internal static class ItemLootBox
                 bannerId = 185;
                 break;
 
+            case InteractionType.BAG_KYOTO:
+                pageId = 1635464176;
+                bannerId = 207;
+                break;
+
             default:
                 session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
                 return;

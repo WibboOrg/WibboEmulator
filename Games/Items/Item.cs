@@ -168,7 +168,7 @@ public class Item : IEquatable<Item>
     public ItemCategoryType Category => this.ItemData.InteractionType switch
     {
         InteractionType.GIFT or InteractionType.LEGEND_BOX or InteractionType.BADGE_BOX or InteractionType.LOOTBOX_2022 or InteractionType.DELUXE_BOX or InteractionType.EXTRA_BOX or
-        InteractionType.CASE_MIEL or InteractionType.CASE_ATHENA or InteractionType.BAG_SAKURA or InteractionType.BAG_ATLANTA => ItemCategoryType.PRESENT,
+        InteractionType.CASE_MIEL or InteractionType.CASE_ATHENA or InteractionType.BAG_SAKURA or InteractionType.BAG_ATLANTA or InteractionType.BAG_KYOTO => ItemCategoryType.PRESENT,
 
         InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE => ItemCategoryType.GUILD_FURNI,
 

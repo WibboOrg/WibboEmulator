@@ -143,6 +143,7 @@ public class InteractionTypes
         "case_athena" => InteractionType.CASE_ATHENA,
         "bag_sakura" => InteractionType.BAG_SAKURA,
         "bag_atlanta" => InteractionType.BAG_ATLANTA,
+        "bag_kyoto" => InteractionType.BAG_KYOTO,
         "maniqui" => InteractionType.MANNEQUIN,
         "bgupdater" => InteractionType.TONER,
         "bot" => InteractionType.BOT,

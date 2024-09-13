@@ -2258,7 +2258,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                int nbLot;
+                var nbLot = 1;
+                var haveWinBag = false;
 
                 if (this.Room.RoomData.OwnerName == gameOwner)
                 {
@@ -2278,13 +2279,28 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     {
                         nbLot = WibboEnvironment.GetRandomNumber(1, 2);
                     }
-                }
-                else
-                {
-                    nbLot = 1;
+
+                    haveWinBag = WibboEnvironment.GetRandomNumber(1, 20001) <= 333;
                 }
 
                 using var dbClient = DatabaseManager.Connection;
+
+                if (haveWinBag)
+                {
+                    var bagItemId = 1000012361;
+
+                    if (ItemManager.GetItem(bagItemId, out var bagData))
+                    {
+                        var itemsBag = ItemFactory.CreateMultipleItems(dbClient, bagData, roomUser.Client.User, string.Empty, 1);
+
+                        foreach (var purchasedItem in itemsBag)
+                        {
+                            roomUser.Client.User.InventoryComponent.TryAddItem(purchasedItem);
+                        }
+
+                        haveWinBag = true;
+                    }
+                }
 
                 var items = ItemFactory.CreateMultipleItems(dbClient, itemData, roomUser.Client.User, "", nbLot);
 
@@ -2293,7 +2309,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     roomUser.Client.User.InventoryComponent.TryAddItem(purchasedItem);
                 }
 
-                roomUser.Client.SendNotification(string.Format(LanguageManager.TryGetValue("notif.givelot.sucess", roomUser.Client.Language), nbLot));
+                roomUser.Client.SendNotification(string.Format(LanguageManager.TryGetValue("notif.givelot.sucess", roomUser.Client.Language), nbLot) + (haveWinBag ? " Et 1 <b>Sachet Rare</b> !" : "");
 
                 if (this.Room.RoomData.OwnerName == gameOwner)
                 {
