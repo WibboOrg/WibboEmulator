@@ -2309,7 +2309,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     roomUser.Client.User.InventoryComponent.TryAddItem(purchasedItem);
                 }
 
-                roomUser.Client.SendNotification(string.Format(LanguageManager.TryGetValue("notif.givelot.sucess", roomUser.Client.Language), nbLot) + (haveWinBag ? " Et 1 <b>Sachet Rare</b> !" : "");
+                roomUser.Client.SendNotification(string.Format(LanguageManager.TryGetValue("notif.givelot.sucess", roomUser.Client.Language), nbLot) + (haveWinBag ? " Et 1 <b>Sachet Rare</b> !" : ""));
 
                 if (this.Room.RoomData.OwnerName == gameOwner)
                 {
