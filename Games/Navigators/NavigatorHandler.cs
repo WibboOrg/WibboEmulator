@@ -90,7 +90,7 @@ internal static class NavigatorHandler
                         {
                             foreach (var room in roomList)
                             {
-                                if (room.State == RoomState.Hide)
+                                if (room.State == RoomState.Invisible)
                                 {
                                     continue;
                                 }

@@ -392,4 +392,65 @@ public static class RoomManager
             ((IDisposable)room).Dispose();
         }
     }
+
+        /* public List<Room> SearchGroupRooms(string query)
+        {
+            return _rooms.Values.Where(x => x.Group != null && x.Group.Name.ToLower().Contains(query.ToLower()) && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(50).ToList();
+        }
+
+        public List<Room> SearchTaggedRooms(string query)
+        {
+            return _rooms.Values.Where(x => x.Tags.Contains(query) && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(50).ToList();
+        }
+
+        public List<Room> GetPopularRooms(int category, int amount = 50)
+        {
+            return _rooms.Values.Where(x => x.UsersNow > 0 && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
+        }
+
+        public List<Room> GetRecommendedRooms(int amount = 50, int CurrentRoomId = 0)
+        {
+            return _rooms.Values.Where(x => x.Id != CurrentRoomId && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).OrderByDescending(x => x.Score).Take(amount).ToList();
+        }
+
+        public List<Room> GetPopularRatedRooms(int amount = 50)
+        {
+            return _rooms.Values.Where(x => x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Score).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
+        }
+
+        public List<Room> GetRoomsByCategory(int category, int amount = 50)
+        {
+            return _rooms.Values.Where(x => x.Category == category && x.Access != RoomAccess.Invisible && x.UsersNow > 0).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
+        }
+
+        public List<Room> GetOnGoingRoomPromotions(int Mode, int Amount = 50)
+        {
+            if (Mode == 17)
+            {
+                return _rooms.Values.Where(x => x.HasActivePromotion && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Promotion.TimestampStarted).Take(Amount).ToList();
+            }
+
+            return _rooms.Values.Where(x => x.HasActivePromotion && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(Amount).ToList();
+        }
+
+        public List<Room> GetPromotedRooms(int categoryId, int amount = 50)
+        {
+            return _rooms.Values.Where(x => x.HasActivePromotion && x.Promotion.CategoryId == categoryId && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Promotion.TimestampStarted).Take(amount).ToList();
+        }
+
+        public List<Room> GetGroupRooms(int amount = 50)
+        {
+            return _rooms.Values.Where(x => x.Group != null && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Score).Take(amount).ToList();
+        }
+
+        public List<Room> GetRoomsByIds(List<int> ids, int amount = 50)
+        {
+            return _rooms.Values.Where(x => ids.Contains(x.Id) && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
+        }
+
+        public Room TryGetRandomLoadedRoom()
+        {
+            return _rooms.Values.Where(x => x.UsersNow > 0 && x.Access != RoomAccess.Invisible && x.UsersNow < x.UsersMax).OrderByDescending(x => x.UsersNow).FirstOrDefault();
+        }
+        */
 }

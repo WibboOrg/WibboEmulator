@@ -146,7 +146,7 @@ internal sealed class SaveRoomSettingsEvent : IPacketEvent
         }
         else if (room.RoomData.Access == RoomAccess.Invisible)
         {
-            accessState = "hide";
+            accessState = "invisible";
         }
 
         using (var dbClient = DatabaseManager.Connection)
