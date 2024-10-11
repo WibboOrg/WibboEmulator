@@ -20,7 +20,7 @@ public class ConsoleCommands
                 case "stop":
                 case "shutdown":
                 {
-                    ExceptionLogger.LogMessage("Server exiting at " + DateTime.Now);
+                    ExceptionLogger.LogMessage("Serveur éteins à " + DateTime.Now);
                     ExceptionLogger.DisablePrimaryWriting(true);
                     WibboEnvironment.PerformShutDown();
                     break;
@@ -38,12 +38,12 @@ public class ConsoleCommands
 
                     GameClientManager.SendMessage(new BroadcastMessageAlertComposer(notice));
 
-                    Console.WriteLine("Alert successfully sent.");
+                    Console.WriteLine("Alerte envoyé.");
                     break;
                 }
 
                 default:
-                    ExceptionLogger.LogMessage(parameters[0].ToLower() + " is an unknown or unsupported command. Type help for more information");
+                    ExceptionLogger.LogMessage(parameters[0].ToLower() + " est une commande inconnue du système.");
                     break;
             }
         }

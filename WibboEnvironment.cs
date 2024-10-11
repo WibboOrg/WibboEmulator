@@ -151,7 +151,7 @@ public static class WibboEnvironment
         GameClientManager.CloseAll();
         RoomManager.RemoveAllRooms();
 
-        Console.WriteLine("L'émulateur s'est parfaitement éteinte.");
+        Console.WriteLine("L'émulateur s'est parfaitement éteint.");
         Environment.Exit(0);
     }
 }
