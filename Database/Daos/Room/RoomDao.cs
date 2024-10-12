@@ -207,5 +207,5 @@ public enum RoomState
     Open,
     Locked,
     Password,
-    Hide
+    Invisible
 }
