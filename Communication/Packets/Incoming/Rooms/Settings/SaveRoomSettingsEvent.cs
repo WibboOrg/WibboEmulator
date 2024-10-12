@@ -144,9 +144,9 @@ internal sealed class SaveRoomSettingsEvent : IPacketEvent
         {
             accessState = "password";
         }
-        else if (room.RoomData.Access == RoomAccess.Invisible)
+        else if (room.RoomData.Access == RoomAccess.Hide)
         {
-            accessState = "invisible";
+            accessState = "hide";
         }
 
         using (var dbClient = DatabaseManager.Connection)

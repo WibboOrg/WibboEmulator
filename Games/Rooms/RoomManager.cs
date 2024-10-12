@@ -190,7 +190,7 @@ public static class RoomManager
         var instanceMatches =
             (from RoomInstance in Rooms.ToList()
              where RoomInstance.Value.RoomData.UsersNow >= 0 &&
-             RoomInstance.Value.RoomData.Access != RoomAccess.Invisible &&
+             RoomInstance.Value.RoomData.Access != RoomAccess.Hide &&
              RoomInstance.Value.RoomData.Group != null &&
              (RoomInstance.Value.RoomData.OwnerName.StartsWith(query) ||
              RoomInstance.Value.RoomData.Tags.Contains(query) ||
@@ -205,7 +205,7 @@ public static class RoomManager
         var instanceMatches =
             (from RoomInstance in Rooms.ToList()
              where RoomInstance.Value.RoomData.UsersNow >= 0 &&
-             RoomInstance.Value.RoomData.Access != RoomAccess.Invisible &&
+             RoomInstance.Value.RoomData.Access != RoomAccess.Hide &&
              RoomInstance.Value.RoomData.Tags.Contains(query)
              orderby RoomInstance.Value.RoomData.UsersNow descending
              select RoomInstance.Value.RoomData).Take(50);
@@ -219,7 +219,7 @@ public static class RoomManager
              where RoomInstance.Value != null && RoomInstance.Value.RoomData != null &&
              RoomInstance.Value.RoomData.UsersNow > 0 &&
              (category == -1 || RoomInstance.Value.RoomData.Category == category) &&
-             RoomInstance.Value.RoomData.Access != RoomAccess.Invisible && RoomInstance.Value.RoomData.Language == langue
+             RoomInstance.Value.RoomData.Access != RoomAccess.Hide && RoomInstance.Value.RoomData.Language == langue
              orderby RoomInstance.Value.RoomData.Score descending
              orderby RoomInstance.Value.RoomData.UsersNow descending
              select RoomInstance.Value.RoomData).Take(amount);
@@ -232,7 +232,7 @@ public static class RoomManager
             (from RoomInstance in Rooms.ToList()
              where RoomInstance.Value.RoomData.UsersNow >= 0 &&
              RoomInstance.Value.RoomData.Score >= 0 &&
-             RoomInstance.Value.RoomData.Access != RoomAccess.Invisible &&
+             RoomInstance.Value.RoomData.Access != RoomAccess.Hide &&
              RoomInstance.Value.RoomData.Id != currentRoomId
              orderby RoomInstance.Value.RoomData.Score descending
              orderby RoomInstance.Value.RoomData.UsersNow descending
@@ -244,7 +244,7 @@ public static class RoomManager
     {
         var rooms =
             (from RoomInstance in Rooms.ToList()
-             where RoomInstance.Value.RoomData.Access != RoomAccess.Invisible
+             where RoomInstance.Value.RoomData.Access != RoomAccess.Hide
              orderby RoomInstance.Value.RoomData.Score descending
              select RoomInstance.Value.RoomData).Take(amount);
         return rooms.ToList();
@@ -256,7 +256,7 @@ public static class RoomManager
             (from RoomInstance in Rooms.ToList()
              where RoomInstance.Value.RoomData.Category == category &&
              RoomInstance.Value.RoomData.UsersNow > 0 &&
-             RoomInstance.Value.RoomData.Access != RoomAccess.Invisible
+             RoomInstance.Value.RoomData.Access != RoomAccess.Hide
              orderby RoomInstance.Value.RoomData.UsersNow descending
              select RoomInstance.Value.RoomData).Take(amount);
         return rooms.ToList();
@@ -267,7 +267,7 @@ public static class RoomManager
         var tags =
             (from RoomInstance in Rooms.ToList()
              where RoomInstance.Value.RoomData.UsersNow >= 0 &&
-             RoomInstance.Value.RoomData.Access != RoomAccess.Invisible
+             RoomInstance.Value.RoomData.Access != RoomAccess.Hide
              orderby RoomInstance.Value.RoomData.UsersNow descending
              orderby RoomInstance.Value.RoomData.Score descending
              select RoomInstance.Value.RoomData.Tags).Take(amount);
@@ -301,7 +301,7 @@ public static class RoomManager
         var rooms =
             (from RoomInstance in Rooms.ToList()
              where RoomInstance.Value.RoomData.Group != null &&
-             RoomInstance.Value.RoomData.Access != RoomAccess.Invisible
+             RoomInstance.Value.RoomData.Access != RoomAccess.Hide
              orderby RoomInstance.Value.RoomData.Score descending
              select RoomInstance.Value.RoomData).Take(amount);
         return rooms.ToList();
@@ -392,65 +392,4 @@ public static class RoomManager
             ((IDisposable)room).Dispose();
         }
     }
-
-        /* public List<Room> SearchGroupRooms(string query)
-        {
-            return _rooms.Values.Where(x => x.Group != null && x.Group.Name.ToLower().Contains(query.ToLower()) && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(50).ToList();
-        }
-
-        public List<Room> SearchTaggedRooms(string query)
-        {
-            return _rooms.Values.Where(x => x.Tags.Contains(query) && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(50).ToList();
-        }
-
-        public List<Room> GetPopularRooms(int category, int amount = 50)
-        {
-            return _rooms.Values.Where(x => x.UsersNow > 0 && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
-        }
-
-        public List<Room> GetRecommendedRooms(int amount = 50, int CurrentRoomId = 0)
-        {
-            return _rooms.Values.Where(x => x.Id != CurrentRoomId && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).OrderByDescending(x => x.Score).Take(amount).ToList();
-        }
-
-        public List<Room> GetPopularRatedRooms(int amount = 50)
-        {
-            return _rooms.Values.Where(x => x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Score).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
-        }
-
-        public List<Room> GetRoomsByCategory(int category, int amount = 50)
-        {
-            return _rooms.Values.Where(x => x.Category == category && x.Access != RoomAccess.Invisible && x.UsersNow > 0).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
-        }
-
-        public List<Room> GetOnGoingRoomPromotions(int Mode, int Amount = 50)
-        {
-            if (Mode == 17)
-            {
-                return _rooms.Values.Where(x => x.HasActivePromotion && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Promotion.TimestampStarted).Take(Amount).ToList();
-            }
-
-            return _rooms.Values.Where(x => x.HasActivePromotion && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(Amount).ToList();
-        }
-
-        public List<Room> GetPromotedRooms(int categoryId, int amount = 50)
-        {
-            return _rooms.Values.Where(x => x.HasActivePromotion && x.Promotion.CategoryId == categoryId && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Promotion.TimestampStarted).Take(amount).ToList();
-        }
-
-        public List<Room> GetGroupRooms(int amount = 50)
-        {
-            return _rooms.Values.Where(x => x.Group != null && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Score).Take(amount).ToList();
-        }
-
-        public List<Room> GetRoomsByIds(List<int> ids, int amount = 50)
-        {
-            return _rooms.Values.Where(x => ids.Contains(x.Id) && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
-        }
-
-        public Room TryGetRandomLoadedRoom()
-        {
-            return _rooms.Values.Where(x => x.UsersNow > 0 && x.Access != RoomAccess.Invisible && x.UsersNow < x.UsersMax).OrderByDescending(x => x.UsersNow).FirstOrDefault();
-        }
-        */
 }

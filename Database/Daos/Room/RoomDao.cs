@@ -93,7 +93,7 @@ internal sealed class RoomDao
         room.users_now, room.allow_hidewireds, room.price, room.wired_security, user.id as owner_id, user.langue 
         FROM room 
         LEFT JOIN user ON room.owner = user.username 
-        WHERE room.owner = @Username AND room.state != 'invisible' 
+        WHERE room.owner = @Username AND room.state != 'hide' 
         ORDER BY room.users_now DESC",
         new { Username = searchData }
     ).ToList();
@@ -207,5 +207,5 @@ public enum RoomState
     Open,
     Locked,
     Password,
-    Invisible
+    Hide
 }

@@ -5,5 +5,5 @@ public enum RoomAccess
     Open,
     Doorbell,
     Password,
-    Invisible
+    Hide
 }

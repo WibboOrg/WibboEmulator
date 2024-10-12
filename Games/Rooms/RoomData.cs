@@ -103,7 +103,7 @@ public class RoomData
         {
             RoomState.Open => RoomAccess.Open,
             RoomState.Password => RoomAccess.Password,
-            RoomState.Invisible => RoomAccess.Invisible,
+            RoomState.Hide => RoomAccess.Hide,
             RoomState.Locked => RoomAccess.Doorbell,
             _ => RoomAccess.Open
         };
