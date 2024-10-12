@@ -129,6 +129,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             case "roomalert":
             case "rpsay":
             case "rpsayme":
+            case "startslot":
+            case "endslot":
                 if (this.IsStaff)
                 {
                     return;
@@ -139,8 +141,6 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             case "givelot":
             case "winmovierun":
             case "givebanner":
-            case "startslot":
-            case "endslot":
                 if (this.IsGod)
                 {
                     return;

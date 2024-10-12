@@ -1,9 +1,12 @@
 namespace WibboEmulator.Communication.Packets.Incoming.RolePlay;
 
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 
 internal sealed class RpBotChooseEvent : IPacketEvent
 {
@@ -34,6 +37,13 @@ internal sealed class RpBotChooseEvent : IPacketEvent
         {
             using var dbClient = DatabaseManager.Connection;
 
+            var ownerUser = UserManager.GetUserById(room.RoomData.OwnerId);
+
+            if (ownerUser == null || ownerUser.WibboPoints < user.SlotAmount)
+            {
+                return;
+            }
+
             user.IsSlotSpin = true;
             user.IsSlot = false;
             user.IsSlotWinner = false;
@@ -44,12 +54,20 @@ internal sealed class RpBotChooseEvent : IPacketEvent
                 user.IsSlotWinner = true;
                 session.User.WibboPoints += user.SlotAmount;
                 UserDao.UpdateAddPoints(dbClient, session.User.Id, user.SlotAmount);
+
+                ownerUser.WibboPoints -= user.SlotAmount;
+                UserDao.UpdateRemovePoints(dbClient, room.RoomData.OwnerId, user.SlotAmount);
             }
             else
             {
                 session.User.WibboPoints -= user.SlotAmount;
                 UserDao.UpdateRemovePoints(dbClient, session.User.Id, user.SlotAmount);
+
+                ownerUser.WibboPoints += user.SlotAmount;
+                UserDao.UpdateAddPoints(dbClient, room.RoomData.OwnerId, user.SlotAmount);
             }
+
+            ownerUser.Client?.SendPacket(new ActivityPointNotificationComposer(ownerUser.WibboPoints, 0, 105));
 
             LogSlotMachineDao.Insert(dbClient, session.User.Id, user.SlotAmount, isWin);
         }
