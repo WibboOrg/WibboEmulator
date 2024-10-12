@@ -90,7 +90,7 @@ internal static class ItemLootBox
 
             case InteractionType.BAG_KYOTO:
                 pageId = 1635464176;
-                bannerId = 207;
+                bannerId = 209;
                 break;
 
             default:
