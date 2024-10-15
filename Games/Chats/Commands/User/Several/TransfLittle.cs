@@ -7,21 +7,21 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal sealed class TransfLittle : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode || Session.User.IsSpectator)
+        if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode || session.User.IsSpectator)
         {
             return;
         }
 
         if (!userRoom.SetPetTransformation("little" + parameters[1], 0))
         {
-            Session.SendHugeNotification(LanguageManager.TryGetValue("cmd.littleorbig.help", Session.Language));
+            session.SendHugeNotification(LanguageManager.TryGetValue("cmd.littleorbig.help", session.Language));
             return;
         }
 

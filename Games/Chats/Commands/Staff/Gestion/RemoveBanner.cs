@@ -8,17 +8,17 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class RemoveBanner : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 3)
         {
             return;
         }
 
-        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
-        if (TargetUser == null || TargetUser.User == null || TargetUser.User.BannerComponent == null)
+        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        if (targetUser == null || targetUser.User == null || targetUser.User.BannerComponent == null)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", Session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
             return;
         }
 
@@ -32,12 +32,12 @@ internal sealed class RemoveBanner : IChatCommand
             return;
         }
 
-        if (!TargetUser.User.BannerComponent.BannerList.Contains(banner))
+        if (!targetUser.User.BannerComponent.BannerList.Contains(banner))
         {
             return;
         }
 
         var dbClient = DatabaseManager.Connection;
-        TargetUser.User.BannerComponent.RemoveBanner(dbClient, bannerId);
+        targetUser.User.BannerComponent.RemoveBanner(dbClient, bannerId);
     }
 }

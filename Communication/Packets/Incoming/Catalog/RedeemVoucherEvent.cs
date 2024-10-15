@@ -10,13 +10,13 @@ internal sealed class RedeemVoucherEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var voucherCode = packet.PopString().Replace("\r", "");
 
         if (!VoucherManager.TryGetVoucher(voucherCode, out var voucher))
         {
-            Session.SendPacket(new VoucherRedeemErrorComposer(0));
+            session.SendPacket(new VoucherRedeemErrorComposer(0));
             return;
         }
 
@@ -27,7 +27,7 @@ internal sealed class RedeemVoucherEvent : IPacketEvent
 
         using var dbClient = DatabaseManager.Connection;
 
-        var haveVoucher = UserVoucherDao.HaveVoucher(dbClient, Session.User.Id, voucherCode);
+        var haveVoucher = UserVoucherDao.HaveVoucher(dbClient, session.User.Id, voucherCode);
 
         if (!haveVoucher)
         {
@@ -35,22 +35,22 @@ internal sealed class RedeemVoucherEvent : IPacketEvent
         }
         else
         {
-            UserVoucherDao.Insert(dbClient, Session.User.Id, voucherCode);
+            UserVoucherDao.Insert(dbClient, session.User.Id, voucherCode);
         }
 
         voucher.UpdateUses();
 
         if (voucher.Type == VoucherType.Credit)
         {
-            Session.User.Credits += voucher.Value;
-            Session.SendPacket(new CreditBalanceComposer(Session.User.Credits));
+            session.User.Credits += voucher.Value;
+            session.SendPacket(new CreditBalanceComposer(session.User.Credits));
         }
         else if (voucher.Type == VoucherType.Ducket)
         {
-            Session.User.Duckets += voucher.Value;
-            Session.SendPacket(new ActivityPointNotificationComposer(Session.User.Duckets, voucher.Value));
+            session.User.Duckets += voucher.Value;
+            session.SendPacket(new ActivityPointNotificationComposer(session.User.Duckets, voucher.Value));
         }
 
-        //Session.SendPacket(new VoucherRedeemOkComposer());
+        //session.SendPacket(new VoucherRedeemOkComposer());
     }
 }

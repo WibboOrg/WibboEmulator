@@ -6,11 +6,11 @@ internal sealed class CancellInviteGuideEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var requester = GameClientManager.GetClientByUserID(Session.User.GuideOtherUserId);
+        var requester = GameClientManager.GetClientByUserID(session.User.GuideOtherUserId);
 
-        Session.SendPacket(new OnGuideSessionDetachedComposer());
+        session.SendPacket(new OnGuideSessionDetachedComposer());
 
         requester?.SendPacket(new OnGuideSessionDetachedComposer());
     }

@@ -5,10 +5,10 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class StopQuestion : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         room.SendPacket(new QuestionFinishedComposer(room.VotedNoCount, room.VotedYesCount));
 
-        Session.SendWhisper("Question terminée!");
+        session.SendWhisper("Question terminée!");
     }
 }

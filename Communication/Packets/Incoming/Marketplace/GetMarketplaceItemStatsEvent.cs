@@ -8,7 +8,7 @@ internal sealed class GetMarketplaceItemStatsEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var itemId = packet.PopInt();
         var spriteId = packet.PopInt();
@@ -19,6 +19,6 @@ internal sealed class GetMarketplaceItemStatsEvent : IPacketEvent
             avgprice = CatalogMarketplaceDataDao.GetPriceBySprite(dbClient, spriteId);
         }
 
-        Session.SendPacket(new MarketplaceItemStatsComposer(itemId, spriteId, avgprice));
+        session.SendPacket(new MarketplaceItemStatsComposer(itemId, spriteId, avgprice));
     }
 }

@@ -7,9 +7,9 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal sealed class Transf : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode || Session.User.IsSpectator)
+        if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode || session.User.IsSpectator)
         {
             return;
         }
@@ -36,7 +36,7 @@ internal sealed class Transf : IChatCommand
 
             if (!userRoom.SetPetTransformation(parameters[1], raceId))
             {
-                Session.SendHugeNotification(LanguageManager.TryGetValue("cmd.transf.help", Session.Language));
+                session.SendHugeNotification(LanguageManager.TryGetValue("cmd.transf.help", session.Language));
                 return;
             }
 
@@ -47,7 +47,7 @@ internal sealed class Transf : IChatCommand
         }
         else
         {
-            Session.SendHugeNotification(LanguageManager.TryGetValue("cmd.transf.help", Session.Language));
+            session.SendHugeNotification(LanguageManager.TryGetValue("cmd.transf.help", session.Language));
         }
     }
 }

@@ -6,11 +6,11 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class ShowGuide : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (HelpManager.Count <= 0)
         {
-            Session.SendHugeNotification("Aucun guide n'utilise la Guide tool");
+            session.SendHugeNotification("Aucun guide n'utilise la Guide tool");
         }
         else
         {
@@ -36,7 +36,7 @@ internal sealed class ShowGuide : IChatCommand
             }
 
             _ = stringBuilder.Append('\r');
-            Session.SendHugeNotification(stringBuilder.ToString());
+            session.SendHugeNotification(stringBuilder.ToString());
         }
     }
 }

@@ -6,16 +6,16 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class GameTime : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (AnimationManager.IsActivate)
         {
             var time = AnimationManager.Time;
-            Session.SendWhisper("Prochaine animation de Jack & Daisy dans " + time);
+            session.SendWhisper("Prochaine animation de Jack & Daisy dans " + time);
         }
         else
         {
-            Session.SendWhisper("Les animations de Jack & Daisy sont désactivées.");
+            session.SendWhisper("Les animations de Jack & Daisy sont désactivées.");
         }
     }
 }

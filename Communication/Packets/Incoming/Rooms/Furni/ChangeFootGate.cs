@@ -6,14 +6,14 @@ internal sealed class ChangeFootGate : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var id = packet.PopInt();
         var gender = packet.PopString(1);
         var look = packet.PopString();
 
-        var room = Session.User.Room;
-        if (room == null || !room.CheckRights(Session, true))
+        var room = session.User.Room;
+        if (room == null || !room.CheckRights(session, true))
         {
             return;
         }

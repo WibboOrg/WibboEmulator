@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class GiveBadge : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 3)
         {
@@ -20,7 +20,7 @@ internal sealed class GiveBadge : IChatCommand
         var clientByUsername = GameClientManager.GetClientByUsername(targetName);
         if (clientByUsername == null)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", Session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
             return;
         }
 

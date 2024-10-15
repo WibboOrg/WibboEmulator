@@ -8,9 +8,9 @@ internal sealed class GetModeratorUserInfoEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!Session.User.HasPermission("mod"))
+        if (!session.User.HasPermission("mod"))
         {
             return;
         }
@@ -21,10 +21,10 @@ internal sealed class GetModeratorUserInfoEvent : IPacketEvent
 
         if (user == null)
         {
-            Session.SendNotification(LanguageManager.TryGetValue("user.loadusererror", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("user.loadusererror", session.Language));
             return;
         }
 
-        Session.SendPacket(new ModeratorUserInfoComposer(user));
+        session.SendPacket(new ModeratorUserInfoComposer(user));
     }
 }

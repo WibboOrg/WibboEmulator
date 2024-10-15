@@ -6,5 +6,5 @@ internal sealed class GetCurrentQuestEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet) => QuestManager.GetCurrentQuest(Session);
+    public void Parse(GameClient session, ClientPacket packet) => QuestManager.GetCurrentQuest(session);
 }

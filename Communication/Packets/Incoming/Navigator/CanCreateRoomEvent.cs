@@ -7,5 +7,5 @@ internal sealed class CanCreateRoomEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet) => Session.SendPacket(new CanCreateRoomComposer(false, 400));
+    public void Parse(GameClient session, ClientPacket packet) => session.SendPacket(new CanCreateRoomComposer(false, 400));
 }

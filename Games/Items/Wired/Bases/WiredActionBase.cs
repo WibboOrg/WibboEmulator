@@ -32,6 +32,6 @@ public class WiredActionBase : WiredBase, IWiredCycleable
     {
     }
 
-    public override void OnTrigger(GameClient Session) => Session.SendPacket(new WiredFurniActionComposer(this.StuffTypeSelectionEnabled, this.FurniLimit, this.StuffIds, this.StuffTypeId, this.Id,
+    public override void OnTrigger(GameClient session) => session.SendPacket(new WiredFurniActionComposer(this.StuffTypeSelectionEnabled, this.FurniLimit, this.StuffIds, this.StuffTypeId, this.Id,
             this.StringParam, this.IntParams, this.StuffTypeSelectionCode, this.Type, this.Delay, this.Conflicting));
 }

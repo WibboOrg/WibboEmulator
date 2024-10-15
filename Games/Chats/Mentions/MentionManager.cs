@@ -11,7 +11,7 @@ public static class MentionManager
     private static readonly string StylePrefix = "[tag]";
     private static readonly string StyleSuffix = "[/tag]";
 
-    public static string Parse(GameClient Session, string message)
+    public static string Parse(GameClient session, string message)
     {
         var styledMessage = message;
 
@@ -21,35 +21,35 @@ public static class MentionManager
 
         foreach (var m in Regex.Matches(message, MentionPattern).Cast<Match>())
         {
-            var TargetUsername = m.Groups[1].Value.ToLower();
+            var targetUsername = m.Groups[1].Value.ToLower();
 
-            if (string.IsNullOrWhiteSpace(TargetUsername))
+            if (string.IsNullOrWhiteSpace(targetUsername))
             {
                 continue;
             }
 
-            if (usersTarget.Contains(TargetUsername))
+            if (usersTarget.Contains(targetUsername))
             {
                 continue;
             }
 
-            usersTarget.Add(TargetUsername);
+            usersTarget.Add(targetUsername);
 
-            if (TargetUsername == "everyone")
+            if (targetUsername == "everyone")
             {
-                if (!EveryoneFriend(Session, message))
+                if (!EveryoneFriend(session, message))
                 {
                     break;
                 }
             }
-            else if (TargetUsername == "here")
+            else if (targetUsername == "here")
             {
-                if (!HereRoom(Session, message))
+                if (!HereRoom(session, message))
                 {
                     break;
                 }
             }
-            else if (!SendNotification(Session, TargetUsername, message))
+            else if (!SendNotification(session, targetUsername, message))
             {
                 continue;
             }
@@ -63,16 +63,16 @@ public static class MentionManager
         return styledMessage;
     }
 
-    public static bool SendNotification(GameClient Session, string TargetUsername, string message)
+    public static bool SendNotification(GameClient session, string targetUsername, string message)
     {
-        var targetClient = GameClientManager.GetClientByUsername(TargetUsername);
+        var targetClient = GameClientManager.GetClientByUsername(targetUsername);
 
         if (targetClient == null)
         {
             return false;
         }
 
-        if (targetClient == Session)
+        if (targetClient == session)
         {
             return false;
         }
@@ -82,35 +82,35 @@ public static class MentionManager
             return false;
         }
 
-        if (!targetClient.User.Messenger.FriendshipExists(Session.User.Id) && !Session.User.HasPermission("mention"))
+        if (!targetClient.User.Messenger.FriendshipExists(session.User.Id) && !session.User.HasPermission("mention"))
         {
-            Session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Tu as besoin d'être ami avec {TargetUsername} pour pouvoir le taguer"));
+            session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Tu as besoin d'être ami avec {targetUsername} pour pouvoir le taguer"));
             return false;
         }
 
-        targetClient.SendPacket(new MentionComposer(Session.User.Id, Session.User.Username, Session.User.Look, message));
+        targetClient.SendPacket(new MentionComposer(session.User.Id, session.User.Username, session.User.Look, message));
 
         return true;
     }
 
-    public static bool EveryoneFriend(GameClient Session, string message)
+    public static bool EveryoneFriend(GameClient session, string message)
     {
-        if (Session.User.Rank < 2)
+        if (session.User.Rank < 2)
         {
-            Session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous devez être Premium pour utiliser @everyone"));
+            session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous devez être Premium pour utiliser @everyone"));
             return false;
         }
 
-        var timeSpan = DateTime.Now - Session.User.EveryoneTimer;
+        var timeSpan = DateTime.Now - session.User.EveryoneTimer;
         if (timeSpan.TotalSeconds < 120)
         {
-            Session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Veuillez patienter pendant 2 minutes avant de pouvoir réutiliser @everyone."));
+            session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Veuillez patienter pendant 2 minutes avant de pouvoir réutiliser @everyone."));
             return false;
         }
 
-        Session.User.EveryoneTimer = DateTime.Now;
+        session.User.EveryoneTimer = DateTime.Now;
 
-        var onlineUsers = GameClientManager.GetClientsById(Session.User.Messenger.Friends.Keys);
+        var onlineUsers = GameClientManager.GetClientsById(session.User.Messenger.Friends.Keys);
 
         if (onlineUsers == null)
         {
@@ -121,9 +121,9 @@ public static class MentionManager
         {
             if (targetClient != null && targetClient.User != null && targetClient.User.Messenger != null)
             {
-                if (targetClient.User.Messenger.FriendshipExists(Session.User.Id))
+                if (targetClient.User.Messenger.FriendshipExists(session.User.Id))
                 {
-                    targetClient.SendPacket(new MentionComposer(Session.User.Id, Session.User.Username, Session.User.Look, message));
+                    targetClient.SendPacket(new MentionComposer(session.User.Id, session.User.Username, session.User.Look, message));
                 }
             }
         }
@@ -131,33 +131,33 @@ public static class MentionManager
         return true;
     }
 
-    public static bool HereRoom(GameClient Session, string message)
+    public static bool HereRoom(GameClient session, string message)
     {
-        if (Session == null || Session.User == null || !Session.User.InRoom)
+        if (session == null || session.User == null || !session.User.InRoom)
         {
             return false;
         }
 
-        var room = Session.User.Room;
+        var room = session.User.Room;
         if (room == null)
         {
             return false;
         }
 
-        if (!room.CheckRights(Session) && !Session.User.HasPermission("mention_here"))
+        if (!room.CheckRights(session) && !session.User.HasPermission("mention_here"))
         {
-            Session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous devez être le propriétaire de l'appart pour @here"));
+            session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous devez être le propriétaire de l'appart pour @here"));
             return false;
         }
 
-        var timeSpan = DateTime.Now - Session.User.HereTimer;
+        var timeSpan = DateTime.Now - session.User.HereTimer;
         if (timeSpan.TotalSeconds < 120)
         {
-            Session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Veuillez patienter pendant 2 minutes avant de pouvoir réutiliser @here."));
+            session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Veuillez patienter pendant 2 minutes avant de pouvoir réutiliser @here."));
             return false;
         }
 
-        Session.User.HereTimer = DateTime.Now;
+        session.User.HereTimer = DateTime.Now;
 
         var onlineUsers = room.RoomUserManager.UserList;
 
@@ -168,9 +168,9 @@ public static class MentionManager
 
         foreach (var targetClient in onlineUsers)
         {
-            if (targetClient != null && targetClient.Client != null && targetClient.UserId != Session.User.Id)
+            if (targetClient != null && targetClient.Client != null && targetClient.UserId != session.User.Id)
             {
-                targetClient.Client.SendPacket(new MentionComposer(Session.User.Id, Session.User.Username, Session.User.Look, message));
+                targetClient.Client.SendPacket(new MentionComposer(session.User.Id, session.User.Username, session.User.Look, message));
             }
         }
 

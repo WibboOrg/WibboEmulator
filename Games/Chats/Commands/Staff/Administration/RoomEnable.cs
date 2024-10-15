@@ -6,14 +6,14 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class RoomEnable : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (!int.TryParse(parameters[1], out var effectId))
         {
             return;
         }
 
-        if (!EffectManager.HasEffect(effectId, Session.User.HasPermission("god")))
+        if (!EffectManager.HasEffect(effectId, session.User.HasPermission("god")))
         {
             return;
         }

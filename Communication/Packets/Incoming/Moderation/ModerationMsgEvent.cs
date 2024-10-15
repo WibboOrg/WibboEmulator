@@ -8,9 +8,9 @@ internal sealed class ModerationMsgEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!Session.User.HasPermission("alert"))
+        if (!session.User.HasPermission("alert"))
         {
             return;
         }
@@ -24,22 +24,22 @@ internal sealed class ModerationMsgEvent : IPacketEvent
             return;
         }
 
-        if (clientTarget.User.Id == Session.User.Id)
+        if (clientTarget.User.Id == session.User.Id)
         {
             return;
         }
 
-        if (clientTarget.User.Rank >= Session.User.Rank)
+        if (clientTarget.User.Rank >= session.User.Rank)
         {
-            Session.SendNotification(LanguageManager.TryGetValue("moderation.caution.missingrank", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("moderation.caution.missingrank", session.Language));
         }
 
-        if (Session.User.CheckChatMessage(message, "<MT>"))
+        if (session.User.CheckChatMessage(message, "<MT>"))
         {
             return;
         }
 
-        ModerationManager.LogStaffEntry(Session.User.Id, Session.User.Username, 0, string.Empty, "ModTool", string.Format("Modtool alert ( {1} ): {0}", message, clientTarget.User.Username));
+        ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "ModTool", string.Format("Modtool alert ( {1} ): {0}", message, clientTarget.User.Username));
 
         clientTarget.SendNotification(message);
     }

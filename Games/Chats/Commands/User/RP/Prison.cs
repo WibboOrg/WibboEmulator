@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Prison : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -47,7 +47,7 @@ internal sealed class Prison : IChatCommand
             return;
         }
 
-        if (targetRoomUser.Client.User.Id == Session.User.Id)
+        if (targetRoomUser.Client.User.Id == session.User.Id)
         {
             return;
         }
@@ -64,14 +64,14 @@ internal sealed class Prison : IChatCommand
 
         if (Math.Floor((double)(rpTwo.Health / (double)rpTwo.HealthMax) * 100) > 75)
         {
-            userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.prison.chat.fail", Session.Language), targetRoomUser.Username));
-            Session.SendWhisper(LanguageManager.TryGetValue("rp.prisonnotallowed", Session.Language));
+            userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.prison.chat.fail", session.Language), targetRoomUser.Username));
+            session.SendWhisper(LanguageManager.TryGetValue("rp.prisonnotallowed", session.Language));
             return;
         }
 
         if (!(Math.Abs(targetRoomUser.X - userRoom.X) >= 2 || Math.Abs(targetRoomUser.Y - userRoom.Y) >= 2))
         {
-            userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.prison.chat.success", Session.Language), targetRoomUser.Username));
+            userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.prison.chat.success", session.Language), targetRoomUser.Username));
 
             targetRoomUser.ApplyEffect(729, true);
             targetRoomUser.RotBody = 2;

@@ -5,9 +5,9 @@ using WibboEmulator.Games.Rooms.PathFinding;
 
 internal sealed class AllEyesOnMe : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var thisUser = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+        var thisUser = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (thisUser == null)
         {
             return;
@@ -16,7 +16,7 @@ internal sealed class AllEyesOnMe : IChatCommand
         var users = room.RoomUserManager.RoomUsers;
         foreach (var u in users.ToList())
         {
-            if (u == null || Session.User.Id == u.UserId)
+            if (u == null || session.User.Id == u.UserId)
             {
                 continue;
             }

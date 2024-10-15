@@ -9,7 +9,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class RegenLTD : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         using var dbClient = DatabaseManager.Connection;
 
@@ -41,14 +41,14 @@ internal sealed class RegenLTD : IChatCommand
                     continue;
                 }
 
-                var newItem = ItemFactory.CreateSingleItemNullable(dbClient, itemData, Session.User, "", limitedNumber, limitedStack);
+                var newItem = ItemFactory.CreateSingleItemNullable(dbClient, itemData, session.User, "", limitedNumber, limitedStack);
 
                 if (newItem == null)
                 {
                     continue;
                 }
 
-                Session.User.InventoryComponent.TryAddItem(newItem);
+                session.User.InventoryComponent.TryAddItem(newItem);
             }
         }
     }

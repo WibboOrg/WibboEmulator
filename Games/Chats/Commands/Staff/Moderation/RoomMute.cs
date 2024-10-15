@@ -4,7 +4,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class RoomMute : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         room.RoomMuted = !room.RoomMuted;
 

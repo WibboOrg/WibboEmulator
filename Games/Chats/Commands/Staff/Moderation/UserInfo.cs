@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class UserInfo : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -17,13 +17,13 @@ internal sealed class UserInfo : IChatCommand
 
         if (string.IsNullOrEmpty(username))
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.userparammissing", Session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.userparammissing", session.Language));
             return;
         }
         var clientByUsername = GameClientManager.GetClientByUsername(username);
         if (clientByUsername == null || clientByUsername.User == null)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.useroffline", Session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.useroffline", session.Language));
             return;
         }
 
@@ -54,7 +54,7 @@ internal sealed class UserInfo : IChatCommand
             _ = stringBuilder.Append("Utilisateurs: " + user.Room.UserCount + "/" + user.Room.RoomData.UsersMax + "\r");
         }
 
-        if (Session.User.HasPermission("god"))
+        if (session.User.HasPermission("god"))
         {
             _ = stringBuilder.Append("\r - Autre information - \r");
             _ = stringBuilder.Append("IP Web: " + clientByUsername.User.IP + "\r");
@@ -62,6 +62,6 @@ internal sealed class UserInfo : IChatCommand
             _ = stringBuilder.Append("Langue: " + clientByUsername.Language.ToString() + "\r");
         }
 
-        Session.SendNotification(stringBuilder.ToString());
+        session.SendNotification(stringBuilder.ToString());
     }
 }

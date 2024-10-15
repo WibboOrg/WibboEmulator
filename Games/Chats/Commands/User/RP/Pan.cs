@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms.Map.Movement;
 
 internal sealed class Pan : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (!room.IsRoleplay || userRoom.Freeze)
         {
@@ -32,13 +32,13 @@ internal sealed class Pan : IChatCommand
 
         if (rp.Munition <= 0)
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("rp.munitionnotfound", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("rp.munitionnotfound", session.Language));
             return;
         }
 
         if (rp.GunLoad <= 0)
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("rp.reloadweapon", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("rp.reloadweapon", session.Language));
             return;
         }
 

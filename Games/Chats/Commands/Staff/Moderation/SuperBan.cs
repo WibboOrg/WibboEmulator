@@ -6,24 +6,24 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class SuperBan : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
             return;
         }
 
-        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
-        if (TargetUser == null || TargetUser.User == null)
+        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        if (targetUser == null || targetUser.User == null)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", Session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
             return;
         }
 
-        if (TargetUser.User.Rank >= Session.User.Rank)
+        if (targetUser.User.Rank >= session.User.Rank)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", Session.Language));
-            GameClientManager.BanUser(Session, "Robot", -1, "Votre compte a été banni par sécurité !", false);
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", session.Language));
+            GameClientManager.BanUser(session, "Robot", -1, "Votre compte a été banni par sécurité !", false);
         }
         else
         {
@@ -35,15 +35,15 @@ internal sealed class SuperBan : IChatCommand
 
             if (num is <= 600 and not (-1))
             {
-                userRoom.SendWhisperChat(LanguageManager.TryGetValue("ban.toolesstime", Session.Language));
+                userRoom.SendWhisperChat(LanguageManager.TryGetValue("ban.toolesstime", session.Language));
             }
             else
             {
                 var raison = CommandManager.MergeParams(parameters, 3);
-                Session.SendWhisper("Tu as SuperBan " + TargetUser.User.Username + " pour" + raison + "!");
+                session.SendWhisper("Tu as SuperBan " + targetUser.User.Username + " pour" + raison + "!");
 
-                GameClientManager.BanUser(TargetUser, Session.User.Username, num, raison, false);
-                _ = Session.User.CheckChatMessage(raison, "<CMD>", room.Id);
+                GameClientManager.BanUser(targetUser, session.User.Username, num, raison, false);
+                _ = session.User.CheckChatMessage(raison, "<CMD>", room.Id);
             }
         }
     }

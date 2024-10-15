@@ -10,17 +10,17 @@ internal sealed class PickupObjectEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         _ = packet.PopInt();
         var itemId = packet.PopInt();
 
-        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.CheckRights(Session, true))
+        if (!room.CheckRights(session, true))
         {
             return;
         }
@@ -33,14 +33,14 @@ internal sealed class PickupObjectEvent : IPacketEvent
 
         if (room.RoomData.SellPrice > 0)
         {
-            Session.SendNotification(LanguageManager.TryGetValue("roomsell.error.7", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("roomsell.error.7", session.Language));
             return;
         }
 
         using var dbClient = DatabaseManager.Connection;
 
-        room.RoomItemHandling.RemoveFurniture(Session, item.Id);
-        Session.User.InventoryComponent.AddItem(dbClient, item);
-        QuestManager.ProgressUserQuest(Session, QuestType.FurniPick, 0);
+        room.RoomItemHandling.RemoveFurniture(session, item.Id);
+        session.User.InventoryComponent.AddItem(dbClient, item);
+        QuestManager.ProgressUserQuest(session, QuestType.FurniPick, 0);
     }
 }

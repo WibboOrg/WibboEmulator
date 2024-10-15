@@ -7,7 +7,7 @@ internal sealed class GetRoomSettingsEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var roomId = packet.PopInt();
 
@@ -16,11 +16,11 @@ internal sealed class GetRoomSettingsEvent : IPacketEvent
             return;
         }
 
-        if (!room.CheckRights(Session, true) && !Session.User.HasPermission("settings_room"))
+        if (!room.CheckRights(session, true) && !session.User.HasPermission("settings_room"))
         {
             return;
         }
 
-        Session.SendPacket(new RoomSettingsDataComposer(room.RoomData));
+        session.SendPacket(new RoomSettingsDataComposer(room.RoomData));
     }
 }

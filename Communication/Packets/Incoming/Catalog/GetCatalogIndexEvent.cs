@@ -9,14 +9,14 @@ internal sealed class GetCatalogIndexEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var packetList = new ServerPacketList();
 
-        packetList.Add(new CatalogIndexComposer(Session, CatalogManager.Pages));//, Sub));
+        packetList.Add(new CatalogIndexComposer(session, CatalogManager.Pages));//, Sub));
         packetList.Add(new CatalogItemDiscountComposer());
         packetList.Add(new BCBorrowedItemsComposer());
 
-        Session.SendPacket(packetList);
+        session.SendPacket(packetList);
     }
 }

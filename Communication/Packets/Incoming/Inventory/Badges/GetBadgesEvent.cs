@@ -6,13 +6,13 @@ internal sealed class GetBadgesEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session == null || Session.User == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
-        Session.SendPacket(new BadgesComposer(Session.User.BadgeComponent.BadgeList));
+        session.SendPacket(new BadgesComposer(session.User.BadgeComponent.BadgeList));
     }
 }

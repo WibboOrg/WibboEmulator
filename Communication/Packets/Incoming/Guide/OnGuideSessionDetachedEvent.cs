@@ -6,15 +6,15 @@ internal sealed class OnGuideSessionDetachedEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var state = packet.PopBoolean();
 
-        var requester = GameClientManager.GetClientByUserID(Session.User.GuideOtherUserId);
+        var requester = GameClientManager.GetClientByUserID(session.User.GuideOtherUserId);
 
         if (!state)
         {
-            Session.SendPacket(new OnGuideSessionDetachedComposer());
+            session.SendPacket(new OnGuideSessionDetachedComposer());
 
             if (requester == null)
             {
@@ -30,7 +30,7 @@ internal sealed class OnGuideSessionDetachedEvent : IPacketEvent
             return;
         }
 
-        requester.SendPacket(new OnGuideSessionStartedComposer(Session.User, requester.User));
-        Session.SendPacket(new OnGuideSessionStartedComposer(Session.User, requester.User));
+        requester.SendPacket(new OnGuideSessionStartedComposer(session.User, requester.User));
+        session.SendPacket(new OnGuideSessionStartedComposer(session.User, requester.User));
     }
 }

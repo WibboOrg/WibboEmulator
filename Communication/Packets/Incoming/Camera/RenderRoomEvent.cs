@@ -10,9 +10,9 @@ internal sealed class RenderRoomEvent : IPacketEvent
 {
     public double Delay => 5000;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session == null || Session.User == null)
+        if (session == null || session.User == null)
         {
             return;
         }
@@ -26,33 +26,33 @@ internal sealed class RenderRoomEvent : IPacketEvent
 
         var photoBinary = packet.ReadBytes(photoLength);
 
-        var room = Session.User.Room;
+        var room = session.User.Room;
         if (room == null)
         {
             return;
         }
 
         var time = WibboEnvironment.GetUnixTimestamp();
-        var pictureName = $"{Session.User.Id}_{room.Id}_{Guid.NewGuid()}";
+        var pictureName = $"{session.User.Id}_{room.Id}_{Guid.NewGuid()}";
 
         var photoId = UploadApi.CameraPhoto(photoBinary, pictureName);
 
         if (string.IsNullOrEmpty(photoId) || pictureName != photoId)
         {
-            Session.SendNotification(LanguageManager.TryGetValue("notif.error", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
-        Session.SendPacket(new CameraURLComposer(photoId));
+        session.SendPacket(new CameraURLComposer(photoId));
 
-        if (Session.User.LastPhotoId == photoId)
+        if (session.User.LastPhotoId == photoId)
         {
             return;
         }
 
-        Session.User.LastPhotoId = photoId;
+        session.User.LastPhotoId = photoId;
 
         using var dbClient = DatabaseManager.Connection;
-        UserPhotoDao.Insert(dbClient, Session.User.Id, photoId, time);
+        UserPhotoDao.Insert(dbClient, session.User.Id, photoId, time);
     }
 }

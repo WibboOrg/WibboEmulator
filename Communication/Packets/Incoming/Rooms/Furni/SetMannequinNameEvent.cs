@@ -7,17 +7,17 @@ internal sealed class SetMannequinNameEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var itemId = packet.PopInt();
         var name = packet.PopString(100);
 
-        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.CheckRights(Session, true))
+        if (!room.CheckRights(session, true))
         {
             return;
         }
@@ -29,11 +29,11 @@ internal sealed class SetMannequinNameEvent : IPacketEvent
         }
 
         var allowedParts = new List<string> { "ha", "he", "ea", "ch", "fa", "cp", "lg", "cc", "ca", "sh", "wa" };
-        var look = string.Join(".", Session.User.Look.Split('.').Where(part => allowedParts.Contains(part.Split('-')[0])));
+        var look = string.Join(".", session.User.Look.Split('.').Where(part => allowedParts.Contains(part.Split('-')[0])));
 
         name = name.Replace(";", ":");
 
-        roomItem.ExtraData = Session.User.Gender + ";" + look + ";" + name;
+        roomItem.ExtraData = session.User.Gender + ";" + look + ";" + name;
         roomItem.UpdateState();
     }
 }

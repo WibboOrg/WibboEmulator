@@ -9,18 +9,18 @@ internal sealed class EditTvYoutubeEvent : IPacketEvent
     internal static readonly string[] Separator = ["?v="];
     internal static readonly string[] SeparatorArray = ["youtu.be/"];
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var itemId = packet.PopInt();
         var url = packet.PopString();
 
-        if (Session == null || Session.User == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
-        var room = Session.User.Room;
-        if (room == null || !room.CheckRights(Session))
+        var room = session.User.Room;
+        if (room == null || !room.CheckRights(session))
         {
             return;
         }

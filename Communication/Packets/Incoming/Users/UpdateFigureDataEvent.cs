@@ -13,9 +13,9 @@ internal sealed class UpdateFigureDataEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session.User == null)
+        if (session.User == null)
         {
             return;
         }
@@ -30,31 +30,31 @@ internal sealed class UpdateFigureDataEvent : IPacketEvent
 
         look = FigureDataManager.ProcessFigure(look, gender, true);
 
-        QuestManager.ProgressUserQuest(Session, QuestType.ProfileChangeLook, 0);
+        QuestManager.ProgressUserQuest(session, QuestType.ProfileChangeLook, 0);
 
-        Session.User.Look = look;
-        Session.User.Gender = gender;
+        session.User.Look = look;
+        session.User.Gender = gender;
 
         using (var dbClient = DatabaseManager.Connection)
         {
-            UserDao.UpdateLookAndGender(dbClient, Session.User.Id, look, gender);
+            UserDao.UpdateLookAndGender(dbClient, session.User.Id, look, gender);
         }
 
-        _ = AchievementManager.ProgressAchievement(Session, "ACH_AvatarLooks", 1);
+        _ = AchievementManager.ProgressAchievement(session, "ACH_AvatarLooks", 1);
 
-        if (!Session.User.InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        var currentRoom = Session.User.Room;
+        var currentRoom = session.User.Room;
 
         if (currentRoom == null)
         {
             return;
         }
 
-        var roomUserByUserId = currentRoom.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+        var roomUserByUserId = currentRoom.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (roomUserByUserId == null)
         {
             return;
@@ -65,9 +65,9 @@ internal sealed class UpdateFigureDataEvent : IPacketEvent
             return;
         }
 
-        Session.SendPacket(new FigureUpdateComposer(Session.User.Look, Session.User.Gender));
-        Session.SendPacket(new UserObjectComposer(Session.User));
-        Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
+        session.SendPacket(new FigureUpdateComposer(session.User.Look, session.User.Gender));
+        session.SendPacket(new UserObjectComposer(session.User));
+        session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
 
         currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
     }

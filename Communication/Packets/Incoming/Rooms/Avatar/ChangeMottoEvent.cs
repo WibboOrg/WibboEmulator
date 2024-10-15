@@ -11,47 +11,47 @@ internal sealed class ChangeMottoEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var newMotto = packet.PopString(38);
-        if (newMotto == Session.User.Motto)
+        if (newMotto == session.User.Motto)
         {
             return;
         }
 
-        if (!Session.User.HasPermission("word_filter_override"))
+        if (!session.User.HasPermission("word_filter_override"))
         {
             newMotto = WordFilterManager.CheckMessage(newMotto);
         }
 
-        if (Session.User.IgnoreAll)
+        if (session.User.IgnoreAll)
         {
             return;
         }
 
-        if (Session.User.CheckChatMessage(newMotto, "<MOTTO>"))
+        if (session.User.CheckChatMessage(newMotto, "<MOTTO>"))
         {
             return;
         }
 
-        Session.User.Motto = newMotto;
+        session.User.Motto = newMotto;
 
         using (var dbClient = DatabaseManager.Connection)
         {
-            UserDao.UpdateMotto(dbClient, Session.User.Id, newMotto);
+            UserDao.UpdateMotto(dbClient, session.User.Id, newMotto);
         }
 
-        QuestManager.ProgressUserQuest(Session, QuestType.ProfileChangeMotto, 0);
+        QuestManager.ProgressUserQuest(session, QuestType.ProfileChangeMotto, 0);
 
-        if (Session.User.InRoom)
+        if (session.User.InRoom)
         {
-            var currentRoom = Session.User.Room;
+            var currentRoom = session.User.Room;
             if (currentRoom == null)
             {
                 return;
             }
 
-            var roomUserByUserId = currentRoom.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+            var roomUserByUserId = currentRoom.RoomUserManager.GetRoomUserByUserId(session.User.Id);
             if (roomUserByUserId == null)
             {
                 return;
@@ -65,6 +65,6 @@ internal sealed class ChangeMottoEvent : IPacketEvent
             currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
         }
 
-        _ = AchievementManager.ProgressAchievement(Session, "ACH_Motto", 1);
+        _ = AchievementManager.ProgressAchievement(session, "ACH_Motto", 1);
     }
 }

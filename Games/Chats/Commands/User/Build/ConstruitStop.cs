@@ -6,10 +6,10 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class ConstruitStop : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         userRoom.BuildToolEnable = false;
 
-        Session.SendWhisper(LanguageManager.TryGetValue("cmd.construit.disabled", Session.Language));
+        session.SendWhisper(LanguageManager.TryGetValue("cmd.construit.disabled", session.Language));
     }
 }

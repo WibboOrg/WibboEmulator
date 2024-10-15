@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal sealed class Poke : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 4)
         {
@@ -17,7 +17,7 @@ internal sealed class Poke : IChatCommand
             return;
         }
 
-        if (Session.User.IsSpectator)
+        if (session.User.IsSpectator)
         {
             return;
         }
@@ -36,18 +36,18 @@ internal sealed class Poke : IChatCommand
             return;
         }
 
-        if (wpCount > Session.User.WibboPoints)
+        if (wpCount > session.User.WibboPoints)
         {
             return;
         }
 
-        var TargetUser = room.RoomUserManager.GetRoomUserByName(username);
-        if (TargetUser == null || TargetUser.Client == null || TargetUser.Client.User == null)
+        var targetUser = room.RoomUserManager.GetRoomUserByName(username);
+        if (targetUser == null || targetUser.Client == null || targetUser.Client.User == null)
         {
             return;
         }
 
-        if (wpCount > TargetUser.Client.User.WibboPoints)
+        if (wpCount > targetUser.Client.User.WibboPoints)
         {
             return;
         }

@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class SuperPull : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -15,20 +15,20 @@ internal sealed class SuperPull : IChatCommand
 
         var targetName = parameters[1];
 
-        var TargetUser = room.RoomUserManager.GetRoomUserByName(targetName);
-        if (TargetUser == null)
+        var targetUser = room.RoomUserManager.GetRoomUserByName(targetName);
+        if (targetUser == null)
         {
             return;
         }
 
-        if (TargetUser.Client.User.Id == Session.User.Id)
+        if (targetUser.Client.User.Id == session.User.Id)
         {
             return;
         }
 
-        if (TargetUser.Client.User.HasPremiumProtect && !Session.User.HasPermission("mod"))
+        if (targetUser.Client.User.HasPremiumProtect && !session.User.HasPermission("mod"))
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("premium.notallowed", Session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("premium.notallowed", session.Language));
             return;
         }
 
@@ -37,7 +37,7 @@ internal sealed class SuperPull : IChatCommand
             return;
         }
 
-        userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.pull.chat.success", Session.Language), targetName), 0, false);
+        userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.pull.chat.success", session.Language), targetName), 0, false);
         if (userRoom.RotBody % 2 != 0)
         {
             userRoom.RotBody--;
@@ -45,19 +45,19 @@ internal sealed class SuperPull : IChatCommand
 
         if (userRoom.RotBody == 0)
         {
-            TargetUser.MoveTo(userRoom.X, userRoom.Y - 1);
+            targetUser.MoveTo(userRoom.X, userRoom.Y - 1);
         }
         else if (userRoom.RotBody == 2)
         {
-            TargetUser.MoveTo(userRoom.X + 1, userRoom.Y);
+            targetUser.MoveTo(userRoom.X + 1, userRoom.Y);
         }
         else if (userRoom.RotBody == 4)
         {
-            TargetUser.MoveTo(userRoom.X, userRoom.Y + 1);
+            targetUser.MoveTo(userRoom.X, userRoom.Y + 1);
         }
         else if (userRoom.RotBody == 6)
         {
-            TargetUser.MoveTo(userRoom.X - 1, userRoom.Y);
+            targetUser.MoveTo(userRoom.X - 1, userRoom.Y);
         }
     }
 }

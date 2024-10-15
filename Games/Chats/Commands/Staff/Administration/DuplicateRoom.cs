@@ -13,7 +13,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class DuplicateRoom : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var oldRoomId = room.Id;
         int roomId;
@@ -22,7 +22,7 @@ internal sealed class DuplicateRoom : IChatCommand
         {
             room.RoomItemHandling.SaveFurniture(dbClient);
 
-            roomId = RoomDao.InsertDuplicate(dbClient, oldRoomId, Session.User.Username);
+            roomId = RoomDao.InsertDuplicate(dbClient, oldRoomId, session.User.Username);
 
             RoomModelCustomDao.InsertDuplicate(dbClient, roomId, oldRoomId);
 
@@ -48,7 +48,7 @@ internal sealed class DuplicateRoom : IChatCommand
                     continue;
                 }
 
-                var itemId = ItemDao.InsertDuplicate(dbClient, Session.User.Id, roomId, oldItemId);
+                var itemId = ItemDao.InsertDuplicate(dbClient, session.User.Id, roomId, oldItemId);
 
                 newItemsId.Add(oldItemId, itemId);
 
@@ -156,16 +156,16 @@ internal sealed class DuplicateRoom : IChatCommand
                 ItemWiredDao.UpdateTriggerItem(dbClient, triggerItems, id);
             }
 
-            BotUserDao.DupliqueAllBotInRoomId(dbClient, Session.User.Id, roomId, oldRoomId);
+            BotUserDao.DupliqueAllBotInRoomId(dbClient, session.User.Id, roomId, oldRoomId);
 
-            BotPetDao.InsertDuplicate(dbClient, Session.User.Id, roomId, oldRoomId);
+            BotPetDao.InsertDuplicate(dbClient, session.User.Id, roomId, oldRoomId);
         }
 
-        if (!Session.User.UsersRooms.Contains(roomId))
+        if (!session.User.UsersRooms.Contains(roomId))
         {
-            Session.User.UsersRooms.Add(roomId);
+            session.User.UsersRooms.Add(roomId);
         }
 
-        Session.SendPacket(new FlatCreatedComposer(roomId, room.RoomData.Name + " (Copie)"));
+        session.SendPacket(new FlatCreatedComposer(roomId, room.RoomData.Name + " (Copie)"));
     }
 }

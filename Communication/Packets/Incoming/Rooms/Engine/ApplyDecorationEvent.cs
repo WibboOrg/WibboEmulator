@@ -12,21 +12,21 @@ internal sealed class ApplyDecorationEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var itemId = packet.PopInt();
 
-        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.CheckRights(Session, true))
+        if (!room.CheckRights(session, true))
         {
             return;
         }
 
-        var userItem = Session.User.InventoryComponent.GetItem(itemId);
+        var userItem = session.User.InventoryComponent.GetItem(itemId);
         if (userItem == null)
         {
             return;
@@ -55,11 +55,11 @@ internal sealed class ApplyDecorationEvent : IPacketEvent
         {
             case "floor":
                 room.RoomData.Floor = userItem.ExtraData;
-                QuestManager.ProgressUserQuest(Session, QuestType.FurniDecorationFloor, 0);
+                QuestManager.ProgressUserQuest(session, QuestType.FurniDecorationFloor, 0);
                 break;
             case "wallpaper":
                 room.RoomData.Wallpaper = userItem.ExtraData;
-                QuestManager.ProgressUserQuest(Session, QuestType.FurniDecorationWall, 0);
+                QuestManager.ProgressUserQuest(session, QuestType.FurniDecorationWall, 0);
                 break;
             case "landscape":
                 room.RoomData.Landscape = userItem.ExtraData;
@@ -72,7 +72,7 @@ internal sealed class ApplyDecorationEvent : IPacketEvent
             ItemDao.DeleteById(dbClient, userItem.Id);
         }
 
-        Session.User.InventoryComponent.RemoveItem(userItem.Id);
+        session.User.InventoryComponent.RemoveItem(userItem.Id);
         room.SendPacket(new RoomPropertyComposer(decorationKey, userItem.ExtraData));
     }
 }

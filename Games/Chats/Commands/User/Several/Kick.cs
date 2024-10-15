@@ -4,25 +4,25 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Kick : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser user, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser user, string[] parameters)
     {
         if (parameters.Length < 2)
         {
             return;
         }
 
-        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
 
-        if (TargetUser == null || TargetUser.User == null)
+        if (targetUser == null || targetUser.User == null)
         {
             return;
         }
 
-        if (Session.User.Rank <= TargetUser.User.Rank)
+        if (session.User.Rank <= targetUser.User.Rank)
         {
             return;
         }
 
-        room.RoomUserManager.RemoveUserFromRoom(TargetUser, true, true);
+        room.RoomUserManager.RemoveUserFromRoom(targetUser, true, true);
     }
 }

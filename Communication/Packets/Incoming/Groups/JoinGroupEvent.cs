@@ -8,9 +8,9 @@ internal sealed class JoinGroupEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session == null || Session.User == null)
+        if (session == null || session.User == null)
         {
             return;
         }
@@ -20,37 +20,37 @@ internal sealed class JoinGroupEvent : IPacketEvent
             return;
         }
 
-        if (group.IsMember(Session.User.Id) || group.IsAdmin(Session.User.Id) || (group.HasRequest(Session.User.Id) && group.GroupType == GroupType.Locked) || group.GroupType == GroupType.Private)
+        if (group.IsMember(session.User.Id) || group.IsAdmin(session.User.Id) || (group.HasRequest(session.User.Id) && group.GroupType == GroupType.Locked) || group.GroupType == GroupType.Private)
         {
             return;
         }
 
-        if (Session.User.MyGroups.Count >= 50)
+        if (session.User.MyGroups.Count >= 50)
         {
-            Session.SendNotification("Oups, il semble que vous avez atteint la limite d'adhésion au groupe! Vous pouvez seulement rejoindre jusqu'à 50 groupes.");
+            session.SendNotification("Oups, il semble que vous avez atteint la limite d'adhésion au groupe! Vous pouvez seulement rejoindre jusqu'à 50 groupes.");
             return;
         }
 
-        group.AddMember(Session.User.Id);
+        group.AddMember(session.User.Id);
 
         if (group.GroupType == GroupType.Locked)
         {
-            Session.SendPacket(new GroupInfoComposer(group, Session));
+            session.SendPacket(new GroupInfoComposer(group, session));
         }
         else
         {
-            Session.User.MyGroups.Add(group.Id);
-            Session.SendPacket(new GroupFurniConfigComposer(GroupManager.GetGroupsForUser(Session.User.MyGroups)));
-            Session.SendPacket(new GroupInfoComposer(group, Session));
+            session.User.MyGroups.Add(group.Id);
+            session.SendPacket(new GroupFurniConfigComposer(GroupManager.GetGroupsForUser(session.User.MyGroups)));
+            session.SendPacket(new GroupInfoComposer(group, session));
 
-            var room = Session.User.Room;
+            var room = session.User.Room;
             if (room != null)
             {
-                room.SendPacket(new RefreshFavouriteGroupComposer(Session.User.Id));
+                room.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
             }
             else
             {
-                Session.SendPacket(new RefreshFavouriteGroupComposer(Session.User.Id));
+                session.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
             }
         }
     }

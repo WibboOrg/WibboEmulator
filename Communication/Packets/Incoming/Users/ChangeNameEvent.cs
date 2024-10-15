@@ -16,19 +16,19 @@ internal sealed class ChangeNameEvent : IPacketEvent
 {
     public double Delay => 5000;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session == null || Session.User == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
-        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
 
-        var roomUser = room.RoomUserManager.GetRoomUserByName(Session.User.Username);
+        var roomUser = room.RoomUserManager.GetRoomUserByName(session.User.Username);
         if (roomUser == null)
         {
             return;
@@ -36,42 +36,42 @@ internal sealed class ChangeNameEvent : IPacketEvent
 
         var newUsername = packet.PopString(16);
 
-        if (!Session.User.CanChangeName && Session.User.Rank == 1)
+        if (!session.User.CanChangeName && session.User.Rank == 1)
         {
-            Session.SendNotification(LanguageManager.TryGetValue("notif.changename.error.1", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("notif.changename.error.1", session.Language));
             return;
         }
 
-        if (newUsername == Session.User.Username)
+        if (newUsername == session.User.Username)
         {
-            Session.SendPacket(new UpdateUsernameComposer(Session.User.Username));
+            session.SendPacket(new UpdateUsernameComposer(session.User.Username));
             return;
         }
 
         if (UserManager.UsernameAvailable(newUsername) != 1)
         {
-            Session.SendNotification(LanguageManager.TryGetValue("notif.changename.error.2", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("notif.changename.error.2", session.Language));
             return;
         }
 
         using (var dbClient = DatabaseManager.Connection)
         {
-            RoomDao.UpdateOwner(dbClient, newUsername, Session.User.Username);
+            RoomDao.UpdateOwner(dbClient, newUsername, session.User.Username);
 
-            UserDao.UpdateName(dbClient, Session.User.Id, newUsername);
+            UserDao.UpdateName(dbClient, session.User.Id, newUsername);
 
-            LogFlagmeDao.Insert(dbClient, Session.User.Id, Session.User.Username, newUsername);
+            LogFlagmeDao.Insert(dbClient, session.User.Id, session.User.Username, newUsername);
         }
 
-        _ = GameClientManager.UpdateClientUsername(Session.ConnectionID, Session.User.Username, newUsername);
-        _ = room.RoomUserManager.UpdateClientUsername(roomUser, Session.User.Username, newUsername);
-        Session.User.Username = newUsername;
-        Session.User.CanChangeName = false;
+        _ = GameClientManager.UpdateClientUsername(session.ConnectionID, session.User.Username, newUsername);
+        _ = room.RoomUserManager.UpdateClientUsername(roomUser, session.User.Username, newUsername);
+        session.User.Username = newUsername;
+        session.User.CanChangeName = false;
 
-        Session.SendPacket(new UpdateUsernameComposer(newUsername));
-        Session.SendPacket(new UserObjectComposer(Session.User));
+        session.SendPacket(new UpdateUsernameComposer(newUsername));
+        session.SendPacket(new UserObjectComposer(session.User));
 
-        foreach (var roomId in Session.User.UsersRooms)
+        foreach (var roomId in session.User.UsersRooms)
         {
             if (RoomManager.TryGetRoom(roomId, out var roomOwner))
             {
@@ -83,7 +83,7 @@ internal sealed class ChangeNameEvent : IPacketEvent
 
         room.SendPacket(new UserNameChangeComposer(newUsername, roomUser.VirtualId));
 
-        if (Session.User.Id == room.RoomData.OwnerId)
+        if (session.User.Id == room.RoomData.OwnerId)
         {
             room.RoomData.OwnerName = newUsername;
             room.SendPacket(new RoomInfoUpdatedComposer(room.Id));

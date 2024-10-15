@@ -16,7 +16,7 @@ using WibboEmulator.Utilities;
 
 internal static class ItemLootBox
 {
-    public static void OpenLootBox2022(GameClient Session, Item present, Room room)
+    public static void OpenLootBox2022(GameClient session, Item present, Room room)
     {
         int pageId;
         var forceItem = 0;
@@ -49,10 +49,10 @@ internal static class ItemLootBox
             LootManager.IncrementeRarityCounter(RaretyLevelType.Basic);
         }
 
-        EndOpenBox(Session, present, room, pageId, forceItem);
+        EndOpenBox(session, present, room, pageId, forceItem);
     }
 
-    public static void OpenCaseOrBag(GameClient Session, Item present, Room room)
+    public static void OpenCaseOrBag(GameClient session, Item present, Room room)
     {
         int pageId;
         int bannerId;
@@ -94,14 +94,14 @@ internal static class ItemLootBox
                 break;
 
             default:
-                Session.SendNotification(LanguageManager.TryGetValue("notif.error", Session.Language));
+                session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
                 return;
         }
 
         _ = CatalogManager.TryGetPage(pageId, out var page);
         if (page == null)
         {
-            Session.SendNotification(LanguageManager.TryGetValue("notif.error", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
@@ -133,10 +133,10 @@ internal static class ItemLootBox
             LootManager.IncrementeRarityCounter(randomRare.Data.RarityLevel);
         }
 
-        EndOpenBox(Session, present, room, pageId, forceItem, extraData);
+        EndOpenBox(session, present, room, pageId, forceItem, extraData);
     }
 
-    public static void OpenLootBox(GameClient Session, Item present, Room room)
+    public static void OpenLootBox(GameClient session, Item present, Room room)
     {
         var loots = LootManager.GetLoots(present.ItemData.InteractionType);
 
@@ -162,7 +162,7 @@ internal static class ItemLootBox
             }
         }
 
-        EndOpenBox(Session, present, room, pageId, forceItem);
+        EndOpenBox(session, present, room, pageId, forceItem);
     }
 
     private static readonly int ProbalilityLegendary = 5000;
@@ -170,7 +170,7 @@ internal static class ItemLootBox
     private static readonly int ProbalilityCommun = 50;
     private static readonly int ProbalilityBasic = 5;
 
-    public static void OpenExtrabox(GameClient Session, Item present, Room room)
+    public static void OpenExtrabox(GameClient session, Item present, Room room)
     {
         int pageId;
         var forceItem = 0;
@@ -188,10 +188,10 @@ internal static class ItemLootBox
             pageId = 894948;
         }
 
-        EndOpenBox(Session, present, room, pageId, forceItem);
+        EndOpenBox(session, present, room, pageId, forceItem);
     }
 
-    public static void OpenDeluxeBox(GameClient Session, Item present, Room room)
+    public static void OpenDeluxeBox(GameClient session, Item present, Room room)
     {
         var forceItem = 0;
 
@@ -209,10 +209,10 @@ internal static class ItemLootBox
             pageId = 91700214;
         }
 
-        EndOpenBox(Session, present, room, pageId, forceItem);
+        EndOpenBox(session, present, room, pageId, forceItem);
     }
 
-    public static void OpenBadgeBox(GameClient Session, Item present, Room room)
+    public static void OpenBadgeBox(GameClient session, Item present, Room room)
     {
         //Présentoir et badge
         var pageId = 987987;
@@ -226,18 +226,18 @@ internal static class ItemLootBox
 
         var badgeCode = pageBadge.Items.GetRandomElement().Value.Badge;
 
-        if (!string.IsNullOrEmpty(badgeCode) && !Session.User.BadgeComponent.HasBadge(badgeCode))
+        if (!string.IsNullOrEmpty(badgeCode) && !session.User.BadgeComponent.HasBadge(badgeCode))
         {
-            Session.User.BadgeComponent.GiveBadge(badgeCode);
+            session.User.BadgeComponent.GiveBadge(badgeCode);
 
-            var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+            var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
             roomUserByUserId?.SendWhisperChat(string.Format(LanguageManager.TryGetValue("give.badge", roomUserByUserId.Client.Language), badgeCode));
         }
 
-        EndOpenBox(Session, present, room, pageId, 0, badgeCode);
+        EndOpenBox(session, present, room, pageId, 0, badgeCode);
     }
 
-    public static void OpenLegendBox(GameClient Session, Item present, Room room)
+    public static void OpenLegendBox(GameClient session, Item present, Room room)
     {
         var pageId = 0;
         var badgeCode = "";
@@ -282,13 +282,13 @@ internal static class ItemLootBox
 
         if (!CatalogManager.TryGetPage(pageBadgeId, out var pageBadge))
         {
-            Session.SendNotification(LanguageManager.TryGetValue("notif.error", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
         foreach (var item in pageBadge.Items.OrderBy(a => Guid.NewGuid()).ToList())
         {
-            if (Session.User.BadgeComponent.HasBadge(item.Value.Badge))
+            if (session.User.BadgeComponent.HasBadge(item.Value.Badge))
             {
                 continue;
             }
@@ -298,42 +298,42 @@ internal static class ItemLootBox
         }
 
         var credits = WibboEnvironment.GetRandomNumber(100, 10000) * 1000;
-        Session.User.Credits += credits;
-        Session.SendPacket(new CreditBalanceComposer(Session.User.Credits));
+        session.User.Credits += credits;
+        session.SendPacket(new CreditBalanceComposer(session.User.Credits));
 
         var winwin = WibboEnvironment.GetRandomNumber(100, 1000);
-        Session.User.AchievementPoints += winwin;
+        session.User.AchievementPoints += winwin;
 
         using (var dbClient = DatabaseManager.Connection)
         {
-            UserStatsDao.UpdateAchievementScore(dbClient, Session.User.Id, winwin);
+            UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, winwin);
         }
 
-        Session.SendPacket(new AchievementScoreComposer(Session.User.AchievementPoints));
+        session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));
 
-        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (roomUserByUserId != null)
         {
-            Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
+            session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
             room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
 
-            roomUserByUserId.SendWhisperChat(string.Format(LanguageManager.TryGetValue("item.legendboxlot", Session.Language), credits, winwin, badgeCode, lotType));
+            roomUserByUserId.SendWhisperChat(string.Format(LanguageManager.TryGetValue("item.legendboxlot", session.Language), credits, winwin, badgeCode, lotType));
         }
 
         if (!string.IsNullOrEmpty(badgeCode))
         {
-            Session.User.BadgeComponent.GiveBadge(badgeCode);
+            session.User.BadgeComponent.GiveBadge(badgeCode);
         }
 
-        EndOpenBox(Session, present, room, pageId, forceItem);
+        EndOpenBox(session, present, room, pageId, forceItem);
     }
 
-    private static void EndOpenBox(GameClient Session, Item present, Room room, int pageId, int forceItem = 0, string extraData = "")
+    private static void EndOpenBox(GameClient session, Item present, Room room, int pageId, int forceItem = 0, string extraData = "")
     {
         _ = CatalogManager.TryGetPage(pageId, out var page);
         if (page == null)
         {
-            Session.SendNotification(LanguageManager.TryGetValue("notif.error", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
@@ -349,17 +349,17 @@ internal static class ItemLootBox
 
         if (lotData == null)
         {
-            Session.SendNotification(LanguageManager.TryGetValue("notif.error", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
-        room.RoomItemHandling.RemoveFurniture(Session, present.Id);
+        room.RoomItemHandling.RemoveFurniture(session, present.Id);
 
         using var dbClient = DatabaseManager.Connection;
 
         if (lotData.IsRare)
         {
-            LogLootBoxDao.Insert(dbClient, present.Data.InteractionType.ToString(), Session.User.Id, present.Id, lotData.Id);
+            LogLootBoxDao.Insert(dbClient, present.Data.InteractionType.ToString(), session.User.Id, present.Id, lotData.Id);
         }
 
         if (lotData.Amount >= 0)
@@ -378,7 +378,7 @@ internal static class ItemLootBox
 
         if (present.Data.Type == ItemType.S)
         {
-            if (!room.RoomItemHandling.SetFloorItem(Session, present, present.X, present.Y, present.Rotation, true, false, true))
+            if (!room.RoomItemHandling.SetFloorItem(session, present, present.X, present.Y, present.Rotation, true, false, true))
             {
                 ItemDao.UpdateResetRoomId(dbClient, present.Id);
 
@@ -392,11 +392,11 @@ internal static class ItemLootBox
             itemIsInRoom = false;
         }
 
-        Session.SendPacket(new OpenGiftComposer(present.Data, present.ExtraData, present, itemIsInRoom));
+        session.SendPacket(new OpenGiftComposer(present.Data, present.ExtraData, present, itemIsInRoom));
 
         if (!itemIsInRoom)
         {
-            Session.User.InventoryComponent.TryAddItem(present);
+            session.User.InventoryComponent.TryAddItem(present);
         }
     }
 }

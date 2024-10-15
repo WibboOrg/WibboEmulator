@@ -6,17 +6,17 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class DisableFriendRequests : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (Session.User.HasFriendRequestsDisabled)
+        if (session.User.HasFriendRequestsDisabled)
         {
-            Session.User.HasFriendRequestsDisabled = false;
-            Session.SendWhisper(LanguageManager.TryGetValue("cmd.textamigo.true", Session.Language));
+            session.User.HasFriendRequestsDisabled = false;
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.textamigo.true", session.Language));
         }
         else
         {
-            Session.User.HasFriendRequestsDisabled = true;
-            Session.SendWhisper(LanguageManager.TryGetValue("cmd.textamigo.false", Session.Language));
+            session.User.HasFriendRequestsDisabled = true;
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.textamigo.false", session.Language));
         }
     }
 }

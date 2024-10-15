@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class LootboxInfo : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var basicCount = LootManager.GetRarityCounter(RaretyLevelType.Basic);
         var communCount = LootManager.GetRarityCounter(RaretyLevelType.Commun);
@@ -21,6 +21,6 @@ internal sealed class LootboxInfo : IChatCommand
         .Append("Epique: " + epicCount + "\r")
         .Append("Legendaire: " + legendaryCount + "\r");
 
-        Session.SendNotification(stringBuilder.ToString());
+        session.SendNotification(stringBuilder.ToString());
     }
 }

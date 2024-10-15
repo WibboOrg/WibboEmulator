@@ -8,7 +8,7 @@ internal sealed class AvatarEffectSelectedEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var effectId = packet.PopInt();
 
@@ -17,18 +17,18 @@ internal sealed class AvatarEffectSelectedEvent : IPacketEvent
             return;
         }
 
-        if (!EffectManager.HasEffect(effectId, Session.User.HasPermission("god")))
+        if (!EffectManager.HasEffect(effectId, session.User.HasPermission("god")))
         {
             return;
         }
 
-        var room = Session.User.Room;
+        var room = session.User.Room;
         if (room == null)
         {
             return;
         }
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
 
         if (user == null)
         {

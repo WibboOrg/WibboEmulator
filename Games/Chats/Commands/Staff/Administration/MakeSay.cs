@@ -4,7 +4,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class MakeSay : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 3)
         {
@@ -14,7 +14,7 @@ internal sealed class MakeSay : IChatCommand
         var username = parameters[1];
         var message = CommandManager.MergeParams(parameters, 2);
 
-        var roomUserByUserId = Session.User.Room.RoomUserManager.GetRoomUserByName(username);
+        var roomUserByUserId = session.User.Room.RoomUserManager.GetRoomUserByName(username);
         if (roomUserByUserId == null)
         {
             return;

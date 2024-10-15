@@ -8,7 +8,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class GiveBannerTroc : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 3)
         {
@@ -34,10 +34,10 @@ internal sealed class GiveBannerTroc : IChatCommand
 
         using var dbClient = DatabaseManager.Connection;
 
-        var items = ItemFactory.CreateMultipleItems(dbClient, itemData, Session.User, banner.Id.ToString(), nbLot);
+        var items = ItemFactory.CreateMultipleItems(dbClient, itemData, session.User, banner.Id.ToString(), nbLot);
         foreach (var purchasedItem in items)
         {
-            Session.User.InventoryComponent.TryAddItem(purchasedItem);
+            session.User.InventoryComponent.TryAddItem(purchasedItem);
         }
     }
 }

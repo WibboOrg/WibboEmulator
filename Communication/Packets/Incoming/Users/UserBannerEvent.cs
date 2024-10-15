@@ -8,7 +8,7 @@ internal sealed class UserBannerEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var userId = packet.PopInt();
         var all = packet.PopBoolean();
@@ -21,9 +21,9 @@ internal sealed class UserBannerEvent : IPacketEvent
 
         if (all && user.BannerComponent != null)
         {
-            Session.SendPacket(new UserBannerListComposer(user.BannerComponent.BannerList));
+            session.SendPacket(new UserBannerListComposer(user.BannerComponent.BannerList));
         }
 
-        Session.SendPacket(new UserBannerComposer(user.Id, user.BannerSelected));
+        session.SendPacket(new UserBannerComposer(user.Id, user.BannerSelected));
     }
 }

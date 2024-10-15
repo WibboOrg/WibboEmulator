@@ -201,7 +201,7 @@ public class WebSocketSessionManager : IDisposable
     ///   </para>
     ///   <para>
     ///   The session instance provides the function to access the information
-    ///   in the Session.    ///   </para>
+    ///   in the session.    ///   </para>
     /// </value>
     /// <param name="id">
     /// A <see cref="string"/> that specifies the ID of the session to find.
@@ -224,7 +224,7 @@ public class WebSocketSessionManager : IDisposable
             }
 
 
-            _ = this.TryGetSession(id, out var Session);
+            _ = this.TryGetSession(id, out var session);
 
             return session;
         }
@@ -351,7 +351,7 @@ public class WebSocketSessionManager : IDisposable
                     break;
                 }
 
-                Session.Context.WebSocket.Send(opcode, data, cache);
+                session.Context.WebSocket.Send(opcode, data, cache);
             }
 
             completed?.Invoke();
@@ -382,7 +382,7 @@ public class WebSocketSessionManager : IDisposable
                     break;
                 }
 
-                Session.Context.WebSocket.Send(opcode, stream, cache);
+                session.Context.WebSocket.Send(opcode, stream, cache);
             }
 
             completed?.Invoke();
@@ -424,9 +424,9 @@ public class WebSocketSessionManager : IDisposable
                 break;
             }
 
-            var res = Session.Context.WebSocket.Ping(frameAsBytes, this._waitTime);
+            var res = session.Context.WebSocket.Ping(frameAsBytes, this._waitTime);
 
-            ret.Add(Session.ID, res);
+            ret.Add(session.ID, res);
         }
 
         return ret;
@@ -458,7 +458,7 @@ public class WebSocketSessionManager : IDisposable
 
             foreach (var session in this._sessions.Values.ToList())
             {
-                Session.Context.WebSocket.Close(payloadData, bytes);
+                session.Context.WebSocket.Close(payloadData, bytes);
             }
 
             this._state = ServerState.Stop;
@@ -467,9 +467,9 @@ public class WebSocketSessionManager : IDisposable
         this.Dispose();
     }
 
-    private bool TryGetSession(string id, out IWebSocketSession Session)
+    private bool TryGetSession(string id, out IWebSocketSession session)
     {
-        Session = null;
+        session = null;
 
         if (this._state != ServerState.Start)
         {
@@ -483,7 +483,7 @@ public class WebSocketSessionManager : IDisposable
                 return false;
             }
 
-            return this._sessions.TryGetValue(id, out Session);
+            return this._sessions.TryGetValue(id, out session);
         }
     }
 
@@ -491,7 +491,7 @@ public class WebSocketSessionManager : IDisposable
 
     #region Internal Methods
 
-    internal string Add(IWebSocketSession Session)
+    internal string Add(IWebSocketSession session)
     {
         lock (this._sync)
         {
@@ -502,7 +502,7 @@ public class WebSocketSessionManager : IDisposable
 
             var id = CreateID();
 
-            this._sessions.Add(id, Session);
+            this._sessions.Add(id, session);
 
             return id;
         }
@@ -936,14 +936,14 @@ public class WebSocketSessionManager : IDisposable
     public void CloseSession(string id)
     {
 
-        if (!this.TryGetSession(id, out var Session))
+        if (!this.TryGetSession(id, out var session))
         {
             var msg = "The session could not be found.";
 
             throw new InvalidOperationException(msg);
         }
 
-        Session.Context.WebSocket.Close();
+        session.Context.WebSocket.Close();
     }
 
     /// <summary>
@@ -1014,14 +1014,14 @@ public class WebSocketSessionManager : IDisposable
     public void CloseSession(string id, ushort code, string reason)
     {
 
-        if (!this.TryGetSession(id, out var Session))
+        if (!this.TryGetSession(id, out var session))
         {
             var msg = "The session could not be found.";
 
             throw new InvalidOperationException(msg);
         }
 
-        Session.Context.WebSocket.Close(code, reason);
+        session.Context.WebSocket.Close(code, reason);
     }
 
     /// <summary>
@@ -1083,24 +1083,24 @@ public class WebSocketSessionManager : IDisposable
     public void CloseSession(string id, CloseStatusCode code, string reason)
     {
 
-        if (!this.TryGetSession(id, out var Session))
+        if (!this.TryGetSession(id, out var session))
         {
             var msg = "The session could not be found.";
 
             throw new InvalidOperationException(msg);
         }
 
-        Session.Context.WebSocket.Close(code, reason);
+        session.Context.WebSocket.Close(code, reason);
     }
 
     /// <summary>
-    /// Sends a ping to the client using the specified Session.    /// </summary>
+    /// Sends a ping to the client using the specified session.    /// </summary>
     /// <returns>
     /// <c>true</c> if the send has done with no error and a pong has been
     /// received from the client within a time; otherwise, <c>false</c>.
     /// </returns>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the Session.    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <exception cref="ArgumentNullException">
     /// <paramref name="id"/> is <see langword="null"/>.
     /// </exception>
@@ -1113,19 +1113,19 @@ public class WebSocketSessionManager : IDisposable
     public bool PingTo(string id)
     {
 
-        if (!this.TryGetSession(id, out var Session))
+        if (!this.TryGetSession(id, out var session))
         {
             var msg = "The session could not be found.";
 
             throw new InvalidOperationException(msg);
         }
 
-        return Session.Context.WebSocket.Ping();
+        return session.Context.WebSocket.Ping();
     }
 
     /// <summary>
     /// Sends a ping with the specified message to the client using
-    /// the specified Session.    /// </summary>
+    /// the specified session.    /// </summary>
     /// <returns>
     /// <c>true</c> if the send has done with no error and a pong has been
     /// received from the client within a time; otherwise, <c>false</c>.
@@ -1139,7 +1139,7 @@ public class WebSocketSessionManager : IDisposable
     ///   </para>
     /// </param>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the Session.    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <exception cref="ArgumentNullException">
     /// <paramref name="id"/> is <see langword="null"/>.
     /// </exception>
@@ -1163,23 +1163,23 @@ public class WebSocketSessionManager : IDisposable
     public bool PingTo(string message, string id)
     {
 
-        if (!this.TryGetSession(id, out var Session))
+        if (!this.TryGetSession(id, out var session))
         {
             var msg = "The session could not be found.";
 
             throw new InvalidOperationException(msg);
         }
 
-        return Session.Context.WebSocket.Ping(message);
+        return session.Context.WebSocket.Ping(message);
     }
 
     /// <summary>
-    /// Sends the specified data to the client using the specified Session.    /// </summary>
+    /// Sends the specified data to the client using the specified session.    /// </summary>
     /// <param name="data">
     /// An array of <see cref="byte"/> that specifies the binary data to send.
     /// </param>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the Session.    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <exception cref="ArgumentNullException">
     ///   <para>
     ///   <paramref name="id"/> is <see langword="null"/>.
@@ -1208,23 +1208,23 @@ public class WebSocketSessionManager : IDisposable
     public void SendTo(byte[] data, string id)
     {
 
-        if (!this.TryGetSession(id, out var Session))
+        if (!this.TryGetSession(id, out var session))
         {
             var msg = "The session could not be found.";
 
             throw new InvalidOperationException(msg);
         }
 
-        Session.Context.WebSocket.Send(data);
+        session.Context.WebSocket.Send(data);
     }
 
     /// <summary>
-    /// Sends the specified data to the client using the specified Session.    /// </summary>
+    /// Sends the specified data to the client using the specified session.    /// </summary>
     /// <param name="data">
     /// A <see cref="string"/> that specifies the text data to send.
     /// </param>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the Session.    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <exception cref="ArgumentNullException">
     ///   <para>
     ///   <paramref name="id"/> is <see langword="null"/>.
@@ -1261,19 +1261,19 @@ public class WebSocketSessionManager : IDisposable
     public void SendTo(string data, string id)
     {
 
-        if (!this.TryGetSession(id, out var Session))
+        if (!this.TryGetSession(id, out var session))
         {
             var msg = "The session could not be found.";
 
             throw new InvalidOperationException(msg);
         }
 
-        Session.Context.WebSocket.Send(data);
+        session.Context.WebSocket.Send(data);
     }
 
     /// <summary>
     /// Sends the data from the specified stream instance to the client using
-    /// the specified Session.    /// </summary>
+    /// the specified session.    /// </summary>
     /// <param name="stream">
     ///   <para>
     ///   A <see cref="Stream"/> instance from which to read the data to send.
@@ -1286,7 +1286,7 @@ public class WebSocketSessionManager : IDisposable
     /// An <see cref="int"/> that specifies the number of bytes to send.
     /// </param>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the Session.    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <exception cref="ArgumentNullException">
     ///   <para>
     ///   <paramref name="id"/> is <see langword="null"/>.
@@ -1335,19 +1335,19 @@ public class WebSocketSessionManager : IDisposable
     public void SendTo(Stream stream, int length, string id)
     {
 
-        if (!this.TryGetSession(id, out var Session))
+        if (!this.TryGetSession(id, out var session))
         {
             var msg = "The session could not be found.";
 
             throw new InvalidOperationException(msg);
         }
 
-        Session.Context.WebSocket.Send(stream, length);
+        session.Context.WebSocket.Send(stream, length);
     }
 
     /// <summary>
     /// Sends the specified data asynchronously to the client using
-    /// the specified Session.    /// </summary>
+    /// the specified session.    /// </summary>
     /// <remarks>
     /// This method does not wait for the send to be complete.
     /// </remarks>
@@ -1355,7 +1355,7 @@ public class WebSocketSessionManager : IDisposable
     /// An array of <see cref="byte"/> that specifies the binary data to send.
     /// </param>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the Session.    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <param name="completed">
     ///   <para>
     ///   An <c>Action&lt;bool&gt;</c> delegate or <see langword="null"/>
@@ -1397,19 +1397,19 @@ public class WebSocketSessionManager : IDisposable
     public void SendToAsync(byte[] data, string id, Action<bool> completed)
     {
 
-        if (!this.TryGetSession(id, out var Session))
+        if (!this.TryGetSession(id, out var session))
         {
             var msg = "The session could not be found.";
 
             throw new InvalidOperationException(msg);
         }
 
-        Session.Context.WebSocket.SendAsync(data, completed);
+        session.Context.WebSocket.SendAsync(data, completed);
     }
 
     /// <summary>
     /// Sends the specified data asynchronously to the client using
-    /// the specified Session.    /// </summary>
+    /// the specified session.    /// </summary>
     /// <remarks>
     /// This method does not wait for the send to be complete.
     /// </remarks>
@@ -1417,7 +1417,7 @@ public class WebSocketSessionManager : IDisposable
     /// A <see cref="string"/> that specifies the text data to send.
     /// </param>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the Session.    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <param name="completed">
     ///   <para>
     ///   An <c>Action&lt;bool&gt;</c> delegate or <see langword="null"/>
@@ -1467,19 +1467,19 @@ public class WebSocketSessionManager : IDisposable
     public void SendToAsync(string data, string id, Action<bool> completed)
     {
 
-        if (!this.TryGetSession(id, out var Session))
+        if (!this.TryGetSession(id, out var session))
         {
             var msg = "The session could not be found.";
 
             throw new InvalidOperationException(msg);
         }
 
-        Session.Context.WebSocket.SendAsync(data, completed);
+        session.Context.WebSocket.SendAsync(data, completed);
     }
 
     /// <summary>
     /// Sends the data from the specified stream instance asynchronously to
-    /// the client using the specified Session.    /// </summary>
+    /// the client using the specified session.    /// </summary>
     /// <remarks>
     /// This method does not wait for the send to be complete.
     /// </remarks>
@@ -1495,7 +1495,7 @@ public class WebSocketSessionManager : IDisposable
     /// An <see cref="int"/> that specifies the number of bytes to send.
     /// </param>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the Session.    /// </param>
+    /// A <see cref="string"/> that specifies the ID of the session.    /// </param>
     /// <param name="completed">
     ///   <para>
     ///   An <c>Action&lt;bool&gt;</c> delegate or <see langword="null"/>
@@ -1558,14 +1558,14 @@ public class WebSocketSessionManager : IDisposable
       Stream stream, int length, string id, Action<bool> completed
     )
     {
-        if (!this.TryGetSession(id, out var Session))
+        if (!this.TryGetSession(id, out var session))
         {
             var msg = "The session could not be found.";
 
             throw new InvalidOperationException(msg);
         }
 
-        Session.Context.WebSocket.SendAsync(stream, length, completed);
+        session.Context.WebSocket.SendAsync(stream, length, completed);
     }
 
     /// <summary>
@@ -1607,16 +1607,16 @@ public class WebSocketSessionManager : IDisposable
                 }
 
 
-                if (!this._sessions.TryGetValue(id, out var Session))
+                if (!this._sessions.TryGetValue(id, out var session))
                 {
                     continue;
                 }
 
-                var state = Session.ConnectionState;
+                var state = session.ConnectionState;
 
                 if (state == WebSocketState.Open)
                 {
-                    Session.Context.WebSocket.Close(CloseStatusCode.Abnormal);
+                    session.Context.WebSocket.Close(CloseStatusCode.Abnormal);
 
                     continue;
                 }

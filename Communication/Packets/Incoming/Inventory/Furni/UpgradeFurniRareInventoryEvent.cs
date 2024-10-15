@@ -12,21 +12,21 @@ internal sealed class UpgradeFurniRareInventoryEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session.User == null)
+        if (session.User == null)
         {
             return;
         }
 
-        if (Session.User.InventoryComponent == null)
+        if (session.User.InventoryComponent == null)
         {
             return;
         }
 
         var itemId = packet.PopInt();
 
-        var item = Session.User.InventoryComponent.GetItem(itemId);
+        var item = session.User.InventoryComponent.GetItem(itemId);
 
         if (item == null)
         {
@@ -45,7 +45,7 @@ internal sealed class UpgradeFurniRareInventoryEvent : IPacketEvent
 
         if (pageLegendary == null || pageEpic == null || pageCommun == null || pageBasic == null)
         {
-            Session.SendNotification(LanguageManager.TryGetValue("notif.error", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
@@ -74,11 +74,11 @@ internal sealed class UpgradeFurniRareInventoryEvent : IPacketEvent
 
         if (lotData == null)
         {
-            Session.SendNotification(LanguageManager.TryGetValue("notif.error", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
-        var items = Session.User.InventoryComponent.GetItemsByType(item.BaseItemId, amount);
+        var items = session.User.InventoryComponent.GetItemsByType(item.BaseItemId, amount);
 
         if (items.Count < amount)
         {
@@ -87,11 +87,11 @@ internal sealed class UpgradeFurniRareInventoryEvent : IPacketEvent
 
         using var dbClient = DatabaseManager.Connection;
 
-        Session.User.InventoryComponent.DeleteItems(dbClient, items);
+        session.User.InventoryComponent.DeleteItems(dbClient, items);
 
-        var newItem = ItemFactory.CreateSingleItemNullable(dbClient, lotData, Session.User, "", 0, 0);
+        var newItem = ItemFactory.CreateSingleItemNullable(dbClient, lotData, session.User, "", 0, 0);
 
-        Session.User.InventoryComponent.TryAddItem(newItem);
+        session.User.InventoryComponent.TryAddItem(newItem);
 
         if (lotData.Amount >= 0)
         {

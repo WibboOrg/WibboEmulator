@@ -3,11 +3,11 @@ using WibboEmulator.Games.GameClients;
 
 public class InteractorAlert : FurniInteractor
 {
-    public override void OnPlace(GameClient Session, Item item) => item.ExtraData = "0";
+    public override void OnPlace(GameClient session, Item item) => item.ExtraData = "0";
 
-    public override void OnRemove(GameClient Session, Item item) => item.ExtraData = "0";
+    public override void OnRemove(GameClient session, Item item) => item.ExtraData = "0";
 
-    public override void OnTrigger(GameClient Session, Item item, int request, bool userHasRights, bool reverse)
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
         if (!userHasRights || !(item.ExtraData == "0"))
         {

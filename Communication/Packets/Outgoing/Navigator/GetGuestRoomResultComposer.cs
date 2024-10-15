@@ -4,7 +4,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class GetGuestRoomResultComposer : ServerPacket
 {
-    public GetGuestRoomResultComposer(GameClient Session, RoomData data, bool isLoading, bool checkEntry)
+    public GetGuestRoomResultComposer(GameClient session, RoomData data, bool isLoading, bool checkEntry)
         : base(ServerPacketHeader.ROOM_INFO)
     {
         this.WriteBoolean(isLoading);
@@ -12,7 +12,7 @@ internal sealed class GetGuestRoomResultComposer : ServerPacket
         this.WriteString(data.Name);
         this.WriteInteger(data.OwnerId);
         this.WriteString(data.OwnerName);
-        this.WriteInteger(Session.User.IsTeleporting ? 0 : (int)data.Access);
+        this.WriteInteger(session.User.IsTeleporting ? 0 : (int)data.Access);
         this.WriteInteger(data.UsersNow);
         this.WriteInteger(data.UsersMax);
         this.WriteString(data.Description);
@@ -49,7 +49,7 @@ internal sealed class GetGuestRoomResultComposer : ServerPacket
         this.WriteInteger(data.WhoCanKick);
         this.WriteInteger(data.BanFuse);
 
-        this.WriteBoolean((Session != null) && !data.OwnerName.Equals(Session.User.Username, StringComparison.CurrentCultureIgnoreCase));
+        this.WriteBoolean((session != null) && !data.OwnerName.Equals(session.User.Username, StringComparison.CurrentCultureIgnoreCase));
         this.WriteInteger(data.ChatType);
         this.WriteInteger(data.ChatBalloon);
         this.WriteInteger(data.ChatSpeed);

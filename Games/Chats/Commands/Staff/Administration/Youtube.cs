@@ -10,7 +10,7 @@ internal sealed class Youtube : IChatCommand
     internal static readonly string[] Separator = ["?v="];
     internal static readonly string[] SeparatorArray = ["youtu.be/"];
 
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 3)
         {
@@ -48,9 +48,9 @@ internal sealed class Youtube : IChatCommand
             return;
         }
 
-        if (Session.Language != roomUserByUserId.Client.Language)
+        if (session.Language != roomUserByUserId.Client.Language)
         {
-            Session.SendWhisper(string.Format(LanguageManager.TryGetValue("cmd.authorized.langue.user", Session.Language), roomUserByUserId.Client.Language));
+            session.SendWhisper(string.Format(LanguageManager.TryGetValue("cmd.authorized.langue.user", session.Language), roomUserByUserId.Client.Language));
             return;
         }
 

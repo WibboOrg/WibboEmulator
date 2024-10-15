@@ -10,38 +10,38 @@ internal sealed class RespectUserEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session == null || Session.User == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
-        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (Session.User.DailyRespectPoints <= 0)
+        if (session.User.DailyRespectPoints <= 0)
         {
             return;
         }
 
         var roomUserByUserIdTarget = room.RoomUserManager.GetRoomUserByUserId(packet.PopInt());
-        if (roomUserByUserIdTarget == null || roomUserByUserIdTarget.Client == null || roomUserByUserIdTarget.Client.User.Id == Session.User.Id || roomUserByUserIdTarget.IsBot)
+        if (roomUserByUserIdTarget == null || roomUserByUserIdTarget.Client == null || roomUserByUserIdTarget.Client.User.Id == session.User.Id || roomUserByUserIdTarget.IsBot)
         {
             return;
         }
 
-        QuestManager.ProgressUserQuest(Session, QuestType.SocialRespect, 0);
+        QuestManager.ProgressUserQuest(session, QuestType.SocialRespect, 0);
         _ = AchievementManager.ProgressAchievement(roomUserByUserIdTarget.Client, "ACH_RespectEarned", 1);
-        _ = AchievementManager.ProgressAchievement(Session, "ACH_RespectGiven", 1);
-        Session.User.DailyRespectPoints--;
+        _ = AchievementManager.ProgressAchievement(session, "ACH_RespectGiven", 1);
+        session.User.DailyRespectPoints--;
         roomUserByUserIdTarget.Client.User.Respect++;
 
         room.SendPacket(new RespectNotificationComposer(roomUserByUserIdTarget.Client.User.Id, roomUserByUserIdTarget.Client.User.Respect));
 
-        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
 
         room.SendPacket(new ActionComposer(roomUserByUserId.VirtualId, 7));
     }

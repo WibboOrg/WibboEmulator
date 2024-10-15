@@ -8,14 +8,14 @@ internal sealed class GetUserGroupBadgesEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session == null || Session.User == null || Session.User.LoadingRoomId == 0)
+        if (session == null || session.User == null || session.User.LoadingRoomId == 0)
         {
             return;
         }
 
-        if (!RoomManager.TryGetRoom(Session.User.LoadingRoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.LoadingRoomId, out var room))
         {
             return;
         }
@@ -44,9 +44,9 @@ internal sealed class GetUserGroupBadgesEvent : IPacketEvent
             }
         }
 
-        if (Session.User.FavouriteGroupId > 0)
+        if (session.User.FavouriteGroupId > 0)
         {
-            if (GroupManager.TryGetGroup(Session.User.FavouriteGroupId, out var group))
+            if (GroupManager.TryGetGroup(session.User.FavouriteGroupId, out var group))
             {
                 if (!badges.ContainsKey(group.Id))
                 {
@@ -56,6 +56,6 @@ internal sealed class GetUserGroupBadgesEvent : IPacketEvent
         }
 
         room.SendPacket(new UserGroupBadgesComposer(badges));
-        Session.SendPacket(new UserGroupBadgesComposer(badges));
+        session.SendPacket(new UserGroupBadgesComposer(badges));
     }
 }

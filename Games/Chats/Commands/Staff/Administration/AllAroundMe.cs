@@ -4,12 +4,12 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class AllAroundMe : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var users = room.RoomUserManager.RoomUsers;
         foreach (var user in users.ToList())
         {
-            if (user == null || Session.User.Id == user.UserId)
+            if (user == null || session.User.Id == user.UserId)
             {
                 continue;
             }

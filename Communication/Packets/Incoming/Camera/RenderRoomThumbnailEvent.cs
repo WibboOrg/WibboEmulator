@@ -7,7 +7,7 @@ internal sealed class RenderRoomThumbnailEvent : IPacketEvent
 {
     public double Delay => 5000;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var photoLength = packet.PopInt();
 
@@ -18,12 +18,12 @@ internal sealed class RenderRoomThumbnailEvent : IPacketEvent
 
         var photoBinary = packet.ReadBytes(photoLength);
 
-        if (Session.User == null)
+        if (session.User == null)
         {
             return;
         }
 
-        var room = Session.User.Room;
+        var room = session.User.Room;
         if (room == null)
         {
             return;
@@ -38,6 +38,6 @@ internal sealed class RenderRoomThumbnailEvent : IPacketEvent
             return;
         }
 
-        Session.SendPacket(new ThumbnailStatusComposer(true, true));
+        session.SendPacket(new ThumbnailStatusComposer(true, true));
     }
 }

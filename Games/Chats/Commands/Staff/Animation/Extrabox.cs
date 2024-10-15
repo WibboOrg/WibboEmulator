@@ -8,7 +8,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class ExtraBox : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         _ = int.TryParse(parameters[1], out var nbLot);
 
@@ -25,10 +25,10 @@ internal sealed class ExtraBox : IChatCommand
 
         using var dbClient = DatabaseManager.Connection;
 
-        var items = ItemFactory.CreateMultipleItems(dbClient, itemData, Session.User, "", nbLot);
+        var items = ItemFactory.CreateMultipleItems(dbClient, itemData, session.User, "", nbLot);
         foreach (var purchasedItem in items)
         {
-            Session.User.InventoryComponent.TryAddItem(purchasedItem);
+            session.User.InventoryComponent.TryAddItem(purchasedItem);
         }
     }
 }

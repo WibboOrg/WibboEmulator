@@ -10,9 +10,9 @@ internal sealed class SetGroupFavouriteEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session == null)
+        if (session == null)
         {
             return;
         }
@@ -28,29 +28,29 @@ internal sealed class SetGroupFavouriteEvent : IPacketEvent
             return;
         }
 
-        Session.User.FavouriteGroupId = group.Id;
+        session.User.FavouriteGroupId = group.Id;
         using (var dbClient = DatabaseManager.Connection)
         {
-            UserStatsDao.UpdateGroupId(dbClient, Session.User.FavouriteGroupId, Session.User.Id);
+            UserStatsDao.UpdateGroupId(dbClient, session.User.FavouriteGroupId, session.User.Id);
         }
 
-        if (Session.User.InRoom && Session.User.Room != null)
+        if (session.User.InRoom && session.User.Room != null)
         {
-            Session.User.Room.SendPacket(new RefreshFavouriteGroupComposer(Session.User.Id));
+            session.User.Room.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
             if (group != null)
             {
-                Session.User.Room.SendPacket(new UserGroupBadgesComposer(group));
+                session.User.Room.SendPacket(new UserGroupBadgesComposer(group));
 
-                var user = Session.User.Room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+                var user = session.User.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
                 if (user != null)
                 {
-                    Session.User.Room.SendPacket(new UpdateFavouriteGroupComposer(group, user.VirtualId));
+                    session.User.Room.SendPacket(new UpdateFavouriteGroupComposer(group, user.VirtualId));
                 }
             }
         }
         else
         {
-            Session.SendPacket(new RefreshFavouriteGroupComposer(Session.User.Id));
+            session.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
         }
     }
 }

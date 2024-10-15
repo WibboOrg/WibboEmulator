@@ -5,13 +5,13 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class HotelAlert : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var message = CommandManager.MergeParams(parameters, 1);
-        if (Session.User.CheckChatMessage(message, "<CMD>", room.Id))
+        if (session.User.CheckChatMessage(message, "<CMD>", room.Id))
         {
             return;
         }
-        GameClientManager.SendMessage(new BroadcastMessageAlertComposer(message + "\r\n" + "- " + Session.User.Username));
+        GameClientManager.SendMessage(new BroadcastMessageAlertComposer(message + "\r\n" + "- " + session.User.Username));
     }
 }

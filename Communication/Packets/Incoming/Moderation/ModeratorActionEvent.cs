@@ -7,9 +7,9 @@ internal sealed class ModeratorActionEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!Session.User.HasPermission("alert"))
+        if (!session.User.HasPermission("alert"))
         {
             return;
         }
@@ -19,13 +19,13 @@ internal sealed class ModeratorActionEvent : IPacketEvent
 
         _ = alertMode != 3;
 
-        if (Session.User.CheckChatMessage(alertMessage, "<MT>"))
+        if (session.User.CheckChatMessage(alertMessage, "<MT>"))
         {
             return;
         }
 
-        ModerationManager.LogStaffEntry(Session.User.Id, Session.User.Username, 0, string.Empty, alertMessage.Split(' ')[0].Replace(":", ""), string.Format("Modtool Roomalert: {0}", alertMessage));
+        ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, alertMessage.Split(' ')[0].Replace(":", ""), string.Format("Modtool Roomalert: {0}", alertMessage));
 
-        Session.User.Room.SendPacket(new BroadcastMessageAlertComposer(alertMessage));
+        session.User.Room.SendPacket(new BroadcastMessageAlertComposer(alertMessage));
     }
 }

@@ -9,23 +9,23 @@ internal sealed class RpUseItemsEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var itemId = packet.PopInt();
         var useCount = packet.PopInt();
 
-        if (Session == null || Session.User == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
-        var room = Session.User.Room;
+        var room = session.User.Room;
         if (room == null || !room.IsRoleplay)
         {
             return;
         }
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (user == null)
         {
             return;
@@ -44,7 +44,7 @@ internal sealed class RpUseItemsEvent : IPacketEvent
 
         if (rp.AggroTimer > 0)
         {
-            user.SendWhisperChat(string.Format(LanguageManager.TryGetValue("rp.useitem.notallowed", Session.Language), Math.Round((double)rp.AggroTimer / 2)));
+            user.SendWhisperChat(string.Format(LanguageManager.TryGetValue("rp.useitem.notallowed", session.Language), Math.Round((double)rp.AggroTimer / 2)));
             return;
         }
 
@@ -106,7 +106,7 @@ internal sealed class RpUseItemsEvent : IPacketEvent
             }
             case "showtime":
             {
-                user.SendWhisperChat(string.Format(LanguageManager.TryGetValue("rp.useitem.showtime", Session.Language), room.RoomRoleplay.Hour, room.RoomRoleplay.Minute));
+                user.SendWhisperChat(string.Format(LanguageManager.TryGetValue("rp.useitem.showtime", session.Language), room.RoomRoleplay.Hour, room.RoomRoleplay.Minute));
                 break;
             }
             case "money":
@@ -134,7 +134,7 @@ internal sealed class RpUseItemsEvent : IPacketEvent
                 rp.RemoveInventoryItem(rpItem.Id, useCount);
 
                 var titleItem = char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..];
-                user.OnChat(string.Format(LanguageManager.TryGetValue("rp.chat.consumes", Session.Language), titleItem));
+                user.OnChat(string.Format(LanguageManager.TryGetValue("rp.chat.consumes", session.Language), titleItem));
                 break;
             }
             case "healthtired":
@@ -148,7 +148,7 @@ internal sealed class RpUseItemsEvent : IPacketEvent
                 rp.RemoveInventoryItem(rpItem.Id, useCount);
 
                 var titleItem = char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..];
-                user.OnChat(string.Format(LanguageManager.TryGetValue("rp.chat.consumes", Session.Language), titleItem));
+                user.OnChat(string.Format(LanguageManager.TryGetValue("rp.chat.consumes", session.Language), titleItem));
                 break;
             }
             case "healthenergy":
@@ -162,7 +162,7 @@ internal sealed class RpUseItemsEvent : IPacketEvent
                 rp.RemoveInventoryItem(rpItem.Id, useCount);
 
                 var titleItem = char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..];
-                user.OnChat(string.Format(LanguageManager.TryGetValue("rp.chat.consumes", Session.Language), titleItem));
+                user.OnChat(string.Format(LanguageManager.TryGetValue("rp.chat.consumes", session.Language), titleItem));
                 break;
             }
             case "energy":
@@ -175,7 +175,7 @@ internal sealed class RpUseItemsEvent : IPacketEvent
                 rp.RemoveInventoryItem(rpItem.Id, useCount);
 
                 var titleItem = char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..];
-                user.OnChat(string.Format(LanguageManager.TryGetValue("rp.chat.consumes", Session.Language), titleItem));
+                user.OnChat(string.Format(LanguageManager.TryGetValue("rp.chat.consumes", session.Language), titleItem));
                 break;
             }
             case "health":
@@ -188,7 +188,7 @@ internal sealed class RpUseItemsEvent : IPacketEvent
                 rp.RemoveInventoryItem(rpItem.Id, useCount);
 
                 var titleItem = char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..];
-                user.OnChat(string.Format(LanguageManager.TryGetValue("rp.chat.consumes", Session.Language), titleItem));
+                user.OnChat(string.Format(LanguageManager.TryGetValue("rp.chat.consumes", session.Language), titleItem));
                 break;
             }
             case "weapon_cac":
@@ -199,7 +199,7 @@ internal sealed class RpUseItemsEvent : IPacketEvent
                 }
 
                 rp.WeaponCac = RPWeaponManager.GetWeaponCac(rpItem.Value);
-                user.SendWhisperChat(LanguageManager.TryGetValue("rp.changearmecac", Session.Language));
+                user.SendWhisperChat(LanguageManager.TryGetValue("rp.changearmecac", session.Language));
                 break;
             }
             case "weapon_far":
@@ -210,7 +210,7 @@ internal sealed class RpUseItemsEvent : IPacketEvent
                 }
 
                 rp.WeaponGun = RPWeaponManager.GetWeaponGun(rpItem.Value);
-                user.SendWhisperChat(LanguageManager.TryGetValue("rp.changearmefar", Session.Language));
+                user.SendWhisperChat(LanguageManager.TryGetValue("rp.changearmefar", session.Language));
                 break;
             }
         }

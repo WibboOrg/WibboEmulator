@@ -6,23 +6,23 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class RemoveBadge : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
         var badgeCode = parameters[2];
 
-        if (TargetUser == null || TargetUser.User == null)
+        if (targetUser == null || targetUser.User == null)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", Session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
             return;
         }
 
-        if (!TargetUser.User.BadgeComponent.HasBadge(badgeCode))
+        if (!targetUser.User.BadgeComponent.HasBadge(badgeCode))
         {
-            Session.SendHugeNotification(LanguageManager.TryGetValue("notif.badge.removed.error", Session.Language));
+            session.SendHugeNotification(LanguageManager.TryGetValue("notif.badge.removed.error", session.Language));
             return;
         }
 
-        TargetUser.User.BadgeComponent.RemoveBadge(parameters[2]);
+        targetUser.User.BadgeComponent.RemoveBadge(parameters[2]);
     }
 }

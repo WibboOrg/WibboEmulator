@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms.Map;
 
 public class InteractorTeleport : FurniInteractor
 {
-    public override void OnPlace(GameClient Session, Item item)
+    public override void OnPlace(GameClient session, Item item)
     {
         item.ExtraData = "0";
 
@@ -35,7 +35,7 @@ public class InteractorTeleport : FurniInteractor
         item.InteractingUser2 = 0;
     }
 
-    public override void OnRemove(GameClient Session, Item item)
+    public override void OnRemove(GameClient session, Item item)
     {
         item.ExtraData = "0";
 
@@ -58,14 +58,14 @@ public class InteractorTeleport : FurniInteractor
         item.InteractingUser2 = 0;
     }
 
-    public override void OnTrigger(GameClient Session, Item item, int request, bool userHasRights, bool reverse)
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (item == null || item.Room == null || Session == null || Session.User == null)
+        if (item == null || item.Room == null || session == null || session.User == null)
         {
             return;
         }
 
-        var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+        var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (roomUserByUserId == null)
         {
             return;

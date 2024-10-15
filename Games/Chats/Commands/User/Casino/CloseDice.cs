@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms.Map;
 
 internal sealed class CloseDice : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var userBooth = room.RoomItemHandling.FloorItems.Where(x => x != null && GameMap.TilesTouching(
             x.X, x.Y, userRoom.X, userRoom.Y) && x.Data.InteractionType == InteractionType.DICE).ToList();

@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal sealed class HandItem : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {

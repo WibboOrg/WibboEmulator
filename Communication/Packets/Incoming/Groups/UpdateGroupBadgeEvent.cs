@@ -9,7 +9,7 @@ internal sealed class UpdateGroupBadgeEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var groupId = packet.PopInt();
 
@@ -18,7 +18,7 @@ internal sealed class UpdateGroupBadgeEvent : IPacketEvent
             return;
         }
 
-        if (group.CreatorId != Session.User.Id)
+        if (group.CreatorId != session.User.Id)
         {
             return;
         }
@@ -38,6 +38,6 @@ internal sealed class UpdateGroupBadgeEvent : IPacketEvent
             GuildDao.UpdateBadge(dbClient, group.Id, group.Badge);
         }
 
-        Session.SendPacket(new GroupInfoComposer(group, Session));
+        session.SendPacket(new GroupInfoComposer(group, session));
     }
 }

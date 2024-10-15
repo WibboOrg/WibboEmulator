@@ -3,14 +3,14 @@ using WibboEmulator.Games.Users;
 
 internal sealed class OnGuideSessionStartedComposer : ServerPacket
 {
-    public OnGuideSessionStartedComposer(User Session, User requester)
+    public OnGuideSessionStartedComposer(User session, User requester)
         : base(ServerPacketHeader.GUIDE_SESSION_STARTED)
     {
         this.WriteInteger(requester.Id);
         this.WriteString(requester.Username);
         this.WriteString(requester.Look);
-        this.WriteInteger(Session.Id);
-        this.WriteString(Session.Username);
-        this.WriteString(Session.Look);
+        this.WriteInteger(session.Id);
+        this.WriteString(session.Username);
+        this.WriteString(session.Look);
     }
 }

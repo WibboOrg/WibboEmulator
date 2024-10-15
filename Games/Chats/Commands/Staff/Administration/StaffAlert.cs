@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class StaffAlert : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser roomUser, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser roomUser, string[] parameters)
     {
         if (parameters.Length < 2)
         {

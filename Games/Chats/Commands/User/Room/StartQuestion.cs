@@ -5,13 +5,13 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class StartQuestion : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var question = CommandManager.MergeParams(parameters, 1);
 
         if (string.IsNullOrWhiteSpace(question))
         {
-            Session.SendWhisper("Votre question ne peut pas être vide");
+            session.SendWhisper("Votre question ne peut pas être vide");
             return;
         }
 

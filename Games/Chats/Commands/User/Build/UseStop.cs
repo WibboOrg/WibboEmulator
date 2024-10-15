@@ -6,10 +6,10 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class UseStop : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        Session.User.ForceUse = -1;
+        session.User.ForceUse = -1;
 
-        Session.SendWhisper(LanguageManager.TryGetValue("cmd.use.disabled", Session.Language));
+        session.SendWhisper(LanguageManager.TryGetValue("cmd.use.disabled", session.Language));
     }
 }

@@ -10,6 +10,6 @@ public class WiredConditionBase : WiredBase
 
     }
 
-    public override void OnTrigger(GameClient Session) => Session.SendPacket(new WiredFurniConditionComposer(this.StuffTypeSelectionEnabled, this.FurniLimit, this.StuffIds, this.StuffTypeId, this.Id,
+    public override void OnTrigger(GameClient session) => session.SendPacket(new WiredFurniConditionComposer(this.StuffTypeSelectionEnabled, this.FurniLimit, this.StuffIds, this.StuffTypeId, this.Id,
             this.StringParam, this.IntParams, this.StuffTypeSelectionCode, this.Type));
 }

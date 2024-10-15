@@ -11,7 +11,7 @@ public struct AuthorizationCommands(int commandID, string input, int rank, strin
     public string DescriptionEn { get; private set; } = descriptionEn;
     public string DescriptionBr { get; private set; } = descriptionBr;
 
-    public readonly bool UserGotAuthorization(GameClient Session, Room room)
+    public readonly bool UserGotAuthorization(GameClient session, Room room)
     {
         if (this.MinRank == 0)
         {
@@ -20,7 +20,7 @@ public struct AuthorizationCommands(int commandID, string input, int rank, strin
 
         if (this.MinRank > 0)
         {
-            if (this.MinRank <= (long)Session.User.Rank)
+            if (this.MinRank <= (long)session.User.Rank)
             {
                 return true;
             }
@@ -29,12 +29,12 @@ public struct AuthorizationCommands(int commandID, string input, int rank, strin
         {
             if (this.MinRank == -1)
             {
-                if (room.CheckRights(Session))
+                if (room.CheckRights(session))
                 {
                     return true;
                 }
             }
-            else if (this.MinRank == -2 && room.CheckRights(Session, true))
+            else if (this.MinRank == -2 && room.CheckRights(session, true))
             {
                 return true;
             }
@@ -53,21 +53,21 @@ public struct AuthorizationCommands(int commandID, string input, int rank, strin
         return false;
     }
 
-    public readonly int UserGotAuthorizationType(GameClient Session, Room room)
+    public readonly int UserGotAuthorizationType(GameClient session, Room room)
     {
         if (this.MinRank == 0)
         {
             return 0;
         }
 
-        if (this.MinRank > 2 && Session.User.Rank < 13 && room.RoomData.Language != Session.Language)
+        if (this.MinRank > 2 && session.User.Rank < 13 && room.RoomData.Language != session.Language)
         {
             return 5;
         }
 
         if (this.MinRank > 0)
         {
-            if (this.MinRank <= Session.User.Rank)
+            if (this.MinRank <= session.User.Rank)
             {
                 return 0;
             }
@@ -80,7 +80,7 @@ public struct AuthorizationCommands(int commandID, string input, int rank, strin
         {
             if (this.MinRank == -1)
             {
-                if (room.CheckRights(Session))
+                if (room.CheckRights(session))
                 {
                     return 0;
                 }
@@ -89,7 +89,7 @@ public struct AuthorizationCommands(int commandID, string input, int rank, strin
                     return 3;
                 }
             }
-            else if (this.MinRank == -2 && room.CheckRights(Session, true))
+            else if (this.MinRank == -2 && room.CheckRights(session, true))
             {
                 return 0;
             }

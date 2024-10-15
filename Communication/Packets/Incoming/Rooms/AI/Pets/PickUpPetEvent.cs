@@ -11,20 +11,20 @@ internal sealed class PickUpPetEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!Session.User.InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        if (Session == null || Session.User == null || Session.User.InventoryComponent == null)
+        if (session == null || session.User == null || session.User.InventoryComponent == null)
         {
             return;
         }
 
 
-        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -33,31 +33,31 @@ internal sealed class PickUpPetEvent : IPacketEvent
 
         if (!room.RoomUserManager.TryGetPet(petId, out var pet))
         {
-            if ((!room.CheckRights(Session) && room.RoomData.WhoCanKick != 2 && room.RoomData.Group == null) || (room.RoomData.Group != null && !room.CheckRights(Session)))
+            if ((!room.CheckRights(session) && room.RoomData.WhoCanKick != 2 && room.RoomData.Group == null) || (room.RoomData.Group != null && !room.CheckRights(session)))
             {
                 return;
             }
 
-            var TargetUser = Session.User.Room.RoomUserManager.GetRoomUserByUserId(petId);
-            if (TargetUser == null)
+            var targetUser = session.User.Room.RoomUserManager.GetRoomUserByUserId(petId);
+            if (targetUser == null)
             {
                 return;
             }
 
-            if (TargetUser.Client == null || TargetUser.Client.User == null)
+            if (targetUser.Client == null || targetUser.Client.User == null)
             {
                 return;
             }
 
-            TargetUser.IsTransf = false;
+            targetUser.IsTransf = false;
 
-            room.SendPacket(new UserRemoveComposer(TargetUser.VirtualId));
+            room.SendPacket(new UserRemoveComposer(targetUser.VirtualId));
 
-            room.SendPacket(new UsersComposer(TargetUser));
+            room.SendPacket(new UsersComposer(targetUser));
             return;
         }
 
-        if (Session.User.Id != pet.PetData.OwnerId && !room.CheckRights(Session, true))
+        if (session.User.Id != pet.PetData.OwnerId && !room.CheckRights(session, true))
         {
             return;
         }
@@ -87,7 +87,7 @@ internal sealed class PickUpPetEvent : IPacketEvent
             BotPetDao.UpdateRoomId(dbClient, petData.PetId, 0);
         }
 
-        if (petData.OwnerId != Session.User.Id)
+        if (petData.OwnerId != session.User.Id)
         {
             var target = GameClientManager.GetClientByUserID(petData.OwnerId);
             if (target != null)
@@ -101,9 +101,9 @@ internal sealed class PickUpPetEvent : IPacketEvent
         }
         else
         {
-            _ = Session.User.InventoryComponent.TryAddPet(pet.PetData);
+            _ = session.User.InventoryComponent.TryAddPet(pet.PetData);
             room.RoomUserManager.RemoveBot(pet.VirtualId, false);
-            Session.SendPacket(new PetInventoryComposer(Session.User.InventoryComponent.Pets));
+            session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.Pets));
         }
     }
 }

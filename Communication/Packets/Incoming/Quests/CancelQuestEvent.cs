@@ -6,5 +6,5 @@ internal sealed class CancelQuestEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet) => QuestManager.CancelQuest(Session);
+    public void Parse(GameClient session, ClientPacket packet) => QuestManager.CancelQuest(session);
 }

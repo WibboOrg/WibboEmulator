@@ -4,7 +4,7 @@ using WibboEmulator.Games.GameClients;
 
 public interface IPacketEvent
 {
-    void Parse(GameClient Session, ClientPacket packet);
+    void Parse(GameClient session, ClientPacket packet);
 
     double Delay { get; }
 }

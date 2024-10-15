@@ -9,7 +9,7 @@ using WibboEmulator.Games.Rooms;
 
 internal static class NavigatorHandler
 {
-    public static void Search(ServerPacket message, SearchResultList searchResult, string searchData, GameClient Session, int fetchLimit)
+    public static void Search(ServerPacket message, SearchResultList searchResult, string searchData, GameClient session, int fetchLimit)
     {
         //Switching by categorys.
         switch (searchResult.CategoryType)
@@ -121,7 +121,7 @@ internal static class NavigatorHandler
             case NavigatorCategoryType.FeaturedRun:
             case NavigatorCategoryType.FeaturedCasino:
                 var rooms = new List<RoomData>();
-                var featured = NavigatorManager.GetFeaturedRooms(Session.Language);
+                var featured = NavigatorManager.GetFeaturedRooms(session.Language);
                 foreach (var featuredItem in featured.ToList())
                 {
                     if (featuredItem == null)
@@ -157,7 +157,7 @@ internal static class NavigatorHandler
             {
                 var popularRooms = new List<RoomData>();
 
-                popularRooms.AddRange(RoomManager.GetPopularRooms(-1, 20, Session.Language)); //FetchLimit
+                popularRooms.AddRange(RoomManager.GetPopularRooms(-1, 20, session.Language)); //FetchLimit
 
                 message.WriteInteger(popularRooms.Count);
                 foreach (var data in popularRooms.ToList())
@@ -195,7 +195,7 @@ internal static class NavigatorHandler
 
                 var myRooms = new List<RoomData>();
 
-                foreach (var roomId in Session.User.UsersRooms)
+                foreach (var roomId in session.User.UsersRooms)
                 {
                     var data = RoomManager.GenerateRoomData(roomId);
                     if (data == null)
@@ -218,7 +218,7 @@ internal static class NavigatorHandler
 
             case NavigatorCategoryType.MyFavorites:
                 var favourites = new List<RoomData>();
-                foreach (var roomId in Session.User.FavoriteRooms)
+                foreach (var roomId in session.User.FavoriteRooms)
                 {
                     var data = RoomManager.GenerateRoomData(roomId);
                     if (data == null)
@@ -244,7 +244,7 @@ internal static class NavigatorHandler
             case NavigatorCategoryType.MyGroups:
                 var myGroups = new List<RoomData>();
 
-                foreach (var groupId in Session.User.MyGroups.ToList())
+                foreach (var groupId in session.User.MyGroups.ToList())
                 {
                     if (!GroupManager.TryGetGroup(groupId, out var group))
                     {
@@ -274,9 +274,9 @@ internal static class NavigatorHandler
 
             /*case NavigatorCategoryType.MY_FRIENDS_ROOMS:
                 List<RoomData> MyFriendsRooms = new List<RoomData>();
-                foreach (MessengerBuddy buddy in Session.GetUser().GetMessenger().GetFriends().Where(p => p.))
+                foreach (MessengerBuddy buddy in session.GetUser().GetMessenger().GetFriends().Where(p => p.))
                 {
-                    if (buddy == null || !buddy.InRoom || buddy.UserId == Session.GetUser().Id)
+                    if (buddy == null || !buddy.InRoom || buddy.UserId == session.GetUser().Id)
                         continue;
 
                     if (!MyFriendsRooms.Contains(buddy.CurrentRoom.RoomData))
@@ -293,7 +293,7 @@ internal static class NavigatorHandler
             case NavigatorCategoryType.MyRights:
                 var myRights = new List<RoomData>();
 
-                foreach (var roomId in Session.User.RoomRightsList)
+                foreach (var roomId in session.User.RoomRightsList)
                 {
                     var data = RoomManager.GenerateRoomData(roomId);
                     if (data == null)

@@ -4,5 +4,5 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class DisableDiagonal : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters) => room.GameMap.DiagonalEnabled = !room.GameMap.DiagonalEnabled;
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters) => room.GameMap.DiagonalEnabled = !room.GameMap.DiagonalEnabled;
 }

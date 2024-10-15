@@ -6,9 +6,9 @@ internal sealed class ModerateRoomEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!Session.User.HasPermission("mod"))
+        if (!session.User.HasPermission("mod"))
         {
             return;
         }
@@ -18,6 +18,6 @@ internal sealed class ModerateRoomEvent : IPacketEvent
         var inappropriateRoom = packet.PopInt() == 1;
         var kickUsers = packet.PopInt() == 1;
 
-        ModerationManager.PerformRoomAction(Session, roomId, kickUsers, lockRoom, inappropriateRoom);
+        ModerationManager.PerformRoomAction(session, roomId, kickUsers, lockRoom, inappropriateRoom);
     }
 }

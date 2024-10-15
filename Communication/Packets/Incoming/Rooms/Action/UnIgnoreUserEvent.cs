@@ -6,14 +6,14 @@ internal sealed class UnIgnoreUserEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session.User == null)
+        if (session.User == null)
         {
             return;
         }
 
-        if (Session.User.Room == null)
+        if (session.User.Room == null)
         {
             return;
         }
@@ -21,13 +21,13 @@ internal sealed class UnIgnoreUserEvent : IPacketEvent
         var str = packet.PopString();
 
         var user = GameClientManager.GetClientByUsername(str).User;
-        if (user == null || !Session.User.MutedUsers.Contains(user.Id))
+        if (user == null || !session.User.MutedUsers.Contains(user.Id))
         {
             return;
         }
 
-        _ = Session.User.MutedUsers.Remove(user.Id);
+        _ = session.User.MutedUsers.Remove(user.Id);
 
-        Session.SendPacket(new IgnoreStatusComposer(3, str));
+        session.SendPacket(new IgnoreStatusComposer(3, str));
     }
 }

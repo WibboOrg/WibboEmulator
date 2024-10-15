@@ -7,7 +7,7 @@ internal sealed class GetGroupInfoEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var groupId = packet.PopInt();
         var newWindow = packet.PopBoolean();
@@ -17,6 +17,6 @@ internal sealed class GetGroupInfoEvent : IPacketEvent
             return;
         }
 
-        Session.SendPacket(new GroupInfoComposer(group, Session, newWindow));
+        session.SendPacket(new GroupInfoComposer(group, session, newWindow));
     }
 }

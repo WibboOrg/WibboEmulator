@@ -9,7 +9,7 @@ internal sealed class InitializeNewNavigatorEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var topLevelItems = NavigatorManager.TopLevelItems;
 
@@ -18,6 +18,6 @@ internal sealed class InitializeNewNavigatorEvent : IPacketEvent
         packetList.Add(new NavigatorLiftedRoomsComposer());
         packetList.Add(new NavigatorCollapsedCategoriesComposer());
 
-        Session.SendPacket(packetList);
+        session.SendPacket(packetList);
     }
 }

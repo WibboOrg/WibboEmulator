@@ -9,20 +9,20 @@ internal sealed class RideHorseEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!Session.User.InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
 
-        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (user == null)
         {
             return;
@@ -56,7 +56,7 @@ internal sealed class RideHorseEvent : IPacketEvent
         {
             if (pet.RidingHorse)
             {
-                var speechtxt = LanguageManager.TryGetValue("pet.alreadymounted", Session.Language);
+                var speechtxt = LanguageManager.TryGetValue("pet.alreadymounted", session.Language);
                 pet.OnChat(speechtxt, 0, false);
             }
             else if (user.RidingHorse)

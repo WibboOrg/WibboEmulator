@@ -6,9 +6,9 @@ internal sealed class ModerationBanEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!Session.User.HasPermission("ban"))
+        if (!session.User.HasPermission("ban"))
         {
             return;
         }
@@ -17,6 +17,6 @@ internal sealed class ModerationBanEvent : IPacketEvent
         var message = packet.PopString();
         var length = packet.PopInt() * 3600;
 
-        ModerationManager.BanUser(Session, userId, length, message);
+        ModerationManager.BanUser(session, userId, length, message);
     }
 }

@@ -8,20 +8,20 @@ internal sealed class UserSettingsCameraFollowEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var flag = packet.PopBoolean();
 
-        if (Session == null || Session.User == null)
+        if (session == null || session.User == null)
         {
             return;
         }
 
         using (var dbClient = DatabaseManager.Connection)
         {
-            UserDao.UpdateCameraFollowDisabled(dbClient, Session.User.Id, flag);
+            UserDao.UpdateCameraFollowDisabled(dbClient, session.User.Id, flag);
         }
 
-        Session.User.CameraFollowDisabled = flag;
+        session.User.CameraFollowDisabled = flag;
     }
 }

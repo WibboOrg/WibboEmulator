@@ -14,20 +14,20 @@ internal sealed partial class ChatEvent(bool isShout = false) : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session == null || Session.User == null || !Session.User.InRoom)
+        if (session == null || session.User == null || !session.User.InRoom)
         {
             return;
         }
 
-        var room = Session.User.Room;
+        var room = session.User.Room;
         if (room == null)
         {
             return;
         }
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (user == null)
         {
             return;
@@ -46,14 +46,14 @@ internal sealed partial class ChatEvent(bool isShout = false) : IPacketEvent
         var color = packet.PopInt();
         var chatColour = packet.PopString(10);
 
-        if (!ChatStyleManager.TryGetStyle(color, out var style) || (style.RequiredRight.Length > 0 && !Session.User.HasPermission(style.RequiredRight)))
+        if (!ChatStyleManager.TryGetStyle(color, out var style) || (style.RequiredRight.Length > 0 && !session.User.HasPermission(style.RequiredRight)))
         {
             color = 0;
         }
 
         if (color == 23)
         {
-            color = Session.User.BadgeComponent.StaffBulleId;
+            color = session.User.BadgeComponent.StaffBulleId;
         }
         else
         {
@@ -62,9 +62,9 @@ internal sealed partial class ChatEvent(bool isShout = false) : IPacketEvent
 
         user.Unidle();
 
-        if (!Session.User.HasPermission("no_mute") && !user.IsOwner && !room.CheckRights(Session) && room.RoomMuted)
+        if (!session.User.HasPermission("no_mute") && !user.IsOwner && !room.CheckRights(session) && room.RoomMuted)
         {
-            user.SendWhisperChat(LanguageManager.TryGetValue("room.muted", Session.Language));
+            user.SendWhisperChat(LanguageManager.TryGetValue("room.muted", session.Language));
             return;
         }
 
@@ -72,48 +72,48 @@ internal sealed partial class ChatEvent(bool isShout = false) : IPacketEvent
         {
             if (!room.JankenManager.PickChoice(user, message))
             {
-                user.SendWhisperChat(LanguageManager.TryGetValue("janken.choice", Session.Language));
+                user.SendWhisperChat(LanguageManager.TryGetValue("janken.choice", session.Language));
             }
 
             return;
         }
 
-        if (!Session.User.HasPermission("mod") && !user.IsOwner && !room.CheckRights(Session) && room.UserIsMuted(Session.User.Id))
+        if (!session.User.HasPermission("mod") && !user.IsOwner && !room.CheckRights(session) && room.UserIsMuted(session.User.Id))
         {
-            if (!room.HasMuteExpired(Session.User.Id))
+            if (!room.HasMuteExpired(session.User.Id))
             {
-                user.SendWhisperChat(LanguageManager.TryGetValue("user.muted", Session.Language));
+                user.SendWhisperChat(LanguageManager.TryGetValue("user.muted", session.Language));
                 return;
             }
             else
             {
-                room.RemoveMute(Session.User.Id);
+                room.RemoveMute(session.User.Id);
             }
         }
 
-        var timeSpan = DateTime.Now - Session.User.SpamFloodTime;
-        if (timeSpan.TotalSeconds > Session.User.SpamProtectionTime && Session.User.SpamEnable)
+        var timeSpan = DateTime.Now - session.User.SpamFloodTime;
+        if (timeSpan.TotalSeconds > session.User.SpamProtectionTime && session.User.SpamEnable)
         {
-            Session.User.FloodCount = 0;
-            Session.User.SpamEnable = false;
+            session.User.FloodCount = 0;
+            session.User.SpamEnable = false;
         }
         else if (timeSpan.TotalSeconds > 4.0)
         {
-            Session.User.FloodCount = 0;
+            session.User.FloodCount = 0;
         }
 
-        if (timeSpan.TotalSeconds < Session.User.SpamProtectionTime && Session.User.SpamEnable)
+        if (timeSpan.TotalSeconds < session.User.SpamProtectionTime && session.User.SpamEnable)
         {
-            var i = Session.User.SpamProtectionTime - timeSpan.Seconds;
+            var i = session.User.SpamProtectionTime - timeSpan.Seconds;
             user.Client?.SendPacket(new FloodControlComposer(i));
             return;
         }
-        else if (timeSpan.TotalSeconds < 4.0 && Session.User.FloodCount > 5 && !Session.User.HasPermission("flood_chat"))
+        else if (timeSpan.TotalSeconds < 4.0 && session.User.FloodCount > 5 && !session.User.HasPermission("flood_chat"))
         {
-            Session.User.SpamProtectionTime = room.IsRoleplay || Session.User.HasPermission("flood_premium") ? 5 : 15;
-            Session.User.SpamEnable = true;
+            session.User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("flood_premium") ? 5 : 15;
+            session.User.SpamEnable = true;
 
-            user.Client?.SendPacket(new FloodControlComposer(Session.User.SpamProtectionTime - timeSpan.Seconds));
+            user.Client?.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
 
             return;
         }
@@ -122,9 +122,9 @@ internal sealed partial class ChatEvent(bool isShout = false) : IPacketEvent
             user.LastMessageCount = 0;
             user.LastMessage = "";
 
-            Session.User.SpamProtectionTime = room.IsRoleplay || Session.User.HasPermission("flood_premium") ? 5 : 15;
-            Session.User.SpamEnable = true;
-            user.Client?.SendPacket(new FloodControlComposer(Session.User.SpamProtectionTime - timeSpan.Seconds));
+            session.User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("flood_premium") ? 5 : 15;
+            session.User.SpamEnable = true;
+            user.Client?.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
             return;
         }
 
@@ -135,30 +135,30 @@ internal sealed partial class ChatEvent(bool isShout = false) : IPacketEvent
 
         user.LastMessage = message;
 
-        Session.User.SpamFloodTime = DateTime.Now;
-        Session.User.FloodCount++;
+        session.User.SpamFloodTime = DateTime.Now;
+        session.User.FloodCount++;
 
-        if (message.StartsWith(":", StringComparison.CurrentCulture) && CommandManager.Parse(Session, user, room, message))
+        if (message.StartsWith(":", StringComparison.CurrentCulture) && CommandManager.Parse(session, user, room, message))
         {
-            room.ChatlogManager.AddMessage(Session.User.Id, Session.User.Username, room.Id, string.Format("{0} a utilisé la commande {1}", Session.User.Username, message), UnixTimestamp.GetNow());
+            room.ChatlogManager.AddMessage(session.User.Id, session.User.Username, room.Id, string.Format("{0} a utilisé la commande {1}", session.User.Username, message), UnixTimestamp.GetNow());
             return;
         }
 
-        if (Session.User.CheckChatMessage(message, "<TCHAT>", room.Id))
+        if (session.User.CheckChatMessage(message, "<TCHAT>", room.Id))
         {
             return;
         }
 
-        QuestManager.ProgressUserQuest(Session, QuestType.SocialChat, 0);
-        Session.User.ChatMessageManager.AddMessage(Session.User.Id, Session.User.Username, room.Id, message, UnixTimestamp.GetNow());
-        room.ChatlogManager.AddMessage(Session.User.Id, Session.User.Username, room.Id, message, UnixTimestamp.GetNow());
+        QuestManager.ProgressUserQuest(session, QuestType.SocialChat, 0);
+        session.User.ChatMessageManager.AddMessage(session.User.Id, session.User.Username, room.Id, message, UnixTimestamp.GetNow());
+        room.ChatlogManager.AddMessage(session.User.Id, session.User.Username, room.Id, message, UnixTimestamp.GetNow());
 
         if (user.TransfBot)
         {
             color = 2;
         }
 
-        if (!Session.User.HasPermission("word_filter_override"))
+        if (!session.User.HasPermission("word_filter_override"))
         {
             message = WordFilterManager.CheckMessage(message);
         }
@@ -183,9 +183,9 @@ internal sealed partial class ChatEvent(bool isShout = false) : IPacketEvent
             return;
         }
 
-        if (!Session.User.IgnoreAll)
+        if (!session.User.IgnoreAll)
         {
-            message = MentionManager.Parse(Session, message);
+            message = MentionManager.Parse(session, message);
         }
 
         user.OnChat(message, color, isShout, chatColour);

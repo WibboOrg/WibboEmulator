@@ -6,11 +6,11 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class SetSpeed : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("input.intonly", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("input.intonly", session.Language));
             return;
         }
 
@@ -20,7 +20,7 @@ internal sealed class SetSpeed : IChatCommand
         }
         else
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("input.intonly", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("input.intonly", session.Language));
         }
     }
 }

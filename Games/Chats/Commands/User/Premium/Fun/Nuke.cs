@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal sealed class Nuke : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode)
         {
@@ -19,36 +19,36 @@ internal sealed class Nuke : IChatCommand
             return;
         }
 
-        var TargetUser = room.RoomUserManager.GetRoomUserByName(parameters[1]);
-        if (TargetUser == null || TargetUser.Client == null || TargetUser.Client.User == null)
+        var targetUser = room.RoomUserManager.GetRoomUserByName(parameters[1]);
+        if (targetUser == null || targetUser.Client == null || targetUser.Client.User == null)
         {
             return;
         }
 
-        if (TargetUser.Client.User.Id == Session.User.Id)
+        if (targetUser.Client.User.Id == session.User.Id)
         {
             return;
         }
 
-        if (TargetUser.Client.User.HasPremiumProtect && !Session.User.HasPermission("mod"))
+        if (targetUser.Client.User.HasPremiumProtect && !session.User.HasPermission("mod"))
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("premium.notallowed", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("premium.notallowed", session.Language));
             return;
         }
 
-        var timeSpan = DateTime.Now - Session.User.CommandFunTimer;
+        var timeSpan = DateTime.Now - session.User.CommandFunTimer;
         if (timeSpan.TotalSeconds < 10)
         {
-            userRoom.SendWhisperChat(string.Format(LanguageManager.TryGetValue("cmd.fun.timeout", Session.Language), 10 - (int)timeSpan.TotalSeconds));
+            userRoom.SendWhisperChat(string.Format(LanguageManager.TryGetValue("cmd.fun.timeout", session.Language), 10 - (int)timeSpan.TotalSeconds));
             return;
         }
 
-        Session.User.CommandFunTimer = DateTime.Now;
+        session.User.CommandFunTimer = DateTime.Now;
 
-        userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.nuke.chat", Session.Language), TargetUser.Username), 27);
-        TargetUser.OnChat(string.Format(LanguageManager.TryGetValue("cmd.nuke.chat.target", Session.Language), userRoom.Username), 18);
+        userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.nuke.chat", session.Language), targetUser.Username), 27);
+        targetUser.OnChat(string.Format(LanguageManager.TryGetValue("cmd.nuke.chat.target", session.Language), userRoom.Username), 18);
 
-        TargetUser.ApplyEffect(108, true);
-        TargetUser.TimerResetEffect = 6;
+        targetUser.ApplyEffect(108, true);
+        targetUser.TimerResetEffect = 6;
     }
 }

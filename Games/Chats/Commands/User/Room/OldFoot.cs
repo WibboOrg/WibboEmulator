@@ -6,17 +6,17 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class OldFoot : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         room.OldFoot = !room.OldFoot;
 
         if (room.OldFoot)
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("cmd.oldfoot.true", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.oldfoot.true", session.Language));
         }
         else
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("cmd.oldfoot.false", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.oldfoot.false", session.Language));
         }
     }
 }

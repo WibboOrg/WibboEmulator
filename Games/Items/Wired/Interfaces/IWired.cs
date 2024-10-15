@@ -10,7 +10,7 @@ public interface IWired
 
     void LoadFromDatabase(string wiredTriggerData, string wiredTriggerData2, string wiredTriggersItem, bool wiredAllUserTriggerable, int wiredDelay);
 
-    void OnTrigger(GameClient Session);
+    void OnTrigger(GameClient session);
 
     void Initialize(List<int> intParams, string stringParam, List<int> stuffIds, int selectionCode, int delay, bool isStaff, bool isGod);
 

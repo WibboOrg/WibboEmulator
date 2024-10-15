@@ -6,10 +6,10 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class RoomKick : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var messageAlert = CommandManager.MergeParams(parameters, 1);
-        if (Session.User.CheckChatMessage(messageAlert, "<CMD>", room.Id))
+        if (session.User.CheckChatMessage(messageAlert, "<CMD>", room.Id))
         {
             return;
         }
@@ -19,7 +19,7 @@ internal sealed class RoomKick : IChatCommand
             var userKick = new List<RoomUser>();
             foreach (var user in room.RoomUserManager.UserList.ToList())
             {
-                if (user != null && user.Client != null && !user.Client.User.HasPermission("mod") && user.Client.User.Id != Session.User.Id)
+                if (user != null && user.Client != null && !user.Client.User.HasPermission("mod") && user.Client.User.Id != session.User.Id)
                 {
                     userKick.Add(user);
                 }

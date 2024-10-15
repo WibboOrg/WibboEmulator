@@ -57,20 +57,20 @@ public class UserCommandSelf : WiredTriggerBase, IWired
 
         e.Result = true;
 
-        var TargetUser = this.Room.RoomUserManager.GetRoomUserByName(messageUserName);
-        TargetUser ??= this.Room.RoomUserManager.GetBotOrPetByName(messageUserName);
+        var targetUser = this.Room.RoomUserManager.GetRoomUserByName(messageUserName);
+        targetUser ??= this.Room.RoomUserManager.GetBotOrPetByName(messageUserName);
 
-        if (TargetUser == null)
+        if (targetUser == null)
         {
             return;
         }
 
-        if (TargetUser == user)
+        if (targetUser == user)
         {
             return;
         }
 
-        if (Math.Abs(TargetUser.X - user.X) >= distance || Math.Abs(TargetUser.Y - user.Y) >= distance)
+        if (Math.Abs(targetUser.X - user.X) >= distance || Math.Abs(targetUser.Y - user.Y) >= distance)
         {
             return;
         }

@@ -6,15 +6,15 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Pickall : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (room.RoomData.SellPrice > 0)
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("roomsell.pickall", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("roomsell.pickall", session.Language));
             return;
         }
 
-        Session.User.InventoryComponent.AddItemArray(room.RoomItemHandling.RemoveAllFurnitureToInventory(Session));
-        Session.SendPacket(new FurniListUpdateComposer());
+        session.User.InventoryComponent.AddItemArray(room.RoomItemHandling.RemoveAllFurnitureToInventory(session));
+        session.SendPacket(new FurniListUpdateComposer());
     }
 }

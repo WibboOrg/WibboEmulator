@@ -10,13 +10,13 @@ internal sealed class PurchasePhotoEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var photoId = Session.User.LastPhotoId;
+        var photoId = session.User.LastPhotoId;
 
         if (string.IsNullOrEmpty(photoId))
         {
-            Session.SendNotification(LanguageManager.TryGetValue("notif.error", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
@@ -33,15 +33,15 @@ internal sealed class PurchasePhotoEvent : IPacketEvent
         }
 
         var time = WibboEnvironment.GetUnixTimestamp();
-        var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + Session.User.Username + "\", \"s\":\"" + Session.User.Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
+        var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + session.User.Username + "\", \"s\":\"" + session.User.Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
 
         using var dbClient = DatabaseManager.Connection;
-        var itemSmall = ItemFactory.CreateSingleItemNullable(dbClient, itemDataSmall, Session.User, extraData);
-        Session.User.InventoryComponent.TryAddItem(itemSmall);
+        var itemSmall = ItemFactory.CreateSingleItemNullable(dbClient, itemDataSmall, session.User, extraData);
+        session.User.InventoryComponent.TryAddItem(itemSmall);
 
-        var item = ItemFactory.CreateSingleItemNullable(dbClient, itemData, Session.User, extraData);
-        Session.User.InventoryComponent.TryAddItem(item);
+        var item = ItemFactory.CreateSingleItemNullable(dbClient, itemData, session.User, extraData);
+        session.User.InventoryComponent.TryAddItem(item);
 
-        Session.SendPacket(new CameraPurchaseSuccesfullComposer());
+        session.SendPacket(new CameraPurchaseSuccesfullComposer());
     }
 }

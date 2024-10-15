@@ -6,29 +6,29 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Follow : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
 
-        if (TargetUser == null || TargetUser.User == null)
+        if (targetUser == null || targetUser.User == null)
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("input.useroffline", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("input.useroffline", session.Language));
         }
-        else if (TargetUser.User.HideInRoom && !Session.User.HasPermission("mod"))
+        else if (targetUser.User.HideInRoom && !session.User.HasPermission("mod"))
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("cmd.follow.notallowed", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.follow.notallowed", session.Language));
         }
         else
         {
-            var currentRoom = TargetUser.User.Room;
+            var currentRoom = targetUser.User.Room;
             if (currentRoom != null)
             {
-                Session.SendPacket(new GetGuestRoomResultComposer(Session, currentRoom.RoomData, false, true));
+                session.SendPacket(new GetGuestRoomResultComposer(session, currentRoom.RoomData, false, true));
             }
         }
     }

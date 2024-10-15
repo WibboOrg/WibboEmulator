@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms.Map;
 
 public class InteractorOneWayGate : FurniInteractor
 {
-    public override void OnPlace(GameClient Session, Item item)
+    public override void OnPlace(GameClient session, Item item)
     {
         item.ExtraData = "0";
 
@@ -22,7 +22,7 @@ public class InteractorOneWayGate : FurniInteractor
         item.InteractingUser = 0;
     }
 
-    public override void OnRemove(GameClient Session, Item item)
+    public override void OnRemove(GameClient session, Item item)
     {
         item.ExtraData = "0";
 
@@ -37,14 +37,14 @@ public class InteractorOneWayGate : FurniInteractor
         item.InteractingUser = 0;
     }
 
-    public override void OnTrigger(GameClient Session, Item item, int request, bool userHasRights, bool reverse)
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (Session == null || Session.User == null || item == null || item.Room == null)
+        if (session == null || session.User == null || item == null || item.Room == null)
         {
             return;
         }
 
-        var roomUser = item.Room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+        var roomUser = item.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (roomUser == null)
         {
             return;

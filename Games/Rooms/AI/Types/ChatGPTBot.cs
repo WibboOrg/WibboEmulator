@@ -124,8 +124,8 @@ public partial class ChatGPTBot : BotAI
             return;
         }
 
-        var TargetUser = this.Room.RoomUserManager.GetRoomUserByUserId(userId);
-        if (TargetUser == null || actionId == 0)
+        var targetUser = this.Room.RoomUserManager.GetRoomUserByUserId(userId);
+        if (targetUser == null || actionId == 0)
         {
             return;
         }
@@ -150,9 +150,9 @@ public partial class ChatGPTBot : BotAI
             case 3: //Give the user an ice cream
             {
                 const int iceCreamId = 4;
-                if (TargetUser.CarryItemId != iceCreamId)
+                if (targetUser.CarryItemId != iceCreamId)
                 {
-                    TargetUser.CarryItem(iceCreamId);
+                    targetUser.CarryItem(iceCreamId);
                 }
                 break;
             }
@@ -178,7 +178,7 @@ public partial class ChatGPTBot : BotAI
 
                 this.
                 RoomUser.TimerResetEffect = 6;
-                this.RoomUser.MoveTo(TargetUser.X, TargetUser.Y, true);
+                this.RoomUser.MoveTo(targetUser.X, targetUser.Y, true);
 
                 this._resetBotTimer = 600;
                 break;

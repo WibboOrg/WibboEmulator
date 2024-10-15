@@ -8,11 +8,11 @@ internal sealed class UserBannerSelectEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var bannerId = packet.PopInt();
 
-        if (Session == null || Session.User == null || Session.User.BannerComponent == null)
+        if (session == null || session.User == null || session.User.BannerComponent == null)
         {
             return;
         }
@@ -22,13 +22,13 @@ internal sealed class UserBannerSelectEvent : IPacketEvent
             return;
         }
 
-        if (!Session.User.BannerComponent.BannerList.Contains(banner) && bannerId != -1)
+        if (!session.User.BannerComponent.BannerList.Contains(banner) && bannerId != -1)
         {
             return;
         }
 
-        Session.User.BannerSelected = bannerId != -1 ? banner : null;
+        session.User.BannerSelected = bannerId != -1 ? banner : null;
 
-        Session.SendPacket(new UserBannerComposer(Session.User.Id, Session.User.BannerSelected));
+        session.SendPacket(new UserBannerComposer(session.User.Id, session.User.BannerSelected));
     }
 }

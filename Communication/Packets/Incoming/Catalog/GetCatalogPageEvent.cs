@@ -7,7 +7,7 @@ internal sealed class GetCatalogPageEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var pageId = packet.PopInt();
 
@@ -15,16 +15,16 @@ internal sealed class GetCatalogPageEvent : IPacketEvent
         var cataMode = packet.PopString();
 
         _ = CatalogManager.TryGetPage(pageId, out var page);
-        if (page == null || !page.HavePermission(Session.User))
+        if (page == null || !page.HavePermission(session.User))
         {
             return;
         }
 
         if (page.Template == "club_gifts")
         {
-            Session.SendPacket(new ClubGiftInfoComposer([.. page.Items.Values]));
+            session.SendPacket(new ClubGiftInfoComposer([.. page.Items.Values]));
         }
 
-        Session.SendPacket(new CatalogPageComposer(page, cataMode, Session.Language, offerId));
+        session.SendPacket(new CatalogPageComposer(page, cataMode, session.Language, offerId));
     }
 }

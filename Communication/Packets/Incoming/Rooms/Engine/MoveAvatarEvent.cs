@@ -5,15 +5,15 @@ internal sealed class MoveAvatarEvent : IPacketEvent
 {
     public double Delay => 50;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var room = Session.User.Room;
+        var room = session.User.Room;
         if (room == null)
         {
             return;
         }
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(Session.User.ControlUserId == 0 ? Session.User.Id : Session.User.ControlUserId);
+        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.ControlUserId == 0 ? session.User.Id : session.User.ControlUserId);
         if (user == null || (!user.CanWalk && !user.TeleportEnabled) || !user.AllowMouseMove)
         {
             return;

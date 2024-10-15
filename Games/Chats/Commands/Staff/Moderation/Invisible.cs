@@ -5,19 +5,19 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Invisible : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (Session.User.IsSpectator)
+        if (session.User.IsSpectator)
         {
-            Session.User.IsSpectator = false;
-            Session.User.HideInRoom = false;
+            session.User.IsSpectator = false;
+            session.User.HideInRoom = false;
         }
         else
         {
-            Session.User.IsSpectator = true;
-            Session.User.HideInRoom = true;
+            session.User.IsSpectator = true;
+            session.User.HideInRoom = true;
         }
 
-        Session.SendPacket(new GetGuestRoomResultComposer(Session, room.RoomData, false, true));
+        session.SendPacket(new GetGuestRoomResultComposer(session, room.RoomData, false, true));
     }
 }

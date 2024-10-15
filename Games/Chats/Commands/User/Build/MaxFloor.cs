@@ -8,7 +8,7 @@ using WibboEmulator.Games.Rooms.Map;
 
 internal sealed class MaxFloor : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var map = "";
         var maxSize = 75;

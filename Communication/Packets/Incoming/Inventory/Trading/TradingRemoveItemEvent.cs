@@ -6,20 +6,20 @@ internal sealed class TradingRemoveItemEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
 
-        var userTrade = room.GetUserTrade(Session.User.Id);
-        var userItem = Session.User.InventoryComponent.GetItem(packet.PopInt());
+        var userTrade = room.GetUserTrade(session.User.Id);
+        var userItem = session.User.InventoryComponent.GetItem(packet.PopInt());
         if (userTrade == null || userItem == null)
         {
             return;
         }
 
-        userTrade.TakeBackItem(Session.User.Id, userItem);
+        userTrade.TakeBackItem(session.User.Id, userItem);
     }
 }

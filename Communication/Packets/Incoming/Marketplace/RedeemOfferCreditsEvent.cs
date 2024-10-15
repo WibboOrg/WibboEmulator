@@ -10,19 +10,19 @@ internal sealed class RedeemOfferCreditsEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         using var dbClient = DatabaseManager.Connection;
 
-        var creditsOwed = CatalogMarketplaceOfferDao.GetSunPrice(dbClient, Session.User.Id);
+        var creditsOwed = CatalogMarketplaceOfferDao.GetSunPrice(dbClient, session.User.Id);
 
         if (creditsOwed >= 1)
         {
-            CatalogMarketplaceOfferDao.Delete(dbClient, Session.User.Id);
-            UserDao.UpdateAddPoints(dbClient, Session.User.Id, creditsOwed);
+            CatalogMarketplaceOfferDao.Delete(dbClient, session.User.Id);
+            UserDao.UpdateAddPoints(dbClient, session.User.Id, creditsOwed);
 
-            Session.User.WibboPoints += creditsOwed;
-            Session.SendPacket(new ActivityPointNotificationComposer(Session.User.WibboPoints, 0, 105));
+            session.User.WibboPoints += creditsOwed;
+            session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
         }
     }
 }

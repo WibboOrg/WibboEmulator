@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class UnMute : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -20,15 +20,15 @@ internal sealed class UnMute : IChatCommand
             return;
         }
 
-        var TargetUser = GameClientManager.GetClientByUsername(username);
-        if (TargetUser == null || TargetUser.User == null)
+        var targetUser = GameClientManager.GetClientByUsername(username);
+        if (targetUser == null || targetUser.User == null)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", Session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
         }
         else
         {
-            TargetUser.User.SpamProtectionTime = 10;
-            TargetUser.User.SpamEnable = true;
+            targetUser.User.SpamProtectionTime = 10;
+            targetUser.User.SpamEnable = true;
         }
     }
 }

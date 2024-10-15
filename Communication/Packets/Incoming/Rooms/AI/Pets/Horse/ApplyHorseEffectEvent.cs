@@ -12,14 +12,14 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!Session.User.InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
@@ -38,7 +38,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
             return;
         }
 
-        if (petUser.PetData == null || petUser.PetData.OwnerId != Session.User.Id || petUser.PetData.Type != 13)
+        if (petUser.PetData == null || petUser.PetData.OwnerId != session.User.Id || petUser.PetData.Type != 13)
         {
             return;
         }
@@ -52,7 +52,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
                 ItemDao.DeleteById(dbClient, item.Id);
             }
 
-            room.RoomItemHandling.RemoveFurniture(Session, item.Id);
+            room.RoomItemHandling.RemoveFurniture(session, item.Id);
         }
         else if (item.Data.InteractionType == InteractionType.HORSE_SADDLE_2)
         {
@@ -63,7 +63,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
                 ItemDao.DeleteById(dbClient, item.Id);
             }
 
-            room.RoomItemHandling.RemoveFurniture(Session, item.Id);
+            room.RoomItemHandling.RemoveFurniture(session, item.Id);
         }
         else if (item.Data.InteractionType == InteractionType.HORSE_HAIRSTYLE)
         {
@@ -79,7 +79,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
                 ItemDao.DeleteById(dbClient, item.Id);
             }
 
-            room.RoomItemHandling.RemoveFurniture(Session, item.Id);
+            room.RoomItemHandling.RemoveFurniture(session, item.Id);
         }
         else if (item.Data.InteractionType == InteractionType.HORSE_HAIR_DYE)
         {
@@ -95,7 +95,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
                 ItemDao.DeleteById(dbClient, item.Id);
             }
 
-            room.RoomItemHandling.RemoveFurniture(Session, item.Id);
+            room.RoomItemHandling.RemoveFurniture(session, item.Id);
         }
         else if (item.Data.InteractionType == InteractionType.HORSE_BODY_DYE)
         {
@@ -128,7 +128,7 @@ internal sealed class ApplyHorseEffectEvent : IPacketEvent
             }
 
             //We only want to use this if we're successful. 
-            room.RoomItemHandling.RemoveFurniture(Session, item.Id);
+            room.RoomItemHandling.RemoveFurniture(session, item.Id);
         }
 
         room.SendPacket(new UsersComposer(petUser));

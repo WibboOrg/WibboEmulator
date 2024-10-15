@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal sealed class Push : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode)
         {
@@ -33,14 +33,14 @@ internal sealed class Push : IChatCommand
             return;
         }
 
-        if (targetRoomUser.Client.User.Id == Session.User.Id)
+        if (targetRoomUser.Client.User.Id == session.User.Id)
         {
             return;
         }
 
-        if (targetRoomUser.Client.User.HasPremiumProtect && !Session.User.HasPermission("mod"))
+        if (targetRoomUser.Client.User.HasPremiumProtect && !session.User.HasPermission("mod"))
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("premium.notallowed", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("premium.notallowed", session.Language));
             return;
         }
 
@@ -90,11 +90,11 @@ internal sealed class Push : IChatCommand
                 targetRoomUser.MoveTo(targetRoomUser.X, targetRoomUser.Y + 1);
             }
 
-            userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.push.chat.success", Session.Language), targetName), 0, false);
+            userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.push.chat.success", session.Language), targetName), 0, false);
         }
         else
         {
-            userRoom.SendWhisperChat(string.Format(LanguageManager.TryGetValue("cmd.push.fail", Session.Language), targetName));
+            userRoom.SendWhisperChat(string.Format(LanguageManager.TryGetValue("cmd.push.fail", session.Language), targetName));
         }
     }
 }

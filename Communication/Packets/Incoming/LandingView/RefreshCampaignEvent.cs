@@ -6,7 +6,7 @@ internal sealed class RefreshCampaignEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var parseCampaings = packet.PopString();
         if (parseCampaings.Contains("gamesmaker"))
@@ -28,6 +28,6 @@ internal sealed class RefreshCampaignEvent : IPacketEvent
             campaingName = data[1];
         }
 
-        Session.SendPacket(new CampaignComposer(parseCampaings, campaingName));
+        session.SendPacket(new CampaignComposer(parseCampaings, campaingName));
     }
 }

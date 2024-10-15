@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class LoadRoomItems : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -27,7 +27,7 @@ internal sealed class LoadRoomItems : IChatCommand
 
         room.RoomItemHandling.LoadFurniture(dbClient, roomId);
         room.GameMap.GenerateMaps(true);
-        Session.SendWhisper("Mobi de l'appart n° " + roomId + " chargé!");
-        Session.SendPacket(new GetGuestRoomResultComposer(Session, room.RoomData, false, true));
+        session.SendWhisper("Mobi de l'appart n° " + roomId + " chargé!");
+        session.SendPacket(new GetGuestRoomResultComposer(session, room.RoomData, false, true));
     }
 }

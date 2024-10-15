@@ -6,17 +6,17 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class DisableWhispers : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (Session.User.ViewMurmur)
+        if (session.User.ViewMurmur)
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("cmd.murmur.true", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.murmur.true", session.Language));
         }
         else
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("cmd.murmur.false", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.murmur.false", session.Language));
         }
 
-        Session.User.ViewMurmur = !Session.User.ViewMurmur;
+        session.User.ViewMurmur = !session.User.ViewMurmur;
     }
 }

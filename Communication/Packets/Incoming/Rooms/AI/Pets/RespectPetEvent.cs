@@ -10,20 +10,20 @@ internal sealed class RespectPetEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session == null || Session.User == null || !Session.User.InRoom || Session.User.DailyPetRespectPoints == 0)
+        if (session == null || session.User == null || !session.User.InRoom || session.User.DailyPetRespectPoints == 0)
         {
             return;
         }
 
 
-        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
 
-        var thisUser = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+        var thisUser = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
         if (thisUser == null)
         {
             return;
@@ -31,50 +31,50 @@ internal sealed class RespectPetEvent : IPacketEvent
 
         var petId = packet.PopInt();
 
-        if (!Session.User.Room.RoomUserManager.TryGetPet(petId, out var pet))
+        if (!session.User.Room.RoomUserManager.TryGetPet(petId, out var pet))
         {
-            var TargetUser = Session.User.Room.RoomUserManager.GetRoomUserByUserId(petId);
-            if (TargetUser == null)
+            var targetUser = session.User.Room.RoomUserManager.GetRoomUserByUserId(petId);
+            if (targetUser == null)
             {
                 return;
             }
 
-            if (TargetUser.Client == null || TargetUser.Client.User == null)
+            if (targetUser.Client == null || targetUser.Client.User == null)
             {
                 return;
             }
 
-            if (TargetUser.Client.User.Id == Session.User.Id)
+            if (targetUser.Client.User.Id == session.User.Id)
             {
                 return;
             }
 
-            QuestManager.ProgressUserQuest(Session, QuestType.SocialRespect);
-            _ = AchievementManager.ProgressAchievement(Session, "ACH_RespectGiven", 1);
-            _ = AchievementManager.ProgressAchievement(TargetUser.Client, "ACH_RespectEarned", 1);
+            QuestManager.ProgressUserQuest(session, QuestType.SocialRespect);
+            _ = AchievementManager.ProgressAchievement(session, "ACH_RespectGiven", 1);
+            _ = AchievementManager.ProgressAchievement(targetUser.Client, "ACH_RespectEarned", 1);
 
             //Take away from pet respect points, just in-case users abuse this..
-            Session.            //Take away from pet respect points, just in-case users abuse this..
+            session.            //Take away from pet respect points, just in-case users abuse this..
             User.DailyPetRespectPoints -= 1;
-            TargetUser.Client.User.Respect += 1;
+            targetUser.Client.User.Respect += 1;
 
             //Apply the effect.
             thisUser.CarryItemId = 999999999;
             thisUser.CarryTimer = 5;
 
             //Send the magic out.
-            room.SendPacket(new RespectPetNotificationComposer(TargetUser.Client.User, TargetUser));
+            room.SendPacket(new RespectPetNotificationComposer(targetUser.Client.User, targetUser));
             room.SendPacket(new CarryObjectComposer(thisUser.VirtualId, thisUser.CarryItemId));
             return;
         }
 
-        if (pet == null || pet.PetData == null || pet.RoomId != Session.User.RoomId)
+        if (pet == null || pet.PetData == null || pet.RoomId != session.User.RoomId)
         {
             return;
         }
 
-        Session.User.DailyPetRespectPoints -= 1;
-        _ = AchievementManager.ProgressAchievement(Session, "ACH_PetRespectGiver", 1);
+        session.User.DailyPetRespectPoints -= 1;
+        _ = AchievementManager.ProgressAchievement(session, "ACH_PetRespectGiver", 1);
 
         thisUser.CarryItemId = 999999999;
         thisUser.CarryTimer = 5;

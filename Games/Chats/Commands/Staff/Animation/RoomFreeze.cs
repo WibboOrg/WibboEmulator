@@ -6,17 +6,17 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class RoomFreeze : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         room.FreezeRoom = !room.FreezeRoom;
 
         if (room.FreezeRoom)
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("cmd.roomfreeze.true", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.roomfreeze.true", session.Language));
         }
         else
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("cmd.roomfreeze.false", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.roomfreeze.false", session.Language));
         }
     }
 }

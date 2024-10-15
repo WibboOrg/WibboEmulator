@@ -11,9 +11,9 @@ internal sealed class GetGroupMembersEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session == null || Session.User == null)
+        if (session == null || session.User == null)
         {
             return;
         }
@@ -114,7 +114,7 @@ internal sealed class GetGroupMembersEvent : IPacketEvent
                 break;
         }
 
-        Session.SendPacket(new GroupMembersComposer(group, [.. members], memberCount, page, group.CreatorId == Session.User.Id || group.IsAdmin(Session.User.Id), requestType, searchVal));
+        session.SendPacket(new GroupMembersComposer(group, [.. members], memberCount, page, group.CreatorId == session.User.Id || group.IsAdmin(session.User.Id), requestType, searchVal));
     }
 
     private static List<int> GetSearchRequests(int groupeId, string searchVal)

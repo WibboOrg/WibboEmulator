@@ -4,7 +4,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Cac : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -75,7 +75,7 @@ internal sealed class Cac : IChatCommand
                 return;
             }
 
-            if (targetRoomUser.Client.User.Id == Session.User.Id)
+            if (targetRoomUser.Client.User.Id == session.User.Id)
             {
                 return;
             }

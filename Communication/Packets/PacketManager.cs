@@ -95,11 +95,11 @@ public static class PacketManager
         Console.WriteLine("Logged " + IncomingPackets.Count + " packet handler(s)!");
     }
 
-    public static void TryExecutePacket(GameClient Session, ClientPacket packet)
+    public static void TryExecutePacket(GameClient session, ClientPacket packet)
     {
         var timeStarted = DateTime.Now;
 
-        if (Session.User == null && !HandshakePacketIds.Contains(packet.Id))
+        if (session.User == null && !HandshakePacketIds.Contains(packet.Id))
         {
             if (Debugger.IsAttached)
             {
@@ -128,7 +128,7 @@ public static class PacketManager
             Console.ResetColor();
         }
 
-        if (Session.PacketTimeout(packet.Id, pak.Delay))
+        if (session.PacketTimeout(packet.Id, pak.Delay))
         {
             if (Debugger.IsAttached)
             {
@@ -139,28 +139,28 @@ public static class PacketManager
 
             if (SettingsManager.GetData<bool>("packet.log.lantency.enable"))
             {
-                ExceptionLogger.LogPacketException(packet.ToString(), string.Format("Spam detected in {0}: {1}ms", Session.User?.Username ?? Session.Connection.Ip, pak.Delay));
+                ExceptionLogger.LogPacketException(packet.ToString(), string.Format("Spam detected in {0}: {1}ms", session.User?.Username ?? session.Connection.Ip, pak.Delay));
             }
             return;
         }
 
-        pak.Parse(Session, packet);
+        pak.Parse(session, packet);
 
         var timeExecution = DateTime.Now - timeStarted;
         if (timeExecution > MaximumRunTimeInSec)
         {
-            ExceptionLogger.LogPacketException(packet.ToString(), string.Format("High latency in {0}: {1}ms", Session.User?.Username ?? Session.Connection.Ip, timeExecution.TotalMilliseconds));
+            ExceptionLogger.LogPacketException(packet.ToString(), string.Format("High latency in {0}: {1}ms", session.User?.Username ?? session.Connection.Ip, timeExecution.TotalMilliseconds));
         }
     }
 
-    /*private async Task ExecutePacketAsync(GameClient Session, ClientPacket packet, IPacketEvent pak)
+    /*private async Task ExecutePacketAsync(GameClient session, ClientPacket packet, IPacketEvent pak)
     {
         if ( _cancellationTokenSource.IsCancellationRequested)
         {
             return;
         }
 
-        var task = new Task(() => pak.Parse(Session, packet));
+        var task = new Task(() => pak.Parse(session, packet));
         task.Start();
 
         await task.WaitAsync( _maximumRunTimeInSec,  _cancellationTokenSource.Token).ContinueWith(t =>
@@ -169,7 +169,7 @@ public static class PacketManager
             {
                 foreach (var e in t.Exception.Flatten().InnerExceptions)
                 {
-                    var messageError = string.Format("Error handling packet {0} for session {1} @ User Name {2}: {3}", packet.Id, Session.ConnectionID, Session.GetUser()?.Username ?? string.Empty, e.Message);
+                    var messageError = string.Format("Error handling packet {0} for session {1} @ User Name {2}: {3}", packet.Id, session.ConnectionID, session.GetUser()?.Username ?? string.Empty, e.Message);
                     ExceptionLogger.LogPacketException(packet.Id.ToString(), messageError);
                 }
             }

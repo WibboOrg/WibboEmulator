@@ -4,13 +4,13 @@ using WibboEmulator.Games.GameClients;
 
 internal sealed class AchievementsComposer : ServerPacket
 {
-    public AchievementsComposer(GameClient Session, List<AchievementData> achievements)
+    public AchievementsComposer(GameClient session, List<AchievementData> achievements)
         : base(ServerPacketHeader.ACHIEVEMENT_LIST)
     {
         this.WriteInteger(achievements.Count);
         foreach (var achievement in achievements)
         {
-            var achievementData = Session.User.AchievementComponent.GetAchievementData(achievement.GroupName);
+            var achievementData = session.User.AchievementComponent.GetAchievementData(achievement.GroupName);
             var targetLevel = achievementData != null ? achievementData.Level + 1 : 1;
             var count = achievement.Levels.Count;
             if (targetLevel > count)

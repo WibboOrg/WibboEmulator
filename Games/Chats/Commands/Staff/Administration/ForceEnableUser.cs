@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class ForceEnableUser : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 3)
         {
@@ -16,15 +16,15 @@ internal sealed class ForceEnableUser : IChatCommand
 
         var username = parameters[1];
 
-        var roomUserByUserId = Session.User.Room.RoomUserManager.GetRoomUserByName(username);
+        var roomUserByUserId = session.User.Room.RoomUserManager.GetRoomUserByName(username);
         if (roomUserByUserId == null || roomUserByUserId.Client == null)
         {
             return;
         }
 
-        if (Session.Language != roomUserByUserId.Client.Language)
+        if (session.Language != roomUserByUserId.Client.Language)
         {
-            Session.SendWhisper(string.Format(LanguageManager.TryGetValue("cmd.authorized.langue.user", Session.Language), roomUserByUserId.Client.Language));
+            session.SendWhisper(string.Format(LanguageManager.TryGetValue("cmd.authorized.langue.user", session.Language), roomUserByUserId.Client.Language));
             return;
         }
 
@@ -33,7 +33,7 @@ internal sealed class ForceEnableUser : IChatCommand
             return;
         }
 
-        if (!EffectManager.HasEffect(effectId, Session.User.HasPermission("god")))
+        if (!EffectManager.HasEffect(effectId, session.User.HasPermission("god")))
         {
             return;
         }

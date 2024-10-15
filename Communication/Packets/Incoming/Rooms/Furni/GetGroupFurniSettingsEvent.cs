@@ -8,9 +8,9 @@ internal sealed class GetGroupFurniSettingsEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session == null || Session.User == null || !Session.User.InRoom)
+        if (session == null || session.User == null || !session.User.InRoom)
         {
             return;
         }
@@ -18,7 +18,7 @@ internal sealed class GetGroupFurniSettingsEvent : IPacketEvent
         var itemId = packet.PopInt();
         var groupId = packet.PopInt();
 
-        var item = Session.User.Room.RoomItemHandling.GetItem(itemId);
+        var item = session.User.Room.RoomItemHandling.GetItem(itemId);
         if (item == null)
         {
             return;
@@ -34,7 +34,7 @@ internal sealed class GetGroupFurniSettingsEvent : IPacketEvent
             return;
         }
 
-        Session.SendPacket(new GroupFurniSettingsComposer(group, itemId, Session.User.Id));
-        Session.SendPacket(new GroupInfoComposer(group, Session, false));
+        session.SendPacket(new GroupFurniSettingsComposer(group, itemId, session.User.Id));
+        session.SendPacket(new GroupInfoComposer(group, session, false));
     }
 }

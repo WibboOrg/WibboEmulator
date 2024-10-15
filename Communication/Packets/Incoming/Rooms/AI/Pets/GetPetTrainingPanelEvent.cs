@@ -6,26 +6,26 @@ internal sealed class GetPetTrainingPanelEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session == null || Session.User == null || !Session.User.InRoom)
+        if (session == null || session.User == null || !session.User.InRoom)
         {
             return;
         }
 
         var petId = packet.PopInt();
 
-        if (!Session.User.Room.RoomUserManager.TryGetPet(petId, out var pet))
+        if (!session.User.Room.RoomUserManager.TryGetPet(petId, out var pet))
         {
             return;
         }
 
         //Continue as a regular pet..
-        if (pet.RoomId != Session.User.RoomId || pet.PetData == null)
+        if (pet.RoomId != session.User.RoomId || pet.PetData == null)
         {
             return;
         }
 
-        Session.SendPacket(new PetTrainingPanelComposer(pet.PetData));
+        session.SendPacket(new PetTrainingPanelComposer(pet.PetData));
     }
 }

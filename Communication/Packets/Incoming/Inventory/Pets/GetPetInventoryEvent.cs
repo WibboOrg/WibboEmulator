@@ -6,20 +6,20 @@ internal sealed class GetPetInventoryEvent : IPacketEvent
 {
     public double Delay => 5000;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session.User == null)
+        if (session.User == null)
         {
             return;
         }
 
-        if (Session.User.InventoryComponent == null)
+        if (session.User.InventoryComponent == null)
         {
             return;
         }
 
-        Session.User.InventoryComponent.LoadInventory();
+        session.User.InventoryComponent.LoadInventory();
 
-        Session.SendPacket(new PetInventoryComposer(Session.User.InventoryComponent.Pets));
+        session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.Pets));
     }
 }

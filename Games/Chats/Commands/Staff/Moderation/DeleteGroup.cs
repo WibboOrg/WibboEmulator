@@ -9,7 +9,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class DeleteGroup : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var groupId = int.TryParse(parameters[1], out var id) ? id : 0;
 
@@ -18,15 +18,15 @@ internal sealed class DeleteGroup : IChatCommand
             return;
         }
 
-        if (group.CreatorId != Session.User.Id && !Session.User.HasPermission("delete_group"))
+        if (group.CreatorId != session.User.Id && !session.User.HasPermission("delete_group"))
         {
-            Session.SendNotification(LanguageManager.TryGetValue("notif.groupdelete.error.1", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("notif.groupdelete.error.1", session.Language));
             return;
         }
 
-        if (group.MemberCount >= 100 && !Session.User.HasPermission("delete_group_limit"))
+        if (group.MemberCount >= 100 && !session.User.HasPermission("delete_group_limit"))
         {
-            Session.SendNotification(LanguageManager.TryGetValue("notif.groupdelete.error.2", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("notif.groupdelete.error.2", session.Language));
             return;
         }
 
@@ -34,12 +34,12 @@ internal sealed class DeleteGroup : IChatCommand
 
         using var dbClient = DatabaseManager.Connection;
 
-        if (group.CreatorId != Session.User.Id)
+        if (group.CreatorId != session.User.Id)
         {
-            LogStaffDao.Insert(dbClient, Session.User.Username, $"Suppresion du groupe {group.Id} crée par {group.CreatorId}");
+            LogStaffDao.Insert(dbClient, session.User.Username, $"Suppresion du groupe {group.Id} crée par {group.CreatorId}");
         }
 
-        Session.SendNotification(LanguageManager.TryGetValue("notif.groupdelete.succes", Session.Language));
+        session.SendNotification(LanguageManager.TryGetValue("notif.groupdelete.succes", session.Language));
 
         if (RoomManager.TryGetRoom(group.RoomId, out var roomGroup))
         {

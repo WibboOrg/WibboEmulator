@@ -7,24 +7,24 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class ShowInventory : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
-        if (TargetUser == null || TargetUser.User == null || TargetUser.User.InventoryComponent == null)
+        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        if (targetUser == null || targetUser.User == null || targetUser.User.InventoryComponent == null)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", Session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
             return;
         }
 
-        TargetUser.User.InventoryComponent.LoadInventory();
+        targetUser.User.InventoryComponent.LoadInventory();
 
         var itemRareCount = new Dictionary<string, int>();
-        foreach (var item in TargetUser.User.InventoryComponent.GetWallAndFloor)
+        foreach (var item in targetUser.User.InventoryComponent.GetWallAndFloor)
         {
             if (!item.ItemData.IsRare)
             {
@@ -43,7 +43,7 @@ internal sealed class ShowInventory : IChatCommand
 
         var assetsUrl = SettingsManager.GetData<string>("assets.url");
 
-        var output = "Inventaire rare de " + TargetUser.User.Username + ":<br><br>";
+        var output = "Inventaire rare de " + targetUser.User.Username + ":<br><br>";
         output += "<div class=\"overflow-auto grid gap-2\" style=\"--bs-columns: 5; --nitro-grid-column-min-height: 40px; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));\">";
         foreach (var item in itemRareCount.Take(50))
         {
@@ -51,6 +51,6 @@ internal sealed class ShowInventory : IChatCommand
         }
         output += "</div>";
 
-        Session.SendNotification(output);
+        session.SendNotification(output);
     }
 }

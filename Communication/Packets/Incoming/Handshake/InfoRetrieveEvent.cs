@@ -6,9 +6,9 @@ internal sealed class InfoRetrieveEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        Session.SendPacket(new UserObjectComposer(Session.User));
-        Session.SendPacket(new UserPerksComposer(Session.User));
+        session.SendPacket(new UserObjectComposer(session.User));
+        session.SendPacket(new UserPerksComposer(session.User));
     }
 }

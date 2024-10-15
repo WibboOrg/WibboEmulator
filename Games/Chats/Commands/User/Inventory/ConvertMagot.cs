@@ -6,15 +6,15 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class ConvertMagot : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (userRoom.IsTrading)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("cmd.troc.not.allowed", Session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("cmd.troc.not.allowed", session.Language));
             return;
         }
 
-        Session.User.InventoryComponent.ConvertMagot();
-        userRoom.SendWhisperChat(LanguageManager.TryGetValue("convert.magot", Session.Language));
+        session.User.InventoryComponent.ConvertMagot();
+        userRoom.SendWhisperChat(LanguageManager.TryGetValue("convert.magot", session.Language));
     }
 }

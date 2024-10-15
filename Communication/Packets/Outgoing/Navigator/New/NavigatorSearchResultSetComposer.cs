@@ -4,7 +4,7 @@ using WibboEmulator.Games.Navigators;
 
 internal sealed class NavigatorSearchResultSetComposer : ServerPacket
 {
-    public NavigatorSearchResultSetComposer(string category, string data, ICollection<SearchResultList> searchResultLists, GameClient Session, int goBack = 1, int fetchLimit = 12)
+    public NavigatorSearchResultSetComposer(string category, string data, ICollection<SearchResultList> searchResultLists, GameClient session, int goBack = 1, int fetchLimit = 12)
         : base(ServerPacketHeader.NAVIGATOR_SEARCH)
     {
         this.WriteString(category);//Search code.
@@ -19,7 +19,7 @@ internal sealed class NavigatorSearchResultSetComposer : ServerPacket
             this.WriteBoolean(searchResult.Minimized);//True = minimized, false = open.
             this.WriteInteger(searchResult.ViewMode == NavigatorViewMode.Regular ? 0 : searchResult.ViewMode == NavigatorViewMode.Thumbnail ? 1 : 0);//View mode, 0 = tiny/regular, 1 = thumbnail
 
-            NavigatorHandler.Search(this, searchResult, data, Session, fetchLimit);
+            NavigatorHandler.Search(this, searchResult, data, session, fetchLimit);
         }
     }
 }

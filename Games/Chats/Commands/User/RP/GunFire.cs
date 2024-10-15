@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms.Map.Movement;
 
 internal sealed class GunFire : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (!userRoom.AllowShoot || userRoom.Freeze)
         {

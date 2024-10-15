@@ -10,7 +10,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class AddPhoto : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
@@ -25,15 +25,15 @@ internal sealed class AddPhoto : IChatCommand
         }
 
         var time = WibboEnvironment.GetUnixTimestamp();
-        var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + Session.User.Username + "\", \"s\":\"" + Session.User.Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
+        var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + session.User.Username + "\", \"s\":\"" + session.User.Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
 
         using var dbClient = DatabaseManager.Connection;
 
-        var item = ItemFactory.CreateSingleItemNullable(dbClient, itemData, Session.User, extraData);
-        Session.User.InventoryComponent.TryAddItem(item);
+        var item = ItemFactory.CreateSingleItemNullable(dbClient, itemData, session.User, extraData);
+        session.User.InventoryComponent.TryAddItem(item);
 
-        UserPhotoDao.Insert(dbClient, Session.User.Id, photoId, time);
+        UserPhotoDao.Insert(dbClient, session.User.Id, photoId, time);
 
-        Session.SendNotification(LanguageManager.TryGetValue("notif.buyphoto.valide", Session.Language));
+        session.SendNotification(LanguageManager.TryGetValue("notif.buyphoto.valide", session.Language));
     }
 }

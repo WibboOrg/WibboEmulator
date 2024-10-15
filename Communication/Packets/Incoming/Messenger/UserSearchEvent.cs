@@ -7,9 +7,9 @@ internal sealed class UserSearchEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session.User.Messenger == null)
+        if (session.User.Messenger == null)
         {
             return;
         }
@@ -26,9 +26,9 @@ internal sealed class UserSearchEvent : IPacketEvent
 
         foreach (var searchResult2 in searchResult)
         {
-            if (searchResult2.UserId != Session.User.Id)
+            if (searchResult2.UserId != session.User.Id)
             {
-                if (Session.User.Messenger.FriendshipExists(searchResult2.UserId))
+                if (session.User.Messenger.FriendshipExists(searchResult2.UserId))
                 {
                     friend.Add(searchResult2);
                 }
@@ -39,6 +39,6 @@ internal sealed class UserSearchEvent : IPacketEvent
             }
         }
 
-        Session.SendPacket(new UserSearchResultComposer(friend, other));
+        session.SendPacket(new UserSearchResultComposer(friend, other));
     }
 }

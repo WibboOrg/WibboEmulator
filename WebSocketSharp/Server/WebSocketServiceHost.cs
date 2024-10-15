@@ -172,7 +172,7 @@ public abstract class WebSocketServiceHost(string path, Logger log)
     /// </summary>
     /// <returns>
     /// A <see cref="WebSocketBehavior"/> instance that represents
-    /// the new Session.    /// </returns>
+    /// the new session.    /// </returns>
     protected abstract WebSocketBehavior CreateSession();
 
     #endregion

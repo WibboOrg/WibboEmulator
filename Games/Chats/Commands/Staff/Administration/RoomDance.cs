@@ -5,18 +5,18 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class RoomDance : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length == 1)
         {
-            Session.SendWhisper("Entrer une dance ID (1-4)");
+            session.SendWhisper("Entrer une dance ID (1-4)");
             return;
         }
 
         var danceId = Convert.ToInt32(parameters[1]);
         if (danceId is < 0 or > 4)
         {
-            Session.SendWhisper("Entrer une dance ID (1-4)");
+            session.SendWhisper("Entrer une dance ID (1-4)");
             return;
         }
 

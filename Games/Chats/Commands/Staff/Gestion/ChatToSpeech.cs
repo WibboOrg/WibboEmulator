@@ -10,7 +10,7 @@ using WibboEmulator.Utilities;
 
 internal sealed class ChatToSpeech : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var nameVoice = parameters[1];
         var text = CommandManager.MergeParams(parameters, 2);
@@ -35,13 +35,13 @@ internal sealed class ChatToSpeech : IChatCommand
 
         var audioBinary = OpenAIProxy.TextToSpeech(nameVoice, text).GetAwaiter().GetResult();
 
-        var audioName = $"{Session.User.Id}_{room.Id}_{Guid.NewGuid()}";
+        var audioName = $"{session.User.Id}_{room.Id}_{Guid.NewGuid()}";
 
         var audioId = UploadApi.ChatAudio(audioBinary, audioName);
 
         if (string.IsNullOrEmpty(audioId) || audioName != audioId)
         {
-            Session.SendNotification(LanguageManager.TryGetValue("notif.error", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
             return;
         }
 
@@ -53,8 +53,8 @@ internal sealed class ChatToSpeech : IChatCommand
 
         var audioUrl = $"{basePath}{audioPath}";
 
-        Session.User.ChatMessageManager.AddMessage(Session.User.Id, Session.User.Username, room.Id, audioUrl, UnixTimestamp.GetNow());
-        room.ChatlogManager.AddMessage(Session.User.Id, Session.User.Username, room.Id, audioUrl, UnixTimestamp.GetNow());
+        session.User.ChatMessageManager.AddMessage(session.User.Id, session.User.Username, room.Id, audioUrl, UnixTimestamp.GetNow());
+        room.ChatlogManager.AddMessage(session.User.Id, session.User.Username, room.Id, audioUrl, UnixTimestamp.GetNow());
 
         userRoom.OnChatAudio(audioPath);
     }

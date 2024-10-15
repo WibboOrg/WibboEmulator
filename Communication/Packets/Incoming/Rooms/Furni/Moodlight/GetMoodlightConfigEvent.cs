@@ -7,14 +7,14 @@ internal sealed class GetMoodlightConfigEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.CheckRights(Session, true))
+        if (!room.CheckRights(session, true))
         {
             return;
         }
@@ -24,6 +24,6 @@ internal sealed class GetMoodlightConfigEvent : IPacketEvent
             return;
         }
 
-        Session.SendPacket(new MoodlightConfigComposer(room.MoodlightData));
+        session.SendPacket(new MoodlightConfigComposer(room.MoodlightData));
     }
 }

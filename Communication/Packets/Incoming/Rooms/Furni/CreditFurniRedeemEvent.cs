@@ -13,19 +13,19 @@ internal sealed class CreditFurniRedeemEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!Session.User.InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.CheckRights(Session, true))
+        if (!room.CheckRights(session, true))
         {
             return;
         }
@@ -57,27 +57,27 @@ internal sealed class CreditFurniRedeemEvent : IPacketEvent
         {
             if (exchange.ItemData.ItemName.StartsWith("CF_") || exchange.ItemData.ItemName.StartsWith("CFC_"))
             {
-                Session.User.Credits += value;
-                Session.SendPacket(new CreditBalanceComposer(Session.User.Credits));
+                session.User.Credits += value;
+                session.SendPacket(new CreditBalanceComposer(session.User.Credits));
             }
             else if (exchange.ItemData.ItemName.StartsWith("PntEx_"))
             {
-                Session.User.WibboPoints += value;
-                Session.SendPacket(new ActivityPointNotificationComposer(Session.User.WibboPoints, 0, 105));
+                session.User.WibboPoints += value;
+                session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
 
-                UserDao.UpdateAddPoints(dbClient, Session.User.Id, value);
+                UserDao.UpdateAddPoints(dbClient, session.User.Id, value);
             }
             else if (exchange.ItemData.ItemName.StartsWith("WwnEx_"))
             {
-                UserStatsDao.UpdateAchievementScore(dbClient, Session.User.Id, value);
+                UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, value);
 
-                Session.User.AchievementPoints += value;
-                Session.SendPacket(new AchievementScoreComposer(Session.User.AchievementPoints));
+                session.User.AchievementPoints += value;
+                session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));
 
-                var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+                var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
                 if (roomUserByUserId != null)
                 {
-                    Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
+                    session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
                     room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
                 }
             }

@@ -10,9 +10,9 @@ internal sealed class GetModeratorUserChatlogEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!Session.User.HasPermission("chatlog"))
+        if (!session.User.HasPermission("chatlog"))
         {
             return;
         }
@@ -36,13 +36,13 @@ internal sealed class GetModeratorUserChatlogEvent : IPacketEvent
 
             sortedMessages.Reverse();
 
-            Session.SendPacket(new ModeratorUserChatlogComposer(userId, "User not online", Session.User.RoomId, sortedMessages));
+            session.SendPacket(new ModeratorUserChatlogComposer(userId, "User not online", session.User.RoomId, sortedMessages));
         }
         else
         {
             var sortedMessages = clientByUserId.User.ChatMessageManager.GetSortedMessages(0);
 
-            Session.SendPacket(new ModeratorUserChatlogComposer(userId, clientByUserId.User.Username, Session.User.RoomId, sortedMessages));
+            session.SendPacket(new ModeratorUserChatlogComposer(userId, clientByUserId.User.Username, session.User.RoomId, sortedMessages));
         }
     }
 }

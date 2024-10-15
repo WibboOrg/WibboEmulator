@@ -4,7 +4,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class ForceRot : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -14,13 +14,13 @@ internal sealed class ForceRot : IChatCommand
         _ = int.TryParse(parameters[1], out var result);
         if (result is <= (-1) or >= 7)
         {
-            Session.User.ForceRot = 0;
+            session.User.ForceRot = 0;
         }
         else
         {
-            Session.User.ForceRot = result;
+            session.User.ForceRot = result;
         }
 
-        Session.SendWhisper("Rot: " + result);
+        session.SendWhisper("Rot: " + result);
     }
 }

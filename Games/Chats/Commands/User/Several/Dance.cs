@@ -5,11 +5,11 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Dance : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser user, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser user, string[] parameters)
     {
         if (parameters.Length < 2)
         {
-            Session.SendWhisper("Entre un numéro à ta danse");
+            session.SendWhisper("Entre un numéro à ta danse");
             return;
         }
 
@@ -17,7 +17,7 @@ internal sealed class Dance : IChatCommand
         {
             if (danceId is > 4 or < 0)
             {
-                Session.SendWhisper("Choisit un numéro entre 0 et 4");
+                session.SendWhisper("Choisit un numéro entre 0 et 4");
                 return;
             }
 
@@ -25,7 +25,7 @@ internal sealed class Dance : IChatCommand
         }
         else
         {
-            Session.SendWhisper("Entre un numéro de danse valide");
+            session.SendWhisper("Entre un numéro de danse valide");
         }
     }
 }

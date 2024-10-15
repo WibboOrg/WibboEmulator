@@ -74,7 +74,7 @@ public class WiredBase
 
     public int GetIntParam(int index) => (this.IntParams.Count > index) ? this.IntParams[index] : 0;
 
-    public virtual void OnTrigger(GameClient Session)
+    public virtual void OnTrigger(GameClient session)
     {
 
     }

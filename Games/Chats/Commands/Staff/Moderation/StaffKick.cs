@@ -6,43 +6,43 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class StaffKick : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
             return;
         }
 
-        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
-        if (TargetUser == null || TargetUser.User == null)
+        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        if (targetUser == null || targetUser.User == null)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", Session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
         }
-        else if (Session.User.Rank <= TargetUser.User.Rank)
+        else if (session.User.Rank <= targetUser.User.Rank)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", Session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", session.Language));
         }
-        else if (!TargetUser.User.InRoom)
+        else if (!targetUser.User.InRoom)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("kick.error", Session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("kick.error", session.Language));
         }
         else
         {
-            room.RoomUserManager.RemoveUserFromRoom(TargetUser, true, false);
+            room.RoomUserManager.RemoveUserFromRoom(targetUser, true, false);
 
             if (parameters.Length > 2)
             {
                 var message = CommandManager.MergeParams(parameters, 2);
-                if (Session.User.CheckChatMessage(message, "<CMD>", room.Id))
+                if (session.User.CheckChatMessage(message, "<CMD>", room.Id))
                 {
                     return;
                 }
 
-                TargetUser.SendNotification(LanguageManager.TryGetValue("kick.withmessage", TargetUser.Language) + message);
+                targetUser.SendNotification(LanguageManager.TryGetValue("kick.withmessage", targetUser.Language) + message);
             }
             else
             {
-                TargetUser.SendNotification(LanguageManager.TryGetValue("kick.nomessage", TargetUser.Language));
+                targetUser.SendNotification(LanguageManager.TryGetValue("kick.nomessage", targetUser.Language));
             }
         }
     }

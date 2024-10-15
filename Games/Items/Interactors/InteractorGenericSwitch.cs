@@ -18,7 +18,7 @@ public class InteractorGenericSwitch : FurniInteractor
         this._modes = 0;
     }
 
-    public override void OnPlace(GameClient Session, Item item)
+    public override void OnPlace(GameClient session, Item item)
     {
         if (item.InteractingUser != 0)
         {
@@ -54,7 +54,7 @@ public class InteractorGenericSwitch : FurniInteractor
         }
     }
 
-    public override void OnRemove(GameClient Session, Item item)
+    public override void OnRemove(GameClient session, Item item)
     {
         if (item.InteractingUser != 0)
         {
@@ -89,11 +89,11 @@ public class InteractorGenericSwitch : FurniInteractor
         }
     }
 
-    public override void OnTrigger(GameClient Session, Item item, int request, bool userHasRights, bool reverse)
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (Session != null)
+        if (session != null)
         {
-            QuestManager.ProgressUserQuest(Session, QuestType.FurniSwitch, 0);
+            QuestManager.ProgressUserQuest(session, QuestType.FurniSwitch, 0);
         }
 
         if (!userHasRights || this._modes == 0)
@@ -122,9 +122,9 @@ public class InteractorGenericSwitch : FurniInteractor
             newState = state < this._modes ? state + 1 : 0;
         }
 
-        if (Session != null && Session.User != null && Session.User.ForceUse > -1)
+        if (session != null && session.User != null && session.User.ForceUse > -1)
         {
-            newState = (Session.User.ForceUse <= this._modes) ? Session.User.ForceUse : 0;
+            newState = (session.User.ForceUse <= this._modes) ? session.User.ForceUse : 0;
         }
 
         if (item.ItemData.InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
@@ -140,17 +140,17 @@ public class InteractorGenericSwitch : FurniInteractor
 
         if (item.ItemData.AdjustableHeights.Count > 1)
         {
-            if (Session == null || Session.User == null)
+            if (session == null || session.User == null)
             {
                 return;
             }
 
-            if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
+            if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
             {
                 return;
             }
 
-            var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
+            var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
             if (roomUserByUserId != null)
             {
                 item.Room.RoomUserManager.UpdateUserStatus(roomUserByUserId, false);

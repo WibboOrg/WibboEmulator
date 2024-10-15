@@ -74,7 +74,7 @@ public static class ItemUtility
         return false;
     }
 
-    public static bool TryProcessExtraData(CatalogItem item, GameClient Session, ref string extraData)
+    public static bool TryProcessExtraData(CatalogItem item, GameClient session, ref string extraData)
     {
         switch (item.Data.InteractionType)
         {
@@ -141,7 +141,7 @@ public static class ItemUtility
                     return false;
                 }
 
-                _ = AchievementManager.ProgressAchievement(Session, "ACH_PetLover", 1);
+                _ = AchievementManager.ProgressAchievement(session, "ACH_PetLover", 1);
 
                 break;
 
@@ -163,7 +163,7 @@ public static class ItemUtility
                 break;
 
             case InteractionType.TROPHY:
-                extraData = Session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + Convert.ToChar(9) + extraData;
+                extraData = session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + Convert.ToChar(9) + extraData;
                 break;
 
             case InteractionType.MANNEQUIN:
@@ -172,35 +172,35 @@ public static class ItemUtility
 
             case InteractionType.BADGE_TROC:
             {
-                if (!BadgeManager.CanGiveBadge(extraData) || !Session.User.BadgeComponent.HasBadge(extraData))
+                if (!BadgeManager.CanGiveBadge(extraData) || !session.User.BadgeComponent.HasBadge(extraData))
                 {
-                    Session.SendNotification(LanguageManager.TryGetValue("notif.buybadgedisplay.error", Session.Language));
+                    session.SendNotification(LanguageManager.TryGetValue("notif.buybadgedisplay.error", session.Language));
                     return false;
                 }
 
                 if (!extraData.StartsWith("perso_"))
                 {
-                    Session.User.BadgeComponent.RemoveBadge(extraData);
+                    session.User.BadgeComponent.RemoveBadge(extraData);
                 }
 
                 break;
             }
 
             case InteractionType.BADGE_DISPLAY:
-                if (!Session.User.BadgeComponent.HasBadge(extraData))
+                if (!session.User.BadgeComponent.HasBadge(extraData))
                 {
-                    Session.SendNotification(LanguageManager.TryGetValue("notif.buybadgedisplay.error", Session.Language));
+                    session.SendNotification(LanguageManager.TryGetValue("notif.buybadgedisplay.error", session.Language));
                     return false;
                 }
 
-                extraData = extraData + Convert.ToChar(9) + Session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
+                extraData = extraData + Convert.ToChar(9) + session.User.Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
                 break;
 
             case InteractionType.BADGE:
             {
-                if (Session.User.BadgeComponent.HasBadge(item.Badge))
+                if (session.User.BadgeComponent.HasBadge(item.Badge))
                 {
-                    Session.SendNotification(LanguageManager.TryGetValue("notif.buybadge.error", Session.Language));
+                    session.SendNotification(LanguageManager.TryGetValue("notif.buybadge.error", session.Language));
                     return false;
                 }
                 break;

@@ -67,20 +67,20 @@ public static class QuestManager
         return 0;
     }
 
-    public static void ProgressUserQuest(GameClient Session, QuestType questType, int eventData = 0)
+    public static void ProgressUserQuest(GameClient session, QuestType questType, int eventData = 0)
     {
-        if (Session == null || Session.User == null || Session.User.QuestId <= 0)
+        if (session == null || session.User == null || session.User.QuestId <= 0)
         {
             return;
         }
 
-        var quest = GetQuest(Session.User.QuestId);
+        var quest = GetQuest(session.User.QuestId);
         if (quest == null || quest.GoalType != questType)
         {
             return;
         }
 
-        var questProgress = Session.User.GetQuestProgress(quest.Id);
+        var questProgress = session.User.GetQuestProgress(quest.Id);
         var flag = false;
         int progress;
         if (questType != QuestType.ExploreFindItem)
@@ -103,23 +103,23 @@ public static class QuestManager
         }
         using (var dbClient = DatabaseManager.Connection)
         {
-            UserQuestDao.Update(dbClient, Session.User.Id, quest.Id, progress);
+            UserQuestDao.Update(dbClient, session.User.Id, quest.Id, progress);
         }
 
-        Session.User.Quests[Session.User.QuestId] = progress;
-        Session.SendPacket(new QuestStartedComposer(Session, quest));
+        session.User.Quests[session.User.QuestId] = progress;
+        session.SendPacket(new QuestStartedComposer(session, quest));
 
         if (!flag)
         {
             return;
         }
 
-        Session.User.QuestId = 0;
-        Session.User.LastCompleted = quest.Id;
-        Session.SendPacket(new QuestCompletedComposer(Session, quest));
-        Session.User.Duckets += quest.Reward;
-        Session.SendPacket(new ActivityPointNotificationComposer(Session.User.Duckets, 1));
-        SendQuestList(Session);
+        session.User.QuestId = 0;
+        session.User.LastCompleted = quest.Id;
+        session.SendPacket(new QuestCompletedComposer(session, quest));
+        session.User.Duckets += quest.Reward;
+        session.SendPacket(new ActivityPointNotificationComposer(session.User.Duckets, 1));
+        SendQuestList(session);
     }
 
     public static Quest GetNextQuestInSeries(string category, int number)
@@ -135,7 +135,7 @@ public static class QuestManager
         return null;
     }
 
-    public static void SendQuestList(GameClient Session, bool send = true)
+    public static void SendQuestList(GameClient session, bool send = true)
     {
         var dictionary1 = new Dictionary<string, int>();
         var dictionary2 = new Dictionary<string, Quest>();
@@ -149,8 +149,8 @@ public static class QuestManager
             }
             if (quest.Number >= questCategory)
             {
-                var questProgress = Session.User.GetQuestProgress(quest.Id);
-                if (Session.User.QuestId != quest.Id && questProgress >= (long)quest.GoalData)
+                var questProgress = session.User.GetQuestProgress(quest.Id);
+                if (session.User.QuestId != quest.Id && questProgress >= (long)quest.GoalData)
                 {
                     dictionary1[quest.Category] = quest.Number + 1;
                 }
@@ -169,10 +169,10 @@ public static class QuestManager
             }
         }
 
-        Session.SendPacket(new QuestListComposer(dictionary2, Session, send));
+        session.SendPacket(new QuestListComposer(dictionary2, session, send));
     }
 
-    public static void ActivateQuest(GameClient Session, int questId)
+    public static void ActivateQuest(GameClient session, int questId)
     {
         var quest = GetQuest(questId);
         if (quest == null)
@@ -182,22 +182,22 @@ public static class QuestManager
 
         using (var dbClient = DatabaseManager.Connection)
         {
-            UserQuestDao.Replace(dbClient, Session.User.Id, quest.Id);
+            UserQuestDao.Replace(dbClient, session.User.Id, quest.Id);
         }
 
-        Session.User.QuestId = quest.Id;
-        SendQuestList(Session);
-        Session.SendPacket(new QuestStartedComposer(Session, quest));
+        session.User.QuestId = quest.Id;
+        SendQuestList(session);
+        session.SendPacket(new QuestStartedComposer(session, quest));
     }
 
-    public static void GetCurrentQuest(GameClient Session)
+    public static void GetCurrentQuest(GameClient session)
     {
-        if (!Session.User.InRoom)
+        if (!session.User.InRoom)
         {
             return;
         }
 
-        var quest = GetQuest(Session.User.LastCompleted);
+        var quest = GetQuest(session.User.LastCompleted);
         var nextQuestInSeries = GetNextQuestInSeries(quest.Category, quest.Number + 1);
         if (nextQuestInSeries == null)
         {
@@ -206,29 +206,29 @@ public static class QuestManager
 
         using (var dbClient = DatabaseManager.Connection)
         {
-            UserQuestDao.Replace(dbClient, Session.User.Id, nextQuestInSeries.Id);
+            UserQuestDao.Replace(dbClient, session.User.Id, nextQuestInSeries.Id);
         }
 
-        Session.User.QuestId = nextQuestInSeries.Id;
-        SendQuestList(Session);
-        Session.SendPacket(new QuestStartedComposer(Session, nextQuestInSeries));
+        session.User.QuestId = nextQuestInSeries.Id;
+        SendQuestList(session);
+        session.SendPacket(new QuestStartedComposer(session, nextQuestInSeries));
     }
 
-    public static void CancelQuest(GameClient Session)
+    public static void CancelQuest(GameClient session)
     {
-        var quest = GetQuest(Session.User.QuestId);
+        var quest = GetQuest(session.User.QuestId);
         if (quest == null)
         {
             return;
         }
 
-        Session.User.QuestId = 0;
+        session.User.QuestId = 0;
         using (var dbClient = DatabaseManager.Connection)
         {
-            UserQuestDao.Delete(dbClient, Session.User.Id, quest.Id);
+            UserQuestDao.Delete(dbClient, session.User.Id, quest.Id);
         }
 
-        Session.SendPacket(new QuestAbortedComposer());
-        SendQuestList(Session);
+        session.SendPacket(new QuestAbortedComposer());
+        SendQuestList(session);
     }
 }

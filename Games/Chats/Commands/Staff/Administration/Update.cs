@@ -30,7 +30,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Update : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -50,7 +50,7 @@ internal sealed class Update : IChatCommand
             case "emuban":
             {
                 WebSocketManager.ResetBan();
-                Session.SendWhisper("Réinitialisation des bannissements de l'émulateur");
+                session.SendWhisper("Réinitialisation des bannissements de l'émulateur");
                 break;
             }
             case "landingview":
@@ -59,13 +59,13 @@ internal sealed class Update : IChatCommand
             case "vue":
             {
                 LandingViewManager.Initialize(dbClient);
-                Session.SendWhisper("Vue et promotion mises à jour");
+                session.SendWhisper("Vue et promotion mises à jour");
                 break;
             }
             case "hof":
             {
                 HallOfFameManager.Initialize(dbClient);
-                Session.SendWhisper("Hof mises à jour");
+                session.SendWhisper("Hof mises à jour");
                 break;
             }
             case "text":
@@ -73,82 +73,82 @@ internal sealed class Update : IChatCommand
             case "locale":
             {
                 LanguageManager.Initialize(dbClient);
-                Session.SendWhisper("Local mis à jour");
+                session.SendWhisper("Local mis à jour");
                 break;
             }
             case "autogame":
             {
                 AnimationManager.Initialize(dbClient);
-                Session.SendWhisper("Jeux automatique mis à jour");
+                session.SendWhisper("Jeux automatique mis à jour");
                 break;
             }
             case "lootbox":
             {
                 LootManager.Initialize(dbClient);
-                Session.SendWhisper("Lootbox mis à jour");
+                session.SendWhisper("Lootbox mis à jour");
                 break;
             }
             case "badge":
             {
                 BadgeManager.Initialize(dbClient);
-                Session.SendWhisper("RP Items mis à jour");
+                session.SendWhisper("RP Items mis à jour");
                 break;
             }
             case "rpitems":
             {
                 RPItemManager.Initialize(dbClient);
-                Session.SendWhisper("Badges mis à jour");
+                session.SendWhisper("Badges mis à jour");
                 break;
             }
             case "rpweapon":
             {
                 RPWeaponManager.Initialize(dbClient);
-                Session.SendWhisper("RP Weapon mis à jour");
+                session.SendWhisper("RP Weapon mis à jour");
                 break;
             }
             case "rpenemy":
             {
                 RPEnemyManager.Initialize(dbClient);
-                Session.SendWhisper("RP Enemy mis à jour");
+                session.SendWhisper("RP Enemy mis à jour");
                 break;
             }
             case "cmd":
             case "commands":
             {
                 CommandManager.Initialize(dbClient);
-                Session.SendWhisper("Commands mis à jour");
+                session.SendWhisper("Commands mis à jour");
                 break;
             }
             case "chat":
             {
                 ChatStyleManager.Initialize(dbClient);
-                Session.SendWhisper("Chat mis à jour");
+                session.SendWhisper("Chat mis à jour");
                 break;
             }
             case "permission":
             {
                 PermissionManager.Initialize(dbClient);
-                Session.SendWhisper("Permissions mises à jour !");
+                session.SendWhisper("Permissions mises à jour !");
                 break;
             }
             case "effet":
             case "enable":
             {
                 EffectManager.Initialize(dbClient);
-                Session.SendWhisper("Effet mis à jour");
+                session.SendWhisper("Effet mis à jour");
                 break;
             }
             case "rp":
             case "roleplay":
             {
                 RoleplayManager.Initialize(dbClient);
-                Session.SendWhisper("Role play mis à jour");
+                session.SendWhisper("Role play mis à jour");
                 break;
             }
             case "moderation":
             {
                 ModerationManager.Initialize(dbClient);
-                Session.SendWhisper("Moderation mis à jour");
+                session.SendWhisper("Moderation mis à jour");
                 GameClientManager.SendMessageStaff(new WhisperComposer(userRoom.VirtualId, "Les outils de modération viennent d'être mis à jour, reconnectez-vous!", 23));
                 break;
             }
@@ -158,7 +158,7 @@ internal sealed class Update : IChatCommand
                 ItemManager.Initialize(dbClient);
                 CatalogManager.Initialize(dbClient);
                 GameClientManager.SendMessage(new CatalogUpdatedComposer());
-                Session.SendWhisper("Catalogue mis à jour");
+                session.SendWhisper("Catalogue mis à jour");
                 break;
             }
             case "navigateur":
@@ -166,57 +166,57 @@ internal sealed class Update : IChatCommand
             case "navigator":
             {
                 NavigatorManager.Initialize(dbClient);
-                Session.SendWhisper("Navigateur mis à jour");
+                session.SendWhisper("Navigateur mis à jour");
                 break;
             }
             case "filter":
             case "filtre":
             {
                 WordFilterManager.Initialize(dbClient);
-                Session.SendWhisper("Filtre mis à jour");
+                session.SendWhisper("Filtre mis à jour");
                 break;
             }
             case "items":
             case "furni":
             {
                 ItemManager.Initialize(dbClient);
-                Session.SendWhisper("Items mis à jour");
+                session.SendWhisper("Items mis à jour");
                 break;
             }
             case "model":
             {
                 RoomManager.Initialize(dbClient);
-                Session.SendWhisper("Model mis à jour");
+                session.SendWhisper("Model mis à jour");
                 break;
             }
             case "mutant":
             case "figure":
             {
                 FigureDataManager.Initialize();
-                Session.SendWhisper("Mutant/Figure mises à jour");
+                session.SendWhisper("Mutant/Figure mises à jour");
                 break;
             }
             case "setting":
             case "settings":
             {
                 SettingsManager.Initialize(dbClient);
-                Session.SendWhisper("Paramètre mises à jour");
+                session.SendWhisper("Paramètre mises à jour");
                 break;
             }
             case "banner":
             {
                 BannerManager.Initialize(dbClient);
-                Session.SendWhisper("Bannière mises à jour");
+                session.SendWhisper("Bannière mises à jour");
                 break;
             }
             case "economy":
                 EconomyCenterManager.Initialize(dbClient);
                 GameClientManager.SendMessage(new EconomyCenterComposer(EconomyCenterManager.EconomyCategory, EconomyCenterManager.EconomyItem));
-                Session.SendWhisper("Centre économique mis à jour");
+                session.SendWhisper("Centre économique mis à jour");
                 break;
             default:
             {
-                Session.SendWhisper(LanguageManager.TryGetValue("cmd.notfound", Session.Language));
+                session.SendWhisper(LanguageManager.TryGetValue("cmd.notfound", session.Language));
                 return;
             }
         }

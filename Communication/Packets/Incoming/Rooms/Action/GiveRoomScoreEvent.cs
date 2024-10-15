@@ -9,19 +9,19 @@ internal sealed class GiveRoomScoreEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        if (Session.User == null)
+        if (session.User == null)
         {
             return;
         }
 
-        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (Session.User.RatedRooms.Contains(room.Id) || room.CheckRights(Session, true))
+        if (session.User.RatedRooms.Contains(room.Id) || room.CheckRights(session, true))
         {
             return;
         }
@@ -46,7 +46,7 @@ internal sealed class GiveRoomScoreEvent : IPacketEvent
             RoomDao.UpdateScore(dbClient, room.Id, room.RoomData.Score);
         }
 
-        Session.User.RatedRooms.Add(room.Id);
-        Session.SendPacket(new RoomRatingComposer(room.RoomData.Score, !(Session.User.RatedRooms.Contains(room.Id) || room.RoomData.OwnerId == Session.User.Id)));
+        session.User.RatedRooms.Add(room.Id);
+        session.SendPacket(new RoomRatingComposer(room.RoomData.Score, !(session.User.RatedRooms.Contains(room.Id) || room.RoomData.OwnerId == session.User.Id)));
     }
 }

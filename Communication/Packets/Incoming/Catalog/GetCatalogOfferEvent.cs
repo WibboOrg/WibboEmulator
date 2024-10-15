@@ -7,11 +7,11 @@ internal sealed class GetCatalogOfferEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var id = packet.PopInt();
 
-        var item = CatalogManager.FindItem(id, Session.User);
+        var item = CatalogManager.FindItem(id, session.User);
         if (item == null)
         {
             return;
@@ -22,7 +22,7 @@ internal sealed class GetCatalogOfferEvent : IPacketEvent
             return;
         }
 
-        if (!page.Enabled || !page.HavePermission(Session.User))
+        if (!page.Enabled || !page.HavePermission(session.User))
         {
             return;
         }
@@ -32,6 +32,6 @@ internal sealed class GetCatalogOfferEvent : IPacketEvent
             return;
         }
 
-        Session.SendPacket(new CatalogOfferComposer(item, page.IsPremium));
+        session.SendPacket(new CatalogOfferComposer(item, page.IsPremium));
     }
 }

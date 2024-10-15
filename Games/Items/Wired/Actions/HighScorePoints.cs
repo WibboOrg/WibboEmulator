@@ -88,7 +88,7 @@ public class HighScorePoints(Item item, Room room) : WiredActionBase(item, room,
         }
     }
 
-    public override void OnTrigger(GameClient Session)
+    public override void OnTrigger(GameClient session)
     {
         _ = int.TryParse(this.Item.ExtraData, out var numMode);
 

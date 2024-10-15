@@ -8,7 +8,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class HideWireds : IChatCommand
 {
-    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         room.RoomData.HideWireds = !room.RoomData.HideWireds;
 
@@ -19,11 +19,11 @@ internal sealed class HideWireds : IChatCommand
 
         if (room.RoomData.HideWireds)
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("cmd.hidewireds.true", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.hidewireds.true", session.Language));
         }
         else
         {
-            Session.SendWhisper(LanguageManager.TryGetValue("cmd.hidewireds.false", Session.Language));
+            session.SendWhisper(LanguageManager.TryGetValue("cmd.hidewireds.false", session.Language));
         }
     }
 }

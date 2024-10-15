@@ -10,13 +10,13 @@ internal sealed class ConfirmLoveLockEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var id = packet.PopInt();
         var isConfirmed = packet.PopBoolean();
 
-        var room = Session.User.Room;
-        if (room == null || !room.CheckRights(Session))
+        var room = session.User.Room;
+        if (room == null || !room.CheckRights(session))
         {
             return;
         }
@@ -38,14 +38,14 @@ internal sealed class ConfirmLoveLockEvent : IPacketEvent
         {
             item.InteractingUser = 0;
             item.InteractingUser2 = 0;
-            Session.SendNotification(LanguageManager.TryGetValue("notif.lovelock.error.1", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("notif.lovelock.error.1", session.Language));
             return;
         }
         else if (userOne.Client == null || userTwo.Client == null)
         {
             item.InteractingUser = 0;
             item.InteractingUser2 = 0;
-            Session.SendNotification(LanguageManager.TryGetValue("notif.lovelock.error.1", Session.Language));
+            session.SendNotification(LanguageManager.TryGetValue("notif.lovelock.error.1", session.Language));
             return;
         }
         else if (userOne == null)
@@ -87,14 +87,14 @@ internal sealed class ConfirmLoveLockEvent : IPacketEvent
         }
         else
         {
-            if (userOneId == Session.User.Id)
+            if (userOneId == session.User.Id)
             {
-                Session.SendPacket(new LoveLockDialogueSetLockedComposer(id));
+                session.SendPacket(new LoveLockDialogueSetLockedComposer(id));
                 userOne.LLPartner = userTwoId;
             }
-            else if (userTwoId == Session.User.Id)
+            else if (userTwoId == session.User.Id)
             {
-                Session.SendPacket(new LoveLockDialogueSetLockedComposer(id));
+                session.SendPacket(new LoveLockDialogueSetLockedComposer(id));
                 userTwo.LLPartner = userOneId;
             }
 

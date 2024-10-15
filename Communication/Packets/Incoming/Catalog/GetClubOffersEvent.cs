@@ -7,7 +7,7 @@ internal sealed class GetClubOffersEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient Session, ClientPacket packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var offerId = packet.PopInt();
 
@@ -18,11 +18,11 @@ internal sealed class GetClubOffersEvent : IPacketEvent
             return;
         }
 
-        if (!pagePremium.Enabled || !pagePremium.HavePermission(Session.User))
+        if (!pagePremium.Enabled || !pagePremium.HavePermission(session.User))
         {
             return;
         }
 
-        Session.SendPacket(new HabboClubOffersComposer(pagePremium.Items));
+        session.SendPacket(new HabboClubOffersComposer(pagePremium.Items));
     }
 }
