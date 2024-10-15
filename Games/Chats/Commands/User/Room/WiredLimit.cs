@@ -8,17 +8,17 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class WiredLimit : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         room.WiredHandler.SecurityEnabled = !room.WiredHandler.SecurityEnabled;
 
         if (room.WiredHandler.SecurityEnabled)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("cmd.wiredlimit.true", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("cmd.wiredlimit.true", Session.Language));
         }
         else
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("cmd.wiredlimit.false", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("cmd.wiredlimit.false", Session.Language));
         }
 
         room.RoomData.WiredSecurity = room.WiredHandler.SecurityEnabled;

@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal sealed class Pull : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode)
         {
@@ -26,26 +26,26 @@ internal sealed class Pull : IChatCommand
 
         var targetName = parameters[1];
 
-        var targetUser = room.RoomUserManager.GetRoomUserByName(targetName);
-        if (targetUser == null || targetUser.Client == null || targetUser.Client.User == null)
+        var TargetUser = room.RoomUserManager.GetRoomUserByName(targetName);
+        if (TargetUser == null || TargetUser.Client == null || TargetUser.Client.User == null)
         {
             return;
         }
 
-        if (targetUser.Client.User.Id == session.User.Id)
+        if (TargetUser.Client.User.Id == Session.User.Id)
         {
             return;
         }
 
-        if (targetUser.Client.User.HasPremiumProtect && !session.User.HasPermission("mod"))
+        if (TargetUser.Client.User.HasPremiumProtect && !Session.User.HasPermission("mod"))
         {
-            session.SendWhisper(LanguageManager.TryGetValue("premium.notallowed", session.Language));
+            Session.SendWhisper(LanguageManager.TryGetValue("premium.notallowed", Session.Language));
             return;
         }
 
-        if (Math.Abs(userRoom.X - targetUser.X) < 3 && Math.Abs(userRoom.Y - targetUser.Y) < 3)
+        if (Math.Abs(userRoom.X - TargetUser.X) < 3 && Math.Abs(userRoom.Y - TargetUser.Y) < 3)
         {
-            userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.pull.chat.success", session.Language), targetName), 0, false);
+            userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.pull.chat.success", Session.Language), targetName), 0, false);
             if (userRoom.RotBody % 2 != 0)
             {
                 userRoom.RotBody--;
@@ -53,24 +53,24 @@ internal sealed class Pull : IChatCommand
 
             if (userRoom.RotBody == 0)
             {
-                targetUser.MoveTo(userRoom.X, userRoom.Y - 1);
+                TargetUser.MoveTo(userRoom.X, userRoom.Y - 1);
             }
             else if (userRoom.RotBody == 2)
             {
-                targetUser.MoveTo(userRoom.X + 1, userRoom.Y);
+                TargetUser.MoveTo(userRoom.X + 1, userRoom.Y);
             }
             else if (userRoom.RotBody == 4)
             {
-                targetUser.MoveTo(userRoom.X, userRoom.Y + 1);
+                TargetUser.MoveTo(userRoom.X, userRoom.Y + 1);
             }
             else if (userRoom.RotBody == 6)
             {
-                targetUser.MoveTo(userRoom.X - 1, userRoom.Y);
+                TargetUser.MoveTo(userRoom.X - 1, userRoom.Y);
             }
         }
         else
         {
-            session.SendWhisper(string.Format(LanguageManager.TryGetValue("cmd.pull.fail", session.Language), targetName));
+            Session.SendWhisper(string.Format(LanguageManager.TryGetValue("cmd.pull.fail", Session.Language), targetName));
             return;
         }
     }

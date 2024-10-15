@@ -6,27 +6,27 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Alert : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 3)
         {
             return;
         }
 
-        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
-        if (targetUser == null)
+        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        if (TargetUser == null)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", Session.Language));
         }
         else
         {
             var message = CommandManager.MergeParams(parameters, 2);
-            if (session.User.CheckChatMessage(message, "<CMD>", room.Id))
+            if (Session.User.CheckChatMessage(message, "<CMD>", room.Id))
             {
                 return;
             }
 
-            targetUser.SendNotification(message);
+            TargetUser.SendNotification(message);
         }
     }
 }

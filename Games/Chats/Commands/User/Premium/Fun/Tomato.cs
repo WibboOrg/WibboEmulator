@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal sealed class Tomato : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode)
         {
@@ -19,35 +19,35 @@ internal sealed class Tomato : IChatCommand
             return;
         }
 
-        var targetUser = room.RoomUserManager.GetRoomUserByName(parameters[1]);
-        if (targetUser == null || targetUser.Client == null || targetUser.Client.User == null)
+        var TargetUser = room.RoomUserManager.GetRoomUserByName(parameters[1]);
+        if (TargetUser == null || TargetUser.Client == null || TargetUser.Client.User == null)
         {
             return;
         }
 
-        if (targetUser.Client.User.Id == session.User.Id)
+        if (TargetUser.Client.User.Id == Session.User.Id)
         {
             return;
         }
 
-        if (targetUser.Client.User.HasPremiumProtect && !session.User.HasPermission("mod"))
+        if (TargetUser.Client.User.HasPremiumProtect && !Session.User.HasPermission("mod"))
         {
-            session.SendWhisper(LanguageManager.TryGetValue("premium.notallowed", session.Language));
+            Session.SendWhisper(LanguageManager.TryGetValue("premium.notallowed", Session.Language));
             return;
         }
 
-        var timeSpan = DateTime.Now - session.User.CommandFunTimer;
+        var timeSpan = DateTime.Now - Session.User.CommandFunTimer;
         if (timeSpan.TotalSeconds < 10)
         {
-            userRoom.SendWhisperChat(string.Format(LanguageManager.TryGetValue("cmd.fun.timeout", session.Language), 10 - (int)timeSpan.TotalSeconds));
+            userRoom.SendWhisperChat(string.Format(LanguageManager.TryGetValue("cmd.fun.timeout", Session.Language), 10 - (int)timeSpan.TotalSeconds));
             return;
         }
 
-        session.User.CommandFunTimer = DateTime.Now;
+        Session.User.CommandFunTimer = DateTime.Now;
 
-        userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.tomato.chat", session.Language), targetUser.Username), 3);
-        targetUser.OnChat(string.Format(LanguageManager.TryGetValue("cmd.tomato.chat.target", session.Language), userRoom.Username), 3);
+        userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.tomato.chat", Session.Language), TargetUser.Username), 3);
+        TargetUser.OnChat(string.Format(LanguageManager.TryGetValue("cmd.tomato.chat.target", Session.Language), userRoom.Username), 3);
 
-        targetUser.CarryItem(98);
+        TargetUser.CarryItem(98);
     }
 }

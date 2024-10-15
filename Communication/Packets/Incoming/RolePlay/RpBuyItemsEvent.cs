@@ -8,12 +8,12 @@ internal sealed class RpBuyItemsEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var itemId = packet.PopInt();
         var count = packet.PopInt();
 
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return;
         }
@@ -28,13 +28,13 @@ internal sealed class RpBuyItemsEvent : IPacketEvent
             count = 1;
         }
 
-        var room = session.User.Room;
+        var room = Session.User.Room;
         if (room == null || !room.IsRoleplay)
         {
             return;
         }
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
         if (user == null)
         {
             return;
@@ -59,7 +59,7 @@ internal sealed class RpBuyItemsEvent : IPacketEvent
 
         if (!rpItem.AllowStack && rp.GetInventoryItem(rpItem.Id) != null)
         {
-            user.SendWhisperChat(LanguageManager.TryGetValue("rp.itemown", session.Language));
+            user.SendWhisperChat(LanguageManager.TryGetValue("rp.itemown", Session.Language));
             return;
         }
 
@@ -77,11 +77,11 @@ internal sealed class RpBuyItemsEvent : IPacketEvent
 
         if (rpItem.Price == 0)
         {
-            user.SendWhisperChat(LanguageManager.TryGetValue("rp.itempick", session.Language));
+            user.SendWhisperChat(LanguageManager.TryGetValue("rp.itempick", Session.Language));
         }
         else
         {
-            user.SendWhisperChat(string.Format(LanguageManager.TryGetValue("rp.itembuy", session.Language), rpItem.Price));
+            user.SendWhisperChat(string.Format(LanguageManager.TryGetValue("rp.itembuy", Session.Language), rpItem.Price));
         }
 
         rp.Money -= rpItem.Price * count;

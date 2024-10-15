@@ -16,15 +16,15 @@ public class InteractorCrackable : FurniInteractor
         this._modes = 0;
     }
 
-    public override void OnPlace(GameClient session, Item item)
+    public override void OnPlace(GameClient Session, Item item)
     {
     }
 
-    public override void OnRemove(GameClient session, Item item)
+    public override void OnRemove(GameClient Session, Item item)
     {
     }
 
-    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    public override void OnTrigger(GameClient Session, Item item, int request, bool userHasRights, bool reverse)
     {
         if (!userHasRights || this._modes == 0)
         {

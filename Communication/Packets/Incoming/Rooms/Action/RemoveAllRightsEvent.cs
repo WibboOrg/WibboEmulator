@@ -10,19 +10,19 @@ internal sealed class RemoveAllRightsEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null)
+        if (Session.User == null)
         {
             return;
         }
 
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.CheckRights(session, true))
+        if (!room.CheckRights(Session, true))
         {
             return;
         }
@@ -45,7 +45,7 @@ internal sealed class RemoveAllRightsEvent : IPacketEvent
                 }
             }
 
-            session.SendPacket(new FlatControllerRemovedMessageComposer(room.Id, num));
+            Session.SendPacket(new FlatControllerRemovedMessageComposer(room.Id, num));
         }
 
         using (var dbClient = DatabaseManager.Connection)
@@ -55,6 +55,6 @@ internal sealed class RemoveAllRightsEvent : IPacketEvent
 
         room.UsersWithRights.Clear();
 
-        session.SendPacket(new RoomRightsListComposer(room));
+        Session.SendPacket(new RoomRightsListComposer(room));
     }
 }

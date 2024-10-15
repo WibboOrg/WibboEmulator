@@ -160,24 +160,24 @@ public static class ModerationManager
         }
     }
 
-    public static void SendNewTicket(GameClient session, int category, int reportedUser, string message)
+    public static void SendNewTicket(GameClient Session, int category, int reportedUser, string message)
     {
-        var roomData = RoomManager.GenerateNullableRoomData(session.User.RoomId);
+        var roomData = RoomManager.GenerateNullableRoomData(Session.User.RoomId);
         var id = 0;
         var roomname = (roomData != null) ? roomData.Name : "Aucun appart";
         var roomId = (roomData != null) ? roomData.Id : 0;
 
         using (var dbClient = DatabaseManager.Connection)
         {
-            id = ModerationTicketDao.Insert(dbClient, message, roomname, category, session.User.Id, reportedUser, roomId);
+            id = ModerationTicketDao.Insert(dbClient, message, roomname, category, Session.User.Id, reportedUser, roomId);
         }
 
-        var ticket = new ModerationTicket(id, 1, category, session.User.Id, reportedUser, message, roomId, roomname, WibboEnvironment.GetUnixTimestamp());
+        var ticket = new ModerationTicket(id, 1, category, Session.User.Id, reportedUser, message, roomId, roomname, WibboEnvironment.GetUnixTimestamp());
         Tickets.Add(ticket);
         SendTicketToModerators(ticket);
     }
 
-    public static void ApplySanction(GameClient session, int reportedUser)
+    public static void ApplySanction(GameClient Session, int reportedUser)
     {
         if (reportedUser == 0)
         {
@@ -190,16 +190,16 @@ public static class ModerationManager
             return;
         }
 
-        session.User.Messenger.DestroyFriendship(userReport.Id);
+        Session.User.Messenger.DestroyFriendship(userReport.Id);
 
-        session.SendPacket(new IgnoreStatusComposer(1, userReport.Username));
+        Session.SendPacket(new IgnoreStatusComposer(1, userReport.Username));
 
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        if ((room.RoomData.BanFuse != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true))
+        if ((room.RoomData.BanFuse != 1 || !room.CheckRights(Session)) && !room.CheckRights(Session, true))
         {
             return;
         }
@@ -228,7 +228,7 @@ public static class ModerationManager
         return null;
     }
 
-    public static void PickTicket(GameClient session, int ticketId)
+    public static void PickTicket(GameClient Session, int ticketId)
     {
         var ticket = GetTicket(ticketId);
         if (ticket == null || ticket.Status != TicketStatusType.Open)
@@ -236,14 +236,14 @@ public static class ModerationManager
             return;
         }
 
-        ticket.Pick(session.User.Id, true);
+        ticket.Pick(Session.User.Id, true);
         SendTicketToModerators(ticket);
     }
 
-    public static void ReleaseTicket(GameClient session, int ticketId)
+    public static void ReleaseTicket(GameClient Session, int ticketId)
     {
         var ticket = GetTicket(ticketId);
-        if (ticket == null || ticket.Status != TicketStatusType.Picked || ticket.ModeratorId != session.User.Id)
+        if (ticket == null || ticket.Status != TicketStatusType.Picked || ticket.ModeratorId != Session.User.Id)
         {
             return;
         }
@@ -252,10 +252,10 @@ public static class ModerationManager
         SendTicketToModerators(ticket);
     }
 
-    public static void CloseTicket(GameClient session, int ticketId, int result)
+    public static void CloseTicket(GameClient Session, int ticketId, int result)
     {
         var ticket = GetTicket(ticketId);
-        if (ticket == null || ticket.Status != TicketStatusType.Picked || ticket.ModeratorId != session.User.Id)
+        if (ticket == null || ticket.Status != TicketStatusType.Picked || ticket.ModeratorId != Session.User.Id)
         {
             return;
         }

@@ -8,9 +8,9 @@ internal sealed class GetModeratorRoomChatlogEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!session.User.HasPermission("mod"))
+        if (!Session.User.HasPermission("mod"))
         {
             return;
         }
@@ -27,6 +27,6 @@ internal sealed class GetModeratorRoomChatlogEvent : IPacketEvent
         listReverse.AddRange(room.ChatlogManager.ListOfMessages);
         listReverse.Reverse();
 
-        session.SendPacket(new ModeratorRoomChatlogComposer(room, listReverse));
+        Session.SendPacket(new ModeratorRoomChatlogComposer(room, listReverse));
     }
 }

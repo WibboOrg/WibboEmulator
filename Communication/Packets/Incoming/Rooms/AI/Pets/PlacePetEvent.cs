@@ -11,26 +11,26 @@ internal sealed class PlacePetEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.CheckRights(session, true))
+        if (!room.CheckRights(Session, true))
         {
-            //session.SendPacket(new RoomErrorNotifComposer(1));
+            //Session.SendPacket(new RoomErrorNotifComposer(1));
             return;
         }
 
         if (room.RoomUserManager.BotPetCount >= 30)
         {
-            session.SendNotification(LanguageManager.TryGetValue("notif.placepet.error", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("notif.placepet.error", Session.Language));
             return;
         }
 
-        if (!session.User.InventoryComponent.TryGetPet(packet.PopInt(), out var pet))
+        if (!Session.User.InventoryComponent.TryGetPet(packet.PopInt(), out var pet))
         {
             return;
         }
@@ -71,11 +71,11 @@ internal sealed class PlacePetEvent : IPacketEvent
             BotPetDao.UpdateRoomId(dbClient, pet.PetId, pet.RoomId);
         }
 
-        if (!session.User.InventoryComponent.TryRemovePet(pet.PetId, out _))
+        if (!Session.User.InventoryComponent.TryRemovePet(pet.PetId, out _))
         {
             return;
         }
 
-        session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.Pets));
+        Session.SendPacket(new PetInventoryComposer(Session.User.InventoryComponent.Pets));
     }
 }

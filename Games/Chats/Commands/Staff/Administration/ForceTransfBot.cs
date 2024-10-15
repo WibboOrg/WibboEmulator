@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class ForceTransfBot : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -21,9 +21,9 @@ internal sealed class ForceTransfBot : IChatCommand
             return;
         }
 
-        if (session.Language != roomUserByUserId.Client.Language)
+        if (Session.Language != roomUserByUserId.Client.Language)
         {
-            session.SendWhisper(string.Format(LanguageManager.TryGetValue("cmd.authorized.langue.user", session.Language), roomUserByUserId.Client.Language));
+            Session.SendWhisper(string.Format(LanguageManager.TryGetValue("cmd.authorized.langue.user", Session.Language), roomUserByUserId.Client.Language));
             return;
         }
 

@@ -5,9 +5,9 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Give : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
 
         var updateVal = parameters[2];
         switch (updateVal.ToLower())
@@ -15,29 +15,29 @@ internal sealed class Give : IChatCommand
             case "coins":
             case "credits":
             {
-                if (!session.User.HasPermission("give_credits"))
+                if (!Session.User.HasPermission("give_credits"))
                 {
-                    session.SendWhisper("Désolé, vous n'avez pas la permission...");
+                    Session.SendWhisper("Désolé, vous n'avez pas la permission...");
                     break;
                 }
                 else
                 {
                     if (int.TryParse(parameters[3], out var amount))
                     {
-                        targetUser.User.Credits += amount;
-                        targetUser.SendPacket(new CreditBalanceComposer(targetUser.User.Credits));
+                        TargetUser.User.Credits += amount;
+                        TargetUser.SendPacket(new CreditBalanceComposer(TargetUser.User.Credits));
 
-                        if (targetUser.User.Id != session.User.Id)
+                        if (TargetUser.User.Id != Session.User.Id)
                         {
-                            targetUser.SendNotification(session.User.Username + " t'a donné  " + amount.ToString() + " crédit(s)!");
+                            TargetUser.SendNotification(Session.User.Username + " t'a donné  " + amount.ToString() + " crédit(s)!");
                         }
 
-                        session.SendWhisper("Tu as donné " + amount + " crédit(s) à " + targetUser.User.Username + "!");
+                        Session.SendWhisper("Tu as donné " + amount + " crédit(s) à " + TargetUser.User.Username + "!");
                         break;
                     }
                     else
                     {
-                        session.SendWhisper("Désolé, le montant n'est pas valide");
+                        Session.SendWhisper("Désolé, le montant n'est pas valide");
                         break;
                     }
                 }
@@ -46,29 +46,29 @@ internal sealed class Give : IChatCommand
             case "wbpts":
             case "wp":
             {
-                if (!session.User.HasPermission("give_wibbopoints"))
+                if (!Session.User.HasPermission("give_wibbopoints"))
                 {
-                    session.SendWhisper("Désolé, vous n'avez pas la permission...");
+                    Session.SendWhisper("Désolé, vous n'avez pas la permission...");
                     break;
                 }
                 else
                 {
                     if (int.TryParse(parameters[3], out var amount))
                     {
-                        targetUser.User.WibboPoints += amount;
-                        targetUser.SendPacket(new ActivityPointNotificationComposer(targetUser.User.WibboPoints, 0, 105));
+                        TargetUser.User.WibboPoints += amount;
+                        TargetUser.SendPacket(new ActivityPointNotificationComposer(TargetUser.User.WibboPoints, 0, 105));
 
-                        if (targetUser.User.Id != session.User.Id)
+                        if (TargetUser.User.Id != Session.User.Id)
                         {
-                            targetUser.SendNotification(session.User.Username + " t'a donné " + amount.ToString() + " WibboPoint(s)!");
+                            TargetUser.SendNotification(Session.User.Username + " t'a donné " + amount.ToString() + " WibboPoint(s)!");
                         }
 
-                        session.SendWhisper("Tu as donné " + amount + " WibboPoint(s) à " + targetUser.User.Username + "!");
+                        Session.SendWhisper("Tu as donné " + amount + " WibboPoint(s) à " + TargetUser.User.Username + "!");
                         break;
                     }
                     else
                     {
-                        session.SendWhisper("Désolé, le montant n'est pas valide");
+                        Session.SendWhisper("Désolé, le montant n'est pas valide");
                         break;
                     }
                 }
@@ -77,36 +77,36 @@ internal sealed class Give : IChatCommand
             case "limitcoins":
             case "ltc":
             {
-                if (!session.User.HasPermission("give_limitcoins"))
+                if (!Session.User.HasPermission("give_limitcoins"))
                 {
-                    session.SendWhisper("Désolé, vous n'avez pas la permission...");
+                    Session.SendWhisper("Désolé, vous n'avez pas la permission...");
                     break;
                 }
                 else
                 {
                     if (int.TryParse(parameters[3], out var amount))
                     {
-                        targetUser.User.LimitCoins += amount;
-                        targetUser.SendPacket(new ActivityPointNotificationComposer(targetUser.User.LimitCoins, 0, 55));
+                        TargetUser.User.LimitCoins += amount;
+                        TargetUser.SendPacket(new ActivityPointNotificationComposer(TargetUser.User.LimitCoins, 0, 55));
 
-                        if (targetUser.User.Id != session.User.Id)
+                        if (TargetUser.User.Id != Session.User.Id)
                         {
-                            targetUser.SendNotification(session.User.Username + " t'a donné " + amount.ToString() + " Limit'Coin(s)!");
+                            TargetUser.SendNotification(Session.User.Username + " t'a donné " + amount.ToString() + " Limit'Coin(s)!");
                         }
 
-                        session.SendWhisper("Tu as donné " + amount + " Limit'Coin(s) à " + targetUser.User.Username + "!");
+                        Session.SendWhisper("Tu as donné " + amount + " Limit'Coin(s) à " + TargetUser.User.Username + "!");
                         break;
                     }
                     else
                     {
-                        session.SendWhisper("Désolé, le montant n'est pas valide");
+                        Session.SendWhisper("Désolé, le montant n'est pas valide");
                         break;
                     }
                 }
             }
 
             default:
-                session.SendWhisper("'" + updateVal + "' n'est pas une monnaie ! ");
+                Session.SendWhisper("'" + updateVal + "' n'est pas une monnaie ! ");
                 break;
         }
     }

@@ -44,21 +44,21 @@ public static class AchievementManager
         }
     }
 
-    public static void GetList(GameClient session) => session.SendPacket(new AchievementsComposer(session, [.. Achievements.Values]));
+    public static void GetList(GameClient Session) => Session.SendPacket(new AchievementsComposer(Session, [.. Achievements.Values]));
 
-    public static bool ProgressAchievement(GameClient session, string achievementGroup, int progressAmount)
+    public static bool ProgressAchievement(GameClient Session, string achievementGroup, int progressAmount)
     {
         if (!Achievements.TryGetValue(achievementGroup, out var achievementData))
         {
             return false;
         }
 
-        var userData = session.User.AchievementComponent.GetAchievementData(achievementGroup);
+        var userData = Session.User.AchievementComponent.GetAchievementData(achievementGroup);
 
         if (userData == null)
         {
             userData = new UserAchievement(achievementGroup, 0, 0);
-            session.User.AchievementComponent.AddAchievement(userData);
+            Session.User.AchievementComponent.AddAchievement(userData);
         }
 
         var totalLevels = achievementData.Levels.Count;
@@ -94,22 +94,22 @@ public static class AchievementManager
             _ = newProgress - targetLevelData.Requirement;
             newProgress = 0;
 
-            session.User.BadgeComponent.GiveBadge(achievementGroup + targetLevel);
+            Session.User.BadgeComponent.GiveBadge(achievementGroup + targetLevel);
 
             if (newTarget > totalLevels)
             {
                 newTarget = totalLevels;
             }
 
-            session.User.Duckets += targetLevelData.RewardPixels;
-            session.SendPacket(new ActivityPointNotificationComposer(session.User.Duckets, 1));
+            Session.User.Duckets += targetLevelData.RewardPixels;
+            Session.SendPacket(new ActivityPointNotificationComposer(Session.User.Duckets, 1));
 
-            session.SendPacket(new AchievementUnlockedComposer(achievementData, targetLevel, targetLevelData.RewardPoints, targetLevelData.RewardPixels));
+            Session.SendPacket(new AchievementUnlockedComposer(achievementData, targetLevel, targetLevelData.RewardPoints, targetLevelData.RewardPixels));
 
             using (var dbClient = DatabaseManager.Connection)
             {
-                UserAchievementDao.Replace(dbClient, session.User.Id, newLevel, newProgress, achievementGroup);
-                UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, targetLevelData.RewardPoints);
+                UserAchievementDao.Replace(dbClient, Session.User.Id, newLevel, newProgress, achievementGroup);
+                UserStatsDao.UpdateAchievementScore(dbClient, Session.User.Id, targetLevelData.RewardPoints);
             }
 
             if (userData != null)
@@ -118,25 +118,25 @@ public static class AchievementManager
                 userData.Progress = newProgress;
             }
 
-            session.User.AchievementPoints += targetLevelData.RewardPoints;
-            session.User.Duckets += targetLevelData.RewardPixels;
-            session.SendPacket(new ActivityPointNotificationComposer(session.User.Duckets, 1));
-            session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));
+            Session.User.AchievementPoints += targetLevelData.RewardPoints;
+            Session.User.Duckets += targetLevelData.RewardPixels;
+            Session.SendPacket(new ActivityPointNotificationComposer(Session.User.Duckets, 1));
+            Session.SendPacket(new AchievementScoreComposer(Session.User.AchievementPoints));
 
 
-            if (session.User.Room != null)
+            if (Session.User.Room != null)
             {
-                var roomUserByUserId = session.User.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+                var roomUserByUserId = Session.User.Room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
                 if (roomUserByUserId != null)
                 {
-                    session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
-                    session.User.Room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
+                    Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
+                    Session.User.Room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
                 }
             }
 
 
             var newLevelData = achievementData.Levels[newTarget];
-            session.SendPacket(new AchievementProgressedComposer(achievementData, newTarget, newLevelData, totalLevels, session.User.AchievementComponent.GetAchievementData(achievementGroup)));
+            Session.SendPacket(new AchievementProgressedComposer(achievementData, newTarget, newLevelData, totalLevels, Session.User.AchievementComponent.GetAchievementData(achievementGroup)));
 
             return true;
         }
@@ -150,11 +150,11 @@ public static class AchievementManager
 
             using (var dbClient = DatabaseManager.Connection)
             {
-                UserAchievementDao.Replace(dbClient, session.User.Id, newLevel, newProgress, achievementGroup);
+                UserAchievementDao.Replace(dbClient, Session.User.Id, newLevel, newProgress, achievementGroup);
             }
 
-            session.SendPacket(new AchievementProgressedComposer(achievementData, targetLevel, targetLevelData,
-            totalLevels, session.User.AchievementComponent.GetAchievementData(achievementGroup)));
+            Session.SendPacket(new AchievementProgressedComposer(achievementData, targetLevel, targetLevelData,
+            totalLevels, Session.User.AchievementComponent.GetAchievementData(achievementGroup)));
         }
 
         return false;

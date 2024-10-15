@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class ForceMimic : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -29,8 +29,8 @@ internal sealed class ForceMimic : IChatCommand
         }
 
         clientByUsername.
-        User.Gender = session.User.Gender;
-        clientByUsername.User.Look = session.User.Look;
+        User.Gender = Session.User.Gender;
+        clientByUsername.User.Look = Session.User.Look;
 
         if (roomUserByUserId.IsTransf || roomUserByUserId.IsSpectator)
         {

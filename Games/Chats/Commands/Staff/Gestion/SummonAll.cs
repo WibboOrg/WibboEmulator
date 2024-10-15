@@ -5,13 +5,13 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class SummonAll : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         foreach (var client in GameClientManager.Clients.ToList())
         {
             if (client.User != null)
             {
-                if (client.User.Room != null && client.User.Room.Id == session.User.Room.Id)
+                if (client.User.Room != null && client.User.Room.Id == Session.User.Room.Id)
                 {
                     continue;
                 }

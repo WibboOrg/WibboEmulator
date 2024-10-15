@@ -8,9 +8,9 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class RoomRemoveSell : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return;
         }
@@ -27,6 +27,6 @@ internal sealed class RoomRemoveSell : IChatCommand
             RoomDao.UpdatePrice(dbClient, room.Id, 0);
         }
 
-        userRoom.SendWhisperChat(LanguageManager.TryGetValue("roomsell.remove", session.Language));
+        userRoom.SendWhisperChat(LanguageManager.TryGetValue("roomsell.remove", Session.Language));
     }
 }

@@ -33,13 +33,13 @@ using WebSocketSharp.Net.WebSockets;
 using WibboEmulator.WebSocketSharp;
 
 /// <summary>
-/// Exposes the access to the information in a WebSocket session./// </summary>
+/// Exposes the access to the information in a WebSocket Session./// </summary>
 public interface IWebSocketSession
 {
     #region Properties
 
     /// <summary>
-    /// Gets the current state of the WebSocket connection for the session.    /// </summary>
+    /// Gets the current state of the WebSocket connection for the Session.    /// </summary>
     /// <value>
     ///   <para>
     ///   One of the <see cref="WebSocketState"/> enum values.
@@ -60,13 +60,13 @@ public interface IWebSocketSession
     WebSocketContext Context { get; }
 
     /// <summary>
-    /// Gets the unique ID of the session.    /// </summary>
+    /// Gets the unique ID of the Session.    /// </summary>
     /// <value>
-    /// A <see cref="string"/> that represents the unique ID of the session.    /// </value>
+    /// A <see cref="string"/> that represents the unique ID of the Session.    /// </value>
     string ID { get; }
 
     /// <summary>
-    /// Gets the name of the WebSocket subprotocol for the session.    /// </summary>
+    /// Gets the name of the WebSocket subprotocol for the Session.    /// </summary>
     /// <value>
     /// A <see cref="string"/> that represents the name of the subprotocol
     /// if present.

@@ -7,10 +7,10 @@ internal sealed class CheckPetNameEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var petName = packet.PopString(16);
 
-        session.SendPacket(new CheckPetNameComposer(petName));
+        Session.SendPacket(new CheckPetNameComposer(petName));
     }
 }

@@ -8,20 +8,20 @@ internal sealed class UserSettingsRoomInvitesEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var flag = packet.PopBoolean();
 
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return;
         }
 
         using (var dbClient = DatabaseManager.Connection)
         {
-            UserDao.UpdateIgnoreRoomInvites(dbClient, session.User.Id, flag);
+            UserDao.UpdateIgnoreRoomInvites(dbClient, Session.User.Id, flag);
         }
 
-        session.User.IgnoreRoomInvites = flag;
+        Session.User.IgnoreRoomInvites = flag;
     }
 }

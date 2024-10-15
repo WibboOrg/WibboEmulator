@@ -8,7 +8,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class DeleteMission : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -16,30 +16,30 @@ internal sealed class DeleteMission : IChatCommand
         }
 
         var username = parameters[1];
-        var targetUser = GameClientManager.GetClientByUsername(username);
-        if (targetUser == null)
+        var TargetUser = GameClientManager.GetClientByUsername(username);
+        if (TargetUser == null)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", Session.Language));
         }
-        else if (session.User.Rank <= targetUser.User.Rank)
+        else if (Session.User.Rank <= TargetUser.User.Rank)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("user.notpermitted", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("user.notpermitted", Session.Language));
         }
         else
         {
-            targetUser.User.Motto = LanguageManager.TryGetValue("user.unacceptable_motto", targetUser.Language);
+            TargetUser.User.Motto = LanguageManager.TryGetValue("user.unacceptable_motto", TargetUser.Language);
             using (var dbClient = DatabaseManager.Connection)
             {
-                UserDao.UpdateMotto(dbClient, targetUser.User.Id, targetUser.User.Motto);
+                UserDao.UpdateMotto(dbClient, TargetUser.User.Id, TargetUser.User.Motto);
             }
 
-            var currentRoom2 = targetUser.User.Room;
+            var currentRoom2 = TargetUser.User.Room;
             if (currentRoom2 == null)
             {
                 return;
             }
 
-            var roomUserByUserId = currentRoom2.RoomUserManager.GetRoomUserByUserId(targetUser.User.Id);
+            var roomUserByUserId = currentRoom2.RoomUserManager.GetRoomUserByUserId(TargetUser.User.Id);
             if (roomUserByUserId == null)
             {
                 return;

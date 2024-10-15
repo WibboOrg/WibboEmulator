@@ -7,11 +7,11 @@ internal sealed class FollowFriendEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var userId = packet.PopInt();
         var clientByUserId = GameClientManager.GetClientByUserID(userId);
-        if (clientByUserId == null || clientByUserId.User == null || !clientByUserId.User.InRoom || (clientByUserId.User.HideInRoom && !session.User.HasPermission("mod")))
+        if (clientByUserId == null || clientByUserId.User == null || !clientByUserId.User.InRoom || (clientByUserId.User.HideInRoom && !Session.User.HasPermission("mod")))
         {
             return;
         }
@@ -21,6 +21,6 @@ internal sealed class FollowFriendEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new RoomForwardComposer(room.Id));
+        Session.SendPacket(new RoomForwardComposer(room.Id));
     }
 }

@@ -7,14 +7,14 @@ internal sealed class FaceLess : IChatCommand
 {
     internal static readonly string[] Separator = ["hd-"];
 
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (userRoom.IsTransf || userRoom.IsSpectator)
         {
             return;
         }
 
-        var look = session.User.Look;
+        var look = Session.User.Look;
 
         if (look.Contains("hd-"))
         {
@@ -30,7 +30,7 @@ internal sealed class FaceLess : IChatCommand
 
             look = look.Replace(hdcode, hdcodenoface);
 
-            session.User.Look = look;
+            Session.User.Look = look;
 
             room.SendPacket(new UserChangeComposer(userRoom, false));
         }

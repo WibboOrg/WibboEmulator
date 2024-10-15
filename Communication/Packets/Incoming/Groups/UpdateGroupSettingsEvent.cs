@@ -11,7 +11,7 @@ internal sealed class UpdateGroupSettingsEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var groupId = packet.PopInt();
 
@@ -20,7 +20,7 @@ internal sealed class UpdateGroupSettingsEvent : IPacketEvent
             return;
         }
 
-        if (group.CreatorId != session.User.Id)
+        if (group.CreatorId != Session.User.Id)
         {
             return;
         }
@@ -82,6 +82,6 @@ internal sealed class UpdateGroupSettingsEvent : IPacketEvent
             }
         }
 
-        session.SendPacket(new GroupInfoComposer(group, session));
+        Session.SendPacket(new GroupInfoComposer(group, Session));
     }
 }

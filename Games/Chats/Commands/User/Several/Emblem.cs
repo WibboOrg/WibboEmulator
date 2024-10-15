@@ -5,9 +5,9 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Emblem : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var emblemId = session.User.BadgeComponent.EmblemId;
+        var emblemId = Session.User.BadgeComponent.EmblemId;
 
         if (emblemId > 0)
         {

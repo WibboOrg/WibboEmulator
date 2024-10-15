@@ -57,25 +57,25 @@ public class UserCommand : WiredTriggerBase, IWired
 
         e.Result = true;
 
-        var targetUser = this.Room.RoomUserManager.GetRoomUserByName(messageUserName);
-        targetUser ??= this.Room.RoomUserManager.GetBotOrPetByName(messageUserName);
+        var TargetUser = this.Room.RoomUserManager.GetRoomUserByName(messageUserName);
+        TargetUser ??= this.Room.RoomUserManager.GetBotOrPetByName(messageUserName);
 
-        if (targetUser == null)
+        if (TargetUser == null)
         {
             return;
         }
 
-        if (targetUser == user)
+        if (TargetUser == user)
         {
             return;
         }
 
-        if (Math.Abs(targetUser.X - user.X) >= distance || Math.Abs(targetUser.Y - user.Y) >= distance)
+        if (Math.Abs(TargetUser.X - user.X) >= distance || Math.Abs(TargetUser.Y - user.Y) >= distance)
         {
             return;
         }
 
-        this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, targetUser, null);
+        this.Room.WiredHandler.ExecutePile(this.Item.Coordinate, TargetUser, null);
     }
 
     public override void Dispose()

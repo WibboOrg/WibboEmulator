@@ -6,9 +6,9 @@ internal sealed class CloseTicketEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User == null || !session.User.HasPermission("mod"))
+        if (Session == null || Session.User == null || !Session.User.HasPermission("mod"))
         {
             return;
         }
@@ -17,6 +17,6 @@ internal sealed class CloseTicketEvent : IPacketEvent
         _ = packet.PopInt();
         var ticketId = packet.PopInt();
 
-        ModerationManager.CloseTicket(session, ticketId, result);
+        ModerationManager.CloseTicket(Session, ticketId, result);
     }
 }

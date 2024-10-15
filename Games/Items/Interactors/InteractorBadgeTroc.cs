@@ -9,31 +9,31 @@ public class InteractorBadgeTroc : FurniInteractor
 {
     private bool _haveReward;
 
-    public override void OnPlace(GameClient session, Item item)
+    public override void OnPlace(GameClient Session, Item item)
     {
     }
 
-    public override void OnRemove(GameClient session, Item item)
+    public override void OnRemove(GameClient Session, Item item)
     {
     }
 
-    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    public override void OnTrigger(GameClient Session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (session == null || this._haveReward || !userHasRights)
+        if (Session == null || this._haveReward || !userHasRights)
         {
             return;
         }
 
         var room = item.Room;
 
-        if (room == null || !room.CheckRights(session, true))
+        if (room == null || !room.CheckRights(Session, true))
         {
             return;
         }
 
-        if (session.User.BadgeComponent.HasBadge(item.ExtraData))
+        if (Session.User.BadgeComponent.HasBadge(item.ExtraData))
         {
-            session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous possèdez déjà ce badge."));
+            Session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous possèdez déjà ce badge."));
             return;
         }
 
@@ -44,9 +44,9 @@ public class InteractorBadgeTroc : FurniInteractor
 
         room.RoomItemHandling.RemoveFurniture(null, item.Id);
 
-        session.User.BadgeComponent.GiveBadge(item.ExtraData);
+        Session.User.BadgeComponent.GiveBadge(item.ExtraData);
 
-        session.SendNotification("Vous avez reçu le badge: " + item.ExtraData + " !");
+        Session.SendNotification("Vous avez reçu le badge: " + item.ExtraData + " !");
     }
 
     public override void OnTick(Item item)

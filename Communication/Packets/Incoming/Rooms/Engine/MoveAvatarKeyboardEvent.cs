@@ -5,7 +5,7 @@ internal sealed class MoveAvatarKeyboardEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var targetX = packet.PopInt();
         var targetY = packet.PopInt();
@@ -20,18 +20,18 @@ internal sealed class MoveAvatarKeyboardEvent : IPacketEvent
             targetY = 0;
         }
 
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return;
         }
 
-        var currentRoom = session.User.Room;
+        var currentRoom = Session.User.Room;
         if (currentRoom == null)
         {
             return;
         }
 
-        var user = currentRoom.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var user = currentRoom.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
 
         if (user == null || (!user.CanWalk && !user.TeleportEnabled) || !user.AllowArrowMove || !user.AllowMoveTo)
         {

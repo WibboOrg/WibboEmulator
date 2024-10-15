@@ -7,15 +7,15 @@ internal sealed class GetGroupCreationWindowEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return;
         }
 
         var validRooms = new List<RoomData>();
-        foreach (var roomId in session.User.UsersRooms)
+        foreach (var roomId in Session.User.UsersRooms)
         {
             var data = RoomManager.GenerateRoomData(roomId);
             if (data == null)
@@ -29,6 +29,6 @@ internal sealed class GetGroupCreationWindowEvent : IPacketEvent
             }
         }
 
-        session.SendPacket(new GroupCreationWindowComposer(validRooms));
+        Session.SendPacket(new GroupCreationWindowComposer(validRooms));
     }
 }

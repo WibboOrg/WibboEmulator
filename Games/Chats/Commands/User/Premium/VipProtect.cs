@@ -6,17 +6,17 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class VipProtect : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
-        session.User.HasPremiumProtect = !session.User.HasPremiumProtect;
+        Session.User.HasPremiumProtect = !Session.User.HasPremiumProtect;
 
-        if (session.User.HasPremiumProtect)
+        if (Session.User.HasPremiumProtect)
         {
-            session.SendWhisper(LanguageManager.TryGetValue("cmd.premium.true", session.Language));
+            Session.SendWhisper(LanguageManager.TryGetValue("cmd.premium.true", Session.Language));
         }
         else
         {
-            session.SendWhisper(LanguageManager.TryGetValue("cmd.premium.false", session.Language));
+            Session.SendWhisper(LanguageManager.TryGetValue("cmd.premium.false", Session.Language));
         }
     }
 }

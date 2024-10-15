@@ -359,23 +359,23 @@ public class RoomUserManager(Room room)
 
     public RoomUser GetUserForSquareNotBot(int x, int y) => room.GameMap.GetRoomUsers(new Point(x, y)).FirstOrDefault(u => !u.IsBot);
 
-    public bool AddAvatarToRoom(GameClient session)
+    public bool AddAvatarToRoom(GameClient Session)
     {
         if (room == null)
         {
             return false;
         }
 
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return false;
         }
 
         var personalID = this._primaryPrivateUserID++;
 
-        var user = new RoomUser(session.User.Id, room.Id, personalID, room)
+        var user = new RoomUser(Session.User.Id, room.Id, personalID, room)
         {
-            IsSpectator = session.User.IsSpectator
+            IsSpectator = Session.User.IsSpectator
         };
 
         if (!this._users.TryAdd(personalID, user))
@@ -383,16 +383,16 @@ public class RoomUserManager(Room room)
             return false;
         }
 
-        if (session.User.Rank > 5 && !this._staffIds.Contains(user.UserId))
+        if (Session.User.Rank > 5 && !this._staffIds.Contains(user.UserId))
         {
             this._staffIds.Add(user.UserId);
         }
 
-        session.User.RoomId = room.Id;
-        session.User.LoadingRoomId = 0;
+        Session.User.RoomId = room.Id;
+        Session.User.LoadingRoomId = 0;
 
-        var username = session.User.Username;
-        var userId = session.User.Id;
+        var username = Session.User.Username;
+        var userId = Session.User.Id;
 
         if (this._usersByUsername.ContainsKey(username.ToLower()))
         {
@@ -418,14 +418,14 @@ public class RoomUserManager(Room room)
 
         if (user.Client != null && user.Client.User != null)
         {
-            if (session.User.IsTeleporting)
+            if (Session.User.IsTeleporting)
             {
                 var roomItem = room.RoomItemHandling.GetItem(user.Client.User.TeleporterId);
                 if (roomItem != null)
                 {
                     GameMap.TeleportToItem(user, roomItem);
 
-                    roomItem.InteractingUser2 = session.User.Id;
+                    roomItem.InteractingUser2 = Session.User.Id;
                     roomItem.ReqUpdate(1);
                 }
             }
@@ -455,32 +455,32 @@ public class RoomUserManager(Room room)
             }
         }
 
-        if (session.User.HasPermission("owner_all_rooms"))
+        if (Session.User.HasPermission("owner_all_rooms"))
         {
             user.SetStatus("flatctrl", "5");
-            session.SendPacket(new YouAreOwnerComposer());
-            session.SendPacket(new YouAreControllerComposer(5));
+            Session.SendPacket(new YouAreOwnerComposer());
+            Session.SendPacket(new YouAreControllerComposer(5));
         }
-        else if (room.CheckRights(session, true))
+        else if (room.CheckRights(Session, true))
         {
             user.SetStatus("flatctrl", "4");
-            session.SendPacket(new YouAreOwnerComposer());
-            session.SendPacket(new YouAreControllerComposer(4));
+            Session.SendPacket(new YouAreOwnerComposer());
+            Session.SendPacket(new YouAreControllerComposer(4));
         }
-        else if (room.CheckRights(session))
+        else if (room.CheckRights(Session))
         {
             user.SetStatus("flatctrl", "1");
-            session.SendPacket(new YouAreControllerComposer(1));
+            Session.SendPacket(new YouAreControllerComposer(1));
         }
         else
         {
             user.RemoveStatus("flatctrl");
-            session.SendPacket(new YouAreNotControllerComposer());
+            Session.SendPacket(new YouAreNotControllerComposer());
         }
 
         if (!user.IsBot)
         {
-            var emblemId = session.User.BadgeComponent.EmblemId;
+            var emblemId = Session.User.BadgeComponent.EmblemId;
 
             if (emblemId > 0)
             {
@@ -508,33 +508,33 @@ public class RoomUserManager(Room room)
 
         if (!user.IsBot)
         {
-            if (session.User.RolePlayId > 0 && room.RoomData.OwnerId != session.User.RolePlayId)
+            if (Session.User.RolePlayId > 0 && room.RoomData.OwnerId != Session.User.RolePlayId)
             {
-                var rpManager = RoleplayManager.GetRolePlay(session.User.RolePlayId);
+                var rpManager = RoleplayManager.GetRolePlay(Session.User.RolePlayId);
                 if (rpManager != null)
                 {
-                    var rp = rpManager.GetPlayer(session.User.Id);
+                    var rp = rpManager.GetPlayer(Session.User.Id);
                     if (rp != null)
                     {
-                        rpManager.RemovePlayer(session.User.Id);
+                        rpManager.RemovePlayer(Session.User.Id);
                     }
                 }
-                session.User.RolePlayId = 0;
+                Session.User.RolePlayId = 0;
             }
 
-            if (room.IsRoleplay && room.RoomData.OwnerId != session.User.RolePlayId)
+            if (room.IsRoleplay && room.RoomData.OwnerId != Session.User.RolePlayId)
             {
                 var rpManager = RoleplayManager.GetRolePlay(room.RoomData.OwnerId);
                 if (rpManager != null)
                 {
-                    var rp = rpManager.GetPlayer(session.User.Id);
+                    var rp = rpManager.GetPlayer(Session.User.Id);
                     if (rp == null)
                     {
-                        rpManager.AddPlayer(session.User.Id);
+                        rpManager.AddPlayer(Session.User.Id);
                     }
                 }
 
-                session.User.RolePlayId = room.RoomData.OwnerId;
+                Session.User.RolePlayId = room.RoomData.OwnerId;
             }
         }
 
@@ -543,14 +543,14 @@ public class RoomUserManager(Room room)
         return true;
     }
 
-    public void RemoveUserFromRoom(GameClient session, bool notifyClient, bool notifyKick)
+    public void RemoveUserFromRoom(GameClient Session, bool notifyClient, bool notifyKick)
     {
-        if (session == null)
+        if (Session == null)
         {
             return;
         }
 
-        if (session.User == null)
+        if (Session.User == null)
         {
             return;
         }
@@ -559,13 +559,13 @@ public class RoomUserManager(Room room)
         {
             if (notifyKick)
             {
-                session.SendPacket(new GenericErrorComposer(4008));
+                Session.SendPacket(new GenericErrorComposer(4008));
             }
 
-            session.SendPacket(new CloseConnectionComposer());
+            Session.SendPacket(new CloseConnectionComposer());
         }
 
-        var user = this.GetRoomUserByUserId(session.User.Id);
+        var user = this.GetRoomUserByUserId(Session.User.Id);
         if (user == null)
         {
             return;
@@ -586,7 +586,7 @@ public class RoomUserManager(Room room)
             room.TeamManager.OnUserLeave(user);
             room.GameManager.UpdateGatesTeamCounts();
 
-            session.SendPacket(new IsPlayingComposer(false));
+            Session.SendPacket(new IsPlayingComposer(false));
         }
 
         room.JankenManager.RemovePlayer(user);
@@ -608,9 +608,9 @@ public class RoomUserManager(Room room)
             user.IsLay = false;
         }
 
-        if (room.HasActiveTrade(session.User.Id))
+        if (room.HasActiveTrade(Session.User.Id))
         {
-            room.TryStopTrade(session.User.Id);
+            room.TryStopTrade(Session.User.Id);
         }
 
         if (user.Roleplayer != null)
@@ -633,10 +633,10 @@ public class RoomUserManager(Room room)
             }
         }
 
-        session.User.RoomId = 0;
-        session.User.LoadingRoomId = 0;
+        Session.User.RoomId = 0;
+        Session.User.LoadingRoomId = 0;
 
-        session.User.ForceUse = -1;
+        Session.User.ForceUse = -1;
 
         this.RemoveRoomUser(user);
 
@@ -645,7 +645,7 @@ public class RoomUserManager(Room room)
         user.Dispose();
 
         _ = this._usersByUserID.TryRemove(user.UserId, out _);
-        _ = this._usersByUsername.TryRemove(session.User.Username.ToLower(), out _);
+        _ = this._usersByUsername.TryRemove(Session.User.Username.ToLower(), out _);
     }
 
     private void RemoveRoomUser(RoomUser user)

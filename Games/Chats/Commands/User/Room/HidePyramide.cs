@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class HidePyramide : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         foreach (var item in room.RoomItemHandling.FloorItems.ToList())
         {
@@ -25,6 +25,6 @@ internal sealed class HidePyramide : IChatCommand
             item.Room.GameMap.UpdateMapForItem(item);
         }
 
-        session.SendWhisper(LanguageManager.TryGetValue("cmd.pyramide", session.Language));
+        Session.SendWhisper(LanguageManager.TryGetValue("cmd.pyramide", Session.Language));
     }
 }

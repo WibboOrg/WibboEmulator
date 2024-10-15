@@ -10,16 +10,16 @@ internal sealed class MakeOfferEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var sellingPrice = packet.PopInt();
         _ = packet.PopInt();
         var itemId = packet.PopInt();
 
-        var item = session.User.InventoryComponent.GetItem(itemId);
+        var item = Session.User.InventoryComponent.GetItem(itemId);
         if (item == null)
         {
-            session.SendPacket(new MarketplaceMakeOfferResultComposer(0));
+            Session.SendPacket(new MarketplaceMakeOfferResultComposer(0));
             return;
         }
 
@@ -30,7 +30,7 @@ internal sealed class MakeOfferEvent : IPacketEvent
 
         if (sellingPrice is > 99999 or <= 0)
         {
-            session.SendPacket(new MarketplaceMakeOfferResultComposer(0));
+            Session.SendPacket(new MarketplaceMakeOfferResultComposer(0));
             return;
         }
 
@@ -45,10 +45,10 @@ internal sealed class MakeOfferEvent : IPacketEvent
         {
             ItemDao.Delete(dbClient, itemId);
 
-            CatalogMarketplaceOfferDao.Insert(dbClient, item.ItemData.ItemName, item.ExtraData, itemId, item.BaseItemId, session.User.Id, sellingPrice, totalPrice, item.ItemData.SpriteId, itemType, item.Limited, item.LimitedStack);
+            CatalogMarketplaceOfferDao.Insert(dbClient, item.ItemData.ItemName, item.ExtraData, itemId, item.BaseItemId, Session.User.Id, sellingPrice, totalPrice, item.ItemData.SpriteId, itemType, item.Limited, item.LimitedStack);
         }
 
-        session.User.InventoryComponent.RemoveItem(itemId);
-        session.SendPacket(new MarketplaceMakeOfferResultComposer(1));
+        Session.User.InventoryComponent.RemoveItem(itemId);
+        Session.SendPacket(new MarketplaceMakeOfferResultComposer(1));
     }
 }

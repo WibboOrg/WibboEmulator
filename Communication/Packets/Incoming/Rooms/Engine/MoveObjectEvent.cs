@@ -9,14 +9,14 @@ internal sealed class MoveObjectEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.CheckRights(session))
+        if (!room.CheckRights(Session))
         {
             return;
         }
@@ -29,7 +29,7 @@ internal sealed class MoveObjectEvent : IPacketEvent
 
         if (room.RoomData.SellPrice > 0)
         {
-            session.SendNotification(LanguageManager.TryGetValue("roomsell.error.7", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("roomsell.error.7", Session.Language));
             return;
         }
 
@@ -40,20 +40,20 @@ internal sealed class MoveObjectEvent : IPacketEvent
 
         if (newX != roomItem.X || newY != roomItem.Y)
         {
-            QuestManager.ProgressUserQuest(session, QuestType.FurniMove, 0);
+            QuestManager.ProgressUserQuest(Session, QuestType.FurniMove, 0);
         }
 
         if (newRot != roomItem.Rotation)
         {
-            QuestManager.ProgressUserQuest(session, QuestType.FurniRotate, 0);
+            QuestManager.ProgressUserQuest(Session, QuestType.FurniRotate, 0);
         }
 
         if (roomItem.Z >= 0.1)
         {
-            QuestManager.ProgressUserQuest(session, QuestType.FurniStack, 0);
+            QuestManager.ProgressUserQuest(Session, QuestType.FurniStack, 0);
         }
 
-        if (!room.RoomItemHandling.SetFloorItem(session, roomItem, newX, newY, newRot, false, false, true))
+        if (!room.RoomItemHandling.SetFloorItem(Session, roomItem, newX, newY, newRot, false, false, true))
         {
             roomItem.UpdateState(false);
             return;

@@ -329,21 +329,21 @@ public class Room : IDisposable
         }
     }
 
-    public bool CheckRights(GameClient session, bool requireOwnership = false)
+    public bool CheckRights(GameClient Session, bool requireOwnership = false)
     {
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return false;
         }
 
-        if (session.User.Username == this.RoomData.OwnerName || session.User.HasPermission("owner_all_rooms"))
+        if (Session.User.Username == this.RoomData.OwnerName || Session.User.HasPermission("owner_all_rooms"))
         {
             return true;
         }
 
         if (!requireOwnership)
         {
-            if (session.User.HasPermission("room_rights") || this.UsersWithRights.Contains(session.User.Id))
+            if (Session.User.HasPermission("room_rights") || this.UsersWithRights.Contains(Session.User.Id))
             {
                 return true;
             }
@@ -358,14 +358,14 @@ public class Room : IDisposable
                 return false;
             }
 
-            if (this.RoomData.Group.IsAdmin(session.User.Id))
+            if (this.RoomData.Group.IsAdmin(Session.User.Id))
             {
                 return true;
             }
 
             if (!this.RoomData.Group.AdminOnlyDeco)
             {
-                if (this.RoomData.Group.IsMember(session.User.Id))
+                if (this.RoomData.Group.IsMember(Session.User.Id))
                 {
                     return true;
                 }
@@ -374,7 +374,7 @@ public class Room : IDisposable
         return false;
     }
 
-    public void SendObjects(GameClient session)
+    public void SendObjects(GameClient Session)
     {
         var packetList = new ServerPacketList();
 
@@ -428,7 +428,7 @@ public class Room : IDisposable
         packetList.Add(new ObjectsComposer(this.RoomItemHandling.TempItems.ToArray(), this));
         packetList.Add(new ItemWallComposer([.. this.RoomItemHandling.WallItems], this));
 
-        session.SendPacket(packetList);
+        Session.SendPacket(packetList);
         packetList.Clear();
     }
 

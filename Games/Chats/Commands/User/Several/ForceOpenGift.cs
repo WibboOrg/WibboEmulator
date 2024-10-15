@@ -4,17 +4,17 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class ForceOpenGift : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
-        session.User.ForceOpenGift = !session.User.ForceOpenGift;
+        Session.User.ForceOpenGift = !Session.User.ForceOpenGift;
 
-        if (session.User.ForceOpenGift)
+        if (Session.User.ForceOpenGift)
         {
-            session.SendWhisper("ForceOpenGift activé");
+            Session.SendWhisper("ForceOpenGift activé");
         }
         else
         {
-            session.SendWhisper("ForceOpenGift désactivé");
+            Session.SendWhisper("ForceOpenGift désactivé");
         }
     }
 }

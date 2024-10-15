@@ -6,17 +6,17 @@ internal sealed class MessengerInitEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null || session.User.Messenger == null)
+        if (Session.User == null || Session.User.Messenger == null)
         {
             return;
         }
 
-        session.User.Messenger.OnStatusChanged();
+        Session.User.Messenger.OnStatusChanged();
 
-        session.SendPacket(new MessengerInitComposer());
-        session.SendPacket(new BuddyListComposer(session.User.Messenger.Friends));
-        session.User.Messenger.ProcessOfflineMessages();
+        Session.SendPacket(new MessengerInitComposer());
+        Session.SendPacket(new BuddyListComposer(Session.User.Messenger.Friends));
+        Session.User.Messenger.ProcessOfflineMessages();
     }
 }

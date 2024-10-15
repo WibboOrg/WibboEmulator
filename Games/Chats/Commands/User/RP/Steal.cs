@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Steal : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 3)
         {
@@ -42,7 +42,7 @@ internal sealed class Steal : IChatCommand
             return;
         }
 
-        if (targetRoomUser.Client.User.Id == session.User.Id)
+        if (targetRoomUser.Client.User.Id == Session.User.Id)
         {
             return;
         }
@@ -69,8 +69,8 @@ internal sealed class Steal : IChatCommand
 
             targetRoomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("rp.vole.receive", targetRoomUser.Client.Language), numberMoney, userRoom.Username));
 
-            session.SendWhisper(string.Format(LanguageManager.TryGetValue("rp.vole.send", session.Language), numberMoney, targetRoomUser.Username));
-            userRoom.OnChat(string.Format(LanguageManager.TryGetValue("rp.vole.send.chat", session.Language), targetRoomUser.Username), 0, true);
+            Session.SendWhisper(string.Format(LanguageManager.TryGetValue("rp.vole.send", Session.Language), numberMoney, targetRoomUser.Username));
+            userRoom.OnChat(string.Format(LanguageManager.TryGetValue("rp.vole.send.chat", Session.Language), targetRoomUser.Username), 0, true);
         }
     }
 }

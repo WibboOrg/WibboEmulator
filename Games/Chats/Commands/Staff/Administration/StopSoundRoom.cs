@@ -6,5 +6,5 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class StopSoundRoom : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters) => room.SendPacket(new StopSoundComposer(parameters.Length != 2 ? "" : parameters[1])); //Type = Trax
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters) => room.SendPacket(new StopSoundComposer(parameters.Length != 2 ? "" : parameters[1])); //Type = Trax
 }

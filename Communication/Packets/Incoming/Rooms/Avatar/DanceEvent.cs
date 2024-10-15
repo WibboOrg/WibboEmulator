@@ -8,14 +8,14 @@ internal sealed class DanceEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
         if (roomUserByUserId == null)
         {
             return;
@@ -35,6 +35,6 @@ internal sealed class DanceEvent : IPacketEvent
 
         roomUserByUserId.DanceId = danceId;
         room.SendPacket(new DanceComposer(roomUserByUserId.VirtualId, danceId));
-        QuestManager.ProgressUserQuest(session, QuestType.SocialDance, 0);
+        QuestManager.ProgressUserQuest(Session, QuestType.SocialDance, 0);
     }
 }

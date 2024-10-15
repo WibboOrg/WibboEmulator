@@ -3,22 +3,22 @@ using WibboEmulator.Games.GameClients;
 
 public class InteractorFreezeTile : FurniInteractor
 {
-    public override void OnPlace(GameClient session, Item item)
+    public override void OnPlace(GameClient Session, Item item)
     {
     }
 
-    public override void OnRemove(GameClient session, Item item)
+    public override void OnRemove(GameClient Session, Item item)
     {
     }
 
-    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    public override void OnTrigger(GameClient Session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (session == null || session.User == null || item.InteractingUser > 0)
+        if (Session == null || Session.User == null || item.InteractingUser > 0)
         {
             return;
         }
 
-        var pName = session.User.Username;
+        var pName = Session.User.Username;
         var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByName(pName);
         if (roomUserByUserId == null || roomUserByUserId.CountFreezeBall == 0 || roomUserByUserId.Freezed)
         {

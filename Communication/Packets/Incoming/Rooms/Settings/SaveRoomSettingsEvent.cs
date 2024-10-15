@@ -13,7 +13,7 @@ internal sealed class SaveRoomSettingsEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var roomId = packet.PopInt();
 
@@ -22,7 +22,7 @@ internal sealed class SaveRoomSettingsEvent : IPacketEvent
             return;
         }
 
-        if (!room.CheckRights(session, true) && !session.User.HasPermission("settings_room"))
+        if (!room.CheckRights(Session, true) && !Session.User.HasPermission("settings_room"))
         {
             return;
         }
@@ -154,11 +154,11 @@ internal sealed class SaveRoomSettingsEvent : IPacketEvent
             RoomDao.UpdateAll(dbClient, room.Id, room.RoomData.Name, room.RoomData.Description, room.RoomData.Password, stringBuilder.ToString(), categoryId, accessState, maxUsers, allowPets, allowPetsEat, allowWalkthrough, room.RoomData.HideWall, room.RoomData.FloorThickness, room.RoomData.WallThickness, mutefuse, kickfuse, banfuse, chatType, chatBalloon, chatSpeed, chatMaxDistance, chatFloodProtection, trocStatus);
         }
 
-        session.SendPacket(new RoomSettingsSavedComposer(room.Id));
+        Session.SendPacket(new RoomSettingsSavedComposer(room.Id));
 
         room.SendPacket(new RoomVisualizationSettingsComposer(room.RoomData.WallThickness, room.RoomData.FloorThickness, room.RoomData.HideWall));
         room.SendPacket(new RoomChatOptionsComposer(room.RoomData.ChatType, room.RoomData.ChatBalloon, room.RoomData.ChatSpeed, room.RoomData.ChatMaxDistance, room.RoomData.ChatFloodProtection));
 
-        session.SendPacket(new GetGuestRoomResultComposer(session, room.RoomData, true, false));
+        Session.SendPacket(new GetGuestRoomResultComposer(Session, room.RoomData, true, false));
     }
 }

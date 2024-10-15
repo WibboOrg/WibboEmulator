@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class AddFilter : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -14,6 +14,6 @@ internal sealed class AddFilter : IChatCommand
         }
 
         WordFilterManager.AddFilterPub(parameters[1].ToLower());
-        session.SendWhisper("Le mot" + parameters[1] + " vient d'être ajouté au filtre des mots interdits.");
+        Session.SendWhisper("Le mot" + parameters[1] + " vient d'être ajouté au filtre des mots interdits.");
     }
 }

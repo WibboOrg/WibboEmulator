@@ -6,23 +6,23 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class BanIP : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
             return;
         }
 
-        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
-        if (targetUser == null || targetUser.User == null)
+        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        if (TargetUser == null || TargetUser.User == null)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", Session.Language));
             return;
         }
 
-        if (targetUser.User.Rank >= session.User.Rank)
+        if (TargetUser.User.Rank >= Session.User.Rank)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", Session.Language));
             return;
         }
 
@@ -32,16 +32,16 @@ internal sealed class BanIP : IChatCommand
             reason = CommandManager.MergeParams(parameters, 2);
         }
 
-        var securityBan = targetUser.User.Rank > 5 && session.User.Rank < 12;
+        var securityBan = TargetUser.User.Rank > 5 && Session.User.Rank < 12;
 
-        session.SendWhisper("Tu as banIP " + targetUser.User.Username + " pour " + reason + "!");
+        Session.SendWhisper("Tu as banIP " + TargetUser.User.Username + " pour " + reason + "!");
 
-        GameClientManager.BanUser(targetUser, session.User.Username, -1, reason, true);
-        _ = session.User.CheckChatMessage(reason, "<CMD>", room.Id);
+        GameClientManager.BanUser(TargetUser, Session.User.Username, -1, reason, true);
+        _ = Session.User.CheckChatMessage(reason, "<CMD>", room.Id);
 
         if (securityBan)
         {
-            GameClientManager.BanUser(session, "Robot", -1, "Votre compte à été banni par sécurité", false);
+            GameClientManager.BanUser(Session, "Robot", -1, "Votre compte à été banni par sécurité", false);
         }
     }
 }

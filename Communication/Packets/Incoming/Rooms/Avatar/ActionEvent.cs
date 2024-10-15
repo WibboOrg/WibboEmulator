@@ -9,14 +9,14 @@ internal sealed class ActionEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
         if (roomUserByUserId == null)
         {
             return;
@@ -33,6 +33,6 @@ internal sealed class ActionEvent : IPacketEvent
             room.SendPacket(new SleepComposer(roomUserByUserId.VirtualId, true));
         }
 
-        QuestManager.ProgressUserQuest(session, QuestType.SocialWave, 0);
+        QuestManager.ProgressUserQuest(Session, QuestType.SocialWave, 0);
     }
 }

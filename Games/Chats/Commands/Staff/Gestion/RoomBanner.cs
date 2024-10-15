@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class RoomBanner : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
@@ -26,14 +26,14 @@ internal sealed class RoomBanner : IChatCommand
 
         var dbClient = DatabaseManager.Connection;
 
-        foreach (var targetUser in room.RoomUserManager.UserList.ToList())
+        foreach (var TargetUser in room.RoomUserManager.UserList.ToList())
         {
-            if (targetUser == null || targetUser.IsBot || targetUser.Client == null || targetUser.Client.User.BannerComponent == null)
+            if (TargetUser == null || TargetUser.IsBot || TargetUser.Client == null || TargetUser.Client.User.BannerComponent == null)
             {
                 continue;
             }
 
-            targetUser.Client.User.BannerComponent.AddBanner(dbClient, bannerId);
+            TargetUser.Client.User.BannerComponent.AddBanner(dbClient, bannerId);
         }
     }
 }

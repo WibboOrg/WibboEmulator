@@ -7,8 +7,9 @@ internal sealed class GetPromoArticlesEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
-    {        if (session == null || session.User == null)
+    public void Parse(GameClient Session, ClientPacket packet)
+    {Session.
+        if (Session == null || Session.User == null)
         {
             return;
         }
@@ -16,7 +17,8 @@ internal sealed class GetPromoArticlesEvent : IPacketEvent
         if (!(LandingViewManager.Count > 0))
         {
             return;
-        }
-        session.SendPacket(new PromoArticlesComposer(LandingViewManager.HotelViewPromosIndexers));
+        }Session.
+
+        Session.SendPacket(new PromoArticlesComposer(LandingViewManager.HotelViewPromosIndexers));
     }
 }

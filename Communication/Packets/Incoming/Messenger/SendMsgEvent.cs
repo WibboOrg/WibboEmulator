@@ -7,16 +7,16 @@ internal sealed class SendMsgEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User == null || session.User.Messenger == null)
+        if (Session == null || Session.User == null || Session.User.Messenger == null)
         {
             return;
         }
 
         var userId = packet.PopInt();
 
-        if (userId == session.User.Id)
+        if (userId == Session.User.Id)
         {
             return;
         }
@@ -27,30 +27,30 @@ internal sealed class SendMsgEvent : IPacketEvent
             return;
         }
 
-        var timeSpan = DateTime.Now - session.User.FloodTime;
+        var timeSpan = DateTime.Now - Session.User.FloodTime;
         if (timeSpan.Seconds > 4)
         {
-            session.User.FloodCount = 0;
+            Session.User.FloodCount = 0;
         }
 
-        if (timeSpan.Seconds < 4 && session.User.FloodCount > 5 && session.User.Rank < 5)
+        if (timeSpan.Seconds < 4 && Session.User.FloodCount > 5 && Session.User.Rank < 5)
         {
             return;
         }
 
-        session.User.FloodTime = DateTime.Now;
-        session.User.FloodCount++;
+        Session.User.FloodTime = DateTime.Now;
+        Session.User.FloodCount++;
 
-        if (session.User.CheckChatMessage("<" + userId + "> " + message, "<MP>"))
+        if (Session.User.CheckChatMessage("<" + userId + "> " + message, "<MP>"))
         {
             return;
         }
 
-        if (session.User.IgnoreAll)
+        if (Session.User.IgnoreAll)
         {
             return;
         }
 
-        session.User.Messenger.SendInstantMessage(userId, message);
+        Session.User.Messenger.SendInstantMessage(userId, message);
     }
 }

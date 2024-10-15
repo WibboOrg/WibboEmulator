@@ -6,18 +6,18 @@ internal sealed class GetPetInformationEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null || session.User.Room == null)
+        if (Session.User == null || Session.User.Room == null)
         {
             return;
         }
 
         var petId = packet.PopInt();
 
-        if (!session.User.Room.RoomUserManager.TryGetPet(petId, out var pet))
+        if (!Session.User.Room.RoomUserManager.TryGetPet(petId, out var pet))
         {
-            var user = session.User.Room.RoomUserManager.GetRoomUserByUserId(petId);
+            var user = Session.User.Room.RoomUserManager.GetRoomUserByUserId(petId);
             if (user == null)
             {
                 return;
@@ -28,15 +28,15 @@ internal sealed class GetPetInformationEvent : IPacketEvent
                 return;
             }
 
-            session.SendPacket(new PetInformationComposer(user.Client.User));
+            Session.SendPacket(new PetInformationComposer(user.Client.User));
             return;
         }
 
-        if (pet.RoomId != session.User.RoomId || pet.PetData == null)
+        if (pet.RoomId != Session.User.RoomId || pet.PetData == null)
         {
             return;
         }
 
-        session.SendPacket(new PetInformationComposer(pet.PetData, pet.RidingHorse));
+        Session.SendPacket(new PetInformationComposer(pet.PetData, pet.RidingHorse));
     }
 }

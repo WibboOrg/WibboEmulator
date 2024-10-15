@@ -6,18 +6,18 @@ internal sealed class TradingCancelEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User == null || !session.User.InRoom)
+        if (Session == null || Session.User == null || !Session.User.InRoom)
         {
             return;
         }
 
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        room.TryStopTrade(session.User.Id);
+        room.TryStopTrade(Session.User.Id);
     }
 }

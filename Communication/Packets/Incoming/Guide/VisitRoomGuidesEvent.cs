@@ -6,14 +6,14 @@ internal sealed class VisitRoomGuidesEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        var requester = GameClientManager.GetClientByUserID(session.User.GuideOtherUserId);
+        var requester = GameClientManager.GetClientByUserID(Session.User.GuideOtherUserId);
         if (requester == null)
         {
             return;
         }
 
-        session.SendPacket(new OnGuideSessionRequesterRoomComposer(requester.User.RoomId));
+        Session.SendPacket(new OnGuideSessionRequesterRoomComposer(requester.User.RoomId));
     }
 }

@@ -6,17 +6,17 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class FastWalk : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         userRoom.WalkSpeed = !userRoom.WalkSpeed;
 
         if (userRoom.WalkSpeed)
         {
-            session.SendWhisper(LanguageManager.TryGetValue("cmd.walkppeed.true", session.Language));
+            Session.SendWhisper(LanguageManager.TryGetValue("cmd.walkppeed.true", Session.Language));
         }
         else
         {
-            session.SendWhisper(LanguageManager.TryGetValue("cmd.walkppeed.false", session.Language));
+            Session.SendWhisper(LanguageManager.TryGetValue("cmd.walkppeed.false", Session.Language));
         }
     }
 }

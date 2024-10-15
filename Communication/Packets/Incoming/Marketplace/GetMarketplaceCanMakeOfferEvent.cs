@@ -6,10 +6,10 @@ internal sealed class GetMarketplaceCanMakeOfferEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var errorCode = 1;
 
-        session.SendPacket(new MarketplaceCanMakeOfferResultComposer(errorCode));
+        Session.SendPacket(new MarketplaceCanMakeOfferResultComposer(errorCode));
     }
 }

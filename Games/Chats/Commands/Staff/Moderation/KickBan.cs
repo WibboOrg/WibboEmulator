@@ -6,25 +6,25 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class KickBan : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
             return;
         }
 
-        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
-        if (targetUser == null || targetUser.User == null)
+        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        if (TargetUser == null || TargetUser.User == null)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", Session.Language));
         }
-        else if (session.User.Rank <= targetUser.User.Rank)
+        else if (Session.User.Rank <= TargetUser.User.Rank)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", Session.Language));
         }
-        else if (!targetUser.User.InRoom)
+        else if (!TargetUser.User.InRoom)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("kick.error", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("kick.error", Session.Language));
         }
         else
         {
@@ -42,8 +42,8 @@ internal sealed class KickBan : IChatCommand
 
             var expireTime = WibboEnvironment.GetUnixTimestamp() + (banMinutes * 60);
 
-            room.AddBan(targetUser.User.Id, expireTime);
-            room.RoomUserManager.RemoveUserFromRoom(targetUser, true, true);
+            room.AddBan(TargetUser.User.Id, expireTime);
+            room.RoomUserManager.RemoveUserFromRoom(TargetUser, true, true);
         }
     }
 }

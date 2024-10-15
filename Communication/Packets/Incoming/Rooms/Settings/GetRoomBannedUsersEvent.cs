@@ -6,22 +6,22 @@ internal sealed class GetRoomBannedUsersEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!session.User.InRoom)
+        if (!Session.User.InRoom)
         {
             return;
         }
 
-        var room = session.User.Room;
-        if (room == null || !room.CheckRights(session, true))
+        var room = Session.User.Room;
+        if (room == null || !room.CheckRights(Session, true))
         {
             return;
         }
 
         if (room.Bans.Count > 0)
         {
-            session.SendPacket(new GetRoomBannedUsersComposer(room));
+            Session.SendPacket(new GetRoomBannedUsersComposer(room));
         }
     }
 }

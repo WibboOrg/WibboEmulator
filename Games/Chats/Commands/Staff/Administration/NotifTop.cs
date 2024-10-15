@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class NotifTop : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         var message = CommandManager.MergeParams(parameters, 1);
         if (string.IsNullOrEmpty(message))

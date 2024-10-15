@@ -10,29 +10,29 @@ public class InteractorPremiumBox : FurniInteractor
 {
     private bool _haveReward;
 
-    public override void OnPlace(GameClient session, Item item)
+    public override void OnPlace(GameClient Session, Item item)
     {
     }
 
-    public override void OnRemove(GameClient session, Item item)
+    public override void OnRemove(GameClient Session, Item item)
     {
     }
 
-    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    public override void OnTrigger(GameClient Session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (session == null || session.User == null || session.User.Premium == null || this._haveReward || !userHasRights)
+        if (Session == null || Session.User == null || Session.User.Premium == null || this._haveReward || !userHasRights)
         {
             return;
         }
 
         var room = item.Room;
 
-        if (room == null || !room.CheckRights(session, true))
+        if (room == null || !room.CheckRights(Session, true))
         {
             return;
         }
 
-        var roomUser = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var roomUser = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
 
         if (roomUser == null)
         {
@@ -60,24 +60,24 @@ public class InteractorPremiumBox : FurniInteractor
             premiumClubLevel = PremiumClubLevel.EPIC;
         }
 
-        session.User.Premium.AddPremiumDays(dbClient, 31, premiumClubLevel);
+        Session.User.Premium.AddPremiumDays(dbClient, 31, premiumClubLevel);
 
         if (premiumClubLevel == PremiumClubLevel.LEGEND)
         {
-            roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("premiumbox.legend.convert", session.Language)));
+            roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("premiumbox.legend.convert", Session.Language)));
         }
         else if (premiumClubLevel == PremiumClubLevel.EPIC)
         {
-            roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("premiumbox.epic.convert", session.Language)));
+            roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("premiumbox.epic.convert", Session.Language)));
         }
         else
         {
-            roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("premiumbox.classic.convert", session.Language)));
+            roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("premiumbox.classic.convert", Session.Language)));
         }
 
-        session.User.BadgeComponent.GiveBadge(badgeCode);
+        Session.User.BadgeComponent.GiveBadge(badgeCode);
 
-        session.User.Premium.SendPackets();
+        Session.User.Premium.SendPackets();
     }
 
     public override void OnTick(Item item)

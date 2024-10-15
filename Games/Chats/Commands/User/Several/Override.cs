@@ -6,17 +6,17 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Override : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (userRoom.AllowOverride)
         {
             userRoom.AllowOverride = false;
-            session.SendWhisper(LanguageManager.TryGetValue("override.disabled", session.Language));
+            Session.SendWhisper(LanguageManager.TryGetValue("override.disabled", Session.Language));
         }
         else
         {
             userRoom.AllowOverride = true;
-            session.SendWhisper(LanguageManager.TryGetValue("override.enabled", session.Language));
+            Session.SendWhisper(LanguageManager.TryGetValue("override.enabled", Session.Language));
         }
     }
 }

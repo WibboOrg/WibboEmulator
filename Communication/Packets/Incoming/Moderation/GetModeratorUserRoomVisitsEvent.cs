@@ -6,9 +6,9 @@ internal sealed class GetModeratorUserRoomVisitsEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!session.User.HasPermission("mod"))
+        if (!Session.User.HasPermission("mod"))
         {
             return;
         }
@@ -22,6 +22,6 @@ internal sealed class GetModeratorUserRoomVisitsEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new ModeratorUserRoomVisitsComposer(clientTarget.User, clientTarget.User.Visits));
+        Session.SendPacket(new ModeratorUserRoomVisitsComposer(clientTarget.User, clientTarget.User.Visits));
     }
 }

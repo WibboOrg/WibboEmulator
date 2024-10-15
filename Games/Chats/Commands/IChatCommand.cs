@@ -4,5 +4,5 @@ using WibboEmulator.Games.Rooms;
 
 public interface IChatCommand
 {
-    void Execute(GameClient session, Room room, RoomUser roomUser, string[] parameters);
+    void Execute(GameClient Session, Room room, RoomUser roomUser, string[] parameters);
 }

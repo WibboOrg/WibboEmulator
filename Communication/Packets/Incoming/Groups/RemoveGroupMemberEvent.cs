@@ -14,7 +14,7 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var groupId = packet.PopInt();
         var userId = packet.PopInt();
@@ -24,14 +24,14 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
             return;
         }
 
-        if (userId == session.User.Id)
+        if (userId == Session.User.Id)
         {
             if (group.IsMember(userId))
             {
                 group.DeleteMember(userId);
             }
 
-            _ = session.User.MyGroups.Remove(group.Id);
+            _ = Session.User.MyGroups.Remove(group.Id);
 
             if (group.IsAdmin(userId))
             {
@@ -45,7 +45,7 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
                     return;
                 }
 
-                var userRom = roomGroup.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+                var userRom = roomGroup.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
                 if (userRom != null)
                 {
                     userRom.RemoveStatus("flatctrl");
@@ -59,10 +59,10 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
 
             GuildMembershipDao.Delete(dbClient, groupId, userId);
 
-            session.SendPacket(new GroupInfoComposer(group, session));
-            if (session.User.FavouriteGroupId == groupId)
+            Session.SendPacket(new GroupInfoComposer(group, Session));
+            if (Session.User.FavouriteGroupId == groupId)
             {
-                session.User.FavouriteGroupId = 0;
+                Session.User.FavouriteGroupId = 0;
                 UserStatsDao.UpdateRemoveGroupId(dbClient, userId);
 
                 if (!group.AdminOnlyDeco)
@@ -72,7 +72,7 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
                         return;
                     }
 
-                    var userRoom = roomGroup.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+                    var userRoom = roomGroup.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
                     if (userRoom != null)
                     {
                         userRoom.RemoveStatus("flatctrl");
@@ -82,36 +82,36 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
                     }
                 }
 
-                var room = session.User.Room;
+                var room = Session.User.Room;
                 if (room != null)
                 {
-                    var userRoom = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+                    var userRoom = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
                     if (userRoom != null)
                     {
                         room.SendPacket(new UpdateFavouriteGroupComposer(group, userRoom.VirtualId));
                     }
 
-                    room.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
+                    room.SendPacket(new RefreshFavouriteGroupComposer(Session.User.Id));
                 }
                 else
                 {
-                    session.SendPacket(new RefreshFavouriteGroupComposer(session.User.Id));
+                    Session.SendPacket(new RefreshFavouriteGroupComposer(Session.User.Id));
                 }
             }
             return;
         }
         else
         {
-            if (group.CreatorId == session.User.Id || group.IsAdmin(session.User.Id))
+            if (group.CreatorId == Session.User.Id || group.IsAdmin(Session.User.Id))
             {
                 if (!group.IsMember(userId))
                 {
                     return;
                 }
 
-                if (group.IsAdmin(userId) && group.CreatorId != session.User.Id)
+                if (group.IsAdmin(userId) && group.CreatorId != Session.User.Id)
                 {
-                    session.SendNotification(LanguageManager.TryGetValue("notif.groupremoveuser.error", session.Language));
+                    Session.SendNotification(LanguageManager.TryGetValue("notif.groupremoveuser.error", Session.Language));
                     return;
                 }
 
@@ -152,7 +152,7 @@ internal sealed class RemoveGroupMemberEvent : IPacketEvent
                 var finishIndex = 14 < members.Count ? 14 : members.Count;
                 var membersCount = group.GetMembers.Count;
 
-                session.SendPacket(new GroupMembersComposer(group, members.Take(finishIndex).ToList(), membersCount, 1, group.CreatorId == session.User.Id || group.IsAdmin(session.User.Id), 0, ""));
+                Session.SendPacket(new GroupMembersComposer(group, members.Take(finishIndex).ToList(), membersCount, 1, group.CreatorId == Session.User.Id || group.IsAdmin(Session.User.Id), 0, ""));
             }
         }
     }

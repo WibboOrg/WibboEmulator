@@ -12,47 +12,47 @@ internal sealed class GetRoomEntryDataEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return;
         }
 
-        if (session.User.LoadingRoomId == 0)
+        if (Session.User.LoadingRoomId == 0)
         {
             return;
         }
 
-        if (!RoomManager.TryGetRoom(session.User.LoadingRoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.LoadingRoomId, out var room))
         {
             return;
         }
 
         if (room.RoomData.Access == RoomAccess.Doorbell)
         {
-            if (!session.User.AllowDoorBell)
+            if (!Session.User.AllowDoorBell)
             {
                 return;
             }
             else
             {
-                session.User.AllowDoorBell = false;
+                Session.User.AllowDoorBell = false;
             }
         }
 
-        if (!room.RoomUserManager.AddAvatarToRoom(session))
+        if (!room.RoomUserManager.AddAvatarToRoom(Session))
         {
-            room.RoomUserManager.RemoveUserFromRoom(session, false, false);
+            room.RoomUserManager.RemoveUserFromRoom(Session, false, false);
             return;
         }
 
-        room.SendObjects(session);
+        room.SendObjects(Session);
 
-        session.SendPacket(new RoomEntryInfoComposer(room.Id, room.CheckRights(session, true)));
-        session.SendPacket(new RoomVisualizationSettingsComposer(room.RoomData.WallThickness, room.RoomData.FloorThickness, room.RoomData.HideWall));
+        Session.SendPacket(new RoomEntryInfoComposer(room.Id, room.CheckRights(Session, true)));
+        Session.SendPacket(new RoomVisualizationSettingsComposer(room.RoomData.WallThickness, room.RoomData.FloorThickness, room.RoomData.HideWall));
 
-        var thisUser = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var thisUser = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
 
         if (thisUser != null)
         {
@@ -64,34 +64,34 @@ internal sealed class GetRoomEntryDataEvent : IPacketEvent
             }
         }
 
-        if (session.User.Nuxenable)
+        if (Session.User.Nuxenable)
         {
-            session.SendPacket(new NuxAlertComposer(2));
+            Session.SendPacket(new NuxAlertComposer(2));
 
-            session.User.PassedNuxCount++;
-            session.SendPacket(new InClientLinkComposer("nux/lobbyoffer/hide"));
-            session.SendPacket(new InClientLinkComposer("helpBubble/add/BOTTOM_BAR_NAVIGATOR/nux.bot.info.navigator.1"));
+            Session.User.PassedNuxCount++;
+            Session.SendPacket(new InClientLinkComposer("nux/lobbyoffer/hide"));
+            Session.SendPacket(new InClientLinkComposer("helpBubble/add/BOTTOM_BAR_NAVIGATOR/nux.bot.info.navigator.1"));
         }
 
-        if (session.User.SpamEnable)
+        if (Session.User.SpamEnable)
         {
-            var timeSpan = DateTime.Now - session.User.SpamFloodTime;
-            if (timeSpan.TotalSeconds < session.User.SpamProtectionTime)
+            var timeSpan = DateTime.Now - Session.User.SpamFloodTime;
+            if (timeSpan.TotalSeconds < Session.User.SpamProtectionTime)
             {
-                session.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
+                Session.SendPacket(new FloodControlComposer(Session.User.SpamProtectionTime - timeSpan.Seconds));
             }
         }
 
-        if (room.RoomData.OwnerId != session.User.Id)
+        if (room.RoomData.OwnerId != Session.User.Id)
         {
-            _ = AchievementManager.ProgressAchievement(session, "ACH_RoomEntry", 1);
+            _ = AchievementManager.ProgressAchievement(Session, "ACH_RoomEntry", 1);
         }
 
         var timeStampNow = UnixTimestamp.GetNow();
 
-        if (!session.User.Visits.ContainsKey(timeStampNow))
+        if (!Session.User.Visits.ContainsKey(timeStampNow))
         {
-            session.User.Visits.Add(timeStampNow, room.Id);
+            Session.User.Visits.Add(timeStampNow, room.Id);
         }
     }
 }

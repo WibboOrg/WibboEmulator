@@ -15,7 +15,7 @@ internal sealed class BuyOfferEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var offerId = packet.PopInt();
 
@@ -25,55 +25,55 @@ internal sealed class BuyOfferEvent : IPacketEvent
 
         if (offer == null)
         {
-            ReloadOffers(session, dbClient);
+            ReloadOffers(Session, dbClient);
             return;
         }
 
         if (offer.State == 2)
         {
-            session.SendNotification(LanguageManager.TryGetValue("notif.buyoffer.error.1", session.Language));
-            ReloadOffers(session, dbClient);
+            Session.SendNotification(LanguageManager.TryGetValue("notif.buyoffer.error.1", Session.Language));
+            ReloadOffers(Session, dbClient);
             return;
         }
 
         if (MarketplaceManager.FormatTimestamp() > offer.Timestamp)
         {
-            session.SendNotification(LanguageManager.TryGetValue("notif.buyoffer.error.2", session.Language));
-            ReloadOffers(session, dbClient);
+            Session.SendNotification(LanguageManager.TryGetValue("notif.buyoffer.error.2", Session.Language));
+            ReloadOffers(Session, dbClient);
             return;
         }
 
         if (!ItemManager.GetItem(offer.ItemId, out var item))
         {
-            session.SendNotification(LanguageManager.TryGetValue("notif.buyoffer.error.3", session.Language));
-            ReloadOffers(session, dbClient);
+            Session.SendNotification(LanguageManager.TryGetValue("notif.buyoffer.error.3", Session.Language));
+            ReloadOffers(Session, dbClient);
             return;
         }
         else
         {
-            if (offer.UserId == session.User.Id)
+            if (offer.UserId == Session.User.Id)
             {
-                session.SendNotification(LanguageManager.TryGetValue("notif.buyoffer.error.4", session.Language));
+                Session.SendNotification(LanguageManager.TryGetValue("notif.buyoffer.error.4", Session.Language));
                 return;
             }
 
-            if (offer.TotalPrice > session.User.WibboPoints)
+            if (offer.TotalPrice > Session.User.WibboPoints)
             {
-                session.SendNotification(LanguageManager.TryGetValue("notif.buyoffer.error.5", session.Language));
+                Session.SendNotification(LanguageManager.TryGetValue("notif.buyoffer.error.5", Session.Language));
                 return;
             }
 
-            session.User.WibboPoints -= offer.TotalPrice;
-            session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
+            Session.User.WibboPoints -= offer.TotalPrice;
+            Session.SendPacket(new ActivityPointNotificationComposer(Session.User.WibboPoints, 0, 105));
 
-            UserDao.UpdateRemovePoints(dbClient, session.User.Id, offer.TotalPrice);
+            UserDao.UpdateRemovePoints(dbClient, Session.User.Id, offer.TotalPrice);
 
-            var giveItem = ItemFactory.CreateSingleItem(dbClient, item, session.User, offer.ExtraData, offer.FurniId, offer.LimitedNumber, offer.LimitedStack);
+            var giveItem = ItemFactory.CreateSingleItem(dbClient, item, Session.User, offer.ExtraData, offer.FurniId, offer.LimitedNumber, offer.LimitedStack);
             if (giveItem != null)
             {
-                session.User.InventoryComponent.TryAddItem(giveItem);
+                Session.User.InventoryComponent.TryAddItem(giveItem);
 
-                session.SendPacket(new PurchaseOKComposer());
+                Session.SendPacket(new PurchaseOKComposer());
             }
 
             CatalogMarketplaceOfferDao.UpdateState(dbClient, offerId);
@@ -100,10 +100,10 @@ internal sealed class BuyOfferEvent : IPacketEvent
             }
         }
 
-        ReloadOffers(session, dbClient);
+        ReloadOffers(Session, dbClient);
     }
 
-    private static void ReloadOffers(GameClient session, IDbConnection dbClient)
+    private static void ReloadOffers(GameClient Session, IDbConnection dbClient)
     {
         var minCost = -1;
         var maxCost = -1;
@@ -151,6 +151,6 @@ internal sealed class BuyOfferEvent : IPacketEvent
             }
         }
 
-        session.SendPacket(new MarketPlaceOffersComposer(dictionary, dictionary2));
+        Session.SendPacket(new MarketPlaceOffersComposer(dictionary, dictionary2));
     }
 }

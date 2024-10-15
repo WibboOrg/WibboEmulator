@@ -8,22 +8,22 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class AllIgnore : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
             return;
         }
 
-        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
-        if (targetUser == null || targetUser.User == null)
+        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        if (TargetUser == null || TargetUser.User == null)
         {
             return;
         }
 
-        if (targetUser.User.Rank >= session.User.Rank)
+        if (TargetUser.User.Rank >= Session.User.Rank)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", Session.Language));
             return;
         }
 
@@ -35,7 +35,7 @@ internal sealed class AllIgnore : IChatCommand
 
         if (lengthSeconds is <= 600 and > 0)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("ban.toolesstime", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("ban.toolesstime", Session.Language));
             return;
         }
 
@@ -43,14 +43,14 @@ internal sealed class AllIgnore : IChatCommand
         var reason = CommandManager.MergeParams(parameters, 3);
 
         using var dbClient = DatabaseManager.Connection;
-        var isIgnoreall = BanDao.GetOneIgnoreAll(dbClient, targetUser.User.Id);
+        var isIgnoreall = BanDao.GetOneIgnoreAll(dbClient, TargetUser.User.Id);
         if (isIgnoreall == 0)
         {
-            BanDao.InsertBan(dbClient, expireTime, "ignoreall", targetUser.User.Id.ToString(), reason, session.User.Username);
+            BanDao.InsertBan(dbClient, expireTime, "ignoreall", TargetUser.User.Id.ToString(), reason, Session.User.Username);
         }
 
-        targetUser.User.IgnoreAllExpireTime = expireTime;
+        TargetUser.User.IgnoreAllExpireTime = expireTime;
 
-        session.SendWhisper("Le joueur  " + targetUser.User.Username + " est ignoré de la part de l'ensemble des joueurs pour " + reason + "!");
+        Session.SendWhisper("Le joueur  " + TargetUser.User.Username + " est ignoré de la part de l'ensemble des joueurs pour " + reason + "!");
     }
 }

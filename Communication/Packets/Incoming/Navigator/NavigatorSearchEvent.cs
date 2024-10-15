@@ -8,7 +8,7 @@ internal sealed class NavigatorSearchEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var category = packet.PopString();
         var search = packet.PopString();
@@ -31,12 +31,12 @@ internal sealed class NavigatorSearchEvent : IPacketEvent
                 categories = NavigatorManager.GetResultByIdentifier(category);
                 if (categories.Count > 0)
                 {
-                    session.SendPacket(new NavigatorSearchResultSetComposer(category, search, categories, session, 2, 50));
+                    Session.SendPacket(new NavigatorSearchResultSetComposer(category, search, categories, Session, 2, 50));
                     return;
                 }
             }
         }
 
-        session.SendPacket(new NavigatorSearchResultSetComposer(category, search, categories, session));
+        Session.SendPacket(new NavigatorSearchResultSetComposer(category, search, categories, Session));
     }
 }

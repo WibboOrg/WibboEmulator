@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class StartGameJD : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         var roomId = 0;
         if (parameters.Length > 1)
@@ -15,6 +15,6 @@ internal sealed class StartGameJD : IChatCommand
         }
 
         AnimationManager.StartGame(roomId);
-        session.SendWhisper("Lancement de l'animation de Jack & Daisy !");
+        Session.SendWhisper("Lancement de l'animation de Jack & Daisy !");
     }
 }

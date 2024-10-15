@@ -8,21 +8,21 @@ internal sealed class DeleteBadgeInventoryEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return;
         }
 
         var badgeCode = packet.PopString();
 
-        if (!BadgeManager.CanDeleteBadge(badgeCode) || !session.User.BadgeComponent.HasBadge(badgeCode))
+        if (!BadgeManager.CanDeleteBadge(badgeCode) || !Session.User.BadgeComponent.HasBadge(badgeCode))
         {
-            session.SendHugeNotification(LanguageManager.TryGetValue("notif.badge.removed.error", session.Language));
+            Session.SendHugeNotification(LanguageManager.TryGetValue("notif.badge.removed.error", Session.Language));
             return;
         }
 
-        session.User.BadgeComponent.RemoveBadge(badgeCode);
+        Session.User.BadgeComponent.RemoveBadge(badgeCode);
     }
 }

@@ -19,7 +19,7 @@ public class InteractorSwitch : FurniInteractor
         this._modes = 0;
     }
 
-    public override void OnPlace(GameClient session, Item item)
+    public override void OnPlace(GameClient Session, Item item)
     {
         if (string.IsNullOrEmpty(item.ExtraData) && this._modes > 0)
         {
@@ -27,7 +27,7 @@ public class InteractorSwitch : FurniInteractor
         }
     }
 
-    public override void OnRemove(GameClient session, Item item)
+    public override void OnRemove(GameClient Session, Item item)
     {
         if (string.IsNullOrEmpty(item.ExtraData) && this._modes > 0)
         {
@@ -35,11 +35,11 @@ public class InteractorSwitch : FurniInteractor
         }
     }
 
-    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    public override void OnTrigger(GameClient Session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (session != null)
+        if (Session != null)
         {
-            QuestManager.ProgressUserQuest(session, QuestType.FurniSwitch, 0);
+            QuestManager.ProgressUserQuest(Session, QuestType.FurniSwitch, 0);
         }
 
         if (this._modes == 0)
@@ -48,9 +48,9 @@ public class InteractorSwitch : FurniInteractor
         }
 
         RoomUser roomUser = null;
-        if (session != null)
+        if (Session != null)
         {
-            roomUser = item.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+            roomUser = item.Room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
         }
 
         if (roomUser == null)

@@ -7,24 +7,24 @@ internal sealed class LookToEvent : IPacketEvent
 {
     public double Delay => 50;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
         var targetX = packet.PopInt();
         var targetY = packet.PopInt();
-        var targetUserId = packet.PopInt();
+        var TargetUserId = packet.PopInt();
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
         if (user == null)
         {
             return;
         }
 
-        var userTarget = room.RoomUserManager.GetRoomUserByVirtualId(targetUserId);
+        var userTarget = room.RoomUserManager.GetRoomUserByVirtualId(TargetUserId);
         if (userTarget == null)
         {
             return;

@@ -6,5 +6,5 @@ internal sealed class LatencyTestEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet) => session.SendPacket(new LatencyResponseComposer(packet.PopInt()));
+    public void Parse(GameClient Session, ClientPacket packet) => Session.SendPacket(new LatencyResponseComposer(packet.PopInt()));
 }

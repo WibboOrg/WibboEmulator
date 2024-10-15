@@ -7,35 +7,35 @@ internal sealed class DeleteFurniTypeInventoryEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null)
+        if (Session.User == null)
         {
             return;
         }
 
-        if (session.User.InventoryComponent == null)
+        if (Session.User.InventoryComponent == null)
         {
             return;
         }
 
         var itemId = packet.PopInt();
 
-        var item = session.User.InventoryComponent.GetItem(itemId);
+        var item = Session.User.InventoryComponent.GetItem(itemId);
 
         if (item == null)
         {
             return;
         }
 
-        if (item.ItemData.IsRare && !session.User.HasPermission("empty_items_all"))
+        if (item.ItemData.IsRare && !Session.User.HasPermission("empty_items_all"))
         {
             return;
         }
 
-        var items = session.User.InventoryComponent.GetItemsByType(item.BaseItemId);
+        var items = Session.User.InventoryComponent.GetItemsByType(item.BaseItemId);
 
         using var dbClient = DatabaseManager.Connection;
-        session.User.InventoryComponent.DeleteItems(dbClient, items, item.BaseItemId);
+        Session.User.InventoryComponent.DeleteItems(dbClient, items, item.BaseItemId);
     }
 }

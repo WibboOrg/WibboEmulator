@@ -5,9 +5,9 @@ internal sealed class DeclineBuddyEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User.Messenger == null)
+        if (Session.User.Messenger == null)
         {
             return;
         }
@@ -17,11 +17,11 @@ internal sealed class DeclineBuddyEvent : IPacketEvent
 
         if (!deleteAllFriend && requestCount == 1)
         {
-            session.User.Messenger.HandleRequest(packet.PopInt());
+            Session.User.Messenger.HandleRequest(packet.PopInt());
         }
         else
         {
-            session.User.Messenger.HandleAllRequests();
+            Session.User.Messenger.HandleAllRequests();
         }
     }
 }

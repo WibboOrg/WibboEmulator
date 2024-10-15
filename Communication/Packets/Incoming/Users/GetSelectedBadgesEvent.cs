@@ -8,7 +8,7 @@ internal sealed class GetSelectedBadgesEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var userId = packet.PopInt();
 
@@ -23,6 +23,6 @@ internal sealed class GetSelectedBadgesEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new UserBadgesComposer(user));
+        Session.SendPacket(new UserBadgesComposer(user));
     }
 }

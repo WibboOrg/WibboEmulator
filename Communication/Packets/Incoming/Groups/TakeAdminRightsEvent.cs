@@ -1,22 +1,26 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Groups;using WibboEmulator.Communication.Packets.Outgoing.Groups;
+namespace WibboEmulator.Communication.Packets.Incoming.Groups;
+using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Users;
 
-internal sealed class TakeAdminRightsEvent : IPacketEvent{
+internal sealed class TakeAdminRightsEvent : IPacketEvent
+{
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket packet)    {        var groupId = packet.PopInt();
+    public void Parse(GameClient Session, ClientPacket packet)
+    {
+        var groupId = packet.PopInt();
         var userId = packet.PopInt();
 
         if (!GroupManager.TryGetGroup(groupId, out var group))
-        {
+        {Session.
             return;
         }
 
-        if (session.User.Id != group.CreatorId || !group.IsMember(userId))
+        if (Session.User.Id != group.CreatorId || !group.IsMember(userId))
         {
             return;
         }
@@ -40,8 +44,10 @@ internal sealed class TakeAdminRightsEvent : IPacketEvent{
                 }
 
                 userRoom.UpdateNeeded = true;
-                userRoom.Client?.SendPacket(new YouAreControllerComposer(0));
+        Session.userRoom.Client?.SendPacket(new YouAreControllerComposer(0));
             }
         }
 
-        session.SendPacket(new GroupMemberUpdatedComposer(groupId, user, 2));    }}
+        Session.SendPacket(new GroupMemberUpdatedComposer(groupId, user, 2));
+    }
+}

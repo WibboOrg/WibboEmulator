@@ -9,7 +9,7 @@ using WibboEmulator.Games.Rooms.AI;
 
 internal sealed class ChatGPT : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {

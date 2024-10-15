@@ -23,7 +23,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var pageId = packet.PopInt();
         var itemId = packet.PopInt();
@@ -35,7 +35,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
             return;
         }
 
-        if (!page.Enabled || !page.HavePermission(session.User))
+        if (!page.Enabled || !page.HavePermission(Session.User))
         {
             return;
         }
@@ -56,10 +56,10 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
             }
         }
 
-        if (page.IsPremium && session.User.Rank < 2)
+        if (page.IsPremium && Session.User.Rank < 2)
         {
-            session.SendNotification("Vous devez être membre du premium club pour pouvoir acheter ce mobilier");
-            session.SendPacket(new PurchaseErrorComposer());
+            Session.SendNotification("Vous devez être membre du premium club pour pouvoir acheter ce mobilier");
+            Session.SendPacket(new PurchaseErrorComposer());
             return;
         }
 
@@ -70,15 +70,15 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 
         if (item.IsLimited)
         {
-            var leftTimeLTD = DateTime.Now - session.User.LastLTDPurchaseTime;
+            var leftTimeLTD = DateTime.Now - Session.User.LastLTDPurchaseTime;
             if (leftTimeLTD.TotalSeconds <= 10)
             {
-                session.SendNotification($"Vous devez attendre encore {10 - (int)leftTimeLTD.TotalSeconds} secondes avant de pouvoir racheter un LTD");
-                session.SendPacket(new PurchaseErrorComposer());
+                Session.SendNotification($"Vous devez attendre encore {10 - (int)leftTimeLTD.TotalSeconds} secondes avant de pouvoir racheter un LTD");
+                Session.SendPacket(new PurchaseErrorComposer());
                 return;
             }
 
-            session.User.LastLTDPurchaseTime = DateTime.Now;
+            Session.User.LastLTDPurchaseTime = DateTime.Now;
         }
 
         var amountPurchase = item.Amount > 1 ? item.Amount : amount;
@@ -88,25 +88,25 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
         var totalWibboPointCost = amount > 1 ? item.CostWibboPoints * amount : item.CostWibboPoints;
         var totalLimitCoinCost = amount > 1 ? item.CostLimitCoins * amount : item.CostLimitCoins;
 
-        if (session.User.Credits < totalCreditsCost ||
-            session.User.Duckets < totalPixelCost ||
-            session.User.WibboPoints < totalWibboPointCost ||
-            session.User.LimitCoins < totalLimitCoinCost)
+        if (Session.User.Credits < totalCreditsCost ||
+            Session.User.Duckets < totalPixelCost ||
+            Session.User.WibboPoints < totalWibboPointCost ||
+            Session.User.LimitCoins < totalLimitCoinCost)
         {
-            session.SendPacket(new PurchaseErrorComposer());
+            Session.SendPacket(new PurchaseErrorComposer());
             return;
         }
 
-        if (!ItemUtility.TryProcessExtraData(item, session, ref extraData))
+        if (!ItemUtility.TryProcessExtraData(item, Session, ref extraData))
         {
-            session.SendPacket(new PurchaseErrorComposer());
+            Session.SendPacket(new PurchaseErrorComposer());
             return;
         }
 
-        if (session.User.InventoryComponent.IsOverlowLimit(amountPurchase, item.Data.Type))
+        if (Session.User.InventoryComponent.IsOverlowLimit(amountPurchase, item.Data.Type))
         {
-            session.SendNotification(LanguageManager.TryGetValue("catalog.purchase.limit", session.Language));
-            session.SendPacket(new PurchaseErrorComposer());
+            Session.SendNotification(LanguageManager.TryGetValue("catalog.purchase.limit", Session.Language));
+            Session.SendPacket(new PurchaseErrorComposer());
             return;
         }
 
@@ -119,8 +119,8 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
         {
             if (item.LimitedEditionStack <= item.LimitedEditionSells)
             {
-                session.SendNotification(LanguageManager.TryGetValue("notif.buyltd.error", session.Language));
-                session.SendPacket(new PurchaseErrorComposer());
+                Session.SendNotification(LanguageManager.TryGetValue("notif.buyltd.error", Session.Language));
+                Session.SendPacket(new PurchaseErrorComposer());
                 return;
             }
 
@@ -134,33 +134,33 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 
         if (item.CostCredits > 0)
         {
-            session.User.Credits -= totalCreditsCost;
-            session.SendPacket(new CreditBalanceComposer(session.User.Credits));
+            Session.User.Credits -= totalCreditsCost;
+            Session.SendPacket(new CreditBalanceComposer(Session.User.Credits));
         }
 
         if (item.CostDuckets > 0)
         {
-            session.User.Duckets -= totalPixelCost;
-            session.SendPacket(new ActivityPointNotificationComposer(session.User.Duckets, session.User.Duckets));
+            Session.User.Duckets -= totalPixelCost;
+            Session.SendPacket(new ActivityPointNotificationComposer(Session.User.Duckets, Session.User.Duckets));
         }
 
         if (item.CostWibboPoints > 0)
         {
-            session.User.WibboPoints -= totalWibboPointCost;
-            session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
+            Session.User.WibboPoints -= totalWibboPointCost;
+            Session.SendPacket(new ActivityPointNotificationComposer(Session.User.WibboPoints, 0, 105));
 
-            UserDao.UpdateRemovePoints(dbClient, session.User.Id, totalWibboPointCost);
+            UserDao.UpdateRemovePoints(dbClient, Session.User.Id, totalWibboPointCost);
         }
 
         if (item.CostLimitCoins > 0)
         {
-            session.User.LimitCoins -= totalLimitCoinCost;
-            session.SendPacket(new ActivityPointNotificationComposer(session.User.LimitCoins, 0, 55));
+            Session.User.LimitCoins -= totalLimitCoinCost;
+            Session.SendPacket(new ActivityPointNotificationComposer(Session.User.LimitCoins, 0, 55));
 
-            LimitCoinsPrime(dbClient, session, totalLimitCoinCost);
+            LimitCoinsPrime(dbClient, Session, totalLimitCoinCost);
 
-            UserDao.UpdateRemoveLimitCoins(dbClient, session.User.Id, totalLimitCoinCost);
-            LogShopDao.Insert(dbClient, session.User.Id, totalLimitCoinCost, $"Achat de {item.Name} (x{item.Amount})", item.Id);
+            UserDao.UpdateRemoveLimitCoins(dbClient, Session.User.Id, totalLimitCoinCost);
+            LogShopDao.Insert(dbClient, Session.User.Id, totalLimitCoinCost, $"Achat de {item.Name} (x{item.Amount})", item.Id);
         }
 
         switch (item.Data.Type)
@@ -174,7 +174,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                     default:
                         if (amountPurchase > 1)
                         {
-                            var items = ItemFactory.CreateMultipleItems(dbClient, item.Data, session.User, extraData, amountPurchase);
+                            var items = ItemFactory.CreateMultipleItems(dbClient, item.Data, Session.User, extraData, amountPurchase);
 
                             if (items != null)
                             {
@@ -183,7 +183,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                         }
                         else
                         {
-                            newItem = ItemFactory.CreateSingleItemNullable(dbClient, item.Data, session.User, extraData, limitedEditionSells, limitedEditionStack);
+                            newItem = ItemFactory.CreateSingleItemNullable(dbClient, item.Data, Session.User, extraData, limitedEditionSells, limitedEditionStack);
 
                             if (newItem != null)
                             {
@@ -196,7 +196,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                     case InteractionType.TELEPORT_ARROW:
                         for (var i = 0; i < amountPurchase; i++)
                         {
-                            var teleItems = ItemFactory.CreateTeleporterItems(dbClient, item.Data, session.User);
+                            var teleItems = ItemFactory.CreateTeleporterItems(dbClient, item.Data, Session.User);
 
                             if (teleItems != null)
                             {
@@ -209,7 +209,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                     {
                         if (amountPurchase > 1)
                         {
-                            var items = ItemFactory.CreateMultipleItems(dbClient, item.Data, session.User, extraData, amountPurchase);
+                            var items = ItemFactory.CreateMultipleItems(dbClient, item.Data, Session.User, extraData, amountPurchase);
 
                             if (items != null)
                             {
@@ -222,7 +222,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                         }
                         else
                         {
-                            newItem = ItemFactory.CreateSingleItemNullable(dbClient, item.Data, session.User, extraData);
+                            newItem = ItemFactory.CreateSingleItemNullable(dbClient, item.Data, Session.User, extraData);
 
                             if (newItem != null)
                             {
@@ -236,7 +236,7 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 
                 foreach (var purchasedItem in generatedGenericItems)
                 {
-                    session.User.InventoryComponent.TryAddItem(purchasedItem);
+                    Session.User.InventoryComponent.TryAddItem(purchasedItem);
                 }
 
                 if (item.Data.Amount >= 0)
@@ -247,16 +247,16 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                 break;
 
             case ItemType.R:
-                var bot = BotUtility.CreateBot(dbClient, item.Data, session.User.Id);
+                var bot = BotUtility.CreateBot(dbClient, item.Data, Session.User.Id);
                 if (bot != null)
                 {
-                    if (!session.User.InventoryComponent.TryAddBot(bot))
+                    if (!Session.User.InventoryComponent.TryAddBot(bot))
                     {
                         break;
                     }
 
-                    session.SendPacket(new UnseenItemsComposer(bot.Id, UnseenItemsType.Bot));
-                    session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.Bots));
+                    Session.SendPacket(new UnseenItemsComposer(bot.Id, UnseenItemsType.Bot));
+                    Session.SendPacket(new BotInventoryComposer(Session.User.InventoryComponent.Bots));
                 }
                 break;
 
@@ -268,16 +268,16 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
                 var race = bits[1];
                 var color = bits[2];
 
-                var generatedPet = PetUtility.CreatePet(session.User.Id, petName, item.Data.SpriteId, race, color);
+                var generatedPet = PetUtility.CreatePet(Session.User.Id, petName, item.Data.SpriteId, race, color);
                 if (generatedPet != null)
                 {
-                    if (!session.User.InventoryComponent.TryAddPet(generatedPet))
+                    if (!Session.User.InventoryComponent.TryAddPet(generatedPet))
                     {
                         break;
                     }
 
-                    session.SendPacket(new UnseenItemsComposer(generatedPet.PetId, UnseenItemsType.Pet));
-                    session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.Pets));
+                    Session.SendPacket(new UnseenItemsComposer(generatedPet.PetId, UnseenItemsType.Pet));
+                    Session.SendPacket(new PetInventoryComposer(Session.User.InventoryComponent.Pets));
                 }
                 break;
             }
@@ -291,53 +291,53 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
             {
                 if (item.Name == "premium_club_3") //Legend
                 {
-                    session.User.Premium.AddPremiumDays(dbClient, 31, PremiumClubLevel.LEGEND);
+                    Session.User.Premium.AddPremiumDays(dbClient, 31, PremiumClubLevel.LEGEND);
                 }
                 else if (item.Name == "premium_club_2") //Epic
                 {
-                    session.User.Premium.AddPremiumDays(dbClient, 31, PremiumClubLevel.EPIC);
+                    Session.User.Premium.AddPremiumDays(dbClient, 31, PremiumClubLevel.EPIC);
                 }
                 else if (item.Name == "premium_club_1") //Classic
                 {
-                    session.User.Premium.AddPremiumDays(dbClient, 31, PremiumClubLevel.CLASSIC);
+                    Session.User.Premium.AddPremiumDays(dbClient, 31, PremiumClubLevel.CLASSIC);
                 }
                 else
                 {
                     break;
                 }
 
-                session.User.Premium.SendPackets();
+                Session.User.Premium.SendPackets();
                 break;
             }
         }
 
-        if (!string.IsNullOrEmpty(item.Badge) && !session.User.BadgeComponent.HasBadge(item.Badge))
+        if (!string.IsNullOrEmpty(item.Badge) && !Session.User.BadgeComponent.HasBadge(item.Badge))
         {
-            session.User.BadgeComponent.GiveBadge(item.Badge);
+            Session.User.BadgeComponent.GiveBadge(item.Badge);
         }
 
-        session.SendPacket(new PurchaseOKComposer(item, item.Data));
+        Session.SendPacket(new PurchaseOKComposer(item, item.Data));
     }
 
-    private static void LimitCoinsPrime(IDbConnection dbClient, GameClient session, int totalLimitCoinCost)
+    private static void LimitCoinsPrime(IDbConnection dbClient, GameClient Session, int totalLimitCoinCost)
     {
         var notifImage = "";
         var wibboPointCount = 0;
         var winwinCount = totalLimitCoinCost * 10;
 
-        if (session.User.HasPermission("premium_legend"))
+        if (Session.User.HasPermission("premium_legend"))
         {
             notifImage = "premium_legend";
             wibboPointCount = totalLimitCoinCost * 3;
             winwinCount += (int)Math.Floor(winwinCount * 1.5);
         }
-        else if (session.User.HasPermission("premium_epic"))
+        else if (Session.User.HasPermission("premium_epic"))
         {
             notifImage = "premium_epic";
             wibboPointCount = totalLimitCoinCost * 2;
             winwinCount += winwinCount;
         }
-        else if (session.User.HasPermission("premium_classic"))
+        else if (Session.User.HasPermission("premium_classic"))
         {
             notifImage = "premium_classic";
             wibboPointCount = totalLimitCoinCost;
@@ -346,27 +346,27 @@ internal sealed class PurchaseFromCatalogEvent : IPacketEvent
 
         if (wibboPointCount > 0)
         {
-            session.User.WibboPoints += wibboPointCount;
-            session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
+            Session.User.WibboPoints += wibboPointCount;
+            Session.SendPacket(new ActivityPointNotificationComposer(Session.User.WibboPoints, 0, 105));
 
-            UserDao.UpdateAddPoints(dbClient, session.User.Id, wibboPointCount);
+            UserDao.UpdateAddPoints(dbClient, Session.User.Id, wibboPointCount);
         }
 
         if (winwinCount > 0)
         {
-            UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, winwinCount);
+            UserStatsDao.UpdateAchievementScore(dbClient, Session.User.Id, winwinCount);
 
-            session.User.AchievementPoints += winwinCount;
-            session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));
+            Session.User.AchievementPoints += winwinCount;
+            Session.SendPacket(new AchievementScoreComposer(Session.User.AchievementPoints));
         }
 
         if (winwinCount > 0 && wibboPointCount > 0)
         {
-            session.SendPacket(RoomNotificationComposer.SendBubble(notifImage, $"Vous avez reçu {wibboPointCount} WibboPoints ainsi que {winwinCount} Win-wins!"));
+            Session.SendPacket(RoomNotificationComposer.SendBubble(notifImage, $"Vous avez reçu {wibboPointCount} WibboPoints ainsi que {winwinCount} Win-wins!"));
         }
         else
         {
-            session.SendPacket(RoomNotificationComposer.SendBubble(notifImage, $"Vous avez reçu {winwinCount} Win-wins!"));
+            Session.SendPacket(RoomNotificationComposer.SendBubble(notifImage, $"Vous avez reçu {winwinCount} Win-wins!"));
         }
     }
 }

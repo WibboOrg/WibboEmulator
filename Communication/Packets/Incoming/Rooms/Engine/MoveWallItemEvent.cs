@@ -9,14 +9,14 @@ internal sealed class MoveWallItemEvent : IPacketEvent
 {
     public double Delay => 200;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.CheckRights(session))
+        if (!room.CheckRights(Session))
         {
             return;
         }
@@ -32,7 +32,7 @@ internal sealed class MoveWallItemEvent : IPacketEvent
 
         if (room.RoomData.SellPrice > 0)
         {
-            session.SendNotification(LanguageManager.TryGetValue("roomsell.error.7", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("roomsell.error.7", Session.Language));
             return;
         }
 

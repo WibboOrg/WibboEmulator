@@ -6,31 +6,31 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Summon : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
-        if (targetUser == null || targetUser.User == null)
+        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        if (TargetUser == null || TargetUser.User == null)
         {
-            session.SendWhisper(LanguageManager.TryGetValue("input.useroffline", session.Language));
+            Session.SendWhisper(LanguageManager.TryGetValue("input.useroffline", Session.Language));
             return;
         }
-        else if (targetUser.User.Room != null && targetUser.User.Room.Id == session.User.Room.Id)
+        else if (TargetUser.User.Room != null && TargetUser.User.Room.Id == Session.User.Room.Id)
         {
             return;
         }
 
-        if (!targetUser.User.IsTeleporting)
+        if (!TargetUser.User.IsTeleporting)
         {
-            targetUser.User.IsTeleporting = true;
-            targetUser.User.TeleportingRoomID = room.RoomData.Id;
-            targetUser.User.TeleporterId = 0;
+            TargetUser.User.IsTeleporting = true;
+            TargetUser.User.TeleportingRoomID = room.RoomData.Id;
+            TargetUser.User.TeleporterId = 0;
 
-            targetUser.SendPacket(new GetGuestRoomResultComposer(targetUser, room.RoomData, false, true));
+            TargetUser.SendPacket(new GetGuestRoomResultComposer(TargetUser, room.RoomData, false, true));
         }
     }
 }

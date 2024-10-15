@@ -4,7 +4,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Use : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -22,8 +22,8 @@ internal sealed class Use : IChatCommand
             return;
         }
 
-        session.User.ForceUse = useCount;
+        Session.User.ForceUse = useCount;
 
-        session.SendWhisper("Use: " + useCount);
+        Session.SendWhisper("Use: " + useCount);
     }
 }

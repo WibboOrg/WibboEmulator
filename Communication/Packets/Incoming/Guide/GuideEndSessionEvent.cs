@@ -7,16 +7,16 @@ internal sealed class GuideEndSessionEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        var requester = GameClientManager.GetClientByUserID(session.User.GuideOtherUserId);
+        var requester = GameClientManager.GetClientByUserID(Session.User.GuideOtherUserId);
 
-        session.SendPacket(new OnGuideSessionEndedComposer(1));
+        Session.SendPacket(new OnGuideSessionEndedComposer(1));
 
-        session.User.GuideOtherUserId = 0;
-        if (session.User.OnDuty)
+        Session.User.GuideOtherUserId = 0;
+        if (Session.User.OnDuty)
         {
-            HelpManager.MarkAsOffDuty(session.User.Id);
+            HelpManager.MarkAsOffDuty(Session.User.Id);
         }
 
         if (requester != null)

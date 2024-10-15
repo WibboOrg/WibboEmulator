@@ -12,28 +12,28 @@ internal sealed class AssignRightsEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null)
+        if (Session.User == null)
         {
             return;
         }
 
         var userId = packet.PopInt();
 
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.CheckRights(session, true))
+        if (!room.CheckRights(Session, true))
         {
             return;
         }
 
         if (room.UsersWithRights.Contains(userId))
         {
-            session.SendNotification(LanguageManager.TryGetValue("user.giverights.error", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("user.giverights.error", Session.Language));
         }
         else
         {
@@ -50,7 +50,7 @@ internal sealed class AssignRightsEvent : IPacketEvent
                 RoomRightDao.Insert(dbClient, room.Id, userId);
             }
 
-            session.SendPacket(new FlatControllerAddedComposer(room.Id, userId, userRight.Username));
+            Session.SendPacket(new FlatControllerAddedComposer(room.Id, userId, userRight.Username));
 
             var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(userId);
             if (roomUserByUserId == null || roomUserByUserId.IsBot)

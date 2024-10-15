@@ -7,14 +7,14 @@ internal sealed class SubmitNewTicketEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null)
+        if (Session.User == null)
         {
             return;
         }
 
-        if (ModerationManager.UsersHasPendingTicket(session.User.Id))
+        if (ModerationManager.UsersHasPendingTicket(Session.User.Id))
         {
             return;
         }
@@ -28,13 +28,13 @@ internal sealed class SubmitNewTicketEvent : IPacketEvent
         _ = packet.PopInt();
         //chatEntries = packet.PopString();
 
-        if (reporterId == session.User.Id)
+        if (reporterId == Session.User.Id)
         {
             return;
         }
 
-        ModerationManager.SendNewTicket(session, ticketType, reporterId, message);
-        ModerationManager.ApplySanction(session, reporterId);
+        ModerationManager.SendNewTicket(Session, ticketType, reporterId, message);
+        ModerationManager.ApplySanction(Session, reporterId);
         GameClientManager.SendMessageStaff(RoomNotificationComposer.SendBubble("mention", "Un nouveau ticket vient d'arriver sur le support"));
     }
 }

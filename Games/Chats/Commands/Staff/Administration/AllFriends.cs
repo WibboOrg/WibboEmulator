@@ -4,7 +4,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class AllFriends : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         foreach (var user in GameClientManager.Clients.ToList())
         {
@@ -28,9 +28,9 @@ internal sealed class AllFriends : IChatCommand
                 user.User.Messenger.OnNewFriendship(userRoom.UserId);
             }
 
-            if (!session.User.Messenger.FriendshipExists(user.User.Id))
+            if (!Session.User.Messenger.FriendshipExists(user.User.Id))
             {
-                session.User.Messenger.OnNewFriendship(user.User.Id);
+                Session.User.Messenger.OnNewFriendship(user.User.Id);
             }
         }
     }

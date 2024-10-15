@@ -7,10 +7,10 @@ internal sealed class GetUserFlatCatsEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var categories = NavigatorManager.FlatCategories;
 
-        session.SendPacket(new UserFlatCatsComposer(categories, session.User.Rank));
+        Session.SendPacket(new UserFlatCatsComposer(categories, Session.User.Rank));
     }
 }

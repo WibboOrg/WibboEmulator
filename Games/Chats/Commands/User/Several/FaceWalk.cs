@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal sealed class FaceWalk : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode)
         {
@@ -17,11 +17,11 @@ internal sealed class FaceWalk : IChatCommand
         userRoom.FacewalkEnabled = !userRoom.FacewalkEnabled;
         if (userRoom.FacewalkEnabled)
         {
-            session.SendWhisper(LanguageManager.TryGetValue("cmd.facewalk.true", session.Language));
+            Session.SendWhisper(LanguageManager.TryGetValue("cmd.facewalk.true", Session.Language));
         }
         else
         {
-            session.SendWhisper(LanguageManager.TryGetValue("cmd.facewalk.false", session.Language));
+            Session.SendWhisper(LanguageManager.TryGetValue("cmd.facewalk.false", Session.Language));
         }
     }
 }

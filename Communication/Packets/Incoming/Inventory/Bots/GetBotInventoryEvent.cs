@@ -6,13 +6,13 @@ internal sealed class GetBotInventoryEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null)
+        if (Session.User == null)
         {
             return;
         }
 
-        session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.Bots));
+        Session.SendPacket(new BotInventoryComposer(Session.User.InventoryComponent.Bots));
     }
 }

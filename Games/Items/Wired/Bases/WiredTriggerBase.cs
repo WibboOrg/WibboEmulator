@@ -10,6 +10,6 @@ public class WiredTriggerBase : WiredBase
 
     }
 
-    public override void OnTrigger(GameClient session) => session.SendPacket(new WiredFurniTriggerComposer(this.StuffTypeSelectionEnabled, this.FurniLimit, this.StuffIds, this.StuffTypeId, this.Id,
+    public override void OnTrigger(GameClient Session) => Session.SendPacket(new WiredFurniTriggerComposer(this.StuffTypeSelectionEnabled, this.FurniLimit, this.StuffIds, this.StuffTypeId, this.Id,
             this.StringParam, this.IntParams, this.StuffTypeSelectionCode, this.Type, this.Conflicting));
 }

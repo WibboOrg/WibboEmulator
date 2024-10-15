@@ -10,7 +10,7 @@ internal sealed class GiveAdminRightsEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var groupId = packet.PopInt();
         var userId = packet.PopInt();
@@ -20,7 +20,7 @@ internal sealed class GiveAdminRightsEvent : IPacketEvent
             return;
         }
 
-        if (session.User.Id != group.CreatorId || !group.IsMember(userId))
+        if (Session.User.Id != group.CreatorId || !group.IsMember(userId))
         {
             return;
         }
@@ -49,6 +49,6 @@ internal sealed class GiveAdminRightsEvent : IPacketEvent
             }
         }
 
-        session.SendPacket(new GroupMemberUpdatedComposer(groupId, user, 1));
+        Session.SendPacket(new GroupMemberUpdatedComposer(groupId, user, 1));
     }
 }

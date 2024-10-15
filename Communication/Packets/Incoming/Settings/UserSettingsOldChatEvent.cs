@@ -5,7 +5,7 @@ internal sealed class UserSettingsOldChatEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
 
     }

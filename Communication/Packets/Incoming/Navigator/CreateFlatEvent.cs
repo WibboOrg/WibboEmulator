@@ -10,31 +10,31 @@ internal sealed class CreateFlatEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return;
         }
 
         var maxRoomCapacity = 200;
 
-        if (session.User.HasPermission("premium_legend"))
+        if (Session.User.HasPermission("premium_legend"))
         {
             maxRoomCapacity = 400;
         }
-        else if (session.User.HasPermission("premium_epic"))
+        else if (Session.User.HasPermission("premium_epic"))
         {
             maxRoomCapacity = 300;
         }
-        else if (session.User.HasPermission("premium_classic"))
+        else if (Session.User.HasPermission("premium_classic"))
         {
             maxRoomCapacity = 250;
         }
 
-        if (session.User.UsersRooms.Count >= maxRoomCapacity)
+        if (Session.User.UsersRooms.Count >= maxRoomCapacity)
         {
-            session.SendPacket(new CanCreateRoomComposer(true, maxRoomCapacity));
+            Session.SendPacket(new CanCreateRoomComposer(true, maxRoomCapacity));
             return;
         }
 
@@ -61,19 +61,19 @@ internal sealed class CreateFlatEvent : IPacketEvent
         }
         else if (name.Length < 3)
         {
-            session.SendNotification(LanguageManager.TryGetValue("room.namelengthshort", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("room.namelengthshort", Session.Language));
             return;
         }
 
         var roomId = 0;
         using (var dbClient = DatabaseManager.Connection)
         {
-            roomId = RoomDao.Insert(dbClient, name, description, session.User.Username, model, category, maxVisitors, tradeSettings);
+            roomId = RoomDao.Insert(dbClient, name, description, Session.User.Username, model, category, maxVisitors, tradeSettings);
         }
-        session.User.UsersRooms.Add(roomId);
+        Session.User.UsersRooms.Add(roomId);
 
         var roomData = RoomManager.GenerateRoomData(roomId);
 
-        session.SendPacket(new FlatCreatedComposer(roomData.Id, name));
+        Session.SendPacket(new FlatCreatedComposer(roomData.Id, name));
     }
 }

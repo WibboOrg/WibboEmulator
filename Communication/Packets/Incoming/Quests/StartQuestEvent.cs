@@ -6,10 +6,10 @@ internal sealed class StartQuestEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var questId = packet.PopInt();
 
-        QuestManager.ActivateQuest(session, questId);
+        QuestManager.ActivateQuest(Session, questId);
     }
 }

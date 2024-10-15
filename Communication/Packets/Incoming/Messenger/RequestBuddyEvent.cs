@@ -6,15 +6,15 @@ internal sealed class RequestBuddyEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var userName = packet.PopString(16);
 
-        if (session.User.Messenger == null || !session.User.Messenger.RequestBuddy(userName))
+        if (Session.User.Messenger == null || !Session.User.Messenger.RequestBuddy(userName))
         {
             return;
         }
 
-        QuestManager.ProgressUserQuest(session, QuestType.SocialFriend, 0);
+        QuestManager.ProgressUserQuest(Session, QuestType.SocialFriend, 0);
     }
 }

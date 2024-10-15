@@ -6,17 +6,17 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class DisableExchange : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (session.User.AcceptTrading)
+        if (Session.User.AcceptTrading)
         {
-            session.User.AcceptTrading = false;
-            session.SendWhisper(LanguageManager.TryGetValue("cmd.troc.true", session.Language));
+            Session.User.AcceptTrading = false;
+            Session.SendWhisper(LanguageManager.TryGetValue("cmd.troc.true", Session.Language));
         }
         else
         {
-            session.User.AcceptTrading = true;
-            session.SendWhisper(LanguageManager.TryGetValue("cmd.troc.false", session.Language));
+            Session.User.AcceptTrading = true;
+            Session.SendWhisper(LanguageManager.TryGetValue("cmd.troc.false", Session.Language));
         }
     }
 }

@@ -205,8 +205,8 @@ public class RolePlayer
 
     public void SendPacket(IServerPacket message)
     {
-        var session = GameClientManager.GetClientByUserID(this._id);
-        session?.SendPacket(message);
+        var Session = GameClientManager.GetClientByUserID(this._id);
+        Session?.SendPacket(message);
     }
 
     internal void RemoveMunition(int count)

@@ -10,19 +10,19 @@ internal sealed class BanUserEvent : IPacketEvent
 
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null)
+        if (Session.User == null)
         {
             return;
         }
 
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!CanBanUser(session, room))
+        if (!CanBanUser(Session, room))
         {
             return;
         }
@@ -48,7 +48,7 @@ internal sealed class BanUserEvent : IPacketEvent
         room.RoomUserManager.RemoveUserFromRoom(roomUserByUserId.Client, true, true);
     }
 
-    private static bool CanBanUser(GameClient session, Room room) => (room.RoomData.BanFuse == 1 && room.CheckRights(session)) || room.CheckRights(session, true);
+    private static bool CanBanUser(GameClient Session, Room room) => (room.RoomData.BanFuse == 1 && room.CheckRights(Session)) || room.CheckRights(Session, true);
 
     private static bool TryGetBanDuration(string banType, out int duration) => banType switch
     {

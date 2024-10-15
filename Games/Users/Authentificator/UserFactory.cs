@@ -7,12 +7,12 @@ using WibboEmulator.Games.GameClients;
 
 public class UserFactory
 {
-    public static User GetUserData(IDbConnection dbClient, string sessionTicket, string ip)
+    public static User GetUserData(IDbConnection dbClient, string SessionTicket, string ip)
     {
         var ignoreAllExpire = 0;
         var isFirstConnexionToday = false;
 
-        var user = UserDao.GetOneByTicket(dbClient, sessionTicket);
+        var user = UserDao.GetOneByTicket(dbClient, SessionTicket);
         if (user == null)
         {
             return null;
@@ -41,7 +41,7 @@ public class UserFactory
             isFirstConnexionToday = true;
         }
 
-        if (!sessionTicket.StartsWith("monticket"))
+        if (!SessionTicket.StartsWith("monticket"))
         {
             UserDao.UpdateOnline(dbClient, userId);
         }

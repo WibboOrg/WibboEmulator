@@ -7,9 +7,9 @@ internal sealed class GetHelperToolConfigurationEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!session.User.HasPermission("helptool"))
+        if (!Session.User.HasPermission("helptool"))
         {
             return;
         }
@@ -19,17 +19,17 @@ internal sealed class GetHelperToolConfigurationEvent : IPacketEvent
         _ = packet.PopBoolean();
         _ = packet.PopBoolean();
 
-        if (onDuty && !session.User.OnDuty)
+        if (onDuty && !Session.User.OnDuty)
         {
-            HelpManager.TryAddGuide(session.User.Id);
-            session.User.OnDuty = true;
+            HelpManager.TryAddGuide(Session.User.Id);
+            Session.User.OnDuty = true;
         }
         else
         {
-            HelpManager.TryRemoveGuide(session.User.Id);
-            session.User.OnDuty = false;
+            HelpManager.TryRemoveGuide(Session.User.Id);
+            Session.User.OnDuty = false;
         }
 
-        session.SendPacket(new HelperToolComposer(session.User.OnDuty, HelpManager.Count));
+        Session.SendPacket(new HelperToolComposer(Session.User.OnDuty, HelpManager.Count));
     }
 }

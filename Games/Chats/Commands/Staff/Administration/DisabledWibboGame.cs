@@ -7,15 +7,15 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class DisabledAutoGame : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (!AnimationManager.ToggleForceDisabled)
         {
-            session.SendWhisper(LanguageManager.TryGetValue("cmd.autogame.false", session.Language));
+            Session.SendWhisper(LanguageManager.TryGetValue("cmd.autogame.false", Session.Language));
         }
         else
         {
-            session.SendWhisper(LanguageManager.TryGetValue("cmd.autogame.true", session.Language));
+            Session.SendWhisper(LanguageManager.TryGetValue("cmd.autogame.true", Session.Language));
         }
         return;
     }

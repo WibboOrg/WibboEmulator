@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal sealed class TransfBig : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -19,14 +19,14 @@ internal sealed class TransfBig : IChatCommand
             return;
         }
 
-        if (session.User.IsSpectator)
+        if (Session.User.IsSpectator)
         {
             return;
         }
 
         if (!userRoom.SetPetTransformation("big" + parameters[1], 0))
         {
-            session.SendHugeNotification(LanguageManager.TryGetValue("cmd.littleorbig.help", session.Language));
+            Session.SendHugeNotification(LanguageManager.TryGetValue("cmd.littleorbig.help", Session.Language));
             return;
         }
 

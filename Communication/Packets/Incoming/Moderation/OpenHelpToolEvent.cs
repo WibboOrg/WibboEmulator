@@ -6,13 +6,13 @@ internal sealed class OpenHelpToolEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null || session.User.HasPermission("helptool"))
+        if (Session.User == null || Session.User.HasPermission("helptool"))
         {
             return;
         }
 
-        session.SendPacket(new OpenHelpToolComposer(0));
+        Session.SendPacket(new OpenHelpToolComposer(0));
     }
 }

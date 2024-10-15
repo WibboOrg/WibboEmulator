@@ -8,15 +8,15 @@ internal sealed class UnbanUserFromRoomEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!session.User.InRoom)
+        if (!Session.User.InRoom)
         {
             return;
         }
 
-        var instance = session.User.Room;
-        if (instance == null || !instance.CheckRights(session, true))
+        var instance = Session.User.Room;
+        if (instance == null || !instance.CheckRights(Session, true))
         {
             return;
         }
@@ -28,12 +28,12 @@ internal sealed class UnbanUserFromRoomEvent : IPacketEvent
         {
             using (var dbClient = DatabaseManager.Connection)
             {
-                RoomBanDao.Delete(dbClient, instance.Id, session.User.Id);
+                RoomBanDao.Delete(dbClient, instance.Id, Session.User.Id);
             }
 
             instance.RemoveBan(userId);
 
-            session.SendPacket(new UnbanUserFromRoomComposer(roomId, userId));
+            Session.SendPacket(new UnbanUserFromRoomComposer(roomId, userId));
         }
     }
 }

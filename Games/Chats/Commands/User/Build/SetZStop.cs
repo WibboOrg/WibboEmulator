@@ -6,11 +6,11 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class SetZStop : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         userRoom.BuildToolStackHeight = false;
-        session.SendPacket(room.GameMap.Model.SerializeRelativeHeightmap());
+        Session.SendPacket(room.GameMap.Model.SerializeRelativeHeightmap());
 
-        session.SendWhisper(LanguageManager.TryGetValue("cmd.setz.disabled", session.Language));
+        Session.SendWhisper(LanguageManager.TryGetValue("cmd.setz.disabled", Session.Language));
     }
 }

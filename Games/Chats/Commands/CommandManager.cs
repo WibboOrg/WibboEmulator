@@ -34,7 +34,7 @@ public static class CommandManager
         RegisterCommand();
     }
 
-    public static bool Parse(GameClient session, RoomUser user, Room room, string message)
+    public static bool Parse(GameClient Session, RoomUser user, Room room, string message)
     {
         if (!message.StartsWith(Prefix))
         {
@@ -43,7 +43,7 @@ public static class CommandManager
 
         if (message == Prefix + "commands")
         {
-            session.SendHugeNotification(GetCommandList(session, room));
+            Session.SendHugeNotification(GetCommandList(Session, room));
             return true;
         }
 
@@ -65,33 +65,33 @@ public static class CommandManager
             return false;
         }
 
-        var autorisationType = cmdInfo.UserGotAuthorizationType(session, room);
+        var autorisationType = cmdInfo.UserGotAuthorizationType(Session, room);
         switch (autorisationType)
         {
             case 2:
-                user.SendWhisperChat(LanguageManager.TryGetValue("cmd.authorized.premium", session.Language));
+                user.SendWhisperChat(LanguageManager.TryGetValue("cmd.authorized.premium", Session.Language));
                 return true;
             case 3:
-                user.SendWhisperChat(LanguageManager.TryGetValue("cmd.authorized.accred", session.Language));
+                user.SendWhisperChat(LanguageManager.TryGetValue("cmd.authorized.accred", Session.Language));
                 return true;
             case 4:
-                user.SendWhisperChat(LanguageManager.TryGetValue("cmd.authorized.owner", session.Language));
+                user.SendWhisperChat(LanguageManager.TryGetValue("cmd.authorized.owner", Session.Language));
                 return true;
             case 5:
-                user.SendWhisperChat(LanguageManager.TryGetValue("cmd.authorized.langue", session.Language));
+                user.SendWhisperChat(LanguageManager.TryGetValue("cmd.authorized.langue", Session.Language));
                 return true;
         }
-        if (!cmdInfo.UserGotAuthorization(session, room))
+        if (!cmdInfo.UserGotAuthorization(Session, room))
         {
             return false;
         }
 
         if (cmdInfo.UserGotAuthorizationStaffLog())
         {
-            ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, room.Id, string.Empty, split[0].ToLower(), string.Format("Tchat commande: {0}", string.Join(" ", split)));
+            ModerationManager.LogStaffEntry(Session.User.Id, Session.User.Username, room.Id, string.Empty, split[0].ToLower(), string.Format("Tchat commande: {0}", string.Join(" ", split)));
         }
 
-        cmd.Execute(session, room, user, split);
+        cmd.Execute(Session, room, user, split);
         return true;
     }
 

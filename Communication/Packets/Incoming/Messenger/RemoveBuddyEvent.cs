@@ -5,9 +5,9 @@ internal sealed class RemoveBuddyEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User.Messenger == null)
+        if (Session.User.Messenger == null)
         {
             return;
         }
@@ -23,7 +23,7 @@ internal sealed class RemoveBuddyEvent : IPacketEvent
         for (var index = 0; index < count; index++)
         {
             friendId = packet.PopInt();
-            session.User.Messenger.DestroyFriendship(friendId);
+            Session.User.Messenger.DestroyFriendship(friendId);
         }
     }
 }

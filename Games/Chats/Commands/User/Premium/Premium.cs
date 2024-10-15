@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal sealed class Premium : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode)
         {
@@ -23,15 +23,15 @@ internal sealed class Premium : IChatCommand
 
         var numEnable = 0;
 
-        if (session.User.HasPermission("premium_legend"))
+        if (Session.User.HasPermission("premium_legend"))
         {
             numEnable = 593;
         }
-        else if (session.User.HasPermission("premium_epic"))
+        else if (Session.User.HasPermission("premium_epic"))
         {
             numEnable = 592;
         }
-        else if (session.User.HasPermission("premium_classic"))
+        else if (Session.User.HasPermission("premium_classic"))
         {
             numEnable = 591;
         }

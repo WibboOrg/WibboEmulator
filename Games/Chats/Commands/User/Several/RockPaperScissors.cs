@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal sealed class RockPaperScissors : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -19,7 +19,7 @@ internal sealed class RockPaperScissors : IChatCommand
             return;
         }
 
-        if (session.User.IsSpectator)
+        if (Session.User.IsSpectator)
         {
             return;
         }
@@ -34,7 +34,7 @@ internal sealed class RockPaperScissors : IChatCommand
         var roomUserTarget = room.RoomUserManager.GetRoomUserByName(username);
         if (roomUserTarget == null)
         {
-            session.SendWhisper(LanguageManager.TryGetValue("input.usernotfound", session.Language));
+            Session.SendWhisper(LanguageManager.TryGetValue("input.usernotfound", Session.Language));
             return;
         }
 

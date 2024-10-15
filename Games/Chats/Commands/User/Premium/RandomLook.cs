@@ -9,14 +9,14 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal sealed class RandomLook : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode)
         {
             return;
         }
 
-        if (session.User == null)
+        if (Session.User == null)
         {
             return;
         }
@@ -28,11 +28,11 @@ internal sealed class RandomLook : IChatCommand
 
         using (var dbClient = DatabaseManager.Connection)
         {
-            session.User.Look = UserWardrobeDao.GetOneRandomLook(dbClient);
+            Session.User.Look = UserWardrobeDao.GetOneRandomLook(dbClient);
         }
 
-        session.SendPacket(new FigureUpdateComposer(session.User.Look, session.User.Gender));
-        session.SendPacket(new UserChangeComposer(userRoom, true));
+        Session.SendPacket(new FigureUpdateComposer(Session.User.Look, Session.User.Gender));
+        Session.SendPacket(new UserChangeComposer(userRoom, true));
         room.SendPacket(new UserChangeComposer(userRoom, false));
     }
 }

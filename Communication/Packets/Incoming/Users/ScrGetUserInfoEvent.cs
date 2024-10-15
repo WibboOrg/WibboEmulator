@@ -5,13 +5,13 @@ internal sealed class ScrGetUserInfoMessageEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return;
         }
 
-        session.User.Premium.SendPackets(true);
+        Session.User.Premium.SendPackets(true);
     }
 }

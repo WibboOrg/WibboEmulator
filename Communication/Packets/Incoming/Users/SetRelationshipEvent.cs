@@ -9,9 +9,9 @@ internal sealed class SetRelationshipEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null || session.User.Messenger == null)
+        if (Session.User == null || Session.User.Messenger == null)
         {
             return;
         }
@@ -24,36 +24,36 @@ internal sealed class SetRelationshipEvent : IPacketEvent
             return;
         }
 
-        if (!session.User.Messenger.FriendshipExists(user))
+        if (!Session.User.Messenger.FriendshipExists(user))
         {
             return;
         }
 
         if (type == 0)
         {
-            if (session.User.Messenger.Relation.ContainsKey(user))
+            if (Session.User.Messenger.Relation.ContainsKey(user))
             {
-                _ = session.User.Messenger.Relation.Remove(user);
+                _ = Session.User.Messenger.Relation.Remove(user);
             }
         }
         else
         {
-            if (session.User.Messenger.Relation.TryGetValue(user, out var value))
+            if (Session.User.Messenger.Relation.TryGetValue(user, out var value))
             {
                 value.Type = type;
             }
             else
             {
-                session.User.Messenger.Relation.Add(user, new Relationship(user, type));
+                Session.User.Messenger.Relation.Add(user, new Relationship(user, type));
             }
         }
 
         using (var dbClient = DatabaseManager.Connection)
         {
-            MessengerFriendshipDao.UpdateRelation(dbClient, type, session.User.Id, user);
+            MessengerFriendshipDao.UpdateRelation(dbClient, type, Session.User.Id, user);
         }
 
-        session.User.Messenger.RelationChanged(user, type);
-        session.User.Messenger.UpdateFriend(user, true);
+        Session.User.Messenger.RelationChanged(user, type);
+        Session.User.Messenger.UpdateFriend(user, true);
     }
 }

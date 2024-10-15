@@ -5,7 +5,7 @@ using WibboEmulator.Games.Users;
 
 internal sealed class ProfileInformationComposer : ServerPacket
 {
-    public ProfileInformationComposer(User habbo, GameClient session, List<Group> groups, int friendCount)
+    public ProfileInformationComposer(User habbo, GameClient Session, List<Group> groups, int friendCount)
         : base(ServerPacketHeader.USER_PROFILE)
     {
         var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(habbo.AccountCreated);
@@ -17,8 +17,8 @@ internal sealed class ProfileInformationComposer : ServerPacket
         this.WriteString(origin.ToString("dd/MM/yyyy"));
         this.WriteInteger(habbo.AchievementPoints);
         this.WriteInteger(friendCount); // Friend Count
-        this.WriteBoolean(habbo.Id != session.User.Id && session.User.Messenger.FriendshipExists(habbo.Id)); //  Is friend
-        this.WriteBoolean(habbo.Id != session.User.Id && !session.User.Messenger.FriendshipExists(habbo.Id) && session.User.Messenger.RequestExists(habbo.Id)); // Sent friend request
+        this.WriteBoolean(habbo.Id != Session.User.Id && Session.User.Messenger.FriendshipExists(habbo.Id)); //  Is friend
+        this.WriteBoolean(habbo.Id != Session.User.Id && !Session.User.Messenger.FriendshipExists(habbo.Id) && Session.User.Messenger.RequestExists(habbo.Id)); // Sent friend request
         this.WriteBoolean(GameClientManager.GetClientByUserID(habbo.Id) != null);
 
         this.WriteInteger(groups.Count);

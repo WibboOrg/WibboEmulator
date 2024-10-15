@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class EventAlert : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (!AnimationManager.AllowAnimation)
         {
@@ -14,7 +14,7 @@ internal sealed class EventAlert : IChatCommand
         }
 
         var str = CommandManager.MergeParams(parameters, 1);
-        str = "<b>[ANIMATION]</b>\r\n" + str + "\r\n- " + session.User.Username;
+        str = "<b>[ANIMATION]</b>\r\n" + str + "\r\n- " + Session.User.Username;
         GameClientManager.SendSuperNotification("Animation des Staffs", str, "game_promo_small", "event:navigator/goto/" + userRoom.RoomId, "Rejoindre!");
     }
 }

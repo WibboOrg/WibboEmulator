@@ -9,9 +9,9 @@ internal sealed class AddFavouriteRoomEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null)
+        if (Session.User == null)
         {
             return;
         }
@@ -19,18 +19,18 @@ internal sealed class AddFavouriteRoomEvent : IPacketEvent
         var roomId = packet.PopInt();
 
         var roomData = RoomManager.GenerateRoomData(roomId);
-        if (roomData == null || session.User.FavoriteRooms.Count >= 30 || session.User.FavoriteRooms.Contains(roomId))
+        if (roomData == null || Session.User.FavoriteRooms.Count >= 30 || Session.User.FavoriteRooms.Contains(roomId))
         {
             return;
         }
         else
         {
-            session.SendPacket(new UpdateFavouriteRoomComposer(roomId, true));
+            Session.SendPacket(new UpdateFavouriteRoomComposer(roomId, true));
 
-            session.User.FavoriteRooms.Add(roomId);
+            Session.User.FavoriteRooms.Add(roomId);
 
             using var dbClient = DatabaseManager.Connection;
-            UserFavoriteDao.Insert(dbClient, session.User.Id, roomId);
+            UserFavoriteDao.Insert(dbClient, Session.User.Id, roomId);
         }
     }
 }

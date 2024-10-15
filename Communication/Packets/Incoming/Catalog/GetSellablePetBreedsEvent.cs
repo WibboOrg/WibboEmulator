@@ -8,7 +8,7 @@ internal sealed class GetSellablePetBreedsEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var type = packet.PopString();
 
@@ -20,6 +20,6 @@ internal sealed class GetSellablePetBreedsEvent : IPacketEvent
 
         var petId = item.SpriteId;
 
-        session.SendPacket(new SellablePetBreedsComposer(type, petId, CatalogManager.GetRacesForRaceId(petId)));
+        Session.SendPacket(new SellablePetBreedsComposer(type, petId, CatalogManager.GetRacesForRaceId(petId)));
     }
 }

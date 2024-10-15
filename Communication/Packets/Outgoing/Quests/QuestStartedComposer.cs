@@ -4,12 +4,12 @@ using WibboEmulator.Games.Quests;
 
 internal sealed class QuestStartedComposer : ServerPacket
 {
-    public QuestStartedComposer(GameClient session, Quest quest)
+    public QuestStartedComposer(GameClient Session, Quest quest)
         : base(ServerPacketHeader.QUEST)
     {
         var questsInCategory = QuestManager.GetAmountOfQuestsInCategory(quest.Category);
         var i = quest == null ? questsInCategory : quest.Number - 1;
-        var num = quest == null ? 0 : session.User.GetQuestProgress(quest.Id);
+        var num = quest == null ? 0 : Session.User.GetQuestProgress(quest.Id);
         if (quest != null && quest.IsCompleted(num))
         {
             i++;
@@ -20,7 +20,7 @@ internal sealed class QuestStartedComposer : ServerPacket
         this.WriteInteger(questsInCategory);
         this.WriteInteger(0);
         this.WriteInteger(quest == null ? 0 : quest.Id);
-        this.WriteBoolean(quest != null && session.User.QuestId == quest.Id);
+        this.WriteBoolean(quest != null && Session.User.QuestId == quest.Id);
         this.WriteString(quest == null ? string.Empty : quest.ActionName);
         this.WriteString(quest == null ? string.Empty : quest.DataBit);
         this.WriteInteger(quest == null ? 0 : quest.Reward);

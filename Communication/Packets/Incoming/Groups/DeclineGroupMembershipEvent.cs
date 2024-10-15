@@ -7,7 +7,7 @@ internal sealed class DeclineGroupMembershipEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var groupId = packet.PopInt();
         var userId = packet.PopInt();
@@ -17,7 +17,7 @@ internal sealed class DeclineGroupMembershipEvent : IPacketEvent
             return;
         }
 
-        if (session.User.Id != group.CreatorId && !group.IsAdmin(session.User.Id))
+        if (Session.User.Id != group.CreatorId && !group.IsAdmin(Session.User.Id))
         {
             return;
         }
@@ -28,6 +28,6 @@ internal sealed class DeclineGroupMembershipEvent : IPacketEvent
         }
 
         group.HandleRequest(userId, false);
-        session.SendPacket(new UnknownGroupComposer(group.Id, userId));
+        Session.SendPacket(new UnknownGroupComposer(group.Id, userId));
     }
 }

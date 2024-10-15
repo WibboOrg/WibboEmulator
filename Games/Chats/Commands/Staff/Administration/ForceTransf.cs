@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class ForceTransf : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
@@ -57,11 +57,11 @@ internal sealed class ForceTransf : IChatCommand
 
         if (!roomUserByUserId.SetPetTransformation(parameters[2], raceId))
         {
-            session.SendHugeNotification(LanguageManager.TryGetValue("cmd.transf.help", session.Language));
+            Session.SendHugeNotification(LanguageManager.TryGetValue("cmd.transf.help", Session.Language));
             return;
         }
 
-        roomUserByUserId.SendWhisperChat(LanguageManager.TryGetValue("cmd.transf.helpstop", session.Language));
+        roomUserByUserId.SendWhisperChat(LanguageManager.TryGetValue("cmd.transf.helpstop", Session.Language));
 
         roomUserByUserId.IsTransf = true;
 

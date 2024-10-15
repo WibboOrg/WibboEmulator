@@ -6,5 +6,5 @@ internal sealed class GetQuestListEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet) => QuestManager.SendQuestList(session, false);
+    public void Parse(GameClient Session, ClientPacket packet) => QuestManager.SendQuestList(Session, false);
 }

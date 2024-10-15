@@ -13,27 +13,27 @@ internal sealed class PlaceObjectEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User == null || !session.User.InRoom)
+        if (Session == null || Session.User == null || !Session.User.InRoom)
         {
             return;
         }
 
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.CheckRights(session))
+        if (!room.CheckRights(Session))
         {
-            session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_not_owner}"));
+            Session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_not_owner}"));
             return;
         }
 
         if (room.RoomData.SellPrice > 0)
         {
-            session.SendNotification(LanguageManager.TryGetValue("roomsell.error.7", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("roomsell.error.7", Session.Language));
             return;
         }
 
@@ -50,15 +50,15 @@ internal sealed class PlaceObjectEvent : IPacketEvent
             return;
         }
 
-        var userItem = session.User.InventoryComponent.GetItem(itemId);
+        var userItem = Session.User.InventoryComponent.GetItem(itemId);
         if (userItem == null)
         {
             return;
         }
 
-        if (userItem.Data.IsRare && !room.CheckRights(session, true))
+        if (userItem.Data.IsRare && !room.CheckRights(Session, true))
         {
-            session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_trade_stuff}"));
+            Session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_trade_stuff}"));
             return;
         }
 
@@ -84,68 +84,68 @@ internal sealed class PlaceObjectEvent : IPacketEvent
                 return;
             }
 
-            if (session.User.ForceRot > -1)
+            if (Session.User.ForceRot > -1)
             {
-                rotation = session.User.ForceRot;
+                rotation = Session.User.ForceRot;
             }
 
             var item = new Item(userItem.Id, room.Id, userItem.BaseItemId, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, x, y, 0.0, rotation, "", room);
-            if (room.RoomItemHandling.SetFloorItem(session, item, x, y, rotation, true, false, true))
+            if (room.RoomItemHandling.SetFloorItem(Session, item, x, y, rotation, true, false, true))
             {
                 using (var dbClient = DatabaseManager.Connection)
                 {
                     ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                 }
 
-                session.User.InventoryComponent.RemoveItem(itemId);
+                Session.User.InventoryComponent.RemoveItem(itemId);
 
                 if (WiredUtillity.TypeIsWired(userItem.ItemData.InteractionType))
                 {
                     WiredRegister.HandleRegister(room, item);
                 }
 
-                if (session.User.ForceUse > -1)
+                if (Session.User.ForceUse > -1)
                 {
-                    item.Interactor.OnTrigger(session, item, 0, true, false);
+                    item.Interactor.OnTrigger(Session, item, 0, true, false);
                 }
 
-                if (session.User.ForceOpenGift)
+                if (Session.User.ForceOpenGift)
                 {
                     if (item.ItemData.InteractionType == InteractionType.EXTRA_BOX)
                     {
-                        ItemLootBox.OpenExtrabox(session, item, room);
+                        ItemLootBox.OpenExtrabox(Session, item, room);
                     }
                     else if (item.ItemData.InteractionType == InteractionType.DELUXE_BOX)
                     {
-                        ItemLootBox.OpenDeluxeBox(session, item, room);
+                        ItemLootBox.OpenDeluxeBox(Session, item, room);
                     }
                     else if (item.ItemData.InteractionType == InteractionType.LOOTBOX_2022)
                     {
-                        ItemLootBox.OpenLootBox2022(session, item, room);
+                        ItemLootBox.OpenLootBox2022(Session, item, room);
                     }
                     else if (item.ItemData.InteractionType == InteractionType.LEGEND_BOX)
                     {
-                        ItemLootBox.OpenLegendBox(session, item, room);
+                        ItemLootBox.OpenLegendBox(Session, item, room);
                     }
                     else if (item.ItemData.InteractionType == InteractionType.BADGE_BOX)
                     {
-                        ItemLootBox.OpenBadgeBox(session, item, room);
+                        ItemLootBox.OpenBadgeBox(Session, item, room);
                     }
                     else if (item.ItemData.InteractionType == InteractionType.GIFT_BANNER)
                     {
-                        item.Interactor.OnTrigger(session, item, 0, true, false);
+                        item.Interactor.OnTrigger(Session, item, 0, true, false);
                     }
                     else if (item.ItemData.InteractionType is InteractionType.CASE_MIEL or InteractionType.CASE_ATHENA or InteractionType.BAG_SAKURA or InteractionType.BAG_ATLANTA or InteractionType.BAG_KYOTO)
                     {
-                        ItemLootBox.OpenCaseOrBag(session, item, room);
+                        ItemLootBox.OpenCaseOrBag(Session, item, room);
                     }
                 }
 
-                QuestManager.ProgressUserQuest(session, QuestType.FurniPlace, 0);
+                QuestManager.ProgressUserQuest(Session, QuestType.FurniPlace, 0);
             }
             else
             {
-                session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_item}"));
+                Session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_item}"));
                 return;
             }
         }
@@ -163,19 +163,19 @@ internal sealed class PlaceObjectEvent : IPacketEvent
             if (TrySetWallItem(correctedData, out var wallPos))
             {
                 var roomItem = new Item(userItem.Id, room.Id, userItem.BaseItemId, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, wallPos, room);
-                if (room.RoomItemHandling.SetWallItem(session, roomItem))
+                if (room.RoomItemHandling.SetWallItem(Session, roomItem))
                 {
                     using (var dbClient = DatabaseManager.Connection)
                     {
                         ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                     }
 
-                    session.User.InventoryComponent.RemoveItem(itemId);
+                    Session.User.InventoryComponent.RemoveItem(itemId);
                 }
             }
             else
             {
-                session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_item}"));
+                Session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_item}"));
                 return;
             }
         }

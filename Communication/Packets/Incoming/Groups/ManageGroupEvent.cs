@@ -7,7 +7,7 @@ internal sealed class ManageGroupEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var groupId = packet.PopInt();
 
@@ -16,11 +16,11 @@ internal sealed class ManageGroupEvent : IPacketEvent
             return;
         }
 
-        if (group.CreatorId != session.User.Id && !session.User.HasPermission("owner_all_rooms"))
+        if (group.CreatorId != Session.User.Id && !Session.User.HasPermission("owner_all_rooms"))
         {
             return;
         }
 
-        session.SendPacket(new ManageGroupComposer(group, group.Badge.Replace("b", "").Split('s')));
+        Session.SendPacket(new ManageGroupComposer(group, group.Badge.Replace("b", "").Split('s')));
     }
 }

@@ -7,9 +7,9 @@ internal sealed class GetModeratorRoomInfoEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!session.User.HasPermission("mod"))
+        if (!Session.User.HasPermission("mod"))
         {
             return;
         }
@@ -27,6 +27,6 @@ internal sealed class GetModeratorRoomInfoEvent : IPacketEvent
             }
         }
 
-        session.SendPacket(new ModeratorRoomInfoComposer(data, ownerInRoom));
+        Session.SendPacket(new ModeratorRoomInfoComposer(data, ownerInRoom));
     }
 }

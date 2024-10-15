@@ -12,20 +12,20 @@ internal sealed partial class ChatAudioEvent : IPacketEvent
 {
     public double Delay => 5000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User == null || !session.User.InRoom || !session.User.HasPermission("chat_audio") || session.User.IgnoreAll)
+        if (Session == null || Session.User == null || !Session.User.InRoom || !Session.User.HasPermission("chat_audio") || Session.User.IgnoreAll)
         {
             return;
         }
 
-        var room = session.User.Room;
+        var room = Session.User.Room;
         if (room == null)
         {
             return;
         }
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
         if (user == null || user.IsSpectator)
         {
             return;
@@ -33,72 +33,72 @@ internal sealed partial class ChatAudioEvent : IPacketEvent
 
         user.Unidle();
 
-        if (!session.User.HasPermission("no_mute") && !user.IsOwner && !room.CheckRights(session) && room.RoomMuted)
+        if (!Session.User.HasPermission("no_mute") && !user.IsOwner && !room.CheckRights(Session) && room.RoomMuted)
         {
-            user.SendWhisperChat(LanguageManager.TryGetValue("room.muted", session.Language));
+            user.SendWhisperChat(LanguageManager.TryGetValue("room.muted", Session.Language));
             return;
         }
 
-        if (!session.User.HasPermission("mod") && !user.IsOwner && !room.CheckRights(session) && room.UserIsMuted(session.User.Id))
+        if (!Session.User.HasPermission("mod") && !user.IsOwner && !room.CheckRights(Session) && room.UserIsMuted(Session.User.Id))
         {
-            if (!room.HasMuteExpired(session.User.Id))
+            if (!room.HasMuteExpired(Session.User.Id))
             {
-                user.SendWhisperChat(LanguageManager.TryGetValue("user.muted", session.Language));
+                user.SendWhisperChat(LanguageManager.TryGetValue("user.muted", Session.Language));
                 return;
             }
             else
             {
-                room.RemoveMute(session.User.Id);
+                room.RemoveMute(Session.User.Id);
             }
         }
 
-        var timeSpan = DateTime.Now - session.User.SpamFloodTime;
-        if (timeSpan.TotalSeconds > session.User.SpamProtectionTime && session.User.SpamEnable)
+        var timeSpan = DateTime.Now - Session.User.SpamFloodTime;
+        if (timeSpan.TotalSeconds > Session.User.SpamProtectionTime && Session.User.SpamEnable)
         {
-            session.User.FloodCount = 0;
-            session.User.SpamEnable = false;
+            Session.User.FloodCount = 0;
+            Session.User.SpamEnable = false;
         }
         else if (timeSpan.TotalSeconds > 4.0)
         {
-            session.User.FloodCount = 0;
+            Session.User.FloodCount = 0;
         }
 
-        if (timeSpan.TotalSeconds < session.User.SpamProtectionTime && session.User.SpamEnable)
+        if (timeSpan.TotalSeconds < Session.User.SpamProtectionTime && Session.User.SpamEnable)
         {
-            var secondsLeft = session.User.SpamProtectionTime - timeSpan.Seconds;
+            var secondsLeft = Session.User.SpamProtectionTime - timeSpan.Seconds;
             user.Client?.SendPacket(new FloodControlComposer(secondsLeft));
             return;
         }
-        else if (timeSpan.TotalSeconds < 4.0 && session.User.FloodCount > 5 && !session.User.HasPermission("flood_chat"))
+        else if (timeSpan.TotalSeconds < 4.0 && Session.User.FloodCount > 5 && !Session.User.HasPermission("flood_chat"))
         {
-            session.User.SpamProtectionTime = room.IsRoleplay || session.User.HasPermission("flood_premium") ? 5 : 15;
-            session.User.SpamEnable = true;
+            Session.User.SpamProtectionTime = room.IsRoleplay || Session.User.HasPermission("flood_premium") ? 5 : 15;
+            Session.User.SpamEnable = true;
 
-            user.Client?.SendPacket(new FloodControlComposer(session.User.SpamProtectionTime - timeSpan.Seconds));
+            user.Client?.SendPacket(new FloodControlComposer(Session.User.SpamProtectionTime - timeSpan.Seconds));
 
             return;
         }
 
-        session.User.SpamFloodTime = DateTime.Now;
-        session.User.FloodCount++;
+        Session.User.SpamFloodTime = DateTime.Now;
+        Session.User.FloodCount++;
 
         var audioLength = packet.PopInt();
 
         if (audioLength > 250_000)
         {
-            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("notif.error", Session.Language));
             return;
         }
 
         var audioBinary = packet.ReadBytes(audioLength);
 
-        var audioName = $"{session.User.Id}_{room.Id}_{Guid.NewGuid()}";
+        var audioName = $"{Session.User.Id}_{room.Id}_{Guid.NewGuid()}";
 
         var audioId = UploadApi.ChatAudio(audioBinary, audioName);
 
         if (string.IsNullOrEmpty(audioId) || audioName != audioId)
         {
-            session.SendNotification(LanguageManager.TryGetValue("notif.error", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("notif.error", Session.Language));
             return;
         }
 
@@ -109,11 +109,11 @@ internal sealed partial class ChatAudioEvent : IPacketEvent
 
         var audioUrl = $"{basePath}{audioPath}";
 
-        session.User.ChatMessageManager.AddMessage(session.User.Id, session.User.Username, room.Id, audioUrl, UnixTimestamp.GetNow());
-        room.ChatlogManager.AddMessage(session.User.Id, session.User.Username, room.Id, audioUrl, UnixTimestamp.GetNow());
+        Session.User.ChatMessageManager.AddMessage(Session.User.Id, Session.User.Username, room.Id, audioUrl, UnixTimestamp.GetNow());
+        room.ChatlogManager.AddMessage(Session.User.Id, Session.User.Username, room.Id, audioUrl, UnixTimestamp.GetNow());
 
         using var dbClient = DatabaseManager.Connection;
-        LogChatDao.Insert(dbClient, session.User.Id, room.Id, audioUrl, "audio", session.User.Username);
+        LogChatDao.Insert(dbClient, Session.User.Id, room.Id, audioUrl, "audio", Session.User.Username);
 
         user.OnChatAudio(audioPath);
     }

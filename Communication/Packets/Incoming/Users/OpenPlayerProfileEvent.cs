@@ -8,7 +8,7 @@ internal sealed class OpenPlayerProfileEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var userId = packet.PopInt();
 
@@ -29,6 +29,6 @@ internal sealed class OpenPlayerProfileEvent : IPacketEvent
             friendCount = targetData.Messenger.Count;
         }
 
-        session.SendPacket(new ProfileInformationComposer(targetData, session, groups, friendCount));
+        Session.SendPacket(new ProfileInformationComposer(targetData, Session, groups, friendCount));
     }
 }

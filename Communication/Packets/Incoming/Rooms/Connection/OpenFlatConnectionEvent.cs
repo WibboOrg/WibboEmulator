@@ -13,9 +13,9 @@ internal sealed class OpenFlatConnectionEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return;
         }
@@ -23,31 +23,31 @@ internal sealed class OpenFlatConnectionEvent : IPacketEvent
         var roomId = packet.PopInt();
         var password = packet.PopString();
 
-        if (session.User.InRoom)
+        if (Session.User.InRoom)
         {
-            if (RoomManager.TryGetRoom(session.User.RoomId, out var oldRoom))
+            if (RoomManager.TryGetRoom(Session.User.RoomId, out var oldRoom))
             {
-                oldRoom.RoomUserManager.RemoveUserFromRoom(session, false, false);
+                oldRoom.RoomUserManager.RemoveUserFromRoom(Session, false, false);
             }
         }
 
-        session.User.TryRemoveFromDoorBellList();
+        Session.User.TryRemoveFromDoorBellList();
 
-        if (session.User.IsTeleporting && session.User.TeleportingRoomID != roomId)
+        if (Session.User.IsTeleporting && Session.User.TeleportingRoomID != roomId)
         {
-            session.User.TeleportingRoomID = 0;
-            session.User.IsTeleporting = false;
-            session.User.TeleporterId = 0;
-            session.SendPacket(new CloseConnectionComposer());
+            Session.User.TeleportingRoomID = 0;
+            Session.User.IsTeleporting = false;
+            Session.User.TeleporterId = 0;
+            Session.SendPacket(new CloseConnectionComposer());
 
             return;
         }
 
         if (!RoomManager.TryGetRoom(roomId, out _))
         {
-            if (session.User.LastLoadedRoomTime.CheckIsBlocked())
+            if (Session.User.LastLoadedRoomTime.CheckIsBlocked())
             {
-                session.SendPacket(new CloseConnectionComposer());
+                Session.SendPacket(new CloseConnectionComposer());
                 return;
             }
         }
@@ -55,31 +55,31 @@ internal sealed class OpenFlatConnectionEvent : IPacketEvent
         var room = RoomManager.LoadRoom(roomId);
         if (room == null)
         {
-            session.SendPacket(new CloseConnectionComposer());
+            Session.SendPacket(new CloseConnectionComposer());
             return;
         }
 
-        if (!session.User.HasPermission("mod") && room.UserIsBanned(session.User.Id))
+        if (!Session.User.HasPermission("mod") && room.UserIsBanned(Session.User.Id))
         {
-            if (room.HasBanExpired(session.User.Id))
+            if (room.HasBanExpired(Session.User.Id))
             {
                 using (var dbClient = DatabaseManager.Connection)
                 {
-                    RoomBanDao.Delete(dbClient, room.Id, session.User.Id);
+                    RoomBanDao.Delete(dbClient, room.Id, Session.User.Id);
                 }
 
-                room.RemoveBan(session.User.Id);
+                room.RemoveBan(Session.User.Id);
             }
             else
             {
-                session.SendPacket(new CantConnectComposer(1));
+                Session.SendPacket(new CantConnectComposer(1));
 
-                session.SendPacket(new CloseConnectionComposer());
+                Session.SendPacket(new CloseConnectionComposer());
                 return;
             }
         }
 
-        if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !session.User.HasPermission("enter_full_rooms") && !session.User.HasPermission("enter_full_rooms"))
+        if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !Session.User.HasPermission("enter_full_rooms") && !Session.User.HasPermission("enter_full_rooms"))
         {
             if (room.CloseFullRoom)
             {
@@ -87,41 +87,41 @@ internal sealed class OpenFlatConnectionEvent : IPacketEvent
                 room.CloseFullRoom = false;
             }
 
-            if (session.User.Id != room.RoomData.OwnerId)
+            if (Session.User.Id != room.RoomData.OwnerId)
             {
-                session.SendPacket(new CantConnectComposer(1));
+                Session.SendPacket(new CantConnectComposer(1));
 
-                session.SendPacket(new CloseConnectionComposer());
+                Session.SendPacket(new CloseConnectionComposer());
                 return;
             }
         }
 
         var ownerEnterNotAllowed = SettingsManager.GetData<string>("room.owner.enter.not.allowed").Split(',');
 
-        if (!session.User.HasPermission("access_apartments_all"))
+        if (!Session.User.HasPermission("access_apartments_all"))
         {
-            if (!(session.User.HasPermission("access_apartments") && !ownerEnterNotAllowed.Contains(room.RoomData.OwnerName)) && !room.CheckRights(session, true) && !(session.User.IsTeleporting && session.User.TeleportingRoomID == room.Id))
+            if (!(Session.User.HasPermission("access_apartments") && !ownerEnterNotAllowed.Contains(room.RoomData.OwnerName)) && !room.CheckRights(Session, true) && !(Session.User.IsTeleporting && Session.User.TeleportingRoomID == room.Id))
             {
-                if (room.RoomData.Access == RoomAccess.Doorbell && !room.CheckRights(session))
+                if (room.RoomData.Access == RoomAccess.Doorbell && !room.CheckRights(Session))
                 {
                     if (room.UserCount == 0)
                     {
-                        session.SendPacket(new FlatAccessDeniedComposer(""));
+                        Session.SendPacket(new FlatAccessDeniedComposer(""));
                     }
                     else
                     {
-                        session.SendPacket(new DoorbellComposer(""));
-                        room.SendPacket(new DoorbellComposer(session.User.Username), true);
-                        session.User.LoadingRoomId = roomId;
-                        session.User.IsRingingDoorBell = true;
-                        session.User.AllowDoorBell = false;
+                        Session.SendPacket(new DoorbellComposer(""));
+                        room.SendPacket(new DoorbellComposer(Session.User.Username), true);
+                        Session.User.LoadingRoomId = roomId;
+                        Session.User.IsRingingDoorBell = true;
+                        Session.User.AllowDoorBell = false;
                     }
                     return;
                 }
                 else if (room.RoomData.Access == RoomAccess.Password && !password.Equals(room.RoomData.Password.ToLower(), StringComparison.CurrentCultureIgnoreCase))
                 {
-                    session.SendPacket(new GenericErrorComposer(-100002));
-                    session.SendPacket(new CloseConnectionComposer());
+                    Session.SendPacket(new GenericErrorComposer(-100002));
+                    Session.SendPacket(new CloseConnectionComposer());
                     return;
                 }
             }
@@ -129,21 +129,21 @@ internal sealed class OpenFlatConnectionEvent : IPacketEvent
 
         if (room.RoomData.OwnerName == SettingsManager.GetData<string>("autogame.owner") || room.CloseFullRoom)
         {
-            if (room.RoomUserManager.GetUserByTracker(session.User.IP) != null)
+            if (room.RoomUserManager.GetUserByTracker(Session.User.IP) != null)
             {
-                session.SendPacket(new CloseConnectionComposer());
+                Session.SendPacket(new CloseConnectionComposer());
                 return;
             }
         }
 
-        if (!session.User.EnterRoom(room))
+        if (!Session.User.EnterRoom(room))
         {
-            session.SendPacket(new CloseConnectionComposer());
+            Session.SendPacket(new CloseConnectionComposer());
         }
         else
         {
-            session.User.LoadingRoomId = roomId;
-            session.User.AllowDoorBell = true;
+            Session.User.LoadingRoomId = roomId;
+            Session.User.AllowDoorBell = true;
         }
     }
 }

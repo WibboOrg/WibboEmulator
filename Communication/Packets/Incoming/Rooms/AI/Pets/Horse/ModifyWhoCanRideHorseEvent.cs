@@ -9,14 +9,14 @@ internal sealed class ModifyWhoCanRideHorseEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!session.User.InRoom)
+        if (!Session.User.InRoom)
         {
             return;
         }
 
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
@@ -28,7 +28,7 @@ internal sealed class ModifyWhoCanRideHorseEvent : IPacketEvent
             return;
         }
 
-        if (pet.PetData == null || pet.PetData.OwnerId != session.User.Id || pet.PetData.Type != 13)
+        if (pet.PetData == null || pet.PetData.OwnerId != Session.User.Id || pet.PetData.Type != 13)
         {
             return;
         }

@@ -10,7 +10,7 @@ internal sealed class UpdateGroupIdentityEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var groupId = packet.PopInt();
         var name = WordFilterManager.CheckMessage(packet.PopString());
@@ -31,7 +31,7 @@ internal sealed class UpdateGroupIdentityEvent : IPacketEvent
             return;
         }
 
-        if (group.CreatorId != session.User.Id)
+        if (group.CreatorId != Session.User.Id)
         {
             return;
         }
@@ -44,7 +44,7 @@ internal sealed class UpdateGroupIdentityEvent : IPacketEvent
         group.Name = name;
         group.Description = desc;
 
-        session.SendPacket(new GroupInfoComposer(group, session));
+        Session.SendPacket(new GroupInfoComposer(group, Session));
 
     }
 }

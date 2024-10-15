@@ -6,17 +6,17 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class DisableFollow : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (session.User.HideInRoom)
+        if (Session.User.HideInRoom)
         {
-            session.User.HideInRoom = false;
-            session.SendWhisper(LanguageManager.TryGetValue("cmd.followme.true", session.Language));
+            Session.User.HideInRoom = false;
+            Session.SendWhisper(LanguageManager.TryGetValue("cmd.followme.true", Session.Language));
         }
         else
         {
-            session.User.HideInRoom = true;
-            session.SendWhisper(LanguageManager.TryGetValue("cmd.followme.false", session.Language));
+            Session.User.HideInRoom = true;
+            Session.SendWhisper(LanguageManager.TryGetValue("cmd.followme.false", Session.Language));
         }
     }
 }

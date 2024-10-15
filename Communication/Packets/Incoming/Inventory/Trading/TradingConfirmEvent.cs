@@ -6,19 +6,19 @@ internal sealed class TradingConfirmEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        var userTrade = room.GetUserTrade(session.User.Id);
+        var userTrade = room.GetUserTrade(Session.User.Id);
         if (userTrade == null)
         {
             return;
         }
 
-        userTrade.CompleteTrade(session.User.Id);
+        userTrade.CompleteTrade(Session.User.Id);
     }
 }

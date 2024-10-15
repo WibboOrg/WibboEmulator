@@ -9,7 +9,7 @@ internal sealed class RoomYouTube : IChatCommand
     internal static readonly string[] Separator = ["?v="];
     internal static readonly string[] SeparatorArray = ["youtu.be/"];
 
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {

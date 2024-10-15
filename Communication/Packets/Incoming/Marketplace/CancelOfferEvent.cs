@@ -9,9 +9,9 @@ internal sealed class CancelOfferEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return;
         }
@@ -24,37 +24,37 @@ internal sealed class CancelOfferEvent : IPacketEvent
 
         if (offer == null)
         {
-            session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
+            Session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
             return;
         }
 
         if (offer.State == 2)
         {
-            session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
+            Session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
             return;
         }
 
-        if (offer.UserId != session.User.Id)
+        if (offer.UserId != Session.User.Id)
         {
-            session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
+            Session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
             return;
         }
 
         if (!ItemManager.GetItem(offer.ItemId, out var item))
         {
-            session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
+            Session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
             return;
         }
 
-        CatalogMarketplaceOfferDao.DeleteUserOffer(dbClient, offerId, session.User.Id);
+        CatalogMarketplaceOfferDao.DeleteUserOffer(dbClient, offerId, Session.User.Id);
 
-        var giveItem = ItemFactory.CreateSingleItem(dbClient, item, session.User, offer.ExtraData, offer.FurniId, offer.LimitedNumber, offer.LimitedStack);
+        var giveItem = ItemFactory.CreateSingleItem(dbClient, item, Session.User, offer.ExtraData, offer.FurniId, offer.LimitedNumber, offer.LimitedStack);
 
         if (giveItem != null)
         {
-            session.User.InventoryComponent.TryAddItem(giveItem);
+            Session.User.InventoryComponent.TryAddItem(giveItem);
         }
 
-        session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, true));
+        Session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, true));
     }
 }

@@ -6,38 +6,38 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Ban : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
             return;
         }
 
-        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
-        if (targetUser == null || targetUser.User == null)
+        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        if (TargetUser == null || TargetUser.User == null)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", Session.Language));
             return;
         }
 
-        if (targetUser.User.Rank >= session.User.Rank)
+        if (TargetUser.User.Rank >= Session.User.Rank)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", Session.Language));
             return;
         }
 
         _ = int.TryParse(parameters.Length >= 3 ? parameters[2] : "0", out var expire);
         if (expire <= 600)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("ban.toolesstime", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("ban.toolesstime", Session.Language));
         }
         else
         {
             var raison = CommandManager.MergeParams(parameters, 3);
-            session.SendWhisper("Tu as bannit " + targetUser.User.Username + " pour " + raison + "!");
+            Session.SendWhisper("Tu as bannit " + TargetUser.User.Username + " pour " + raison + "!");
 
-            GameClientManager.BanUser(targetUser, session.User.Username, expire, raison, false);
-            _ = session.User.CheckChatMessage(raison, "<CMD>", room.Id);
+            GameClientManager.BanUser(TargetUser, Session.User.Username, expire, raison, false);
+            _ = Session.User.CheckChatMessage(raison, "<CMD>", room.Id);
         }
     }
 }

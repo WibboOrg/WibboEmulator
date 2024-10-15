@@ -8,9 +8,9 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Mazo : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (session.User == null)
+        if (Session.User == null)
         {
             return;
         }
@@ -21,7 +21,7 @@ internal sealed class Mazo : IChatCommand
         }
 
         var numberRandom = WibboEnvironment.GetRandomNumber(1, 3);
-        var user = session.User;
+        var user = Session.User;
 
         if (numberRandom != 1)
         {
@@ -29,7 +29,7 @@ internal sealed class Mazo : IChatCommand
 
             if (user.MazoHighScore < user.Mazo)
             {
-                session.SendWhisper(string.Format(LanguageManager.TryGetValue("cmd.mazo.newscore", session.Language), user.Mazo));
+                Session.SendWhisper(string.Format(LanguageManager.TryGetValue("cmd.mazo.newscore", Session.Language), user.Mazo));
                 user.MazoHighScore = user.Mazo;
 
                 using var dbClient = DatabaseManager.Connection;
@@ -37,7 +37,7 @@ internal sealed class Mazo : IChatCommand
             }
             else
             {
-                session.SendWhisper(string.Format(LanguageManager.TryGetValue("cmd.mazo.win", session.Language), user.Mazo));
+                Session.SendWhisper(string.Format(LanguageManager.TryGetValue("cmd.mazo.win", Session.Language), user.Mazo));
             }
 
             userRoom.ApplyEffect(566, true);
@@ -48,11 +48,11 @@ internal sealed class Mazo : IChatCommand
         {
             if (user.Mazo > 0)
             {
-                session.SendWhisper(LanguageManager.TryGetValue("cmd.mazo.bigloose", session.Language));
+                Session.SendWhisper(LanguageManager.TryGetValue("cmd.mazo.bigloose", Session.Language));
             }
             else
             {
-                session.SendWhisper(LanguageManager.TryGetValue("cmd.mazo.loose", session.Language));
+                Session.SendWhisper(LanguageManager.TryGetValue("cmd.mazo.loose", Session.Language));
             }
 
             user.Mazo = 0;

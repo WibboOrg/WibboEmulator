@@ -6,10 +6,10 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class EmptyBots : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
-        session.User.InventoryComponent.ClearBots();
-        session.SendPacket(new BotInventoryComposer(session.User.InventoryComponent.Bots));
-        userRoom.SendWhisperChat(LanguageManager.TryGetValue("empty.cleared", session.Language));
+        Session.User.InventoryComponent.ClearBots();
+        Session.SendPacket(new BotInventoryComposer(Session.User.InventoryComponent.Bots));
+        userRoom.SendWhisperChat(LanguageManager.TryGetValue("empty.cleared", Session.Language));
     }
 }

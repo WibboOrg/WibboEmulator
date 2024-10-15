@@ -15,15 +15,15 @@ internal sealed class SaveBotActionEvent : IPacketEvent
                         '\n'
                 ];
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null || !session.User.InRoom)
+        if (Session.User == null || !Session.User.InRoom)
         {
             return;
         }
 
-        var room = session.User.Room;
-        if (room == null || !room.CheckRights(session, true))
+        var room = Session.User.Room;
+        if (room == null || !room.CheckRights(Session, true))
         {
             return;
         }
@@ -61,13 +61,13 @@ internal sealed class SaveBotActionEvent : IPacketEvent
             case 1:
             {
                 //Change the defaults
-                bot.BotData.Look = session.User.Look;
-                bot.BotData.Gender = session.User.Gender;
+                bot.BotData.Look = Session.User.Look;
+                bot.BotData.Gender = Session.User.Gender;
 
                 room.SendPacket(new UserChangeComposer(bot));
 
                 using var dbClient = DatabaseManager.Connection;
-                BotUserDao.UpdateLookGender(dbClient, bot.BotData.Id, session.User.Gender, session.User.Look);
+                BotUserDao.UpdateLookGender(dbClient, bot.BotData.Id, Session.User.Gender, Session.User.Look);
                 break;
             }
 

@@ -33,9 +33,9 @@ internal sealed class SSOTicketEvent : IPacketEvent
 {
     public double Delay => 5000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User != null)
+        if (Session == null || Session.User != null)
         {
             return;
         }
@@ -48,15 +48,15 @@ internal sealed class SSOTicketEvent : IPacketEvent
             return;
         }
 
-        if (GameClientManager.TryReconnection(ref session, ssoTicket))
+        if (GameClientManager.TryReconnection(ref Session, ssoTicket))
         {
-            session.SendPacket(new AuthenticationOKComposer());
+            Session.SendPacket(new AuthenticationOKComposer());
             return;
         }
 
-        if (session.IsDisconnected)
+        if (Session.IsDisconnected)
         {
-            session.Disconnect();
+            Session.Disconnect();
             return;
         }
 
@@ -64,43 +64,43 @@ internal sealed class SSOTicketEvent : IPacketEvent
         {
             using var dbClient = DatabaseManager.Connection;
 
-            var ip = session.Connection.Ip;
+            var ip = Session.Connection.Ip;
             var user = UserFactory.GetUserData(dbClient, ssoTicket, ip);
 
             if (user == null)
             {
-                session.Disconnect();
+                Session.Disconnect();
                 return;
             }
 
             var packetList = new ServerPacketList();
 
             GameClientManager.LogClonesOut(user.Id);
-            session.User = user;
-            session.Language = user.Langue;
-            session.SSOTicket = ssoTicket;
+            Session.User = user;
+            Session.Language = user.Langue;
+            Session.SSOTicket = ssoTicket;
 
-            GameClientManager.RegisterClient(session, user.Id, user.Username, ssoTicket);
+            GameClientManager.RegisterClient(Session, user.Id, user.Username, ssoTicket);
 
-            session.User.Initialize(dbClient, session);
+            Session.User.Initialize(dbClient, Session);
 
-            IsFirstConnexionToday(session, dbClient, packetList);
+            IsFirstConnexionToday(Session, dbClient, packetList);
 
-            session.SendPacket(new AuthenticationOKComposer());
+            Session.SendPacket(new AuthenticationOKComposer());
 
             packetList.Add(new EconomyCenterComposer(EconomyCenterManager.EconomyCategory, EconomyCenterManager.EconomyItem));
-            packetList.Add(new NavigatorHomeRoomComposer(session.User.HomeRoom, session.User.HomeRoom));
-            packetList.Add(new FavouritesComposer(session.User.FavoriteRooms));
+            packetList.Add(new NavigatorHomeRoomComposer(Session.User.HomeRoom, Session.User.HomeRoom));
+            packetList.Add(new FavouritesComposer(Session.User.FavoriteRooms));
             packetList.Add(new FigureSetIdsComposer());
-            packetList.Add(new UserRightsComposer(session.User.Rank < 2 ? 2 : session.User.Rank, session.User.Rank > 1));
+            packetList.Add(new UserRightsComposer(Session.User.Rank < 2 ? 2 : Session.User.Rank, Session.User.Rank > 1));
             packetList.Add(new AvailabilityStatusComposer());
-            packetList.Add(new AchievementScoreComposer(session.User.AchievementPoints));
+            packetList.Add(new AchievementScoreComposer(Session.User.AchievementPoints));
             packetList.Add(new BuildersClubMembershipComposer());
             packetList.Add(new CfhTopicsInitComposer(ModerationManager.UserActionPresets));
-            packetList.Add(new UserSettingsComposer(session.User.ClientVolume, session.User.OldChat, session.User.IgnoreRoomInvites, session.User.CameraFollowDisabled, 1, 0));
+            packetList.Add(new UserSettingsComposer(Session.User.ClientVolume, Session.User.OldChat, Session.User.IgnoreRoomInvites, Session.User.CameraFollowDisabled, 1, 0));
             //packetList.Add(new AvatarEffectsComposer(EffectManager.Effects));
 
-            packetList.Add(new CreditBalanceComposer(session.User.Credits));
+            packetList.Add(new CreditBalanceComposer(Session.User.Credits));
 
             // if (user.Rank > 12)
             // {
@@ -117,30 +117,30 @@ internal sealed class SSOTicketEvent : IPacketEvent
             //     packetList.Add(new InClientLinkComposer("openView/calendar"));
             // }
 
-            if (IsNewUser(session, dbClient))
+            if (IsNewUser(Session, dbClient))
             {
                 packetList.Add(new NuxAlertComposer(2));
                 packetList.Add(new InClientLinkComposer("nux/lobbyoffer/hide"));
             }
 
-            if (session.User.HasPermission("mod"))
+            if (Session.User.HasPermission("mod"))
             {
-                GameClientManager.AddUserStaff(session.User.Id);
+                GameClientManager.AddUserStaff(Session.User.Id);
                 packetList.Add(new ModeratorInitComposer(
                     ModerationManager.UserMessagePresets,
                     ModerationManager.RoomMessagePresets,
                     ModerationManager.Tickets));
             }
 
-            if (session.User.HasPermission("helptool") && session.User.BadgeComponent.HasBadgeSlot("STAFF_HELPER"))
+            if (Session.User.HasPermission("helptool") && Session.User.BadgeComponent.HasBadgeSlot("STAFF_HELPER"))
             {
-                HelpManager.TryAddGuide(session.User.Id);
-                session.User.OnDuty = true;
+                HelpManager.TryAddGuide(Session.User.Id);
+                Session.User.OnDuty = true;
 
-                packetList.Add(new HelperToolComposer(session.User.OnDuty, HelpManager.Count));
+                packetList.Add(new HelperToolComposer(Session.User.OnDuty, HelpManager.Count));
             }
 
-            session.SendPacket(packetList);
+            Session.SendPacket(packetList);
         }
         catch (Exception ex)
         {
@@ -148,14 +148,14 @@ internal sealed class SSOTicketEvent : IPacketEvent
         }
     }
 
-    private static void IsFirstConnexionToday(GameClient session, IDbConnection dbClient, ServerPacketList packetList)
+    private static void IsFirstConnexionToday(GameClient Session, IDbConnection dbClient, ServerPacketList packetList)
     {
-        if (!session.User.IsFirstConnexionToday)
+        if (!Session.User.IsFirstConnexionToday)
         {
             return;
         }
 
-        session.User.IsFirstConnexionToday = false;
+        Session.User.IsFirstConnexionToday = false;
 
         var notifImage = "";
         var nbLot = 0;
@@ -164,7 +164,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
         var wibboPointCount = 0;
         var winwinCount = 0;
 
-        if (session.User.HasPermission("premium_legend"))
+        if (Session.User.HasPermission("premium_legend"))
         {
             notifImage = "premium_legend";
             nbLot = 5;
@@ -173,7 +173,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
             wibboPointCount = 65;
             winwinCount = 100;
         }
-        else if (session.User.HasPermission("premium_epic"))
+        else if (Session.User.HasPermission("premium_epic"))
         {
             notifImage = "premium_epic";
             nbLot = 3;
@@ -182,7 +182,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
             wibboPointCount = 32;
             winwinCount = 50;
         }
-        else if (session.User.HasPermission("premium_classic"))
+        else if (Session.User.HasPermission("premium_classic"))
         {
             notifImage = "premium_classic";
             nbLot = 1;
@@ -198,37 +198,37 @@ internal sealed class SSOTicketEvent : IPacketEvent
 
             if (ItemManager.GetItem(lootboxId, out var itemData))
             {
-                var items = ItemFactory.CreateMultipleItems(dbClient, itemData, session.User, "", nbLot);
+                var items = ItemFactory.CreateMultipleItems(dbClient, itemData, Session.User, "", nbLot);
 
                 foreach (var purchasedItem in items)
                 {
-                    session.User.InventoryComponent.TryAddItem(purchasedItem);
+                    Session.User.InventoryComponent.TryAddItem(purchasedItem);
                 }
             }
         }
 
         if (wibboPointCount > 0)
         {
-            session.User.WibboPoints += wibboPointCount;
-            session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
+            Session.User.WibboPoints += wibboPointCount;
+            Session.SendPacket(new ActivityPointNotificationComposer(Session.User.WibboPoints, 0, 105));
 
-            UserDao.UpdateAddPoints(dbClient, session.User.Id, wibboPointCount);
+            UserDao.UpdateAddPoints(dbClient, Session.User.Id, wibboPointCount);
         }
 
         if (winwinCount > 0)
         {
-            UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, winwinCount);
+            UserStatsDao.UpdateAchievementScore(dbClient, Session.User.Id, winwinCount);
 
-            session.User.AchievementPoints += winwinCount;
+            Session.User.AchievementPoints += winwinCount;
         }
 
-        if (session.User.Credits <= int.MaxValue - creditCount)
+        if (Session.User.Credits <= int.MaxValue - creditCount)
         {
-            session.User.Credits += creditCount;
+            Session.User.Credits += creditCount;
         }
 
-        session.User.DailyRespectPoints = respectCount;
-        session.User.DailyPetRespectPoints = respectCount;
+        Session.User.DailyRespectPoints = respectCount;
+        Session.User.DailyPetRespectPoints = respectCount;
 
         if (winwinCount > 0 || wibboPointCount > 0 || nbLot > 0)
         {
@@ -236,33 +236,33 @@ internal sealed class SSOTicketEvent : IPacketEvent
         }
     }
 
-    private static bool IsNewUser(GameClient session, IDbConnection dbClient)
+    private static bool IsNewUser(GameClient Session, IDbConnection dbClient)
     {
-        if (!session.User.NewUser)
+        if (!Session.User.NewUser)
         {
             return false;
         }
 
-        session.User.NewUser = false;
+        Session.User.NewUser = false;
 
         var homeId = SettingsManager.GetData<int>("default.home.id");
 
-        var roomId = RoomDao.InsertDuplicate(dbClient, session.User.Username, LanguageManager.TryGetValue("room.welcome.desc", session.Language));
+        var roomId = RoomDao.InsertDuplicate(dbClient, Session.User.Username, LanguageManager.TryGetValue("room.welcome.desc", Session.Language));
 
-        UserDao.UpdateNuxEnable(dbClient, session.User.Id, homeId > 0 ? homeId : roomId);
+        UserDao.UpdateNuxEnable(dbClient, Session.User.Id, homeId > 0 ? homeId : roomId);
 
-        session.User.HomeRoom = homeId > 0 ? homeId : roomId;
+        Session.User.HomeRoom = homeId > 0 ? homeId : roomId;
 
         if (roomId == 0)
         {
             return false;
         }
 
-        ItemDao.InsertDuplicate(dbClient, session.User.Id, roomId);
+        ItemDao.InsertDuplicate(dbClient, Session.User.Id, roomId);
 
-        if (!session.User.UsersRooms.Contains(roomId))
+        if (!Session.User.UsersRooms.Contains(roomId))
         {
-            session.User.UsersRooms.Add(roomId);
+            Session.User.UsersRooms.Add(roomId);
         }
 
         return true;

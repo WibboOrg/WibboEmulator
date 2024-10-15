@@ -8,9 +8,9 @@ internal sealed class GetStickyNoteEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
@@ -23,6 +23,6 @@ internal sealed class GetStickyNoteEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new StickyNoteComposer(roomItem.Id, roomItem.ExtraData));
+        Session.SendPacket(new StickyNoteComposer(roomItem.Id, roomItem.ExtraData));
     }
 }

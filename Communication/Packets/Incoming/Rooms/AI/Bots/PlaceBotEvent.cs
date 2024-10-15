@@ -11,19 +11,19 @@ internal sealed class PlaceBotEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null)
+        if (Session.User == null)
         {
             return;
         }
 
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.CheckRights(session, true))
+        if (!room.CheckRights(Session, true))
         {
             return;
         }
@@ -37,14 +37,14 @@ internal sealed class PlaceBotEvent : IPacketEvent
             return;
         }
 
-        if (!session.User.InventoryComponent.TryGetBot(botId, out var bot))
+        if (!Session.User.InventoryComponent.TryGetBot(botId, out var bot))
         {
             return;
         }
 
         if (room.RoomUserManager.BotPetCount >= 30)
         {
-            session.SendNotification(LanguageManager.TryGetValue("notif.placebot.error", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("notif.placebot.error", Session.Language));
             return;
         }
 
@@ -55,11 +55,11 @@ internal sealed class PlaceBotEvent : IPacketEvent
 
         _ = room.RoomUserManager.DeployBot(new RoomBot(bot.Id, bot.OwnerId, room.Id, bot.AIType, bot.WalkingEnabled, bot.Name, bot.Motto, bot.Gender, bot.Figure, x, y, 0, 2, bot.ChatEnabled, bot.ChatText, bot.ChatSeconds, bot.IsDancing, bot.Enable, bot.Handitem, bot.Status), null);
 
-        if (!session.User.InventoryComponent.TryRemoveBot(botId, out _))
+        if (!Session.User.InventoryComponent.TryRemoveBot(botId, out _))
         {
             return;
         }
 
-        session.SendPacket(new BotRemovedFromInventoryComposer(botId));
+        Session.SendPacket(new BotRemovedFromInventoryComposer(botId));
     }
 }

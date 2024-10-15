@@ -5,15 +5,15 @@ internal sealed class SitEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        var room = session.User.Room;
+        var room = Session.User.Room;
         if (room == null)
         {
             return;
         }
 
-        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
         if (roomUserByUserId == null)
         {
             return;

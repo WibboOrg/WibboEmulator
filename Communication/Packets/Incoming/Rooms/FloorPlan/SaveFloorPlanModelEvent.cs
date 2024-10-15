@@ -12,7 +12,7 @@ internal sealed partial class SaveFloorPlanModelEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var map = packet.PopString(5776).ToLower().TrimEnd('\r');
         var doorX = packet.PopInt();
@@ -22,19 +22,19 @@ internal sealed partial class SaveFloorPlanModelEvent : IPacketEvent
         var floorThick = packet.PopInt();
         var wallHeight = packet.PopInt();
 
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.CheckRights(session, false))
+        if (!room.CheckRights(Session, false))
         {
             return;
         }
 
         if (room.RoomData.SellPrice > 0)
         {
-            session.SendNotification(LanguageManager.TryGetValue("roomsell.error.8", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("roomsell.error.8", Session.Language));
             return;
         }
 
@@ -46,7 +46,7 @@ internal sealed partial class SaveFloorPlanModelEvent : IPacketEvent
 
         if (map.Length > 5776) //76x76
         {
-            session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "(%%%general%%%): %%%too_large_area%%% (%%%max%%% 5776 %%%tiles%%%)"));
+            Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "(%%%general%%%): %%%too_large_area%%% (%%%max%%% 5776 %%%tiles%%%)"));
             return;
         }
 
@@ -54,13 +54,13 @@ internal sealed partial class SaveFloorPlanModelEvent : IPacketEvent
 
         if (string.IsNullOrEmpty(map))
         {
-            session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oups, il semble que vous avez entré un Floormap invalide! (Map vide)"));
+            Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oups, il semble que vous avez entré un Floormap invalide! (Map vide)"));
             return;
         }
 
         if (map.Any(letter => !validLetters.Contains(letter)))
         {
-            session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oups, il semble que vous avez entré un Floormap invalide! (Code map)"));
+            Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oups, il semble que vous avez entré un Floormap invalide! (Code map)"));
             return;
         }
 
@@ -71,7 +71,7 @@ internal sealed partial class SaveFloorPlanModelEvent : IPacketEvent
 
         if (sizeY > 75 || sizeX > 75 || sizeX < 1 || sizeY < 1)
         {
-            session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "La hauteur et la largeur maximales d'un modèle sont de 75x75!"));
+            Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "La hauteur et la largeur maximales d'un modèle sont de 75x75!"));
             return;
         }
 
@@ -87,7 +87,7 @@ internal sealed partial class SaveFloorPlanModelEvent : IPacketEvent
 
         if (!isValid)
         {
-            session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oups, il semble que vous avez entré un Floormap invalide! (Forme)"));
+            Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oups, il semble que vous avez entré un Floormap invalide! (Forme)"));
             return;
         }
 

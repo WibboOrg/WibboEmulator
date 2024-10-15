@@ -10,7 +10,7 @@ internal sealed class UpdateGroupColoursEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var groupId = packet.PopInt();
         var colour1 = packet.PopInt();
@@ -31,7 +31,7 @@ internal sealed class UpdateGroupColoursEvent : IPacketEvent
             return;
         }
 
-        if (group.CreatorId != session.User.Id)
+        if (group.CreatorId != Session.User.Id)
         {
             return;
         }
@@ -44,10 +44,10 @@ internal sealed class UpdateGroupColoursEvent : IPacketEvent
         group.Colour1 = colour1;
         group.Colour2 = colour2;
 
-        session.SendPacket(new GroupInfoComposer(group, session));
-        if (session.User.Room != null)
+        Session.SendPacket(new GroupInfoComposer(group, Session));
+        if (Session.User.Room != null)
         {
-            foreach (var item in session.User.Room.RoomItemHandling.FloorItems.ToList())
+            foreach (var item in Session.User.Room.RoomItemHandling.FloorItems.ToList())
             {
                 if (item == null || item.ItemData == null)
                 {

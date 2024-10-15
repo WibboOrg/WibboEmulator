@@ -4,5 +4,5 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class TeleportStaff : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters) => userRoom.TeleportEnabled = !userRoom.TeleportEnabled;
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters) => userRoom.TeleportEnabled = !userRoom.TeleportEnabled;
 }

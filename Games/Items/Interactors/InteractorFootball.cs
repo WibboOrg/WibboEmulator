@@ -5,22 +5,22 @@ using WibboEmulator.Games.Rooms.Map.Movement;
 
 public class InteractorFootball : FurniInteractor
 {
-    public override void OnPlace(GameClient session, Item item)
+    public override void OnPlace(GameClient Session, Item item)
     {
     }
 
-    public override void OnRemove(GameClient session, Item item)
+    public override void OnRemove(GameClient Session, Item item)
     {
     }
 
-    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    public override void OnTrigger(GameClient Session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (session == null)
+        if (Session == null)
         {
             return;
         }
 
-        var user = item.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var user = item.Room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
 
         if (user == null)
         {

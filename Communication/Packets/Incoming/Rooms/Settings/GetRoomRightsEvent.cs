@@ -6,24 +6,24 @@ internal sealed class GetRoomRightsEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!session.User.InRoom)
+        if (!Session.User.InRoom)
         {
             return;
         }
 
-        var rooom = session.User.Room;
+        var rooom = Session.User.Room;
         if (rooom == null)
         {
             return;
         }
 
-        if (!rooom.CheckRights(session))
+        if (!rooom.CheckRights(Session))
         {
             return;
         }
 
-        session.SendPacket(new RoomRightsListComposer(rooom));
+        Session.SendPacket(new RoomRightsListComposer(rooom));
     }
 }

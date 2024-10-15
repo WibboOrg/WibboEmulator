@@ -9,16 +9,16 @@ internal sealed class InitTradeEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
         var virtualId = packet.PopInt();
 
-        var roomUser = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var roomUser = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
         var roomUserTarget = room.RoomUserManager.GetRoomUserByVirtualId(virtualId);
         if (roomUser == null || roomUser.Client == null || roomUser.Client.User == null)
         {
@@ -35,14 +35,14 @@ internal sealed class InitTradeEvent : IPacketEvent
             var rp = roomUser.Roleplayer;
             if (rp == null || rp.TradeId > 0 || rp.Dead || rp.SendPrison || (rp.PvpEnable && room.RoomRoleplay.Pvp) || rp.AggroTimer > 0)
             {
-                roomUser.SendWhisperChat(LanguageManager.TryGetValue("rp.troc.zonesafe", session.Language));
+                roomUser.SendWhisperChat(LanguageManager.TryGetValue("rp.troc.zonesafe", Session.Language));
                 return;
             }
 
             var rpTarget = roomUserTarget.Roleplayer;
             if (rpTarget == null || rpTarget.TradeId > 0 || rpTarget.Dead || rpTarget.SendPrison || (rpTarget.PvpEnable && room.RoomRoleplay.Pvp) || rpTarget.AggroTimer > 0)
             {
-                roomUser.SendWhisperChat(LanguageManager.TryGetValue("rp.troc.fail", session.Language));
+                roomUser.SendWhisperChat(LanguageManager.TryGetValue("rp.troc.fail", Session.Language));
                 return;
             }
 
@@ -50,24 +50,24 @@ internal sealed class InitTradeEvent : IPacketEvent
             return;
         }
 
-        if (room.RoomData.TrocStatus == 0 && !room.CheckRights(session, true) && !session.User.HasPermission("force_trade"))
+        if (room.RoomData.TrocStatus == 0 && !room.CheckRights(Session, true) && !Session.User.HasPermission("force_trade"))
         {
-            session.SendNotification(LanguageManager.TryGetValue("notif.trade.error.1", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("notif.trade.error.1", Session.Language));
             return;
         }
-        else if (room.RoomData.TrocStatus == 1 && !room.CheckRights(session) && !session.User.HasPermission("force_trade"))
+        else if (room.RoomData.TrocStatus == 1 && !room.CheckRights(Session) && !Session.User.HasPermission("force_trade"))
         {
-            session.SendNotification(LanguageManager.TryGetValue("notif.trade.error.2", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("notif.trade.error.2", Session.Language));
             return;
         }
 
-        if (!roomUserTarget.Client.User.AcceptTrading && !session.User.HasPermission("force_trade"))
+        if (!roomUserTarget.Client.User.AcceptTrading && !Session.User.HasPermission("force_trade"))
         {
-            session.SendNotification(LanguageManager.TryGetValue("user.tradedisabled", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("user.tradedisabled", Session.Language));
         }
         else if (roomUserTarget.IsTransf || roomUser.IsTransf || roomUser.IsSpectator || roomUserTarget.IsSpectator)
         {
-            session.SendNotification(LanguageManager.TryGetValue("notif.trade.error.3", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("notif.trade.error.3", Session.Language));
         }
         else
         {

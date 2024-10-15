@@ -37,23 +37,23 @@ public class RoomItemHandling(Room room)
 
     public void QueueRoomItemUpdate(Item item) => this._roomItemUpdateQueue.Enqueue(item);
 
-    public List<Item> RemoveAllFurnitureToInventory(GameClient session)
+    public List<Item> RemoveAllFurnitureToInventory(GameClient Session)
     {
         var listMessage = new ServerPacketList();
         var items = new List<Item>();
 
         foreach (var roomItem in this._floorItems.Values.ToList())
         {
-            roomItem.Interactor.OnRemove(session, roomItem);
+            roomItem.Interactor.OnRemove(Session, roomItem);
 
             roomItem.Destroy();
-            listMessage.Add(new ObjectRemoveComposer(roomItem.Id, session.User.Id));
+            listMessage.Add(new ObjectRemoveComposer(roomItem.Id, Session.User.Id));
             items.Add(roomItem);
         }
 
         foreach (var roomItem in this._wallItems.Values.ToList())
         {
-            roomItem.Interactor.OnRemove(session, roomItem);
+            roomItem.Interactor.OnRemove(Session, roomItem);
             roomItem.Destroy();
 
             listMessage.Add(new ItemRemoveComposer(roomItem.Id, room.RoomData.OwnerId));
@@ -78,7 +78,7 @@ public class RoomItemHandling(Room room)
         return items;
     }
 
-    public List<Item> RemoveFurnitureToInventoryByIds(GameClient session, List<int> itemIds)
+    public List<Item> RemoveFurnitureToInventoryByIds(GameClient Session, List<int> itemIds)
     {
         var listMessage = new ServerPacketList();
         var items = new List<Item>();
@@ -91,7 +91,7 @@ public class RoomItemHandling(Room room)
                 continue;
             }
 
-            item.Interactor.OnRemove(session, item);
+            item.Interactor.OnRemove(Session, item);
             this.RemoveRoomItem(item);
             item.Destroy();
 
@@ -100,7 +100,7 @@ public class RoomItemHandling(Room room)
         }
 
         using var dbClient = DatabaseManager.Connection;
-        ItemDao.UpdateItems(dbClient, items, session.User.Id);
+        ItemDao.UpdateItems(dbClient, items, Session.User.Id);
 
         room.SendPackets(listMessage);
 
@@ -292,7 +292,7 @@ public class RoomItemHandling(Room room)
 
     public IEnumerable<Item> WallAndFloorItems => this._floorItems.Values.Concat(this._wallItems.Values);
 
-    public void RemoveFurniture(GameClient session, int id)
+    public void RemoveFurniture(GameClient Session, int id)
     {
         var roomItem = this.GetItem(id);
         if (roomItem == null)
@@ -300,7 +300,7 @@ public class RoomItemHandling(Room room)
             return;
         }
 
-        roomItem.Interactor.OnRemove(session, roomItem);
+        roomItem.Interactor.OnRemove(Session, roomItem);
         this.RemoveRoomItem(roomItem);
         roomItem.Destroy();
 
@@ -527,7 +527,7 @@ public class RoomItemHandling(Room room)
         return item;
     }
 
-    public bool SetFloorItem(GameClient session, Item item, int newX, int newY, int newRot, bool newItem, bool onRoller, bool sendMessage)
+    public bool SetFloorItem(GameClient Session, Item item, int newX, int newY, int newRot, bool newItem, bool onRoller, bool sendMessage)
     {
         var needsReAdd = false;
         if (!newItem)
@@ -574,9 +574,9 @@ public class RoomItemHandling(Room room)
             pileMagic = true;
         }
 
-        if (session != null && session.User != null && session.User.Room != null)
+        if (Session != null && Session.User != null && Session.User.Room != null)
         {
-            var roomUser = session.User.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+            var roomUser = Session.User.Room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
             if (roomUser != null)
             {
                 buildToolEnable = roomUser.BuildToolEnable;
@@ -649,16 +649,16 @@ public class RoomItemHandling(Room room)
         item.Rotation = newRot;
         item.SetState(newX, newY, pZ, true);
 
-        if (!onRoller && session != null)
+        if (!onRoller && Session != null)
         {
-            item.Interactor.OnPlace(session, item);
+            item.Interactor.OnPlace(Session, item);
         }
 
         if (newItem)
         {
             if (this._floorItems.ContainsKey(item.Id))
             {
-                session?.SendNotification(LanguageManager.TryGetValue("room.itemplaced", session.Language));
+                Session?.SendNotification(LanguageManager.TryGetValue("room.itemplaced", Session.Language));
 
                 return true;
             }
@@ -727,7 +727,7 @@ public class RoomItemHandling(Room room)
         return true;
     }
 
-    public bool SetWallItem(GameClient session, Item item)
+    public bool SetWallItem(GameClient Session, Item item)
     {
         if (!item.IsWallItem || this._wallItems.ContainsKey(item.Id))
         {
@@ -740,7 +740,7 @@ public class RoomItemHandling(Room room)
         }
         else
         {
-            item.Interactor.OnPlace(session, item);
+            item.Interactor.OnPlace(Session, item);
             if (item.ItemData.InteractionType == InteractionType.MOODLIGHT && room.MoodlightData == null)
             {
                 using var dbClient = DatabaseManager.Connection;

@@ -9,21 +9,21 @@ internal sealed class PickupObjectAllEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.CheckRights(session, true))
+        if (!room.CheckRights(Session, true))
         {
             return;
         }
 
         if (room.RoomData.SellPrice > 0)
         {
-            session.SendNotification(LanguageManager.TryGetValue("roomsell.error.7", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("roomsell.error.7", Session.Language));
             return;
         }
 
@@ -39,7 +39,7 @@ internal sealed class PickupObjectAllEvent : IPacketEvent
             itemIds.Add(itemId);
         }
 
-        session.User.InventoryComponent.AddItemArray(room.RoomItemHandling.RemoveFurnitureToInventoryByIds(session, itemIds));
-        session.SendPacket(new FurniListUpdateComposer());
+        Session.User.InventoryComponent.AddItemArray(room.RoomItemHandling.RemoveFurnitureToInventoryByIds(Session, itemIds));
+        Session.SendPacket(new FurniListUpdateComposer());
     }
 }

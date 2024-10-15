@@ -4,26 +4,26 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class WarpStaff : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
-        if (targetUser == null)
+        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        if (TargetUser == null)
         {
             return;
         }
 
-        var roomUserByUserIdTarget = room.RoomUserManager.GetRoomUserByUserId(targetUser.User.Id);
+        var roomUserByUserIdTarget = room.RoomUserManager.GetRoomUserByUserId(TargetUser.User.Id);
         if (roomUserByUserIdTarget == null)
         {
             return;
         }
 
-        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
         if (roomUserByUserId == null)
         {
             return;

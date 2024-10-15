@@ -12,7 +12,7 @@ internal sealed class PurchaseGroupEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var name = WordFilterManager.CheckMessage(packet.PopString(16));
         var description = WordFilterManager.CheckMessage(packet.PopString());
@@ -24,7 +24,7 @@ internal sealed class PurchaseGroupEvent : IPacketEvent
 
         var groupCost = 20;
 
-        if (session.User.Credits < groupCost)
+        if (Session.User.Credits < groupCost)
         {
             return;
         }
@@ -50,7 +50,7 @@ internal sealed class PurchaseGroupEvent : IPacketEvent
         }
 
         var roomData = RoomManager.GenerateRoomData(roomId);
-        if (roomData == null || roomData.OwnerId != session.User.Id || roomData.Group != null)
+        if (roomData == null || roomData.OwnerId != Session.User.Id || roomData.Group != null)
         {
             return;
         }
@@ -62,23 +62,23 @@ internal sealed class PurchaseGroupEvent : IPacketEvent
             badge += BadgePartUtility.WorkBadgeParts(i == 0, packet.PopInt().ToString(), packet.PopInt().ToString(), packet.PopInt().ToString());
         }
 
-        if (!GroupManager.TryCreateGroup(session.User, name, description, roomId, badge, colour1, colour2, out var group))
+        if (!GroupManager.TryCreateGroup(Session.User, name, description, roomId, badge, colour1, colour2, out var group))
         {
             return;
         }
 
-        session.SendPacket(new PurchaseOKComposer());
+        Session.SendPacket(new PurchaseOKComposer());
 
         roomData.Group = group;
 
-        session.User.Credits -= groupCost;
-        session.SendPacket(new CreditBalanceComposer(session.User.Credits));
+        Session.User.Credits -= groupCost;
+        Session.SendPacket(new CreditBalanceComposer(Session.User.Credits));
 
-        if (session.User.RoomId != roomData.Id)
+        if (Session.User.RoomId != roomData.Id)
         {
-            session.SendPacket(new RoomForwardComposer(roomData.Id));
+            Session.SendPacket(new RoomForwardComposer(roomData.Id));
         }
 
-        session.SendPacket(new NewGroupInfoComposer(roomId, group.Id));
+        Session.SendPacket(new NewGroupInfoComposer(roomId, group.Id));
     }
 }

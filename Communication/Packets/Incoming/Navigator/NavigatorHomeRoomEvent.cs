@@ -9,22 +9,22 @@ internal sealed class NavigatorHomeRoomEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var roomId = packet.PopInt();
 
         var roomData = RoomManager.GenerateRoomData(roomId);
-        if (roomId != 0 && (roomData == null || !roomData.OwnerName.ToLower().Equals(session.User.Username, StringComparison.CurrentCultureIgnoreCase)))
+        if (roomId != 0 && (roomData == null || !roomData.OwnerName.ToLower().Equals(Session.User.Username, StringComparison.CurrentCultureIgnoreCase)))
         {
             return;
         }
 
-        session.User.HomeRoom = roomId;
+        Session.User.HomeRoom = roomId;
         using (var dbClient = DatabaseManager.Connection)
         {
-            UserDao.UpdateHomeRoom(dbClient, session.User.Id, roomId);
+            UserDao.UpdateHomeRoom(dbClient, Session.User.Id, roomId);
         }
 
-        session.SendPacket(new NavigatorHomeRoomComposer(roomId, 0));
+        Session.SendPacket(new NavigatorHomeRoomComposer(roomId, 0));
     }
 }

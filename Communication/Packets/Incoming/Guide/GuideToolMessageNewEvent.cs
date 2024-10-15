@@ -6,22 +6,22 @@ internal sealed class GuideToolMessageNewEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var message = packet.PopString();
 
-        var requester = GameClientManager.GetClientByUserID(session.User.GuideOtherUserId);
+        var requester = GameClientManager.GetClientByUserID(Session.User.GuideOtherUserId);
         if (requester == null)
         {
             return;
         }
 
-        if (session.User.CheckChatMessage(message, "<GUIDEMESSAGE>"))
+        if (Session.User.CheckChatMessage(message, "<GUIDEMESSAGE>"))
         {
             return;
         }
 
-        requester.SendPacket(new OnGuideSessionMsgComposer(message, session.User.Id));
-        session.SendPacket(new OnGuideSessionMsgComposer(message, session.User.Id));
+        requester.SendPacket(new OnGuideSessionMsgComposer(message, Session.User.Id));
+        Session.SendPacket(new OnGuideSessionMsgComposer(message, Session.User.Id));
     }
 }

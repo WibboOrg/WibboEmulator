@@ -6,25 +6,25 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class Disconnect : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
             return;
         }
 
-        var targetUser = GameClientManager.GetClientByUsername(parameters[1]);
-        if (targetUser == null || targetUser.User == null)
+        var TargetUser = GameClientManager.GetClientByUsername(parameters[1]);
+        if (TargetUser == null || TargetUser.User == null)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", Session.Language));
         }
-        else if (targetUser.User.Rank >= session.User.Rank)
+        else if (TargetUser.User.Rank >= Session.User.Rank)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("action.notallowed", Session.Language));
         }
         else
         {
-            targetUser.Disconnect();
+            TargetUser.Disconnect();
         }
     }
 }

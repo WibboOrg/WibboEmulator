@@ -6,10 +6,10 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class EmptyPets : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
-        session.User.InventoryComponent.ClearPets();
-        session.SendPacket(new PetInventoryComposer(session.User.InventoryComponent.Pets));
-        userRoom.SendWhisperChat(LanguageManager.TryGetValue("empty.cleared", session.Language));
+        Session.User.InventoryComponent.ClearPets();
+        Session.SendPacket(new PetInventoryComposer(Session.User.InventoryComponent.Pets));
+        userRoom.SendWhisperChat(LanguageManager.TryGetValue("empty.cleared", Session.Language));
     }
 }

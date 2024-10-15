@@ -6,22 +6,22 @@ internal sealed class RpTrocRemoveItemEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var itemId = packet.PopInt();
 
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return;
         }
 
-        var room = session.User.Room;
+        var room = Session.User.Room;
         if (room == null || !room.IsRoleplay)
         {
             return;
         }
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
         if (user == null)
         {
             return;

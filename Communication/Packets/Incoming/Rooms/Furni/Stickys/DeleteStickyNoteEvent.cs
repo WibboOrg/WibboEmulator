@@ -10,14 +10,14 @@ internal sealed class DeleteStickyNoteEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        if (!room.CheckRights(session, true))
+        if (!room.CheckRights(Session, true))
         {
             return;
         }
@@ -29,7 +29,7 @@ internal sealed class DeleteStickyNoteEvent : IPacketEvent
             return;
         }
 
-        room.RoomItemHandling.RemoveFurniture(session, roomItem.Id);
+        room.RoomItemHandling.RemoveFurniture(Session, roomItem.Id);
         using var dbClient = DatabaseManager.Connection;
         ItemDao.DeleteById(dbClient, roomItem.Id);
     }

@@ -7,17 +7,17 @@ using WibboEmulator.Games.Rooms;
 
 public class InteractorManiqui : FurniInteractor
 {
-    public override void OnPlace(GameClient session, Item item)
+    public override void OnPlace(GameClient Session, Item item)
     {
     }
 
-    public override void OnRemove(GameClient session, Item item)
+    public override void OnRemove(GameClient Session, Item item)
     {
     }
 
-    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    public override void OnTrigger(GameClient Session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (session == null || session.User == null || item == null)
+        if (Session == null || Session.User == null || item == null)
         {
             return;
         }
@@ -28,19 +28,19 @@ public class InteractorManiqui : FurniInteractor
         }
 
         var allowedParts = new List<string> { "ha", "he", "ea", "ch", "fa", "cp", "lg", "cc", "ca", "sh", "wa" };
-        var look = string.Join(".", session.User.Look.Split('.').Where(part => !allowedParts.Contains(part.Split('-')[0])));
+        var look = string.Join(".", Session.User.Look.Split('.').Where(part => !allowedParts.Contains(part.Split('-')[0])));
         var stuff = item.ExtraData.Split(';');
 
         var newLook = look + "." + stuff[1];
 
-        session.User.Look = FigureDataManager.ProcessFigure(newLook, session.User.Gender, true);
+        Session.User.Look = FigureDataManager.ProcessFigure(newLook, Session.User.Gender, true);
 
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
 
-        var roomUser = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var roomUser = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
         if (roomUser == null)
         {
             return;
@@ -51,12 +51,12 @@ public class InteractorManiqui : FurniInteractor
             return;
         }
 
-        if (!session.User.InRoom)
+        if (!Session.User.InRoom)
         {
             return;
         }
 
-        session.SendPacket(new FigureUpdateComposer(session.User.Look, session.User.Gender));
+        Session.SendPacket(new FigureUpdateComposer(Session.User.Look, Session.User.Gender));
         room.SendPacket(new UserChangeComposer(roomUser, false));
     }
 

@@ -6,7 +6,7 @@ using WibboEmulator.Utilities;
 
 public class InteractorVendorEnable : FurniInteractor
 {
-    public override void OnPlace(GameClient session, Item item)
+    public override void OnPlace(GameClient Session, Item item)
     {
         item.ExtraData = "0";
         if (item.InteractingUser <= 0)
@@ -17,7 +17,7 @@ public class InteractorVendorEnable : FurniInteractor
         item.InteractingUser = 0;
     }
 
-    public override void OnRemove(GameClient session, Item item)
+    public override void OnRemove(GameClient Session, Item item)
     {
         item.ExtraData = "0";
         if (item.InteractingUser <= 0)
@@ -28,14 +28,14 @@ public class InteractorVendorEnable : FurniInteractor
         item.InteractingUser = 0;
     }
 
-    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    public override void OnTrigger(GameClient Session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (!(item.ExtraData != "1") || item.ItemData.VendingIds.Count < 1 || item.InteractingUser != 0 || session == null)
+        if (!(item.ExtraData != "1") || item.ItemData.VendingIds.Count < 1 || item.InteractingUser != 0 || Session == null)
         {
             return;
         }
 
-        var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var roomUserByUserId = item.Room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
         if (roomUserByUserId == null)
         {
             return;
@@ -47,7 +47,7 @@ public class InteractorVendorEnable : FurniInteractor
         }
         else
         {
-            item.InteractingUser = session.User.Id;
+            item.InteractingUser = Session.User.Id;
             roomUserByUserId.SetRot(Rotation.Calculate(roomUserByUserId.X, roomUserByUserId.Y, item.X, item.Y), false);
             item.ReqUpdate(2);
             item.ExtraData = "1";

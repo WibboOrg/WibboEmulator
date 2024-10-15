@@ -6,15 +6,15 @@ internal sealed class CheckValidNameEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null || session == null)
+        if (Session.User == null || Session == null)
         {
             return;
         }
 
         var name = packet.PopString(16);
 
-        session.SendPacket(new NameChangeUpdateComposer(name));
+        Session.SendPacket(new NameChangeUpdateComposer(name));
     }
 }

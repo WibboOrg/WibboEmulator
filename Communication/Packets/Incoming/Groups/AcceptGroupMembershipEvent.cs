@@ -9,7 +9,7 @@ internal sealed class AcceptGroupMembershipEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var groupId = packet.PopInt();
         var userId = packet.PopInt();
@@ -19,7 +19,7 @@ internal sealed class AcceptGroupMembershipEvent : IPacketEvent
             return;
         }
 
-        if (session.User.Id != group.CreatorId && !group.IsAdmin(session.User.Id) && !session.User.HasPermission("delete_group_limit"))
+        if (Session.User.Id != group.CreatorId && !group.IsAdmin(Session.User.Id) && !Session.User.HasPermission("delete_group_limit"))
         {
             return;
         }
@@ -39,6 +39,6 @@ internal sealed class AcceptGroupMembershipEvent : IPacketEvent
 
         user.MyGroups.Add(group.Id);
 
-        session.SendPacket(new GroupMemberUpdatedComposer(groupId, user, 4));
+        Session.SendPacket(new GroupMemberUpdatedComposer(groupId, user, 4));
     }
 }

@@ -6,21 +6,21 @@ internal sealed class RequestFurniInventoryEvent : IPacketEvent
 {
     public double Delay => 5000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null)
+        if (Session.User == null)
         {
             return;
         }
 
-        if (session.User.InventoryComponent == null)
+        if (Session.User.InventoryComponent == null)
         {
             return;
         }
 
-        session.User.InventoryComponent.LoadInventory();
+        Session.User.InventoryComponent.LoadInventory();
 
-        var items = session.User.InventoryComponent.GetWallAndFloor;
-        session.SendPacket(new FurniListComposer(items.ToList(), 1, 0));
+        var items = Session.User.InventoryComponent.GetWallAndFloor;
+        Session.SendPacket(new FurniListComposer(items.ToList(), 1, 0));
     }
 }

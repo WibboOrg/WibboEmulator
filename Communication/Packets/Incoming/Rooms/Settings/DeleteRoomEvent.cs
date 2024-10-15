@@ -12,11 +12,11 @@ internal sealed class DeleteRoomEvent : IPacketEvent
 {
     public double Delay => 5000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var roomId = packet.PopInt();
 
-        if (session == null || session.User == null || session.User.UsersRooms == null)
+        if (Session == null || Session.User == null || Session.User.UsersRooms == null)
         {
             return;
         }
@@ -26,7 +26,7 @@ internal sealed class DeleteRoomEvent : IPacketEvent
             return;
         }
 
-        if (!(room.RoomData.OwnerName == session.User.Username))
+        if (!(room.RoomData.OwnerName == Session.User.Username))
         {
             return;
         }
@@ -37,7 +37,7 @@ internal sealed class DeleteRoomEvent : IPacketEvent
             // TODO: a notification like "you must first delete the group of this room" 
         }
 
-        session.User.InventoryComponent?.AddItemArray(room.RoomItemHandling.RemoveAllFurnitureToInventory(session));
+        Session.User.InventoryComponent?.AddItemArray(room.RoomItemHandling.RemoveAllFurnitureToInventory(Session));
 
         RoomManager.UnloadRoom(room);
 
@@ -48,21 +48,21 @@ internal sealed class DeleteRoomEvent : IPacketEvent
             RoomRightDao.Delete(dbClient, roomId);
             RoomBanDao.Delete(dbClient, roomId);
             ItemDao.DeleteAllByRoomId(dbClient, roomId);
-            UserDao.UpdateHomeRoom(dbClient, session.User.Id, 0);
+            UserDao.UpdateHomeRoom(dbClient, Session.User.Id, 0);
             BotUserDao.UpdateRoomBot(dbClient, roomId);
             BotPetDao.UpdateRoomIdByRoomId(dbClient, roomId);
         }
 
-        if (session.User.UsersRooms.Contains(roomId))
+        if (Session.User.UsersRooms.Contains(roomId))
         {
-            _ = session.User.UsersRooms.Remove(roomId);
+            _ = Session.User.UsersRooms.Remove(roomId);
         }
 
-        if (session.User.FavoriteRooms != null)
+        if (Session.User.FavoriteRooms != null)
         {
-            if (session.User.FavoriteRooms.Contains(roomId))
+            if (Session.User.FavoriteRooms.Contains(roomId))
             {
-                _ = session.User.FavoriteRooms.Remove(roomId);
+                _ = Session.User.FavoriteRooms.Remove(roomId);
             }
         }
     }

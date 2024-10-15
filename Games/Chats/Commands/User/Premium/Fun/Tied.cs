@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal sealed class Tied : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (userRoom.Team != TeamType.None || userRoom.InGame || room.IsGameMode)
         {
@@ -19,41 +19,41 @@ internal sealed class Tied : IChatCommand
             return;
         }
 
-        var targetUser = room.RoomUserManager.GetRoomUserByName(parameters[1]);
-        if (targetUser == null || targetUser.Client == null || targetUser.Client.User == null)
+        var TargetUser = room.RoomUserManager.GetRoomUserByName(parameters[1]);
+        if (TargetUser == null || TargetUser.Client == null || TargetUser.Client.User == null)
         {
             return;
         }
 
-        if (targetUser.Client.User.Id == session.User.Id)
+        if (TargetUser.Client.User.Id == Session.User.Id)
         {
             return;
         }
 
-        if (targetUser.Client.User.HasPremiumProtect && !session.User.HasPermission("mod"))
+        if (TargetUser.Client.User.HasPremiumProtect && !Session.User.HasPermission("mod"))
         {
-            session.SendWhisper(LanguageManager.TryGetValue("premium.notallowed", session.Language));
+            Session.SendWhisper(LanguageManager.TryGetValue("premium.notallowed", Session.Language));
             return;
         }
 
-        if (Math.Abs(targetUser.X - userRoom.X) >= 2 || Math.Abs(targetUser.Y - userRoom.Y) >= 2)
+        if (Math.Abs(TargetUser.X - userRoom.X) >= 2 || Math.Abs(TargetUser.Y - userRoom.Y) >= 2)
         {
             return;
         }
 
-        var timeSpan = DateTime.Now - session.User.CommandFunTimer;
+        var timeSpan = DateTime.Now - Session.User.CommandFunTimer;
         if (timeSpan.TotalSeconds < 10)
         {
-            userRoom.SendWhisperChat(string.Format(LanguageManager.TryGetValue("cmd.fun.timeout", session.Language), 10 - (int)timeSpan.TotalSeconds));
+            userRoom.SendWhisperChat(string.Format(LanguageManager.TryGetValue("cmd.fun.timeout", Session.Language), 10 - (int)timeSpan.TotalSeconds));
             return;
         }
 
-        session.User.CommandFunTimer = DateTime.Now;
+        Session.User.CommandFunTimer = DateTime.Now;
 
-        userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.tied.chat", session.Language), targetUser.Username), 32);
-        targetUser.OnChat(string.Format(LanguageManager.TryGetValue("cmd.tied.chat.target", session.Language), userRoom.Username), 18);
+        userRoom.OnChat(string.Format(LanguageManager.TryGetValue("cmd.tied.chat", Session.Language), TargetUser.Username), 32);
+        TargetUser.OnChat(string.Format(LanguageManager.TryGetValue("cmd.tied.chat.target", Session.Language), userRoom.Username), 18);
 
-        targetUser.ApplyEffect(729, true);
-        targetUser.TimerResetEffect = 6;
+        TargetUser.ApplyEffect(729, true);
+        TargetUser.TimerResetEffect = 6;
     }
 }

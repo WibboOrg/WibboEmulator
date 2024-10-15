@@ -11,7 +11,7 @@ internal sealed class DeleteGroupEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var groupId = packet.PopInt();
 
@@ -20,15 +20,15 @@ internal sealed class DeleteGroupEvent : IPacketEvent
             return;
         }
 
-        if (group.CreatorId != session.User.Id && !session.User.HasPermission("delete_group"))
+        if (group.CreatorId != Session.User.Id && !Session.User.HasPermission("delete_group"))
         {
-            session.SendNotification(LanguageManager.TryGetValue("notif.groupdelete.error.1", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("notif.groupdelete.error.1", Session.Language));
             return;
         }
 
-        if (group.MemberCount >= 100 && !session.User.HasPermission("delete_group_limit"))
+        if (group.MemberCount >= 100 && !Session.User.HasPermission("delete_group_limit"))
         {
-            session.SendNotification(LanguageManager.TryGetValue("notif.groupdelete.error.2", session.Language));
+            Session.SendNotification(LanguageManager.TryGetValue("notif.groupdelete.error.2", Session.Language));
             return;
         }
 
@@ -36,12 +36,12 @@ internal sealed class DeleteGroupEvent : IPacketEvent
 
         using var dbClient = DatabaseManager.Connection;
 
-        if (group.CreatorId != session.User.Id)
+        if (group.CreatorId != Session.User.Id)
         {
-            LogStaffDao.Insert(dbClient, session.User.Username, $"Suppresion du groupe {group.Id} crée par {group.CreatorId}");
+            LogStaffDao.Insert(dbClient, Session.User.Username, $"Suppresion du groupe {group.Id} crée par {group.CreatorId}");
         }
 
-        session.SendNotification(LanguageManager.TryGetValue("notif.groupdelete.succes", session.Language));
+        Session.SendNotification(LanguageManager.TryGetValue("notif.groupdelete.succes", Session.Language));
 
         if (RoomManager.TryGetRoom(group.RoomId, out var room))
         {

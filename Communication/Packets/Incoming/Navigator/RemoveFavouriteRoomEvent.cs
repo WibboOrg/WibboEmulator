@@ -8,25 +8,25 @@ internal sealed class RemoveFavouriteRoomEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session.User == null)
+        if (Session.User == null)
         {
             return;
         }
 
         var roomId = packet.PopInt();
 
-        if (!session.User.FavoriteRooms.Contains(roomId))
+        if (!Session.User.FavoriteRooms.Contains(roomId))
         {
             return;
         }
 
-        _ = session.User.FavoriteRooms.Remove(roomId);
+        _ = Session.User.FavoriteRooms.Remove(roomId);
 
-        session.SendPacket(new UpdateFavouriteRoomComposer(roomId, false));
+        Session.SendPacket(new UpdateFavouriteRoomComposer(roomId, false));
 
         using var dbClient = DatabaseManager.Connection;
-        UserFavoriteDao.Delete(dbClient, session.User.Id, roomId);
+        UserFavoriteDao.Delete(dbClient, Session.User.Id, roomId);
     }
 }

@@ -7,14 +7,14 @@ internal sealed class GetBadgeEditorPartsEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return;
         }
 
-        session.SendPacket(new BadgeEditorPartsComposer(
+        Session.SendPacket(new BadgeEditorPartsComposer(
             GroupManager.BadgeBases,
             GroupManager.BadgeSymbols,
             GroupManager.BadgeBaseColours,

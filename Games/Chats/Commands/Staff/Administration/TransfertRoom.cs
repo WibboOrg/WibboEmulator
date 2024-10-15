@@ -10,14 +10,14 @@ using WibboEmulator.Games.Users;
 
 internal sealed class TransfertRoom : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        if (!room.CheckRights(session, true) && !session.User.HasPermission("transfert_all_room"))
+        if (!room.CheckRights(Session, true) && !Session.User.HasPermission("transfert_all_room"))
         {
             return;
         }

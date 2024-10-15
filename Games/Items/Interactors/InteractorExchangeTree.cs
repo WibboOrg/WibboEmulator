@@ -11,27 +11,27 @@ public class InteractorExchangeTree : FurniInteractor
 {
     private bool _haveReward;
 
-    public override void OnPlace(GameClient session, Item item) => item.ReqUpdate(60);
+    public override void OnPlace(GameClient Session, Item item) => item.ReqUpdate(60);
 
-    public override void OnRemove(GameClient session, Item item)
+    public override void OnRemove(GameClient Session, Item item)
     {
     }
 
-    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    public override void OnTrigger(GameClient Session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (session == null || this._haveReward || !userHasRights)
+        if (Session == null || this._haveReward || !userHasRights)
         {
             return;
         }
 
         var room = item.Room;
 
-        if (room == null || !room.CheckRights(session, true))
+        if (room == null || !room.CheckRights(Session, true))
         {
             return;
         }
 
-        var roomUser = item.Room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var roomUser = item.Room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
 
         if (roomUser == null)
         {
@@ -63,7 +63,7 @@ public class InteractorExchangeTree : FurniInteractor
 
         if (timeLeft.TotalSeconds > 0)
         {
-            roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("tree.exchange.timeout", session.Language), timeLeft.Days, timeLeft.Hours, timeLeft.Minutes));
+            roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("tree.exchange.timeout", Session.Language), timeLeft.Days, timeLeft.Hours, timeLeft.Minutes));
         }
         else if (timeLeft.TotalSeconds <= 0)
         {
@@ -91,12 +91,12 @@ public class InteractorExchangeTree : FurniInteractor
 
             room.RoomItemHandling.RemoveFurniture(null, item.Id);
 
-            session.User.WibboPoints += rewards;
-            session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
+            Session.User.WibboPoints += rewards;
+            Session.SendPacket(new ActivityPointNotificationComposer(Session.User.WibboPoints, 0, 105));
 
-            UserDao.UpdateAddPoints(dbClient, session.User.Id, rewards);
+            UserDao.UpdateAddPoints(dbClient, Session.User.Id, rewards);
 
-            roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("tree.exchange.convert", session.Language), rewards));
+            roomUser.SendWhisperChat(string.Format(LanguageManager.TryGetValue("tree.exchange.convert", Session.Language), rewards));
         }
     }
 

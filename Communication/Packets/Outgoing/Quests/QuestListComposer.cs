@@ -4,7 +4,7 @@ using WibboEmulator.Games.Quests;
 
 internal sealed class QuestListComposer : ServerPacket
 {
-    public QuestListComposer(Dictionary<string, Quest> quests, GameClient session, bool send)
+    public QuestListComposer(Dictionary<string, Quest> quests, GameClient Session, bool send)
         : base(ServerPacketHeader.QUESTS)
     {
         this.WriteInteger(quests.Count);
@@ -12,7 +12,7 @@ internal sealed class QuestListComposer : ServerPacket
         {
             if (keyValuePair.Value != null)
             {
-                this.SerializeQuest(session, keyValuePair.Value, keyValuePair.Key);
+                this.SerializeQuest(Session, keyValuePair.Value, keyValuePair.Key);
             }
         }
 
@@ -20,18 +20,18 @@ internal sealed class QuestListComposer : ServerPacket
         {
             if (keyValuePair.Value == null)
             {
-                this.SerializeQuest(session, keyValuePair.Value, keyValuePair.Key);
+                this.SerializeQuest(Session, keyValuePair.Value, keyValuePair.Key);
             }
         }
 
         this.WriteBoolean(send);
     }
 
-    private void SerializeQuest(GameClient session, Quest quest, string category)
+    private void SerializeQuest(GameClient Session, Quest quest, string category)
     {
         var questsInCategory = QuestManager.GetAmountOfQuestsInCategory(category);
         var i = quest == null ? questsInCategory : quest.Number - 1;
-        var num = quest == null ? 0 : session.User.GetQuestProgress(quest.Id);
+        var num = quest == null ? 0 : Session.User.GetQuestProgress(quest.Id);
         if (quest != null && quest.IsCompleted(num))
         {
             i++;
@@ -42,7 +42,7 @@ internal sealed class QuestListComposer : ServerPacket
         this.WriteInteger(questsInCategory);
         this.WriteInteger(0);
         this.WriteInteger(quest == null ? 0 : quest.Id);
-        this.WriteBoolean(quest != null && session.User.QuestId == quest.Id);
+        this.WriteBoolean(quest != null && Session.User.QuestId == quest.Id);
         this.WriteString(quest == null ? string.Empty : quest.ActionName);
         this.WriteString(quest == null ? string.Empty : quest.DataBit);
         this.WriteInteger(quest == null ? 0 : quest.Reward);

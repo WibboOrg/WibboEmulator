@@ -7,15 +7,15 @@ internal sealed class UpdateTriggerEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        var room = session.User.Room;
+        var room = Session.User.Room;
         if (room == null)
         {
             return;
         }
 
-        if (!room.CheckRights(session) && !room.CheckRights(session, true))
+        if (!room.CheckRights(Session) && !room.CheckRights(Session, true))
         {
             return;
         }
@@ -46,11 +46,11 @@ internal sealed class UpdateTriggerEvent : IPacketEvent
 
         var selectionCode = packet.PopInt();
 
-        var isStaff = session.User.HasPermission("superwired_staff");
-        var isGod = session.User.HasPermission("superwired_god");
+        var isStaff = Session.User.HasPermission("superwired_staff");
+        var isGod = Session.User.HasPermission("superwired_god");
 
         WiredRegister.HandleRegister(item, room, intParams, stringParam, stuffIds, selectionCode, 0, isStaff, isGod);
 
-        session.SendPacket(new SaveWiredComposer());
+        Session.SendPacket(new SaveWiredComposer());
     }
 }

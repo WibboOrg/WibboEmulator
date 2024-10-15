@@ -6,9 +6,9 @@ internal sealed class OpenBotActionEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!session.User.InRoom)
+        if (!Session.User.InRoom)
         {
             return;
         }
@@ -21,8 +21,8 @@ internal sealed class OpenBotActionEvent : IPacketEvent
             return;
         }
 
-        var room = session.User.Room;
-        if (room == null || !room.CheckRights(session))
+        var room = Session.User.Room;
+        if (room == null || !room.CheckRights(Session))
         {
             return;
         }
@@ -47,7 +47,7 @@ internal sealed class OpenBotActionEvent : IPacketEvent
 
         if (actionId is 2 or 5 or 9)
         {
-            session.SendPacket(new OpenBotActionComposer(botUser, actionId, botSpeech));
+            Session.SendPacket(new OpenBotActionComposer(botUser, actionId, botSpeech));
         }
     }
 }

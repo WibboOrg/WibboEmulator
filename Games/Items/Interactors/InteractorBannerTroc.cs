@@ -10,24 +10,24 @@ public class InteractorBannerTroc : FurniInteractor
 {
     private bool _haveReward;
 
-    public override void OnPlace(GameClient session, Item item)
+    public override void OnPlace(GameClient Session, Item item)
     {
     }
 
-    public override void OnRemove(GameClient session, Item item)
+    public override void OnRemove(GameClient Session, Item item)
     {
     }
 
-    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    public override void OnTrigger(GameClient Session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (session == null || this._haveReward || !userHasRights)
+        if (Session == null || this._haveReward || !userHasRights)
         {
             return;
         }
 
         var room = item.Room;
 
-        if (room == null || !room.CheckRights(session, true))
+        if (room == null || !room.CheckRights(Session, true))
         {
             return;
         }
@@ -37,9 +37,9 @@ public class InteractorBannerTroc : FurniInteractor
             return;
         }
 
-        if (!BannerManager.TryGetBannerById(bannerId, out var banner) || session.User.BannerComponent.BannerList.Contains(banner))
+        if (!BannerManager.TryGetBannerById(bannerId, out var banner) || Session.User.BannerComponent.BannerList.Contains(banner))
         {
-            session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous possèdez déjà cette bannière."));
+            Session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous possèdez déjà cette bannière."));
             return;
         }
 
@@ -50,9 +50,9 @@ public class InteractorBannerTroc : FurniInteractor
 
         room.RoomItemHandling.RemoveFurniture(null, item.Id);
 
-        session.User.BannerComponent.AddBanner(dbClient, bannerId);
+        Session.User.BannerComponent.AddBanner(dbClient, bannerId);
 
-        session.SendNotification("Vous avez reçu la bannière : " + bannerId + " !");
+        Session.SendNotification("Vous avez reçu la bannière : " + bannerId + " !");
     }
 
     public override void OnTick(Item item)

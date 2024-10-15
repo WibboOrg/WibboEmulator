@@ -12,14 +12,14 @@ internal sealed class OpenGiftEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User == null || !session.User.InRoom)
+        if (Session == null || Session.User == null || !Session.User.InRoom)
         {
             return;
         }
 
-        var room = session.User.Room;
+        var room = Session.User.Room;
         if (room == null)
         {
             return;
@@ -32,14 +32,14 @@ internal sealed class OpenGiftEvent : IPacketEvent
             return;
         }
 
-        if (!room.CheckRights(session, true))
+        if (!room.CheckRights(Session, true))
         {
             return;
         }
 
         if (present.ItemData.InteractionType is InteractionType.GIFT_BANNER or InteractionType.PREMIUM_CLASSIC or InteractionType.PREMIUM_EPIC or InteractionType.PREMIUM_LEGEND)
         {
-            present.Interactor.OnTrigger(session, present, -1, true, false);
+            present.Interactor.OnTrigger(Session, present, -1, true, false);
         }
         else if (present.ItemData.InteractionType == InteractionType.GIFT)
         {
@@ -54,7 +54,7 @@ internal sealed class OpenGiftEvent : IPacketEvent
                 ItemDao.DeleteById(dbClient, present.Id);
                 ItemPresentDao.Delete(dbClient, present.Id);
 
-                session.User.InventoryComponent.RemoveItem(present.Id);
+                Session.User.InventoryComponent.RemoveItem(present.Id);
                 return;
             }
 
@@ -65,43 +65,43 @@ internal sealed class OpenGiftEvent : IPacketEvent
                 ItemDao.DeleteById(dbClient, present.Id);
                 ItemPresentDao.Delete(dbClient, present.Id);
 
-                session.User.InventoryComponent.RemoveItem(present.Id);
+                Session.User.InventoryComponent.RemoveItem(present.Id);
                 return;
             }
 
-            FinishOpenGift(dbClient, session, present, room, itemPresent);
+            FinishOpenGift(dbClient, Session, present, room, itemPresent);
         }
         else if (present.ItemData.InteractionType == InteractionType.EXTRA_BOX)
         {
-            ItemLootBox.OpenExtrabox(session, present, room);
+            ItemLootBox.OpenExtrabox(Session, present, room);
         }
         else if (present.ItemData.InteractionType == InteractionType.DELUXE_BOX)
         {
-            ItemLootBox.OpenDeluxeBox(session, present, room);
+            ItemLootBox.OpenDeluxeBox(Session, present, room);
         }
         else if (present.ItemData.InteractionType == InteractionType.LOOTBOX_2022)
         {
-            ItemLootBox.OpenLootBox2022(session, present, room);
+            ItemLootBox.OpenLootBox2022(Session, present, room);
         }
         else if (present.ItemData.InteractionType == InteractionType.LEGEND_BOX)
         {
-            ItemLootBox.OpenLegendBox(session, present, room);
+            ItemLootBox.OpenLegendBox(Session, present, room);
         }
         else if (present.ItemData.InteractionType == InteractionType.BADGE_BOX)
         {
-            ItemLootBox.OpenBadgeBox(session, present, room);
+            ItemLootBox.OpenBadgeBox(Session, present, room);
         }
         else if (present.ItemData.InteractionType is InteractionType.CASE_MIEL or InteractionType.CASE_ATHENA or InteractionType.BAG_SAKURA or InteractionType.BAG_ATLANTA or InteractionType.BAG_KYOTO)
         {
-            ItemLootBox.OpenCaseOrBag(session, present, room);
+            ItemLootBox.OpenCaseOrBag(Session, present, room);
         }
     }
 
-    private static void FinishOpenGift(IDbConnection dbClient, GameClient session, Item present, Room room, ItemPresentEntity itemPresent)
+    private static void FinishOpenGift(IDbConnection dbClient, GameClient Session, Item present, Room room, ItemPresentEntity itemPresent)
     {
         var itemIsInRoom = true;
 
-        room.RoomItemHandling.RemoveFurniture(session, present.Id);
+        room.RoomItemHandling.RemoveFurniture(Session, present.Id);
 
         ItemDao.UpdateBaseItemAndExtraData(dbClient, present.Id, itemPresent.BaseId, itemPresent.ExtraData);
 
@@ -113,11 +113,11 @@ internal sealed class OpenGiftEvent : IPacketEvent
 
         if (present.Data.Type == ItemType.S)
         {
-            if (!room.RoomItemHandling.SetFloorItem(session, present, present.X, present.Y, present.Rotation, true, false, true))
+            if (!room.RoomItemHandling.SetFloorItem(Session, present, present.X, present.Y, present.Rotation, true, false, true))
             {
                 ItemDao.UpdateResetRoomId(dbClient, present.Id);
 
-                session.User.InventoryComponent.TryAddItem(present);
+                Session.User.InventoryComponent.TryAddItem(present);
 
                 itemIsInRoom = false;
             }
@@ -126,11 +126,11 @@ internal sealed class OpenGiftEvent : IPacketEvent
         {
             ItemDao.UpdateResetRoomId(dbClient, present.Id);
 
-            session.User.InventoryComponent.TryAddItem(present);
+            Session.User.InventoryComponent.TryAddItem(present);
 
             itemIsInRoom = false;
         }
 
-        session.SendPacket(new OpenGiftComposer(present.Data, present.ExtraData, present, itemIsInRoom));
+        Session.SendPacket(new OpenGiftComposer(present.Data, present.ExtraData, present, itemIsInRoom));
     }
 }

@@ -6,23 +6,23 @@ internal sealed class GoToFlatEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!session.User.InRoom)
+        if (!Session.User.InRoom)
         {
             return;
         }
 
-        var room = session.User.Room;
+        var room = Session.User.Room;
 
         if (room == null)
         {
             return;
         }
 
-        if (!session.User.EnterRoom(room))
+        if (!Session.User.EnterRoom(room))
         {
-            session.SendPacket(new CloseConnectionComposer());
+            Session.SendPacket(new CloseConnectionComposer());
         }
     }
 }

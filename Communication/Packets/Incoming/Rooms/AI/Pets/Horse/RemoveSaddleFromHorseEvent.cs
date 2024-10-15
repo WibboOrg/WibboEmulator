@@ -13,14 +13,14 @@ internal sealed class RemoveSaddleFromHorseEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (!session.User.InRoom)
+        if (!Session.User.InRoom)
         {
             return;
         }
 
-        if (!RoomManager.TryGetRoom(session.User.RoomId, out var room))
+        if (!RoomManager.TryGetRoom(Session.User.RoomId, out var room))
         {
             return;
         }
@@ -30,7 +30,7 @@ internal sealed class RemoveSaddleFromHorseEvent : IPacketEvent
             return;
         }
 
-        if (petUser.PetData == null || petUser.PetData.OwnerId != session.User.Id || petUser.PetData.Type != 13)
+        if (petUser.PetData == null || petUser.PetData.OwnerId != Session.User.Id || petUser.PetData.Type != 13)
         {
             return;
         }
@@ -48,12 +48,12 @@ internal sealed class RemoveSaddleFromHorseEvent : IPacketEvent
             return;
         }
 
-        var item = ItemFactory.CreateSingleItemNullable(dbClient, itemData, session.User, "");
+        var item = ItemFactory.CreateSingleItemNullable(dbClient, itemData, Session.User, "");
         if (item != null)
         {
-            session.User.InventoryComponent.TryAddItem(item);
+            Session.User.InventoryComponent.TryAddItem(item);
 
-            session.SendPacket(new PurchaseOKComposer());
+            Session.SendPacket(new PurchaseOKComposer());
         }
 
         room.SendPacket(new UsersComposer(petUser));

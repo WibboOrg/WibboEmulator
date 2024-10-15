@@ -11,20 +11,20 @@ internal sealed class SetActivatedBadgesEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        if (session == null || session.User == null || session.User.BadgeComponent == null)
+        if (Session == null || Session.User == null || Session.User.BadgeComponent == null)
         {
             return;
         }
 
         using var dbClient = DatabaseManager.Connection;
 
-        UserBadgeDao.UpdateResetSlot(dbClient, session.User.Id);
+        UserBadgeDao.UpdateResetSlot(dbClient, Session.User.Id);
 
-        session.User.BadgeComponent.ResetSlots();
+        Session.User.BadgeComponent.ResetSlots();
 
-        var maxBadgeCount = session.User.BadgeComponent.BadgeMaxCount;
+        var maxBadgeCount = Session.User.BadgeComponent.BadgeMaxCount;
 
         for (var i = 0; i < maxBadgeCount; i++)
         {
@@ -36,27 +36,27 @@ internal sealed class SetActivatedBadgesEvent : IPacketEvent
                 continue;
             }
 
-            if (!session.User.BadgeComponent.HasBadge(badge) || slot < 1 || slot > maxBadgeCount)
+            if (!Session.User.BadgeComponent.HasBadge(badge) || slot < 1 || slot > maxBadgeCount)
             {
                 continue;
             }
 
-            session.User.BadgeComponent.GetBadge(badge).Slot = slot;
+            Session.User.BadgeComponent.GetBadge(badge).Slot = slot;
 
-            UserBadgeDao.UpdateSlot(dbClient, session.User.Id, slot, badge);
+            UserBadgeDao.UpdateSlot(dbClient, Session.User.Id, slot, badge);
         }
 
-        QuestManager.ProgressUserQuest(session, QuestType.ProfileBadge, 0);
+        QuestManager.ProgressUserQuest(Session, QuestType.ProfileBadge, 0);
 
-        if (!session.User.InRoom)
+        if (!Session.User.InRoom)
         {
-            session.SendPacket(new UserBadgesComposer(session.User));
+            Session.SendPacket(new UserBadgesComposer(Session.User));
         }
         else
         {
-            if (RoomManager.TryGetRoom(session.User.RoomId, out var room))
+            if (RoomManager.TryGetRoom(Session.User.RoomId, out var room))
             {
-                room.SendPacket(new UserBadgesComposer(session.User));
+                room.SendPacket(new UserBadgesComposer(Session.User));
             }
         }
     }

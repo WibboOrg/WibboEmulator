@@ -13,7 +13,7 @@ using WibboEmulator.Games.Rooms;
 
 internal sealed class GiveLot : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parts)
+    public void Execute(GameClient Session, Room room, RoomUser userRoom, string[] parts)
     {
         if (parts.Length != 2)
         {
@@ -23,14 +23,14 @@ internal sealed class GiveLot : IChatCommand
         var targetRoomUser = room.RoomUserManager.GetRoomUserByName(parts[1]);
         if (targetRoomUser == null || targetRoomUser.Client == null)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", session.Language));
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("input.usernotfound", Session.Language));
             return;
         }
 
-        if (targetRoomUser.Username == session.User.Username || targetRoomUser.Client.User.IP == session.User.IP)
+        if (targetRoomUser.Username == Session.User.Username || targetRoomUser.Client.User.IP == Session.User.IP)
         {
-            userRoom.SendWhisperChat(LanguageManager.TryGetValue("notif.givelot.error", session.Language));
-            ModerationManager.LogStaffEntry(session.User.Id, session.User.Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + targetRoomUser.Username);
+            userRoom.SendWhisperChat(LanguageManager.TryGetValue("notif.givelot.error", Session.Language));
+            ModerationManager.LogStaffEntry(Session.User.Id, Session.User.Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + targetRoomUser.Username);
             return;
         }
 
@@ -89,7 +89,7 @@ internal sealed class GiveLot : IChatCommand
         }
 
         targetRoomUser.Client.SendNotification(string.Format(LanguageManager.TryGetValue("notif.givelot.sucess", targetRoomUser.Client.Language), lotCount) + (haveWinBag ? " Et 1 <b>Sachet Rare</b> !" : ""));
-        session.SendWhisper(targetRoomUser.Username + " à reçu " + lotCount + " LootBox !" + (haveWinBag ? " Et 1 Sachet Rare !" : ""));
+        Session.SendWhisper(targetRoomUser.Username + " à reçu " + lotCount + " LootBox !" + (haveWinBag ? " Et 1 Sachet Rare !" : ""));
 
         targetRoomUser.Client.User.GamePointsMonth += 1;
         HallOfFameManager.UpdateRakings(targetRoomUser.Client.User);

@@ -12,28 +12,28 @@ internal sealed class RpBotChooseEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
         var message = packet.PopString();
 
-        if (session == null || session.User == null)
+        if (Session == null || Session.User == null)
         {
             return;
         }
 
-        var room = session.User.Room;
+        var room = Session.User.Room;
         if (room == null)
         {
             return;
         }
 
-        var user = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(Session.User.Id);
         if (user == null)
         {
             return;
         }
 
-        if (message == "play_slot" && user.IsSlot && !user.IsSlotSpin && session.User.WibboPoints >= user.SlotAmount)
+        if (message == "play_slot" && user.IsSlot && !user.IsSlotSpin && Session.User.WibboPoints >= user.SlotAmount)
         {
             using var dbClient = DatabaseManager.Connection;
 
@@ -52,16 +52,16 @@ internal sealed class RpBotChooseEvent : IPacketEvent
             if (isWin)
             {
                 user.IsSlotWinner = true;
-                session.User.WibboPoints += user.SlotAmount;
-                UserDao.UpdateAddPoints(dbClient, session.User.Id, user.SlotAmount);
+                Session.User.WibboPoints += user.SlotAmount;
+                UserDao.UpdateAddPoints(dbClient, Session.User.Id, user.SlotAmount);
 
                 ownerUser.WibboPoints -= user.SlotAmount;
                 UserDao.UpdateRemovePoints(dbClient, room.RoomData.OwnerId, user.SlotAmount);
             }
             else
             {
-                session.User.WibboPoints -= user.SlotAmount;
-                UserDao.UpdateRemovePoints(dbClient, session.User.Id, user.SlotAmount);
+                Session.User.WibboPoints -= user.SlotAmount;
+                UserDao.UpdateRemovePoints(dbClient, Session.User.Id, user.SlotAmount);
 
                 ownerUser.WibboPoints += user.SlotAmount;
                 UserDao.UpdateAddPoints(dbClient, room.RoomData.OwnerId, user.SlotAmount);
@@ -69,7 +69,7 @@ internal sealed class RpBotChooseEvent : IPacketEvent
 
             ownerUser.Client?.SendPacket(new ActivityPointNotificationComposer(ownerUser.WibboPoints, 0, 105));
 
-            LogSlotMachineDao.Insert(dbClient, session.User.Id, user.SlotAmount, isWin);
+            LogSlotMachineDao.Insert(dbClient, Session.User.Id, user.SlotAmount, isWin);
         }
 
         _ = room.AllowsShous(user, message);

@@ -7,21 +7,21 @@ internal sealed class SendRoomInviteEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket packet)
+    public void Parse(GameClient Session, ClientPacket packet)
     {
-        var timeSpan = DateTime.Now - session.User.FloodTime;
+        var timeSpan = DateTime.Now - Session.User.FloodTime;
         if (timeSpan.Seconds > 4)
         {
-            session.User.FloodCount = 0;
+            Session.User.FloodCount = 0;
         }
 
-        if (timeSpan.Seconds < 4 && session.User.FloodCount > 5 && session.User.Rank < 5)
+        if (timeSpan.Seconds < 4 && Session.User.FloodCount > 5 && Session.User.Rank < 5)
         {
             return;
         }
 
-        session.User.FloodTime = DateTime.Now;
-        session.User.FloodCount++;
+        Session.User.FloodTime = DateTime.Now;
+        Session.User.FloodCount++;
 
         var inviteCount = packet.PopInt();
         if (inviteCount > 100)
@@ -41,22 +41,22 @@ internal sealed class SendRoomInviteEvent : IPacketEvent
 
         var textMessage = packet.PopString(121);
 
-        if (session.User.CheckChatMessage(textMessage, "<RM>"))
+        if (Session.User.CheckChatMessage(textMessage, "<RM>"))
         {
             return;
         }
 
-        if (session.User.IgnoreAll)
+        if (Session.User.IgnoreAll)
         {
             return;
         }
 
 
-        ServerPacket roomInvitePacket = new RoomInviteComposer(session.User.Id, textMessage);
+        ServerPacket roomInvitePacket = new RoomInviteComposer(Session.User.Id, textMessage);
 
         foreach (var userId in targets)
         {
-            if (session.User.Messenger.FriendshipExists(userId))
+            if (Session.User.Messenger.FriendshipExists(userId))
             {
                 var clientByUserId = GameClientManager.GetClientByUserID(userId);
                 if (clientByUserId == null || clientByUserId.User.IgnoreRoomInvites)
@@ -64,7 +64,7 @@ internal sealed class SendRoomInviteEvent : IPacketEvent
                     break;
                 }
 
-                if (clientByUserId.User.Messenger.FriendshipExists(session.User.Id))
+                if (clientByUserId.User.Messenger.FriendshipExists(Session.User.Id))
                 {
                     clientByUserId.SendPacket(roomInvitePacket);
                 }
