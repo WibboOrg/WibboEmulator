@@ -5,7 +5,6 @@ using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Users;
 
 internal sealed class RpBotChooseEvent : IPacketEvent
@@ -33,7 +32,7 @@ internal sealed class RpBotChooseEvent : IPacketEvent
             return;
         }
 
-        if (message == "play_slot" && user.IsSlot && !user.IsSlotSpin && session.User.WibboPoints >= user.SlotAmount)
+        if (message == ("play_slot_" + user.SlotAmount) && user.IsSlot && !user.IsSlotSpin && session.User.WibboPoints >= user.SlotAmount)
         {
             using var dbClient = DatabaseManager.Connection;
 
@@ -48,7 +47,7 @@ internal sealed class RpBotChooseEvent : IPacketEvent
             user.IsSlot = false;
             user.IsSlotWinner = false;
 
-            var isWin = WibboEnvironment.GetRandomNumber(0, 100) <= 48;
+            var isWin = WibboEnvironment.GetRandomNumber(0, 10000) <= 4800;
             if (isWin)
             {
                 user.IsSlotWinner = true;

@@ -27,6 +27,7 @@ using WibboEmulator.Games.Effects;
 using WibboEmulator.Games.Achievements;
 using WibboEmulator.Utilities;
 using WibboEmulator.Games.Badges;
+using WibboEmulator.Games.Users;
 
 public class SuperWired : WiredActionBase, IWired, IWiredEffect
 {
@@ -1720,7 +1721,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 var chooseList = new List<string[]>
                 {
-                    new string[] { "", "play_slot", string.Format(LanguageManager.TryGetValue("startslot.botchoose", roomUser.Client.Language), roomUser.SlotAmount), "" },
+                    new string[] { "", "play_slot_" + roomUser.SlotAmount, string.Format(LanguageManager.TryGetValue("startslot.botchoose", roomUser.Client.Language), roomUser.SlotAmount), "" },
                 };
 
                 roomUser.Client.SendPacket(new BotChooseComposer(chooseList));
