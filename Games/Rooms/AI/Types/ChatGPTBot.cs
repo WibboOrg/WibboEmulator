@@ -1,13 +1,18 @@
 namespace WibboEmulator.Games.Rooms.AI.Types;
 
 using System.Drawing;
+using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Core;
+using WibboEmulator.Core.Language;
 using WibboEmulator.Core.OpenIA;
 using WibboEmulator.Core.Settings;
+using WibboEmulator.Database.Daos.Log;
+using WibboEmulator.Database;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Users;
 using WibboEmulator.Utilities;
 
 public partial class ChatGPTBot : BotAI
@@ -313,15 +318,15 @@ public partial class ChatGPTBot : BotAI
                 var messagesSend = new List<ChatCompletionMessage>([prePrompt]);
                 messagesSend.AddRange(this._userMessages.TryGetValue(userId, out var userMessages) ? userMessages : []);
 
-                var messagesGtp = await OpenAIProxy.SendChatMessage(messagesSend);
+                var messagesGpt = await OpenAIProxy.SendChatMessage(messagesSend);
 
-                if (messagesGtp != null)
+                if (messagesGpt != null && messagesGpt.Content != null)
                 {
-                    var message = messagesGtp.Content;
+                    var message = messagesGpt.Content;
                     if (message.Contains("(Action: "))
                     {
                         message = message.Split("(Action: ")[0];
-                        this.ParseActionId(messagesGtp.Content, userId);
+                        this.ParseActionId(messagesGpt.Content, userId);
                     }
 
                     var chatTexts = SplitSentence(message, 20);
@@ -334,7 +339,28 @@ public partial class ChatGPTBot : BotAI
                         }
                     }
 
-                    this.StackMessages(userId, messagesGtp);
+                    this.StackMessages(userId, messagesGpt);
+                }
+                else if (messagesGpt != null && messagesGpt.Audio != null && messagesGpt.Audio.Data != null)
+                {
+                    var audioName = $"chatgpt_{this.Room.Id}_{Guid.NewGuid()}";
+
+                    var audioBinary = Convert.FromBase64String(messagesGpt.Audio.Data);
+                    var audioId = UploadApi.ChatAudio(audioBinary, audioName);
+
+                    if (string.IsNullOrEmpty(audioId) || audioName != audioId)
+                    {
+                        return;
+                    }
+
+                    var audioPath = $"/chat-audio/{audioName}.webm";
+
+                    var audioUploadUrl = SettingsManager.GetData<string>("audio.upload.url");
+                    var basePath = new Uri(audioUploadUrl).GetLeftPart(UriPartial.Authority);
+
+                    var audioUrl = $"{basePath}{audioPath}";
+
+                    this.RoomUser.OnChatAudio(audioPath);
                 }
             }
             catch (Exception ex)

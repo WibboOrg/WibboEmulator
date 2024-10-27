@@ -9,4 +9,13 @@ public class ChatCompletionMessage
 
     [JsonProperty("content")]
     public string Content { get; set; }
+
+    [JsonProperty("audio")]
+    public AudioData Audio { get; set; }
+}
+
+public class AudioData
+{
+    [JsonProperty("data")]
+    public string Data { get; set; }
 }

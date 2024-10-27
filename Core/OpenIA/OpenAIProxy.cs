@@ -59,7 +59,7 @@ public static class OpenAIProxy
         return null;
     }
 
-    public static async Task<ChatCompletionMessage> SendChatMessage(List<ChatCompletionMessage> messagesSend)
+    public static async Task<ChatCompletionMessage> SendChatMessage(List<ChatCompletionMessage> messagesSend, bool audioMode = false)
     {
         try
         {
@@ -73,11 +73,14 @@ public static class OpenAIProxy
             var request = new
             {
                 messages = messagesSend.ToArray(),
-                model = "gpt-3.5-turbo-1106",
+                model = audioMode ? "gpt-4o-audio-preview" : "gpt-3.5-turbo-1106",
                 max_tokens = 150,
-                temperature = 0.6,
-                stop = "\n"
+                temperature = audioMode ? (double?)null : 0.6,
+                stop = audioMode ? null : "\n",
+                modalities = audioMode ? new string[] { "text", "audio" } : null,
+                audio = audioMode ? new { voice = "nova", format = "wav" } : null
             };
+
 
             var requestJson = JsonConvert.SerializeObject(request);
             var requestContent = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
@@ -95,7 +98,7 @@ public static class OpenAIProxy
 
             var responseObject = JsonConvert.DeserializeAnonymousType(jsonString, new
             {
-                choices = new[] { new { message = new ChatCompletionMessage { Role = string.Empty, Content = string.Empty } } },
+                choices = new[] { new { message = new ChatCompletionMessage { Role = string.Empty, Content = string.Empty, Audio = new() } } },
                 error = new { message = string.Empty }
             });
 
