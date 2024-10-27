@@ -1706,11 +1706,6 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 _ = int.TryParse(value, out var valueInt);
 
-                if (valueInt is <= 0 or > 100)
-                {
-                    break;
-                }
-
                 if (roomUser.Client.User.WibboPoints < valueInt)
                 {
                     break;
