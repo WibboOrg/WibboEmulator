@@ -158,28 +158,40 @@ public class InventoryComponent(User user) : IDisposable
                 continue;
             }
 
-            if (!int.TryParse(roomItem.ItemData.ItemName.Split('_')[1], out var magotCount))
+            var itemName = roomItem.ItemData.ItemName;
+
+            var isParsed = itemName.StartsWith("nft_credit_")
+                ? int.TryParse(itemName.Split("nft_credit_")[1], out var magotCount)
+                : int.TryParse(itemName.Split('_')[1], out magotCount);
+
+            if (!isParsed || magotCount <= 0)
             {
                 continue;
             }
 
-            if (magotCount > 0)
+            if (itemName.StartsWith("CF_") || itemName.StartsWith("CFC_") || itemName.StartsWith("nft_credit_"))
             {
-                if (roomItem.ItemData.ItemName.StartsWith("CF_") || roomItem.ItemData.ItemName.StartsWith("CFC_"))
-                {
-                    creditCount += magotCount;
-                }
-                else if (roomItem.ItemData.ItemName.StartsWith("PntEx_"))
-                {
-                    wibboPointsCount += magotCount;
-                }
-                else if (roomItem.ItemData.ItemName.StartsWith("WwnEx_"))
-                {
-                    winwinCount += magotCount;
-                }
+                creditCount += magotCount;
+            }
+            else if (itemName.StartsWith("PntEx_"))
+            {
+                wibboPointsCount += magotCount;
+            }
+            else if (itemName.StartsWith("WwnEx_"))
+            {
+                winwinCount += magotCount;
+            }
+            else
+            {
+                continue;
             }
 
             deleteItem.Add(roomItem);
+        }
+
+        if (deleteItem.Count == 0)
+        {
+            return;
         }
 
         using var dbClient = DatabaseManager.Connection;

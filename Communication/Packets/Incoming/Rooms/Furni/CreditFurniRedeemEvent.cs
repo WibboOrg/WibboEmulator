@@ -48,38 +48,41 @@ internal sealed class CreditFurniRedeemEvent : IPacketEvent
 
         room.RoomItemHandling.RemoveFurniture(null, exchange.Id);
 
-        if (!int.TryParse(exchange.ItemData.ItemName.Split('_')[1], out var value))
+        var itemName = exchange.ItemData.ItemName;
+
+        var isParsed = itemName.StartsWith("nft_credit_")
+            ? int.TryParse(itemName.Split("nft_credit_")[1], out var magotCount)
+            : int.TryParse(itemName.Split('_')[1], out magotCount);
+
+        if (!isParsed || magotCount <= 0)
         {
             return;
         }
 
-        if (value > 0)
+        if (exchange.ItemData.ItemName.StartsWith("CF_") || exchange.ItemData.ItemName.StartsWith("CFC_") || exchange.ItemData.ItemName.StartsWith("nft_credit_"))
         {
-            if (exchange.ItemData.ItemName.StartsWith("CF_") || exchange.ItemData.ItemName.StartsWith("CFC_"))
-            {
-                session.User.Credits += value;
-                session.SendPacket(new CreditBalanceComposer(session.User.Credits));
-            }
-            else if (exchange.ItemData.ItemName.StartsWith("PntEx_"))
-            {
-                session.User.WibboPoints += value;
-                session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
+            session.User.Credits += magotCount;
+            session.SendPacket(new CreditBalanceComposer(session.User.Credits));
+        }
+        else if (exchange.ItemData.ItemName.StartsWith("PntEx_"))
+        {
+            session.User.WibboPoints += magotCount;
+            session.SendPacket(new ActivityPointNotificationComposer(session.User.WibboPoints, 0, 105));
 
-                UserDao.UpdateAddPoints(dbClient, session.User.Id, value);
-            }
-            else if (exchange.ItemData.ItemName.StartsWith("WwnEx_"))
+            UserDao.UpdateAddPoints(dbClient, session.User.Id, magotCount);
+        }
+        else if (exchange.ItemData.ItemName.StartsWith("WwnEx_"))
+        {
+            UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, magotCount);
+
+            session.User.AchievementPoints += magotCount;
+            session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));
+
+            var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
+            if (roomUserByUserId != null)
             {
-                UserStatsDao.UpdateAchievementScore(dbClient, session.User.Id, value);
-
-                session.User.AchievementPoints += value;
-                session.SendPacket(new AchievementScoreComposer(session.User.AchievementPoints));
-
-                var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.User.Id);
-                if (roomUserByUserId != null)
-                {
-                    session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
-                    room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
-                }
+                session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
+                room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
             }
         }
     }
