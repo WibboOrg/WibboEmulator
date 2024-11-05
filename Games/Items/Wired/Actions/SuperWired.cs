@@ -1970,7 +1970,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 _ = int.TryParse(value, out var points);
 
-                if (roomUser.WiredPoints <= int.MaxValue - points && roomUser.WiredPoints >= int.MinValue + points)
+                if ((points > 0 && roomUser.WiredPoints <= int.MaxValue - points) || (points < 0 && roomUser.WiredPoints >= int.MinValue - points))
                 {
                     roomUser.WiredPoints += points;
                 }
@@ -1981,7 +1981,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 _ = int.TryParse(value, out var points);
 
-                if (roomUser.WiredPoints <= int.MaxValue - points && roomUser.WiredPoints >= int.MinValue + points)
+                if ((points > 0 && roomUser.WiredPoints <= int.MaxValue - points) || (points < 0 && roomUser.WiredPoints >= int.MinValue - points))
                 {
                     roomUser.WiredPoints -= points;
                 }
