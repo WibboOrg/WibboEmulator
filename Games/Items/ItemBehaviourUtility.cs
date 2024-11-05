@@ -216,6 +216,7 @@ internal static class ItemBehaviourUtility
             case InteractionType.BAG_SAKURA:
             case InteractionType.BAG_ATLANTA:
             case InteractionType.BAG_KYOTO:
+            case InteractionType.BAG_NOEL:
             {
                 var lotName = "une LootBox";
                 switch (itemData.InteractionType)
@@ -243,6 +244,9 @@ internal static class ItemBehaviourUtility
                         break;
                     case InteractionType.BAG_KYOTO:
                         lotName = "un sachet Kyoto";
+                        break;
+                    case InteractionType.BAG_NOEL:
+                        lotName = "un sachet Noël";
                         break;
                 }
 
