@@ -64,7 +64,7 @@ public class GivePointsHighScore : WiredActionBase, IWired, IWiredEffect, IWired
                         }
                         else if (valueInt < 0)
                         {
-                            scores[user.Username] = (score < int.MinValue / valueInt) ? int.MinValue : score * valueInt;
+                            scores[user.Username] = (score > int.MinValue / valueInt) ? int.MinValue : score * valueInt;
                         }
                         else
                         {
