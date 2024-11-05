@@ -98,6 +98,8 @@ public class BannerComponent(User user) : IDisposable
         }
     }
 
+    public bool HaveBanner(int id) => BannerManager.TryGetBannerById(id, out var banner) && this.BannerList.Contains(banner);
+
     public void Dispose()
     {
         this.BannerList.Clear();

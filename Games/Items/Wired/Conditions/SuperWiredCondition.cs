@@ -85,6 +85,8 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "notslotspin":
             case "slot":
             case "notslot":
+            case "banner":
+            case "notbanner":
                 if (this.IsStaff)
                 {
                     return;
@@ -1323,6 +1325,23 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "notenable":
             {
                 if (user.CurrentEffect.ToString() == value)
+                {
+                    result = true;
+                }
+
+                break;
+            }
+            case "banner":
+            case "notbanner":
+            {
+                if (user.IsBot || user.Client == null || user.Client.User == null || user.Client.User.BannerComponent == null)
+                {
+                    break;
+                }
+
+                _ = int.TryParse(value, out var valueInt);
+
+                if (user.Client.User.BannerComponent.HaveBanner(valueInt))
                 {
                     result = true;
                 }
