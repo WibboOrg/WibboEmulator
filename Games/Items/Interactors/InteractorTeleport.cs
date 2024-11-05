@@ -106,7 +106,7 @@ public class InteractorTeleport : FurniInteractor
                 {
                     roomUserTarget.AllowOverride = false;
 
-                    var (isLinked, linkedTele, teleRoomId) = ItemTeleporterFinder.IsTeleLinked(item.Id, item.Room);
+                    var (isLinked, linkedTele, teleRoomId) = ItemTeleporterFinder.IsTeleLinked(item.TeleLinkId, item.Room);
                     if (isLinked)
                     {
                         showTeleEffect = true;

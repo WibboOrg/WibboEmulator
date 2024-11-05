@@ -197,13 +197,18 @@ public class RoomItemHandling(Room room)
                     roomItem.ExtraData = room.MoodlightData.GenerateExtraData();
                 }
             }
-            else //Is flooritem
+            else
             {
                 var roomItem = new Item(itemID, room.Id, baseID, extraData, limited, limitedTo, x, y, z, rot, "", room);
 
                 if (!this._floorItems.ContainsKey(itemID))
                 {
                     _ = this._floorItems.TryAdd(itemID, roomItem);
+                }
+
+                if (roomItem.Data.InteractionType is InteractionType.TELEPORT or InteractionType.TELEPORT_ARROW)
+                {
+                    roomItem.SetTeleLinkId(item.TeleTwoId);
                 }
 
                 if (WiredUtillity.TypeIsWired(data.InteractionType))
@@ -741,21 +746,7 @@ public class RoomItemHandling(Room room)
         else
         {
             item.Interactor.OnPlace(session, item);
-            if (item.ItemData.InteractionType == InteractionType.MOODLIGHT && room.MoodlightData == null)
-            {
-                using var dbClient = DatabaseManager.Connection;
 
-                var moodlightRow = ItemMoodlightDao.GetOne(dbClient, item.Id);
-
-                var moodlightEnabled = moodlightRow != null && moodlightRow.Enabled;
-                var moodlightCurrentPreset = moodlightRow != null ? moodlightRow.CurrentPreset : 1;
-                var moodlightPresetOne = moodlightRow != null ? moodlightRow.PresetOne : "#000000,255,0";
-                var moodlightPresetTwo = moodlightRow != null ? moodlightRow.PresetTwo : "#000000,255,0";
-                var moodlightPresetThree = moodlightRow != null ? moodlightRow.PresetThree : "#000000,255,0";
-
-                room.MoodlightData = new MoodlightData(item.Id, moodlightEnabled, moodlightCurrentPreset, moodlightPresetOne, moodlightPresetTwo, moodlightPresetThree);
-                item.ExtraData = room.MoodlightData.GenerateExtraData();
-            }
             _ = this._wallItems.TryAdd(item.Id, item);
             this.UpdateItem(item);
 

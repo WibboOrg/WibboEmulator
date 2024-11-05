@@ -46,6 +46,7 @@ public class Item : IEquatable<Item>
     public double TotalHeight => this.Z + this.Height;
     public bool IsWallItem { get; set; }
     public bool IsFloorItem { get; set; }
+    public int TeleLinkId { get; set; }
 
     public event EventHandler<ItemTriggeredEventArgs> ItemTrigger;
     public event EventHandler<ItemTriggeredEventArgs> OnUserWalksOffFurni;
@@ -288,6 +289,8 @@ public class Item : IEquatable<Item>
             this.Interactor = ItemFactory.CreateInteractor(this);
         }
     }
+
+    public void SetTeleLinkId(int teleLinkId) => this.TeleLinkId = teleLinkId;
 
     public void SetState(int x, int y, double z, bool updateTiles = false)
     {

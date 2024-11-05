@@ -150,11 +150,12 @@ internal sealed class ItemDao
         "SELECT room_id FROM `item` WHERE id = '" + itemId + "' LIMIT 1");
 
     internal static List<ItemEntity> GetAll(IDbConnection dbClient, int roomId) => dbClient.Query<ItemEntity>(
-        @"SELECT `item`.id, `item`.user_id, `item`.room_id, `item`.base_item, `item`.extra_data, `item`.x, `item`.y, `item`.z, `item`.rot, `item`.wall_pos, `item_limited`.limited_number, `item_limited`.limited_stack, `item_wired`.trigger_data, `item_wired`.trigger_data_2, `item_wired`.triggers_item, `item_wired`.all_user_triggerable, `item_wired`.delay, `item_moodlight`.enabled, `item_moodlight`.current_preset, `item_moodlight`.preset_one, `item_moodlight`.preset_two, `item_moodlight`.preset_three 
+        @"SELECT `item`.id, `item`.user_id, `item`.room_id, `item`.base_item, `item`.extra_data, `item`.x, `item`.y, `item`.z, `item`.rot, `item`.wall_pos, `item_limited`.limited_number, `item_limited`.limited_stack, `item_wired`.trigger_data, `item_wired`.trigger_data_2, `item_wired`.triggers_item, `item_wired`.all_user_triggerable, `item_wired`.delay, `item_moodlight`.enabled, `item_moodlight`.current_preset, `item_moodlight`.preset_one, `item_moodlight`.preset_two, `item_moodlight`.preset_three, `item_teleport`.tele_two_id 
         FROM `item` 
         LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) 
         LEFT JOIN `item_wired` ON (trigger_id = `item`.id) 
-        LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) 
+        LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id)
+        LEFT JOIN `item_teleport` ON (`item_teleport`.tele_one_id = `item`.id) 
         WHERE `item`.room_id = @RoomId",
         new { RoomId = roomId }
     ).ToList();
@@ -200,4 +201,6 @@ public class ItemEntity
     public string PresetOne { get; set; }
     public string PresetTwo { get; set; }
     public string PresetThree { get; set; }
+
+    public int TeleTwoId { get; set; }
 }

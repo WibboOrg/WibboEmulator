@@ -6,22 +6,9 @@ using WibboEmulator.Games.Rooms;
 
 public static class ItemTeleporterFinder
 {
-    public static int GetLinkedTele(int teleId)
-    {
-        using var dbClient = DatabaseManager.Connection;
-        var teleportId = ItemTeleportDao.GetOne(dbClient, teleId);
-
-        return teleportId;
-    }
-
     public static int GetTeleRoomId(int teleId, Room room)
     {
-        if (room == null)
-        {
-            return 0;
-        }
-
-        if (room.RoomItemHandling == null)
+        if (room == null || room.RoomItemHandling == null)
         {
             return 0;
         }
@@ -37,9 +24,8 @@ public static class ItemTeleporterFinder
         return roomId;
     }
 
-    public static (bool isLinked, int linkedTele, int teleRoomId) IsTeleLinked(int teleId, Room room)
+    public static (bool isLinked, int linkedTele, int teleRoomId) IsTeleLinked(int linkedTele, Room room)
     {
-        var linkedTele = GetLinkedTele(teleId);
         if (linkedTele == 0)
         {
             return (isLinked: false, linkedTele: 0, teleRoomId: 0);
@@ -49,6 +35,6 @@ public static class ItemTeleporterFinder
 
         var teleRoomId = roomItem != null ? roomItem.RoomId : GetTeleRoomId(linkedTele, room);
 
-        return (isLinked: true, linkedTele, teleRoomId);
+        return (isLinked: teleRoomId != 0, linkedTele, teleRoomId);
     }
 }

@@ -8,6 +8,7 @@ using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Quests;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Moodlight;
 
 internal sealed class PlaceObjectEvent : IPacketEvent
 {
@@ -89,55 +90,61 @@ internal sealed class PlaceObjectEvent : IPacketEvent
                 rotation = session.User.ForceRot;
             }
 
-            var item = new Item(userItem.Id, room.Id, userItem.BaseItemId, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, x, y, 0.0, rotation, "", room);
-            if (room.RoomItemHandling.SetFloorItem(session, item, x, y, rotation, true, false, true))
+            var roomItem = new Item(userItem.Id, room.Id, userItem.BaseItemId, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, x, y, 0.0, rotation, "", room);
+            if (room.RoomItemHandling.SetFloorItem(session, roomItem, x, y, rotation, true, false, true))
             {
                 using (var dbClient = DatabaseManager.Connection)
                 {
                     ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
+
+                    if (roomItem.Data.InteractionType is InteractionType.TELEPORT or InteractionType.TELEPORT_ARROW)
+                    {
+                        var teleTwoId = ItemTeleportDao.GetOne(dbClient, roomItem.Id);
+                        roomItem.SetTeleLinkId(teleTwoId);
+                    }
                 }
 
                 session.User.InventoryComponent.RemoveItem(itemId);
 
                 if (WiredUtillity.TypeIsWired(userItem.ItemData.InteractionType))
                 {
-                    WiredRegister.HandleRegister(room, item);
+                    WiredRegister.HandleRegister(room, roomItem);
                 }
 
                 if (session.User.ForceUse > -1)
                 {
-                    item.Interactor.OnTrigger(session, item, 0, true, false);
+                    roomItem.Interactor.OnTrigger(session, roomItem, 0, true, false);
                 }
 
                 if (session.User.ForceOpenGift)
                 {
-                    if (item.ItemData.InteractionType == InteractionType.EXTRA_BOX)
+                    if (roomItem.ItemData.InteractionType == InteractionType.EXTRA_BOX)
                     {
-                        ItemLootBox.OpenExtrabox(session, item, room);
+                        ItemLootBox.OpenExtrabox(session, roomItem, room);
                     }
-                    else if (item.ItemData.InteractionType == InteractionType.DELUXE_BOX)
+                    else if (roomItem.ItemData.InteractionType == InteractionType.DELUXE_BOX)
                     {
-                        ItemLootBox.OpenDeluxeBox(session, item, room);
+                        ItemLootBox.OpenDeluxeBox(session, roomItem, room);
                     }
-                    else if (item.ItemData.InteractionType == InteractionType.LOOTBOX_2022)
+                    else if (roomItem.ItemData.InteractionType == InteractionType.LOOTBOX_2022)
                     {
-                        ItemLootBox.OpenLootBox2022(session, item, room);
+                        ItemLootBox.OpenLootBox2022(session, roomItem, room);
                     }
-                    else if (item.ItemData.InteractionType == InteractionType.LEGEND_BOX)
+                    else if (roomItem.ItemData.InteractionType == InteractionType.LEGEND_BOX)
                     {
-                        ItemLootBox.OpenLegendBox(session, item, room);
+                        ItemLootBox.OpenLegendBox(session, roomItem, room);
                     }
-                    else if (item.ItemData.InteractionType == InteractionType.BADGE_BOX)
+                    else if (roomItem.ItemData.InteractionType == InteractionType.BADGE_BOX)
                     {
-                        ItemLootBox.OpenBadgeBox(session, item, room);
+                        ItemLootBox.OpenBadgeBox(session, roomItem, room);
                     }
-                    else if (item.ItemData.InteractionType == InteractionType.GIFT_BANNER)
+                    else if (roomItem.ItemData.InteractionType == InteractionType.GIFT_BANNER)
                     {
-                        item.Interactor.OnTrigger(session, item, 0, true, false);
+                        roomItem.Interactor.OnTrigger(session, roomItem, 0, true, false);
                     }
-                    else if (item.ItemData.InteractionType is InteractionType.CASE_MIEL or InteractionType.CASE_ATHENA or InteractionType.BAG_SAKURA or InteractionType.BAG_ATLANTA or InteractionType.BAG_KYOTO or InteractionType.BAG_NOEL)
+                    else if (roomItem.ItemData.InteractionType is InteractionType.CASE_MIEL or InteractionType.CASE_ATHENA or InteractionType.BAG_SAKURA or InteractionType.BAG_ATLANTA or InteractionType.BAG_KYOTO or InteractionType.BAG_NOEL)
                     {
-                        ItemLootBox.OpenCaseOrBag(session, item, room);
+                        ItemLootBox.OpenCaseOrBag(session, roomItem, room);
                     }
                 }
 
@@ -149,8 +156,6 @@ internal sealed class PlaceObjectEvent : IPacketEvent
                 return;
             }
         }
-
-
         else if (userItem.IsWallItem)
         {
             var correctedData = new string[data.Length - 1];
@@ -168,6 +173,20 @@ internal sealed class PlaceObjectEvent : IPacketEvent
                     using (var dbClient = DatabaseManager.Connection)
                     {
                         ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
+
+                        if (roomItem.ItemData.InteractionType == InteractionType.MOODLIGHT && room.MoodlightData == null)
+                        {
+                            var moodlightRow = ItemMoodlightDao.GetOne(dbClient, roomItem.Id);
+
+                            var moodlightEnabled = moodlightRow != null && moodlightRow.Enabled;
+                            var moodlightCurrentPreset = moodlightRow != null ? moodlightRow.CurrentPreset : 1;
+                            var moodlightPresetOne = moodlightRow != null ? moodlightRow.PresetOne : "#000000,255,0";
+                            var moodlightPresetTwo = moodlightRow != null ? moodlightRow.PresetTwo : "#000000,255,0";
+                            var moodlightPresetThree = moodlightRow != null ? moodlightRow.PresetThree : "#000000,255,0";
+
+                            room.MoodlightData = new MoodlightData(roomItem.Id, moodlightEnabled, moodlightCurrentPreset, moodlightPresetOne, moodlightPresetTwo, moodlightPresetThree);
+                            roomItem.ExtraData = room.MoodlightData.GenerateExtraData();
+                        }
                     }
 
                     session.User.InventoryComponent.RemoveItem(itemId);
