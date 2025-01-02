@@ -142,11 +142,12 @@ internal sealed class PlaceObjectEvent : IPacketEvent
                     {
                         roomItem.Interactor.OnTrigger(session, roomItem, 0, true, false);
                     }
-                    else if (roomItem.ItemData.InteractionType is InteractionType.CASE_MIEL or InteractionType.CASE_ATHENA or InteractionType.BAG_SAKURA or InteractionType.BAG_ATLANTA or InteractionType.BAG_KYOTO or InteractionType.BAG_NOEL)
+                     else if (Item.ItemData.InteractionType is InteractionType.CASE_MIEL or InteractionType.CASE_ATHENA or InteractionType.BAG_SAKURA or InteractionType.BAG_ATLANTA or InteractionType.BAG_KYOTO or InteractionType.BAG_NOEL)
                     {
                         ItemLootBox.OpenCaseOrBag(session, roomItem, room);
                     }
                 }
+
 
                 QuestManager.ProgressUserQuest(session, QuestType.FurniPlace, 0);
             }

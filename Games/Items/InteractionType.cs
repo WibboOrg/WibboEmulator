@@ -161,7 +161,7 @@ public enum InteractionType
     BAG_ATLANTA,
     BAG_KYOTO,
     BAG_NOEL,
-
+    BAG_PORCELAINE,
     TELEPORT,
     TELEPORT_ARROW,
 
