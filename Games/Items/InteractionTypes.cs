@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Items;
 
+using Microsoft.VisualBasic;
 public class InteractionTypes
 {
     public static InteractionType GetTypeFromString(string pType) => pType switch
@@ -141,6 +142,7 @@ public class InteractionTypes
         "lootbox2022" => InteractionType.LOOTBOX_2022,
         "case_miel" => InteractionType.CASE_MIEL,
         "case_athena" => InteractionType.CASE_ATHENA,
+        "case_celeste" => InteractionType.CASE_CELESTE,
         "bag_sakura" => InteractionType.BAG_SAKURA,
         "bag_atlanta" => InteractionType.BAG_ATLANTA,
         "bag_noel" => InteractionType.BAG_NOEL,
