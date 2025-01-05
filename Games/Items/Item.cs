@@ -187,107 +187,106 @@ public class Item : IEquatable<Item>
     public Item(int id, int roomId, int baseItemId, string extraData, int limitedNumber, int limitedStack, int x, int y, double z, int rot,
         string wallCoord, Room room)
     {
-        if (ItemManager.GetItem(baseItemId, out var data))
+        _ = ItemManager.GetItem(baseItemId, out var data);
+
+        this.Id = id;
+        this.RoomId = roomId;
+        this.BaseItemId = baseItemId;
+        this.ExtraData = extraData;
+        this.X = x;
+        this.Y = y;
+        if (!double.IsInfinity(z))
         {
-            this.Id = id;
-            this.RoomId = roomId;
-            this.BaseItemId = baseItemId;
-            this.ExtraData = extraData;
-            this.X = x;
-            this.Y = y;
-            if (!double.IsInfinity(z))
-            {
-                this.Z = z;
-            }
-
-            this.Rotation = rot;
-            this.UpdateCounter = 0;
-            this.InteractingUser = 0;
-            this.InteractingUser2 = 0;
-            this.InteractionCountHelper = 0;
-            this.Value = 0;
-            this.Limited = limitedNumber;
-            this.LimitedStack = limitedStack;
-            this.Data = data;
-            this.WallCoord = wallCoord;
-            this.Scores = [];
-            this.EffectId = this.Data.EffectId;
-
-            if (this.ItemData == null)
-            {
-                ExceptionLogger.LogException("Unknown baseID: " + baseItemId);
-                return;
-            }
-
-            switch (this.ItemData.InteractionType)
-            {
-                case InteractionType.FOOTBALL_COUNTER_GREEN:
-                case InteractionType.BANZAI_GATE_GREEN:
-                case InteractionType.BANZAI_SCORE_GREEN:
-                case InteractionType.FREEZE_GREEN_COUNTER:
-                case InteractionType.FREEZE_GREEN_GATE:
-                    this.Team = TeamType.Green;
-                    break;
-                case InteractionType.FOOTBALL_COUNTER_YELLOW:
-                case InteractionType.BANZAI_GATE_YELLOW:
-                case InteractionType.BANZAI_SCORE_YELLOW:
-                case InteractionType.FREEZE_YELLOW_COUNTER:
-                case InteractionType.FREEZE_YELLOW_GATE:
-                    this.Team = TeamType.Yellow;
-                    break;
-                case InteractionType.FOOTBALL_COUNTER_BLUE:
-                case InteractionType.BANZAI_GATE_BLUE:
-                case InteractionType.BANZAI_SCORE_BLUE:
-                case InteractionType.FREEZE_BLUE_COUNTER:
-                case InteractionType.FREEZE_BLUE_GATE:
-                    this.Team = TeamType.Blue;
-                    break;
-                case InteractionType.FOOTBALL_COUNTER_RED:
-                case InteractionType.BANZAI_GATE_RED:
-                case InteractionType.BANZAI_SCORE_RED:
-                case InteractionType.FREEZE_RED_COUNTER:
-                case InteractionType.FREEZE_RED_GATE:
-                    this.Team = TeamType.Red;
-                    break;
-                case InteractionType.BANZAI_TELE:
-                    this.ExtraData = "";
-                    break;
-                case InteractionType.GUILD_ITEM:
-                case InteractionType.GUILD_GATE:
-                    if (!string.IsNullOrEmpty(extraData) && extraData.Contains(';'))
-                    {
-                        if (int.TryParse(this.ExtraData.Split(';')[1], out var groupId))
-                        {
-                            this.GroupId = groupId;
-                        }
-                    }
-                    break;
-                case InteractionType.GIFT:
-                {
-                    if (!string.IsNullOrEmpty(extraData) && extraData.Contains(';') && extraData.Contains(Convert.ToChar(5)))
-                    {
-                        var giftData = this.ExtraData.Split(';', 2);
-                        var giftExtraData = giftData[1].Split(Convert.ToChar(5));
-                        var giftRibbon = int.Parse(giftExtraData[1]);
-                        var giftBoxId = int.Parse(giftExtraData[2]);
-
-                        this.Extra = (giftBoxId * 1000) + giftRibbon;
-                    }
-                    break;
-                }
-            }
-            this.IsWallItem = this.ItemData.Type == ItemType.I;
-            this.IsFloorItem = this.ItemData.Type == ItemType.S;
-
-            if (room == null)
-            {
-                return;
-            }
-
-            this.Room = room;
-            this.GetAffectedTiles = GameMap.GetAffectedTiles(this.ItemData.Length, this.ItemData.Width, this.X, this.Y, rot);
-            this.Interactor = ItemFactory.CreateInteractor(this);
+            this.Z = z;
         }
+
+        this.Rotation = rot;
+        this.UpdateCounter = 0;
+        this.InteractingUser = 0;
+        this.InteractingUser2 = 0;
+        this.InteractionCountHelper = 0;
+        this.Value = 0;
+        this.Limited = limitedNumber;
+        this.LimitedStack = limitedStack;
+        this.Data = data;
+        this.WallCoord = wallCoord;
+        this.Scores = [];
+        this.EffectId = this.Data.EffectId;
+
+        if (this.ItemData == null)
+        {
+            ExceptionLogger.LogException("Unknown baseID: " + baseItemId);
+            return;
+        }
+
+        switch (this.ItemData.InteractionType)
+        {
+            case InteractionType.FOOTBALL_COUNTER_GREEN:
+            case InteractionType.BANZAI_GATE_GREEN:
+            case InteractionType.BANZAI_SCORE_GREEN:
+            case InteractionType.FREEZE_GREEN_COUNTER:
+            case InteractionType.FREEZE_GREEN_GATE:
+                this.Team = TeamType.Green;
+                break;
+            case InteractionType.FOOTBALL_COUNTER_YELLOW:
+            case InteractionType.BANZAI_GATE_YELLOW:
+            case InteractionType.BANZAI_SCORE_YELLOW:
+            case InteractionType.FREEZE_YELLOW_COUNTER:
+            case InteractionType.FREEZE_YELLOW_GATE:
+                this.Team = TeamType.Yellow;
+                break;
+            case InteractionType.FOOTBALL_COUNTER_BLUE:
+            case InteractionType.BANZAI_GATE_BLUE:
+            case InteractionType.BANZAI_SCORE_BLUE:
+            case InteractionType.FREEZE_BLUE_COUNTER:
+            case InteractionType.FREEZE_BLUE_GATE:
+                this.Team = TeamType.Blue;
+                break;
+            case InteractionType.FOOTBALL_COUNTER_RED:
+            case InteractionType.BANZAI_GATE_RED:
+            case InteractionType.BANZAI_SCORE_RED:
+            case InteractionType.FREEZE_RED_COUNTER:
+            case InteractionType.FREEZE_RED_GATE:
+                this.Team = TeamType.Red;
+                break;
+            case InteractionType.BANZAI_TELE:
+                this.ExtraData = "";
+                break;
+            case InteractionType.GUILD_ITEM:
+            case InteractionType.GUILD_GATE:
+                if (!string.IsNullOrEmpty(extraData) && extraData.Contains(';'))
+                {
+                    if (int.TryParse(this.ExtraData.Split(';')[1], out var groupId))
+                    {
+                        this.GroupId = groupId;
+                    }
+                }
+                break;
+            case InteractionType.GIFT:
+            {
+                if (!string.IsNullOrEmpty(extraData) && extraData.Contains(';') && extraData.Contains(Convert.ToChar(5)))
+                {
+                    var giftData = this.ExtraData.Split(';', 2);
+                    var giftExtraData = giftData[1].Split(Convert.ToChar(5));
+                    var giftRibbon = int.Parse(giftExtraData[1]);
+                    var giftBoxId = int.Parse(giftExtraData[2]);
+
+                    this.Extra = (giftBoxId * 1000) + giftRibbon;
+                }
+                break;
+            }
+        }
+        this.IsWallItem = this.ItemData.Type == ItemType.I;
+        this.IsFloorItem = this.ItemData.Type == ItemType.S;
+
+        if (room == null)
+        {
+            return;
+        }
+
+        this.Room = room;
+        this.GetAffectedTiles = GameMap.GetAffectedTiles(this.ItemData.Length, this.ItemData.Width, this.X, this.Y, rot);
+        this.Interactor = ItemFactory.CreateInteractor(this);
     }
 
     public void SetTeleLinkId(int teleLinkId) => this.TeleLinkId = teleLinkId;

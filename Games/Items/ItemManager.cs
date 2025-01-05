@@ -70,7 +70,7 @@ public static class ItemManager
             return true;
         }
 
-        return false;
+        return Items.TryGetValue(158, out item);
     }
 
     public static ItemData GetItemByName(string name)
