@@ -18,4 +18,7 @@ public class AudioData
 {
     [JsonProperty("data")]
     public string Data { get; set; }
+
+    [JsonProperty("transcript")]
+    public string Transcript { get; set; }
 }

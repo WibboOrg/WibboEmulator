@@ -293,8 +293,7 @@ public partial class ChatGPTBot : BotAI
                     return;
                 }
 
-                this.
-                Room.SendPacket(new UserTypingComposer(this.VirtualId, true));
+                this.Room.SendPacket(new UserTypingComposer(this.VirtualId, true));
 
                 var listActions = "";
                 foreach (var kvp in this._listActions)
@@ -318,7 +317,9 @@ public partial class ChatGPTBot : BotAI
                 var messagesSend = new List<ChatCompletionMessage>([prePrompt]);
                 messagesSend.AddRange(this._userMessages.TryGetValue(userId, out var userMessages) ? userMessages : []);
 
-                var messagesGpt = await OpenAIProxy.SendChatMessage(messagesSend);
+                var audioEnable = SettingsManager.GetData<bool>("openai.audio.enable");
+                var audioVoice = SettingsManager.GetData<string>("openai.audio.voice");
+                var messagesGpt = await OpenAIProxy.SendChatMessage(messagesSend, audioEnable, audioVoice);
 
                 if (messagesGpt != null && messagesGpt.Content != null)
                 {
@@ -361,6 +362,7 @@ public partial class ChatGPTBot : BotAI
                     var audioUrl = $"{basePath}{audioPath}";
 
                     this.RoomUser.OnChatAudio(audioPath);
+                    this.StackMessages(userId, new ChatCompletionMessage { Role = messagesGpt.Role, Content = messagesGpt.Audio.Transcript });
                 }
             }
             catch (Exception ex)

@@ -59,7 +59,7 @@ public static class OpenAIProxy
         return null;
     }
 
-    public static async Task<ChatCompletionMessage> SendChatMessage(List<ChatCompletionMessage> messagesSend, bool audioMode = false)
+    public static async Task<ChatCompletionMessage> SendChatMessage(List<ChatCompletionMessage> messagesSend, bool audioMode = false, string audioVoice = "alloy")
     {
         try
         {
@@ -73,16 +73,19 @@ public static class OpenAIProxy
             var request = new
             {
                 messages = messagesSend.ToArray(),
-                model = audioMode ? "gpt-4o-audio-preview" : "gpt-3.5-turbo-1106",
-                max_tokens = 150,
+                model = audioMode ? "gpt-4o-mini-audio-preview" : "gpt-4o-mini",
+                max_completion_tokens = audioMode ? (int?)null : 150,
                 temperature = audioMode ? (double?)null : 0.6,
                 stop = audioMode ? null : "\n",
                 modalities = audioMode ? new string[] { "text", "audio" } : null,
-                audio = audioMode ? new { voice = "nova", format = "wav" } : null
+                audio = audioMode ? new { voice = audioVoice, format = "wav" } : null
             };
 
 
-            var requestJson = JsonConvert.SerializeObject(request);
+            var requestJson = JsonConvert.SerializeObject(request, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
             var requestContent = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
             var httpResponseMessage = await OpenAIClient.PostAsync(BASE_URL + "chat/completions", requestContent);
 
@@ -91,6 +94,8 @@ public static class OpenAIProxy
 
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
+                var errorContent = await httpResponseMessage.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error: {errorContent}");
                 return null;
             }
 
@@ -102,7 +107,7 @@ public static class OpenAIProxy
                 error = new { message = string.Empty }
             });
 
-            if (responseObject == null || !string.IsNullOrEmpty(responseObject?.error?.message))  // Check for errors
+            if (responseObject == null || !string.IsNullOrEmpty(responseObject?.error?.message)) // Check for errors
             {
                 return null;
             }
