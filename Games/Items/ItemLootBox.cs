@@ -79,10 +79,10 @@ internal static class ItemLootBox
                 break;
 
             case InteractionType.CASE_CELESTE:
-            pageId = 1635464206;
-            bannerId = 244;
-            isCase = true;
-            break;
+                pageId = 1635464206;
+             bannerId = 244;
+             isCase = true;
+             break;
 
             case InteractionType.BAG_SAKURA:
                 pageId = 1635464079;
