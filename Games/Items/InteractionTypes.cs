@@ -144,6 +144,7 @@ public class InteractionTypes
         "bag_sakura" => InteractionType.BAG_SAKURA,
         "bag_atlanta" => InteractionType.BAG_ATLANTA,
         "bag_noel" => InteractionType.BAG_NOEL,
+        "bag_porcelaine" => InteractionType.BAG_PORCELAINE,
         "bag_kyoto" => InteractionType.BAG_KYOTO,
         "maniqui" => InteractionType.MANNEQUIN,
         "bgupdater" => InteractionType.TONER,

@@ -148,6 +148,7 @@ internal sealed class PlaceObjectEvent : IPacketEvent
                     }
                 }
 
+
                 QuestManager.ProgressUserQuest(session, QuestType.FurniPlace, 0);
             }
             else
