@@ -2254,8 +2254,14 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                var nbLot = 1;
                 var haveWinBag = false;
+                var nbLot = 1;
+
+                if (this.Room.RoomData.OwnerName != gameOwner && !roomUser.Client.User.HaveMail)
+                {
+                    roomUser.Client.SendNotification("Vous devez valider votre compte pour reçevoir les givelots hors animation!");
+                    return;
+                }
 
                 if (this.Room.RoomData.OwnerName == gameOwner)
                 {

@@ -132,6 +132,7 @@ public class User : IDisposable, IEquatable<User>
     public bool SessionGiftBlocked { get; set; }
     public int RolePlayId { get; set; }
     public int IgnoreAllExpireTime { get; set; }
+    public bool HaveMail { get; set; }
     public bool IgnoreRoomInvites { get; set; }
     public bool CameraFollowDisabled { get; set; }
     public bool OldChat { get; set; }
@@ -163,7 +164,7 @@ public class User : IDisposable, IEquatable<User>
         int dailyPetRespectPoints, bool hasFriendRequestsDisabled, int currentQuestID, int achievementPoints,
         int lastOnline, int favoriteGroup, int accountCreated, bool accepttrading, string ip, bool hideInroom,
         bool hideOnline, int mazoHighScore, int mazo, string clientVolume, bool nuxenable, bool isFirstConnexionToday,
-        Language langue, int ignoreAllExpire, bool ignoreRoomInvite, bool cameraFollowDisabled, int gamePointsMonth, int bannerId)
+        Language langue, int ignoreAllExpire, bool ignoreRoomInvite, bool cameraFollowDisabled, int gamePointsMonth, int bannerId, bool haveMail)
     {
         this.Id = id;
         this.Username = username;
@@ -197,6 +198,7 @@ public class User : IDisposable, IEquatable<User>
         this.Langue = langue;
         this.IgnoreAllExpireTime = ignoreAllExpire;
         this.BannerSelected = BannerManager.TryGetBannerById(bannerId, out var banner) ? banner : null;
+        this.HaveMail = haveMail;
 
         if (clientVolume.Contains(','))
         {

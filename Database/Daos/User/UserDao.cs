@@ -30,11 +30,11 @@ internal sealed class UserDao
     ).ToList();
 
     internal static UserEntity GetOneByTicket(IDbConnection dbClient, string ticket) => dbClient.QuerySingleOrDefault<UserEntity>(
-        "SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned`, `banner_id` FROM `user` WHERE auth_ticket = @SsoTicket LIMIT 1",
+        "SELECT `id`, `username`, `mail`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned`, `banner_id` FROM `user` WHERE auth_ticket = @SsoTicket LIMIT 1",
         new { SsoTicket = ticket });
 
     internal static UserEntity GetOne(IDbConnection dbClient, int userId) => dbClient.QuerySingleOrDefault<UserEntity>(
-        "SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned`, `banner_id` FROM `user` WHERE id = @Id LIMIT 1",
+        "SELECT `id`, `username`, `mail`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned`, `banner_id` FROM `user` WHERE id = @Id LIMIT 1",
         new { Id = userId });
 
     internal static void UpdateRemoveLimitCoins(IDbConnection dbClient, int userId, int points) => dbClient.Execute(
@@ -115,9 +115,7 @@ public class UserEntity
 {
     public int Id { get; set; }
     public string Username { get; set; }
-    public string Password { get; set; }
     public string Mail { get; set; }
-    public string AuthTicket { get; set; }
     public int Rank { get; set; }
     public int Credits { get; set; }
     public int ActivityPoints { get; set; }
@@ -126,14 +124,12 @@ public class UserEntity
     public string Motto { get; set; }
     public int AccountCreated { get; set; }
     public int LastOnline { get; set; }
-    public bool Online { get; set; }
     public string IpLast { get; set; }
     public int HomeRoom { get; set; }
     public bool BlockNewFriends { get; set; }
+    public string Langue { get; set; }
     public bool HideOnline { get; set; }
     public bool HideInRoom { get; set; }
-    public int LastOffline { get; set; }
-    public int MoisVip { get; set; }
     public string Volume { get; set; }
     public int VipPoints { get; set; }
     public int LimitCoins { get; set; }
@@ -141,16 +137,9 @@ public class UserEntity
     public bool CameraFollowDisabled { get; set; }
     public bool IgnoreRoomInvite { get; set; }
     public string LastDailyCredits { get; set; }
-    public bool HideGameAlert { get; set; }
-    public string IpCountry { get; set; }
-    public int GamePoints { get; set; }
     public int GamePointsMonth { get; set; }
     public int MazoScore { get; set; }
     public int Mazo { get; set; }
     public bool NuxEnable { get; set; }
-    public string Langue { get; set; }
-    public int RunPoints { get; set; }
-    public int RunPointsMonth { get; set; }
-    public bool IsBanned { get; set; }
     public int BannerId { get; set; }
 }

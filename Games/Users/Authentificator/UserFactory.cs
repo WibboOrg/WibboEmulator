@@ -91,6 +91,7 @@ public class UserFactory
     {
         var id = user.Id;
         var username = user.Username;
+        var haveMail = !string.IsNullOrEmpty(user.Mail);
         var rank = user.Rank;
         var motto = user.Motto;
         var look = user.Look;
@@ -124,6 +125,6 @@ public class UserFactory
         var achievementPoints = userStats.AchievementScore;
         var favoriteGroup = userStats.GroupId;
 
-        return new User(id, username, rank, motto, look, gender, credits, wibboPoints, limitCoins, activityPoints, homeRoom, respect, dailyRespectPoints, dailyPetRespectPoints, hasFriendRequestsDisabled, currentQuestID, achievementPoints, lastOnline, favoriteGroup, accountCreated, acceptTrading, ip, hideInroom, hideOnline, mazoHighScore, mazo, clientVolume, nuxEnable, isFirstConnexionToday, langue, ignoreAllExpire, ignoreRoomInvite, cameraFollowDisabled, gamePointsMonth, bannerId);
+        return new User(id, username, rank, motto, look, gender, credits, wibboPoints, limitCoins, activityPoints, homeRoom, respect, dailyRespectPoints, dailyPetRespectPoints, hasFriendRequestsDisabled, currentQuestID, achievementPoints, lastOnline, favoriteGroup, accountCreated, acceptTrading, ip, hideInroom, hideOnline, mazoHighScore, mazo, clientVolume, nuxEnable, isFirstConnexionToday, langue, ignoreAllExpire, ignoreRoomInvite, cameraFollowDisabled, gamePointsMonth, bannerId, haveMail);
     }
 }
