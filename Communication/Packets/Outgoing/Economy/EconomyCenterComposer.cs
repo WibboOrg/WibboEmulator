@@ -37,7 +37,7 @@ internal sealed class EconomyCenterComposer : ServerPacket
                 this.WriteInteger(item.Id);
                 this.WriteInteger(item.CategoryId);
                 this.WriteInteger(item.AveragePrice);
-                this.WriteInteger(item.ItemId);
+                this.WriteInteger(itemData.SpriteId);
 
                 switch (itemData.InteractionType)
                 {
