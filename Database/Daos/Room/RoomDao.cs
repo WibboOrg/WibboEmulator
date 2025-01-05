@@ -78,12 +78,12 @@ internal sealed class RoomDao
     internal static void UpdateResetUsersNow(IDbConnection dbClient) => dbClient.Execute(
         "UPDATE `room` SET users_now = '0' WHERE users_now > '0'");
 
-    internal static int InsertDuplicate(IDbConnection dbClient, string username, string desc) => dbClient.ExecuteScalar<int>(
+    internal static int InsertDuplicate(IDbConnection dbClient, int copyRoomId, string username, string desc) => dbClient.ExecuteScalar<int>(
         @"INSERT INTO room (caption, description, owner, model_name, category, state, wallpaper, floor, landscape, allow_hidewall, wallthick, floorthick) 
-        SELECT @Caption, @Desc, @Username, 'model_welcome', category, state, wallpaper, floor, landscape, allow_hidewall, wallthick, floorthick 
-        FROM room WHERE id = '5328079'; 
+        SELECT @Caption, @Desc, @Username, model_name, category, state, wallpaper, floor, landscape, allow_hidewall, wallthick, floorthick 
+        FROM room WHERE id = @CopyRoomId;
         SELECT LAST_INSERT_ID();",
-        new { Caption = username, Desc = desc, Username = username });
+        new { CopyRoomId = copyRoomId, Caption = username, Desc = desc, Username = username });
 
     internal static List<RoomEntity> GetAllSearchByUsername(IDbConnection dbClient, string searchData) => dbClient.Query<RoomEntity>(
         @"SELECT room.id, room.caption, room.owner, room.description, room.category, room.state, room.users_max, room.model_name, room.score, room.tags, 

@@ -103,8 +103,8 @@ internal sealed class ItemDao
         SELECT LAST_INSERT_ID();",
         new { UserId = userId, RoomId = roomId, ItemId = itemId });
 
-    internal static void InsertDuplicate(IDbConnection dbClient, int userId, int roomId) => dbClient.Execute(
-        "INSERT INTO `item` (user_id, room_id, base_item, extra_data, x, y, z, rot) SELECT '" + userId + "', '" + roomId + "', base_item, extra_data, x, y, z, rot FROM `item` WHERE room_id = '5328079'");
+    internal static void InsertWelcomHome(IDbConnection dbClient, int userId, int roomId, int copyRoomId) => dbClient.Execute(
+        "INSERT INTO `item` (user_id, room_id, base_item, extra_data, x, y, z, rot, wall_pos) SELECT '" + userId + "', '" + roomId + "', base_item, extra_data, x, y, z, rot, wall_pos FROM `item` WHERE room_id = '" + copyRoomId + "'");
 
     internal static void Delete(IDbConnection dbClient, int itemId) => dbClient.Execute(
         "DELETE `item`, `item_limited` FROM `item` LEFT JOIN `item_limited` ON(`item_limited`.item_id = `item`.id) WHERE id = '" + itemId + "'");

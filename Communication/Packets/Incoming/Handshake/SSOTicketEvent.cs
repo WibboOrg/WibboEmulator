@@ -246,8 +246,9 @@ internal sealed class SSOTicketEvent : IPacketEvent
         session.User.NewUser = false;
 
         var homeId = SettingsManager.GetData<int>("default.home.id");
+        var welcomeRoomId = SettingsManager.GetData<int>("welcome.room.id");
 
-        var roomId = RoomDao.InsertDuplicate(dbClient, session.User.Username, LanguageManager.TryGetValue("room.welcome.desc", session.Language));
+        var roomId = RoomDao.InsertDuplicate(dbClient, welcomeRoomId, session.User.Username, LanguageManager.TryGetValue("room.welcome.desc", session.Language));
 
         UserDao.UpdateNuxEnable(dbClient, session.User.Id, homeId > 0 ? homeId : roomId);
 
@@ -258,7 +259,7 @@ internal sealed class SSOTicketEvent : IPacketEvent
             return false;
         }
 
-        ItemDao.InsertDuplicate(dbClient, session.User.Id, roomId);
+        ItemDao.InsertWelcomHome(dbClient, session.User.Id, roomId, welcomeRoomId);
 
         if (!session.User.UsersRooms.Contains(roomId))
         {
