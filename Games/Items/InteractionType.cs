@@ -157,10 +157,12 @@ public enum InteractionType
     BADGE_BOX,
     CASE_MIEL,
     CASE_ATHENA,
+    CASE_CELESTE,
     BAG_SAKURA,
     BAG_ATLANTA,
     BAG_KYOTO,
     BAG_NOEL,
+    BAG_PORCELAINE,
 
     TELEPORT,
     TELEPORT_ARROW,

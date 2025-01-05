@@ -213,10 +213,12 @@ internal static class ItemBehaviourUtility
             case InteractionType.BADGE_BOX:
             case InteractionType.CASE_MIEL:
             case InteractionType.CASE_ATHENA:
+            case InteractionType.CASE_CELESTE:
             case InteractionType.BAG_SAKURA:
             case InteractionType.BAG_ATLANTA:
             case InteractionType.BAG_KYOTO:
             case InteractionType.BAG_NOEL:
+            case InteractionType.BAG_PORCELAINE:
             {
                 var lotName = "une LootBox";
                 switch (itemData.InteractionType)
@@ -236,6 +238,9 @@ internal static class ItemBehaviourUtility
                     case InteractionType.CASE_ATHENA:
                         lotName = "une caisse d'Athènes";
                         break;
+                    case InteractionType.CASE_CELESTE:
+                        lotName = "Une caisse Céleste";
+                        break;
                     case InteractionType.BAG_SAKURA:
                         lotName = "un sachet Sakura";
                         break;
@@ -247,6 +252,9 @@ internal static class ItemBehaviourUtility
                         break;
                     case InteractionType.BAG_NOEL:
                         lotName = "un sachet Noël";
+                        break;
+                    case InteractionType.BAG_PORCELAINE:
+                        lotName = "un sachet Porcelaine";
                         break;
                 }
 
