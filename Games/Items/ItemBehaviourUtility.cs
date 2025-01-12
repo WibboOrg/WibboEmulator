@@ -238,6 +238,9 @@ internal static class ItemBehaviourUtility
                     case InteractionType.CASE_ATHENA:
                         lotName = "une caisse d'Athènes";
                         break;
+                    case InteractionType.CASE_CELESTE:
+                        lotName = "une caisse Céleste";
+                        break;
                     case InteractionType.BAG_SAKURA:
                         lotName = "un sachet Sakura";
                         break;

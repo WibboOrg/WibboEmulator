@@ -1,6 +1,4 @@
 namespace WibboEmulator.Games.Items;
-
-using Microsoft.VisualBasic;
 public class InteractionTypes
 {
     public static InteractionType GetTypeFromString(string pType) => pType switch
