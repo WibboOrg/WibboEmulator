@@ -10,6 +10,7 @@ using WibboEmulator.Games.Items;
 using WibboEmulator.Games.LandingView;
 using WibboEmulator.Games.Moderations;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Utilities;
 
 internal sealed class GiveLot : IChatCommand
 {
@@ -73,7 +74,8 @@ internal sealed class GiveLot : IChatCommand
 
         if (WibboEnvironment.GetRandomNumber(1, 20001) <= 333)
         {
-            var bagItemId = WibboEnvironment.GetRandomNumber(0, 1) == 1 ? 1000011466 : 1000011467;
+            var bagItemIds = new List<int> { 1000011533, 1000011466, 1000011467 };
+            var bagItemId = bagItemIds.GetRandomElement();
 
             if (ItemManager.GetItem(bagItemId, out var bagData))
             {
