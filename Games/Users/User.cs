@@ -96,6 +96,7 @@ public class User : IDisposable, IEquatable<User>
     public DateTime SpamFloodTime { get; set; }
     public DateTime HereTimer { get; set; }
     public DateTime EveryoneTimer { get; set; }
+    public DateTime MazoTimer { get; set; }
     public DateTime CommandFunTimer { get; set; }
     public DateTime LastGiftPurchaseTime { get; set; }
     public DateTime LastLTDPurchaseTime { get; set; }

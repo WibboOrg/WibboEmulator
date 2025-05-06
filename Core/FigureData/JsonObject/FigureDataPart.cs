@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Core.FigureData.JsonObject;
+namespace WibboEmulator.Core.FigureData.JsonObject;
 
 public class FigureDataPart
 {

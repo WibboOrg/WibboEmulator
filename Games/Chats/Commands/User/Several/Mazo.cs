@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Chats.Commands.User.Several;
 
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Core.Language;
 using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
@@ -19,6 +20,15 @@ internal sealed class Mazo : IChatCommand
         {
             return;
         }
+
+        var timeSpan = DateTime.Now - session.User.MazoTimer;
+        if (timeSpan.TotalSeconds < 2)
+        {
+            session.SendWhisper($"Veuillez patienter pendant {timeSpan.TotalSeconds} secondes avant de pouvoir réutiliser le mazo.");
+            return;
+        }
+
+        session.User.MazoTimer = DateTime.Now;
 
         var numberRandom = WibboEnvironment.GetRandomNumber(1, 3);
         var user = session.User;
@@ -42,7 +52,6 @@ internal sealed class Mazo : IChatCommand
 
             userRoom.ApplyEffect(566, true);
             userRoom.TimerResetEffect = 4;
-
         }
         else
         {

@@ -150,7 +150,7 @@ internal sealed class DuplicateRoom : IChatCommand
 
                 if (triggerItems.Length > 0)
                 {
-                    triggerItems = triggerItems.Remove(triggerItems.Length - 1);
+                    triggerItems = triggerItems[..^1];
                 }
 
                 ItemWiredDao.UpdateTriggerItem(dbClient, triggerItems, id);
