@@ -150,7 +150,7 @@ public class BadgeComponent(User user) : IDisposable
             { "STAFF_DEV", 41 },
             { "STAFF_ADMIN", 41 },
             { "STAFF_FURNI", 41 },
-            { "STAFF_COMM", 41 },
+            { "STAFF_COM", 54 },
             { "STAFF_ANIMATEUR", 42 },
             { "STAFF_EVENT", 52 },
             { "STAFF_MODO", 47 },
